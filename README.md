@@ -1,1 +1,1 @@
-Some_scripts i made for a certain purpose. Use it at your own risk.
+Some_scripts i made for a certain purpose. If you choose to use them, the risk is 100% yours.
