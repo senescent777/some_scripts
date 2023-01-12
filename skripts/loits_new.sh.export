@@ -1,0 +1,72 @@
+#!/bin/sh
+
+. ./common.conf
+
+srcdir=""
+target=""
+bloader="isolinux"
+
+usage() {
+	echo "$0 --in <SOURCE_DIR> --out <OUTFILE> --bl <BOOTLOADER>"
+	exit 666
+}
+
+[ "$#" -gt 3 ] || usage
+
+parse_opts() {
+	case $1 in
+		--in)
+			srcdir=$2
+		;;
+		--out)
+			target=$2
+		;;
+		--bl)
+			bloader=$2
+		;; 
+		*)
+			echo "MEE HIMAAS LEIKKIMÄÄN"
+		;;
+	esac
+}
+
+parse_opts $1 $2
+parse_opts $3 $4
+parse_opts $5 $6
+
+[ -d ./$srcdir ] || exit
+gi=$(sudo which genisoimage)
+echo "gi=$gi"
+
+if [ -x "$gi" ] ; then
+	echo "gi löytyy"
+else
+	sudo dpkg -i $pkgsdir2/*.deb
+fi
+
+[ -s ./$padfile ] && sudo mv ./$padfile.OLD
+cd $srcdir
+
+sudo chown -R root:root ./*
+sudo chmod -R a-w $pad_dir/*
+sudo chmod  a-w $pad_dir/ 
+sudo tar -cvfp /../$padfile $pad_dir
+
+sudo mv p ../$padfile 
+ 
+case $bloader in
+	isolinux)
+		sudo genisoimage -o ../$target $gi_opts -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table .
+	break
+	;;
+	grub)
+		echo "TODO:grub-mkrescue"
+	break
+	;;
+	*)
+		echo "P.V"
+	break
+	;;
+esac
+
+echo "stick.sh ?"

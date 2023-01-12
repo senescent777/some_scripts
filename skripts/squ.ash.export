@@ -1,0 +1,257 @@
+#!/bin/sh
+. ./common.conf
+. ./common_funcs.sh
+debug=0
+dgb $2
+dgb $3
+dgb $4
+
+xxx() {
+	if [ x$squash0 != x ]; then
+		[ $debug -eq 1 ] && echo "ENTER xxx($1)"
+		[ -d $squash0 ] || sudo mkdir $squash0
+		cd $squash0
+		sudo unsquashfs $1
+
+		sudo chown 0:0 squashfs-root/*
+
+		[ $debug -eq 1 ] && ls -las squashfs-root;sleep 5
+		[ $debug -eq 1 ] && echo "EXIT xxx($1)"
+	fi
+}
+
+fix_sudo() {
+	if [ x$squash_dir != x ]; then
+		[ $debug -eq 1 ] && echo "pre-emptive attempt to fix sudo";sleep 1
+		cd $squash_dir
+		sleep 6
+
+		chown -R 0:0 ./etc/sudo*
+		chmod -R a-w ./etc/sudo*
+
+		chown -R 0:0 ./usr/lib/sudo/*
+		chmod -R a-w ./usr/lib/sudo/*
+		chmod -R a-w ./usr/bin/sudo*
+		chown -R 0:0 ./usr/bin/sudo*
+		sleep 6
+
+		chmod u+s ./usr/bin/sudo
+		sleep 6
+	
+		ls -las ./usr/bin/sudo*
+		sleep 6
+		[ $debug -eq 1 ] && echo "...done"
+	fi
+}
+
+bbb() {
+	if [ x$squash_dir != x ]; then
+		[ $debug -eq 1 ] && echo "ENTER bbb()"
+
+		cd $squash_dir
+		rm -rf ./run/live
+		rm -rf ./boot/grub/*
+		rm -rf ./boot/*
+		rm -rf ./usr/share/doc/*	
+		rm -rf ./var/cache/apt/archives/*.deb
+		rm -rf ./var/cache/apt/*.bin
+		rm -rf ./tmp/{manifest,var,pad}
+
+		fix_sudo
+
+		mv ./etc/hosts.OLD ./etc/hosts
+		sudo chmod -R go-w ./var/cache/man
+		sudo chown -R root:root ./var/cache/man
+
+		[ $debug -eq 1 ] && echo "EXIT bbb()"
+	fi
+}
+
+jlk1() {
+	if [ x$squash_dir != x ]; then
+		echo "-x ?"
+	
+		[ $debug -eq 1 ] && echo "ENTER jlk1($1 , $2)"
+		[ -d $squash_dir/run/live/medium/pad ] || mkdir -p $squash_dir/run/live/medium/pad
+
+		[ $debug -eq 1 ] && echo "HÖST"	
+		cp $squash_dir/etc/hosts $squash_dir/etc/hosts.OLD	
+		cp /etc/hosts $squash_dir/etc
+
+		[ $debug -eq 1 ] && echo "DAP"
+		cd $squash_dir/run/live/medium/pad
+
+		[ $debug -eq 1 ] && echo "HS"
+		[ $debug -eq 1 ] && echo "cp $1/pad/*.sh ."
+		cp $1/pad/*.sh .
+		chmod a+x *.sh
+		[ $debug -eq 1 ] && ls -las *.sh ;sleep 10
+
+		[ $debug -eq 1 ] && echo "ZB($1/pad/*.bz?)"
+		cp $1/pad/*.bz2 .
+		cp $1/pad/*.bz3 .
+		cp $1/pad/*.conf .
+		
+		rm ./mf*
+		[ $debug -eq 1 ] && echo "devuan.conf"
+
+		rm ./root.conf;rm ./devuan.conf;sleep 6 
+	
+	   	grep -v to_ram $1/pad/devuan.conf > ./root.conf 
+
+	        echo "to_ram=1" >> ./root.conf	
+		cat ./root.conf;sleep 10	
+
+		[ $debug -eq 1 ] && echo "chmod+chown"
+		chown -R root:root ./*	
+		chmod 0644 ./*.bz2
+		chmod 0744 ./*.sh
+		chmod 0444 ./*.conf
+		sleep 6	
+	
+		[ $debug -eq 1 ] && ls -las;sleep 3
+		[ $debug -eq 1 ] && echo "EXIT jlk1($1,$2)"
+	fi
+}
+
+jlk2() {
+	[ $debug -eq 1 ] && echo "ENTER jlk2($1 , $2)"
+	[ $debug -eq 1 ] && pwd
+	[ -d ./0 ] || mkdir -p ./0
+	[ $debug -eq 1 ] && echo "cp -a $1/pad/0/* ./0"
+	cp -a $1/pad/0/* ./0
+	[ $debug -eq 1 ] && ls -las 0; sleep 6
+	sleep 5
+	[ $debug -eq 1 ] && echo "EXIT jlk2($1 , $2)"
+}
+	
+rst() {
+	if [ x$squash_dir != x ]; then
+		fix_sudo
+
+		cd $squash_dir
+
+		#sudo mount -o bind /proc ./proc
+		#sudo mount -o bind /sys ./sys
+
+		sudo mount -o bind /dev ./dev 
+		#/pts
+
+		sleep 6
+
+		sudo chroot ./ ./bin/bash 
+
+	
+		[ "$?" -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC $tmpdir0"
+		sleep 6
+	
+		sudo umount ./dev 
+		#/pts
+	
+		sleep 6
+		#sudo umount ./sys
+		#sudo umount ./proc
+	fi
+}
+
+cfd() {
+	if [ x$squash_dir != x ]; then
+		echo "-b ?"
+
+		if [ "$debug" -eq 1 ] ; then 
+			echo "ENTER cfd($1)"
+		 	echo "cd $squash_dir"
+		fi	
+
+		cd $squash_dir
+
+		[ -s $1 ] && rm $1
+
+		if [ $debug -eq 1 ] ; then 
+			 echo "sudo mksquashfs . $1 -comp xz -b 1048576"
+		fi
+	
+		sudo mksquashfs . $1 -comp xz -b 1048576
+		[ $debug -eq 1 ] && echo "EXIT cfd($1)"
+	fi
+}
+
+#void main(args)
+case $1 in
+	-x)
+		xxx $2
+	;;
+	-y)
+		[ -d $source ] || sudo mkdir -p $source
+		sudo mount -o loop,ro $2 $source
+		xxx $source/live/filesystem.squashfs
+		sudo umount $source
+	;;
+	-b) 
+		bbb		
+	;;
+	-d)
+		if [ x$squash0 != x ]; then
+			echo "sudo rm -rf $squash0/* IN 6 SECS";sleep 6
+			sudo rm -rf $squash0/*
+		fi
+
+		if [ x$tmpdir != x ]; then 
+			echo "sudo rm -rf $tmpdir/* IN 6 SECS";sleep 6	
+			sudo rm -rf $tmpdir/*
+		fi
+	;;
+	-c)
+		cfd $2
+	;;
+	-r)
+		rst
+	;;
+	-i)
+		if [ x$squash_dir != x ]; then
+			echo "-x ?"
+
+			previous=$(pwd)
+			mkdir -p $squash_dir/run/live/medium/pad
+			cd $squash_dir/run/live/medium/pad
+	
+			cp $2/pad/*.conf .
+			cp $2/pad/extras.tar.bz2 .
+			cp $2/pad/functions_part1.sh . 
+
+			grep -v to_ram devuan.conf > root.conf 
+	
+			rm devuan.conf
+			echo "to_ram=1" >> root.conf
+	
+			cd $previous
+		fi
+	;;
+	-j)
+		jlk1 $2
+		jlk2 $3
+	;;
+	*)
+		echo -n "-x <source_file>:eXtracts <source_file> to "
+		echo "$squash0 "
+
+		echo -n "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to "
+		echo "$squash0 "
+
+		echo -n "-c <target_file> [optional_params_4_mksquashfs] : Compresses "
+		echo "$squash_dir to <target_file> with optional_params"
+
+		echo "-b is supposed top be run just Before -c but after -r"
+
+		echo -n "-r :runs chRoot in "
+		echo "$squash_dir "
+		echo "as of 21.12.22 /proc,/sys are no longer bind-mounted in order to find out a root cause for some weird shit"
+
+		echo -n "-d :Destroys contents of "
+		echo "$squash0/ and $tmpdir/d.rem "
+
+		echo "-i <src>: Installs scripts 2 chroot_dir "
+		echo "-j <src>: extracts dir 2 chroot_dir"
+	;;
+esac
+

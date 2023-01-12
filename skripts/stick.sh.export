@@ -1,0 +1,53 @@
+#!/bin/sh
+. ./common.conf
+
+if [ $# -gt 0 ] ; then 
+	parse_opts $1 $2
+	parse_opts $3 $4
+	parse_opts $5 $6
+fi
+
+if [ "$debug" -eq 1 ] ; then 
+	echo "mount /deb/$stick_part $archdir0"
+	sleep 5
+fi
+
+[ "$debug" -eq 1 ] &&  echo "sudo mount /dev/$stick_part $archdir0"
+sudo mount /dev/"$stick_part" "$archdir0"
+[ $? -eq 0 ] || exit 1
+
+mk_bkup() {
+	[ "$debug" -eq 1 ] &&  echo "ENTER mk_bkup($1)"
+
+	if [ -s $1 ] ; then
+		[ "$debug" -eq 1 ] &&  echo "sudo mv $1 $1.OLD"
+		sudo mv $1 $1.OLD
+	fi
+
+	[ "$debug" -eq 1 ] &&  echo "EXIT mk_bkup"
+}
+
+kala2="$pad_bak_file"."$post"
+mk_bkup "$archdir"/"$kala2"
+
+[ "$debug" -eq 1 ] && echo "sudo cp $padfile $archdir/$kala2"
+sudo cp "$padfile" "$archdir"/"$kala2"
+[ "$b" -eq 1 ] && gpg -b "$archdir"/"$kala2"
+cd "$sorsa"
+
+p=$(date +%F)
+kala3="$scripts_bak_file"."$p"
+kala3="$archdir"/"$kala3"
+
+if [ "$debug" -eq 1 ] ; then
+	echo "sudo tar -jcvpf $kala3 $scripts_dir $stg0file";sleep 10
+	sudo tar -jcvpf $kala3 $scripts_dir $stg0file	 
+else
+	sudo tar -jcpf $kala3 $scripts_dir $stg0file
+fi
+
+[ "$b" -eq 1 ] && gpg -b "$kala3"
+[ "$debug" -eq 1 ] && ls -la $archdir
+
+sleep 16 
+sudo umount "$archdir0"
