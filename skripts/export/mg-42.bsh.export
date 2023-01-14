@@ -1,0 +1,18 @@
+#!/bin/sh
+
+case $1 in
+	-i)
+		ls $2/tmp/var/cache/apt/archives/ | cut -d '.' -f 1 > $2/tmp/manifest
+	;;
+	-o)
+		if [ -s $2/tmp/manifest ] ; then
+			echo "sudo rm -rf /var/cache/apt/archives/*"
+
+			for f in $(cat $2/tmp/manifest) ; do echo "apt-get reinstall $f" ; done
+			echo "sudo tar -jcvpf $2/tmp/out.tar.bz2 /var/cache/apt/archives"
+		fi
+	;;
+	*)
+		echo "FUCK OFF"
+	;;
+esac

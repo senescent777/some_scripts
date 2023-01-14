@@ -1,0 +1,12 @@
+dgb() {
+	if [ $1 = "-v" ] || [ $1 = "--v" ] ; then 
+	fi
+}
+
+griffindor() {
+	sha512sum ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > $target/$digestsdir/SAM.1
+}
+
+slithering() {
+	sha512sum ./boot/* > $digestsfile.1
+}

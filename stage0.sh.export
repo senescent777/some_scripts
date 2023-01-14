@@ -1,13 +1,16 @@
 #!/bin/sh
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
+. ./skripts/stage0_backend.sh
+
 
 base=""
 source2=""
-debug=0
 
 n=devuan 
+
 dir201122=$(pwd) 
+
 
 usage() {
 	echo "$0 --base <BASE> --add <THINGS_TO_ADD> (--bl <BOOTLOADER>) (--luser <loser>) (--v <verbosity_level>)"
@@ -16,251 +19,32 @@ usage() {
 }
 
 parse_opts() {
-	case $1 in
-		--base)
-			base=$2
-		;;
-		--add)
-			source2=./"$2"/$pad_dir
-		;;
-		--bl)
-			bloader=$2
-		;;
-		--luser)
-			n=$2
-		;;
-		--v)
-			debug=$2
-		;;
-	esac
+
+	if [ x"$1" != x ] ; then 
+		if [ x"$2" != x ] ; then 
+			case $1 in
+				--base)
+					base=$2
+				;;
+				--add)
+					source2=./"$2"/$pad_dir
+				;;
+				--bl)
+					bloader=$2
+				;;
+				--luser)
+					n=$2
+				;;
+				--v)
+				;;
+			esac
+		else
+			echo "P.V.H.H"
+			exit 100
+		fi
+	fi
 }
 
-make_dirs() {
-	echo "mkdir ./keys"
-	echo "mkdir ./distros"
-	echo "mkdir ./isolinux"
-	echo "mkdir ./grub"
-	echo "mkdir ./paketit2"
-	echo "mkdir ./v"
-}
-
-cleanup() {
-	found=$(cat /proc/mounts | grep $source | wc -l)
-	[ $found -eq 0 ] || umount $source
-}
-
-cip() {
-	[ $debug -eq 1 ] && echo "ENTER isol($1)"
-	cp -a $1/isolinux/*.cfg $target/isolinux || exit 9
-	[ $debug -eq 1 ] && ls -laR $target/isolinux;sleep 6
-	[ $debug -eq 1 ] && echo "EXIR isol($1)"	
-}
-
-cig() {
-	[ $debug -eq 1 ] && echo "ENTER BURG($1)"
-	
-	cp -a $1/boot/grub/{*.cfg,*.png} $target/boot/grub
-	cp -a $1/boot/grub/x86_64-efi/{*.cfg,*.png} $target/boot/grub/x86_64-efi	
-
-	[ $debug -eq 1 ] && ls -las $target/boot;sleep 6
-	[ $debug -eq 1 ] && echo "EXIT BURG($1)"
-}
-
-bootloader() {
-	[ $debug -eq 1 ] && echo "ENTER BOOTLOADER($1,$2)"
-	ks2="."
-
-	case $1 in
-		isolinux)
-			[ $debug -eq 1 ] && echo "cp -a $source/isolinux/ $target || exit 8"
-			cp -a $source/isolinux/ $target || exit 8
-			[ -d "$2"/../isolinux ] && ks2="$2"/../isolinux
-			cip $ks2
-		;;
-		grub)
-			[ $debug -eq 1 ] && echo "cp -a $source/boot/ $target || exit 8"
-			cp -a $source/boot/ $target || exit 8
-			[ -d "$2"/../boot ] && ks2="$2"/../boot
-			cig $ks2
-		;;
-		*)
-			echo "METTÄÄN MENI"
-			exit 11
-		;;
-	esac
-
-	[ $debug -eq 1 ] && echo "---------EXIT BOOTLOADER()-------------"
-}
-
-
-pad1() {
-	[ $debug -eq 1 ] && echo "ENTER pad1($1) "
-	[ $debug -eq 1 ] && echo -n "skripts:"
-
-	cp -a $scripts_dir/*.sh $tmpdir
-	chmod 0555 $tmpdir/*.sh
-	sudo chown root:root  $tmpdir/*.sh
-
-	[ $debug -eq 1 ] && ls -l  $tmpdir
-	[ $debug -eq 1 ] && echo "done"
-
-	[ -d $target/$digestsdir ] || mkdir -p $target/$digestsdir
-	[ $debug -eq 1 ] && echo "source2=$1"
-
-	cp -a "$1"/*.sh $target/$pad_dir || exit 9
-	chmod 0555 $target/$pad_dir/*.sh || exit 9
-	sudo chown root:root $target/$pad_dir/*.sh
-
-	[ $debug -eq 1 ] && ls -las $target/$pad_dir/*.sh 
-
-	cp -a "$1"/*.bz2  $target/$pad_dir || exit 9
-	chmod 0444 $target/$pad_dir/*.bz2
-	sudo chown root:root $target/$pad_dir/*.bz2
-
-	[ $debug -eq 1 ] && ls -las $target/$pad_dir/*.bz2 
-	sleep 1
-	[ $debug -eq 1 ] && echo "EXIT pad1() "
-}
-
-pad2() {
-	[ $debug -eq 1 ] && echo "ENTER pad2($1) "
-
-	cp -a $scripts_dir/*.conf $tmpdir 
-	cp -a "$1"/"$n".conf $target/$pad_dir || exit 9
-
-	if [ -s $target/$pad_dir/upload.sh ] || [ -s $target/$pad_dir/extras.tar.bz2 ] ; then 
-		pad2extrasd
-	fi
-
-	[ $debug -eq 1 ] && echo "ENTER pad2.2() "
-	echo "#" >> $target/$pad_dir/"$n".conf
-	grep DNS $dir201122/skripts/common.conf | grep -v '#' >> $target/$pad_dir/"$n".conf
-	grep dhcp_row $dir201122/skripts/common.conf | grep -v '#' >> $target/$pad_dir/"$n".conf
-
-	chmod 0444 $target/$pad_dir/*.conf
-	sudo chown root:root $target/$pad_dir/*.conf
-	[ $debug -eq 1 ] && echo "EXIT pad2.2() "
-
-	if [ -s "$1"/0/SAM.1 ] ; then
-		[ -d "$target"/"$pad_dir"/0 ] || mkdir "$target"/"$pad_dir"/0
-		cp "$1"/0/SAM.1 "$target"/"$pad_dir"/0
-	fi
-
-	if [ -s "$1"/0/SAM.2 ] ; then
-		[ -d "$target"/"$pad_dir"/0 ] || mkdir "$target"/"$pad_dir"/0
-		cp "$1"/0/SAM.2 "$target"/"$pad_dir"/0
-		cat "$target"/"$pad_dir"/0/SAM.2
-	fi
-
-	if [ $debug -eq 1 ] ; then
-		echo "FINAL 2 ROWS:" 
-		tail -n 2 $target/$pad_dir/"$n".conf
-		sleep 10
-		ls -las $target/$pad_dir ;sleep 10
-		echo "$1 done"
-	fi
-
-	sleep 1
-	[ $debug -eq 1 ] && echo "EXIT pad2() "
-}
-
-livedir() {
-	if [ $debug -eq 1 ] ; then 
-		echo -n "ENTER livedir($1)"
-		echo "cp -a $1/live/ $target "
-	fi
-
-	cp -a $1/live/ $target || exit 8
-
-	if [ $debug -eq 1 ] ; then
-		ls -l $target/live 
-		echo "done"
-	fi
-
-	[ $debug -eq 1 ] && echo -n "EXIT livedir()"
-}
-
-keyz() {
-	[ $debug -eq 1 ] && echo "ENTER keyz($1)"
-	[ $debug -eq 1 ] && pwd
-	[ "$debug" -eq 1 ] && echo "from kbup:sudo cp $1/pubK* $target/$digestsdir"
-
-	cp "$1"/pubK* "$target"/"$digestsdir"
-	[ "$debug" -eq 1 ] && echo $?
-
-	cp "$1"/KsK* "$target"/"$digestsdir"
-	[ "$debug" -eq 1 ] && echo $?
-	chmod o+w "$target"/"$digestsdir"
-
-	[ "$debug" -eq 1 ] && echo "CONTENTS OV $target/$digestsdir :"
-	ls -las $target/$digestsdir ;sleep 10
-	[ $debug -eq 1 ] && echo "EXIT keyz()"
-}
-
-newsquash() {
-	[ "$debug" -eq 1 ] && echo "ENTER newsquash($1, $2)"
-	olddir=$(pwd)
-
-	if [ "$debug" -eq 1 ] ; then 
-		echo "target=$target"
-
-		echo "----------------------"	
-		echo "CONTENTS OF $1 : "
-		ls -l $1
-		echo "----------------------"
-
-		echo "CONTENTS OF $2 : "
-		ls -l $2
-		echo "----------------------"
-	fi
-
-	[ -d $target/live ] || mkdir $target/live
-	cd $1
-
-	if [ "$debug" -eq 1 ] ; then
-		echo "pwd="
-		pwd
-		sleep 5
-	fi
-
-	if [ -s ./filesystem.squashfs ] ; then
-		[ "$debug" -eq 1 ] && echo "sudo rm $target/live/filesystem.squashfs"
-		sudo rm $target/live/filesystem.squashfs
-		
-		sleep 5
-
-		[ "$debug" -eq 1 ] && echo "sudo cp filesystem.squashfs $target/live"
-		sudo cp filesystem.squashfs $target/live
-		sleep 5
-	fi
-
-	[ -s ./vmlinuz ] || cp $2/vmlinuz $target/live
-	[ -s ./initrd.img ] || cp $2/initrd.img $target/live
-	
-	[ "$debug" -eq 1 ] && echo "PRE-SAM.3";sleep 5
-	cd $target
-
-	if [ "$debug" -eq 1 ] ; then 
-		echo -n "pwd="
-		pwd;sleep 2
-		ls -la;sleep 2
-	fi
-	
-	[ -d $digestsdir ] || mkdir -p $digestsdir
-	sha512sum ./live/* > $digestsdir/SAM.3 
-
-	if [ "$debug" -eq 1 ] ; then 
-		echo "CONTENTS OF $target/live"
-		ls -l $target/live;sleep 10
-		echo "----------------------"
-		echo "done"
-	fi
-
-	cd $olddir
-	[ "$debug" -eq 1 ] && echo "EXIT newsquash()"
-}
-
-if [ "$#" -lt 4 ] ; then
 	case $1 in
 		--make-dirs)
 			make_dirs
@@ -274,7 +58,6 @@ if [ "$#" -lt 4 ] ; then
 	esac
 
 	exit 1
-fi 
 
 [ -d $tmpdir0 ] || exit 7
 
@@ -286,7 +69,9 @@ parse_opts $9 ${10}
 
 t_count=$(grep $tmpdir0 /proc/mounts | wc -l)
 [ $t_count -eq 0 ] && mount $tmpdir0
+
 source_n_target
+
 
 if [ -s $source2/../live/filesystem.squashfs ] ; then 
 	newsquash /mnt/d/$source2/../live $source/live
@@ -294,8 +79,9 @@ else
 	livedir $source
 fi
 
-pad1 $source2
-pad2 $source2
+copy_main $source2
+copy_conf $source2
+copy_sums $source2
 
 if [ -s "$source2"/0/pubK.new ] || [ -s "$source2"/0/KsK.new ] ; then
 	keyz "$source2"/0
@@ -308,12 +94,13 @@ else
 fi
 
 bootloader $bloader $source2 
+
 chown -R 1000:1000 $target
 chmod -R a-w $target
 
 cp -a ./"$pkgsdir2" $tmpdir 
+
 ls -laRs $target/$pad_dir
 
-[ $debug -eq 1 ] && echo "cleanup"
 cleanup
-echo "MKSUMS.SH"
+
