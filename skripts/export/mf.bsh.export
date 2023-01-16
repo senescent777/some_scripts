@@ -1,17 +1,35 @@
 #!/bin/sh
 
+target=""
+cleanup=0
+
 . ./common.conf
 . ./common_funcs.sh
 
-dgb $1
-dgb $2
+parse_opts_real() {
+	case $1 in
+		--target)
+			target=$2
+		;;
+		--cleanup)
+			cleanup=$2
+		;;	
+	esac
+}
 
+usage() {
+	echo "U\$AG1 Y0JIMBO!!!"
+}
 
-if [ -s $1/mf.conf ] ; then
- . $1/mf.conf
+parse_opts $1 $2
+parse_opts $3 $4
+parse_opts $5 $6
+
+if [ -s $target/mf.conf ] ; then
+	. $target/mf.conf
 else
-  echo "FUCK OFF"
-  exit 666
+ 	echo "FUCK OFF"
+ 	exit 666
 fi
 
 process_dir() {
@@ -20,7 +38,7 @@ process_dir() {
 	if [ -s ./$1 ] ; then 
 		if [ -d ./$1 ] ; then
 				echo $1
-		        	ls ./$1 ;sleep 6
+		        	ls ./$1 ;sleep 4
 			fi
 
 			cd ./$1
@@ -33,24 +51,42 @@ process_dir() {
 				tar -jcf ../$1.tar.$2 .
 			fi
 
-			cd ..
+			cd ../..
+
+			ts=$(sha512sum $pad_dir/$1.tar.$2)
+			echo $ts >> $digestsdir/SAM.2
+
+			if [ -s $pad_dir/$1.sh ] ; then
+				ts=$(sha512sum $pad_dir/$1.sh)
+				echo $ts >> $digestsdir/SAM.2
+			fi
+
+			cd $pad_dir
 		fi
 	fi
 
 }
 
-if [ ! -s $1/extras/run/live/medium/"$pad_dir"/mg-42.bsh ] ; then 
-	cp ./mg-42.bsh $1/extras/run/live/medium/$pad_dir
+if [ ! -s $target/extras/run/live/medium/$pad_dir/mg-42.bsh ] ; then 
+	cp ./mg-42.bsh $target/extras/run/live/medium/$pad_dir
 fi
 
-cd $1
+cd $target/..
+
+
+[ -s $digestsdir/SAM.2 ] && rm $digestsdir/SAM.2 
+[ -d $digestsdir ] || mkdir -p $digestsdir
+touch $digestsdir/SAM.2 
+
+cd $target
+if [ $cleanup -eq 1 ] ; then
+	rm ./*.bz2;rm ./*.bz3
+fi
+
+
 for d in $bz3files ; do process_dir $d bz3 ; done
-for d in $bz2files ; do process_dir $d bz2; done
+for d in $bz2files ; do process_dir $d bz2 ; done
 
-cd $1/..
-[ -s ./$digestsdir/SAM.2 ] && rm ./$digestsdir/SAM.2 
-[ -d ./$digestsdir ] || mkdir -p ./$digestsdir
-touch ./$digestsdir/SAM.2 
+cd $target/..
+for d in $conffiles ; do sha512sum $pad_dir/$d >> $digestsdir/SAM.2 ;done
 
-for d in $bz3files ; do sha512sum $pad_dir/$d.* >> $digestsdir/SAM.2 ;done
-for d in $bz2files ; do sha512sum $pad_dir/$d.* >> $digestsdir/SAM.2 ;done

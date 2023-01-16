@@ -1,7 +1,7 @@
 #!/bin/sh
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
-. ./skripts/stage0_backend.sh
+. ./skripts/stage0_backend.bsh
 
 
 base=""
@@ -18,46 +18,38 @@ usage() {
 	echo "$0 --make-dirs"
 }
 
-parse_opts() {
-
-	if [ x"$1" != x ] ; then 
-		if [ x"$2" != x ] ; then 
-			case $1 in
-				--base)
-					base=$2
-				;;
-				--add)
-					source2=./"$2"/$pad_dir
-				;;
-				--bl)
-					bloader=$2
-				;;
-				--luser)
-					n=$2
-				;;
-				--v)
-				;;
-			esac
-		else
-			echo "P.V.H.H"
-			exit 100
-		fi
-	fi
+parse_opts_real() {
+	case $1 in
+		--base)
+			base=$2
+		;;
+		--add)
+			source2=./"$2"/$pad_dir
+		;;
+		--bl)
+			bloader=$2
+		;;
+		--luser)
+			n=$2
+		;;
+		--get-devuan)
+			get_devuan $2
+			exit
+		;;
+	esac	
 }
 
+single_param() {
 	case $1 in
 		--make-dirs)
 			make_dirs
 		;;
-		--get-devuan)
-			get_devuan $2
-		;;
-		*)
+		--h)
 			usage
 		;;
 	esac
+}
 
-	exit 1
 
 [ -d $tmpdir0 ] || exit 7
 
@@ -73,25 +65,29 @@ t_count=$(grep $tmpdir0 /proc/mounts | wc -l)
 source_n_target
 
 
-if [ -s $source2/../live/filesystem.squashfs ] ; then 
-	newsquash /mnt/d/$source2/../live $source/live
-else
-	livedir $source
-fi
+[ -d $target/live ] || mkdir $target/live
+olddir=$(pwd)
+cd $source2/../live
+[ -d $target/$digestsdir ] || mkdir -p $target/$digestsdir
+
+live1
+live2
+live3
+
+sleep 5
+
+cd $olddir
 
 copy_main $source2
 copy_conf $source2
 copy_sums $source2
 
-if [ -s "$source2"/0/pubK.new ] || [ -s "$source2"/0/KsK.new ] ; then
-	keyz "$source2"/0
-else
-	if [ -s $digestsdir/pubK.new ] || [ -s $digestsdir/KsK.new ] ; then
-		keyz ./$digestsdir 
-	else
-		keyz ./keys
-	fi
-fi
+klist="$source2/0 $digestsdir ./keys"
+
+for x in $klist; do
+	[ -s $x/pubK.new ] && keyz $x
+	[ -s $x/pubK.new ] && break
+done
 
 bootloader $bloader $source2 
 
@@ -100,6 +96,7 @@ chmod -R a-w $target
 
 cp -a ./"$pkgsdir2" $tmpdir 
 
+touch $target/$pad_dir/*
 ls -laRs $target/$pad_dir
 
 cleanup

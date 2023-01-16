@@ -1,12 +1,41 @@
-dgb() {
-	if [ $1 = "-v" ] || [ $1 = "--v" ] ; then 
-	fi
-}
-
 griffindor() {
 	sha512sum ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > $target/$digestsdir/SAM.1
 }
 
 slithering() {
 	sha512sum ./boot/* > $digestsfile.1
+}
+
+parse_opts() {
+	common_pars=0
+
+	if [ x"$1" != x ] ; then 
+		if [ x"$2" != x ] ; then
+			case $1 in
+				-v|-V|--v|--V)
+					common_pars=1
+				;;
+			esac
+
+			[ $common_pars -eq 0 ] && parse_opts_real $1 $2
+		else
+			case $1 in
+				-h|--h)
+					common_pars=1
+					usage
+				;;		
+			esac
+
+			[ $common_pars -eq 0 ] && single_param $1
+		fi
+
+		if [ x$cmd != x ] ; then
+			echo "1"
+		else
+			if [ $common_pars -eq 0 ] ; then
+				echo 0
+				cmd=$1
+			fi
+		fi
+	fi
 }

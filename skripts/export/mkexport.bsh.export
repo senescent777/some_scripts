@@ -15,7 +15,8 @@ if [ -d $1 ] ; then
 	for f in $(find $1 -name '*.bsh') ; do mangle $f ; done
 	mv $1/*.bsh.export $1/export
 else
-	if [ -s $1 ] ; then 
+	if [ -s $1 ] ; then
+		[ -d ./export ] || mkdir -p ./export
 		mangle $1
 	fi
 fi

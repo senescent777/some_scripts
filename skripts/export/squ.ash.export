@@ -3,9 +3,32 @@
 . ./common_funcs.sh
 
 
-dgb $2
-dgb $3
-dgb $4
+dir2=""
+cmd=""
+
+parse_opts_real() {
+
+	case $1 in
+		--dir2)
+			dir2=$2
+			[ -d $2 ] || exit 666
+		;;
+		-x|-y|-i|-j)
+			if [ -s $2 ] || [ -d $2 ] ; then
+			else
+				exit 666
+			fi
+		;;
+	esac
+}
+
+single_param() {
+	echo "single param"
+}
+
+parse_opts $1 $2
+parse_opts $3 $4
+parse_opts $5 $6
 
 xxx() {
 	if [ x$squash0 != x ]; then
@@ -84,6 +107,7 @@ jlk1() {
 
 		cd $squash_dir/$pad2
 
+
 		cp $1/$pad_dir/*.sh .
 		chmod a+x *.sh
 
@@ -112,7 +136,10 @@ jlk1() {
 
 jlk2() {
 
+
+
 	cp -a $1/$digestsdir/* ./0
+
 	sleep 5
 }
 
@@ -162,7 +189,33 @@ cfd() {
 	fi
 }
 
-case $1 in
+usage() {
+	echo -n "-x <source_file>:eXtracts <source_file> to "
+	echo "$squash0 "
+
+	echo -n "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to "
+	echo "$squash0 "
+
+	echo "-b is supposed top be run just Before -c but after -r"
+
+	echo -n "-d :Destroys contents of "
+	echo "$squash0/ and $tmpdir/d.rem "
+
+	echo -n "-c <target_file> [optional_params_4_mksquashfs?] : Compresses "
+	echo "$squash_dir to <target_file> with optional_params"
+
+	echo -n "-r :runs chRoot in "
+	echo "$squash_dir "
+	echo "as of 21.12.22 /proc,/sys are no longer bind-mounted in order to find out a root cause for some weird shit"
+
+	echo "-i <src> : Installs scripts 2 chroot_dir "
+	echo "-j <src> [ --dir2 <stuff>] : extracts dir 2 chroot_dir"
+
+	echo "-f attempts to Fix some problems w/ sudo"
+	echo "--v 1 adds Verbosity"
+}
+
+case $cmd in
 	-x)
 		xxx $2
 	;;
@@ -215,36 +268,14 @@ case $1 in
 	;;
 	-j)
 		jlk1 $2
-		jlk2 $3
+		jlk2 $dir2 
 		fix_sudo
 	;;
 	-f)
 		fix_sudo
 	;;
 	*)
-		echo -n "-x <source_file>:eXtracts <source_file> to "
-		echo "$squash0 "
-
-		echo -n "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to "
-		echo "$squash0 "
-
-		echo "-b is supposed top be run just Before -c but after -r"
-
-		echo -n "-d :Destroys contents of "
-		echo "$squash0/ and $tmpdir/d.rem "
-
-		echo -n "-c <target_file> [optional_params_4_mksquashfs] : Compresses "
-		echo "$squash_dir to <target_file> with optional_params"
-
-		echo -n "-r :runs chRoot in "
-		echo "$squash_dir "
-		echo "as of 21.12.22 /proc,/sys are no longer bind-mounted in order to find out a root cause for some weird shit"
-
-		echo "-i <src>: Installs scripts 2 chroot_dir "
-		echo "-j <src>: extracts dir 2 chroot_dir"
-
-		echo "-f attempts to Fix some problems w/ sudo"
-		echo "--v 1 adds Verbosity"
+		usage
 	;;
 esac
 

@@ -3,7 +3,7 @@
 . ./common_funcs.sh
 
 
-dgb $1
+parse_opts $1 $2
 
 cd ./$targetdir
 [ -d $digestsdir ] || mkdir -p $digestsdir
@@ -124,7 +124,7 @@ echo $?
 fi
 
 
-sha512sum $digestsdir/* | grep -v '$digestsfile0.4' | grep -v 'cf83e' | head -n 10 > $digestsfile.4
+sha512sum $digestsdir/* | grep -v '$digestsfile0.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > $digestsfile.4
 
 	sleep 5
 	echo "chmod+chown"

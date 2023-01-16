@@ -1,39 +1,36 @@
 #!/bin/sh
 
 . ./common.conf
+. ./common_funcs.sh
+
 post="stable"
 b=0
 
-parse_opts() {
-	if [ x"$1" != x ] ; then 
-		if [ x"$2" != x ] ; then 
-			case $1 in
-				-v)
-				;;
-				-t)
-					post=$2
-				;;
-				-b)
-					b=$2
-				;;
-			esac
-		else
-			echo "P.V.H.H"
-			exit 100
-		fi
-	fi
+usage() {
+	echo "$0 [-t <type>] [--v <verbosity>] [-b <sign_or_not>]"
 }
 
-	parse_opts $1 $2
-	parse_opts $3 $4
-	parse_opts $5 $6
-fi
+parse_opts_real() {
+	case $1 in
+		-t)
+			post=$2
+		;;
+		-b)
+			b=$2
+		;;
+		*)
+			usage
+			exit 666
+		;;
+	esac
+}
 
-	echo "mount /deb/$stick_part $archdir0"
-	sleep 5
-fi
+parse_opts $1 $2
+parse_opts $3 $4
+parse_opts $5 $6
 
-sudo mount /dev/"$stick_part" "$archdir0"
+
+sudo mount /dev/$stick_part "$archdir0"
 [ $? -eq 0 ] || exit 1
 
 mk_bkup() {
@@ -44,24 +41,30 @@ mk_bkup() {
 
 }
 
-kala2="$pad_bak_file"."$post"
-mk_bkup "$archdir"/"$kala2"
+kala2=$pad_bak_file.$post
+mk_bkup $archdir/$kala2
 
-sudo cp "$padfile" "$archdir"/"$kala2"
-[ "$b" -eq 1 ] && gpg -b "$archdir"/"$kala2"
-cd "$sorsa"
+sudo cp $padfile $archdir/$kala2
+
+if [ $b -eq 1 ] ; then 
+	gpg -b $archdir/$kala2
+fi
+
+cd $sorsa
 
 p=$(date +%F)
-kala3="$scripts_bak_file"."$p"
-kala3="$archdir"/"$kala3"
+kala3=$scripts_bak_file.$p
+kala3=$archdir/$kala3
 
-	echo "sudo tar -jcvpf $kala3 $scripts_dir $stg0file";sleep 10
+	echo "sudo tar -jcvpf $kala3 $scripts_dir $stg0file";sleep 5
 	sudo tar -jcvpf $kala3 $scripts_dir $stg0file	 
 else
 	sudo tar -jcpf $kala3 $scripts_dir $stg0file
 fi
 
-[ "$b" -eq 1 ] && gpg -b "$kala3"
+if [ $b -eq 1 ] ; then 
+	gpg -b $kala3
+fi
 
 sleep 16 
 

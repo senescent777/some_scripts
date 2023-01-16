@@ -1,4 +1,5 @@
 #!/bin/sh
+[ -s ./common_funcs.sh ] && . ./common_funcs.sh
 
 case $1 in
 	-i)
