@@ -11,9 +11,8 @@ n=devuan
 
 dir201122=$(pwd) 
 
-
 usage() {
-	echo "$0 --base <BASE> --add <THINGS_TO_ADD> (--bl <BOOTLOADER>) (--luser <loser>) (--v <verbosity_level>)"
+	echo "$0 --base <BASE> --add <THINGS_TO_ADD> [--bl <BOOTLOADER>] [--luser <loser>] [--v <verbosity_level>]"
 	echo "$0 --get-devuan <download_dir>"
 	echo "$0 --make-dirs"
 }
@@ -24,7 +23,7 @@ parse_opts_real() {
 			base=$2
 		;;
 		--add)
-			source2=./"$2"/$pad_dir
+			source2=$2/$TARGET_pad_dir
 		;;
 		--bl)
 			bloader=$2
@@ -50,7 +49,6 @@ single_param() {
 	esac
 }
 
-
 [ -d $tmpdir0 ] || exit 7
 
 parse_opts $1 $2
@@ -59,45 +57,56 @@ parse_opts $5 $6
 parse_opts $7 $8
 parse_opts $9 ${10}
 
+	echo "$0 --h"
+	exit
+fi
+
 t_count=$(grep $tmpdir0 /proc/mounts | wc -l)
 [ $t_count -eq 0 ] && mount $tmpdir0
 
-source_n_target
-
+source_n_target $base $source2
+[ x$target != x ] || exit 99
+[ -d $target ] || exit 100
 
 [ -d $target/live ] || mkdir $target/live
 olddir=$(pwd)
 cd $source2/../live
-[ -d $target/$digestsdir ] || mkdir -p $target/$digestsdir
+echo $?
+[ -d $target/$TARGET_DIGESTS_dir ] || mkdir -p $target/$TARGET_DIGESTS_dir
 
-live1
-live2
-live3
-
+live1 $source2/../live
+live2 $source2/../live
+live3 $source2/../live
 sleep 5
 
 cd $olddir
 
 copy_main $source2
-copy_conf $source2
+copy_conf $source2 $n
 copy_sums $source2
 
-klist="$source2/0 $digestsdir ./keys"
+
+klist="$source2/0 $TARGET_DIGESTS_dir ./keys"
 
 for x in $klist; do
-	[ -s $x/pubK.new ] && keyz $x
-	[ -s $x/pubK.new ] && break
+	if [ -s $x/$TARGET_Dkname1 ] ; then 
+		keyz $x
+		break
+	fi	
 done
 
 bootloader $bloader $source2 
 
-chown -R 1000:1000 $target
-chmod -R a-w $target
+chown -R 1000:1000 $target/$TARGET_DIGESTS_dir
+chmod -R u+w $target/$TARGET_DIGESTS_dir
+chown -R 1000:1000 $target/isolinux/*
+chmod -R a+w $target/isolinux/*
+echo $?
 
-cp -a ./"$pkgsdir2" $tmpdir 
+cp -a ./$pkgsdir2 $tmpdir 
 
-touch $target/$pad_dir/*
-ls -laRs $target/$pad_dir
+touch $target/$TARGET_pad_dir/*
 
 cleanup
 
+echo "MKSUMS.SH" 

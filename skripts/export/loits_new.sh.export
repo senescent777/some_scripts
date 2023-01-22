@@ -7,7 +7,7 @@ target=""
 bloader="isolinux"
 
 usage() {
-	echo "$0 --in <SOURCE_DIR> --out <OUTFILE> --bl <BOOTLOADER>"
+	echo "$0 --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666
 }
 
@@ -20,7 +20,7 @@ parse_opts_real() {
 		--out)
 			target=$2
 		;;
-		--bl)
+		--bl) 
 			bloader=$2
 		;; 
 		*)
@@ -30,9 +30,23 @@ parse_opts_real() {
 	
 }
 
+mk_pad_bak() {
+	[ -s ./$1 ] && sudo mv $1 $1.OLD
+	cd $srcdir
+	pwd
+
+	sudo chown -R root:root ./*
+	sudo chmod -R a-w $TARGET_pad_dir/*
+	sudo chmod  a-w $TARGET_pad_dir/ 
+
+	sudo tar $TARGET_TAR_OPTS -cvf ../$1 $2
+
+}
+
 parse_opts $1 $2
 parse_opts $3 $4
 parse_opts $5 $6
+
 
 [ -d ./$srcdir ] || exit
 gi=$(sudo which genisoimage)
@@ -44,16 +58,12 @@ fi
 
 
 
-[ -s ./$padfile ] && sudo mv ./$padfile.OLD
-cd $srcdir
 
-sudo chown -R root:root ./*
-sudo chmod -R a-w $pad_dir/*
-sudo chmod  a-w $pad_dir/ 
-sudo tar -cvfp /../$padfile $pad_dir
 
-sudo mv p ../$padfile 
- 
+mk_pad_bak $TARGET_pad_bak_file $TARGET_pad_dir
+sleep 1
+echo $bloader
+
 case $bloader in
 	isolinux)
 		genisoimage -o ../$target $gi_opts -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table .
@@ -64,7 +74,6 @@ case $bloader in
 		break
 	;;
 	*)
-		echo "PAINU VITTUUN"
 		break
 	;;
 esac
