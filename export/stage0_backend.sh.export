@@ -1,0 +1,287 @@
+copy_conf_extrasd() {
+
+	outfile=$target/$pad_dir/"$n".conf
+	echo "\r\n" >> $outfile
+
+	echo "stick=/dev/$stick_part" >> $outfile
+	echo "a0=$archdir0" >> $outfile
+	echo "archdir=4522/" >> $outfile
+	echo "archfile=$pad_bak_file" >> $outfile
+
+	echo -n "archive=" >> $outfile
+	echo -n "$" >> $outfile
+	echo -n "archdir/" >> $outfile
+	echo -n "$" >> $outfile
+	echo  "archfile" >> $outfile
+
+}
+
+mount_img() {
+
+	if [ -d $source ]; then
+		found=$(cat /proc/mounts | grep $source | wc -l)
+
+		if [ $found -gt 0 ] ; then
+			umount $source
+			exit 4
+		else
+			mount -o loop,ro $1 $source
+		fi
+
+	else
+		exit 5
+	fi
+
+}
+
+source_n_target() {
+	[ -d $source2 ] || exit 2
+	[ -d $source ] || mkdir -p $source
+
+	if [ -d $base ]; then
+		source=$base
+	else
+		if [ -s $base ] ; then
+			mount_img $base
+		else
+			exit 6
+		fi
+	fi
+
+		echo "source=$source"
+		echo "source2=$source2"
+		echo "target=$target"
+		echo "creating $target ..."
+		sleep 5
+	fi
+
+	[ -d $target ] && rm -rf $tmpdir/target
+	mkdir -p $target
+
+	sleep 1
+}
+
+get_devuan() {
+	[ -d $distros_dir ] || sudo mkdir $distros_dir
+	cd $distros_dir
+
+		wget $wget_opts $1
+	else
+		wget $wget_opts --recursive $wget_def_url
+	fi
+
+	sha256sum -c SHA256SUMS
+	[ "$?" -eq 0 ] || echo "WITUIX MÄN"
+}
+
+make_dirs() {
+	echo "mkdir ./keys"
+	echo "mkdir ./distros"
+	echo "mkdir ./isolinux"
+	echo "mkdir ./grub"
+	echo "mkdir ./paketit2"
+	echo "mkdir ./v"
+}
+
+cleanup() {
+	found=$(cat /proc/mounts | grep $source | wc -l)
+	[ $found -eq 0 ] || umount $source
+}
+
+cip() {
+
+	
+
+}
+
+cig() {
+	
+	
+}
+
+bootloader() {
+	ks2="."
+
+	if [ -s $target/$digestsdir/SAM.1 ] ; then
+	fi
+
+	cd $target;pwd
+
+	case $1 in
+		isolinux)
+			cp -a $source/isolinux/ . || exit 8
+
+			if [ -d "$2"/../isolinux ] ; then 
+				ks2="$2"/../isolinux
+				echo "cp -a $ks2/isolinux/*.cfg ./isolinux || exit 9"
+			fi
+
+			if [ ! -s $target/$digestsdir/SAM.1 ] ; then
+				griffindor
+			fi
+		;;
+		grub)
+			cp -a $source/boot/ $target || exit 8
+			
+			if [ -d "$2"/../boot ] ; then 
+				ks2="$2"/../boot
+			
+				echo "cp -a $ks2/boot/grub/{*.cfg,*.png} ./boot/grub"
+				echo "cp -a $ks2/boot/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
+			fi
+
+			if [ ! -s $target/$digestsdir/SAM.1 ] ; then 
+				sha512sum ./boot/* > $digestsdir/SAM.1
+			fi
+		;;
+		*)
+			echo "METTÄÄN MENI"
+			exit 11
+		;;
+	esac
+
+		ls -laR $digestsdir;sleep 5
+		echo "---------EXIT BOOTLOADER()-------------"
+	fi
+}
+
+copy_main() {
+
+	cp -a $scripts_dir/*.sh $tmpdir
+	chmod 0555 $tmpdir/*.sh
+	sudo chown root:root  $tmpdir/*.sh
+
+
+	[ -d $target/$digestsdir ] || mkdir -p $target/$digestsdir
+
+	cp -a $1/*.sh $target/$pad_dir || exit 9
+	chmod 0555 $target/$pad_dir/*.sh || exit 9
+	sudo chown root:root $target/$pad_dir/*.sh
+
+	cp -a "$1"/*.bz2  $target/$pad_dir || exit 9
+	chmod 0444 $target/$pad_dir/*.bz2
+	sudo chown root:root $target/$pad_dir/*.bz2
+
+	sleep 1
+}
+
+copy_conf() {
+
+	cp -a $scripts_dir/*.conf $tmpdir 
+	cp -a $1/$n.conf $target/$pad_dir || exit 9
+
+	if [ -s $target/$pad_dir/upload.sh ] || [ -s $target/$pad_dir/extras.tar.bz2 ] ; then 
+		copy_conf_extrasd
+	fi
+
+
+	chmod 0444 $target/$pad_dir/*.conf
+	sudo chown root:root $target/$pad_dir/*.conf
+
+	sleep 1
+
+		echo "FINAL 2 ROWS:" 
+		tail -n 2 $target/$pad_dir/"$n".conf
+		sleep 10
+		ls -las $target/$pad_dir ;sleep 10
+		echo "$1 done"
+
+}
+
+copy_sums() {
+
+	if [ -d $target/$digestsdir ] ; then
+		echo "targeidir alr3ady exiusts"
+	else
+		mkdir $target/$digestsdir
+		sleep 5
+	fi
+
+	if [ -s $1/0/SAM.1 ] ; then
+		cp $1/0/SAM.1 $target/$digestsdir
+	fi
+
+	if [ -s $1/0/SAM.2 ] ; then
+
+		cp $1/0/SAM.2 $target/$digestsdir
+
+	fi
+
+}
+
+livedir() {
+		echo -n "ENTER livedir($1)"
+		echo "cp -a $1/live/ $target "
+	fi
+
+	cp -a $1/live/ $target || exit 8
+
+		ls -l $target/live 
+		echo "done"
+	fi
+
+}
+
+keyz() {
+
+	cp $1/pubK* $target/$digestsdir
+
+	cp $1/KsK* $target/$digestsdir
+	chmod o+w $target/$digestsdir
+
+	ls -las $target/$digestsdir ;sleep 10
+}
+
+newsquash() {
+	olddir=$(pwd)
+
+		echo "target=$target"
+
+		echo "----------------------"	
+		echo "CONTENTS OF $1 : "
+		ls -l $1
+		echo "----------------------"
+
+		echo "CONTENTS OF $2 : "
+		ls -l $2
+		echo "----------------------"
+	fi
+
+	[ -d $target/live ] || mkdir $target/live
+	cd $1
+
+		echo "pwd="
+		pwd
+		sleep 5
+	fi
+
+	if [ -s ./filesystem.squashfs ] ; then
+		sudo rm $target/live/filesystem.squashfs
+		
+		sleep 5
+
+		sudo cp filesystem.squashfs $target/live
+		sleep 5
+	fi
+
+	[ -s ./vmlinuz ] || cp $2/vmlinuz $target/live
+	[ -s ./initrd.img ] || cp $2/initrd.img $target/live
+
+	cd $target
+
+		echo -n "pwd="
+		pwd;sleep 2
+		ls -la;sleep 2
+	fi
+	
+	[ -d $digestsdir ] || mkdir -p $digestsdir
+	sha512sum ./live/* > $digestsdir/SAM.3 
+
+		echo "CONTENTS OF $target/live"
+		ls -l $target/live;sleep 10
+		echo "----------------------"
+		echo "done"
+	fi
+
+	cd $olddir
+}

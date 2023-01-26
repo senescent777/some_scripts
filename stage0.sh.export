@@ -64,7 +64,8 @@ fi
 t_count=$(grep $tmpdir0 /proc/mounts | wc -l)
 [ $t_count -eq 0 ] && mount $tmpdir0
 
-source_n_target $base $source2
+source_n_target $base
+
 [ x$target != x ] || exit 99
 [ -d $target ] || exit 100
 
@@ -74,28 +75,28 @@ cd $source2/../live
 echo $?
 [ -d $target/$TARGET_DIGESTS_dir ] || mkdir -p $target/$TARGET_DIGESTS_dir
 
-live1 $source2/../live
-live2 $source2/../live
-live3 $source2/../live
+live1 $source2/../live $target/live
+live2 $source2/../live $target/live
+live3 $source2/../live $target/live
 sleep 5
 
 cd $olddir
 
-copy_main $source2
-copy_conf $source2 $n
-copy_sums $source2
+copy_main $source2 $target/$TARGET_pad_dir 
+copy_conf $source2 $n $target/$TARGET_pad_dir
+copy_sums $source2 $target/$TARGET_DIGESTS_dir
 
 
 klist="$source2/0 $TARGET_DIGESTS_dir ./keys"
 
 for x in $klist; do
 	if [ -s $x/$TARGET_Dkname1 ] ; then 
-		keyz $x
+		keyz $x $target/$TARGET_DIGESTS_dir
 		break
 	fi	
 done
 
-bootloader $bloader $source2 
+bootloader $bloader $source2 $target/$TARGET_DIGESTS_dir
 
 chown -R 1000:1000 $target/$TARGET_DIGESTS_dir
 chmod -R u+w $target/$TARGET_DIGESTS_dir
@@ -103,7 +104,7 @@ chown -R 1000:1000 $target/isolinux/*
 chmod -R a+w $target/isolinux/*
 echo $?
 
-cp -a ./$pkgsdir2 $tmpdir 
+cp -a $sorsa/$pkgsdir2 $tmpdir 
 
 touch $target/$TARGET_pad_dir/*
 

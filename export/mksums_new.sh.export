@@ -1,0 +1,136 @@
+#!/bin/sh
+
+. ./common.conf
+. ./common_funcs.sh
+
+parse_opts $1 $2
+cd $targetdir 
+
+[ x$TARGET_DIGESTS_dir != x ] || exit 1
+
+if [ ! -d $TARGET_DIGESTS_dir ] ; then 
+	mkdir -p $TARGET_DIGESTS_dir
+fi
+
+
+rm $TARGET_DIGESTS_file*
+
+rm $TARGET_DIGESTS_dir/*.sig
+for i in 1 2 3 4 ; do touch $TARGET_DIGESTS_file.$i ; done
+
+
+	echo "CONTENTS OF: $TARGET_DIGESTS_dir"
+	ls -las $TARGET_DIGESTS_dir
+	sleep 6
+
+part1() {
+	if [ ! -s $TARGET_DIGESTS_dir/SAM.1 ] ; then
+		echo "grif|slith" 
+		if [ -d ./isolinux ] ; then
+		else
+			slithering
+		fi
+	else
+		mv $TARGET_DIGESTS_dir/SAM.1 $TARGET_DIGESTS_file.1
+	fi
+}
+
+part1
+
+sleep 5
+
+part2() {
+	if [ ! -s $TARGET_DIGESTS_dir/SAM.2 ] ; then 
+		
+		if [ x$TARGET_pad_dir != x ] ; then 
+			sha512sum $TARGET_pad_dir/* | grep -v $TARGET_DIGESTS_file0 > $TARGET_DIGESTS_file.2
+		else
+			echo "FUXX 0FXXX @$$H013!!!xx"
+		fi
+	else
+		mv $TARGET_DIGESTS_dir/SAM.2 $TARGET_DIGESTS_file.2
+	fi
+}
+
+part2
+sleep 5 
+
+part3() {
+	if [ ! -s $TARGET_DIGESTS_dir/SAM.3 ] ; then
+		sha512sum ./live/* > $TARGET_DIGESTS_file.3
+	else
+		echo "mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3"
+		mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3
+	fi
+}
+
+part3
+sleep 5
+
+part4() {
+		echo "IS $TARGET_DIGESTS_file.1 ok?"
+	
+		sha512sum -c $TARGET_DIGESTS_file.1
+		[ $? -eq 0 ] || exit
+}
+
+part4
+part5() {
+		sleep 5
+		echo "IS $TARGET_DIGESTS_file.2 ok?"
+		sha512sum -c $TARGET_DIGESTS_file.2 --ignore-missing
+}
+
+part5
+[ $? -eq 0 ] || exit
+
+part6() {
+		sleep 5 
+	
+		sha512sum -c $TARGET_DIGESTS_file.3
+	fi
+}
+
+part6
+
+if [ $? -eq 0 ]; then 
+	gpg -u $kayid -sb $TARGET_DIGESTS_file.1 
+
+	if [ $? -gt 0 ] ; then
+		echo "install -keys --i"
+		exit 666
+	fi
+ 
+	gpg -u $kayid -sb $TARGET_DIGESTS_file.2
+
+	[ -s $TARGET_DIGESTS_file.3 ] && gpg -u $kayid -sb $TARGET_DIGESTS_file.3
+fi
+
+part7() {
+	gpg -u $kayid2 -sb $TARGET_Dpubkf
+	echo $?
+	
+	
+		gpgv --keyring $TARGET_Dpubkg $TARGET_Dpubkf.sig $TARGET_Dpubkf
+		gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.1.sig $TARGET_DIGESTS_file.1
+		gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.2.sig $TARGET_DIGESTS_file.2
+		gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.3.sig $TARGET_DIGESTS_file.3
+
+	echo $?
+}
+
+part7 
+sha512sum $TARGET_DIGESTS_dir/* | grep -v '$TARGET_DIGESTS_file.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > $TARGET_DIGESTS_file.4
+
+	echo "	sha512sum -c $TARGET_DIGESTS_file.4" 
+	sleep 5
+
+	sha512sum -c $TARGET_DIGESTS_file.4
+	echo $?
+	sleep 2
+
+	echo "$TARGET_DIGESTS_dir;"
+	ls -laRs $TARGET_DIGESTS_dir;sleep 5
+fi
+
+echo "loits_new ?"

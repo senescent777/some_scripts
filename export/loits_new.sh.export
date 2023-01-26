@@ -1,0 +1,80 @@
+#!/bin/sh
+. ./common.conf
+. ./common_funcs.sh
+
+srcdir=""
+target=""
+bloader="isolinux"
+
+usage() {
+	echo "$0 --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
+	exit 666
+}
+
+
+parse_opts_real() {
+	case $1 in
+		--in)
+			srcdir=$2
+		;;
+		--out)
+			target=$2
+		;;
+		--bl) 
+			bloader=$2
+		;; 
+		*)
+			echo "MEE HIMAAS LEIKKIMÄÄN"
+		;;
+	esac
+	
+}
+
+mk_pad_bak() {
+	[ -s ./$1 ] && sudo mv $1 $1.OLD
+	cd $srcdir
+	pwd
+
+	sudo chown -R root:root ./*
+	sudo chmod -R a-w $TARGET_pad_dir/*
+	sudo chmod  a-w $TARGET_pad_dir/ 
+
+	sudo tar $TARGET_TAR_OPTS -cvf ../$1 $2
+
+}
+
+parse_opts $1 $2
+parse_opts $3 $4
+parse_opts $5 $6
+
+
+[ -d ./$srcdir ] || exit
+gi=$(sudo which genisoimage)
+
+if [ -x "$gi" ] ; then
+else
+	sudo dpkg -i $pkgsdir2/*.deb
+fi
+
+
+
+
+mk_pad_bak $TARGET_pad_bak_file $TARGET_pad_dir
+sleep 1
+echo $bloader
+
+case $bloader in
+	isolinux)
+		genisoimage -o ../$target $gi_opts  .
+		break
+	;;
+	grub)
+		echo "TÄHÄN ON TULOSSA:grub-mkrescue-KIKKAULIA"
+		break
+	;;
+	*)
+		break
+	;;
+esac
+
+echo "EHKÄ stick.sh ?"

@@ -1,0 +1,289 @@
+mangle_conf() {
+}
+
+mount_img() {
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+
+	if [ -d $2 ]; then
+		found=$(cat /proc/mounts | grep $2 | wc -l)
+
+		if [ $found -gt 0 ] ; then
+			umount $source
+			exit 4
+		else
+			mount -o loop,ro $1 $2
+		fi
+
+	else
+		exit 5
+	fi
+
+}
+
+source_n_target() {
+	[ x$1 != x ] || exit 2
+	[ -d $source ] || mkdir -p $source
+
+	if [ -d $1 ]; then
+		source=$1 
+	else
+		if [ -s $base ] ; then
+			mount_img $1 $source
+		else
+			exit 6
+		fi
+	fi
+
+	[ -d $target ] && rm -rf $tmpdir/target
+	mkdir -p $target
+
+	sleep 1
+}
+
+get_devuan() {
+	[ -d $distros_dir ] || sudo mkdir $distros_dir
+	cd $distros_dir
+
+		wget $wget_opts $1
+	else
+		wget $wget_opts --recursive $wget_def_url
+	fi
+
+	sha256sum -c SHA256SUMS
+}
+
+make_dirs() {
+	echo "mkdir ./keys"
+	echo "mkdir ./distros"
+	echo "mkdir ./isolinux"
+	echo "mkdir ./grub"
+	echo "mkdir ./paketit2"
+	echo "mkdir ./v"
+}
+
+cleanup() {
+	found=$(cat /proc/mounts | grep $source | wc -l)
+	[ $found -eq 0 ] || umount $source
+}
+
+bootloader() {
+	ks2="."
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+	[ x$target != x ] || exit 3
+	[ -d $target ] || exit 3
+
+	if [ -s $3/SAM.1 ] ; then
+		echo "$3/SAM.1 already exists"
+	fi
+
+	cd $target;pwd
+
+	case $1 in
+		isolinux)
+			cp -a $source/isolinux/ . || exit 8
+
+			if [ -d $2/../isolinux ] ; then 
+				ks2=$2/../isolinux
+				cp -a $ks2/isolinux/*.cfg ./isolinux || exit 9
+			fi
+
+			if [ ! -s $3/SAM.1 ] ; then
+				griffindor
+			fi
+		;;
+		grub)
+			cp -a $source/boot/ $target || exit 8
+			
+			if [ -d $2/../boot ] ; then 
+				ks2=$2/../boot
+			
+				echo "cp -a $ks2/boot/grub/{*.cfg,*.png} ./boot/grub"
+				echo "cp -a $ks2/boot/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
+			fi
+
+			if [ ! -s $3/SAM.1 ] ; then 
+				sha512sum ./boot/* > $TARGET_DIGESTS_dir/SAM.1
+			fi
+		;;
+		*)
+			echo "/sbin/fsck &0xff"
+			exit 11
+		;;
+	esac
+
+}
+copy_main() {
+
+	[ x$1 != x ] || exit 2
+
+	cp -a $scripts_dir/*.sh $tmpdir
+	echo $?
+	chmod 0555 $tmpdir/*.sh
+	sudo chown root:root $tmpdir/*.sh
+
+
+	cp -a $1/*.sh $2 
+	chmod 0555 $2/*.sh 
+	sudo chown root:root $2/*.sh
+
+	if [ -s $1/0/SAM.2.0 ] ; then 
+		cp $1/0/SAM.2.0 $1/0/SAM.2 
+
+		cd $1/..
+		sha512sum $TARGET_pad_dir/*.sh >> $TARGET_DIGESTS_dir/SAM.2
+	fi
+
+		echo "done"
+		echo "TARGET_arch1v3s;"
+	
+	cd $sorsa;pwd;sleep 1
+
+		cp -a $1/*.bz2 $2
+		echo $?
+
+		cp -a $1/*.bz3 $2 
+		echo $?
+
+	chmod 0444 $2/*.bz2
+	sudo chown root:root $2/*.bz2
+	chmod 0444 $2/*.bz3
+	sudo chown root:root $2/*.bz3
+	
+	sleep 1
+}
+
+copy_conf() {
+
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+
+	cp -a $sorsa/$scripts_dir/*.conf $tmpdir 
+	cd $sorsa
+
+	cp -a $1/$2.conf $3
+	echo $?
+
+	if [ -s $3/upload.sh ] || [ -s $3/extras.tar.bz2 ] ; then 
+		mangle_conf TARGET_arch $3/$2.conf
+	fi
+
+
+	utfile=$3/$2.conf
+
+	mangle_conf TARGET_D $utfile
+
+	mangle_conf TARGET_pad2 $utfile
+
+	echo -n "src=" >> $utfile
+	echo -n "$" >> $utfile
+	echo "TARGET_pad2" >> $utfile
+	
+	mangle_conf to_ram $utfile
+	mangle_conf nosu_do $utfile
+
+	chmod 0444 $3/*.conf
+	sudo chown root:root $3/*.conf
+
+	sleep 1
+
+
+
+}
+
+copy_sums() {
+	[ x$1 != x ] || exit 2
+
+	if [ -d $2 ] ; then
+		echo "targeidir alr3ady exiusts"
+	else
+		mkdir $2
+		sleep 5
+	fi
+
+	cd $sorsa
+
+	if [ -s $1/0/SAM.1 ] ; then
+
+		if [ -s $1/0/SAM.1.0 ] ; then
+	
+		fi
+
+		cp $1/0/SAM.1 $2
+	fi
+
+	
+	if [ -s $1/0/SAM.2.0 ] ; then
+		echo "cp $1/0/SAM.2.0 $2";sleep 1
+		cp $1/0/SAM.2.0 $2;sleep 5
+	fi
+
+		echo "cp $1/0/SAM.2 $2";sleep 1
+		cp $1/0/SAM.2 $2;sleep 5
+
+	fi
+
+
+	if [ -s $1/0/SAM.3 ] ; then 
+	fi 
+
+
+		echo "source:";ls -las $1/0;sleep 5
+		echo "target:";ls -las $2;sleep 5
+		echo "Exit copy_sums($1) ";sleep 5
+
+}
+
+keyz() {
+
+	[ x$1 != x ] || exit 2
+
+	cp $1/$TARGET_Dkname1 $2
+
+	cp $1/$TARGET_Dkname2 $2
+	chmod o+w $2
+
+		echo "CONTENTS OV $2 :"
+		ls -las $2;sleep 10
+		echo "EXIT keyz()"
+}
+
+live1() {
+
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+	cd $1	
+
+	if [ -s ./filesystem.squashfs ] ; then 
+		sudo rm $2/filesystem.squashfs
+		sleep 5
+		sudo cp ./filesystem.squashfs $2	
+	else
+		sudo cp $source/live/filesystem.squashfs $2
+	fi
+
+}
+
+live2()  {
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+	cd $1	
+
+	if [ -s ./vmlinuz ] ; then 
+		sudo cp ./vmlinuz $2
+	else
+		sudo cp $source/live/vmlinuz $2
+	fi
+}
+live3() {
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+	cd $1	
+
+	if [ -s ./initrd.img ] ; then 
+		sudo cp ./initrd.img $2
+	else
+		sudo cp $source/live/initrd.img $2
+	fi
+}

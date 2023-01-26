@@ -1,0 +1,22 @@
+#!/bin/sh
+
+mangle() {
+}
+
+if [ -d $1 ] ; then
+	[ -s $1/export ] || mkdir -p $1/export
+
+	for f in $(find $1 -name '*.sh') ; do mangle $f ; done
+	mv $1/*.sh.export $1/export
+
+	for f in $(find $1 -name '*.ash') ; do mangle $f ; done
+	mv $1/*.ash.export $1/export
+
+	for f in $(find $1 -name '*.bsh') ; do mangle $f ; done
+	mv $1/*.bsh.export $1/export
+else
+	if [ -s $1 ] ; then
+		[ -d ./export ] || mkdir -p ./export
+		mangle $1
+	fi
+fi
