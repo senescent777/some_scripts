@@ -22,58 +22,76 @@ for i in 1 2 3 4 ; do touch $TARGET_DIGESTS_file.$i ; done
 	echo "CONTENTS OF: $TARGET_DIGESTS_dir"
 	ls -las $TARGET_DIGESTS_dir
 	sleep 6
-fi
 
-if [ ! -s $TARGET_DIGESTS_dir/SAM.1 ] ; then 
-	if [ -d ./isolinux ] ; then
-		griffindor LAIATA TAKAISIN SITTENQ TOIMII
+part1() {
+	if [ ! -s $TARGET_DIGESTS_dir/SAM.1 ] ; then
+		echo "grif|slith" 
+		if [ -d ./isolinux ] ; then
+		else
+			slithering
+		fi
 	else
-		slithering
+		mv $TARGET_DIGESTS_dir/SAM.1 $TARGET_DIGESTS_file.1
 	fi
-else
-	mv $TARGET_DIGESTS_dir/SAM.1 $TARGET_DIGESTS_file.1
-fi
+}
+
+part1
 
 sleep 5
 
-if [ ! -s $TARGET_DIGESTS_dir/SAM.2 ] ; then 
-	
-	if [ x$TARGET_pad_dir != x ] ; then 
-		sha512sum $TARGET_pad_dir/* | grep -v $TARGET_DIGESTS_file0 > $TARGET_DIGESTS_file.2
+part2() {
+	if [ ! -s $TARGET_DIGESTS_dir/SAM.2 ] ; then 
+		
+		if [ x$TARGET_pad_dir != x ] ; then 
+			sha512sum $TARGET_pad_dir/* | grep -v $TARGET_DIGESTS_file0 > $TARGET_DIGESTS_file.2
+		else
+			echo "FUXX 0FXXX @$$H013!!!xx"
+		fi
 	else
-		echo "FUXX 0FXXX @$$H013!!!xx"
+		mv $TARGET_DIGESTS_dir/SAM.2 $TARGET_DIGESTS_file.2
 	fi
-else
-	mv $TARGET_DIGESTS_dir/SAM.2 $TARGET_DIGESTS_file.2
-fi
+}
 
+part2
 sleep 5 
 
-if [ ! -s $TARGET_DIGESTS_dir/SAM.3 ] ; then
-	sha512sum ./live/* > $TARGET_DIGESTS_file.3
-else
-	echo "mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3"
-	mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3
-fi
+part3() {
+	if [ ! -s $TARGET_DIGESTS_dir/SAM.3 ] ; then
+		sha512sum ./live/* > $TARGET_DIGESTS_file.3
+	else
+		echo "mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3"
+		mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3
+	fi
+}
 
+part3
 sleep 5
 
-	echo "IS $TARGET_DIGESTS_file.1 ok?"
+part4() {
+		echo "IS $TARGET_DIGESTS_file.1 ok?"
+	
+		sha512sum -c $TARGET_DIGESTS_file.1
+		[ $? -eq 0 ] || exit
+}
 
-	sha512sum -c $TARGET_DIGESTS_file.1
-	[ $? -eq 0 ] || exit
+part4
+part5() {
+		sleep 5
+		echo "IS $TARGET_DIGESTS_file.2 ok?"
+		sha512sum -c $TARGET_DIGESTS_file.2 --ignore-missing
+}
 
-	sleep 5
-	echo "IS $TARGET_DIGESTS_file.2 ok?"
-	sha512sum -c $TARGET_DIGESTS_file.2 --ignore-missing
-
-
+part5
 [ $? -eq 0 ] || exit
 
-	sleep 5 
+part6() {
+		sleep 5 
+	
+		sha512sum -c $TARGET_DIGESTS_file.3
+	fi
+}
 
-	sha512sum -c $TARGET_DIGESTS_file.3
-fi
+part6
 
 if [ $? -eq 0 ]; then 
 	gpg -u $kayid -sb $TARGET_DIGESTS_file.1 
@@ -88,17 +106,20 @@ if [ $? -eq 0 ]; then
 	[ -s $TARGET_DIGESTS_file.3 ] && gpg -u $kayid -sb $TARGET_DIGESTS_file.3
 fi
 
-gpg -u $kayid2 -sb $TARGET_Dpubkf
-echo $?
+part7() {
+	gpg -u $kayid2 -sb $TARGET_Dpubkf
+	echo $?
+	
+	
+		gpgv --keyring $TARGET_Dpubkg $TARGET_Dpubkf.sig $TARGET_Dpubkf
+		gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.1.sig $TARGET_DIGESTS_file.1
+		gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.2.sig $TARGET_DIGESTS_file.2
+		gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.3.sig $TARGET_DIGESTS_file.3
 
+	echo $?
+}
 
-	gpgv --keyring $TARGET_Dpubkg $TARGET_Dpubkf.sig $TARGET_Dpubkf
-	gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.1.sig $TARGET_DIGESTS_file.1
-	gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.2.sig $TARGET_DIGESTS_file.2
-	gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.3.sig $TARGET_DIGESTS_file.3
-
-echo $?
- 
+part7 
 sha512sum $TARGET_DIGESTS_dir/* | grep -v '$TARGET_DIGESTS_file.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > $TARGET_DIGESTS_file.4
 
 	echo "	sha512sum -c $TARGET_DIGESTS_file.4" 

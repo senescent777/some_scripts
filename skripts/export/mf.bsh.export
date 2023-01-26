@@ -70,7 +70,7 @@ process_dir() {
 [ x$tgtfile != x ] || exit 1
 
 if [ ! -s $target/extras/run/live/medium/$pad_dir/mg-42.bsh ] ; then 
-	cp ./mg-42.bsh $target/extras/run/live/medium/$pad_dir
+	cp ./mg-42.bsh $target/extras/run/live/medium/$TARGET_pad_dir
 fi
 
 cd $target/..

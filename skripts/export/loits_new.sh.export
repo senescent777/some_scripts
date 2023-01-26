@@ -59,14 +59,13 @@ fi
 
 
 
-
 mk_pad_bak $TARGET_pad_bak_file $TARGET_pad_dir
 sleep 1
 echo $bloader
 
 case $bloader in
 	isolinux)
-		genisoimage -o ../$target $gi_opts -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table .
+		genisoimage -o ../$target $gi_opts  .
 		break
 	;;
 	grub)

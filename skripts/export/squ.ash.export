@@ -15,9 +15,13 @@ parse_opts_real() {
 		;;
 		-x|-y|-i|-j)
 			if [ -s $2 ] || [ -d $2 ] ; then
+				par=$2
 			else
 				exit 666
 			fi
+		;;
+		-c)
+			par=$2
 		;;
 	esac
 }
@@ -46,22 +50,22 @@ fix_sudo() {
 	if [ x$squash_dir != x ]; then
 		cd $squash_dir
 		
-		chown -R 0:0 ./etc/sudo*
-		chmod -R a-w ./etc/sudo*
-		chown -R 0:0 ./usr/lib/sudo/*
-		chown -R 0:0 ./usr/bin/sudo*
+		sudo chown -R 0:0 ./etc/sudo*
+		sudo chmod -R a-w ./etc/sudo*
+		sudo chown -R 0:0 ./usr/lib/sudo/*
+		sudo chown -R 0:0 ./usr/bin/sudo*
 
-		chmod 0750 ./etc/sudoers.d
-		chmod 0440 /etc/sudoers.d/*
+		sudo chmod 0750 ./etc/sudoers.d
+		sudo chmod 0440 /etc/sudoers.d/*
 
 
-		chmod -R a-w ./usr/lib/sudo/*
-		chmod -R a-w ./usr/bin/sudo*
-		chmod 4555 ./usr/bin/sudo
-		chmod 4555 ./usr/lib/sudo/sudoers.so		
+		sudo chmod -R a-w ./usr/lib/sudo/*
+		sudo chmod -R a-w ./usr/bin/sudo*
+		sudo chmod 4555 ./usr/bin/sudo
+		sudo chmod 0444	./usr/lib/sudo/sudoers.so	
 
-		chattr +ui ./usr/bin/sudo
-		chattr +ui ./usr/lib/sudo/sudoers.so	
+		sudo chattr +ui ./usr/bin/sudo
+		sudo chattr +ui ./usr/lib/sudo/sudoers.so	
 
 	fi
 }
@@ -70,15 +74,15 @@ bbb() {
 	if [ x$squash_dir != x ]; then
 
 		cd $squash_dir
-		rm -rf ./run/live
-		rm -rf ./boot/grub/*
-		rm -rf ./boot/*
-		rm -rf ./usr/share/doc/*	
-		rm -rf ./var/cache/apt/archives/*.deb
-		rm -rf ./var/cache/apt/*.bin
-		rm -rf ./tmp/manifest*
-		rm -rf ./tmp/var
-		rm -rf ./tmp/$pad_dir
+		sudo rm -rf ./run/live
+		sudo rm -rf ./boot/grub/*
+		sudo rm -rf ./boot/*
+		sudo rm -rf ./usr/share/doc/*	
+		sudo rm -rf ./var/cache/apt/archives/*.deb
+		sudo rm -rf ./var/cache/apt/*.bin
+		sudo rm -rf ./tmp/manifest*
+		sudo rm -rf ./tmp/var
+		sudo rm -rf ./tmp/$TARGET_pad_dir
 
 		fix_sudo
 	
@@ -95,39 +99,41 @@ jlk1() {
 	if [ x$squash_dir != x ]; then
 		echo "-x JO AJETTU?"
 	
-		[ -d $squash_dir/$pad2 ] || mkdir -p $squash_dir/$pad2
+		[ -d $squash_dir/$TARGET_pad2 ] || mkdir -p $squash_dir/$TARGET_pad2
 
-		cd $squash_dir/$pad2
-			cp $1/$pad_dir/*.sh .
+		cd $squash_dir/$TARGET_pad2
+		[ x$1 != x ] || exit 666
+
+			cp $1/$TARGET_pad_dir/*.sh .
 			chmod a+x *.sh
 
-			cp $1/$pad_dir/*.bz2 .
-			cp $1/$pad_dir/*.bz3 .
-			cp $1/$pad_dir/*.conf .
+			cp $1/$TARGET_pad_dir/*.bz2 .
+			cp $1/$TARGET_pad_dir/*.bz3 .
+			cp $1/$TARGET_pad_dir/*.conf .
 
 		rm ./mf*
 
 		rm ./root.conf;rm ./devuan.conf;sleep 6 
 	
-	   	grep -v to_ram $1/$pad_dir/devuan.conf > ./root.conf 
+	   	grep -v to_ram $1/$TARGET_pad_dir/devuan.conf > ./root.conf 
 	
 	        echo "to_ram=1" >> ./root.conf	
 
-		chown -R root:root ./*	
-		chmod 0444 ./*.bz2
-		chmod 0444 ./*.bz3
-		chmod 0555 ./*.sh
-		chmod 0444 ./*.conf
+		sudo chown -R root:root ./*	
+		sudo chmod 0444 ./*.bz2
+		sudo chmod 0444 ./*.bz3
+		sudo chmod 0555 ./*.sh
+		sudo chmod 0444 ./*.conf
 		sleep 6	
 	
 	fi
 }
 
 jlk2() {
+	[ x$1 != x ] || exit 666
 
 
-
-	cp -a $1/$digestsdir/* ./0
+	cp -a $1/$TARGET_DIGESTS_dir/* ./0
 
 	sleep 5
 }
@@ -206,11 +212,11 @@ usage() {
 
 case $cmd in
 	-x)
-		xxx $2
+		xxx $par
 	;;
 	-y)
 		[ -d $source ] || sudo mkdir -p $source
-		sudo mount -o loop,ro $2 $source
+		sudo mount -o loop,ro $par $source
 		xxx $source/live/filesystem.squashfs
 		sudo umount $source
 	;;
@@ -232,7 +238,7 @@ case $cmd in
 
 	;;
 	-c)
-		cfd $2
+		cfd $par
 	;;
 	-r)
 		rst
@@ -241,11 +247,13 @@ case $cmd in
 		if [ x$squash_dir != x ]; then
 			echo "-x JO AJETTU?"
 			previous=$(pwd)
-			mkdir -p $squash_dir/$pad2
-			cd $squash_dir/$pad2
+			mkdir -p $squash_dir/$TARGET_pad2
+			cd $squash_dir/$TARGET_pad2
 	
-			cp $2/$pad_dir/extras.tar.bz2 .
-			cp $2/$pad_dir/functions_part1.sh . 
+			[ x$par != x ] || exit 666
+
+			cp $par/$TARGET_pad_dir/extras.tar.bz2 .
+			cp $par/$TARGET_pad_dir/functions_part1.sh . 
 
 			grep -v to_ram devuan.conf > root.conf 
 	
@@ -256,7 +264,7 @@ case $cmd in
 		fi
 	;;
 	-j)
-		jlk1 $2
+		jlk1 $par
 		jlk2 $dir2 
 		fix_sudo
 	;;
