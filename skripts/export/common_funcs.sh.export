@@ -1,9 +1,10 @@
 griffindor() {
-	sha512sum ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > $target/$digestsdir/SAM.1
+	pwd
+	sha512sum ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > $TARGET_DIGESTS_file.1
 }
 
 slithering() {
-	sha512sum ./boot/* > $digestsfile.1
+	sha512sum ./boot/* > $TARGET_DIGESTS_file.1
 }
 
 parse_opts() {
@@ -38,4 +39,13 @@ parse_opts() {
 			fi
 		fi
 	fi
+
+}
+
+mk_bkup() { 
+
+	if [ -s $1 ] ; then
+		sudo mv $1 $1.OLD
+	fi
+
 }

@@ -1,22 +1,15 @@
+mangle_conf() {
+}
+
 copy_conf_extrasd() {
+	[ x$1 != x ] || exit 2
 
-	outfile=$target/$pad_dir/"$n".conf
-	echo "\r\n" >> $outfile
 
-	echo "stick=/dev/$stick_part" >> $outfile
-	echo "a0=$archdir0" >> $outfile
-	echo "archdir=4522/" >> $outfile
-	echo "archfile=$pad_bak_file" >> $outfile
-
-	echo -n "archive=" >> $outfile
-	echo -n "$" >> $outfile
-	echo -n "archdir/" >> $outfile
-	echo -n "$" >> $outfile
-	echo  "archfile" >> $outfile
-
+	mangle_conf TARGET_arch $target/$TARGET_pad_dir/$1.conf
 }
 
 mount_img() {
+	[ x$1 != x ] || exit 2
 
 	if [ -d $source ]; then
 		found=$(cat /proc/mounts | grep $source | wc -l)
@@ -35,24 +28,19 @@ mount_img() {
 }
 
 source_n_target() {
-	[ -d $source2 ] || exit 2
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+	[ -d $2 ] || exit 2
 	[ -d $source ] || mkdir -p $source
 
-	if [ -d $base ]; then
-		source=$base
+	if [ -d $1 ]; then
 	else
 		if [ -s $base ] ; then
-			mount_img $base
+			mount_img $1
 		else
 			exit 6
 		fi
 	fi
-
-		echo "source=$source"
-		echo "source2=$source2"
-		echo "target=$target"
-		echo "creating $target ..."
-		sleep 5
 
 	[ -d $target ] && rm -rf $tmpdir/target
 	mkdir -p $target
@@ -70,7 +58,6 @@ get_devuan() {
 	fi
 
 	sha256sum -c SHA256SUMS
-	[ "$?" -eq 0 ] || echo "WITUIX MÄN"
 }
 
 make_dirs() {
@@ -89,8 +76,12 @@ cleanup() {
 
 bootloader() {
 	ks2="."
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+	[ x$target != x ] || exit 3
+	[ -d $target ] || exit 3
 
-	if [ -s $target/$digestsdir/SAM.1 ] ; then
+	if [ -s $target/$TARGET_DIGESTS_dir/SAM.1 ] ; then
 	fi
 
 	cd $target;pwd
@@ -100,11 +91,11 @@ bootloader() {
 			cp -a $source/isolinux/ . || exit 8
 
 			if [ -d "$2"/../isolinux ] ; then 
-				ks2="$2"/../isolinux
+				ks2=$2/../isolinux
 				cp -a $ks2/isolinux/*.cfg ./isolinux || exit 9
 			fi
 
-			if [ ! -s $target/$digestsdir/SAM.1 ] ; then
+			if [ ! -s $target/$TARGET_DIGESTS_dir/SAM.1 ] ; then
 				griffindor
 			fi
 		;;
@@ -112,14 +103,14 @@ bootloader() {
 			cp -a $source/boot/ $target || exit 8
 			
 			if [ -d "$2"/../boot ] ; then 
-				ks2="$2"/../boot
+				ks2=$2/../boot
 			
 				echo "cp -a $ks2/boot/grub/{*.cfg,*.png} ./boot/grub"
 				echo "cp -a $ks2/boot/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
 			fi
 
-			if [ ! -s $target/$digestsdir/SAM.1 ] ; then 
-				sha512sum ./boot/* > $digestsdir/SAM.1
+			if [ ! -s $target/$TARGET_DIGESTS_dir/SAM.1 ] ; then 
+				sha512sum ./boot/* > $TARGET_DIGESTS_dir/SAM.1
 			fi
 		;;
 		*)
@@ -128,84 +119,160 @@ bootloader() {
 		;;
 	esac
 
-		ls -laR $digestsdir;sleep 5
+		ls -laR $TARGET_DIGESTS_dir;sleep 5
 		echo "---------EXIT BOOTLOADER()-------------"
 	fi
 }
 
 copy_main() {
+		echo "ENTER copy_main($1) "
+		echo -n "pwd=";pwd;sleep 5
+		echo -n "skripts.1:"
+
+	[ x$1 != x ] || exit 2
 
 	cp -a $scripts_dir/*.sh $tmpdir
+	echo $?
 	chmod 0555 $tmpdir/*.sh
-	sudo chown root:root  $tmpdir/*.sh
+	sudo chown root:root $tmpdir/*.sh
 
+	[ -d $target/$TARGET_DIGESTS_dir ] || mkdir -p $target/$TARGET_DIGESTS_dir
 
-	[ -d $target/$digestsdir ] || mkdir -p $target/$digestsdir
+	cp -a $1/*.sh $target/$TARGET_pad_dir 
+	chmod 0555 $target/$TARGET_pad_dir/*.sh 
+	sudo chown root:root $target/$TARGET_pad_dir/*.sh
 
-	cp -a $1/*.sh $target/$pad_dir || exit 9
-	chmod 0555 $target/$pad_dir/*.sh || exit 9
-	sudo chown root:root $target/$pad_dir/*.sh
+	if [ -s $1/0/SAM.2.0 ] ; then 
+		cp $1/0/SAM.2.0 $1/0/SAM.2 
 
+		cd $1/..
+		sha512sum ./pad/*.sh >> ./pad/0/SAM.2
+	fi
 
-	cp -a "$1"/*.bz2 $target/$pad_dir || exit 9
-	cp -a "$1"/*.bz3 $target/$pad_dir || exit 9
+		echo "done"
+		echo "pad:";ls -lR $target/$TARGET_pad_dir;sleep 5
+		echo "TARGET_arch1v3s;"
+	
+	cd $sorsa;pwd;sleep 1
 
-	chmod 0444 $target/$pad_dir/*.bz?
-	sudo chown root:root $target/$pad_dir/*.bz?
+		cp -a $1/*.bz2 $target/$TARGET_pad_dir 
+		echo $?
 
+		cp -a $1/*.bz3 $target/$TARGET_pad_dir 
+		echo $?
+
+	chmod 0444 $target/$TARGET_pad_dir/*.bz2
+	sudo chown root:root $target/$TARGET_pad_dir/*.bz2
+	chmod 0444 $target/$TARGET_pad_dir/*.bz3
+	sudo chown root:root $target/$TARGET_pad_dir/*.bz3
+	
 	sleep 1
 }
 
 copy_conf() {
 
-	cp -a $scripts_dir/*.conf $tmpdir 
-	cp -a $1/$n.conf $target/$pad_dir || exit 9
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
 
-	if [ -s $target/$pad_dir/upload.sh ] || [ -s $target/$pad_dir/extras.tar.bz2 ] ; then 
-		copy_conf_extrasd
+	cp -a $sorsa/$scripts_dir/*.conf $tmpdir 
+	cd $sorsa
+
+	cp -a $1/$2.conf $target/$TARGET_pad_dir 
+	echo $?
+
+	if [ -s $target/$TARGET_pad_dir/upload.sh ] || [ -s $target/$TARGET_pad_dir/extras.tar.bz2 ] ; then 
+		copy_conf_extrasd $2
 	fi
 
 
-	chmod 0444 $target/$pad_dir/*.conf
-	sudo chown root:root $target/$pad_dir/*.conf
+	utfile=$target/$TARGET_pad_dir/$2.conf
+
+	mangle_conf TARGET_D $utfile
+
+	mangle_conf TARGET_pad2 $utfile
+
+	echo -n "src=" >> $utfile
+	echo -n "$" >> $utfile
+	echo "TARGET_pad2" >> $utfile
+	
+	mangle_conf to_ram $utfile
+	mangle_conf nosu_do $utfile
+
+	chmod 0444 $target/$TARGET_pad_dir/*.conf
+	sudo chown root:root $target/$TARGET_pad_dir/*.conf
 
 	sleep 1
+
 
 
 }
 
 copy_sums() {
+	[ x$1 != x ] || exit 2
 
-	if [ -d $target/$digestsdir ] ; then
+	if [ -d $target/$TARGET_DIGESTS_dir ] ; then
 		echo "targeidir alr3ady exiusts"
 	else
-		mkdir $target/$digestsdir
+		mkdir $target/$TARGET_DIGESTS__dir
 		sleep 5
 	fi
 
+	cd $sorsa
+
 	if [ -s $1/0/SAM.1 ] ; then
-		cp $1/0/SAM.1 $target/$digestsdir
+
+		if [ -s $1/0/SAM.1.0 ] ; then
+	
+		fi
+
+		cp $1/0/SAM.1 $target/$TARGET_DIGESTS_dir
 	fi
 
-	if [ -s $1/0/SAM.2 ] ; then
+	
+	if [ -s $1/0/SAM.2.0 ] ; then
+		echo "cp $1/0/SAM.2.0 $target/$TARGET_DIGESTS_dir";sleep 1
+		cp $1/0/SAM.2.0 $target/$TARGET_DIGESTS_dir;sleep 5
+	fi
 
-		cp $1/0/SAM.2 $target/$digestsdir
+		echo "cp $1/0/SAM.2 $target/$TARGET_DIGESTS_dir";sleep 1
+		cp $1/0/SAM.2 $target/$TARGET_DIGESTS_dir;sleep 5
 
+	fi
+
+
+	if [ -s $1/0/SAM.3 ] ; then 
+
+
+		echo "source:";ls -las $1/0;sleep 5
+		echo "target:";ls -las $target/$TARGET_DIGESTS_dir;sleep 5
+		echo "Exit copy_sums($1) ";sleep 5
 	fi
 
 }
 
 keyz() {
+		echo "ENTER keyz($1)"
+		pwd
+		echo "from kbup:sudo cp $1/pubK* $target/$TARGET_DIGESTS_dir"
+	fi
 
-	cp $1/pubK* $target/$digestsdir
+	[ x$1 != x ] || exit 2
 
-	cp $1/KsK* $target/$digestsdir
-	chmod o+w $target/$digestsdir
+	cp $1/$TARGET_Dkname1 $target/$TARGET_DIGESTS_dir
 
-	ls -las $target/$digestsdir ;sleep 10
+	cp $1/$TARGET_Dkname2 $target/$TARGET_DIGESTS_dir
+	chmod o+w $target/$TARGET_DIGESTS_dir
+
+		echo "CONTENTS OV $target/$TARGET_DIGESTS_dir :"
+		ls -las $target/$TARGET_DIGESTS_dir;sleep 10
+		echo "EXIT keyz()"
+	fi
 }
 
 live1() {
+
+	[ x$1 != x ] || exit 2
+	cd $1	
 
 	if [ -s ./filesystem.squashfs ] ; then 
 		sudo rm $target/live/filesystem.squashfs
@@ -218,6 +285,9 @@ live1() {
 }
 
 live2()  {
+	[ x$1 != x ] || exit 2
+	
+	cd $1	
 
 	if [ -s ./vmlinuz ] ; then 
 		sudo cp ./vmlinuz $target/live
@@ -227,6 +297,9 @@ live2()  {
 }
 
 live3() {
+	[ x$1 != x ] || exit 2
+
+	cd $1	
 
 	if [ -s ./initrd.img ] ; then 
 		sudo cp ./initrd.img $target/live

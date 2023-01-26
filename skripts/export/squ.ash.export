@@ -32,12 +32,12 @@ parse_opts $5 $6
 
 xxx() {
 	if [ x$squash0 != x ]; then
+
 		[ -d $squash0 ] || sudo mkdir $squash0
 
 		cd $squash0
 		sudo unsquashfs $1
 
-		sudo chown 0:0 squashfs-root/*
 
 	fi
 }
@@ -53,24 +53,16 @@ fix_sudo() {
 
 		chmod 0750 ./etc/sudoers.d
 		chmod 0440 /etc/sudoers.d/*
-		sleep 6
 
 
 		chmod -R a-w ./usr/lib/sudo/*
 		chmod -R a-w ./usr/bin/sudo*
 		chmod 4555 ./usr/bin/sudo
 		chmod 4555 ./usr/lib/sudo/sudoers.so		
-		sleep 6	
 
 		chattr +ui ./usr/bin/sudo
 		chattr +ui ./usr/lib/sudo/sudoers.so	
-		sleep 6	
 
-			ls -las ./etc/sudo*;sleep 3
-			ls -las ./usr/bin/sudo*;sleep 3
-			ls -las ./usr/lib/sudo/*.so;sleep 3
-			echo "...done"
-		fi
 	fi
 }
 
@@ -106,15 +98,13 @@ jlk1() {
 		[ -d $squash_dir/$pad2 ] || mkdir -p $squash_dir/$pad2
 
 		cd $squash_dir/$pad2
+			cp $1/$pad_dir/*.sh .
+			chmod a+x *.sh
 
+			cp $1/$pad_dir/*.bz2 .
+			cp $1/$pad_dir/*.bz3 .
+			cp $1/$pad_dir/*.conf .
 
-		cp $1/$pad_dir/*.sh .
-		chmod a+x *.sh
-
-		cp $1/$pad_dir/*.bz2 .
-		cp $1/$pad_dir/*.bz3 .
-		cp $1/$pad_dir/*.conf .
-		
 		rm ./mf*
 
 		rm ./root.conf;rm ./devuan.conf;sleep 6 
@@ -122,12 +112,11 @@ jlk1() {
 	   	grep -v to_ram $1/$pad_dir/devuan.conf > ./root.conf 
 	
 	        echo "to_ram=1" >> ./root.conf	
-		cat ./root.conf;sleep 10
-	
 
 		chown -R root:root ./*	
-		chmod 0644 ./*.bz2
-		chmod 0744 ./*.sh
+		chmod 0444 ./*.bz2
+		chmod 0444 ./*.bz3
+		chmod 0555 ./*.sh
 		chmod 0444 ./*.conf
 		sleep 6	
 	
