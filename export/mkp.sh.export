@@ -1,7 +1,0 @@
-#!/bin/sh
-
-. ./common.conf
-. ./common_funcs.sh
-
-[ -s $1 ] || exit 666
-gpg -u $kayid -sb $1
