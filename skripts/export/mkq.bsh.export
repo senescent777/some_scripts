@@ -9,9 +9,7 @@
 
 echo "params opk";sleep 3
 
-cp $1/extras.tar.bz2 $1/$patch_name/$TARGET_pad2
-cp $1/patch.sh $1/$patch_name/$TARGET_pad2
-cp $1/machupo.tar.bz2  $1/$patch_name/$TARGET_pad2
+for f in $patch_list_1; do cp $1/$f $1/$patch_name/$TARGET_pad2 ; done
 
 echo "cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $1/$patch_name/$TARGET_pad2/0"
 cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $1/$patch_name/$TARGET_pad2/0
@@ -19,7 +17,4 @@ sleep 1
 echo "cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $1/$patch_name/$TARGET_pad2/0"
 cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $1/$patch_name/$TARGET_pad2/0
 
-cp $1/functions* $1/$patch_name/$TARGET_pad2
-cp $1/8856.sh $1/$patch_name/$TARGET_pad2
-cp $1/*.conf $1/$patch_name/$TARGET_pad2
-cp $1/extras/$TARGET_pad2/upload_lite $1/$patch_name/$TARGET_pad2
+for f in $patch_list_2 ; do cp $1/$f $1/$patch_name/$TARGET_pad2 ; done
