@@ -54,11 +54,11 @@ get_devuan() {
 }
 
 make_dirs() {
-	echo "mkdir ./keys"
-	echo "mkdir ./distros"
-	echo "mkdir ./isolinux"
+	echo "mkdir $keys_dir"
+	echo "mkdir $distros_dir"
+	echo "mkdir $bloader"
 	echo "mkdir ./grub"
-	echo "mkdir ./paketit2"
+	echo "mkdir $pkgsdir2"
 	echo "mkdir ./v"
 }
 
@@ -119,7 +119,6 @@ copy_main() {
 	[ x$1 != x ] || exit 2
 
 	cp -a $scripts_dir/*.sh $tmpdir
-	echo $?
 	chmod 0555 $tmpdir/*.sh
 	sudo chown root:root $tmpdir/*.sh
 
@@ -138,13 +137,11 @@ copy_main() {
 		echo "done"
 		echo "TARGET_arch1v3s;"
 	
-	cd $sorsa;pwd;sleep 1
+	cd $sorsa
 
 		cp -a $1/*.bz2 $2
-		echo $?
 
 		cp -a $1/*.bz3 $2 
-		echo $?
 
 	chmod 0444 $2/*.bz2
 	sudo chown root:root $2/*.bz2
@@ -163,7 +160,6 @@ copy_conf() {
 	cd $sorsa
 
 	cp -a $1/$2.conf $3
-	echo $?
 
 	if [ -s $3/upload.sh ] || [ -s $3/extras.tar.bz2 ] ; then 
 		mangle_conf TARGET_arch $3/$2.conf
@@ -176,7 +172,7 @@ copy_conf() {
 
 	mangle_conf TARGET_pad2 $utfile
 
-	echo -n "src=" >> $utfile
+	echo -n "src=/" >> $utfile
 	echo -n "$" >> $utfile
 	echo "TARGET_pad2" >> $utfile
 	

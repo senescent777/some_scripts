@@ -57,9 +57,6 @@ parse_opts $5 $6
 parse_opts $7 $8
 parse_opts $9 ${10}
 
-	echo "$0 --h"
-	exit
-fi
 
 t_count=$(grep $tmpdir0 /proc/mounts | wc -l)
 [ $t_count -eq 0 ] && mount $tmpdir0

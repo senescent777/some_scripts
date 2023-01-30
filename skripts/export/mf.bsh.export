@@ -55,7 +55,7 @@ process_dir() {
 
 			cd ../..
 			
-			ts=$(sha512sum $TARGET_pad_dir/$1.tar.$2)
+			ts=$(sha512sum $TARGET_pad_dir/$1.tar.$2 | grep -v $patch_name)
 
 			echo $ts >> $TARGET_DIGESTS_dir/$tgtfile
 

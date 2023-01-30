@@ -178,7 +178,6 @@ cfd() {
 		[ -s $1 ] && rm $1
 
 			 echo "sudo mksquashfs . $1 -comp xz -b 1048576"
-		fi
 	
 		sudo mksquashfs . $1 -comp xz -b 1048576
 	fi

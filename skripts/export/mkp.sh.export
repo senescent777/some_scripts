@@ -3,5 +3,19 @@
 . ./common.conf
 . ./common_funcs.sh
 
-[ -s $1 ] || exit 666
-gpg -u $kayid -sb $1
+
+t=$1
+[ -d $t ] || exit 55
+u=$t/$patch_name.tar.bz2
+[ -s $u ] || exit 66
+echo "PARS OK"
+
+gpg -u $kayid -sb $u
+sleep 3
+
+mount $TARGET_archdir0 || exit 77
+cp $u $TARGET_archdir0/$patch_dir
+cp $u.sig $TARGET_archdir0/$patch_dir
+cp $t/patch* $TARGET_archdir0/$patch_dir
+ls -las $TARGET_archdir0/$patch_dir;sleep 6
+umount $TARGET_archdir0

@@ -43,7 +43,7 @@ part2() {
 	if [ ! -s $TARGET_DIGESTS_dir/SAM.2 ] ; then 
 		
 		if [ x$TARGET_pad_dir != x ] ; then 
-			sha512sum $TARGET_pad_dir/* | grep -v $TARGET_DIGESTS_file0 > $TARGET_DIGESTS_file.2
+			sha512sum $TARGET_pad_dir/* | grep -v $patch_name | grep -v $TARGET_DIGESTS_file0 > $TARGET_DIGESTS_file.2
 		else
 			echo "FUXX 0FXXX @$$H013!!!xx"
 		fi
