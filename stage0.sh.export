@@ -49,7 +49,7 @@ single_param() {
 	esac
 }
 
-[ -d $tmpdir0 ] || exit 7
+[ -d $CONF_tmpdir0 ] || exit 7
 
 parse_opts $1 $2
 parse_opts $3 $4
@@ -58,8 +58,8 @@ parse_opts $7 $8
 parse_opts $9 ${10}
 
 
-t_count=$(grep $tmpdir0 /proc/mounts | wc -l)
-[ $t_count -eq 0 ] && mount $tmpdir0
+t_count=$(grep $CONF_tmpdir0 /proc/mounts | wc -l)
+[ $t_count -eq 0 ] && mount $CONF_tmpdir0
 
 source_n_target $base
 
@@ -101,7 +101,7 @@ chown -R 1000:1000 $target/isolinux/*
 chmod -R a+w $target/isolinux/*
 echo $?
 
-cp -a $sorsa/$pkgsdir2 $tmpdir 
+cp -a $sorsa/$CONF_pkgsdir2 $CONF_tmpdir 
 
 touch $target/$TARGET_pad_dir/*
 
