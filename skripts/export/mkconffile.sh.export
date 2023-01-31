@@ -1,76 +1,94 @@
 #!/bin/sh
 
-echo "kayname=" 
-echo "kayname2=" 
-echo "kname1=" 
-echo "pkgsdir2=" 
-echo "padfile=" 
-echo "pad_dir=" 
+echo -n "CONF_kayid="
+echo
 
-echo "gi_opts=" 
+echo -n "CONF_kayid2="
+echo
 
-echo -n "digestsdir=" 
-echo -n "$"
-echo "pad_dir/0" 
+echo -n "CONF_pkgsdir2="
+echo
 
-echo "digestsfile0="
-echo -n "digestsfile="
-echo -n "$"
-echo -n "digestsdir/"
-echo -n "$"
-echo "digestsfile0" >>
+echo -n "CONF_gi_opts="
+echo
 
-echo "targetdir=" >>
-echo "archdir0=" >>
-echo "archdir=" >>
-echo "sorsa=" >>
-echo "stick_part=" >>
-echo "scripts_bak_file="
-echo "pad_bak_file="
-echo "scripts_dir="
-echo "keys_dir="
-echo "stg0file="
+echo "CONF_targetdir="
+echo "sorsa="
 
-echo "tmpdir0="
+echo -n "TARGET_archdir0="
+echo 
 
-echo -n "tmpdir="
-echo -n "$" 
-echo "tmpdir0/d.rem"
+echo -n "TARGET_archdir=\$TARGET_archdir0/"
+echo
 
-echo -n "$"
-echo -n "squash0="
-echo -n "$"
-echo "tmpdir0/squash"
+echo -n "TARGET_stick_part=disk/by-uuid/"
+echo
 
-echo -n "$"
-echo -n "squash_dir="
-echo -n "$"
-echo "squash0/squashfs-root"
+echo -n "TARGET_scripts_bak_file="
+echo
 
-echo -n "$"
-echo "squash_part=/dev/squash"
+echo -n "TARGET_pad_bak_file="
+echo
 
-echo -n "HUOM. fstab'issa oltava rivi tyyppiä "
-echo -n "$"
-echo -n "squash_part "
-echo -n "$"
-echo "squash0 ext2 noauto,user,exec,suid,dev 0 0"
+echo -n "TARGET_TAR_OPTS=\"--exclude=*.bz3"
+echo -n " --exclude=KsK*\"" 
+echo
 
-echo -n "source="
-echo -n "$"
-echo "tmpdir/source"
+echo "TARGET_pad_dir="
+echo "TARGET_padfile="
+echo "TARGET_pad2="
 
-echo -n "target="
-echo -n "$"
-echo "tmpdir/target"
+echo -n "TARGET_Dkname1="
+echo
 
-echo "bloader=isolinux"
+echo -n "TARGET_Dkname2="
+echo
 
-echo -n "n="
-echo -n "$"
-echo "(whoami)"
+echo -n "TARGET_DIGESTS_dir=\$TARGET_pad_dir/"
+echo
 
-echo "distros_dir=./distrot"
-echo "wget_opts=""--https-only --show-progress"""
+echo -n "TARGET_DIGESTS_file0="
+echo
 
-echo "wget_def_url=https://ftp.fau.de/devuan-cd/chimaera/desktop-live"
+echo "TARGET_DIGESTS_file=\$TARGET_DIGESTS_dir/\$TARGET_DIGESTS_file0"
+
+echo "TARGET_Dpubkf=\$TARGET_DIGESTS_dir/\$TARGET_Dkname1"
+echo "TARGET_Dpubkg=\$TARGET_DIGESTS_dir/\$TARGET_Dkname2"
+
+echo "CONF_scripts_dir="
+echo "CONF_keys_dir="
+echo "CONF_stg0file="
+
+echo -n "CONF_tmpdir0="
+echo
+
+echo "CONF_squash0=\$CONF_tmpdir0/\$CONF_squash"
+echo "CONF_squash_dir=\$CONF_squash0/squashfs-root"
+
+echo "the line \$CONF_squash0 ext2 noauto,user,exec,suid,dev 0 0 should be found in /etc/fstab"
+
+echo -n "CONF_tmpdir=\$CONF_tmpdir0/"
+echo
+
+echo -n "CONF_source=\$CONF_tmpdir/"
+echo
+
+echo -n "CONF_target=\$CONF_tmpdir/"
+echo
+
+echo -n "CONF_bloader="
+echo
+
+echo -n "CONF_distros_dir="
+echo
+
+echo "CONF_wget_opts=\"--https-only --show-progress\""
+
+echo -n "CONF_wget_def_url=https://"
+echo
+
+echo "TARGET_DHCP_row1=\"\""
+
+echo "CONF_patch_name="
+echo "CONF_patch_list_1=\"\""
+echo "CONF_patch_list_2=\"\""

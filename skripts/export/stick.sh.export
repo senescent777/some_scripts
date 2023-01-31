@@ -38,8 +38,9 @@ mk_bkup $TARGET_archdir/$kala2
 
 sudo cp $TARGET_pad_bak_file $TARGET_archdir/$kala2
 
+
 if [ $b -eq 1 ] ; then 
-	gpg -u $kayid -sb $TARGET_archdir/$kala2
+	gpg -u $CONF_kayid -sb $TARGET_archdir/$kala2
 fi
 
 cd $sorsa
@@ -47,12 +48,13 @@ p=$(date +%F)
 kala3=$TARGET_scripts_bak_file.$p
 kala3=$TARGET_archdir/$kala3
 
-	sudo tar -jcpf $kala3 $scripts_dir $stg0file $stg0file.export
+	sudo tar -jcpf $kala3 $CONF_scripts_dir $CONF_stg0file $CONF_stg0file.export
 
 if [ $b -eq 1 ] ; then 
-	gpg -u $kayid2 -sb $kala3
+	gpg -u $CONF_kayid -sb $kala3
 
 fi
 
+echo "mkp.sh"
 
 sudo umount $TARGET_archdir0

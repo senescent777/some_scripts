@@ -3,6 +3,7 @@
 target=""
 cleanup=0
 tgtfile=SAM.2.0
+
 . ./common.conf
 . ./common_funcs.sh
 
@@ -19,7 +20,7 @@ parse_opts_real() {
 }
 
 usage() {
-	echo "U\$AG1 Y0JIMBO!!!"
+	echo "a poor man's Makefile"
 }
 
 parse_opts $1 $2
@@ -34,7 +35,7 @@ else
 fi
 
 process_dir() {
-	[ -s $1.tar.$2 ] && mv $1.tar.$2 r0skis/$1.tar.bz2.OLD
+	[ -s $1.tar.$2 ] && mv $1.tar.$2 $CONF_trash_dir/$1.tar.bz2.OLD
 	
 	if [ x$1 != x ] ; then 
 		if [ -d ./$1 ] ; then
@@ -55,7 +56,7 @@ process_dir() {
 
 			cd ../..
 			
-			ts=$(sha512sum $TARGET_pad_dir/$1.tar.$2 | grep -v $patch_name)
+			ts=$(sha512sum $TARGET_pad_dir/$1.tar.$2 | grep -v $TARGET_patch_name)
 
 			echo $ts >> $TARGET_DIGESTS_dir/$tgtfile
 
@@ -69,16 +70,13 @@ process_dir() {
 [ x$TARGET_DIGESTS_dir != x ] || exit 1
 [ x$tgtfile != x ] || exit 1
 
-if [ ! -s $target/extras/run/live/medium/$pad_dir/mg-42.bsh ] ; then 
-	cp ./mg-42.bsh $target/extras/run/live/medium/$TARGET_pad_dir
+if [ ! -s $target/extras/$TARGET_pad2/mg-42.bsh ] ; then 
+	cp ./mg-42.bsh $target/extras/$TARGET_pad2
 fi
 
 cd $target/..
 
-	echo "pre-SAM2"
-	pwd;sleep 5
 	touch $TARGET_DIGESTS_dir/$tgtfile;sleep 5
-fi
 
 if [ x$TARGET_DIGESTS_dir != x ] ; then 
 	[ -d $TARGET_DIGESTS_dir ] || mkdir -p $TARGET_DIGESTS_dir

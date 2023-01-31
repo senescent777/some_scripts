@@ -24,7 +24,7 @@ parse_opts_real() {
 			bloader=$2
 		;; 
 		*)
-			echo "MEE HIMAAS LEIKKIMÄÄN"
+			usage
 		;;
 	esac
 	
@@ -49,11 +49,13 @@ parse_opts $5 $6
 
 
 [ -d ./$srcdir ] || exit
+[ -s $target ] && exit 
+
 gi=$(sudo which genisoimage)
 
-if [ -x "$gi" ] ; then
+if [ -x $gi ] ; then
 else
-	sudo dpkg -i $pkgsdir2/*.deb
+	sudo dpkg -i $CONF_pkgsdir2/*.deb
 fi
 
 
@@ -65,16 +67,17 @@ echo $bloader
 
 case $bloader in
 	isolinux)
-		genisoimage -o ../$target $gi_opts  .
+		genisoimage -o ../$target $CONF_gi_opts  .
 		break
 	;;
 	grub)
-		echo "TÄHÄN ON TULOSSA:grub-mkrescue-KIKKAULIA"
+		echo "TODO:grub-mkrescue"
 		break
 	;;
 	*)
+		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 		break
 	;;
 esac
 
-echo "EHKÄ stick.sh ?"
+echo "stick.sh ?"

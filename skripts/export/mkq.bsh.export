@@ -5,16 +5,22 @@
 
 [ x$1 != x ] || exit 11
 [ -d $1 ] || exit 22
-[ y$patch_name != y ] || exit 33
+[ y$TARGET_patch_name != y ] || exit 33
+
+cccp() {
+	echo "cp $1 $2"
+	cp $1 $2
+}
 
 echo "params opk";sleep 3
+for f in $TARGET_patch_list_1; do cccp $1/$f $1/$TARGET_patch_name/$TARGET_pad2 ; done
 
-for f in $patch_list_1; do cp $1/$f $1/$patch_name/$TARGET_pad2 ; done
+echo "cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $1/$TARGET_patch_name/$TARGET_pad2/0"
+cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $1/$TARGET_patch_name/$TARGET_pad2/0
 
-echo "cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $1/$patch_name/$TARGET_pad2/0"
-cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $1/$patch_name/$TARGET_pad2/0
 sleep 1
-echo "cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $1/$patch_name/$TARGET_pad2/0"
-cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $1/$patch_name/$TARGET_pad2/0
 
-for f in $patch_list_2 ; do cp $1/$f $1/$patch_name/$TARGET_pad2 ; done
+echo "cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $1/$TARGET_patch_name/$TARGET_pad2/0"
+cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $1/$TARGET_patch_name/$TARGET_pad2/0
+
+for f in $TARGET_patch_list_2 ; do cccp  $1/$f $1/$TARGET_patch_name/$TARGET_pad2 ; done

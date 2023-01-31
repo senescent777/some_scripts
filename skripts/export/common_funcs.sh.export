@@ -7,6 +7,10 @@ slithering() {
 	sha512sum ./boot/* > $TARGET_DIGESTS_file.1
 }
 
+malfoy() {
+	sha512sum ./boot/* > $1
+}
+
 parse_opts() {
 	common_pars=0
 

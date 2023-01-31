@@ -26,7 +26,7 @@ source_n_target() {
 	[ -d $source ] || mkdir -p $source
 
 	if [ -d $1 ]; then
-		source=$1 
+		source=$1
 	else
 		if [ -s $base ] ; then
 			mount_img $1 $source
@@ -35,7 +35,7 @@ source_n_target() {
 		fi
 	fi
 
-	[ -d $target ] && rm -rf $tmpdir/target
+	[ -d $target ] && rm -rf $CONF_tmpdir/target
 	mkdir -p $target
 
 	sleep 1
@@ -45,12 +45,14 @@ get_devuan() {
 	[ -d $distros_dir ] || sudo mkdir $distros_dir
 	cd $distros_dir
 
-		wget $wget_opts $1
+		wget $CONF_wget_opts $1
 	else
-		wget $wget_opts --recursive $wget_def_url
+		wget $CONF_wget_opts --recursive $CONF_wget_def_url
 	fi
 
+
 	sha256sum -c SHA256SUMS
+	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 }
 
 make_dirs() {
@@ -58,7 +60,7 @@ make_dirs() {
 	echo "mkdir $distros_dir"
 	echo "mkdir $bloader"
 	echo "mkdir ./grub"
-	echo "mkdir $pkgsdir2"
+	echo "mkdir $CONF_pkgsdir2"
 	echo "mkdir ./v"
 }
 
@@ -104,7 +106,7 @@ bootloader() {
 			fi
 
 			if [ ! -s $3/SAM.1 ] ; then 
-				sha512sum ./boot/* > $TARGET_DIGESTS_dir/SAM.1
+				malfoy $TARGET_DIGESTS_dir/SAM.1
 			fi
 		;;
 		*)
@@ -118,14 +120,17 @@ copy_main() {
 
 	[ x$1 != x ] || exit 2
 
-	cp -a $scripts_dir/*.sh $tmpdir
-	chmod 0555 $tmpdir/*.sh
-	sudo chown root:root $tmpdir/*.sh
+	cp -a $CONF_scripts_dir/*.sh $CONF_tmpdir
+	chmod 0555 $CONF_tmpdir/*.sh
+	sudo chown root:root $CONF_tmpdir/*.sh
 
+	[ -d $target/$TARGET_DIGESTS_dir ] || mkdir -p $target/$TARGET_DIGESTS_dir
 
 	cp -a $1/*.sh $2 
 	chmod 0555 $2/*.sh 
 	sudo chown root:root $2/*.sh
+
+	cd $sorsa 
 
 	if [ -s $1/0/SAM.2.0 ] ; then 
 		cp $1/0/SAM.2.0 $1/0/SAM.2 
@@ -156,7 +161,7 @@ copy_conf() {
 	[ x$1 != x ] || exit 2
 	[ x$2 != x ] || exit 2
 
-	cp -a $sorsa/$scripts_dir/*.conf $tmpdir 
+	cp -a $sorsa/$CONF_scripts_dir/*.conf $CONF_tmpdir 
 	cd $sorsa
 
 	cp -a $1/$2.conf $3
@@ -192,7 +197,7 @@ copy_sums() {
 	[ x$1 != x ] || exit 2
 
 	if [ -d $2 ] ; then
-		echo "targeidir alr3ady exiusts"
+		echo "targeTdir alr3ady ex1st5"
 	else
 		mkdir $2
 		sleep 5
@@ -202,9 +207,6 @@ copy_sums() {
 
 	if [ -s $1/0/SAM.1 ] ; then
 
-		if [ -s $1/0/SAM.1.0 ] ; then
-	
-		fi
 
 		cp $1/0/SAM.1 $2
 	fi
@@ -215,19 +217,14 @@ copy_sums() {
 		cp $1/0/SAM.2.0 $2;sleep 5
 	fi
 
-		echo "cp $1/0/SAM.2 $2";sleep 1
+	if [ -s $1/0/SAM.2 ] ; then
 		cp $1/0/SAM.2 $2;sleep 5
 
 	fi
 
 
-	if [ -s $1/0/SAM.3 ] ; then 
-	fi 
 
 
-		echo "source:";ls -las $1/0;sleep 5
-		echo "target:";ls -las $2;sleep 5
-		echo "Exit copy_sums($1) ";sleep 5
 
 }
 
@@ -272,6 +269,7 @@ live2()  {
 		sudo cp $source/live/vmlinuz $2
 	fi
 }
+
 live3() {
 	[ x$1 != x ] || exit 2
 	[ x$2 != x ] || exit 2

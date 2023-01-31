@@ -4,7 +4,7 @@
 . ./common_funcs.sh
 
 parse_opts $1 $2
-cd $targetdir 
+cd $CONF_targetdir 
 
 [ x$TARGET_DIGESTS_dir != x ] || exit 1
 
@@ -19,20 +19,20 @@ rm $TARGET_DIGESTS_dir/*.sig
 for i in 1 2 3 4 ; do touch $TARGET_DIGESTS_file.$i ; done
 
 
-	echo "CONTENTS OF: $TARGET_DIGESTS_dir"
-	ls -las $TARGET_DIGESTS_dir
-	sleep 6
 
 part1() {
 	if [ ! -s $TARGET_DIGESTS_dir/SAM.1 ] ; then
-		echo "grif|slith" 
+		echo "grif|slith"
+ 
 		if [ -d ./isolinux ] ; then
+			griffindor
 		else
 			slithering
 		fi
 	else
 		mv $TARGET_DIGESTS_dir/SAM.1 $TARGET_DIGESTS_file.1
 	fi
+
 }
 
 part1
@@ -43,9 +43,9 @@ part2() {
 	if [ ! -s $TARGET_DIGESTS_dir/SAM.2 ] ; then 
 		
 		if [ x$TARGET_pad_dir != x ] ; then 
-			sha512sum $TARGET_pad_dir/* | grep -v $patch_name | grep -v $TARGET_DIGESTS_file0 > $TARGET_DIGESTS_file.2
+			sha512sum $TARGET_pad_dir/* | grep -v $TARGET_patch_name | grep -v $TARGET_DIGESTS_file0 > $TARGET_DIGESTS_file.2
 		else
-			echo "FUXX 0FXXX @$$H013!!!xx"
+			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 		fi
 	else
 		mv $TARGET_DIGESTS_dir/SAM.2 $TARGET_DIGESTS_file.2
@@ -53,7 +53,6 @@ part2() {
 }
 
 part2
-sleep 5 
 
 part3() {
 	if [ ! -s $TARGET_DIGESTS_dir/SAM.3 ] ; then
@@ -62,14 +61,13 @@ part3() {
 		echo "mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3"
 		mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3
 	fi
+
 }
 
 part3
-sleep 5
 
 part4() {
 		echo "IS $TARGET_DIGESTS_file.1 ok?"
-	
 		sha512sum -c $TARGET_DIGESTS_file.1
 		[ $? -eq 0 ] || exit
 }
@@ -85,8 +83,7 @@ part5
 [ $? -eq 0 ] || exit
 
 part6() {
-		sleep 5 
-	
+	if [ -s $TARGET_DIGESTS_file.3 ] ; then
 		sha512sum -c $TARGET_DIGESTS_file.3
 	fi
 }
@@ -94,20 +91,21 @@ part6() {
 part6
 
 if [ $? -eq 0 ]; then 
-	gpg -u $kayid -sb $TARGET_DIGESTS_file.1 
+	gpg -u $CONF_kayid -sb $TARGET_DIGESTS_file.1 
 
 	if [ $? -gt 0 ] ; then
 		echo "install -keys --i"
 		exit 666
 	fi
  
-	gpg -u $kayid -sb $TARGET_DIGESTS_file.2
+	gpg -u $CONF_kayid -sb $TARGET_DIGESTS_file.2
 
-	[ -s $TARGET_DIGESTS_file.3 ] && gpg -u $kayid -sb $TARGET_DIGESTS_file.3
+	[ -s $TARGET_DIGESTS_file.3 ] && gpg -u $CONF_kayid -sb $TARGET_DIGESTS_file.3
+	echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 fi
 
 part7() {
-	gpg -u $kayid2 -sb $TARGET_Dpubkf
+	gpg -u $CONF_kayid2 -sb $TARGET_Dpubkf
 	echo $?
 	
 	
@@ -131,6 +129,5 @@ sha512sum $TARGET_DIGESTS_dir/* | grep -v '$TARGET_DIGESTS_file.4' | grep -v 'cf
 
 	echo "$TARGET_DIGESTS_dir;"
 	ls -laRs $TARGET_DIGESTS_dir;sleep 5
-fi
 
 echo "loits_new ?"

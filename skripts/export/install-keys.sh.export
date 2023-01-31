@@ -1,16 +1,22 @@
 #!/bin/sh
-
 . ./common.conf
+. ./common_funcs.sh
 
-case $1 in
+usage() {
+	echo "$0 --i Imports keys"
+	echo "$0 --m generates 2 keys"
+}
+parse_opts $1 $2
+
+case $cmd in
 	--i)
 		sudo gpg --import $keys_dir/*.new
 	;;
 	--e) 
-		sudo gpg --export $kayname > $2/$kname
+		sudo gpg --export $CONF_kayname > $par/$TARGET_Dkname1
 	;;
 	--f)
-		sudo gpg --export $kayname2 > $2/KsK
+		sudo gpg --export $CONF_kayname2 > $par/TARGET_Dkname2
 	;;
 	--m)
 		echo "cd $keys_dir"
@@ -18,8 +24,7 @@ case $1 in
 		echo "gpg --generate-key"
 	;;
 	*)
-		echo "$0 --i OR "
-		echo "$0 --e <dir> "	
+		usage
 	break
 	;;
 esac
