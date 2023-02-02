@@ -10,7 +10,8 @@ parse_opts $1 $2
 
 case $cmd in
 	--i)
-		sudo gpg --import $keys_dir/*.new
+		cd $sorsa
+		sudo gpg --import $CONF_keys_dir/*.new
 	;;
 	--e) 
 		sudo gpg --export $CONF_kayname > $par/$TARGET_Dkname1
@@ -19,7 +20,7 @@ case $cmd in
 		sudo gpg --export $CONF_kayname2 > $par/TARGET_Dkname2
 	;;
 	--m)
-		echo "cd $keys_dir"
+		echo "cd $sorsa/$CONF_keys_dir"
 		echo "gpg --generate-key"
 		echo "gpg --generate-key"
 	;;

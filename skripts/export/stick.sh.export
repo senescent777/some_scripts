@@ -8,6 +8,8 @@ b=0
 
 usage() {
 	echo "$0 [-t <type>] [--v <verbosity>] [-b <sign_or_not>]"
+	echo "-b 1:just signs"
+	echo "-b 2:signs and encrypts"
 }
 
 parse_opts_real() {
@@ -39,22 +41,43 @@ mk_bkup $TARGET_archdir/$kala2
 sudo cp $TARGET_pad_bak_file $TARGET_archdir/$kala2
 
 
-if [ $b -eq 1 ] ; then 
-	gpg -u $CONF_kayid -sb $TARGET_archdir/$kala2
-fi
+
+case $b in
+	0)
+	;;
+	1)
+		gpg -u $CONF_kayid2 -sb $TARGET_archdir/$kala2
+	;;
+	2)
+		echo "TODO:gpg -u $CONF_kayid2 -sb $TARGET_archdir/$kala2 -e"
+	;;
+	*)
+		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+	;;
+esac
 
 cd $sorsa
 p=$(date +%F)
 kala3=$TARGET_scripts_bak_file.$p
 kala3=$TARGET_archdir/$kala3
 
-	sudo tar -jcpf $kala3 $CONF_scripts_dir $CONF_stg0file $CONF_stg0file.export
+	sudo tar -jcpf $kala3 $CONF_scripts_dir $CONF_stg0file $CONF_stg0file.export lib/*.export 
 
-if [ $b -eq 1 ] ; then 
-	gpg -u $CONF_kayid -sb $kala3
 
-fi
+case $b in
+	0)
+	;;
+	1)
+		gpg -u $CONF_kayid -sb $kala3
 
-echo "mkp.sh"
+	;;
+	2)
+	;;
+	*)
+		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+	;;
+esac
+
+echo "chmod+mkp.sh"
 
 sudo umount $TARGET_archdir0

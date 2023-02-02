@@ -3,24 +3,65 @@
 . ./common.conf
 . ./common_funcs.sh
 
-[ x$1 != x ] || exit 11
-[ -d $1 ] || exit 22
-[ y$TARGET_patch_name != y ] || exit 33
+dir=""
 
-cccp() {
-	echo "cp $1 $2"
-	cp $1 $2
+[ y$TARGET_patch_name != y ] || exit 33
+[ z$TARGET_pad2 != z ] || exit 44
+[ w$TARGET_DIGESTS_file0 != w ] || exit 55
+
+usage() {
+	echo "$0 --in <input dir> [--v <verbosity lebel>]"
 }
 
-echo "params opk";sleep 3
-for f in $TARGET_patch_list_1; do cccp $1/$f $1/$TARGET_patch_name/$TARGET_pad2 ; done
+parse_opts_real() {
+	case $1 in
+		--in)
+			dir=$2
+		;;
+		*)
+			usage
+			exit 666
+		;;
+	esac
+}
 
-echo "cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $1/$TARGET_patch_name/$TARGET_pad2/0"
-cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $1/$TARGET_patch_name/$TARGET_pad2/0
+parse_opts $1 $2
+parse_opts $3 $4
 
-sleep 1
+[ x$dir != x ] || exit 66
+[ -d $dir ] || exit 77
 
-echo "cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $1/$TARGET_patch_name/$TARGET_pad2/0"
-cp $target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $1/$TARGET_patch_name/$TARGET_pad2/0
+sssr() {
+	if [ -s $1/$3/$2 ] ; then 
+		rm $1/$3/$2
+	fi
 
-for f in $TARGET_patch_list_2 ; do cccp  $1/$f $1/$TARGET_patch_name/$TARGET_pad2 ; done
+	cp $1/$2 $1/$3
+
+}
+
+mutilate() {
+	head -n 1 $1/$2 > $1/$3
+	h="TARGET_pad_bak TARGET_pad_dir TARGET_DIGESTS TARGET_DT"
+
+	for f in $g ; do
+	done
+
+
+	for f in $h ; do
+	done
+
+}
+
+
+for f in $TARGET_patch_list_1; do sssr $dir $f $TARGET_patch_name/$TARGET_pad2 ; done
+
+rm $dir/$TARGET_patch_name/$TARGET_pad2/0/$TARGET_DIGESTS_file0.*
+
+cp $CONF_target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $dir/$TARGET_patch_name/$TARGET_pad2/0
+
+cp $CONF_target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $dir/$TARGET_patch_name/$TARGET_pad2/0
+
+
+for f in $TARGET_patch_list_3 ; do sssr $dir $f $TARGET_patch_name/$TARGET_pad2 ; done
+echo "stg0 | mf"

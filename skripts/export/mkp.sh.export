@@ -3,15 +3,31 @@
 . ./common.conf
 . ./common_funcs.sh
 
+b=1
 t=$1
+
 [ -d $t ] || exit 55
 u=$t/$TARGET_patch_name.tar.bz2
 [ -s $u ] || exit 66
 echo "PARS OK"
 
-echo "gpg -u $CONF_kayid -sb $u"
-gpg -u $CONF_kayid -sb $u
-sleep 3
+case $b in
+	0)
+	;;
+	1)
+		echo "gpg -u $CONF_kayid -sb $u"
+		gpg -u $CONF_kayid -sb $u
+		sleep 3
+	;;
+	2)
+		echo "TODO:gpg -u $CONF_kayid2 -sb $TARGET_archdir/$kala2 -e"
+	;;
+	*)
+		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+	;;
+esac
+
+
 
 mount $TARGET_archdir0 || exit 77
 cp $u $TARGET_archdir0/$TARGET_patch_dir

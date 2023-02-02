@@ -26,7 +26,7 @@ parse_opts_real() {
 			source2=$2/$TARGET_pad_dir
 		;;
 		--bl)
-			bloader=$2
+			CONF_bloader=$2
 		;;
 		--luser)
 			n=$2
@@ -63,47 +63,47 @@ t_count=$(grep $CONF_tmpdir0 /proc/mounts | wc -l)
 
 source_n_target $base
 
-[ x$target != x ] || exit 99
-[ -d $target ] || exit 100
+[ x$CONF_target != x ] || exit 99
+[ -d $CONF_target ] || exit 100
 
-[ -d $target/live ] || mkdir $target/live
+[ -d $CONF_target/live ] || mkdir $CONF_target/live
 olddir=$(pwd)
 cd $source2/../live
 echo $?
-[ -d $target/$TARGET_DIGESTS_dir ] || mkdir -p $target/$TARGET_DIGESTS_dir
+[ -d $CONF_target/$TARGET_DIGESTS_dir ] || mkdir -p $CONF_target/$TARGET_DIGESTS_dir
 
-live1 $source2/../live $target/live
-live2 $source2/../live $target/live
-live3 $source2/../live $target/live
+live1 $source2/../live $CONF_target/live
+live2 $source2/../live $CONF_target/live
+live3 $source2/../live $CONF_target/live
 sleep 5
 
 cd $olddir
 
-copy_main $source2 $target/$TARGET_pad_dir 
-copy_conf $source2 $n $target/$TARGET_pad_dir
-copy_sums $source2 $target/$TARGET_DIGESTS_dir
+copy_main $source2 $CONF_target/$TARGET_pad_dir 
+copy_conf $source2 $n $CONF_target/$TARGET_pad_dir
+copy_sums $source2 $CONF_target/$TARGET_DIGESTS_dir
 
 
-klist="$source2/0 $TARGET_DIGESTS_dir ./keys"
+klist="$source2/0 $TARGET_DIGESTS_dir $CONF_keys_dir"
 
 for x in $klist; do
 	if [ -s $x/$TARGET_Dkname1 ] ; then 
-		keyz $x $target/$TARGET_DIGESTS_dir
+		keyz $x $CONF_target/$TARGET_DIGESTS_dir
 		break
 	fi	
 done
 
-bootloader $bloader $source2 $target/$TARGET_DIGESTS_dir
+bootloader $CONF_bloader $source2 $CONF_target/$TARGET_DIGESTS_dir
 
-chown -R 1000:1000 $target/$TARGET_DIGESTS_dir
-chmod -R u+w $target/$TARGET_DIGESTS_dir
-chown -R 1000:1000 $target/isolinux/*
-chmod -R a+w $target/isolinux/*
+chown -R 1000:1000 $CONF_target/$TARGET_DIGESTS_dir
+chmod -R u+w $CONF_target/$TARGET_DIGESTS_dir
+chown -R 1000:1000 $CONF_target/isolinux/*
+chmod -R a+w $CONF_target/isolinux/*
 echo $?
 
 cp -a $sorsa/$CONF_pkgsdir2 $CONF_tmpdir 
 
-touch $target/$TARGET_pad_dir/*
+touch $CONF_target/$TARGET_pad_dir/*
 
 cleanup
 

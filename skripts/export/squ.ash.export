@@ -74,9 +74,9 @@ bbb() {
 		sudo rm -rf ./usr/share/doc/*	
 		sudo rm -rf ./var/cache/apt/archives/*.deb
 		sudo rm -rf ./var/cache/apt/*.bin
-		sudo rm -rf ./tmp/manifest*
-		sudo rm -rf ./tmp/var
-		sudo rm -rf ./tmp/$TARGET_pad_dir
+
+		sudo rm -rf ./tmp/*
+
 		fix_sudo
 		sudo chmod -R go-w ./var/cache/man
 		sudo chown -R root:root ./var/cache/man
@@ -105,21 +105,26 @@ jlk1() {
 		sudo chmod 0555 ./*.sh
 	fi
 }
+
 jlk1_5() {
 
-	if [ x$CONF_squash_dir != x ]; then
-		cd $CONF_squash_dir/$TARGET_pad2
-		pwd
-		rm ./mf*
-		rm ./root.conf;rm ./devuan.conf;sleep 6 
+	if [ x$CONF_squash_dir != x ] && [ y$1 != y ] ; then
+		if [ -d $1 ] ; then 
+			cd $CONF_squash_dir/$TARGET_pad2
+			pwd;sleep 6
 
-	   	grep -v to_ram $1/$TARGET_pad_dir/devuan.conf > ./root.conf 
+			rm ./mf*;rm ./root.conf
+			rm ./$2.conf
+			sleep 6 
+
+	   		grep -v to_ram $1/$TARGET_pad_dir/$2.conf > ./root.conf 
 	
-	        echo "to_ram=1" >> ./root.conf
+	        	echo "to_ram=1" >> ./root.conf
 
-		sudo chown -R root:root ./*
-		sudo chmod 0444 ./*.conf
-		sleep 6	
+			sudo chown -R root:root ./*
+			sudo chmod 0444 ./*.conf
+			sleep 6	
+		fi
 	fi
 
 }
@@ -167,7 +172,7 @@ cfd() {
 usage() {
 	echo "-x <source_file>:eXtracts <source_file> to $CONF_squash0 "
 	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to $CONF_squash0 "
-	echo "-b is supposed top be run just Before -c but after -r"
+	echo "-b is supposed to be run just Before -c but after -r"
 	echo "-d :Destroys contents of $CONF_squash0/ and $CONF_tmpdir/d.rem "
 	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses $CONF_squash_dir to <target_file> with optional_params"
 
@@ -184,14 +189,14 @@ usage() {
 ijk() {
 	if [ x$CONF_squash_dir != x ]; then
 		echo "$0 -x ?"
+		
 		previous=$(pwd)
 		mkdir -p $CONF_squash_dir/$TARGET_pad2
 		cd $CONF_squash_dir/$TARGET_pad2
 	
-		[ x$par != x ] || exit 666
-
-		cp $par/$TARGET_pad_dir/extras.tar.bz2 .
-		cp $par/$TARGET_pad_dir/functions_part1.sh . 
+		[ x$1 != x ] || exit 666
+		[ -d $1 ] || exit 666
+		for d in $TARGET_patch_list_2 ; do cp $1/$TARGET_pad_dir/$d . ; done
 
 		grep -v to_ram devuan.conf > root.conf 
 	
@@ -207,10 +212,10 @@ case $cmd in
 		xxx $par
 	;;
 	-y)
-		[ -d $source ] || sudo mkdir -p $source
-		sudo mount -o loop,ro $par $source
-		xxx $source/live/filesystem.squashfs
-		sudo umount $source
+		[ -d $CONF_source ] || sudo mkdir -p $CONF_source
+		sudo mount -o loop,ro $par $CONF_source
+		xxx $CONF_source/live/filesystem.squashfs
+		sudo umount $CONF_source
 	;;
 	-b) 
 		bbb		
@@ -234,12 +239,12 @@ case $cmd in
 		rst
 	;;
 	-i)
-		ijk
+		ijk $par
 	;;
 	-j)
 		jlk1 $par
 
-		jlk1_5 $dir2
+		jlk1_5 $dir2 devuan
 
 		jlk2 $dir2 
 		fix_sudo

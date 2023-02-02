@@ -39,7 +39,9 @@ mk_pad_bak() {
 	sudo chmod -R a-w $TARGET_pad_dir/*
 	sudo chmod  a-w $TARGET_pad_dir/ 
 
-	sudo tar $TARGET_TAR_OPTS -cvf ../$1 $2
+
+	sudo tar $TARGET_DTAR_OPTS -cvf ../$1 $2
+
 
 }
 

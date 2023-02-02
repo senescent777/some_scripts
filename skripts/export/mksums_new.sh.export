@@ -101,6 +101,7 @@ if [ $? -eq 0 ]; then
 	gpg -u $CONF_kayid -sb $TARGET_DIGESTS_file.2
 
 	[ -s $TARGET_DIGESTS_file.3 ] && gpg -u $CONF_kayid -sb $TARGET_DIGESTS_file.3
+else 
 	echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 fi
 
@@ -130,4 +131,4 @@ sha512sum $TARGET_DIGESTS_dir/* | grep -v '$TARGET_DIGESTS_file.4' | grep -v 'cf
 	echo "$TARGET_DIGESTS_dir;"
 	ls -laRs $TARGET_DIGESTS_dir;sleep 5
 
-echo "loits_new ?"
+echo "loits_new | mkq"

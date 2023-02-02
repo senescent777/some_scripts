@@ -21,7 +21,6 @@ echo
 echo -n "TARGET_archdir=\$TARGET_archdir0/"
 echo
 
-echo -n "TARGET_stick_part=disk/by-uuid/"
 echo
 
 echo -n "TARGET_scripts_bak_file="
