@@ -5,6 +5,7 @@
 
 parse_opts $1 $2
 cd $CONF_targetdir 
+pwd
 
 [ x$TARGET_DIGESTS_dir != x ] || exit 1
 
@@ -21,6 +22,7 @@ for i in 1 2 3 4 ; do touch $TARGET_DIGESTS_file.$i ; done
 
 
 part1() {
+
 	if [ ! -s $TARGET_DIGESTS_dir/SAM.1 ] ; then
 		echo "grif|slith"
  
@@ -40,6 +42,7 @@ part1
 sleep 5
 
 part2() {
+
 	if [ ! -s $TARGET_DIGESTS_dir/SAM.2 ] ; then 
 		
 		if [ x$TARGET_pad_dir != x ] ; then 
@@ -55,6 +58,7 @@ part2() {
 part2
 
 part3() {
+
 	if [ ! -s $TARGET_DIGESTS_dir/SAM.3 ] ; then
 		sha512sum ./live/* > $TARGET_DIGESTS_file.3
 	else
@@ -67,6 +71,7 @@ part3() {
 part3
 
 part4() {
+
 		echo "IS $TARGET_DIGESTS_file.1 ok?"
 		sha512sum -c $TARGET_DIGESTS_file.1
 		[ $? -eq 0 ] || exit
@@ -74,6 +79,7 @@ part4() {
 
 part4
 part5() {
+
 		sleep 5
 		echo "IS $TARGET_DIGESTS_file.2 ok?"
 		sha512sum -c $TARGET_DIGESTS_file.2 --ignore-missing
@@ -83,6 +89,7 @@ part5
 [ $? -eq 0 ] || exit
 
 part6() {
+
 	if [ -s $TARGET_DIGESTS_file.3 ] ; then
 		sha512sum -c $TARGET_DIGESTS_file.3
 	fi
@@ -90,30 +97,49 @@ part6() {
 
 part6
 
-if [ $? -eq 0 ]; then 
-	gpg -u $CONF_kayid -sb $TARGET_DIGESTS_file.1 
+part6_5() {
+	
+
+	for i in 1 2 3 ; do
+		gpg -u $CONF_kayid -sb ./$TARGET_DIGESTS_file.$i
+	done
 
 	if [ $? -gt 0 ] ; then
 		echo "install -keys --i"
 		exit 666
 	fi
- 
-	gpg -u $CONF_kayid -sb $TARGET_DIGESTS_file.2
+}
 
-	[ -s $TARGET_DIGESTS_file.3 ] && gpg -u $CONF_kayid -sb $TARGET_DIGESTS_file.3
+if [ $? -eq 0 ]; then 
+	gg=$(which gpg)
+
+	if [ x$gg != x ] ; then 
+		part6_5
+	else
+		echo "cd ./$CONF_pkgsdir2"
+		echo "sudo tar -jxvf ./*.bz2"
+		echo "sudo dpkg -i ./$TARGET_pkgdir/lib*.deb"
+		echo "rm ./$TARGET_pkgdir/lib*.deb"
+		echo "sudo dpkg -i ./$TARGET_pkgdir/*.deb"
+		echo "sudo rm ./$TARGET_pkgdir/*.deb"	
+		exit 666
+	fi
 else 
 	echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 fi
 
 part7() {
-	gpg -u $CONF_kayid2 -sb $TARGET_Dpubkf
+	
+	gpg -u $CONF_kayid2 -sb ./$TARGET_Dpubkf
 	echo $?
 	
-	
-		gpgv --keyring $TARGET_Dpubkg $TARGET_Dpubkf.sig $TARGET_Dpubkf
-		gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.1.sig $TARGET_DIGESTS_file.1
-		gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.2.sig $TARGET_DIGESTS_file.2
-		gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.3.sig $TARGET_DIGESTS_file.3
+		gpgv --keyring ./$TARGET_Dpubkg ./$TARGET_Dpubkf.sig ./$TARGET_Dpubkf
+
+		for i in 1 2 3 ; do
+			echo "gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.$i.sig $TARGET_DIGESTS_file.$i"
+			gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.$i.sig $TARGET_DIGESTS_file.$i			
+			sleep 5
+		done
 
 	echo $?
 }

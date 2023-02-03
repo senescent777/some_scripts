@@ -9,7 +9,7 @@ b=0
 usage() {
 	echo "$0 [-t <type>] [--v <verbosity>] [-b <sign_or_not>]"
 	echo "-b 1:just signs"
-	echo "-b 2:signs and encrypts"
+	echo "-b 2:signs and encrypts (TODO)"
 }
 
 parse_opts_real() {
@@ -35,10 +35,10 @@ parse_opts $5 $6
 sudo mount /dev/$TARGET_stick_part $TARGET_archdir0
 [ $? -eq 0 ] || exit 1
 
-kala2=$TARGET_pad_bak_file.$post
-mk_bkup $TARGET_archdir/$kala2
+kala6=$TARGET_pad_bak_file.$post
+mk_bkup $TARGET_archdir/$kala6
 
-sudo cp $TARGET_pad_bak_file $TARGET_archdir/$kala2
+sudo cp $TARGET_pad_bak_file $TARGET_archdir/$kala6
 
 
 
@@ -46,10 +46,10 @@ case $b in
 	0)
 	;;
 	1)
-		gpg -u $CONF_kayid2 -sb $TARGET_archdir/$kala2
+		gpg -u $CONF_kayid2 -sb $TARGET_archdir/$kala6
 	;;
 	2)
-		echo "TODO:gpg -u $CONF_kayid2 -sb $TARGET_archdir/$kala2 -e"
+		echo "TODO:gpg -u $CONF_kayid2 -sb $TARGET_archdir/$kala6 -e"
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 

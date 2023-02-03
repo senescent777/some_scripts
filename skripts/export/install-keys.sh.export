@@ -1,31 +1,61 @@
-#!/bin/sh
+#!/bin/bash
+
 . ./common.conf
 . ./common_funcs.sh
 
 usage() {
-	echo "$0 --i Imports keys"
-	echo "$0 --m generates 2 keys"
+	echo "$0 --kdir <kdir> --i Imports keys from <kdir>"
+	echo "$0 --kdir <kdir> --m generates 2 keys , <kdir> still needed"
 }
-parse_opts $1 $2
+
+
+ridk=""
+cmd=""
+
+tpop() {
+
+	case $1 in
+		--kdir)
+			ridk=$2
+		;;
+		--v)
+		;;
+		*)
+			cmd=$1
+		;;
+	esac
+}
+
+tpop $1 $2
+tpop $3 $4
+
+[ x$ridk != x ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
+[ -d $ridk ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 
 case $cmd in
 	--i)
-		cd $sorsa
-		sudo gpg --import $CONF_keys_dir/*.new
+		echo "gpg --import $ridk/*.new"
 	;;
 	--e) 
-		sudo gpg --export $CONF_kayname > $par/$TARGET_Dkname1
+		echo "sudo chmod a+w $ridk"
+		echo "gpg --export $CONF_kayid > $ridk/$TARGET_Dkname1"
+		echo "sudo chmod a-w $ridk"
 	;;
 	--f)
-		sudo gpg --export $CONF_kayname2 > $par/TARGET_Dkname2
+		echo "sudo chmod a+w $ridk"
+		echo "gpg --export $CONF_kayid2 > $ridk/$TARGET_Dkname2"
+		echo "sudo chmod a-w $ridk"
 	;;
 	--m)
-		echo "cd $sorsa/$CONF_keys_dir"
 		echo "gpg --generate-key"
 		echo "gpg --generate-key"
+		echo "sudo chmod a+w $ridk"
+		echo "cd ~;tar -jcvf $ridk/k3yz.tar.bz2 ~/.gnupg"
+		echo "sudo chmod a-w $ridk"
+		echo "gpg --list-keys"
+		echo "nano $CONF_scripts_dir/common.conf"
 	;;
 	*)
 		usage
-	break
 	;;
 esac

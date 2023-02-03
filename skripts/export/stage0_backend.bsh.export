@@ -168,17 +168,25 @@ copy_conf() {
 	cp -a $1/$2.conf $3
 
 	if [ -s $3/upload.sh ] || [ -s $3/extras.tar.bz2 ] ; then 
-		for f in $g ; do mangle_conf $f $3/$2.conf ; done
+		for f in $CONF_g2 ; do mangle_conf $f $3/$2.conf ; done
 	fi
 
 
 	utfile=$3/$2.conf
-	for f in $g; do mangle_conf $f $utfile ; done
+	for f in $CONF_g1; do mangle_conf $f $utfile ; done
 
 	echo -n "src=/" >> $utfile
 	echo -n "$" >> $utfile
 	echo "TARGET_pad2" >> $utfile
 	
+	echo -n "tmpdir=" >> $utfile
+	echo -n "$" >> $utfile
+	echo "TARGET_tmpdir" >> $utfile
+
+	echo -n "pkgdir=" >> $utfile
+	echo -n "$" >> $utfile
+	echo "TARGET_pkgdir" >> $utfile
+
 	mangle_conf to_ram $utfile
 	mangle_conf nosu_do $utfile
 
