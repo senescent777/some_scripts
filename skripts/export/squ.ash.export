@@ -188,7 +188,7 @@ usage() {
 
 	echo "-r :runs chRoot in $CONF_squash_dir "
 	echo "as of 21.12.22 /proc,/sys are no longer automatically bind-mounted in order to find out a root cause for some weird shit"
-	echo "(it looks like the remastering OS is rotten and has to be removed)"
+	echo "(it looks like the remastering OS is rotten and have to be replaced)"
 
 	echo "-i <src> : Installs scripts 2 chroot_dir "
 	echo "-j <src> [ --dir2 <stuff>] : extracts dir 2 chroot_dir"
