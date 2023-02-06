@@ -98,15 +98,14 @@ part6() {
 part6
 
 part6_5() {
-	
 
 	for i in 1 2 3 ; do
-		gpg -u $CONF_kayid -sb ./$TARGET_DIGESTS_file.$i
+		gpg -u $CONF_kay1name -sb ./$TARGET_DIGESTS_file.$i
+		echo $?
 	done
 
 	if [ $? -gt 0 ] ; then
 		echo "install -keys --i"
-		exit 666
 	fi
 }
 
@@ -126,12 +125,15 @@ if [ $? -eq 0 ]; then
 	fi
 else 
 	echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+	exit 666
 fi
 
 part7() {
-	
-	gpg -u $CONF_kayid2 -sb ./$TARGET_Dpubkf
+
+	gpg -u $CONF_kay2name -sb ./$TARGET_Dpubkf
+
 	echo $?
+	sleep 5
 	
 		gpgv --keyring ./$TARGET_Dpubkg ./$TARGET_Dpubkf.sig ./$TARGET_Dpubkf
 

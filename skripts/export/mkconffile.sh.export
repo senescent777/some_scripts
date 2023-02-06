@@ -1,12 +1,12 @@
 #!/bin/sh
 
-echo "CONF_kayid=<your_key_1>"
-echo "CONF_kayid2=<your_key_2>"
+echo "CONF_kayid=0x<your_key_1>"
+echo "CONF_kayid2=0x<your_key_2>"
 
 echo "CONF_pkgsdir2=<dir_containing_genisoimage>"
 echo "CONF_gi_opts=<opts_4_genisoimage>"
 echo "CONF_targetdir="
-echo "sorsa=<sourcedir 4 many things>"
+echo "CONF_BASEDIR=<sourcedir 4 many things>"
 
 echo "TARGET_archdir0=<base_4_archive_dir>"
 echo "TARGET_archdir=\$TARGET_archdir0/<$CONF_target 4 archiving stuff>"

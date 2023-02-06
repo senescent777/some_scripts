@@ -42,7 +42,6 @@ mk_pad_bak() {
 
 	sudo tar $TARGET_DTAR_OPTS -cvf ../$1 $2
 
-
 }
 
 parse_opts $1 $2
@@ -55,31 +54,28 @@ parse_opts $5 $6
 
 gi=$(sudo which genisoimage)
 
-if [ -x $gi ] ; then
+if [ x$gi != x ] ; then
 else
 	sudo dpkg -i $CONF_pkgsdir2/*.deb
 fi
 
 
-
-
 mk_pad_bak $TARGET_pad_bak_file $TARGET_pad_dir
 sleep 1
 echo $bloader
+sudo chmod o+w ..
 
 case $bloader in
 	isolinux)
 		genisoimage -o ../$target $CONF_gi_opts  .
-		break
 	;;
 	grub)
 		echo "TODO:grub-mkrescue"
-		break
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
-		break
 	;;
 esac
 
+sleep 1;sudo chmod o-w ..
 echo "stick.sh ?"

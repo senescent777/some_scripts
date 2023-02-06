@@ -32,7 +32,7 @@ parse_opts $3 $4
 parse_opts $5 $6
 
 
-sudo mount /dev/$TARGET_stick_part $TARGET_archdir0
+sudo mount /dev/$TARGET_backup_part $TARGET_archdir0
 [ $? -eq 0 ] || exit 1
 
 kala6=$TARGET_pad_bak_file.$post
@@ -40,36 +40,32 @@ mk_bkup $TARGET_archdir/$kala6
 
 sudo cp $TARGET_pad_bak_file $TARGET_archdir/$kala6
 
-
-
 case $b in
 	0)
 	;;
 	1)
-		gpg -u $CONF_kayid2 -sb $TARGET_archdir/$kala6
+		gpg -u $CONF_kay2name -sb $TARGET_archdir/$kala6
 	;;
 	2)
-		echo "TODO:gpg -u $CONF_kayid2 -sb $TARGET_archdir/$kala6 -e"
+		echo "TODO:gpg -u $CONF_kay2name  -sb $TARGET_archdir/$kala6 -e"
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 	;;
 esac
 
-cd $sorsa
+cd $CONF_BASEDIR
 p=$(date +%F)
 kala3=$TARGET_scripts_bak_file.$p
 kala3=$TARGET_archdir/$kala3
 
 	sudo tar -jcpf $kala3 $CONF_scripts_dir $CONF_stg0file $CONF_stg0file.export lib/*.export 
 
-
 case $b in
 	0)
 	;;
 	1)
-		gpg -u $CONF_kayid -sb $kala3
-
+		gpg -u $CONF_kay2name -sb $kala3
 	;;
 	2)
 	;;

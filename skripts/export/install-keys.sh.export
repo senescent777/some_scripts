@@ -5,15 +5,14 @@
 
 usage() {
 	echo "$0 --kdir <kdir> --i Imports keys from <kdir>"
-	echo "$0 --kdir <kdir> --m generates 2 keys , <kdir> still needed"
+	echo "$0 --kdir <kdir> --e Exports keys to <kdir>"
+	echo "$0 --kdir <kdir> --m Makes 2 keys , <kdir> still needed"
 }
-
 
 ridk=""
 cmd=""
 
 tpop() {
-
 	case $1 in
 		--kdir)
 			ridk=$2
@@ -34,21 +33,33 @@ tpop $3 $4
 
 case $cmd in
 	--i)
-		echo "gpg --import $ridk/*.new"
+		for f in $TARGET_Dkname1 $TARGET_Dkname2 $TARGET_Dkname1.secret $TARGET_Dkname2.secret ; do
+			echo "gpg --import $ridk/$f"
+		done
 	;;
 	--e) 
+		[ x$CONF_kay1name != x ] || exit 666
+		[ x$CONF_kay2name != x ] || exit 666
+
 		echo "sudo chmod a+w $ridk"
-		echo "gpg --export $CONF_kayid > $ridk/$TARGET_Dkname1"
+		echo "sudo rm $ridk/$TARGET_Dkname1*"
+		echo "sudo rm $ridk/$TARGET_Dkname2*"
+
+		echo "gpg --export $CONF_kay1name > $ridk/$TARGET_Dkname1"
+		echo "gpg --export-secret-keys $CONF_kay1name > $ridk/$TARGET_Dkname1.secret"
+		echo "gpg --export $CONF_kay2name > $ridk/$TARGET_Dkname2"
+		echo "gpg --export-secret-keys $CONF_kay2name > $ridk/$TARGET_Dkname2.secret"
+			
 		echo "sudo chmod a-w $ridk"
-	;;
-	--f)
-		echo "sudo chmod a+w $ridk"
-		echo "gpg --export $CONF_kayid2 > $ridk/$TARGET_Dkname2"
-		echo "sudo chmod a-w $ridk"
+		echo "ls -las $ridk"
 	;;
 	--m)
+		echo "cd ~"
+		echo "mv ~/.gnupg ~/.gnupg.OLD"
 		echo "gpg --generate-key"
+		echo "sleep 5"
 		echo "gpg --generate-key"
+		echo "sleep 5"
 		echo "sudo chmod a+w $ridk"
 		echo "cd ~;tar -jcvf $ridk/k3yz.tar.bz2 ~/.gnupg"
 		echo "sudo chmod a-w $ridk"

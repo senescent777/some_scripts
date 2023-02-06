@@ -1,6 +1,6 @@
 #!/bin/sh
 
-target=""
+ltgtdir=""
 cleanup=0
 tgtfile=SAM.2.0
 
@@ -11,7 +11,7 @@ tgtfile=SAM.2.0
 parse_opts_real() {
 	case $1 in
 		--target)
-			target=$2
+			ltgtdir=$2
 		;;
 		--cleanup)
 			cleanup=$2
@@ -27,37 +27,37 @@ parse_opts $1 $2
 parse_opts $3 $4
 parse_opts $5 $6
 
-if [ -s $target/mf.conf ] ; then
-	. $target/mf.conf
+if [ -s $ltgtdir/mf.conf ] ; then
+	echo ". $ltgtdir/mf.conf"
+	. $ltgtdir/mf.conf
 else
- 	echo "/sbin/fsck &0xff"
- 	exit 666
+ 	echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+	exit 666
 fi
 
 process_dir() {
-	[ -s $1.tar.$2 ] && mv $1.tar.$2 $CONF_trash_dir/$1.tar.bz2.OLD
-	
+	pwd
+
+	if [ -s $1.tar.$2 ] ; then 
+		sudo mv $1.tar.$2 $CONF_trash_dir/$1.tar.bz2.OLD
+	fi
+
 	if [ x$1 != x ] ; then 
 		if [ -d ./$1 ] ; then
 				echo $1
-		        	ls ./$1 ;sleep 4
-			fi
+		        	ls ./$1 ;sleep 2
 
-			chmod -R a-w $1/*
-			chown -R root:root $1/*.sh $1/*.conf
-			chown -R root:root $1/tmp/*
+			sudo chmod -R a-w $1/*
+			sudo chown -R root:root $1/*.sh $1/*.conf
+			sudo chown -R root:root $1/tmp/*
 
 			cd ./$1
 			
-				tar -jcvf ../$1.tar.$2 .
-			else
-				tar -jcf ../$1.tar.$2 .
-			fi
+				sudo tar -jcvf ../$1.tar.$2 .
 
 			cd ../..
 			
 			ts=$(sha512sum $TARGET_pad_dir/$1.tar.$2 | grep -v $TARGET_patch_name)
-
 			echo $ts >> $TARGET_DIGESTS_dir/$tgtfile
 
 			cd $TARGET_pad_dir
@@ -70,36 +70,39 @@ process_dir() {
 [ x$TARGET_DIGESTS_dir != x ] || exit 1
 [ x$tgtfile != x ] || exit 1
 
-if [ ! -s $target/extras/$TARGET_pad2/mg-42.bsh ] ; then 
-	cp ./mg-42.bsh $target/extras/$TARGET_pad2
+if [ ! -s $ltgtdir/extras/$TARGET_pad2/mg-42.bsh ] ; then 
+	sudo cp ./mg-42.bsh $ltgtdir/extras/$TARGET_pad2
 fi
 
-cd $target/..
+cd $ltgtdir/..
 
-	touch $TARGET_DIGESTS_dir/$tgtfile;sleep 5
 
 if [ x$TARGET_DIGESTS_dir != x ] ; then 
-	[ -d $TARGET_DIGESTS_dir ] || mkdir -p $TARGET_DIGESTS_dir
+	[ -d $TARGET_DIGESTS_dir ] || sudo mkdir -p $TARGET_DIGESTS_dir
 
 	if [ x$tgtfile != x ] ; then 
-		[ -s $TARGET_DIGESTS_dir/$tgtfile ] && rm $TARGET_DIGESTS_dir/$tgtfile
+		[ -s $TARGET_DIGESTS_dir/$tgtfile ] && sudo rm $TARGET_DIGESTS_dir/$tgtfile
 	fi
 
-	touch $TARGET_DIGESTS_dir/$tgtfile 
+	sudo touch $TARGET_DIGESTS_dir/$tgtfile;sleep 2
+	sudo chmod a+w $TARGET_DIGESTS_dir/$tgtfile
 fi
 
-cd $target
+cd $ltgtdir
 
 if [ $cleanup -eq 1 ] ; then
 	exit 1
 fi
 
-
+cd $ltgtdir
 for d in $bz3files ; do process_dir $d bz3 ; done
+
+cd $ltgtdir
 for d in $bz2files ; do process_dir $d bz2 ; done
 
-cd $target/..
+cd $ltgtdir/..
 for d in $conffiles ; do sha512sum $TARGET_pad_dir/$d >> $TARGET_DIGESTS_dir/$tgtfile ;done
+sudo chmod a-w $TARGET_DIGESTS_dir/$tgtfile
 
 
 echo "stage0?"

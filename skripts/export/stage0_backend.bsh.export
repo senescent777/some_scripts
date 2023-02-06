@@ -9,10 +9,10 @@ mount_img() {
 		found=$(cat /proc/mounts | grep $2 | wc -l)
 
 		if [ $found -gt 0 ] ; then
-			umount $CONF_source
+			sudo umount $CONF_source
 			exit 4
 		else
-			mount -o loop,ro $1 $2
+			sudo mount -o loop,ro $1 $2
 		fi
 
 	else
@@ -23,7 +23,8 @@ mount_img() {
 
 source_n_target() {
 	[ x$1 != x ] || exit 2
-	[ -d $CONF_source ] || mkdir -p $CONF_source
+
+	[ -d $CONF_source ] || sudo mkdir -p $CONF_source
 
 	if [ -d $1 ]; then
 		CONF_source=$1
@@ -35,8 +36,8 @@ source_n_target() {
 		fi
 	fi
 
-	[ -d $CONF_target ] && rm -rf $CONF_target
-	mkdir -p $CONF_target
+	[ -d $CONF_target ] && sudo rm -rf $CONF_target;sleep 1
+	sudo mkdir -p $CONF_target
 
 	sleep 1
 }
@@ -65,8 +66,7 @@ make_dirs() {
 }
 
 cleanup() {
-	found=$(cat /proc/mounts | grep $CONF_source | wc -l)
-	[ $found -eq 0 ] || umount $CONF_source
+	sudo umount $CONF_source
 }
 
 bootloader() {
@@ -84,27 +84,37 @@ bootloader() {
 
 	case $1 in
 		isolinux)
-			cp -a $CONF_source/isolinux/ . || exit 8
+			sudo cp -a $CONF_source/isolinux/ . || exit 8
 
 			if [ -d $2/../isolinux ] ; then 
 				ks2=$2/../isolinux
-				cp -a $ks2/isolinux/*.cfg ./isolinux || exit 9
+
+				for t in cfg png ; do
+					sudo rm ./isolinux/*.$t				
+
+					sudo cp -a $ks2/*.$t ./isolinux 
+				done				
+			else
+					echo "mkdir  $2/../isolinux ; cp $CONF_BASEDIR/isolinux/{*.cfg,*.png} $2/../isolinux "
+				fi			
 			fi
+
 
 			if [ ! -s $3/SAM.1 ] ; then
 				griffindor
 			fi
 		;;
 		grub)
-			cp -a $CONF_source/boot/ $CONF_target || exit 8
+			sudo cp -a $CONF_source/boot/ $CONF_target || exit 8
 			
 			if [ -d $2/../boot ] ; then 
 				ks2=$2/../boot
 			
-				echo "cp -a $ks2/boot/grub/{*.cfg,*.png} ./boot/grub"
-				echo "cp -a $ks2/boot/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
+				echo "cp -a $ks2/grub/{*.cfg,*.png} ./boot/grub"
+				echo "cp -a $ks2/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
 			fi
 
+			
 			if [ ! -s $3/SAM.1 ] ; then 
 				malfoy $TARGET_DIGESTS_dir/SAM.1
 			fi
@@ -121,37 +131,42 @@ copy_main() {
 
 	[ x$1 != x ] || exit 2
 
-	cp -a $CONF_scripts_dir/*.sh $CONF_tmpdir
-	chmod 0555 $CONF_tmpdir/*.sh
+	sudo cp -a $CONF_scripts_dir/*.sh $CONF_tmpdir
+	sudo chmod 0555 $CONF_tmpdir/*.sh
 	sudo chown root:root $CONF_tmpdir/*.sh
 
-	[ -d $CONF_target/$TARGET_DIGESTS_dir ] || mkdir -p $CONF_target/$TARGET_DIGESTS_dir
+	[ -d $CONF_target/$TARGET_DIGESTS_dir ] || sudo mkdir -p $CONF_target/$TARGET_DIGESTS_dir
 
-	cp -a $1/*.sh $2 
-	chmod 0555 $2/*.sh 
+	sudo cp -a $1/*.sh $2 
+	sudo chmod 0555 $2/*.sh 
 	sudo chown root:root $2/*.sh
 
-	cd $sorsa 
+	cd $CONF_BASEDIR 
 
 	if [ -s $1/0/SAM.2.0 ] ; then 
-		cp $1/0/SAM.2.0 $1/0/SAM.2 
+		sudo cp $1/0/SAM.2.0 $1/0/SAM.2 
 
 		cd $1/..
-		sha512sum $TARGET_pad_dir/*.sh >> $TARGET_DIGESTS_dir/SAM.2
+		
+		sudo chmod a+w $TARGET_DIGESTS_dir/SAM.2
+		sha512sum $TARGET_pad_dir/*.sh >> $TARGET_DIGESTS_dir/SAM.2;sleep 1
+		sudo chmod a-w $TARGET_DIGESTS_dir/SAM.2
 	fi
 
 		echo "done"
 		echo "TARGET_arch1v3s;"
 	
-	cd $sorsa
+	cd $CONF_BASEDIR
 
-		cp -a $1/*.bz2 $2
+		sudo cp -a $1/*.bz2 $2
 
-		cp -a $1/*.bz3 $2 
+		sudo cp -a $1/*.bz3 $2 
 
-	chmod 0444 $2/*.bz2
+
+	sudo chmod 0444 $2/*.bz2
 	sudo chown root:root $2/*.bz2
-	chmod 0444 $2/*.bz3
+
+	sudo chmod 0444 $2/*.bz3
 	sudo chown root:root $2/*.bz3
 	
 	sleep 1
@@ -162,10 +177,10 @@ copy_conf() {
 	[ x$1 != x ] || exit 2
 	[ x$2 != x ] || exit 2
 
-	cp -a $CONF_scripts_dir/*.conf $CONF_tmpdir 
-	cd $sorsa
+	sudo cp -a $CONF_scripts_dir/*.conf $CONF_tmpdir 
+	cd $CONF_BASEDIR
 
-	cp -a $1/$2.conf $3
+	sudo cp -a $1/$2.conf $3
 
 	if [ -s $3/upload.sh ] || [ -s $3/extras.tar.bz2 ] ; then 
 		for f in $CONF_g2 ; do mangle_conf $f $3/$2.conf ; done
@@ -173,6 +188,8 @@ copy_conf() {
 
 
 	utfile=$3/$2.conf
+	sudo chmod a+w $utfile;sleep 1
+
 	for f in $CONF_g1; do mangle_conf $f $utfile ; done
 
 	echo -n "src=/" >> $utfile
@@ -190,7 +207,8 @@ copy_conf() {
 	mangle_conf to_ram $utfile
 	mangle_conf nosu_do $utfile
 
-	chmod 0444 $3/*.conf
+	sudo chmod a-w $utfile;sleep 1
+	sudo chmod 0444 $3/*.conf
 	sudo chown root:root $3/*.conf
 
 	sleep 1
@@ -205,26 +223,26 @@ copy_sums() {
 	if [ -d $2 ] ; then
 		echo "targeTdir alr3ady ex1st5"
 	else
-		mkdir $2
+		sudo mkdir $2
 		sleep 5
 	fi
 
-	cd $sorsa
+	cd $CONF_BASEDIR
 
 	if [ -s $1/0/SAM.1 ] ; then
 
 
-		cp $1/0/SAM.1 $2
+		sudo cp $1/0/SAM.1 $2
 	fi
 
 	
 	if [ -s $1/0/SAM.2.0 ] ; then
 		echo "cp $1/0/SAM.2.0 $2";sleep 1
-		cp $1/0/SAM.2.0 $2;sleep 5
+		sudo cp $1/0/SAM.2.0 $2;sleep 5
 	fi
 
 	if [ -s $1/0/SAM.2 ] ; then
-		cp $1/0/SAM.2 $2;sleep 5
+		sudo cp $1/0/SAM.2 $2;sleep 5
 
 	fi
 
@@ -238,10 +256,12 @@ keyz() {
 
 	[ x$1 != x ] || exit 2
 
-	cp $1/$TARGET_Dkname1 $2
+	sudo cp $1/$TARGET_Dkname1 $2
 
-	cp $1/$TARGET_Dkname2 $2
-	chmod o+w $2
+	sudo cp $1/$TARGET_Dkname2 $2
+	sudo chmod o+w $2
+
+	sudo rm $2/*.secret
 
 		echo "CONTENTS OV $2 :"
 		ls -las $2;sleep 10
