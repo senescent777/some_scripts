@@ -1,0 +1,74 @@
+#!/bin/sh
+
+. ./common.conf
+. ./common_funcs.sh
+
+dir=""
+
+[ y$TARGET_patch_name != y ] || exit 33
+[ z$TARGET_pad2 != z ] || exit 44
+[ w$TARGET_DIGESTS_file0 != w ] || exit 55
+
+lokal_h="TARGET_pad_bak TARGET_pad_dir TARGET_DIGESTS TARGET_DT"
+
+usage() {
+	echo "$0 --in <Input dir> [--v <verbosity leVel>]"
+}
+
+parse_opts_real() {
+	case $1 in
+		--in)
+			dir=$2
+		;;
+		*)
+			usage
+			exit 666
+		;;
+	esac
+}
+
+parse_opts $1 $2
+parse_opts $3 $4
+
+[ x$dir != x ] || exit 66
+[ -d $dir ] || exit 77
+
+sssr() {
+	if [ -s $1/$3/$2 ] ; then 
+		sudo rm $1/$3/$2
+	fi
+
+	sudo cp $1/$2 $1/$3
+}
+
+mutilate() {
+	sudo touch $1/$3
+	sudo chmod a+w $1/$3
+	head -n 1 $1/$2 > $1/$3
+
+	for f in $lokal_g ; do
+	done
+
+
+	for f in $lokal_h ; do
+	done
+
+	sudo chmod a-w  $1/$3
+}
+
+
+for f in $TARGET_patch_list_1; do sssr $dir $f $TARGET_patch_name/$TARGET_pad2 ; done
+
+sudo rm $dir/$TARGET_patch_name/$TARGET_pad2/0/$TARGET_DIGESTS_file0.*
+
+sudo cp $CONF_target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.2* $dir/$TARGET_patch_name/$TARGET_pad2/0
+
+sudo cp $CONF_target/$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0.4 $dir/$TARGET_patch_name/$TARGET_pad2/0
+
+sudo rm $dir/$TARGET_patch_name/$TARGET_pad2/*.conf
+
+sudo cp $CONF_target/$TARGET_pad_dir/devuan.conf $dir/$TARGET_patch_name/$TARGET_pad2
+
+
+for f in $TARGET_patch_list_3 ; do sssr $dir $f $TARGET_patch_name/$TARGET_pad2 ; done
+echo "stg0 | mf"
