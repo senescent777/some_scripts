@@ -34,37 +34,37 @@ tpop $3 $4
 case $cmd in
 	--i)
 		for f in $TARGET_Dkname1 $TARGET_Dkname2 $TARGET_Dkname1.secret $TARGET_Dkname2.secret ; do
-			echo "gpg --import $ridk/$f"
+			gpg --import $ridk/$f
 		done
 	;;
 	--e) 
 		[ x$CONF_kay1name != x ] || exit 666
 		[ x$CONF_kay2name != x ] || exit 666
 
-		echo "sudo chmod a+w $ridk"
-		echo "sudo rm $ridk/$TARGET_Dkname1*"
-		echo "sudo rm $ridk/$TARGET_Dkname2*"
+		sudo chmod a+w $ridk
+		sudo rm $ridk/$TARGET_Dkname1*
+		sudo rm $ridk/$TARGET_Dkname2*
 
-		echo "gpg --export $CONF_kay1name > $ridk/$TARGET_Dkname1"
-		echo "gpg --export-secret-keys $CONF_kay1name > $ridk/$TARGET_Dkname1.secret"
-		echo "gpg --export $CONF_kay2name > $ridk/$TARGET_Dkname2"
-		echo "gpg --export-secret-keys $CONF_kay2name > $ridk/$TARGET_Dkname2.secret"
+		gpg --export $CONF_kay1name > $ridk/$TARGET_Dkname1
+		gpg --export-secret-keys $CONF_kay1name > $ridk/$TARGET_Dkname1.secret
+		gpg --export $CONF_kay2name > $ridk/$TARGET_Dkname2
+		gpg --export-secret-keys $CONF_kay2name > $ridk/$TARGET_Dkname2.secret
 			
-		echo "sudo chmod a-w $ridk"
-		echo "ls -las $ridk"
+		sudo chmod a-w $ridk
+		ls -las $ridk
 	;;
 	--m)
-		echo "cd ~"
-		echo "mv ~/.gnupg ~/.gnupg.OLD"
-		echo "gpg --generate-key"
-		echo "sleep 5"
-		echo "gpg --generate-key"
-		echo "sleep 5"
-		echo "sudo chmod a+w $ridk"
-		echo "cd ~;tar -jcvf $ridk/k3yz.tar.bz2 ~/.gnupg"
-		echo "sudo chmod a-w $ridk"
-		echo "gpg --list-keys"
-		echo "nano $CONF_scripts_dir/common.conf"
+		cd ~
+		mv ~/.gnupg ~/.gnupg.OLD
+		gpg --generate-key
+		sleep 5
+		gpg --generate-key
+		sleep 5
+		sudo chmod a+w $ridk
+		cd ~;tar -jcvf $ridk/k3yz.tar.bz2 ~/.gnupg
+		sudo chmod a-w $ridk
+		gpg --list-keys
+		nano $CONF_scripts_dir/common.conf
 	;;
 	*)
 		usage

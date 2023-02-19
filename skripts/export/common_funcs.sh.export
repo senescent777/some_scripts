@@ -1,6 +1,13 @@
 griffindor() {
 	pwd
-	sha512sum ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > $TARGET_DIGESTS_file.1
+
+	if [ x$1 != x ] ; then 
+		of=$1
+	else
+		of=$TARGET_DIGESTS_file.1
+	fi
+
+	sha512sum ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > $of
 }
 
 slithering() {
@@ -52,4 +59,14 @@ mk_bkup() {
 		sudo mv $1 $1.OLD
 	fi
 
+}
+
+slaughter0() {
+	fn=$(echo $1 | awk '{print $1}') 
+	ts=$(sha512sum $fn)
+
+	a=$(echo $ts | awk '{print $1}')
+	b=$(echo $ts | awk '{print $2}')
+
+	echo "$a $b" >> $2 
 }

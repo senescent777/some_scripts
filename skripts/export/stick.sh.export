@@ -4,7 +4,7 @@
 . ./common_funcs.sh
 
 post=stable
-b=0
+b=1
 
 usage() {
 	echo "$0 [-t <type>] [--v <verbosity>] [-b <sign_or_not>]"
@@ -38,42 +38,52 @@ sudo mount /dev/$TARGET_backup_part $TARGET_archdir0
 kala6=$TARGET_pad_bak_file.$post
 mk_bkup $TARGET_archdir/$kala6
 
-sudo cp $TARGET_pad_bak_file $TARGET_archdir/$kala6
+sudo cp $TARGET_pad_bak_file $kala6
+sudo chmod a+w .
 
 case $b in
 	0)
 	;;
 	1)
-		gpg -u $CONF_kay2name -sb $TARGET_archdir/$kala6
+		gpg -u $CONF_kay2name -sb $kala6
 	;;
 	2)
-		echo "TODO:gpg -u $CONF_kay2name  -sb $TARGET_archdir/$kala6 -e"
+		gpg -r $CONF_kay2name -se $kala6
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 	;;
 esac
 
-cd $CONF_BASEDIR
-p=$(date +%F)
-kala3=$TARGET_scripts_bak_file.$p
-kala3=$TARGET_archdir/$kala3
+sudo chmod a+w $TARGET_archdir
+sudo mv $kala6 $TARGET_archdir
 
-	sudo tar -jcpf $kala3 $CONF_scripts_dir $CONF_stg0file $CONF_stg0file.export lib/*.export 
+q=$(date +%F)
+kala6=$TARGET_scripts_bak_file.$q
+
+	sudo tar -jcpf $kala6 $CONF_scripts_dir $CONF_BASEDIR/$CONF_stg0file $CONF_BASEDIR/$CONF_stg0file.export $CONF_BASEDIR/lib/*.export 
 
 case $b in
 	0)
 	;;
 	1)
-		gpg -u $CONF_kay2name -sb $kala3
+		gpg -u $CONF_kay2name -sb $kala6
 	;;
 	2)
+		gpg -r $CONF_kay2name -se $kala6 
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 	;;
 esac
+
+sudo mv $kala6 $TARGET_archdir
+sudo mv *.sig $TARGET_archdir
+sudo mv *.gpg $TARGET_archdir
+
+sudo chmod a-w $TARGET_archdir
+sudo chmod a-w .
+
 
 echo "chmod+mkp.sh"
-
 sudo umount $TARGET_archdir0

@@ -4,6 +4,7 @@ ltgtdir=""
 cleanup=0
 tgtfile=SAM.2.0
 
+
 . ./common.conf
 . ./common_funcs.sh
 
@@ -36,7 +37,6 @@ else
 fi
 
 process_dir() {
-	pwd
 
 	if [ -s $1.tar.$2 ] ; then 
 		sudo mv $1.tar.$2 $CONF_trash_dir/$1.tar.bz2.OLD
@@ -53,12 +53,17 @@ process_dir() {
 
 			cd ./$1
 			
-				sudo tar -jcvf ../$1.tar.$2 .
+
+				sudo tar --exclude=*.export -jcvf ../$1.tar.$2 .
 
 			cd ../..
 			
-			ts=$(sha512sum $TARGET_pad_dir/$1.tar.$2 | grep -v $TARGET_patch_name)
-			echo $ts >> $TARGET_DIGESTS_dir/$tgtfile
+			has_patch=$(echo $1 | grep $TARGET_patch_name | wc -l)
+
+			if [ $has_patch -eq 0 ] ; then 
+				slaughter0 $TARGET_pad_dir/$1.tar.$2 $TARGET_DIGESTS_dir/$tgtfile
+			else
+			fi
 
 			cd $TARGET_pad_dir
 
@@ -94,6 +99,7 @@ if [ $cleanup -eq 1 ] ; then
 	exit 1
 fi
 
+
 cd $ltgtdir
 for d in $bz3files ; do process_dir $d bz3 ; done
 
@@ -101,7 +107,7 @@ cd $ltgtdir
 for d in $bz2files ; do process_dir $d bz2 ; done
 
 cd $ltgtdir/..
-for d in $conffiles ; do sha512sum $TARGET_pad_dir/$d >> $TARGET_DIGESTS_dir/$tgtfile ;done
+for d in $conffiles ; do slaughter0 $TARGET_pad_dir/$d $TARGET_DIGESTS_dir/$tgtfile; done
 sudo chmod a-w $TARGET_DIGESTS_dir/$tgtfile
 
 

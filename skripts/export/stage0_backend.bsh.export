@@ -1,3 +1,4 @@
+
 mangle_conf() {
 }
 
@@ -10,11 +11,11 @@ mount_img() {
 
 		if [ $found -gt 0 ] ; then
 			sudo umount $CONF_source
-			exit 4
 		else
 			sudo mount -o loop,ro $1 $2
 		fi
 
+		sleep 5 
 	else
 		exit 5
 	fi
@@ -69,107 +70,82 @@ cleanup() {
 	sudo umount $CONF_source
 }
 
-bootloader() {
-	ks2="."
+live1() {
+
 	[ x$1 != x ] || exit 2
 	[ x$2 != x ] || exit 2
-	[ x$CONF_target != x ] || exit 3
-	[ -d $CONF_target ] || exit 3
+	
+	cd $1	
 
-	if [ -s $3/SAM.1 ] ; then
-		echo "$3/SAM.1 already exists"
+	if [ -s ./filesystem.squashfs ] ; then 
+
+		sudo rm $2/filesystem.squashfs
+		
+		sudo cp ./filesystem.squashfs $2	
+	else
+		sudo cp $CONF_source/live/filesystem.squashfs $2
 	fi
 
-	cd $CONF_target;pwd
+}
 
-	case $1 in
-		isolinux)
-			sudo cp -a $CONF_source/isolinux/ . || exit 8
+live2()  {
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+	cd $1	
 
-			if [ -d $2/../isolinux ] ; then 
-				ks2=$2/../isolinux
+	if [ -s ./vmlinuz ] ; then 
+		sudo cp ./vmlinuz $2
+	else
+		sudo cp $CONF_source/live/vmlinuz $2
+	fi
+}
 
-				for t in cfg png ; do
-					sudo rm ./isolinux/*.$t				
+live3() {
+	[ x$1 != x ] || exit 2
+	[ x$2 != x ] || exit 2
+	cd $1	
 
-					sudo cp -a $ks2/*.$t ./isolinux 
-				done				
-			else
-					echo "mkdir  $2/../isolinux ; cp $CONF_BASEDIR/isolinux/{*.cfg,*.png} $2/../isolinux "
-				fi			
-			fi
-
-
-			if [ ! -s $3/SAM.1 ] ; then
-				griffindor
-			fi
-		;;
-		grub)
-			sudo cp -a $CONF_source/boot/ $CONF_target || exit 8
-			
-			if [ -d $2/../boot ] ; then 
-				ks2=$2/../boot
-			
-				echo "cp -a $ks2/grub/{*.cfg,*.png} ./boot/grub"
-				echo "cp -a $ks2/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
-			fi
-
-			
-			if [ ! -s $3/SAM.1 ] ; then 
-				malfoy $TARGET_DIGESTS_dir/SAM.1
-			fi
-		;;
-		*)
-			echo "https://www.youtube.com/watch?v=PjotFePip2M"
-			exit 11
-		;;
-	esac
-
+	if [ -s ./initrd.img ] ; then 
+		sudo cp ./initrd.img $2
+	else
+		sudo cp $CONF_source/live/initrd.img $2
+	fi
 }
 
 copy_main() {
 
 	[ x$1 != x ] || exit 2
 
-	sudo cp -a $CONF_scripts_dir/*.sh $CONF_tmpdir
-	sudo chmod 0555 $CONF_tmpdir/*.sh
-	sudo chown root:root $CONF_tmpdir/*.sh
+	if [ z$CONF_scripts_dir != z ] ; then 
+		sudo cp -a $CONF_scripts_dir/*.sh $CONF_tmpdir
+		sudo chmod 0555 $CONF_tmpdir/*.sh
+		sudo chown root:root $CONF_tmpdir/*.sh
+	fi
 
-	[ -d $CONF_target/$TARGET_DIGESTS_dir ] || sudo mkdir -p $CONF_target/$TARGET_DIGESTS_dir
+	if [ x$CONF_target != x ] ; then 
+		if [ y$TARGET_DIGESTS_dir != y ] ; then 
+			[ -d $CONF_target/$TARGET_DIGESTS_dir ] || sudo mkdir -p $CONF_target/$TARGET_DIGESTS_dir
+		fi
+	fi
 
 	sudo cp -a $1/*.sh $2 
 	sudo chmod 0555 $2/*.sh 
 	sudo chown root:root $2/*.sh
 
-	cd $CONF_BASEDIR 
-
 	if [ -s $1/0/SAM.2.0 ] ; then 
-		sudo cp $1/0/SAM.2.0 $1/0/SAM.2 
-
-		cd $1/..
-		
-		sudo chmod a+w $TARGET_DIGESTS_dir/SAM.2
-		sha512sum $TARGET_pad_dir/*.sh >> $TARGET_DIGESTS_dir/SAM.2;sleep 1
-		sudo chmod a-w $TARGET_DIGESTS_dir/SAM.2
 	fi
 
 		echo "done"
 		echo "TARGET_arch1v3s;"
 	
-	cd $CONF_BASEDIR
 
 		sudo cp -a $1/*.bz2 $2
-
-		sudo cp -a $1/*.bz3 $2 
 
 
 	sudo chmod 0444 $2/*.bz2
 	sudo chown root:root $2/*.bz2
 
-	sudo chmod 0444 $2/*.bz3
-	sudo chown root:root $2/*.bz3
 	
-	sleep 1
 }
 
 copy_conf() {
@@ -177,8 +153,9 @@ copy_conf() {
 	[ x$1 != x ] || exit 2
 	[ x$2 != x ] || exit 2
 
-	sudo cp -a $CONF_scripts_dir/*.conf $CONF_tmpdir 
-	cd $CONF_BASEDIR
+	if [ x$CONF_scripts_dir != x ] ; then 
+		sudo cp -a $CONF_scripts_dir/*.conf $CONF_tmpdir
+	fi
 
 	sudo cp -a $1/$2.conf $3
 
@@ -218,38 +195,6 @@ copy_conf() {
 }
 
 copy_sums() {
-	[ x$1 != x ] || exit 2
-
-	if [ -d $2 ] ; then
-		echo "targeTdir alr3ady ex1st5"
-	else
-		sudo mkdir $2
-		sleep 5
-	fi
-
-	cd $CONF_BASEDIR
-
-	if [ -s $1/0/SAM.1 ] ; then
-
-
-		sudo cp $1/0/SAM.1 $2
-	fi
-
-	
-	if [ -s $1/0/SAM.2.0 ] ; then
-		echo "cp $1/0/SAM.2.0 $2";sleep 1
-		sudo cp $1/0/SAM.2.0 $2;sleep 5
-	fi
-
-	if [ -s $1/0/SAM.2 ] ; then
-		sudo cp $1/0/SAM.2 $2;sleep 5
-
-	fi
-
-
-
-
-
 }
 
 keyz() {
@@ -267,43 +212,52 @@ keyz() {
 		ls -las $2;sleep 10
 		echo "EXIT keyz()"
 }
-
-live1() {
-
+bootloader() {
+	ks2="."
 	[ x$1 != x ] || exit 2
 	[ x$2 != x ] || exit 2
-	cd $1	
+	[ x$CONF_target != x ] || exit 3
+	[ -d $CONF_target ] || exit 3
 
-	if [ -s ./filesystem.squashfs ] ; then 
-		sudo rm $2/filesystem.squashfs
-		sleep 5
-		sudo cp ./filesystem.squashfs $2	
-	else
-		sudo cp $CONF_source/live/filesystem.squashfs $2
-	fi
 
-}
+	cd $CONF_target;pwd
 
-live2()  {
-	[ x$1 != x ] || exit 2
-	[ x$2 != x ] || exit 2
-	cd $1	
 
-	if [ -s ./vmlinuz ] ; then 
-		sudo cp ./vmlinuz $2
-	else
-		sudo cp $CONF_source/live/vmlinuz $2
-	fi
-}
+	case $1 in
+		isolinux)
+			sudo cp -a $CONF_source/isolinux/ . || exit 8
 
-live3() {
-	[ x$1 != x ] || exit 2
-	[ x$2 != x ] || exit 2
-	cd $1	
+			if [ -d $2/../isolinux ] ; then 
+				ks2=$2/../isolinux
+				for t in cfg png ; do
+					sudo rm ./isolinux/*.$t				
 
-	if [ -s ./initrd.img ] ; then 
-		sudo cp ./initrd.img $2
-	else
-		sudo cp $CONF_source/live/initrd.img $2
-	fi
+					sudo cp -a $ks2/*.$t ./isolinux 
+
+				done				
+			else
+					echo "mkdir  $2/../isolinux ; cp $CONF_BASEDIR/isolinux/{*.cfg,*.png} $2/../isolinux "
+				fi			
+			fi
+
+
+		;;
+		grub)
+			sudo cp -a $CONF_source/boot/ $CONF_target || exit 8
+			
+			if [ -d $2/../boot ] ; then 
+				ks2=$2/../boot
+			
+				echo "cp -a $ks2/grub/{*.cfg,*.png} ./boot/grub"
+				echo "cp -a $ks2/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
+			fi
+
+			
+		;;
+		*)
+			echo "https://www.youtube.com/watch?v=PjotFePip2M"
+			exit 11
+		;;
+	esac
+
 }

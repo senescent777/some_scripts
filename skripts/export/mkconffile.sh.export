@@ -10,7 +10,7 @@ echo "CONF_BASEDIR=<sourcedir 4 many things>"
 
 echo "TARGET_archdir0=<base_4_archive_dir>"
 echo "TARGET_archdir=\$TARGET_archdir0/<$CONF_target 4 archiving stuff>"
-echo "TARGET_backup_part=disk/by-uuid/<devicefile reserved for archiving>"
+echo "TARGET_stick_part=disk/by-uuid/<devicefile reserved for archiving>"
 
 echo "TARGET_scripts_bak_file=<file to archive scripts>"
 echo "TARGET_pad_bak_file=<file to archive .iso's additional stuff>"

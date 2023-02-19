@@ -2,8 +2,8 @@
 . ./common.conf
 . ./common_funcs.sh
 
-srcdir=""
-target=""
+lsrcdir=""
+ltarget=""
 bloader="isolinux"
 
 usage() {
@@ -15,10 +15,10 @@ usage() {
 parse_opts_real() {
 	case $1 in
 		--in)
-			srcdir=$2
+			lsrcdir=$2
 		;;
 		--out)
-			target=$2
+			ltarget=$2
 		;;
 		--bl) 
 			bloader=$2
@@ -32,7 +32,7 @@ parse_opts_real() {
 
 mk_pad_bak() {
 	[ -s ./$1 ] && sudo mv $1 $1.OLD
-	cd $srcdir
+	cd $lsrcdir
 	pwd
 
 	sudo chown -R root:root ./*
@@ -49,14 +49,23 @@ parse_opts $3 $4
 parse_opts $5 $6
 
 
-[ -d ./$srcdir ] || exit
-[ -s $target ] && exit 
+[ -d ./$lsrcdir ] || exit
+[ -s $ltarget ] && exit 
 
 gi=$(sudo which genisoimage)
 
 if [ x$gi != x ] ; then
 else
-	sudo dpkg -i $CONF_pkgsdir2/*.deb
+	for f in $(ls $CONF_pkgsdir2/*.deb) ; do
+		gpgv --keyring $CONF_target/$TARGET_Dpubkg $f.sig $f
+	done
+
+	if [ $? -eq 0 ] ; then 
+		echo "sudo dpkg -i $CONF_pkgsdir2/*.deb"
+		sudo dpkg -i $CONF_pkgsdir2/*.deb
+	else
+		exit 666
+	fi
 fi
 
 
@@ -65,9 +74,11 @@ sleep 1
 echo $bloader
 sudo chmod o+w ..
 
+cd $lsrcdir
+
 case $bloader in
 	isolinux)
-		genisoimage -o ../$target $CONF_gi_opts  .
+		genisoimage -o ../$ltarget $CONF_gi_opts  .
 	;;
 	grub)
 		echo "TODO:grub-mkrescue"

@@ -11,27 +11,33 @@ u=$t/$TARGET_patch_name.tar.bz2
 [ -s $u ] || exit 66
 echo "PARS OK"
 
+sudo chmod a+w .
+
 case $b in
 	0)
 	;;
 	1)
-		echo "gpg -u  $CONF_kay2name -sb $u"
+		echo "gpg -u $CONF_kay2name -sb $u"
 		gpg -u $CONF_kay2name -sb $u
-		sleep 3
 	;;
 	2)
-		echo "TODO:gpg -u  $CONF_kay2name  -sb $TARGET_archdir/$kala2 -e"
+		gpg -r $CONF_kay2name -se $u
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 	;;
 esac
 
-
-
+sleep 3
 sudo mount /dev/$TARGET_backup_part $TARGET_archdir0 || exit 77
+sudo chmod a+w $TARGET_archdir0/$TARGET_patch_dir
+
 sudo cp $u $TARGET_archdir0/$TARGET_patch_dir
 sudo cp $u.sig $TARGET_archdir0/$TARGET_patch_dir
+sudo cp $u.gpg $TARGET_archdir0/$TARGET_patch_dir
 sudo cp $t/patch* $TARGET_archdir0/$TARGET_patch_dir
+
+sudo chmod a-w .
+sudo chmod a-w $TARGET_archdir0/$TARGET_patch_dir
 ls -las $TARGET_archdir0/$TARGET_patch_dir;sleep 6
 sudo umount $TARGET_archdir0

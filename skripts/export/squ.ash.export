@@ -26,15 +26,27 @@ parse_opts_real() {
 		-c)
 			par=$2
 		;;
+		--mp)
+			mp=$2
+		;;
+		--md)
+			md=$2
+		;;
+		--ms)
+			ms=$2
+		;;
 	esac
 }
 single_param() {
-	echo "single param"
+	cmd=$1
+	echo "sp"
 }
 
 parse_opts $1 $2
 parse_opts $3 $4
 parse_opts $5 $6
+parse_opts $7 $8
+parse_opts $9 ${10}
 
 xxx() {
 	if [ x$CONF_squash0 != x ]; then
@@ -120,7 +132,6 @@ jlk1_5() {
 			pwd;sleep 6
 
 			sudo rm ./mf*;sudo rm ./root.conf
-			sudo rm ./$2.conf
 			sleep 6 
 
 			sudo touch ./root.conf 
@@ -188,7 +199,7 @@ usage() {
 
 	echo "-r :runs chRoot in $CONF_squash_dir "
 	echo "as of 21.12.22 /proc,/sys are no longer automatically bind-mounted in order to find out a root cause for some weird shit"
-	echo "(it looks like the remastering OS is rotten and have to be replaced)"
+	echo "(it looks like the remastering OS is rotten and has to be removed)"
 
 	echo "-i <src> : Installs scripts 2 chroot_dir "
 	echo "-j <src> [ --dir2 <stuff>] : extracts dir 2 chroot_dir"
@@ -196,7 +207,6 @@ usage() {
 	echo "-f attempts to Fix some problems w/ sudo"
 	echo "--v 1 adds Verbosity"
 
-	echo "TODO:--mp, --md, --ms"
 }
 
 ijk() {
@@ -240,11 +250,13 @@ case $cmd in
 		if [ x$CONF_squash0 != x ]; then
 			echo "sudo rm -rf $CONF_squash0/* IN 6 SECS";sleep 6
 			sudo chattr -R -ui $CONF_squash0/*
+			sudo rm -rf $CONF_squash0/*
 		fi
 
 		if [ x$CONF_tmpdir != x ]; then 
 			echo "sudo rm -rf $CONF_tmpdir/* IN 6 SECS";sleep 6	
 			sudo chattr -R -ui $CONF_tmpdir/*
+			sudo rm -rf $CONF_tmpdir/*
 		fi
 	;;
 	-c)
@@ -259,6 +271,7 @@ case $cmd in
 	-j)
 		jlk1 $par
 
+		[ -d $dir2 ] || echo "--dir2 "
 		jlk1_5 $dir2 devuan
 
 		jlk2 $dir2 
