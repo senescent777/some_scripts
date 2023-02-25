@@ -68,7 +68,8 @@ part0
 part1() {
 
 	if [ -s $TARGET_DIGESTS_dir/SAM.1.0 ] || [ -s $TARGET_DIGESTS_dir/SAM.1.1 ] ; then
-		
+
+
 		[ -s $TARGET_DIGESTS_dir/SAM.1.0 ] && sudo mv $TARGET_DIGESTS_dir/SAM.1.0 $TARGET_DIGESTS_file.1
 		[ -s $TARGET_DIGESTS_dir/SAM.1.1 ] && sudo cat $TARGET_DIGESTS_dir/SAM.1.1 >> $TARGET_DIGESTS_file.1
 	else
@@ -126,7 +127,7 @@ part4() {
 
 part5() {
 
-		sleep 5
+		sleep 2
 		echo "IS $TARGET_DIGESTS_file.2 ok?"
 		sha512sum -c $TARGET_DIGESTS_file.2 --ignore-missing
 }
@@ -142,6 +143,7 @@ part6_5() {
 
 	for i in 1 2 3 ; do
 		gpg -u $CONF_kay1name -sb ./$TARGET_DIGESTS_file.$i
+		[ $? -eq 0 ] || echo "install-keys --i"
 		echo $?
 	done
 
@@ -155,14 +157,14 @@ part7() {
 	gpg -u $CONF_kay2name -sb ./$TARGET_Dpubkf
 
 	[ $? -eq 0 ] || echo "install-keys --kdir <kdir> --i"
-	sleep 5
+	sleep 2
 	
 		gpgv --keyring ./$TARGET_Dpubkg ./$TARGET_Dpubkf.sig ./$TARGET_Dpubkf
 
 		for i in 1 2 3 ; do
 			echo "gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.$i.sig $TARGET_DIGESTS_file.$i"
 			gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.$i.sig $TARGET_DIGESTS_file.$i			
-			sleep 5
+			sleep 2
 		done
 
 	echo $?
@@ -170,7 +172,7 @@ part7() {
 
 part1
 
-sleep 5
+sleep 2
 
 part2
 
@@ -216,13 +218,13 @@ fi
 sha512sum $TARGET_DIGESTS_dir/* | grep -v '$TARGET_DIGESTS_file.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > $TARGET_DIGESTS_file.4
 
 	echo "	sha512sum -c $TARGET_DIGESTS_file.4" 
-	sleep 5
+	sleep 2
 
 	sha512sum -c $TARGET_DIGESTS_file.4
 	echo $?
 	sleep 2
 
 	echo "$TARGET_DIGESTS_dir;"
-	ls -laRs $TARGET_DIGESTS_dir;sleep 5
+	ls -laRs $TARGET_DIGESTS_dir;sleep 2
 
 echo "loits_new | mkq"

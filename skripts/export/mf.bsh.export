@@ -79,6 +79,10 @@ if [ ! -s $ltgtdir/extras/$TARGET_pad2/mg-42.bsh ] ; then
 	sudo cp ./mg-42.bsh $ltgtdir/extras/$TARGET_pad2
 fi
 
+for d in $CONF_g3 ; do
+	sudo cp -a $ltgtdir/ect/etc/* $ltgtdir/$d/etc
+done
+
 cd $ltgtdir/..
 
 

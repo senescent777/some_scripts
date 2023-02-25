@@ -60,7 +60,6 @@ mk_bkup() {
 	fi
 
 }
-
 slaughter0() {
 	fn=$(echo $1 | awk '{print $1}') 
 	ts=$(sha512sum $fn)

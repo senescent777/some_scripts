@@ -26,20 +26,23 @@ parse_opts_real() {
 		-c)
 			par=$2
 		;;
-		--mp)
-			mp=$2
-		;;
-		--md)
-			md=$2
-		;;
-		--ms)
-			ms=$2
-		;;
 	esac
 }
 single_param() {
 	cmd=$1
 	echo "sp"
+
+	case $1 in
+		-mp)
+			mp=1
+		;;
+		--md)
+			md=1
+		;;
+		--ms)
+			ms=1
+		;;
+	esac
 }
 
 parse_opts $1 $2
@@ -203,9 +206,7 @@ usage() {
 	echo "-j <src> [ --dir2 <stuff>] : extracts dir 2 chroot_dir"
 
 	echo "-f attempts to Fix some problems w/ sudo"
-	echo "--v 1 adds Verbosity\n"
-
-	echo "--md --mp --ms: self-explanatory options for -r"
+	echo "--v 1 adds Verbosity"
 
 }
 
