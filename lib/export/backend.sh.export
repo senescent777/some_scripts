@@ -1,0 +1,57 @@
+#!/bin/sh
+
+n=$(whoami) 
+. ./${n}.conf
+. ./backend0.sh
+
+
+cd ${src}/..
+sha512sum -c ./pad/0/sha512sums.4  || exit 
+gpgv --keyring ./pad/0/KsK.gpg ./pad/0/pubK.gpg.sig ./pad/0/pubK.gpg
+
+cond_check ${src}/0/sha512sums.1
+cond_check ${src}/0/sha512sums.3
+cond_check ${src}/0/sha512sums.2
+
+molest() {
+	sudo chown root:root "$1"
+	sudo chmod 0755 "$1"
+
+	sudo chown -R root:root "$1"/*
+	sudo chmod go-w "$1"/*
+}
+
+ilemak() {
+	molest /etc
+	sudo chmod o+w /tmp
+	molest /sbin
+	sudo chown root:root /home
+	sudo chmod 0755 /home
+	sudo chmod 0700 /home/"${n}"
+	sudo chown "${n}":"${n}" /home/"${n}"
+}
+
+whack() {
+	sudo killall "$1"
+
+	if [ "$?" -eq 0 ] ; then  
+	fi
+}
+
+meshuggah() {
+
+	sudo shred -fu /home/"$1"/Desktop/*
+	SBU ${src}/x3nr.tar.bz2
+
+	sudo chown root:root /home
+	sudo chmod 0755 /home
+	sudo chmod 0700 /home/"${n}"
+	sudo chown "$1":"$1" /home/"$1"
+	sudo chown "$1":"$1" /home/"$1"/*
+	sudo chown "$1":"$1" /home/"$1"/.*
+	sudo chown -R "$1":"$1" /home/"$1"/.config
+	sudo touch /home/"$1"/.config/xfce4/*
+	sudo chmod 0700 /home/"$1"/*
+	sudo chmod -R 0700 /home/"$1"/.*
+
+}

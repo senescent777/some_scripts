@@ -3,6 +3,7 @@
 . ./common.conf
 . ./common_funcs.sh
 
+
 usage() {
 	echo "$0 --kdir <kdir> --i Imports keys from <kdir>"
 	echo "$0 --kdir <kdir> --e Exports keys to <kdir>"
@@ -13,45 +14,45 @@ ridk=""
 cmd=""
 
 tpop() {
-	case $1 in
+	case "${1}" in
 		--kdir)
-			ridk=$2
+			ridk="${2}"
 		;;
 		--v)
 		;;
 		*)
-			cmd=$1
+			cmd="${1}"
 		;;
 	esac
 }
 
-tpop $1 $2
-tpop $3 $4
+tpop "${1}" "${2}"
+tpop "${3}" "${4}"
 
-[ x$ridk != x ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
-[ -d $ridk ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
+[ x"${ridk}" != x ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
+[ -d "${ridk}" ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 
-case $cmd in
+case "${cmd}" in
 	--i)
-		for f in $TARGET_Dkname1 $TARGET_Dkname2 $TARGET_Dkname1.secret $TARGET_Dkname2.secret ; do
-			gpg --import $ridk/$f
+		for f in "${TARGET_Dkname1}" "${TARGET_Dkname2}" "${TARGET_Dkname1}".secret "${TARGET_Dkname2}".secret ; do
+			gpg --import "${ridk}"/"${f}"
 		done
 	;;
 	--e) 
-		[ x$CONF_kay1name != x ] || exit 666
-		[ x$CONF_kay2name != x ] || exit 666
+		[ x"${CONF_kay1name}" != x ] || exit 666
+		[ x"${CONF_kay2name}" != x ] || exit 666
 
-		sudo chmod a+w $ridk
-		sudo rm $ridk/$TARGET_Dkname1*
-		sudo rm $ridk/$TARGET_Dkname2*
+		sudo chmod a+w "${ridk}"
+		sudo rm "${ridk}"/"${TARGET_Dkname1}"*
+		sudo rm "${ridk}"/"${TARGET_Dkname2}"*
 
-		gpg --export $CONF_kay1name > $ridk/$TARGET_Dkname1
-		gpg --export-secret-keys $CONF_kay1name > $ridk/$TARGET_Dkname1.secret
-		gpg --export $CONF_kay2name > $ridk/$TARGET_Dkname2
-		gpg --export-secret-keys $CONF_kay2name > $ridk/$TARGET_Dkname2.secret
+		gpg --export "${CONF_kay1name}" > "${ridk}"/"${TARGET_Dkname1}"
+		gpg --export-secret-keys "${CONF_kay1name}" > "${ridk}"/"${TARGET_Dkname1}".secret
+		gpg --export "${CONF_kay2name}" > "${ridk}"/"${TARGET_Dkname2}"
+		gpg --export-secret-keys "${CONF_kay2name}" > "${ridk}"/"${TARGET_Dkname2}".secret
 			
-		sudo chmod a-w $ridk
-		ls -las $ridk
+		sudo chmod a-w "${ridk}"
+		ls -las "${ridk}"
 	;;
 	--m)
 		cd ~
@@ -60,11 +61,11 @@ case $cmd in
 		sleep 5
 		gpg --generate-key
 		sleep 5
-		sudo chmod a+w $ridk
-		cd ~;tar -jcvf $ridk/k3yz.tar.bz2 ~/.gnupg
-		sudo chmod a-w $ridk
+		sudo chmod a+w "${ridk}"
+		cd ~;tar -jcvf "${ridk}"/k3yz.tar.bz2 ~/.gnupg
+		sudo chmod a-w "${ridk}"
 		gpg --list-keys
-		nano $CONF_scripts_dir/common.conf
+		nano "${CONF_scripts_dir}"/common.conf
 	;;
 	*)
 		usage

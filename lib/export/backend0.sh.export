@@ -1,0 +1,135 @@
+#!/bin/sh
+
+n=$(whoami) 
+. ./"${n}".conf
+
+
+paskan_alustus() {
+	siptr=$(sudo which iptables-restore) 
+	sifd=$(sudo which ifdown)
+	sifu=$(sudo which ifup)
+	sipt=$(sudo which iptables)
+	sipts=$(sudo which iptables-save)
+	sag=$(sudo which apt-get)
+	srat=$(sudo which tar)
+	spd=$(sudo which dpkg)
+
+		echo "${src}"
+
+		echo "${sipt}"
+		echo "${siptr}"
+		echo "${sipts}"
+		echo "${sifu}"
+		echo "${sifd}"
+
+		echo "${sag}"
+		echo "${srat}" 
+		echo "${spd}"
+
+		[ "$nosu_do" -eq 1 ] && sleep 10
+
+	[ -x "${sag}" ] || exit
+	[ -x "${srat}" ] || exit
+	[ -s "${spd}" ] || exit
+
+	srat="sudo ${srat} " 
+
+		srat="${srat} -v "
+
+	sifd="sudo ${sifd} "
+	sifu="sudo ${ifu} "
+	srat="${srat} -jxpf "
+	spd="sudo ${spd} -i "
+	sag="sudo ${sag} "
+	sipts="sudo ${sipts} "
+	sipt="sudo ${sipt} "
+	siptr="sudo ${siptr} "
+}
+
+paskan_alustus
+
+cond_check() {
+	if [ -s "$1" ] ; then 
+		cd "${src}"
+		gpgv --keyring ./0/pubK.gpg "$1".sig "$1" 
+
+		if [ "$?" -eq 0 ] ; then
+			echo "kakka"
+		else
+				echo "Serrano"
+				exit 666
+		fi
+
+		cd ..
+		sha512sum --ignore-missing -c "$1"
+
+		if [ "$?" -eq 0 ]; then 
+			echo "pissa"
+		else
+				echo "SHITTER LIMITED"
+				exit 667
+		fi
+
+	else
+		echo "K.Palsa"
+	fi
+}
+
+sarp() {
+	"${sag}" remove --purge "$@"
+	sudo apt autoremove
+}
+
+SBU() {
+	sudo shred -fu "$1"
+}
+
+eichman() {
+	[ "$to_ram" -eq 1 ] && sudo shred -fu "$1"
+}
+
+cleanup1() {
+	cd /home/"$1"
+	SBU "${pkgdir}"/*
+	sudo rm -rf "${pkgdir}"
+	sudo rm -rf /tmp/var
+
+
+
+	SBU "${tmpdir}"/pad/*
+	sudo rm -rf "${tmpdir}"/pad
+
+
+	cp "${src}"/machupo.tar.bz2 /tmp
+
+	if [ "$to_ram" -eq 1 ] ; then
+		SBU "${src}"/0/*
+		SBU "${src}"/*
+		sudo rmdir "${src}"/0 
+		sudo rmdir "${src}"
+	fi
+
+	sudo usermod -G devuan,cdrom,floppy,audio,dip,video,plugdev,netdev devuan
+	cd /;"${srat}" /tmp/machupo.tar.bz2
+	SBU /tmp/machupo.tar.bz2
+	/usr/bin/killall xfce4-session
+}
+efk() {
+	[ -s "$1" ] || exit
+	[ "${to}_ram" -eq 1 ] && sudo cp "${src}"/foxp3.tar.bz2 "${src}"/foxp3.tar.bz2.BACKUP
+
+	cd /;"${srat}" "$1"
+
+	"${spd}" "${pkgdir}"/lib*.deb
+	SBU "${pkgdir}"/lib*.deb
+
+	"${spd}" "${pkgdir}"/*.deb 
+	SBU "${pkgdir}"/*.deb
+
+	if [ "$to_ram" -eq 1 ] ; then
+		SBU "$1"
+		sudo mv "${src}"/foxp3.tar.bz2.BACKUP "${src}"/foxp3.tar.bz2
+	fi
+}
+
+

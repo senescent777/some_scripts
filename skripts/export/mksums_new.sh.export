@@ -3,6 +3,7 @@
 . ./common.conf
 . ./common_funcs.sh
 
+
 usage() {
 	echo "TODO"
 }
@@ -12,26 +13,26 @@ parse_opts_real() {
 }
 
 single_param() {
-	case $1 in
+	case "${1}" in
 		--iso)
-			sudo chmod o+w $(pwd)
-			gpg -u $CONF_kay1name -sb ./*.iso
-			[ $? -eq 0 ] || echo "install-keys --kdir $CONF_keys_dir --i"
-			sudo chmod o-w $(pwd)
+			sudo chmod o+w "$(pwd)"
+			gpg -u "${CONF_kay1name}" -sb ./*.iso
+			[ "$?" -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
+			sudo chmod o-w "$(pwd)"
 			exit 666
 		;;
 		--pkgs)
-			[ x$CONF_BASEDIR != x ] || exit 664
-			[ x$CONF_pkgsdir2 != x ] || exit 665
+			[ x"${CONF_BASEDIR}" != x ] || exit 664
+			[ x"${CONF_pkgsdir2}" != x ] || exit 665
 
-			sudo chmod o+w $CONF_BASEDIR/$CONF_pkgsdir2
-			cd $CONF_BASEDIR/$CONF_pkgsdir2
+			sudo chmod o+w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+			cd "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
 
-			gpg -u $CONF_kay1name -sb ./*.deb
-			gpg -u $CONF_kay1name -sb ./*.bz2
-			[ $? -eq 0 ] || echo "install-keys --kdir $CONF_keys_dir --i"
+			gpg -u "${CONF_kay1name}" -sb ./*.deb
+			gpg -u "${CONF_kay1name}" -sb ./*.bz2
+			[ "$?" -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
 			
-			sudo chmod o-w $CONF_BASEDIR/$CONF_pkgsdir2
+			sudo chmod o-w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
 			exit 666
 		;;
 		--h)
@@ -40,40 +41,38 @@ single_param() {
 	esac
 }
 
-parse_opts $1 $2
-parse_opts $3 $4
+parse_opts "${1}" "${2}"
+parse_opts "${3}" "${4}"
 
-cd $CONF_targetdir 
+cd "${CONF_targetdir}" 
 pwd
 
-[ x$TARGET_DIGESTS_dir != x ] || exit 1
+[ x"${TARGET_DIGESTS_dir}" != x ] || exit 1
 
-if [ ! -d $TARGET_DIGESTS_dir ] ; then 
-	mkdir -p $TARGET_DIGESTS_dir
+if [ ! -d "${TARGET_DIGESTS_dir}" ] ; then 
+	mkdir -p "${TARGET_DIGESTS_dir}"
 fi
 
 part0() {
+	if [ x"{TARGET_DIGESTS_file}" != "x" ] ; then
+		echo "rm "${TARGET_DIGESTS_file}"* in 5 secs";sleep 5 
+		rm "${TARGET_DIGESTS_file}"*
+	else
+		exit 666
+	fi
 
-	rm $TARGET_DIGESTS_file*
-	
-	rm $TARGET_DIGESTS_dir/*.sig
-	for i in 1 2 3 4 ; do touch $TARGET_DIGESTS_file.$i ; done
-	
-	
+	rm "${TARGET_DIGESTS_dir}"/*.sig
+	for i in 1 2 3 4 ; do touch "${TARGET_DIGESTS_file}"."${i}" ; done
 }
 
-sudo chmod a+w $TARGET_DIGESTS_dir;sleep 1
+sudo chmod a+w "${TARGET_DIGESTS_dir}";sleep 1
 part0
 
 part1() {
-
-	if [ -s $TARGET_DIGESTS_dir/SAM.1.0 ] || [ -s $TARGET_DIGESTS_dir/SAM.1.1 ] ; then
-
-
-		[ -s $TARGET_DIGESTS_dir/SAM.1.0 ] && sudo mv $TARGET_DIGESTS_dir/SAM.1.0 $TARGET_DIGESTS_file.1
-		[ -s $TARGET_DIGESTS_dir/SAM.1.1 ] && sudo cat $TARGET_DIGESTS_dir/SAM.1.1 >> $TARGET_DIGESTS_file.1
+	if [ -s "${TARGET_DIGESTS_dir}"/SAM.1.0 ] || [ -s "${TARGET_DIGESTS_dir}"/SAM.1.1 ] ; then
+		[ -s "${TARGET_DIGESTS_dir}"/SAM.1.0 ] && sudo mv "${TARGET_DIGESTS_dir}"/SAM.1.0 "${TARGET_DIGESTS_file}".1
+		[ -s "${TARGET_DIGESTS_dir}"/SAM.1.1 ] && sudo cat "${TARGET_DIGESTS_dir}"/SAM.1.1 >> "${TARGET_DIGESTS_file}".1
 	else
-		echo "grif|slith"
  
 		if [ -d ./isolinux ] ; then
 			griffindor
@@ -81,26 +80,21 @@ part1() {
 			slithering
 		fi
 	fi
-
 }
 
 part2_5() {
-	sudo chmod a+w $TARGET_DIGESTS_DIR
-	sudo $TARGET_DIGESTS_file.*
-	sha512sum $TARGET_pad_dir/*.sh >> $TARGET_DIGESTS_file.2
+	sudo chmod a+w "${TARGET_DIGESTS_DIR}"
+	sudo "${TARGET_DIGESTS_file}".*
+	sha512sum "${TARGET_pad_dir}"/*.sh >> "${TARGET_DIGESTS_file}".2
 }
 
 part2() {
-
-	if [ -s $TARGET_DIGESTS_dir/SAM.2.0 ] ; then 
-
-		sudo mv $TARGET_DIGESTS_dir/SAM.2.0 $TARGET_DIGESTS_file.2
-		sudo cat $TARGET_DIGESTS_dir/SAM.2.1 >> $TARGET_DIGESTS_file.2	
+	if [ -s "${TARGET_DIGESTS_dir}"/SAM.2.0 ] ; then 
+		sudo mv "${TARGET_DIGESTS_dir}"/SAM.2.0 "${TARGET_DIGESTS_file}".2
+		sudo cat "${TARGET_DIGESTS_dir}"/SAM.2.1 >> "${TARGET_DIGESTS_file}".2	
 	else
-		
-		if [ x$TARGET_pad_dir != x ] ; then 
-			echo "sha512sum $TARGET_pad_dir/* | grep -v $TARGET_patch_name | grep -v $TARGET_DIGESTS_file0 > $TARGET_DIGESTS_file.2";sleep 1
-			sha512sum $TARGET_pad_dir/* | grep -v $TARGET_patch_name | grep -v $TARGET_DIGESTS_file0 > $TARGET_DIGESTS_file.2
+		if [ x"${TARGET_pad_dir}" != x ] ; then 
+			sha512sum "${TARGET_pad_dir}"/* | grep -v "${TARGET_patch_name}" | grep -v "${TARGET_DIGESTS_file0}" > "${TARGET_DIGESTS_file}".2
 		else
 			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 		fi
@@ -108,123 +102,111 @@ part2() {
 }
 
 part3() {
-
-	if [ -s $TARGET_DIGESTS_dir/SAM.3 ] ; then
-		echo "mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3"
-		mv $TARGET_DIGESTS_dir/SAM.3 $TARGET_DIGESTS_file.3
+	if [ -s "${TARGET_DIGESTS_dir}"/SAM.3 ] ; then
+		mv "${TARGET_DIGESTS_dir}"/SAM.3 "${TARGET_DIGESTS_file}".3
 	else
-		sha512sum ./live/* > $TARGET_DIGESTS_file.3
+		sha512sum ./live/* > "${TARGET_DIGESTS_file}".3
 	fi
-
 }
 
 part4() {
-
-		echo "IS $TARGET_DIGESTS_file.1 ok?"
-		sha512sum -c $TARGET_DIGESTS_file.1
-		[ $? -eq 0 ] || exit
+		echo "IS "${TARGET_DIGESTS_file}".1 ok?"
+		sha512sum -c "${TARGET_DIGESTS_file}".1
+		[ "$?" -eq 0 ] || exit
 }
 
 part5() {
 
 		sleep 2
-		echo "IS $TARGET_DIGESTS_file.2 ok?"
-		sha512sum -c $TARGET_DIGESTS_file.2 --ignore-missing
+		echo "IS "${TARGET_DIGESTS_file}".2 ok?"
+		sha512sum -c "${TARGET_DIGESTS_file}".2 --ignore-missing
+
 }
 
 part6() {
 
-	if [ -s $TARGET_DIGESTS_file.3 ] ; then
-		sha512sum -c $TARGET_DIGESTS_file.3
+	if [ -s "${TARGET_DIGESTS_file}".3 ] ; then
+		sha512sum -c "${TARGET_DIGESTS_file}".3
 	fi
+
 }
 
 part6_5() {
 
 	for i in 1 2 3 ; do
-		gpg -u $CONF_kay1name -sb ./$TARGET_DIGESTS_file.$i
-		[ $? -eq 0 ] || echo "install-keys --i"
-		echo $?
+		gpg -u "${CONF_kay1name}" -sb ./"${TARGET_DIGESTS_file}"."${i}"
+		[ "$?" -eq 0 ] || echo "install-keys --i"
+		echo "$?"
 	done
 
-	if [ $? -gt 0 ] ; then
+	if [ "$?" -gt 0 ] ; then
 		echo "install-keys --i"
 	fi
+
 }
 
 part7() {
 
-	gpg -u $CONF_kay2name -sb ./$TARGET_Dpubkf
-
-	[ $? -eq 0 ] || echo "install-keys --kdir <kdir> --i"
+	gpg -u "${CONF_kay2name}" -sb ./"${TARGET_Dpubkf}"
+	[ "$?" -eq 0 ] || echo "install-keys --kdir <kdir> --i"
 	sleep 2
 	
-		gpgv --keyring ./$TARGET_Dpubkg ./$TARGET_Dpubkf.sig ./$TARGET_Dpubkf
+		gpgv --keyring ./"${TARGET_Dpubkg}" ./"${TARGET_Dpubkf}".sig ./"${TARGET_Dpubkf}"
 
 		for i in 1 2 3 ; do
-			echo "gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.$i.sig $TARGET_DIGESTS_file.$i"
-			gpgv --keyring $TARGET_Dpubkf $TARGET_DIGESTS_file.$i.sig $TARGET_DIGESTS_file.$i			
+			echo "gpgv --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}"
+			gpgv --keyring "${TARGET_Dpubkf}" "${TARGET_DIGESTS_file}"."${i}".sig "${TARGET_DIGESTS_file}"."${i}"			
 			sleep 2
 		done
 
-	echo $?
+	echo "$?"
 }
 
 part1
-
 sleep 2
 
 part2
-
 part3
 
 part4
 part5
 
-if [ $? -eq 0 ] ; then 
-else
-fi
 
 part6
 
 part66() {
-	if [ $? -eq 0 ]; then 
+
+	if [ "$?" -eq 0 ]; then 
 		gg=$(which gpg)
-	
-		if [ x$gg != x ] ; then 
+		echo "gg=${gg}"
+
+		if [ x"${gg}" != "x" ] ; then 
 			part6_5
-		else
-			echo "cd ./$CONF_pkgsdir2"
-			echo "sudo tar -jxvf ./*.bz2"
-			echo "sudo dpkg -i ./$TARGET_pkgdir/lib*.deb"
-			echo "rm ./$TARGET_pkgdir/lib*.deb"
-			echo "sudo dpkg -i ./$TARGET_pkgdir/*.deb"
-			echo "sudo rm ./$TARGET_pkgdir/*.deb"	
-			exit 666
 		fi
 	else 
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 		exit 666
 	fi
+
 }
 
 part66
 part7 
 
-if [ -d $TARGET_DIGESTS_dir ] ; then 
-	sudo rm $TARGET_DIGESTS_dir/SAM*
+if [ -d "${TARGET_DIGESTS_dir}" ] ; then 
+	sudo rm "${TARGET_DIGESTS_dir}"/SAM*
 fi
 
-sha512sum $TARGET_DIGESTS_dir/* | grep -v '$TARGET_DIGESTS_file.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > $TARGET_DIGESTS_file.4
+sha512sum "${TARGET_DIGESTS_dir}"/* | grep -v '"${TARGET_DIGESTS_file}".4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > "${TARGET_DIGESTS_file}".4
 
-	echo "	sha512sum -c $TARGET_DIGESTS_file.4" 
+	echo "	sha512sum -c ${TARGET_DIGESTS_file}.4" 
 	sleep 2
 
-	sha512sum -c $TARGET_DIGESTS_file.4
-	echo $?
+	sha512sum -c "${TARGET_DIGESTS_file}".4
+	echo "$?"
 	sleep 2
 
-	echo "$TARGET_DIGESTS_dir;"
-	ls -laRs $TARGET_DIGESTS_dir;sleep 2
+	ls -laRs "${TARGET_DIGESTS_dir}"
+	sleep 2
 
 echo "loits_new | mkq"

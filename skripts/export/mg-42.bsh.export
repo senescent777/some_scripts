@@ -1,18 +1,18 @@
 #!/bin/sh
 [ -s ./common_funcs.sh ] && . ./common_funcs.sh
 
-parse_opts $1 $2
+parse_opts "$1" "$2"
 
-case $cmd in
+case "$cmd" in
 	-i)
-		ls $par/tmp/var/cache/apt/archives/ | cut -d '.' -f 1 > $par/tmp/manifest
+		ls "$par"/tmp/var/cache/apt/archives/ | cut -d '.' -f 1 > "${par}"/tmp/manifest
 	;;
 	-o)
-		if [ -s $par/tmp/manifest ] ; then
+		if [ -s "${par}"/tmp/manifest ] ; then
 			echo "sudo rm -rf /var/cache/apt/archives/*"
 
-			for f in $(cat $par/tmp/manifest) ; do echo "apt-get reinstall $f" ; done
-			echo "sudo tar -jcvpf $par/tmp/out.tar.bz2 /var/cache/apt/archives"
+			for f in $(cat "$par"/tmp/manifest) ; do echo "apt-get reinstall ${f}" ; done
+			echo "sudo tar -jcvpf ${par}/tmp/out.tar.bz2 /var/cache/apt/archives"
 		fi
 	;;
 	*)

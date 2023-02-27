@@ -6,6 +6,7 @@ lsrcdir=""
 ltarget=""
 bloader="isolinux"
 
+
 usage() {
 	echo "$0 --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666
@@ -13,15 +14,15 @@ usage() {
 
 
 parse_opts_real() {
-	case $1 in
+	case "$1" in
 		--in)
-			lsrcdir=$2
+			lsrcdir="$2"
 		;;
 		--out)
-			ltarget=$2
+			ltarget="$2"
 		;;
 		--bl) 
-			bloader=$2
+			bloader="$2"
 		;; 
 		*)
 			usage
@@ -31,54 +32,52 @@ parse_opts_real() {
 }
 
 mk_pad_bak() {
-	[ -s ./$1 ] && sudo mv $1 $1.OLD
-	cd $lsrcdir
-	pwd
+	[ -s ./"$1" ] && sudo mv "$1" "$1".OLD
+	cd "${lsrcdir}"
 
 	sudo chown -R root:root ./*
-	sudo chmod -R a-w $TARGET_pad_dir/*
-	sudo chmod  a-w $TARGET_pad_dir/ 
+	sudo chmod -R a-w "${TARGET_pad_dir}"/*
+	sudo chmod a-w "${TARGET_pad_dir}"/ 
 
-
-	sudo tar $TARGET_DTAR_OPTS -cvf ../$1 $2
-
+	sudo tar "${TARGET_DTAR_OPTS}" -cvf ../"${1}" "${2}"
 }
 
-parse_opts $1 $2
-parse_opts $3 $4
-parse_opts $5 $6
+parse_opts "${1}" "${2}"
+parse_opts "${3}" "${4}"
+parse_opts "${5}" "${6}"
 
 
-[ -d ./$lsrcdir ] || exit
-[ -s $ltarget ] && exit 
+[ -d ./"${lsrcdir}" ] || exit
+[ -s "${ltarget}" ] && exit 
 
 gi=$(sudo which genisoimage)
 
-if [ x$gi != x ] ; then
+if [ x"${gi}" != "x" ] ; then
 else
-	for f in $(ls $CONF_pkgsdir2/*.deb) ; do
-		gpgv --keyring $CONF_target/$TARGET_Dpubkg $f.sig $f
+	for f in $(ls "${CONF_pkgsdir2}"/*.deb) ; do
+		gpgv --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${f}".sig "${f}"
 	done
 
-	if [ $? -eq 0 ] ; then 
-		echo "sudo dpkg -i $CONF_pkgsdir2/*.deb"
-		sudo dpkg -i $CONF_pkgsdir2/*.deb
+	if [ "$?" -eq 0 ] ; then 
+		echo "sudo dpkg -i "${CONF_pkgsdir2}"/*.deb"
+		sudo dpkg -i "${CONF_pkgsdir2}"/*.deb
 	else
 		exit 666
 	fi
 fi
 
 
-mk_pad_bak $TARGET_pad_bak_file $TARGET_pad_dir
+mk_pad_bak "${TARGET_pad_bak_file}" "${TARGET_pad_dir}"
 sleep 1
-echo $bloader
+
+echo "${bloader}"
 sudo chmod o+w ..
+cd "${lsrcdir}"
 
-cd $lsrcdir
-
-case $bloader in
+case "${bloader}" in
 	isolinux)
-		genisoimage -o ../$ltarget $CONF_gi_opts  .
+		echo "genisoimage -o ../${ltarget} ${CONF_gi_opts}  ."
+		$gi -o ../$ltarget ${CONF_gi_opts} .
 	;;
 	grub)
 		echo "TODO:grub-mkrescue"

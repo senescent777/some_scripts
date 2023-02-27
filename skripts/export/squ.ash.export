@@ -2,7 +2,6 @@
 . ./common.conf
 . ./common_funcs.sh
 
-
 dir2=""
 cmd=""
 md=0

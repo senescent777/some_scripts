@@ -1,71 +1,76 @@
 griffindor() {
 	pwd
+	local of2
 
-	if [ x$1 != x ] ; then 
-		of=$1
+	if [ x"$1" != "x" ] ; then 
+		of2="$1"
 	else
-		of=$TARGET_DIGESTS_file.1
+		of2="${TARGET_DIGESTS_file}".1
 	fi
 
-	sha512sum ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > $of
+	sha512sum ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > "${of2}"
 }
 
+
 slithering() {
-	sha512sum ./boot/* > $TARGET_DIGESTS_file.1
+	sha512sum ./boot/* > "${TARGET_DIGESTS_file}".1
 }
 
 malfoy() {
-	sha512sum ./boot/* > $1
+	sha512sum ./boot/* > "${1}"
 }
 
 parse_opts() {
 	common_pars=0
 
-	if [ x"$1" != x ] ; then 
-		if [ x"$2" != x ] ; then
-			case $1 in
+	if [ x"$1" != "x" ] ; then 
+		if [ x"$2" != "x" ] ; then
+			case "$1" in
 				-v|-V|--v|--V)
 					common_pars=1
 				;;
 			esac
 
-			[ $common_pars -eq 0 ] && parse_opts_real $1 $2
+			[ "${common_pars}" -eq 0 ] && parse_opts_real "$1" "$2"
 		else
-			case $1 in
+			case "$1" in
 				-h|--h)
 					common_pars=1
 					usage
 				;;		
 			esac
 
-			[ $common_pars -eq 0 ] && single_param $1
+			[ "${common_pars}" -eq 0 ] && single_param "$1"
 		fi
 
-		if [ x$cmd != x ] ; then
+		if [ x"${cmd}" != "x" ] ; then
 			echo "1"
 		else
-			if [ $common_pars -eq 0 ] ; then
+			if [ "${common_pars}" -eq 0 ] ; then
 				echo 0
-				cmd=$1
+				cmd="$1"
 			fi
 		fi
 	fi
-
 }
 
 mk_bkup() { 
-
-	if [ -s $1 ] ; then
+	if [ -s "$1" ] ; then
 		sudo mv $1 $1.OLD
 	fi
-
 }
+
 slaughter0() {
-	fn=$(echo $1 | awk '{print $1}') 
-	ts=$(sha512sum $fn)
+	local fn2
+	local ts2
+	local a2
+	local b2
 
-	a=$(echo $ts | awk '{print $1}')
-	b=$(echo $ts | awk '{print $2}')
+	fn2=$(echo $1 | awk '{print $1}') 
+	ts2=$(sha512sum ${fn2})
 
-	echo "$a $b" >> $2 
+	a2=$(echo ${ts2} | awk '{print $1}')
+	b2=$(echo ${ts2} | awk '{print $2}')
+
+	echo "$a2 $b2" >> $2 
 }

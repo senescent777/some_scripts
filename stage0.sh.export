@@ -1,0 +1,96 @@
+#!/bin/sh
+
+. ./skripts/common.conf
+. ./skripts/common_funcs.sh
+. ./skripts/stage0_backend.bsh
+
+
+base=""
+source2=""
+
+n=devuan 
+
+usage() {
+	echo "$0 --base <BASE> --add <THINGS_TO_ADD> [--bl <BOOTLOADER>] [--luser <loser>] [--v <verbosity_level>]"
+	echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})"
+	echo "$0 --get-devuan <download_dir>"
+	echo "$0 --make-dirs"
+}
+
+parse_opts_real() {
+	case "$1" in
+		--base)
+			base="$2"
+		;;
+		--add)
+			source2="$2"/"${TARGET_pad_dir}"
+		;;
+		--bl)
+			CONF_bloader="$2"
+		;;
+		--luser)
+			n="$2"
+		;;
+		--get-devuan)
+			get_devuan "$2"
+			exit
+		;;
+	esac	
+}
+
+single_param() {
+	case "$1" in
+		--make-dirs)
+			make_dirs
+		;;
+		--h)
+			usage
+		;;
+	esac
+}
+
+[ -d "${CONF_tmpdir0}" ] || exit 7
+
+parse_opts "$1" "$2"
+parse_opts "$3" "$4"
+parse_opts "$5" "$6"
+parse_opts "$7" "$8"
+parse_opts "$9" "${10}"
+
+
+t_count=$(grep ${CONF_tmpdir0} /proc/mounts | wc -l)
+[ "$t_count" -eq 0 ] && mount "${CONF_tmpdir0}"
+
+source_n_target "${base}"
+
+[ x"${CONF_target}" != "x" ] || exit 99
+[ -d "${CONF_target}" ] || exit 100
+
+
+[ -d "${CONF_target}"/live ] || sudo mkdir "${CONF_target}"/live
+olddir=$(pwd)
+cd "${source2}"/../live
+echo "$?"
+[ -d "${CONF_target}"/"${TARGET_DIGESTS_dir}" ] || sudo mkdir -p "${CONF_target}"/"${TARGET_DIGESTS_dir}"
+
+live1 "${source2}"/../live "${CONF_target}"/live
+live2 "${source2}"/../live "${CONF_target}"/live
+live3 "${source2}"/../live "${CONF_target}"/live
+
+sleep 3
+cd "${olddir}"
+
+copy_main "${CONF_BASEDIR}"/"${source2}" "${CONF_target}"/"${TARGET_pad_dir}" 
+copy_conf "${CONF_BASEDIR}"/"${source2}" "${n}" "${CONF_target}"/"${TARGET_pad_dir}"
+copy_sums "${CONF_BASEDIR}"/"${source2}" "${CONF_target}"/"${TARGET_DIGESTS_dir}"
+
+cd "${CONF_BASEDIR}"
+keyz "${CONF_keys_dir}" "${CONF_target}"/"${TARGET_DIGESTS_dir}"
+
+bootloader "${CONF_bloader}" "${CONF_BASEDIR}"/"${source2}" "${CONF_target}"/"${TARGET_DIGESTS_dir}"
+after_bl 
+
+
+cleanup
+
+echo "MKSUMS.SH" 
