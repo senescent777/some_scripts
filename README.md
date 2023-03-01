@@ -1,5 +1,5 @@
 Some_scripts that i made for a certain purpose. 
-During covid i had to find something to do. Recently i decided to show you "what i did last summer".
+During covid i had to find something to do. And i kept going after that. Recently i decided to show the world "what i did last summer".
 
 There is some remains of debug-clutter that have to be removed.  After that, this  should work, at least for me. I think i got the most of it.
 
