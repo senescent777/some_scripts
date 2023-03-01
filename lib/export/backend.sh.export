@@ -1,19 +1,20 @@
 #!/bin/sh
 
 n=$(whoami) 
-. ./${n}.conf
+. ./"${n}".conf
 . ./backend0.sh
 
 
-cd ${src}/..
+cd "${src}"/..
 sha512sum -c ./pad/0/sha512sums.4  || exit 
 gpgv --keyring ./pad/0/KsK.gpg ./pad/0/pubK.gpg.sig ./pad/0/pubK.gpg
 
-cond_check ${src}/0/sha512sums.1
-cond_check ${src}/0/sha512sums.3
-cond_check ${src}/0/sha512sums.2
+cond_check "${src}"/0/sha512sums.1
+cond_check "${src}"/0/sha512sums.3
+cond_check "${src}"/0/sha512sums.2
 
 molest() {
+	echo "MOLESTING THE DECAPITATED REMAINS OF ${1}"
 	sudo chown root:root "$1"
 	sudo chmod 0755 "$1"
 

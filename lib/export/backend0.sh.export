@@ -4,7 +4,7 @@ n=$(whoami)
 . ./"${n}".conf
 
 
-paskan_alustus() {
+start_this_shit() {
 	siptr=$(sudo which iptables-restore) 
 	sifd=$(sudo which ifdown)
 	sifu=$(sudo which ifup)
@@ -46,7 +46,7 @@ paskan_alustus() {
 	siptr="sudo ${siptr} "
 }
 
-paskan_alustus
+start_this_shit
 
 cond_check() {
 	if [ -s "$1" ] ; then 
@@ -76,16 +76,12 @@ cond_check() {
 }
 
 sarp() {
-	"${sag}" remove --purge "$@"
+	${sag} remove --purge "$@"
 	sudo apt autoremove
 }
 
 SBU() {
 	sudo shred -fu "$1"
-}
-
-eichman() {
-	[ "$to_ram" -eq 1 ] && sudo shred -fu "$1"
 }
 
 cleanup1() {
@@ -102,7 +98,7 @@ cleanup1() {
 
 	cp "${src}"/machupo.tar.bz2 /tmp
 
-	if [ "$to_ram" -eq 1 ] ; then
+	if [ "${to_ram}" -eq 1 ] ; then
 		SBU "${src}"/0/*
 		SBU "${src}"/*
 		sudo rmdir "${src}"/0 
@@ -110,26 +106,73 @@ cleanup1() {
 	fi
 
 	sudo usermod -G devuan,cdrom,floppy,audio,dip,video,plugdev,netdev devuan
-	cd /;"${srat}" /tmp/machupo.tar.bz2
+	cd /;${srat} /tmp/machupo.tar.bz2
 	SBU /tmp/machupo.tar.bz2
 	/usr/bin/killall xfce4-session
 }
 efk() {
 	[ -s "$1" ] || exit
-	[ "${to}_ram" -eq 1 ] && sudo cp "${src}"/foxp3.tar.bz2 "${src}"/foxp3.tar.bz2.BACKUP
+	[ "${to_ram}" -eq 1 ] && sudo cp "${src}"/foxp3.tar.bz2 "${src}"/foxp3.tar.bz2.BACKUP
 
-	cd /;"${srat}" "$1"
+	cd /;${srat} "$1"
 
-	"${spd}" "${pkgdir}"/lib*.deb
+	${spd} "${pkgdir}"/lib*.deb
 	SBU "${pkgdir}"/lib*.deb
 
-	"${spd}" "${pkgdir}"/*.deb 
+	${spd} "${pkgdir}"/*.deb 
 	SBU "${pkgdir}"/*.deb
 
-	if [ "$to_ram" -eq 1 ] ; then
+	if [ "${to_ram}" -eq 1 ] ; then
 		SBU "$1"
 		sudo mv "${src}"/foxp3.tar.bz2.BACKUP "${src}"/foxp3.tar.bz2
 	fi
 }
+tablz() {
+	[ -d /etc/iptables ] || sudo mkdir /etc/iptables	
+	cd /etc/iptables
+	[ -s /etc/iptables/rules.v4 ] && sudo mv /etc/iptables/rules.v4 /etc/iptables/rules.v4.OLD
+	
 
+	if [ "$2" -eq 1 ] ; then 
+
+		if [ "${sipt}" != "sudo" ] ; then 
+			for t in ${TABLES} ; do
+				${sipt} -P "${t}" DROP
+				${sipt} -F "${t}"
+			done
+	
+			${sipts} -f /etc/iptables/rules.v4
+		fi
+	fi
+
+	if [ "${sipt6}" != "sudo" ] ; then 
+
+		for t in ${TABLES} ; do
+			${sipt6} -P "${t}" DROP
+			${sipt6} -F "${t}"
+		done
+
+		${sipt6s} -f /etc/iptables/rules.v6
+	fi
+
+	sudo /sbin/sysctl -w net.ipv6.conf.all.disable.ipv6=1 
+	sudo /sbin/sysctl -w net.ipv6.conf.default.disable_ipv6=1
+}
+
+s0rsat() {
+	cd /etc/apt/
+	sudo mv sources.list sources.list.ORIG
+	sudo chmod a+w /etc/apt/conf.d
+
+
+	sudo chmod a-w /etc/apt/conf.d
+	cat /etc/apt/apt.conf.d/01recommended;sleep 2
+
+	sources_ok=$(grep https /etc/apt/sources.list | wc -l)
+
+		echo "sources_ok=${sources_ok}"
+		if [ "${sources_ok}" -eq 1 ] ; then
+			 ${sag} update
+		fi
+}
 

@@ -133,7 +133,6 @@ copy_main() {
 	sudo chown root:root "${2}"/*.sh
 
 	if [ -s "${1}"/0/SAM.2.0 ] ; then 
-
 		sudo chmod a-w ./"${TARGET_DIGESTS_dir}"/SAM*
 	fi
 
@@ -153,13 +152,14 @@ copy_conf() {
 	sudo cp -a "${1}"/"${2}".conf "${3}"
 
 	if [ -s "${3}"/upload.sh ] || [ -s "${3}"/extras.tar.bz2 ] ; then 
-		for f in "${CONF_g2}" ; do mangle_conf "${f}" "${3}"/"${2}".conf ; done
+		for f in ${CONF_g2} ; do mangle_conf "${f}" "${3}"/"${2}".conf ; done
 	fi
 
 	utfile="${3}"/"${2}".conf
 	sudo chmod a+w "${utfile}";sleep 1
 
-	for f in "${CONF_g1}"; do mangle_conf "${f}" "${utfile}" ; done
+	for f in ${CONF_g1} ; do mangle_conf "${f}" "${utfile}" ; done
+
 
 	echo -n "src=/" >> "${utfile}"
 	echo -n "$" >> "${utfile}"
@@ -198,13 +198,14 @@ keyz() {
 
 
 bootloader() {
-	ks2="."
 	[ x"$1" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
 	[ x"${CONF_target}" != "x" ] || exit 3
 	[ -d "${CONF_target}" ] || exit 3
 
 	cd "${CONF_target}";pwd
+	local ks2
+	ks2="."
 
 	case "${1}" in
 		isolinux)
@@ -212,6 +213,8 @@ bootloader() {
 
 			if [ -d "${2}"/../isolinux ] ; then 
 				ks2="${2}"/../isolinux
+
+
 				for t in cfg png ; do
 					sudo rm ./isolinux/*."${t}"				
 					sudo cp -a "${ks2}"/*."${t}" ./isolinux 

@@ -21,6 +21,7 @@ malfoy() {
 }
 
 parse_opts() {
+	local common_pars
 	common_pars=0
 
 	if [ x"$1" != "x" ] ; then 
@@ -56,21 +57,15 @@ parse_opts() {
 
 mk_bkup() { 
 	if [ -s "$1" ] ; then
-		sudo mv $1 $1.OLD
+		sudo mv "$1" "$1".OLD
 	fi
 }
 
 slaughter0() {
 	local fn2
 	local ts2
-	local a2
-	local b2
 
 	fn2=$(echo $1 | awk '{print $1}') 
 	ts2=$(sha512sum ${fn2})
-
-	a2=$(echo ${ts2} | awk '{print $1}')
-	b2=$(echo ${ts2} | awk '{print $2}')
-
-	echo "$a2 $b2" >> $2 
+	echo ${ts2} | awk '{print $1,$2}' >> "$2"
 }

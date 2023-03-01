@@ -53,7 +53,6 @@ process_dir() {
 				sudo tar --exclude=*.export -jcvf ../"${1}".tar."${2}" .
 
 			cd ../..
-			
 			has_patch=$(echo $1 | grep ${TARGET_patch_name} | wc -l)
 
 			if [ "${has_patch}" -eq 0 ] ; then 

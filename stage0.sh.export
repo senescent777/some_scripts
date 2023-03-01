@@ -85,7 +85,18 @@ copy_conf "${CONF_BASEDIR}"/"${source2}" "${n}" "${CONF_target}"/"${TARGET_pad_d
 copy_sums "${CONF_BASEDIR}"/"${source2}" "${CONF_target}"/"${TARGET_DIGESTS_dir}"
 
 cd "${CONF_BASEDIR}"
-keyz "${CONF_keys_dir}" "${CONF_target}"/"${TARGET_DIGESTS_dir}"
+
+klist="${source2}/0 ${CONF_keys_dir}"
+
+for x in ${klist}; do
+
+	if [ -s "${x}"/"${TARGET_Dkname1}" ] ; then 
+		keyz "$x" "$CONF_target"/"$TARGET_DIGESTS_dir"
+		break
+	else
+		echo "n.s.t.a ${x}/${TARGET_Dkname1}"
+	fi	
+done
 
 bootloader "${CONF_bloader}" "${CONF_BASEDIR}"/"${source2}" "${CONF_target}"/"${TARGET_DIGESTS_dir}"
 after_bl 

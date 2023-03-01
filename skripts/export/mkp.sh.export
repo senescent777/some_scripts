@@ -7,7 +7,7 @@ b=1
 t="${1}"
 
 usage() {
-	echo "$0 <directory containing "${TARGET_patch_name.tar.bz2}>"
+	echo "$0 <directory containing ${TARGET_patch_name}.tar.bz2>"
 	exit 123
 }
 
