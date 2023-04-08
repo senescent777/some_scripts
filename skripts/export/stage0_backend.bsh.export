@@ -139,6 +139,7 @@ copy_main() {
 	sudo cp -a "${1}"/*.bz2 "${2}"
 	sudo chmod 0444 "${2}"/*.bz2
 	sudo chown root:root "${2}"/*.bz2
+
 }
 
 copy_conf() {

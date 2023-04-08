@@ -58,6 +58,8 @@ process_dir() {
 
 			if [ "${has_patch}" -eq 0 ] ; then 
 				slaughter0 "${TARGET_pad_dir}"/"${1}".tar."${2}" "${TARGET_DIGESTS_dir}"/"${tgtfile}"
+
+				slaughter0 "${TARGET_pad_dir}"/"${1}".sh  "${TARGET_DIGESTS_dir}"/"${tgtfile}"
 			else
 			fi
 

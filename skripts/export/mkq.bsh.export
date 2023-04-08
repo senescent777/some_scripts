@@ -58,6 +58,7 @@ mutilate() {
 	sudo chmod a-w  "${1}"/"${3}"
 }
 
+[ -d "${CONF_BASEDIR}"/lib/mkq ] && sudo cp -a "${CONF_BASEDIR}"/lib/mkq/* "${dir}"
 
 for f in ${TARGET_patch_list_1} ; do 
 	sssr "${dir}" "${f}" "${TARGET_patch_name}"/"${TARGET_pad2}" 
