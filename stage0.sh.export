@@ -88,7 +88,7 @@ cd "${CONF_BASEDIR}"
 
 klist="${source2}/0 ${CONF_keys_dir}"
 
-for x in ${klist}; do
+for x in ${klist} ; do
 
 	if [ -s "${x}"/"${TARGET_Dkname1}" ] ; then 
 		keyz "$x" "$CONF_target"/"$TARGET_DIGESTS_dir"

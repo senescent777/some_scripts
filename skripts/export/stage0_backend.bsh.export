@@ -1,3 +1,4 @@
+#VAIH:tsummien rakentelu paloissa , yhteistyössä muiden skriptien kanssa
 
 mangle_conf() {
 }
@@ -119,7 +120,6 @@ copy_main() {
 		sudo cp -a "${CONF_scripts_dir}"/*.sh "${CONF_tmpdir}"
 		sudo chmod 0555 "${CONF_tmpdir}"/*.sh
 		sudo chown root:root "${CONF_tmpdir}"/*.sh
-	else
 	fi
 
 	if [ x"${CONF_target}" != "x" ] ; then 
@@ -149,7 +149,11 @@ copy_conf() {
 		sudo cp -a "${CONF_scripts_dir}"/*.conf "${CONF_tmpdir}"
 	fi
 
-	sudo cp -a "${1}"/"${2}".conf "${3}"
+	sudo chmod a+w "${3}"
+	sudo chown "${n}":"${n}" "${3}"
+	sudo touch "${3}"/"${2}".conf
+	sudo chown "${n}":"${n}" "${3}"/"${2}".conf
+
 
 	if [ -s "${3}"/upload.sh ] || [ -s "${3}"/extras.tar.bz2 ] ; then 
 		for f in ${CONF_g2} ; do mangle_conf "${f}" "${3}"/"${2}".conf ; done
@@ -163,22 +167,33 @@ copy_conf() {
 
 	echo -n "src=/" >> "${utfile}"
 	echo -n "$" >> "${utfile}"
-	echo "TARGET_pad2" >> "${utfile}"
-	
+	echo -n "{" >> "${utfile}"
+	echo -n "TARGET_pad2" >> "${utfile}"
+	echo "}" >> "${utfile}"	
+
 	echo -n "tmpdir=" >> "${utfile}"
 	echo -n "$" >> "${utfile}"
-	echo "TARGET_tmpdir" >> "${utfile}"
+	echo -n "{" >> "${utfile}"
+	echo -n "TARGET_tmpdir" >> "${utfile}"
+	echo "}" >> "${utfile}"	
 
 	echo -n "pkgdir=" >> "${utfile}"
 	echo -n "$" >> "${utfile}"
-	echo "TARGET_pkgdir" >> "${utfile}"
+	echo -n "{" >> "${utfile}"
+	echo -n "TARGET_pkgdir" >> "${utfile}"
+	echo "}" >> "${utfile}"	
 
 	mangle_conf to_ram "${utfile}"
 	mangle_conf nosu_do "${utfile}"
 
+	sudo cat "${1}"/"${2}".conf >> "${utfile}"
+
 	sudo chmod a-w "${utfile}";sleep 1
 	sudo chmod 0444 "${3}"/*.conf
 	sudo chown root:root "${3}"/*.conf
+
+	sudo chmod go-w "${3}"
+	sudo chown root:root "${3}"
 
 	sleep 1
 }

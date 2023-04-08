@@ -31,11 +31,17 @@ tpop "${3}" "${4}"
 
 [ x"${ridk}" != x ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 [ -d "${ridk}" ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
+gp=$(sudo which gpg)
+
+if [ x"${gp}" != "x" ] ; then
+else
+	echo "sudo apt-get install gpg*"
+fi
 
 case "${cmd}" in
 	--i)
 		for f in "${TARGET_Dkname1}" "${TARGET_Dkname2}" "${TARGET_Dkname1}".secret "${TARGET_Dkname2}".secret ; do
-			gpg --import "${ridk}"/"${f}"
+			${gp} --import "${ridk}"/"${f}"
 		done
 	;;
 	--e) 
@@ -46,10 +52,10 @@ case "${cmd}" in
 		sudo rm "${ridk}"/"${TARGET_Dkname1}"*
 		sudo rm "${ridk}"/"${TARGET_Dkname2}"*
 
-		gpg --export "${CONF_kay1name}" > "${ridk}"/"${TARGET_Dkname1}"
-		gpg --export-secret-keys "${CONF_kay1name}" > "${ridk}"/"${TARGET_Dkname1}".secret
-		gpg --export "${CONF_kay2name}" > "${ridk}"/"${TARGET_Dkname2}"
-		gpg --export-secret-keys "${CONF_kay2name}" > "${ridk}"/"${TARGET_Dkname2}".secret
+		${gp} --export "${CONF_kay1name}" > "${ridk}"/"${TARGET_Dkname1}"
+		${gp} --export-secret-keys "${CONF_kay1name}" > "${ridk}"/"${TARGET_Dkname1}".secret
+		${gp} --export "${CONF_kay2name}" > "${ridk}"/"${TARGET_Dkname2}"
+		${gp} --export-secret-keys "${CONF_kay2name}" > "${ridk}"/"${TARGET_Dkname2}".secret
 			
 		sudo chmod a-w "${ridk}"
 		ls -las "${ridk}"
@@ -57,14 +63,14 @@ case "${cmd}" in
 	--m)
 		cd ~
 		mv ~/.gnupg ~/.gnupg.OLD
-		gpg --generate-key
+		${gp} --generate-key
 		sleep 5
-		gpg --generate-key
+		${gp} --generate-key
 		sleep 5
 		sudo chmod a+w "${ridk}"
 		cd ~;tar -jcvf "${ridk}"/k3yz.tar.bz2 ~/.gnupg
 		sudo chmod a-w "${ridk}"
-		gpg --list-keys
+		${gp} --list-keys
 		nano "${CONF_scripts_dir}"/common.conf
 	;;
 	*)

@@ -12,11 +12,33 @@ parse_opts_real() {
 	echo "parse_opts_real()"
 }
 
+gg=$(sudo which gpg)
+gv=$(sudo which gpgv)
+sh5=$(sudo which sha512sum)
+
+if [ x"${gg}" != "x" ] ; then 
+	echo "gg=${gg}"
+else
+	if [ z"{TARGET_pkgdir}" != "z" ] ; then 
+		echo "cd ./${CONF_pkgsdir2}"
+		echo "sudo tar -jxvf ./*.bz2"
+		echo "sudo dpkg -i ./${TARGET_pkgdir}/lib*.deb"
+		echo "rm ./${TARGET_pkgdir}/lib*.deb"
+		echo "sudo dpkg -i ./${TARGET_pkgdir}/*.deb"
+		echo "sudo rm ./${TARGET_pkgdir}/*.deb"	
+	else
+		echo "sudo apt-get install gpg*"	
+	fi
+
+	exit 666
+fi
+
+
 single_param() {
 	case "${1}" in
 		--iso)
 			sudo chmod o+w "$(pwd)"
-			gpg -u "${CONF_kay1name}" -sb ./*.iso
+			${gg} -u "${CONF_kay1name}" -sb ./*.iso
 			[ "$?" -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
 			sudo chmod o-w "$(pwd)"
 			exit 666
@@ -28,8 +50,8 @@ single_param() {
 			sudo chmod o+w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
 			cd "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
 
-			gpg -u "${CONF_kay1name}" -sb ./*.deb
-			gpg -u "${CONF_kay1name}" -sb ./*.bz2
+			${gg} -u "${CONF_kay1name}" -sb ./*.deb
+			${gg} -u "${CONF_kay1name}" -sb ./*.bz2
 			[ "$?" -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
 			
 			sudo chmod o-w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
@@ -52,6 +74,7 @@ pwd
 if [ ! -d "${TARGET_DIGESTS_dir}" ] ; then 
 	mkdir -p "${TARGET_DIGESTS_dir}"
 fi
+
 
 part0() {
 	if [ x"{TARGET_DIGESTS_file}" != "x" ] ; then
@@ -94,7 +117,7 @@ part2() {
 		sudo cat "${TARGET_DIGESTS_dir}"/SAM.2.1 >> "${TARGET_DIGESTS_file}".2	
 	else
 		if [ x"${TARGET_pad_dir}" != x ] ; then 
-			sha512sum "${TARGET_pad_dir}"/* | grep -v "${TARGET_patch_name}" | grep -v "${TARGET_DIGESTS_file0}" > "${TARGET_DIGESTS_file}".2
+			${sh5} "${TARGET_pad_dir}"/* | grep -v "${TARGET_patch_name}" | grep -v "${TARGET_DIGESTS_file0}" > "${TARGET_DIGESTS_file}".2
 		else
 			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 		fi
@@ -105,13 +128,13 @@ part3() {
 	if [ -s "${TARGET_DIGESTS_dir}"/SAM.3 ] ; then
 		mv "${TARGET_DIGESTS_dir}"/SAM.3 "${TARGET_DIGESTS_file}".3
 	else
-		sha512sum ./live/* > "${TARGET_DIGESTS_file}".3
+		${sh5} ./live/* > "${TARGET_DIGESTS_file}".3
 	fi
 }
 
 part4() {
 		echo "IS "${TARGET_DIGESTS_file}".1 ok?"
-		sha512sum -c "${TARGET_DIGESTS_file}".1
+		${sh5} -c "${TARGET_DIGESTS_file}".1
 		[ "$?" -eq 0 ] || exit
 }
 
@@ -119,14 +142,14 @@ part5() {
 
 		sleep 2
 		echo "IS "${TARGET_DIGESTS_file}".2 ok?"
-		sha512sum -c "${TARGET_DIGESTS_file}".2 --ignore-missing
+		${sh5} -c "${TARGET_DIGESTS_file}".2 --ignore-missing
 
 }
 
 part6() {
 
 	if [ -s "${TARGET_DIGESTS_file}".3 ] ; then
-		sha512sum -c "${TARGET_DIGESTS_file}".3
+		${sh5} -c "${TARGET_DIGESTS_file}".3
 	fi
 
 }
@@ -134,7 +157,7 @@ part6() {
 part6_5() {
 
 	for i in 1 2 3 ; do
-		gpg -u "${CONF_kay1name}" -sb ./"${TARGET_DIGESTS_file}"."${i}"
+		${gg} -u "${CONF_kay1name}" -sb ./"${TARGET_DIGESTS_file}"."${i}"
 		[ "$?" -eq 0 ] || echo "install-keys --i"
 		echo "$?"
 	done
@@ -147,15 +170,15 @@ part6_5() {
 
 part7() {
 
-	gpg -u "${CONF_kay2name}" -sb ./"${TARGET_Dpubkf}"
+	${gg} -u "${CONF_kay2name}" -sb ./"${TARGET_Dpubkf}"
 	[ "$?" -eq 0 ] || echo "install-keys --kdir <kdir> --i"
 	sleep 2
 	
-		gpgv --keyring ./"${TARGET_Dpubkg}" ./"${TARGET_Dpubkf}".sig ./"${TARGET_Dpubkf}"
+		${gv} --keyring ./"${TARGET_Dpubkg}" ./"${TARGET_Dpubkf}".sig ./"${TARGET_Dpubkf}"
 
 		for i in 1 2 3 ; do
-			echo "gpgv --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}"
-			gpgv --keyring "${TARGET_Dpubkf}" "${TARGET_DIGESTS_file}"."${i}".sig "${TARGET_DIGESTS_file}"."${i}"			
+			echo "${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}"
+			${gv} --keyring "${TARGET_Dpubkf}" "${TARGET_DIGESTS_file}"."${i}".sig "${TARGET_DIGESTS_file}"."${i}"			
 			sleep 2
 		done
 
@@ -177,8 +200,7 @@ part6
 part66() {
 
 	if [ "$?" -eq 0 ]; then 
-		gg=$(which gpg)
-		echo "gg=${gg}"
+
 
 		if [ x"${gg}" != "x" ] ; then 
 			part6_5
@@ -197,12 +219,12 @@ if [ -d "${TARGET_DIGESTS_dir}" ] ; then
 	sudo rm "${TARGET_DIGESTS_dir}"/SAM*
 fi
 
-sha512sum "${TARGET_DIGESTS_dir}"/* | grep -v '"${TARGET_DIGESTS_file}".4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > "${TARGET_DIGESTS_file}".4
+${sh5} "${TARGET_DIGESTS_dir}"/* | grep -v '"${TARGET_DIGESTS_file}".4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > "${TARGET_DIGESTS_file}".4
 
-	echo "	sha512sum -c ${TARGET_DIGESTS_file}.4" 
+	echo "	${sh5} -c ${TARGET_DIGESTS_file}.4" 
 	sleep 2
 
-	sha512sum -c "${TARGET_DIGESTS_file}".4
+	${sh5} -c "${TARGET_DIGESTS_file}".4
 	echo "$?"
 	sleep 2
 

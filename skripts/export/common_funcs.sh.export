@@ -1,4 +1,5 @@
 griffindor() {
+griffindor() {
 	pwd
 	local of2
 
@@ -56,8 +57,8 @@ parse_opts() {
 }
 
 mk_bkup() { 
-	if [ -s "$1" ] ; then
-		sudo mv "$1" "$1".OLD
+	if [ -s "${1}" ] ; then
+		sudo mv "${1}" "${1}".OLD
 	fi
 }
 
@@ -67,5 +68,6 @@ slaughter0() {
 
 	fn2=$(echo $1 | awk '{print $1}') 
 	ts2=$(sha512sum ${fn2})
+
 	echo ${ts2} | awk '{print $1,$2}' >> "$2"
 }

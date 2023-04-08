@@ -1,11 +1,40 @@
-#!/bin/sh
+
+
 . ./common.conf
 . ./common_funcs.sh
 
-lsrcdir=""
-ltarget=""
-bloader="isolinux"
+ltarget="" 
+bloader=""
 
+gi=$(sudo which genisoimage)
+gv=$(sudo which gpgv)
+
+inst_dep() {
+	echo "inst.dep ${1}"
+	
+	case "${1}" in
+		0)
+			echo "sudo apt-get install genisoimage wodim gpg*"
+		;;
+		1)
+			for f in $(ls "${CONF_pkgsdir2}"/*.deb) ; do
+				${gv} --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${f}".sig "${f}"
+			done
+
+			if [ "$?" -eq 0 ] ; then 
+				sudo dpkg -i "${CONF_pkgsdir2}"/*.deb
+			fi
+		;;
+		*)
+			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+		;;
+	esac
+
+	exit 666
+}
+
+[ y"${gv}" != "y" ] || inst_dep 0
+[ x"${gi}" != "x" ] || inst_dep 1
 
 usage() {
 	echo "$0 --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
@@ -14,78 +43,82 @@ usage() {
 
 
 parse_opts_real() {
-	case "$1" in
+	case "${1}" in
 		--in)
-			lsrcdir="$2"
+			lsrcdir="${2}"
 		;;
 		--out)
-			ltarget="$2"
+			ltarget="${2}"
 		;;
 		--bl) 
-			bloader="$2"
+			bloader="${2}"
 		;; 
 		*)
 			usage
 		;;
 	esac
-	
-}
-
-mk_pad_bak() {
-	[ -s ./"$1" ] && sudo mv "$1" "$1".OLD
-	cd "${lsrcdir}"
-
-	sudo chown -R root:root ./*
-	sudo chmod -R a-w "${TARGET_pad_dir}"/*
-	sudo chmod a-w "${TARGET_pad_dir}"/ 
-
-	sudo tar "${TARGET_DTAR_OPTS}" -cvf ../"${1}" "${2}"
 }
 
 parse_opts "${1}" "${2}"
 parse_opts "${3}" "${4}"
 parse_opts "${5}" "${6}"
+parse_opts "${7}" "${8}"
 
-
-[ -d ./"${lsrcdir}" ] || exit
-[ -s "${ltarget}" ] && exit 
-
-gi=$(sudo which genisoimage)
-
-if [ x"${gi}" != "x" ] ; then
+if [ -d ./"${lsrcdir}" ] ; then
 else
-	for f in $(ls "${CONF_pkgsdir2}"/*.deb) ; do
-		gpgv --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${f}".sig "${f}"
-	done
+	echo "no such thing as ${lsrcdir}"
+fi
 
-	if [ "$?" -eq 0 ] ; then 
-		echo "sudo dpkg -i "${CONF_pkgsdir2}"/*.deb"
-		sudo dpkg -i "${CONF_pkgsdir2}"/*.deb
-	else
-		exit 666
-	fi
+if [ -s "${ltarget}" ] ; then
+	exit 666
+fi
+
+if [ x"${bloader}" != "x" ] ; then 
+else
+	bloader="${CONF_bloader}"
 fi
 
 
+mk_pad_bak() {
+	[ -s ./"${1}" ] && sudo mv "${1}" "${1}".OLD
+	
+	sudo chown -R root:root ./*
+	sudo chmod -R a-w "${TARGET_pad_dir}"/*
+	sudo chmod a-w "${TARGET_pad_dir}"/ 
+
+	
+	
+
+}
+
+cd "${lsrcdir}"
 mk_pad_bak "${TARGET_pad_bak_file}" "${TARGET_pad_dir}"
 sleep 1
 
-echo "${bloader}"
-sudo chmod o+w ..
-cd "${lsrcdir}"
+sudo chmod o+w .
+sudo chmod o+w ..	
 
 case "${bloader}" in
 	isolinux)
-		echo "genisoimage -o ../${ltarget} ${CONF_gi_opts}  ."
-		$gi -o ../$ltarget ${CONF_gi_opts} .
+
+		${gi} -o ../"${ltarget}" ${CONF_gi_opts} .
 	;;
 	grub)
-		echo "TODO:grub-mkrescue"
+		xi=$(sudo which xorriso)
+		[ y"${xi}" != "y" ] || echo "apt-get install xorriso";exit 666
+
+		gmk=$(sudo which grub-mkrescue)
+		[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666
+		
+		echo "sudo ${gmk} -o ../${ltarget} <OTHER_OPTS> . "
 	;;
 	*)
+		echo "bl= ${bloader}"
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 	;;
 esac
 
-sleep 1;sudo chmod o-w ..
+sudo chmod o-w .
+sudo chmod o-w ..
+sleep 1
 echo "stick.sh ?"

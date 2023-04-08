@@ -1,5 +1,4 @@
 #!/bin/sh
-
 echo "CONF_kayid=0x<your_key_1>"
 echo "CONF_kayid2=0x<your_key_2>"
 

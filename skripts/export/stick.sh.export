@@ -16,10 +16,10 @@ usage() {
 parse_opts_real() {
 	case "${1}" in
 		-t)
-			post="$2"
+			post="${2}"
 		;;
 		-b)
-			b="$2"
+			b="${2}"
 		;;
 		*)
 			usage
@@ -28,63 +28,87 @@ parse_opts_real() {
 	esac
 }
 
-parse_opts "$1" "$2"
-parse_opts "$3" "$4"
-parse_opts "$5" "$6"
+parse_opts "${1}" "${2}"
+parse_opts "${3}" "${4}"
+parse_opts "${5}" "${6}"
 
 
 sudo mount /dev/"${TARGET_backup_part}" "${TARGET_archdir0}"
 
 if [ "$?" -eq 0 ] ; then 
 else
-	usage;exit 1
+	echo "sudo umount ${TARGET_archdir0}";exit 555
 fi
 
 kala6="${TARGET_pad_bak_file}"."${post}"
 mk_bkup "${TARGET_archdir}"/"${kala6}"
 
 sudo cp "${TARGET_pad_bak_file}" "${kala6}"
-sudo chmod a+w .
+
+sudo chmod a+w .;sudo chmod a+w "${TARGET_archdir}";sleep 1
+sudo chmod a+w .;sudo chmod a+w "${TARGET_archdir}";sleep 1
+sudo chmod a+w .;sudo chmod a+w "${TARGET_archdir}";sleep 1
+
+pwd
+
+sudo mv "${TARGET_archdir}"/"${kala6}".sig "${TARGET_archdir}"/"${kala6}".sig.OLD
 
 case "${b}" in
 	0)
 	;;
 	1)
+		pwd
+
+		n=$(whoami)
+		sudo chown "${n}":"${n}" .
+		sudo chown "${n}":"${n}" "${TARGET_archdir}"
+		sleep 1
+
 		gpg -u "${CONF_kay2name}" -sb "${kala6}"
+		sudo mv "${kala6}".* "${TARGET_archdir}"
+		sleep 1
+
 	;;
 	2)
-		gpg -r "${CONF_kay2name}" -se "${kala6}"
+		gpg -u "${CONF_kay2name}" -se "${kala6}"
+		sudo mv "${kala6}".gpg "${TARGET_archdir}" 
+		sleep 1
+
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 	;;
 esac
 
-sudo chmod a+w "${TARGET_archdir}"
-sudo mv "${kala6}" "${TARGET_archdir}"
 
 q=$(date +%F)
 kala6="${TARGET_scripts_bak_file}"."${q}"
 
 	sudo tar -jcpf "${kala6}" "${CONF_scripts_dir}" "${CONF_BASEDIR}"/"${CONF_stg0file}" "${CONF_BASEDIR}"/"${CONF_stg0file}".export "${CONF_BASEDIR}"/lib/export/*.export 
 
+sudo mv "${TARGET_archdir}"/"${kala6}".sig "${TARGET_archdir}"/"${kala6}".sig.OLD
+
 case "${b}" in
 	0)
 	;;
 	1)
 		gpg -u "${CONF_kay2name}" -sb "${kala6}"
+		sudo mv "${kala6}".* "${TARGET_archdir}"
+		sleep 1
+		
 	;;
 	2)
-		gpg -r "${CONF_kay2name}" -se "${kala6}" 
+		gpg -u "${CONF_kay2name}" -se "${kala6}" 
+		sudo cp "${kala6}".gpg "${TARGET_archdir}"
+		sleep 1
+
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 	;;
 esac
 
-sudo mv "${kala6}" "${TARGET_archdir}"
-sudo mv *.sig "${TARGET_archdir}"
-sudo mv *.gpg "${TARGET_archdir}"
+
 
 sudo chmod a-w "${TARGET_archdir}"
 sudo chmod a-w .

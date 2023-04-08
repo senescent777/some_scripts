@@ -5,17 +5,27 @@
 
 b=1
 t="${1}"
+check_g=1
+gg=$(sudo which gpg)
+gv=$(sudo which gpgv)
 
 usage() {
-	echo "$0 <directory containing ${TARGET_patch_name}.tar.bz2>"
 	exit 123
 }
 
-u="${t}"/"${TARGET_patch_name}".tar.bz2
+v="${TARGET_patch_name}".tar.bz2
+u="${t}"/"${v}"
+
 [ -s "${u}" ] || usage
-echo "PARS OK"
+[ x"${2}" != "x" ] && b="${2}"
+
+if [ "${b}" -eq 0 ] ; then 
+else
+fi
 
 sudo chmod a+w .
+sudo rm "${u}".sig
+sudo rm "${u}".gpg
 
 case "${b}" in
 	0)
@@ -32,15 +42,26 @@ case "${b}" in
 	;;
 esac
 
+ls -las "${u}"*
 sleep 2
+
 sudo mount /dev/"${TARGET_backup_part}" "${TARGET_archdir0}" || exit 77
 sudo chmod a+w "${TARGET_archdir0}"/"${TARGET_patch_dir}"
 
+sudo mv "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}" "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".OLD
 sudo cp "${u}" "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+
+sudo mv "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".sig "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".sig.OLD
 sudo cp "${u}".sig "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+
+sudo mv "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".gpg "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".gpg.OLD
 sudo cp "${u}".gpg "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+
+sudo rm "${TARGET_archdir0}"/"${TARGET_patch_dir}"/patch*
 sudo cp "${t}"/patch* "${TARGET_archdir0}"/"${TARGET_patch_dir}"
 
 sudo chmod a-w .
 sudo chmod a-w "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+
 sudo umount "${TARGET_archdir0}"
+

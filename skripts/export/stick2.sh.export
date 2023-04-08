@@ -1,0 +1,124 @@
+#!/bin/sh
+
+. ./common.conf
+. ./common_funcs.sh
+
+post=stable
+b=1
+gg=$(sudo which gpg)
+gv=$(sudo which gpgv)
+
+usage() {
+	echo "$0 [-t <type>] [--v <verbosity>] [-b <sign_or_not>]"
+	echo "-b 1:just signs"
+	echo "-b 2:signs and encrypts (TODO)"
+}
+
+parse_opts_real() {
+	case ${1} in
+		-t)
+			post="${2}"
+		;;
+		-b)
+			b="${2}"
+		;;
+		*)
+			usage
+			exit 666
+		;;
+	esac
+}
+check_params() {
+	local check_g=1
+
+	case "${1}" in
+		0)
+			check_g=0
+		;;
+		1)
+		;;
+		2)
+		;;
+		*)
+			echo "https://www.youtube.com/watch?v=PjotFePip2M"
+			exit 666 
+		;;
+	esac
+
+
+	if [ "${check_g}" -eq 1 ] ; then 
+	fi
+}
+
+part1() {
+	sudo cp "${1}" "${1}"."${2}"
+	mk_bkup "${TARGET_archdir}"/"${1}"."${2}"	
+}
+
+part2() {	
+	local opts=""
+
+		opts="-v"
+	fi
+
+	sudo tar "${opts}" -jcpf "${1}" "${CONF_scripts_dir}" "${CONF_BASEDIR}"/"${CONF_stg0file}" "${CONF_BASEDIR}"/"${CONF_stg0file}".export "${CONF_BASEDIR}"/lib/export/*.export 
+}
+
+part3() {
+	local g
+
+	for g in ${1} ${1}.sig ${1}.gpg ; do
+		sudo mv "${2}"/"${g}" "${2}"/"${g}".OLD
+	done
+
+	case "${3}" in
+		0)
+		;;
+		1)
+			${gg} -u "${CONF_kay2name}" -sb ./"${1}"
+		;;
+		2)
+			${gg} -r "${CONF_kay2name}" -se ./"${1}"
+		;;
+	esac
+
+	sudo mv ./"${1}"* "${2}"
+	sleep 1
+
+		if [ -s "${2}"/"${1}".sig ] ; then
+			${gv} --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${2}"/"${1}".sig "${2}"/"${1}"
+		fi
+
+		if [ -s "${2}"/"${1}".gpg ] ; then
+			${gv} --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${2}"/"${1}".gpg
+		fi
+	fi 
+
+}
+
+parse_opts "${1}" "${2}"
+parse_opts "${3}" "${4}"
+parse_opts "${5}" "${6}"
+
+check_params "${b}"
+
+sudo mount /dev/"${TARGET_backup_part}" "${TARGET_archdir0}"
+
+if [ "$?" -eq 0 ] ; then 
+else
+	echo "sudo umount ${TARGET_archdir0}";exit 555
+fi
+
+sudo chmod a+w .
+
+part1 "${TARGET_pad_bak_file}" "${post}"
+
+q=$(date +%F)
+part2 "${TARGET_scripts_bak_file}"."${q}"
+
+for f in "${TARGET_pad_bak_file}"."${post}" "${TARGET_scripts_bak_file}"."${q}" ; do 
+	part3 "${f}" "${TARGET_archdir}" "${b}"
+done
+
+sudo umount "${TARGET_archdir0}"
+sudo chmod a-w .

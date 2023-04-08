@@ -220,8 +220,8 @@ cfd() {
 	fi
 }
 usage() {
-	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0}"
-	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0}"
+	echo "-x <source_file>:eXtracts <source_file> to "${CONF_squash0}"
+	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to "${CONF_squash0}"
 	echo "-b is supposed to be run just Before -c but after -r"
 	echo "-d :Destroys contents of ${CONF_squash0}/ and ${CONF_tmpdir} "
 	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)"
@@ -230,12 +230,12 @@ usage() {
 	
 	echo "-i <src> : Installs scripts 2 chroot_dir "
 	echo "-j <src> [ --dir2 <stuff>] : extracts dir 2 chroot_dir"
-	echo " --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir}"
+
 	echo "-f attempts to Fix some problems w/ sudo"
 	echo "--v 1 adds Verbosity"
 
 	echo "--mp, --md, --ms:self-explanatory opts 4 -r" 
-	echo "potentially dangerous, so disabled by default"
+	echo "not default on the grounds of the damage they can cause"
 }
 
 ijk() {
