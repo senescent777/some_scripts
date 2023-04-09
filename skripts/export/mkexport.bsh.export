@@ -1,5 +1,4 @@
 #!/bin/sh
-
 mengle() {
 	echo "mengle(${1})";sleep 1
 	[ x"${1}" != "x" ] || exit

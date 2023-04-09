@@ -3,65 +3,71 @@
 . ./common.conf
 . ./common_funcs.sh
 
-b=1
-t="${1}"
-check_g=1
-gg=$(sudo which gpg)
-gv=$(sudo which gpgv)
+lsrc=""
+mode=1
+u=""
+tfile=""
 
 usage() {
-	exit 123
 }
 
-v="${TARGET_patch_name}".tar.bz2
-u="${t}"/"${v}"
-
-[ -s "${u}" ] || usage
-[ x"${2}" != "x" ] && b="${2}"
-
-if [ "${b}" -eq 0 ] ; then 
+	usage
+	exit 666
 else
+	lsrc="${1}"
+	mode="${2}"
 fi
 
-sudo chmod a+w .
-sudo rm "${u}".sig
-sudo rm "${u}".gpg
+[ -d "${lsrc}" ] || exit 666
 
-case "${b}" in
+if [ "${mode}" -gt 0 ] ; then
+	enforce_deps
+	sudo chown 1000:1000 "${lsrc}"
+	sudo chmod a+w  "${lsrc}"
+fi
+
+tfile0="${TARGET_patch_name}".tar.bz2
+tfile="${lsrc}"/"${tfile0}"
+kalat="${tfile0}"
+
+case "${2}" in
 	0)
 	;;
 	1)
-		echo "gpg -u ${CONF_kay2name} -sb ${u}"
-		gpg -u "${CONF_kay2name}" -sb "${u}"
+		kalat="${kalat} ${kalat}.sig" 
+		sudo mv "${tfile}".sig "${tfile}".sig.OLD
+		${gg} -u "${CONF_kay2name}" -sb "${tfile}"
+
 	;;
 	2)
-		gpg -r "${CONF_kay2name}" -se "${u}"
+		kalat="${kalat} ${kalat}.gpg" 
+		sudo mv "${tfile}".gpg "${tfile}".gpg.OLD
+
+		${gg} -u "${CONF_kay2name}" --symmetric -se "${tfile}"
+
 	;;
 	*)
-		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
-	;;
+		echo "https://www.youtube.com/watch?v=PjotFePip2M"
+		exit 666 
+	;;	
 esac
 
-ls -las "${u}"*
-sleep 2
+sudo chown root:root "${lsrc}"
+sudo chmod go-w "${lsrc}"
 
 sudo mount /dev/"${TARGET_backup_part}" "${TARGET_archdir0}" || exit 77
 sudo chmod a+w "${TARGET_archdir0}"/"${TARGET_patch_dir}"
 
-sudo mv "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}" "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".OLD
-sudo cp "${u}" "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+kalat="${kalat} patch.sh"
 
-sudo mv "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".sig "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".sig.OLD
-sudo cp "${u}".sig "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+for kala in ${kalat} ; do 
+	sudo mv "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${kala}" "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${kala}".OLD 
 
-sudo mv "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".gpg "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${v}".gpg.OLD
-sudo cp "${u}".gpg "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+	sudo cp "${lsrc}"/"${kala}" "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+done 
 
-sudo rm "${TARGET_archdir0}"/"${TARGET_patch_dir}"/patch*
-sudo cp "${t}"/patch* "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+cd /tmp;sudo tar -v -jf "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${tfile0}" -x ./"${TARGET_pad2}"/patch.sh
+sudo mv /tmp/"${TARGET_pad2}"/patch.sh "${TARGET_archdir0}"/"${TARGET_patch_dir}"
 
-sudo chmod a-w .
-sudo chmod a-w "${TARGET_archdir0}"/"${TARGET_patch_dir}"
-
+sudo chmod go-w "${TARGET_archdir0}"/"${TARGET_patch_dir}"
 sudo umount "${TARGET_archdir0}"
-

@@ -6,36 +6,6 @@
 ltarget="" 
 bloader=""
 
-gi=$(sudo which genisoimage)
-gv=$(sudo which gpgv)
-
-inst_dep() {
-	echo "inst.dep ${1}"
-	
-	case "${1}" in
-		0)
-			echo "sudo apt-get install genisoimage wodim gpg*"
-		;;
-		1)
-			for f in $(ls "${CONF_pkgsdir2}"/*.deb) ; do
-				${gv} --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${f}".sig "${f}"
-			done
-
-			if [ "$?" -eq 0 ] ; then 
-				sudo dpkg -i "${CONF_pkgsdir2}"/*.deb
-			fi
-		;;
-		*)
-			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
-		;;
-	esac
-
-	exit 666
-}
-
-[ y"${gv}" != "y" ] || inst_dep 0
-[ x"${gi}" != "x" ] || inst_dep 1
-
 usage() {
 	echo "$0 --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666
@@ -67,6 +37,7 @@ parse_opts "${7}" "${8}"
 if [ -d ./"${lsrcdir}" ] ; then
 else
 	echo "no such thing as ${lsrcdir}"
+	exit 666
 fi
 
 if [ -s "${ltarget}" ] ; then
@@ -77,6 +48,10 @@ if [ x"${bloader}" != "x" ] ; then
 else
 	bloader="${CONF_bloader}"
 fi
+
+enforce_deps
+[ y"${gv}" != "y" ] || inst_dep 0
+[ x"${gi}" != "x" ] || inst_dep 1
 
 
 mk_pad_bak() {
@@ -95,13 +70,20 @@ cd "${lsrcdir}"
 mk_pad_bak "${TARGET_pad_bak_file}" "${TARGET_pad_dir}"
 sleep 1
 
-sudo chmod o+w .
-sudo chmod o+w ..	
+sudo chmod a+w .
+sudo chmod a+w ..	
 
 case "${bloader}" in
 	isolinux)
 
+		sudo chmod -R a+w ./isolinux
+		sudo chown -R 1000:1000  ./isolinux
+
+		
 		${gi} -o ../"${ltarget}" ${CONF_gi_opts} .
+
+		sudo chmod go-w ./isolinux
+		sudo chmod -R go-w  ./isolinux
 	;;
 	grub)
 		xi=$(sudo which xorriso)

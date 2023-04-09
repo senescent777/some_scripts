@@ -53,8 +53,8 @@ xxx() {
 	if [ x"${CONF_squash0}" != "x" ]; then
 		[ -d "${CONF_squash0}" ] || sudo mkdir "${CONF_squash0}"
 		cd "${CONF_squash0}"
-
 		unsq=$(sudo which unsquashfs)
+
 		if [ x"${unsq}" != "x" ] ; then 
 			sudo ${unsq} "${1}"
 		else
@@ -223,19 +223,20 @@ usage() {
 	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0}"
 	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0}"
 	echo "-b is supposed to be run just Before -c but after -r"
-	echo "-d :Destroys contents of ${CONF_squash0}/ and ${CONF_tmpdir} "
-	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)"
+	echo "-d Destroys contents of ${CONF_squash0}/ and ${CONF_tmpdir} \n"
+	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n"
 
 	echo "-r :runs chRoot in ${CONF_squash_dir}"
 	
 	echo "-i <src> : Installs scripts 2 chroot_dir "
-	echo "-j <src> [ --dir2 <stuff>] : extracts dir 2 chroot_dir"
-	echo " --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir}"
+	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir"
+	echo "\t --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} \n"
+
 	echo "-f attempts to Fix some problems w/ sudo"
-	echo "--v 1 adds Verbosity"
+	echo "--v 1 adds Verbosity\n"
 
 	echo "--mp, --md, --ms:self-explanatory opts 4 -r" 
-	echo "potentially dangerous, so disabled by default"
+	echo "\t potentially dangerous, so disabled by default"
 }
 
 ijk() {

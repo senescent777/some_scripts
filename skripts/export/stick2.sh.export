@@ -5,8 +5,6 @@
 
 post=stable
 b=1
-gg=$(sudo which gpg)
-gv=$(sudo which gpgv)
 
 usage() {
 	echo "$0 [-t <type>] [--v <verbosity>] [-b <sign_or_not>]"
@@ -28,12 +26,11 @@ parse_opts_real() {
 		;;
 	esac
 }
+
 check_params() {
-	local check_g=1
 
 	case "${1}" in
 		0)
-			check_g=0
 		;;
 		1)
 		;;
@@ -45,13 +42,11 @@ check_params() {
 		;;
 	esac
 
-
-	if [ "${check_g}" -eq 1 ] ; then 
-	fi
 }
 
 part1() {
 	sudo cp "${1}" "${1}"."${2}"
+	[ "$?" -eq 0 ] || echo "no such thing as ${1}"
 	mk_bkup "${TARGET_archdir}"/"${1}"."${2}"	
 }
 
@@ -78,7 +73,7 @@ part3() {
 			${gg} -u "${CONF_kay2name}" -sb ./"${1}"
 		;;
 		2)
-			${gg} -r "${CONF_kay2name}" -se ./"${1}"
+			${gg} -r "${CONF_kay2name}" --symmetric -se ./"${1}"
 		;;
 	esac
 
@@ -100,6 +95,7 @@ parse_opts "${1}" "${2}"
 parse_opts "${3}" "${4}"
 parse_opts "${5}" "${6}"
 
+enforce_deps
 check_params "${b}"
 
 sudo mount /dev/"${TARGET_backup_part}" "${TARGET_archdir0}"

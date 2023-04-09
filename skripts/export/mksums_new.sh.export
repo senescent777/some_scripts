@@ -12,27 +12,7 @@ parse_opts_real() {
 	echo "parse_opts_real()"
 }
 
-gg=$(sudo which gpg)
-gv=$(sudo which gpgv)
-sh5=$(sudo which sha512sum)
-
-if [ x"${gg}" != "x" ] ; then 
-	echo "gg=${gg}"
-else
-	if [ z"{TARGET_pkgdir}" != "z" ] ; then 
-		echo "cd ./${CONF_pkgsdir2}"
-		echo "sudo tar -jxvf ./*.bz2"
-		echo "sudo dpkg -i ./${TARGET_pkgdir}/lib*.deb"
-		echo "rm ./${TARGET_pkgdir}/lib*.deb"
-		echo "sudo dpkg -i ./${TARGET_pkgdir}/*.deb"
-		echo "sudo rm ./${TARGET_pkgdir}/*.deb"	
-	else
-		echo "sudo apt-get install gpg*"	
-	fi
-
-	exit 666
-fi
-
+enforce_deps
 
 single_param() {
 	case "${1}" in
@@ -107,7 +87,7 @@ part1() {
 part2_5() {
 	sudo chmod a+w "${TARGET_DIGESTS_DIR}"
 	sudo "${TARGET_DIGESTS_file}".*
-	sha512sum "${TARGET_pad_dir}"/*.sh >> "${TARGET_DIGESTS_file}".2
+	${sh5} "${TARGET_pad_dir}"/*.sh >> "${TARGET_DIGESTS_file}".2
 }
 
 part2() {

@@ -141,7 +141,6 @@ copy_main() {
 	sudo chown root:root "${2}"/*.bz2
 
 }
-
 copy_conf() {
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
@@ -261,9 +260,19 @@ after_bl() {
 	sudo chmod -R u+w "${CONF_target}"/"${TARGET_DIGESTS_dir}"
 	sudo chown -R 1000:1000 "${CONF_target}"/isolinux/*
 	sudo chmod -R a+w "${CONF_target}"/isolinux/*
+
+	sudo chmod -R a+w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+	sudo chown -R 1000:1000 "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+	sudo chmod -R a+w "${CONF_tmpdir}"
+	sudo chown -R 1000:1000 "${CONF_tmpdir}"
 	echo $?
 
 	sudo cp -a "${CONF_BASEDIR}"/"${CONF_pkgsdir2}" "${CONF_tmpdir}" 
 
 	sudo touch "${CONF_target}"/"${TARGET_pad_dir}"/*
+
+	sudo chmod -R go-w "${CONF_tmpdir}"
+	sudo chown root:root "${CONF_tmpdir}"
+	sudo chmod -R "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+	sudo chown root:root "${CONF_BASEDIR}"/"${CONF_pkgsdir2}" 	
 }

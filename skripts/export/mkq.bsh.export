@@ -10,9 +10,8 @@ dir=""
 [ z"${TARGET_pad2}" != "z" ] || exit 44
 [ w"${TARGET_DIGESTS_file0}" != "w" ] || exit 55
 
-lokal_h="TARGET_pad_bak TARGET_pad_dir TARGET_DIGESTS TARGET_DT"
-
 usage() {
+	echo "prepare dirs 4 mf.bsh"
 	echo "$0 --in <input dir> [--v <verbosity leVel>]"
 }
 
@@ -44,6 +43,9 @@ sssr() {
 }
 
 mutilate() {
+
+	local lokal_h="TARGET_pad_bak TARGET_pad_dir TARGET_DIGESTS TARGET_DT"
+
 	sudo touch "${1}"/"${3}"
 	sudo chmod a+w "${1}"/"${3}"
 	head -n 1 "${1}"/"${2}" > "${1}"/"${3}"
@@ -58,17 +60,51 @@ mutilate() {
 	sudo chmod a-w  "${1}"/"${3}"
 }
 
+desecrate() {
+	if [ -s "${1}"/mf.conf ] ; then 
+		. "${1}"/mf.conf
+		olddir=$(pwd)
+
+		cd "${CONF_BASEDIR}"/lib/ect
+		local flist=$(find . -type f)
+		cd "${olddir}"
+
+		for d in ${MF_g3} ; do
+			for f in ${flist} ; do
+				if [ -s "${1}"/"${d}"/"${f}" ] ; then 
+					sudo mv "${1}"/"${d}"/"${f}" "${1}"/"${d}"/"${f}".OLD
+				fi
+
+				sudo cp "${CONF_BASEDIR}"/lib/ect/"${f}" "${1}"/"${d}"/"${f}"
+			done
+		done	
+	fi
+}
+
+extras_part1() {
+	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/patch*	
+}
+
+sums_part() {
+	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0/"${TARGET_DIGESTS_file0}".*
+	sudo cp "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".2* "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
+	sudo cp "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".4 "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
+	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/*.conf
+	sudo cp "${CONF_target}"/"${TARGET_pad_dir}"/devuan.conf "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"
+}
+
+desecrate "${dir}"
+
+extras_part1
 [ -d "${CONF_BASEDIR}"/lib/mkq ] && sudo cp -a "${CONF_BASEDIR}"/lib/mkq/* "${dir}"
+
+mutilate "${dir}" patch0 patch.sh
 
 for f in ${TARGET_patch_list_1} ; do 
 	sssr "${dir}" "${f}" "${TARGET_patch_name}"/"${TARGET_pad2}" 
 done
 
-sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0/"${TARGET_DIGESTS_file0}".*
-sudo cp "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".2* "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
-sudo cp "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".4 "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
-sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/*.conf
-sudo cp "${CONF_target}"/"${TARGET_pad_dir}"/devuan.conf "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"
+sums_part
 
 
 for f in ${TARGET_patch_list_3} ; do 

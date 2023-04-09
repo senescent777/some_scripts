@@ -62,6 +62,11 @@ mk_bkup() {
 	fi
 }
 
+gg=$(sudo which gpg)
+gv=$(sudo which gpgv)
+sh5=$(sudo which sha512sum)
+gi=$(sudo which genisoimage)
+
 slaughter0() {
 	local fn2
 	local ts2
@@ -70,4 +75,94 @@ slaughter0() {
 	ts2=$(sha512sum ${fn2})
 
 	echo ${ts2} | awk '{print $1,$2}' >> "$2"
+}
+
+enforce_deps() {
+	local doIt=0
+	local doIt2
+
+	if [ z"{TARGET_pkgdir}" != "z" ] ; then
+		doIt2=1
+	else
+		doIt2=2
+	fi
+
+	if [ x"${gg}" != "x" ] ; then 
+	else
+		echo "sudo apt-get install gpg*"
+		doIt="${doIt2}"
+	fi
+
+
+	if [ y"${gv}" != "y" ] ; then 
+	else
+		echo "sudo apt-get install gpgv*"
+		doIt="${doIt2}"
+	fi
+
+	if [ z"{sh5}" != "z" ] ; then 
+	else
+		doIt="${doIt2}"
+	fi
+	
+	if [ w"${gi}" != "w" ] ; then
+	else
+		echo "no genisoimage"
+		doIt="${doIt2}"
+	fi	
+
+	case "${doIt}" in 
+		0)
+		;;
+		1)
+			echo "cd ./${CONF_pkgsdir2}"
+			echo "sudo tar -jxvf ./*.bz2"
+
+			echo -n "for f in "
+			echo -n "$"
+			echo -n "(ls ${CONF_pkgsdir2}/*.deb) ; do "
+			echo -n "${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} "
+			echo -n "$"
+			echo -n "f.sig "
+			echo -n "$"
+			echo "f; done\n"
+
+			echo "sudo dpkg -i ./${TARGET_pkgdir}/lib*.deb"
+			echo "rm ./${TARGET_pkgdir}/lib*.deb"
+			echo "sudo dpkg -i ./${TARGET_pkgdir}/*.deb"
+			echo "sudo rm ./${TARGET_pkgdir}/*.deb"	
+		;;
+		2)
+			echo "sudo apt-get update;sudo apt-get install gpg* wodim genisoimage squashfs-utils"
+		;;
+		*)
+			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+		;;
+	esac
+
+	[ "${doIt}" -gt 0 ] && exit 666
+}
+
+inst_dep() {
+	echo "inst.dep ${1}"
+	
+	case "${1}" in
+		0)
+			echo "sudo apt-get install genisoimage wodim gpg*"
+		;;
+		1)
+			for f in $(ls "${CONF_pkgsdir2}"/*.deb) ; do
+				${gv} --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${f}".sig "${f}"
+			done
+
+			if [ "$?" -eq 0 ] ; then 
+				sudo dpkg -i "${CONF_pkgsdir2}"/*.deb
+			fi
+		;;
+		*)
+			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+		;;
+	esac
+
+	exit 666
 }
