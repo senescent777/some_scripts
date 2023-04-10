@@ -1,4 +1,4 @@
-#VAIH:tsummien rakentelu paloissa , yhteistyössä muiden skriptien kanssa
+#VAIH:tsummien rakentelu paloissa , yhteistyössä muiden skriptien kanssa v?
 
 mangle_conf() {
 }
@@ -273,6 +273,6 @@ after_bl() {
 
 	sudo chmod -R go-w "${CONF_tmpdir}"
 	sudo chown root:root "${CONF_tmpdir}"
-	sudo chmod -R "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+	sudo chmod -R  go-w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
 	sudo chown root:root "${CONF_BASEDIR}"/"${CONF_pkgsdir2}" 	
 }

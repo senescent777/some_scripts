@@ -34,8 +34,9 @@ tpop "${3}" "${4}"
 
 case "${cmd}" in
 	--i)
+		for f in "${TARGET_Dkname1}" "${TARGET_Dkname2}" "${TARGET_Dkname1}".secret "${TARGET_Dkname2}".secret ; do
 		
-		for f in ${TARGET_Dkeylist} ; do
+			echo "dbg: ${gg} --import ${ridk}/${f}"
 			${gg} --import "${ridk}"/"${f}"
 		done
 	;;

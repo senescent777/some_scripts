@@ -2,6 +2,10 @@ sh5=$(sudo which sha512sum)
 sh5=$(sudo which sha512sum)
 [ -x ${sh5} ] || echo "install sha512sum !!!"
 
+gg=$(sudo which gpg)
+gv=$(sudo which gpgv)
+gi=$(sudo which genisoimage)
+
 griffindor() {
 	pwd
 	local of2
@@ -65,10 +69,6 @@ mk_bkup() {
 	fi
 }
 
-gg=$(sudo which gpg)
-gv=$(sudo which gpgv)
-gi=$(sudo which genisoimage)
-
 slaughter0() {
 	local fn2
 	local ts2
@@ -84,15 +84,15 @@ enforce_deps() {
 
 	local doIt=0
 	local doIt2
-	local pkgsdir=./"{CONF_pkgsdir2}"
+	local pkgsdir="{CONF_pkgsdir2}"
 
 
-	if [ -d "${pkgsdir}" ] ; then 
+	if [ -d ./"${pkgsdir}" ] ; then 
 		doIt2=1
 	else
 		pkgsdir="${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
 
-		if [ -d  "${pkgsdir}" ] ; then 
+		if [ -d "${pkgsdir}" ] ; then 
 			doIt2=1
 		else
 			doIt2=2
