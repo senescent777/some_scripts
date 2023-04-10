@@ -1,7 +1,0 @@
-#!/bin/sh
-usage() {
-	echo "$0 --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
-	exit 666
-}
-
-
