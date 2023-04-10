@@ -3,7 +3,6 @@
 . ./common.conf
 . ./common_funcs.sh
 
-
 usage() {
 	echo "$0 --kdir <kdir> --i Imports keys from <kdir>"
 	echo "$0 --kdir <kdir> --e Exports keys to <kdir>"
@@ -33,10 +32,10 @@ tpop "${3}" "${4}"
 [ x"${ridk}" != x ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 [ -d "${ridk}" ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 
-
 case "${cmd}" in
 	--i)
-		for f in "${TARGET_Dkname1}" "${TARGET_Dkname2}" "${TARGET_Dkname1}".secret "${TARGET_Dkname2}".secret ; do
+		
+		for f in ${TARGET_Dkeylist} ; do
 			${gg} --import "${ridk}"/"${f}"
 		done
 	;;
@@ -49,9 +48,7 @@ case "${cmd}" in
 		sudo rm "${ridk}"/"${TARGET_Dkname2}"*
 
 		${gg} --export "${CONF_kay1name}" > "${ridk}"/"${TARGET_Dkname1}"
-		${gg} --export-secret-keys "${CONF_kay1name}" > "${ridk}"/"${TARGET_Dkname1}".secret
 		${gg} --export "${CONF_kay2name}" > "${ridk}"/"${TARGET_Dkname2}"
-		${gg} --export-secret-keys "${CONF_kay2name}" > "${ridk}"/"${TARGET_Dkname2}".secret
 			
 		sudo chmod a-w "${ridk}"
 		ls -las "${ridk}"

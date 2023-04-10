@@ -34,21 +34,30 @@ parse_opts "${3}" "${4}"
 parse_opts "${5}" "${6}"
 parse_opts "${7}" "${8}"
 
-if [ -d ./"${lsrcdir}" ] ; then
-else
-	echo "no such thing as ${lsrcdir}"
-	exit 666
-fi
+check_params() {
+	if [ -d ./"${lsrcdir}" ] ; then
+	else
+		echo "no such thing as ${lsrcdir}"
+		exit 666
+	fi
+	
+	if [ x"${ltarget}" != "x" ] ; then 
 
-if [ -s "${ltarget}" ] ; then
-	exit 666
-fi
+		if [ -s out/"${ltarget}" ] ; then
+			echo "out/${ltarget} already exists"
+			exit 666
+		fi
+	else
+		exit 666
+	fi
 
-if [ x"${bloader}" != "x" ] ; then 
-else
-	bloader="${CONF_bloader}"
-fi
+	if [ x"${bloader}" != "x" ] ; then 
+	else
+		bloader="${CONF_bloader}"
+	fi
+}
 
+check_params
 enforce_deps
 [ y"${gv}" != "y" ] || inst_dep 0
 [ x"${gi}" != "x" ] || inst_dep 1
@@ -57,6 +66,10 @@ enforce_deps
 mk_pad_bak() {
 	[ -s ./"${1}" ] && sudo mv "${1}" "${1}".OLD
 	
+	[ -d ../out ] || sudo mkdir ../out
+	sudo chown 1000:1000 ../out
+	sudo chmod a+w  ../out
+
 	sudo chown -R root:root ./*
 	sudo chmod -R a-w "${TARGET_pad_dir}"/*
 	sudo chmod a-w "${TARGET_pad_dir}"/ 
@@ -67,11 +80,11 @@ mk_pad_bak() {
 }
 
 cd "${lsrcdir}"
+
 mk_pad_bak "${TARGET_pad_bak_file}" "${TARGET_pad_dir}"
 sleep 1
 
-sudo chmod a+w .
-sudo chmod a+w ..	
+sudo chmod a+w ../out	
 
 case "${bloader}" in
 	isolinux)
@@ -80,7 +93,7 @@ case "${bloader}" in
 		sudo chown -R 1000:1000  ./isolinux
 
 		
-		${gi} -o ../"${ltarget}" ${CONF_gi_opts} .
+		${gi} -o ../out/"${ltarget}" ${CONF_gi_opts} .
 
 		sudo chmod go-w ./isolinux
 		sudo chmod -R go-w  ./isolinux
@@ -92,7 +105,7 @@ case "${bloader}" in
 		gmk=$(sudo which grub-mkrescue)
 		[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666
 		
-		echo "sudo ${gmk} -o ../${ltarget} <OTHER_OPTS> . "
+		echo "sudo ${gmk} -o ../out/${ltarget} <OTHER_OPTS> . "
 	;;
 	*)
 		echo "bl= ${bloader}"
@@ -100,7 +113,9 @@ case "${bloader}" in
 	;;
 esac
 
-sudo chmod o-w .
-sudo chmod o-w ..
+sudo chmod go-w .
+sudo chmod go-w ..
+sudo chmod o-w ../out
+
 sleep 1
 echo "stick.sh ?"

@@ -41,13 +41,12 @@ check_params() {
 			exit 666 
 		;;
 	esac
-
 }
 
 part1() {
 	sudo cp "${1}" "${1}"."${2}"
 	[ "$?" -eq 0 ] || echo "no such thing as ${1}"
-	mk_bkup "${TARGET_archdir}"/"${1}"."${2}"	
+	mk_bkup "${TARGET_archdir}"/"${1}"."${2}"
 }
 
 part2() {	
@@ -56,10 +55,12 @@ part2() {
 		opts="-v"
 	fi
 
-	sudo tar "${opts}" -jcpf "${1}" "${CONF_scripts_dir}" "${CONF_BASEDIR}"/"${CONF_stg0file}" "${CONF_BASEDIR}"/"${CONF_stg0file}".export "${CONF_BASEDIR}"/lib/export/*.export 
+	sudo tar "${opts}" -jcpf "${1}" "${CONF_scripts_dir}" "${CONF_BASEDIR}"/"${CONF_stg0file}" "${CONF_BASEDIR}"/"${CONF_stg0file}".export "${CONF_BASEDIR}"/lib 
 }
 
 part3() {
+	[ x"${1}" != "x" ] || exit 666
+	[ -s ${1} ] || exit 666
 	local g
 
 	for g in ${1} ${1}.sig ${1}.gpg ; do
@@ -73,7 +74,11 @@ part3() {
 			${gg} -u "${CONF_kay2name}" -sb ./"${1}"
 		;;
 		2)
-			${gg} -r "${CONF_kay2name}" --symmetric -se ./"${1}"
+			${gg} -u "${CONF_kay2name}" --symmetric -se ./"${1}"
+
+			if [ $? -gt 0 ] ; then 
+				sudo rm ./"${1}"
+			fi
 		;;
 	esac
 
@@ -98,14 +103,17 @@ parse_opts "${5}" "${6}"
 enforce_deps
 check_params "${b}"
 
-sudo mount /dev/"${TARGET_backup_part}" "${TARGET_archdir0}"
+
+	 sudo mount /dev/"${TARGET_backup_part}" "${TARGET_archdir0}"
 
 if [ "$?" -eq 0 ] ; then 
 else
 	echo "sudo umount ${TARGET_archdir0}";exit 555
 fi
 
-sudo chmod a+w .
+sudo chmod a+w ./out
+sudo chown 1000:1000 .
+cd ./out
 
 part1 "${TARGET_pad_bak_file}" "${post}"
 
@@ -116,5 +124,9 @@ for f in "${TARGET_pad_bak_file}"."${post}" "${TARGET_scripts_bak_file}"."${q}" 
 	part3 "${f}" "${TARGET_archdir}" "${b}"
 done
 
+cd ..
 sudo umount "${TARGET_archdir0}"
+
 sudo chmod a-w .
+sudo chmod a-w ./out
+sudo chown root:root ./out

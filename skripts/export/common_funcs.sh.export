@@ -1,24 +1,27 @@
-griffindor() {
+sh5=$(sudo which sha512sum)
+sh5=$(sudo which sha512sum)
+[ -x ${sh5} ] || echo "install sha512sum !!!"
+
 griffindor() {
 	pwd
 	local of2
 
 	if [ x"$1" != "x" ] ; then 
-		of2="$1"
+		of2="${1}"
 	else
 		of2="${TARGET_DIGESTS_file}".1
 	fi
 
-	sha512sum ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > "${of2}"
+	${sh5} ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > "${of2}"
 }
 
 
 slithering() {
-	sha512sum ./boot/* > "${TARGET_DIGESTS_file}".1
+	${sh5} ./boot/* > "${TARGET_DIGESTS_file}".1
 }
 
 malfoy() {
-	sha512sum ./boot/* > "${1}"
+	${sh5} ./boot/* > "${1}"
 }
 
 parse_opts() {
@@ -64,7 +67,6 @@ mk_bkup() {
 
 gg=$(sudo which gpg)
 gv=$(sudo which gpgv)
-sh5=$(sudo which sha512sum)
 gi=$(sudo which genisoimage)
 
 slaughter0() {
@@ -78,13 +80,23 @@ slaughter0() {
 }
 
 enforce_deps() {
+	pwd
+
 	local doIt=0
 	local doIt2
+	local pkgsdir=./"{CONF_pkgsdir2}"
 
-	if [ z"{TARGET_pkgdir}" != "z" ] ; then
+
+	if [ -d "${pkgsdir}" ] ; then 
 		doIt2=1
 	else
-		doIt2=2
+		pkgsdir="${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+
+		if [ -d  "${pkgsdir}" ] ; then 
+			doIt2=1
+		else
+			doIt2=2
+		fi
 	fi
 
 	if [ x"${gg}" != "x" ] ; then 
@@ -115,22 +127,30 @@ enforce_deps() {
 		0)
 		;;
 		1)
-			echo "cd ./${CONF_pkgsdir2}"
+		
+
+			echo "cd ${CONF_keys_dir}"
+
+			echo -n "for f in ";echo -n ${TARGET_Dkeylist}
+			echo -n " ; do ${gg} --import ";echo -n "$";echo "{f}; done "
+		
+			echo "cd ${pkgsdir}"
+			echo "ls *.deb || ls *.bz2"
+
+			echo -n "for f in ";echo -n "$"
+			echo -n "(ls ./{*.deb,*.bz2}) ; do "
+			echo -n "${gv} --keyring ${CONF_keys_dir}/${TARGET_Dkname2} "
+			echo -n "$";echo -n "f.sig ";echo -n "$"
+			echo "f; done"
+
+			echo -n "[ ";echo -n "$";echo "?==0 ] || exit"
+			echo "sudo dpkg -i ./*.deb"
+
 			echo "sudo tar -jxvf ./*.bz2"
-
-			echo -n "for f in "
-			echo -n "$"
-			echo -n "(ls ${CONF_pkgsdir2}/*.deb) ; do "
-			echo -n "${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} "
-			echo -n "$"
-			echo -n "f.sig "
-			echo -n "$"
-			echo "f; done\n"
-
-			echo "sudo dpkg -i ./${TARGET_pkgdir}/lib*.deb"
-			echo "rm ./${TARGET_pkgdir}/lib*.deb"
-			echo "sudo dpkg -i ./${TARGET_pkgdir}/*.deb"
-			echo "sudo rm ./${TARGET_pkgdir}/*.deb"	
+			echo "sudo dpkg -i .${TARGET_pkgdir}/lib*.deb"
+			echo "rm .${TARGET_pkgdir}/lib*.deb"
+			echo "sudo dpkg -i .${TARGET_pkgdir}/*.deb"
+			echo "sudo rm .${TARGET_pkgdir}/*.deb"	
 		;;
 		2)
 			echo "sudo apt-get update;sudo apt-get install gpg* wodim genisoimage squashfs-utils"

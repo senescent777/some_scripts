@@ -9,14 +9,13 @@ u=""
 tfile=""
 
 usage() {
+	echo "$0 <directory containing ${TARGET_patch_name}.tar.bz2> <gpg_mode> <dbg_level>"
 }
 
 	usage
 	exit 666
-else
 	lsrc="${1}"
 	mode="${2}"
-fi
 
 [ -d "${lsrc}" ] || exit 666
 
@@ -29,6 +28,7 @@ fi
 tfile0="${TARGET_patch_name}".tar.bz2
 tfile="${lsrc}"/"${tfile0}"
 kalat="${tfile0}"
+
 
 case "${2}" in
 	0)
@@ -52,6 +52,7 @@ case "${2}" in
 	;;	
 esac
 
+
 sudo chown root:root "${lsrc}"
 sudo chmod go-w "${lsrc}"
 
@@ -66,8 +67,22 @@ for kala in ${kalat} ; do
 	sudo cp "${lsrc}"/"${kala}" "${TARGET_archdir0}"/"${TARGET_patch_dir}"
 done 
 
-cd /tmp;sudo tar -v -jf "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${tfile0}" -x ./"${TARGET_pad2}"/patch.sh
-sudo mv /tmp/"${TARGET_pad2}"/patch.sh "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+sudo chown 1000:1000 "${CONF_tmpdir}"/out
+sudo chmod a+w  "${CONF_tmpdir}"/out
+cd "${CONF_tmpdir}"/out
 
+sudo tar -jf "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${tfile0}" -x ./"${TARGET_pad2}"/patch.sh
+sudo chown -R 1000:1000 ./"${TARGET_pad2}"
+sudo chmod a+w ./"${TARGET_pad2}"/*
+
+if [ "${2}" -gt 0 ] ; then
+	${gg} -u "${CONF_kay2name}" -s -armor ./"${TARGET_pad2}"/patch.sh
+
+fi
+
+sudo mv ./"${TARGET_pad2}"/patch.sh* "${TARGET_archdir0}"/"${TARGET_patch_dir}"
 sudo chmod go-w "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+
 sudo umount "${TARGET_archdir0}"
+sudo chown root:root "${CONF_tmpdir}"/out
+sudo chmod go-w  "${CONF_tmpdir}"/out

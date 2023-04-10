@@ -61,6 +61,7 @@ mutilate() {
 }
 
 desecrate() {
+
 	if [ -s "${1}"/mf.conf ] ; then 
 		. "${1}"/mf.conf
 		olddir=$(pwd)
@@ -82,21 +83,31 @@ desecrate() {
 }
 
 extras_part1() {
+
 	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/patch*	
+
 }
 
 sums_part() {
 	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0/"${TARGET_DIGESTS_file0}".*
+
+
 	sudo cp "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".2* "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
 	sudo cp "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".4 "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
 	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/*.conf
+
 	sudo cp "${CONF_target}"/"${TARGET_pad_dir}"/devuan.conf "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"
+
 }
 
+sudo chmod -R 0755 "${CONF_BASEDIR}"/lib
+sudo chown -R root:root "${CONF_BASEDIR}"/lib
+sudo chattr -R +ui "${CONF_BASEDIR}"/lib
 desecrate "${dir}"
 
 extras_part1
 [ -d "${CONF_BASEDIR}"/lib/mkq ] && sudo cp -a "${CONF_BASEDIR}"/lib/mkq/* "${dir}"
+
 
 mutilate "${dir}" patch0 patch.sh
 
@@ -111,4 +122,5 @@ for f in ${TARGET_patch_list_3} ; do
 	sssr "${dir}" "${f}" "${TARGET_patch_name}"/"${TARGET_pad2}" 
 done
 
+sudo chmod -R a-w  "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"
 echo "stg0 | mf"

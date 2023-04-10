@@ -18,7 +18,7 @@ single_param() {
 	case "${1}" in
 		--iso)
 			sudo chmod o+w "$(pwd)"
-			${gg} -u "${CONF_kay1name}" -sb ./*.iso
+			${gg} -u "${CONF_kay2name}" -sb ./*.iso
 			[ "$?" -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
 			sudo chmod o-w "$(pwd)"
 			exit 666
@@ -27,14 +27,21 @@ single_param() {
 			[ x"${CONF_BASEDIR}" != x ] || exit 664
 			[ x"${CONF_pkgsdir2}" != x ] || exit 665
 
-			sudo chmod o+w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+			sudo chmod o+w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}" || exit 667
+			sudo chattr -ui "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig || exit 667
+			sudo rm "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig || exit 667
+	
 			cd "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
 
-			${gg} -u "${CONF_kay1name}" -sb ./*.deb
-			${gg} -u "${CONF_kay1name}" -sb ./*.bz2
+			${gg} -u "${CONF_kay2name}" -sb ./*.deb
+			[ "$?" -eq 0 ]  && ${gg} -u "${CONF_kay2name}" -sb ./*.bz2
 			[ "$?" -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
 			
-			sudo chmod o-w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+			sudo chmod 0444 "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig
+			sudo chown root:root "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig
+			sudo chattr +ui  "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig
+
+			sudo chmod a-w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
 			exit 666
 		;;
 		--h)
