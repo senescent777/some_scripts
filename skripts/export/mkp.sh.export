@@ -76,7 +76,7 @@ sudo chown -R 1000:1000 ./"${TARGET_pad2}"
 sudo chmod a+w ./"${TARGET_pad2}"/*
 
 if [ "${2}" -gt 0 ] ; then
-	${gg} -u "${CONF_kay2name}" -s -armor ./"${TARGET_pad2}"/patch.sh
+	${gg} -u "${CONF_kay2name}" -s --clearsign ./"${TARGET_pad2}"/patch.sh
 
 fi
 

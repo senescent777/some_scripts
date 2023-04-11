@@ -55,7 +55,8 @@ part2() {
 		opts="-v"
 	fi
 
-	sudo tar "${opts}" -jcpf "${1}" "${CONF_scripts_dir}" "${CONF_BASEDIR}"/"${CONF_stg0file}" "${CONF_BASEDIR}"/"${CONF_stg0file}".export "${CONF_BASEDIR}"/lib 
+	sudo tar "${opts}" -jcpf "${1}" "${CONF_scripts_dir}" "${CONF_BASEDIR}"/"${CONF_stg0file}" "${CONF_BASEDIR}"/lib 
+	sudo tar "${opts}" -jcpf "${1}".e "${CONF_scripts_dir}"/export "${CONF_BASEDIR}"/"${CONF_stg0file}".export
 }
 
 part3() {
@@ -120,12 +121,14 @@ part1 "${TARGET_pad_bak_file}" "${post}"
 q=$(date +%F)
 part2 "${TARGET_scripts_bak_file}"."${q}"
 
-for f in "${TARGET_pad_bak_file}"."${post}" "${TARGET_scripts_bak_file}"."${q}" ; do 
+for f in "${TARGET_pad_bak_file}"."${post}" "${TARGET_scripts_bak_file}"."${q}" "${TARGET_scripts_bak_file}"."${q}".e; do 
 	part3 "${f}" "${TARGET_archdir}" "${b}"
 done
 
 cd ..
-sudo umount "${TARGET_archdir0}"
+	ls -las ${TARGET_archdir};sleep 10
+
+sudo umount ${TARGET_archdir0}
 
 sudo chmod a-w .
 sudo chmod a-w ./out

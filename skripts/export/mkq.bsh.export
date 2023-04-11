@@ -76,7 +76,7 @@ desecrate() {
 					sudo mv "${1}"/"${d}"/"${f}" "${1}"/"${d}"/"${f}".OLD
 				fi
 
-				sudo cp "${CONF_BASEDIR}"/lib/ect/"${f}" "${1}"/"${d}"/"${f}"
+				sudo cp -a "${CONF_BASEDIR}"/lib/ect/"${f}" "${1}"/"${d}"/"${f}"
 			done
 		done	
 	fi
@@ -92,11 +92,11 @@ sums_part() {
 	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0/"${TARGET_DIGESTS_file0}".*
 
 
-	sudo cp "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".2* "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
-	sudo cp "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".4 "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
+	sudo cp -a "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".2* "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
+	sudo cp -a "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".4 "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
 	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/*.conf
 
-	sudo cp "${CONF_target}"/"${TARGET_pad_dir}"/devuan.conf "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"
+	sudo cp -a "${CONF_target}"/"${TARGET_pad_dir}"/devuan.conf "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"
 
 }
 
@@ -106,7 +106,13 @@ sudo chattr -R +ui "${CONF_BASEDIR}"/lib
 desecrate "${dir}"
 
 extras_part1
-[ -d "${CONF_BASEDIR}"/lib/mkq ] && sudo cp -a "${CONF_BASEDIR}"/lib/mkq/* "${dir}"
+
+if [ -d "${CONF_BASEDIR}"/lib/mkq ] ; then 
+	sudo rm "${dir}"/extras/"${TARGET_pad2}"/upload_lite*
+	sudo rm "${dir}"/extras/"${TARGET_pad2}"/patch*
+
+	sudo cp -a "${CONF_BASEDIR}"/lib/mkq/* "${dir}"
+fi
 
 
 mutilate "${dir}" patch0 patch.sh
