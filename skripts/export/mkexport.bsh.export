@@ -1,34 +1,42 @@
 #!/bin/sh
-mengle() {
-	echo "mengle(${1})";sleep 1
+
+mfngle() {
+
 	[ x"${1}" != "x" ] || exit
-	[ -s "${1}".export ] && mv "${1}".export "${1}".export.old
+	[ -s ${1}.export ] && sudo mv ${1}.export ${1}.export.old
 
-	sudo touch "${1}".export
-	sudo chmod a+w "${1}".export
+	sudo touch ${1}.export
+	sudo chmod a+w ${1}.export
 
-	head -n 1 "${1}" >> "${1}".export
+	head -n 1 ${1} >> ${1}.export
 
-	sudo chmod a-w "${1}".export
+	sudo chmod a-w ${1}.export
 }
 
-if [ -d "${1}" ] ; then
-	[ -s "${1}"/export ] || mkdir -p "${1}"/export
+
+if [ -d ./${1} ] ; then
+	[ -d ./${1}/export ] || mkdir -p ./${1}/export
+	sudo chmod a+w ./${1}/export
+
+	for e in ash bsh ; do
+		for f in $(find ./${1} -name *.${e}) ; do
+			mfngle ${f}
+			sudo mv ${f}.export ./${1}/export
+		done
+	done
 
 
-	for f in $(find ${1} -name '*.sh') ; do mengle "${f}" ; done
-	sudo mv "${1}"/*.sh.export "${1}"/export
+	for f in $(find ./${1} -name '*.sh') ; do
+		mfngle ${f} 
+		sudo mv  ${f}.export ./${1}/export
+	done
 
-	for f in $(find ${1} -name '*.ash') ; do mengle "${f}" ; done
-	sudo mv "${1}"/*.ash.export "${1}"/export	
-	
-	for f in $(find ${1} -name '*.bsh') ; do mengle "${f}" ; done
-	sudo mv "${1}"/*.bsh.export "${1}"/export
-
+	sudo chmod go-w  ./${1}/export
 else
-	if [ -s "${1}" ] ; then
-		[ -d ./export ] || sudo mkdir -p ./export
-		mengle "${1}"
+	if [ -s ./${1} ] ; then
+		[ -d ./export ] || sudo mkdir -p ./export		
+
+		mfngle ./${1}
 	else
 		echo "https://www.youtube.com/watch?v=PjotFePip2M";exit 666
 	fi

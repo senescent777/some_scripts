@@ -33,7 +33,8 @@ parse_opts "${3}" "${4}"
 [ x"${dir}" != "x" ] || exit 66
 [ -d "${dir}" ] || exit 77
 
-sssr() {
+decapitate() {
+	[ -d "${1}" ] || exit 666
 
 	if [ -s "${1}"/"${3}"/"${2}" ] ; then 
 		sudo rm "${1}"/"${3}"/"${2}"
@@ -44,89 +45,22 @@ sssr() {
 
 mutilate() {
 
+	[ -d "${1}" ] || exit 666
+	[ -s "${1}"/"${2}" ] || exit 666
+
 	local lokal_h="TARGET_pad_bak TARGET_pad_dir TARGET_DIGESTS TARGET_DT"
 
 	sudo touch "${1}"/"${3}"
 	sudo chmod a+w "${1}"/"${3}"
 	head -n 1 "${1}"/"${2}" > "${1}"/"${3}"
-
+	
 	for f in ${lokal_g} ; do
 	done
 
 
 	for f in ${lokal_h} ; do
 	done
-
+	
 	sudo chmod a-w  "${1}"/"${3}"
 }
 
-desecrate() {
-
-	if [ -s "${1}"/mf.conf ] ; then 
-		. "${1}"/mf.conf
-		olddir=$(pwd)
-
-		cd "${CONF_BASEDIR}"/lib/ect
-		local flist=$(find . -type f)
-		cd "${olddir}"
-
-		for d in ${MF_g3} ; do
-			for f in ${flist} ; do
-				if [ -s "${1}"/"${d}"/"${f}" ] ; then 
-					sudo mv "${1}"/"${d}"/"${f}" "${1}"/"${d}"/"${f}".OLD
-				fi
-
-				sudo cp -a "${CONF_BASEDIR}"/lib/ect/"${f}" "${1}"/"${d}"/"${f}"
-			done
-		done	
-	fi
-}
-
-extras_part1() {
-
-	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/patch*	
-
-}
-
-sums_part() {
-	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0/"${TARGET_DIGESTS_file0}".*
-
-
-	sudo cp -a "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".2* "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
-	sudo cp -a "${CONF_target}"/"${TARGET_DIGESTS_dir}"/"${TARGET_DIGESTS_file0}".4 "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/0
-	sudo rm "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"/*.conf
-
-	sudo cp -a "${CONF_target}"/"${TARGET_pad_dir}"/devuan.conf "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"
-
-}
-
-sudo chmod -R 0755 "${CONF_BASEDIR}"/lib
-sudo chown -R root:root "${CONF_BASEDIR}"/lib
-sudo chattr -R +ui "${CONF_BASEDIR}"/lib
-desecrate "${dir}"
-
-extras_part1
-
-if [ -d "${CONF_BASEDIR}"/lib/mkq ] ; then 
-	sudo rm "${dir}"/extras/"${TARGET_pad2}"/upload_lite*
-	sudo rm "${dir}"/extras/"${TARGET_pad2}"/patch*
-
-	sudo cp -a "${CONF_BASEDIR}"/lib/mkq/* "${dir}"
-fi
-
-
-mutilate "${dir}" patch0 patch.sh
-
-for f in ${TARGET_patch_list_1} ; do 
-	sssr "${dir}" "${f}" "${TARGET_patch_name}"/"${TARGET_pad2}" 
-done
-
-sums_part
-
-
-for f in ${TARGET_patch_list_3} ; do 
-	sssr "${dir}" "${f}" "${TARGET_patch_name}"/"${TARGET_pad2}" 
-done
-
-sudo chmod -R a-w  "${dir}"/"${TARGET_patch_name}"/"${TARGET_pad2}"
-echo "stg0 | mf"

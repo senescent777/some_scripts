@@ -98,7 +98,7 @@ for x in ${klist} ; do
 done
 
 bootloader "${CONF_bloader}" "${CONF_BASEDIR}"/"${source2}" "${CONF_target}"/"${TARGET_DIGESTS_dir}"
-after_bl 
+after_bl ${CONF_target} ${CONF_BASEDIR}
 
 cleanup
 

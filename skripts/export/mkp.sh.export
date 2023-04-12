@@ -5,46 +5,48 @@
 
 lsrc=""
 mode=1
-u=""
 tfile=""
 
 usage() {
-	echo "$0 <directory containing ${TARGET_patch_name}.tar.bz2> <gpg_mode> <dbg_level>"
+	echo "$0 --in <directory containing ${TARGET_patch_name}.tar.bz2> [--mode <gpg_mode> ] [ --v <dbg_level> ]"
 }
 
 	usage
 	exit 666
-	lsrc="${1}"
-	mode="${2}"
 
-[ -d "${lsrc}" ] || exit 666
+parse_opts_real() {
+	case ${1} in
+		--in)
+			lsrc=${2}
+		;;
+		-b|--mode)
+			mode=${2}
+		;;
+	esac
+}
 
-if [ "${mode}" -gt 0 ] ; then
-	enforce_deps
-	sudo chown 1000:1000 "${lsrc}"
-	sudo chmod a+w  "${lsrc}"
-fi
+parse_opts ${1} ${2}
+parse_opts ${3} ${4}
+parse_opts ${5} ${6}
+[ -d ${lsrc} ] || exit 666
 
-tfile0="${TARGET_patch_name}".tar.bz2
-tfile="${lsrc}"/"${tfile0}"
-kalat="${tfile0}"
+tfile0=${TARGET_patch_name}.tar.bz2
+tfile=${lsrc}/${tfile0}
+kalat=${tfile0}
 
-
-case "${2}" in
+case ${mode} in
 	0)
 	;;
 	1)
 		kalat="${kalat} ${kalat}.sig" 
-		sudo mv "${tfile}".sig "${tfile}".sig.OLD
-		${gg} -u "${CONF_kay2name}" -sb "${tfile}"
 
+			echo "kalat=${kalat}" 
+			echo "sudo mv ${tfile}.sig ${tfile}.sig.OLD"
+			${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile} 
+		fi	
 	;;
 	2)
 		kalat="${kalat} ${kalat}.gpg" 
-		sudo mv "${tfile}".gpg "${tfile}".gpg.OLD
-
-		${gg} -u "${CONF_kay2name}" --symmetric -se "${tfile}"
-
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M"
@@ -53,36 +55,29 @@ case "${2}" in
 esac
 
 
-sudo chown root:root "${lsrc}"
-sudo chmod go-w "${lsrc}"
+sudo chown root:root ${lsrc}
+sudo chmod go-w ${lsrc}
 
-sudo mount /dev/"${TARGET_backup_part}" "${TARGET_archdir0}" || exit 77
-sudo chmod a+w "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+sudo mount /dev/${TARGET_backup_part} ${TARGET_archdir0} || exit 77
+sudo chmod a+w ${TARGET_archdir0}/${TARGET_patch_dir}
 
 kalat="${kalat} patch.sh"
 
 for kala in ${kalat} ; do 
-	sudo mv "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${kala}" "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${kala}".OLD 
+	sudo mv ${TARGET_archdir0}/${TARGET_patch_dir}/${kala} ${TARGET_archdir0}/${TARGET_patch_dir}/${kala}.OLD 
 
-	sudo cp "${lsrc}"/"${kala}" "${TARGET_archdir0}"/"${TARGET_patch_dir}"
+	sudo cp ${lsrc}/${kala} ${TARGET_archdir0}/${TARGET_patch_dir}
 done 
 
-sudo chown 1000:1000 "${CONF_tmpdir}"/out
-sudo chmod a+w  "${CONF_tmpdir}"/out
-cd "${CONF_tmpdir}"/out
 
-sudo tar -jf "${TARGET_archdir0}"/"${TARGET_patch_dir}"/"${tfile0}" -x ./"${TARGET_pad2}"/patch.sh
-sudo chown -R 1000:1000 ./"${TARGET_pad2}"
-sudo chmod a+w ./"${TARGET_pad2}"/*
+sudo chown 1000:1000 ${CONF_tmpdir}/out
+sudo chmod a+w ${CONF_tmpdir}/out
+cd ${CONF_tmpdir}/out
 
-if [ "${2}" -gt 0 ] ; then
-	${gg} -u "${CONF_kay2name}" -s --clearsign ./"${TARGET_pad2}"/patch.sh
+sudo mv ./${TARGET_pad2}/patch.sh* ${TARGET_archdir0}/${TARGET_patch_dir}
+sudo chmod go-w ${TARGET_archdir0}/${TARGET_patch_dir}
 
-fi
+sudo chown root:root ${CONF_tmpdir}/out
+sudo chmod go-w ${CONF_tmpdir}/out
 
-sudo mv ./"${TARGET_pad2}"/patch.sh* "${TARGET_archdir0}"/"${TARGET_patch_dir}"
-sudo chmod go-w "${TARGET_archdir0}"/"${TARGET_patch_dir}"
-
-sudo umount "${TARGET_archdir0}"
-sudo chown root:root "${CONF_tmpdir}"/out
-sudo chmod go-w  "${CONF_tmpdir}"/out
+sudo umount ${TARGET_archdir0}

@@ -140,6 +140,7 @@ copy_main() {
 	sudo chown root:root "${2}"/*.bz2
 
 }
+
 copy_conf() {
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
@@ -203,13 +204,16 @@ copy_sums() {
 keyz() {
 	[ x"${1}" != "x" ] || exit 2
 
+	sudo chmod o+w "${2}"
+
 	sudo cp "${1}"/"${TARGET_Dkname1}" "${2}"
 	sudo cp "${1}/${TARGET_Dkname2}" "${2}"
-	sudo chmod o+w "${2}"
+
 	sudo rm "${2}"/*.secret
 
-}
+	sudo chmod o-w "${2}"
 
+}
 
 bootloader() {
 	[ x"$1" != "x" ] || exit 2
@@ -255,23 +259,18 @@ bootloader() {
 
 after_bl() {
 
-	sudo chown -R 1000:1000 "${CONF_target}"/"${TARGET_DIGESTS_dir}"
-	sudo chmod -R u+w "${CONF_target}"/"${TARGET_DIGESTS_dir}"
-	sudo chown -R 1000:1000 "${CONF_target}"/isolinux/*
-	sudo chmod -R a+w "${CONF_target}"/isolinux/*
+	sudo chown -R 1000:1000 ${1}/${TARGET_DIGESTS_dir}
+	sudo chmod u+w ${1}/${TARGET_DIGESTS_dir}/"${TARGET_DIGESTS_file0}"* 
+	sudo chmod u+w ${1}/${TARGET_DIGESTS_dir}/*.gpg
 
-	sudo chmod -R a+w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
-	sudo chown -R 1000:1000 "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
-	sudo chmod -R a+w "${CONF_tmpdir}"
-	sudo chown -R 1000:1000 "${CONF_tmpdir}"
-	echo $?
+	sudo touch ${1}/${TARGET_pad_dir}/*
 
-	sudo cp -a "${CONF_BASEDIR}"/"${CONF_pkgsdir2}" "${CONF_tmpdir}" 
+	if [ ! -d ${1}/../out ] ; then 
+		sudo mkdir ${1}/../out
+		sudo chown 1000:1000 ${1}/../out
+		sudo chmod a+w  ${1}/../out
+	fi
 
-	sudo touch "${CONF_target}"/"${TARGET_pad_dir}"/*
-
-	sudo chmod -R go-w "${CONF_tmpdir}"
-	sudo chown root:root "${CONF_tmpdir}"
-	sudo chmod -R  go-w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
-	sudo chown root:root "${CONF_BASEDIR}"/"${CONF_pkgsdir2}" 	
+	sudo chmod  go-w  ${1}
+	sudo chown root:root ${1}
 }

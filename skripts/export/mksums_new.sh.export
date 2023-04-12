@@ -3,7 +3,6 @@
 . ./common.conf
 . ./common_funcs.sh
 
-
 usage() {
 	echo "TODO"
 }
@@ -11,8 +10,6 @@ usage() {
 parse_opts_real() {
 	echo "parse_opts_real()"
 }
-
-enforce_deps
 
 single_param() {
 	case "${1}" in
@@ -50,37 +47,27 @@ single_param() {
 	esac
 }
 
-parse_opts "${1}" "${2}"
-parse_opts "${3}" "${4}"
-
-cd "${CONF_targetdir}" 
-pwd
-
-[ x"${TARGET_DIGESTS_dir}" != x ] || exit 1
-
-if [ ! -d "${TARGET_DIGESTS_dir}" ] ; then 
-	mkdir -p "${TARGET_DIGESTS_dir}"
-fi
-
 part0() {
+	sudo chmod a+w ${TARGET_DIGESTS_dir}
+	
+
 	if [ x"{TARGET_DIGESTS_file}" != "x" ] ; then
-		echo "rm "${TARGET_DIGESTS_file}"* in 5 secs";sleep 5 
-		rm "${TARGET_DIGESTS_file}"*
+		echo "rm ${TARGET_DIGESTS_file}* in 5 secs";sleep 5 
+		rm ${TARGET_DIGESTS_file}*
 	else
 		exit 666
 	fi
 
-	rm "${TARGET_DIGESTS_dir}"/*.sig
-	for i in 1 2 3 4 ; do touch "${TARGET_DIGESTS_file}"."${i}" ; done
+	rm ${TARGET_DIGESTS_dir}/*.sig
+	for i in 1 2 3 4 ; do touch ${TARGET_DIGESTS_file}.${i} ; done
 }
 
-sudo chmod a+w "${TARGET_DIGESTS_dir}";sleep 1
-part0
-
 part1() {
-	if [ -s "${TARGET_DIGESTS_dir}"/SAM.1.0 ] || [ -s "${TARGET_DIGESTS_dir}"/SAM.1.1 ] ; then
-		[ -s "${TARGET_DIGESTS_dir}"/SAM.1.0 ] && sudo mv "${TARGET_DIGESTS_dir}"/SAM.1.0 "${TARGET_DIGESTS_file}".1
-		[ -s "${TARGET_DIGESTS_dir}"/SAM.1.1 ] && sudo cat "${TARGET_DIGESTS_dir}"/SAM.1.1 >> "${TARGET_DIGESTS_file}".1
+	[ -d ${1} ] || exit 666
+
+	if [ -s ${1}/SAM.1.0 ] || [ -s ${1}/SAM.1.1 ] ; then
+		[ -s ${1}/SAM.1.0 ] && sudo mv ${1}/SAM.1.0 ${1}.1
+		[ -s ${1}/SAM.1.1 ] && sudo cat ${1}/SAM.1.1 >> ${1}.1
 	else
  
 		if [ -d ./isolinux ] ; then
@@ -89,21 +76,18 @@ part1() {
 			slithering
 		fi
 	fi
+
 }
 
-part2_5() {
-	sudo chmod a+w "${TARGET_DIGESTS_DIR}"
-	sudo "${TARGET_DIGESTS_file}".*
-	${sh5} "${TARGET_pad_dir}"/*.sh >> "${TARGET_DIGESTS_file}".2
-}
 
 part2() {
-	if [ -s "${TARGET_DIGESTS_dir}"/SAM.2.0 ] ; then 
-		sudo mv "${TARGET_DIGESTS_dir}"/SAM.2.0 "${TARGET_DIGESTS_file}".2
-		sudo cat "${TARGET_DIGESTS_dir}"/SAM.2.1 >> "${TARGET_DIGESTS_file}".2	
+
+	if [ -s ${TARGET_DIGESTS_dir}/SAM.2.0 ] ; then 
+		sudo mv ${TARGET_DIGESTS_dir}/SAM.2.0 ${TARGET_DIGESTS_file}.2
+		sudo cat ${TARGET_DIGESTS_dir}/SAM.2.1 >> ${TARGET_DIGESTS_file}.2	
 	else
-		if [ x"${TARGET_pad_dir}" != x ] ; then 
-			${sh5} "${TARGET_pad_dir}"/* | grep -v "${TARGET_patch_name}" | grep -v "${TARGET_DIGESTS_file0}" > "${TARGET_DIGESTS_file}".2
+		if [ x"${TARGET_pad_dir}" != "x" ] ; then 
+			${sh5} ${TARGET_pad_dir}/* | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} > ${TARGET_DIGESTS_file}.2
 		else
 			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 		fi
@@ -111,81 +95,75 @@ part2() {
 }
 
 part3() {
-	if [ -s "${TARGET_DIGESTS_dir}"/SAM.3 ] ; then
-		mv "${TARGET_DIGESTS_dir}"/SAM.3 "${TARGET_DIGESTS_file}".3
+
+	if [ -s ${TARGET_DIGESTS_dir}/SAM.3 ] ; then
+		mv ${TARGET_DIGESTS_dir}/SAM.3 ${TARGET_DIGESTS_file}.3
 	else
-		${sh5} ./live/* > "${TARGET_DIGESTS_file}".3
+		${sh5} ./live/* > ${TARGET_DIGESTS_file}.3
 	fi
 }
 
 part4() {
-		echo "IS "${TARGET_DIGESTS_file}".1 ok?"
-		${sh5} -c "${TARGET_DIGESTS_file}".1
-		[ "$?" -eq 0 ] || exit
+
+		echo "IS ${TARGET_DIGESTS_file}.1 ok?"
+		${sh5} -c ${TARGET_DIGESTS_file}.1
+		[ $? -eq 0 ] || exit
 }
 
 part5() {
+		echo "ENTER part5()"
 
-		sleep 2
-		echo "IS "${TARGET_DIGESTS_file}".2 ok?"
-		${sh5} -c "${TARGET_DIGESTS_file}".2 --ignore-missing
+			sleep 2
+			echo "IS ${TARGET_DIGESTS_file}.2 ok?"
+			${sh5} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
 
+		echo "EXIT part5()"
 }
 
 part6() {
+		echo "ENTER part6()"
 
-	if [ -s "${TARGET_DIGESTS_file}".3 ] ; then
-		${sh5} -c "${TARGET_DIGESTS_file}".3
-	fi
+		if [ -s ${TARGET_DIGESTS_file}.3 ] ; then
+			${sh5} -c ${TARGET_DIGESTS_file}.3
+		fi
 
+		echo "EXIT part6()"
 }
 
 part6_5() {
 
 	for i in 1 2 3 ; do
-		${gg} -u "${CONF_kay1name}" -sb ./"${TARGET_DIGESTS_file}"."${i}"
-		[ "$?" -eq 0 ] || echo "install-keys --i"
+		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_file}.${i}
+		[ $? -eq 0 ] || echo "install-keys --i"
 		echo "$?"
 	done
 
-	if [ "$?" -gt 0 ] ; then
+	if [ $? -gt 0 ] ; then
 		echo "install-keys --i"
 	fi
 
 }
 
 part7() {
-
-	${gg} -u "${CONF_kay2name}" -sb ./"${TARGET_Dpubkf}"
-	[ "$?" -eq 0 ] || echo "install-keys --kdir <kdir> --i"
+	
+	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
+	[ $? -eq 0 ] || echo "install-keys --kdir <kdir> --i"
 	sleep 2
 	
-		${gv} --keyring ./"${TARGET_Dpubkg}" ./"${TARGET_Dpubkf}".sig ./"${TARGET_Dpubkf}"
+		${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
 
 		for i in 1 2 3 ; do
 			echo "${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}"
-			${gv} --keyring "${TARGET_Dpubkf}" "${TARGET_DIGESTS_file}"."${i}".sig "${TARGET_DIGESTS_file}"."${i}"			
+			${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}			
 			sleep 2
 		done
 
-	echo "$?"
+	echo $?
 }
-
-part1
-sleep 2
-
-part2
-part3
-
-part4
-part5
-
-
-part6
 
 part66() {
 
-	if [ "$?" -eq 0 ]; then 
+	if [ $? -eq 0 ]; then 
 
 
 		if [ x"${gg}" != "x" ] ; then 
@@ -198,23 +176,99 @@ part66() {
 
 }
 
-part66
-part7 
+part8() {
 
-if [ -d "${TARGET_DIGESTS_dir}" ] ; then 
-	sudo rm "${TARGET_DIGESTS_dir}"/SAM*
+	sudo chmod a+w ./${TARGET_pad_dir}
+	sudo chown 1000:1000 ./${TARGET_pad_dir}
+	cd ./${TARGET_pad_dir}
+
+	[ -f ./${TARGET_patch_name}.tar.bz2.sig ] && sudo rm ./${TARGET_patch_name}.tar.bz2.sig
+	${gg} -u ${CONF_kay2name} -sb ./${TARGET_patch_name}.tar.bz2
+	echo $?
+
+		sleep 6
+		echo "${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ./${TARGET_patch_name}.tar.bz2.sig ./${TARGET_patch_name}.tar.bz2"
+		${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ./${TARGET_patch_name}.tar.bz2.sig ./${TARGET_patch_name}.tar.bz2	
+	fi
+
+	sudo chmod a-w ./${TARGET_patch_name}.*
+	sudo chown root:root ./${TARGET_patch_name}.*
+	
+	cd ..
+	sudo chmod a-w ./${TARGET_pad_dir}
+	sudo chown root:root ./${TARGET_pad_dir}
+
+}
+
+part9() {
+	local olddir=$(pwd)
+
+	cd ${CONF_tmpdir}/out
+
+	sudo tar -v -jf ${CONF_target}/${TARGET_pad_dir}/${TARGET_patch_name}.tar.bz2 -x ./${TARGET_pad2}/patch.sh
+	
+	sudo chown -R 1000:1000 ./${TARGET_pad2}
+	sudo chmod a+w ./${TARGET_pad2}/*
+
+	[ -s  ./${TARGET_pad2}/patch.sh.asc ] && rm ./${TARGET_pad2}/patch.sh.asc
+	${gg} -u ${CONF_kay2name} -s --clearsign ./${TARGET_pad2}/patch.sh
+	
+
+	cd ${olddir}
+
+}
+
+enforce_deps
+parse_opts ${1} ${2}
+parse_opts ${3} ${4}
+
+cd ${CONF_targetdir} 
+pwd
+
+[ x"${TARGET_DIGESTS_dir}" != x ] || exit 1
+
+if [ ! -d ${TARGET_DIGESTS_dir} ] ; then 
+	mkdir -p ${TARGET_DIGESTS_dir}
 fi
 
-${sh5} "${TARGET_DIGESTS_dir}"/* | grep -v '"${TARGET_DIGESTS_file}".4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > "${TARGET_DIGESTS_file}".4
+sudo chmod a+w ${TARGET_DIGESTS_dir};sleep 1
+part0 
+
+part1 ${TARGET_DIGESTS_dir}
+sleep 2
+
+part2
+part3
+
+part4
+part5
+
+part6
+part66
+
+part7 
+part8
+part9
+
+
+if [ -d ${TARGET_DIGESTS_dir} ] ; then 
+	sudo rm ${TARGET_DIGESTS_dir}/SAM*
+fi
+
+${sh5} ${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ${TARGET_DIGESTS_file}.4
+
+sudo chmod 0555 ${TARGET_DIGESTS_dir}
+sudo chown -R root:root ${TARGET_DIGESTS_dir}
+sudo chmod 0444 ${TARGET_DIGESTS_dir}/*
 
 	echo "	${sh5} -c ${TARGET_DIGESTS_file}.4" 
 	sleep 2
 
-	${sh5} -c "${TARGET_DIGESTS_file}".4
-	echo "$?"
+	${sh5} -c ${TARGET_DIGESTS_file}.4
+	echo $?
 	sleep 2
 
-	ls -laRs "${TARGET_DIGESTS_dir}"
+	ls -laRs ${TARGET_DIGESTS_dir}
 	sleep 2
 
 echo "loits_new | mkq"

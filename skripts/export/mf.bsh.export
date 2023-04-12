@@ -30,10 +30,7 @@ process_dir() {
 	fi
 
 	local topts=""
-
-		topts="-v"
-	fi
-
+	
 	if [ x"${1}" != x ] ; then 
 		if [ -d ./"${1}" ] ; then
 			sudo chmod -R a-w "${1}"/*

@@ -7,18 +7,17 @@ post=stable
 b=1
 
 usage() {
-	echo "$0 [-t <type>] [--v <verbosity>] [-b <sign_or_not>]"
+	echo "$0 [-t <type> ] [ --v <verbosity> ] [-b <sign_or_not> ]"
 	echo "-b 1:just signs"
-	echo "-b 2:signs and encrypts (TODO)"
 }
 
 parse_opts_real() {
 	case ${1} in
 		-t)
-			post="${2}"
+			post=${2}
 		;;
 		-b)
-			b="${2}"
+			b=${2}
 		;;
 		*)
 			usage
@@ -29,7 +28,7 @@ parse_opts_real() {
 
 check_params() {
 
-	case "${1}" in
+	case ${1} in
 		0)
 		;;
 		1)
@@ -44,19 +43,19 @@ check_params() {
 }
 
 part1() {
-	sudo cp "${1}" "${1}"."${2}"
-	[ "$?" -eq 0 ] || echo "no such thing as ${1}"
-	mk_bkup "${TARGET_archdir}"/"${1}"."${2}"
+	sudo cp ${1} ${1}.${2}
+	[ $? -eq 0 ] || echo "no such thing as ${1}"
+	mk_bkup ${TARGET_archdir}/${1}.${2}
 }
 
+
 part2() {	
+	
 	local opts=""
 
-		opts="-v"
-	fi
+	sudo tar ${opts} -jcpf ${1} ${CONF_scripts_dir} ${CONF_BASEDIR}/${CONF_stg0file} ${CONF_BASEDIR}/lib 
+	sudo tar ${opts} -jcpf ${1}.e ${CONF_scripts_dir}/export ${CONF_BASEDIR}/${CONF_stg0file}.export
 
-	sudo tar "${opts}" -jcpf "${1}" "${CONF_scripts_dir}" "${CONF_BASEDIR}"/"${CONF_stg0file}" "${CONF_BASEDIR}"/lib 
-	sudo tar "${opts}" -jcpf "${1}".e "${CONF_scripts_dir}"/export "${CONF_BASEDIR}"/"${CONF_stg0file}".export
 }
 
 part3() {
@@ -65,49 +64,44 @@ part3() {
 	local g
 
 	for g in ${1} ${1}.sig ${1}.gpg ; do
-		sudo mv "${2}"/"${g}" "${2}"/"${g}".OLD
+		sudo mv ${2}/${g} ${2}/${g}.OLD
 	done
 
-	case "${3}" in
+	case ${3} in
 		0)
 		;;
 		1)
-			${gg} -u "${CONF_kay2name}" -sb ./"${1}"
+			${gg} -u ${CONF_kay2name} -sb ./${1}
 		;;
 		2)
-			${gg} -u "${CONF_kay2name}" --symmetric -se ./"${1}"
-
-			if [ $? -gt 0 ] ; then 
-				sudo rm ./"${1}"
-			fi
 		;;
 	esac
 
-	sudo mv ./"${1}"* "${2}"
+	sudo mv ./${1}* ${2}
 	sleep 1
 
-		if [ -s "${2}"/"${1}".sig ] ; then
-			${gv} --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${2}"/"${1}".sig "${2}"/"${1}"
+		if [ -s ${2}/${1}.sig ] ; then
+			${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${2}/${1}.sig ${2}/${1}
 		fi
 
-		if [ -s "${2}"/"${1}".gpg ] ; then
-			${gv} --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${2}"/"${1}".gpg
+		if [ -s ${2}/${1}.gpg ] ; then
+			${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${2}/${1}.gpg
 		fi
 	fi 
 
 }
 
-parse_opts "${1}" "${2}"
-parse_opts "${3}" "${4}"
-parse_opts "${5}" "${6}"
+parse_opts ${1} ${2}
+parse_opts ${3} ${4}
+parse_opts ${5} ${6}
 
 enforce_deps
-check_params "${b}"
+check_params ${b}
 
 
-	 sudo mount /dev/"${TARGET_backup_part}" "${TARGET_archdir0}"
+	 sudo mount /dev/${TARGET_backup_part} ${TARGET_archdir0}
 
-if [ "$?" -eq 0 ] ; then 
+if [ $? -eq 0 ] ; then 
 else
 	echo "sudo umount ${TARGET_archdir0}";exit 555
 fi
@@ -116,16 +110,17 @@ sudo chmod a+w ./out
 sudo chown 1000:1000 .
 cd ./out
 
-part1 "${TARGET_pad_bak_file}" "${post}"
+part1 ${TARGET_pad_bak_file} ${post}
 
 q=$(date +%F)
-part2 "${TARGET_scripts_bak_file}"."${q}"
+part2 ${TARGET_scripts_bak_file}.${q}
 
-for f in "${TARGET_pad_bak_file}"."${post}" "${TARGET_scripts_bak_file}"."${q}" "${TARGET_scripts_bak_file}"."${q}".e; do 
-	part3 "${f}" "${TARGET_archdir}" "${b}"
+for f in ${TARGET_pad_bak_file}.${post} ${TARGET_scripts_bak_file}.${q} ${TARGET_scripts_bak_file}.${q}.e ; do 
+	part3 ${f} ${TARGET_archdir} ${b}
 done
 
 cd ..
+
 	ls -las ${TARGET_archdir};sleep 10
 
 sudo umount ${TARGET_archdir0}
