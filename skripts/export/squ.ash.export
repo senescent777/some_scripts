@@ -250,7 +250,7 @@ usage() {
 	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0}"
 	echo "-b is supposed to be run just Before -c but after -r"
 	echo "-d Destroys contents of ${CONF_squash0}/ and ${CONF_tmpdir} "
-	echo "\t if possible, use -b insted\n"
+	echo "\t if possible, use -b instead\n"
 
 	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n"
 	echo "-r :runs chRoot in ${CONF_squash_dir}"
