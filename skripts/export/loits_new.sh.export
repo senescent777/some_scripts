@@ -13,15 +13,15 @@ usage() {
 
 
 parse_opts_real() {
-	case "${1}" in
+	case ${1} in
 		--in)
-			lsrcdir="${2}"
+			lsrcdir=${2}
 		;;
 		--out)
-			ltarget="${2}"
+			ltarget=${2}
 		;;
 		--bl) 
-			bloader="${2}"
+			bloader=${2}
 		;; 
 		*)
 			usage
@@ -29,13 +29,13 @@ parse_opts_real() {
 	esac
 }
 
-parse_opts "${1}" "${2}"
-parse_opts "${3}" "${4}"
-parse_opts "${5}" "${6}"
-parse_opts "${7}" "${8}"
+parse_opts ${1} ${2}
+parse_opts ${3} ${4}
+parse_opts ${5} ${6}
+parse_opts ${7} ${8}
 
 check_params() {
-	if [ -d ./"${lsrcdir}" ] ; then
+	if [ -d ./${lsrcdir} ] ; then
 	else
 		echo "no such thing as ${lsrcdir}"
 		exit 666
@@ -43,7 +43,7 @@ check_params() {
 	
 	if [ x"${ltarget}" != "x" ] ; then 
 
-		if [ -s out/"${ltarget}" ] ; then
+		if [ -s out/${ltarget} ] ; then
 			echo "out/${ltarget} already exists"
 			exit 666
 		fi
@@ -53,7 +53,7 @@ check_params() {
 
 	if [ x"${bloader}" != "x" ] ; then 
 	else
-		bloader="${CONF_bloader}"
+		bloader=${CONF_bloader}
 	fi
 }
 
@@ -65,35 +65,38 @@ enforce_deps
 
 
 mk_pad_bak() {
+
+
 	[ -s ./${1} ] && sudo mv ${1} ${1}.OLD
 	
 	if [ ! -d ../out ] ; then 
 		sudo mkdir ../out
-		sudo chown 1000:1000 ../out
-		sudo chmod a+w  ../out
 	fi
 
+	sudo chown 1000:1000 ../out
+	sudo chmod a+w  ../out
+
 	sudo chown -R root:root ./*
-	sudo chmod -R a-w ${TARGET_pad_dir}/*
-	sudo chmod a-w ${TARGET_pad_dir}/ 
+	sudo chmod -R a-w ./${TARGET_pad_dir}/*
+	sudo chmod a-w ./${TARGET_pad_dir}/ 
 
 	local tpop=""
-	sudo tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ../out/${1} ${2}			
+	sudo tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ../out/${1} ./${2}			
 
 }
 
-cd "${lsrcdir}"
+cd ${lsrcdir}
 
-mk_pad_bak "${TARGET_pad_bak_file}" "${TARGET_pad_dir}"
+mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir}
 sleep 1
 
 sudo chmod a+w ../out	
 
-case "${bloader}" in
+case ${bloader} in
 	isolinux)
 		
 		sudo chmod a+w ./isolinux/isolinux.bin
-		${gi} -o ../out/"${ltarget}" ${CONF_gi_opts} .
+		${gi} -o ../out/${ltarget} ${CONF_gi_opts} .
 		sudo chmod -R a-w ./isolinux
 
 	;;

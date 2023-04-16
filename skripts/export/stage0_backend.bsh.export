@@ -3,16 +3,16 @@ mangle_conf() {
 }
 
 mount_img() {
-	[ x"$1" != "x" ] || exit 2
-	[ x"$2" != "x" ] || exit 2
+	[ x${1} != "x" ] || exit 2
+	[ x"${2}" != "x" ] || exit 2
 
-	if [ -d "${2}" ]; then
-		found=$(cat /proc/mounts | grep $2 | wc -l)
+	if [ -d ${2} ]; then
+		found=$(cat /proc/mounts | grep ${2} | wc -l)
 
-		if [ "${found}" -gt 0 ] ; then
-			sudo umount "${CONF_source}"
+		if [ ${found} -gt 0 ] ; then
+			sudo umount ${CONF_source}
 		else
-			sudo mount -o loop,ro "${1}" "${2}"
+			sudo mount -o loop,ro ${1} ${2}
 		fi
 
 		sleep 3 
@@ -25,13 +25,12 @@ mount_img() {
 
 source_n_target() {
 	[ "x${1}" != "x" ] || exit 2
-	[ -d "${CONF_source}" ] || sudo mkdir -p "${CONF_source}"
+	[ -d ${CONF_source} ] || sudo mkdir -p ${CONF_source}
 
-	if [ -d "${1}" ]; then
-		CONF_source="${1}"
+	if [ -d ${1} ]; then
 	else
-		if [ -s "${1}" ] ; then
-			mount_img "${1}" "${CONF_source}"
+		if [ -s ${1} ] ; then
+			mount_img ${1} ${CONF_source}
 		else
 			exit 6
 		fi
@@ -39,21 +38,21 @@ source_n_target() {
 
 	if [ x"${CONF_target}" != "x" ] ; then 
 		echo "rm + mkdir ${CONF_target}"
-		[ -d "${CONF_target}" ] && sudo rm -rf "${CONF_target}";sleep 1
-		sudo mkdir -p "${CONF_target}"
+		[ -d ${CONF_target} ] && sudo rm -rf "${CONF_target}";sleep 1
+		sudo mkdir -p ${CONF_target}
 		sleep 1
 	fi
 
 }
 
 get_devuan() {
-	[ -d "${CONF_distros_dir}" ] || sudo mkdir "${CONF_distros_dir}"
-	cd "${CONF_distros_dir}"
+	[ -d ${CONF_distros_dir} ] || sudo mkdir ${CONF_distros_dir}
+	cd ${CONF_distros_dir}
 
-		wget "${CONF_wget_opts}" "${1}"
+		wget ${CONF_wget_opts} ${1}
 
 	sha256sum -c SHA256SUMS
-	[ "$?" -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
+	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 }
 
 make_dirs() {
@@ -66,19 +65,21 @@ make_dirs() {
 }
 
 cleanup() {
-	sudo umount "${CONF_source}"
+	sudo umount ${CONF_source}
 }
 
 live1() {
 	[ "x${1}" != "x" ] || exit 2
 	[ "x${2}" != "x" ] || exit 2
-	cd "${1}"	
+	[ -d ${2} ] || exit 2 
+
+	cd ${1}	
 
 	if [ -s ./filesystem.squashfs ] ; then 
-		sudo rm "${2}"/filesystem.squashfs
-		sudo cp ./filesystem.squashfs "${2}"	
+		sudo rm ${2}/filesystem.squashfs
+		sudo cp ./filesystem.squashfs ${2}	
 	else
-		sudo cp "${CONF_source}"/live/filesystem.squashfs "${2}"
+		sudo cp ${CONF_source}/live/filesystem.squashfs ${2}
 	fi
 
 }
@@ -86,58 +87,62 @@ live1() {
 live2()  {
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
-	cd "${1}"	
+
+	cd ${1}	
+	[ -d ${2} ] || exit 2 
 
 	if [ -s ./vmlinuz ] ; then 
-		sudo cp ./vmlinuz "${2}"
+		sudo cp ./vmlinuz ${2}
 	else
-		sudo cp "${CONF_source}"/live/vmlinuz "${2}"
+		sudo cp ${CONF_source}/live/vmlinuz ${2}
 	fi
 
 }
 
 live3() {
-	[ x"${1} != "x" ] || exit 2
-	[ x"${2} != "x" ] || exit 2
-	cd "${1}"	
+	[ x"${1}" != "x" ] || exit 2
+	[ x"${2}" != "x" ] || exit 2
+
+	cd ${1}	
+	[ -d ${2} ] || exit 2 
 
 	if [ -s ./initrd.img ] ; then 
-		sudo cp ./initrd.img "${2}"
+		sudo cp ./initrd.img ${2}
 	else
-		sudo cp "${CONF_source}"/live/initrd.img "${2}"
+		sudo cp ${CONF_source}/live/initrd.img ${2}
 	fi
 
 }
 
 copy_main() {
 	[ x"${1}" != "x" ] || exit 2
-	pwd
+	[ -d ${2} ] || exit 2 
 
-	[ z"${CONF_scripts_dir}" != "z"] || echo "n.s.t.as ${CONF_scripts_dir}"
+	[ z"${CONF_scripts_dir}" != "z" ] || echo "n.s.t.as ${CONF_scripts_dir}"
 
-	if [ -d "${CONF_scripts_dir}" ]; then 
-		sudo cp -a "${CONF_scripts_dir}"/*.sh "${CONF_tmpdir}"
-		sudo chmod 0555 "${CONF_tmpdir}"/*.sh
-		sudo chown root:root "${CONF_tmpdir}"/*.sh
+	if [ -d ${CONF_scripts_dir} ]; then 
+		sudo cp -a ${CONF_scripts_dir}/*.sh ${CONF_tmpdir}
+		sudo chmod 0555 ${CONF_tmpdir}/*.sh
+		sudo chown root:root ${CONF_tmpdir}/*.sh
 	fi
 
 	if [ x"${CONF_target}" != "x" ] ; then 
 		if [ y"${TARGET_DIGESTS_dir}" != "y" ] ; then 
-			[ -d "${CONF_target}"/"${TARGET_DIGESTS_dir}" ] || sudo mkdir -p "${CONF_target}"/"${TARGET_DIGESTS_dir}"
+			[ -d ${CONF_target}/${TARGET_DIGESTS_dir} ] || sudo mkdir -p ${CONF_target}/${TARGET_DIGESTS_dir}
 		fi
 	fi
 
-	sudo cp -a "${1}"/*.sh "${2}" 
-	sudo chmod 0555 "${2}"/*.sh 
-	sudo chown root:root "${2}"/*.sh
+	sudo cp -a ${1}/*.sh ${2} 
+	sudo chmod 0555 ${2}/*.sh 
+	sudo chown root:root ${2}/*.sh
 
-	if [ -s "${1}"/0/SAM.2.0 ] ; then 
-		sudo chmod a-w ./"${TARGET_DIGESTS_dir}"/SAM*
+	if [ -s ${1}/0/SAM.2.0 ] ; then 
+		sudo chmod a-w ./${TARGET_DIGESTS_dir}/SAM*
 	fi
 
-	sudo cp -a "${1}"/*.bz2 "${2}"
-	sudo chmod 0444 "${2}"/*.bz2
-	sudo chown root:root "${2}"/*.bz2
+	sudo cp -a ${1}/*.bz2 ${2}
+	sudo chmod 0444 ${2}/*.bz2
+	sudo chown root:root ${2}/*.bz2
 
 }
 
@@ -146,54 +151,54 @@ copy_conf() {
 	[ x"${2}" != "x" ] || exit 2
 
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
-		sudo cp -a "${CONF_scripts_dir}"/*.conf "${CONF_tmpdir}"
+		sudo cp -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
 	fi
 
-	sudo chmod a+w "${3}"
-	sudo chown "${n}":"${n}" "${3}"
-	sudo touch "${3}"/"${2}".conf
-	sudo chown "${n}":"${n}" "${3}"/"${2}".conf
+	sudo chmod a+w ${3}
+	sudo chown ${n}:${n} ${3}
+	sudo touch ${3}/${2}.conf
+	sudo chown ${n}:${n} ${3}/${2}.conf
 
 
-	if [ -s "${3}"/upload.sh ] || [ -s "${3}"/extras.tar.bz2 ] ; then 
-		for f in ${CONF_g2} ; do mangle_conf "${f}" "${3}"/"${2}".conf ; done
+	if [ -s ${3}/upload.sh ] || [ -s ${3}/extras.tar.bz2 ] ; then 
+		for f in ${CONF_g2} ; do mangle_conf ${f} ${3}/${2}.conf ; done
 	fi
 
-	utfile="${3}"/"${2}".conf
-	sudo chmod a+w "${utfile}";sleep 1
+	utfile=${3}/${2}.conf
+	sudo chmod a+w ${utfile};sleep 1
 
-	for f in ${CONF_g1} ; do mangle_conf "${f}" "${utfile}" ; done
+	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
 
-	echo -n "src=/" >> "${utfile}"
-	echo -n "$" >> "${utfile}"
-	echo -n "{" >> "${utfile}"
-	echo -n "TARGET_pad2" >> "${utfile}"
-	echo "}" >> "${utfile}"	
+	echo -n "src=/" >> ${utfile}
+	echo -n "$" >> ${utfile}
+	echo -n "{" >> ${utfile}
+	echo -n "TARGET_pad2" >> ${utfile}
+	echo "}" >> ${utfile}	
 
-	echo -n "tmpdir=" >> "${utfile}"
-	echo -n "$" >> "${utfile}"
-	echo -n "{" >> "${utfile}"
-	echo -n "TARGET_tmpdir" >> "${utfile}"
-	echo "}" >> "${utfile}"	
+	echo -n "tmpdir=" >> ${utfile}
+	echo -n "$" >> ${utfile}
+	echo -n "{" >> ${utfile}
+	echo -n "TARGET_tmpdir" >> ${utfile}
+	echo "}" >> ${utfile}	
 
-	echo -n "pkgdir=" >> "${utfile}"
-	echo -n "$" >> "${utfile}"
-	echo -n "{" >> "${utfile}"
-	echo -n "TARGET_pkgdir" >> "${utfile}"
-	echo "}" >> "${utfile}"	
+	echo -n "pkgdir=" >> ${utfile}
+	echo -n "$" >> ${utfile}
+	echo -n "{" >> ${utfile}
+	echo -n "TARGET_pkgdir" >> ${utfile}
+	echo "}" >> ${utfile}	
 
-	mangle_conf to_ram "${utfile}"
-	mangle_conf nosu_do "${utfile}"
+	mangle_conf TARGET_to_ram ${utfile}
+	mangle_conf TARGET_nosu_do ${utfile}
 
-	sudo cat "${1}"/"${2}".conf >> "${utfile}"
+	sudo cat ${1}/${2}.conf >> ${utfile}
 
-	sudo chmod a-w "${utfile}";sleep 1
-	sudo chmod 0444 "${3}"/*.conf
-	sudo chown root:root "${3}"/*.conf
+	sudo chmod a-w ${utfile};sleep 1
+	sudo chmod 0444 ${3}/*.conf
+	sudo chown root:root ${3}/*.conf
 
-	sudo chmod go-w "${3}"
-	sudo chown root:root "${3}"
+	sudo chmod go-w ${3}
+	sudo chown root:root ${3}
 
 	sleep 1
 }
@@ -204,49 +209,49 @@ copy_sums() {
 keyz() {
 	[ x"${1}" != "x" ] || exit 2
 
-	sudo chmod o+w "${2}"
+	sudo chmod o+w ${2}
 
-	sudo cp "${1}"/"${TARGET_Dkname1}" "${2}"
-	sudo cp "${1}/${TARGET_Dkname2}" "${2}"
+	sudo cp ${1}/${TARGET_Dkname1} ${2}
+	sudo cp ${1}/${TARGET_Dkname2} ${2}
 
-	sudo rm "${2}"/*.secret
+	sudo rm ${2}/*.secret
 
-	sudo chmod o-w "${2}"
+	sudo chmod o-w ${2}
 
 }
 
 bootloader() {
-	[ x"$1" != "x" ] || exit 2
+	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
 	[ x"${CONF_target}" != "x" ] || exit 3
-	[ -d "${CONF_target}" ] || exit 3
+	[ -d ${CONF_target} ] || exit 3
 
-	cd "${CONF_target}";pwd
+	cd ${CONF_target};pwd
 	local ks2
 	ks2="."
 
-	case "${1}" in
+	case ${1} in
 		isolinux)
-			sudo cp -a "${CONF_source}"/isolinux/ . || exit 8
+			sudo cp -a ${CONF_source}/isolinux/ . || exit 8
 
-			if [ -d "${2}"/../isolinux ] ; then 
-				ks2="${2}"/../isolinux
+			if [ -d ${2}/../isolinux ] ; then 
+				ks2=${2}/../isolinux
 
 
 				for t in cfg png ; do
-					sudo rm ./isolinux/*."${t}"				
-					sudo cp -a "${ks2}"/*."${t}" ./isolinux 
+					sudo rm ./isolinux/*.${t}				
+					sudo cp -a ${ks2}/*.${t} ./isolinux 
 				done						
 			fi
 		;;
 		grub)
-			sudo cp -a "${CONF_source}"/boot/ "${CONF_target}" || exit 8
+			sudo cp -a ${CONF_source}/boot/ ${CONF_target} || exit 8
 			
-			if [ -d "${2}"/../boot ] ; then 
-				ks2="${2}"/../boot
+			if [ -d ${2}/../boot ] ; then 
+				ks2=${2}/../boot
 			
-				echo "cp -a "${ks2}"/grub/{*.cfg,*.png} ./boot/grub"
-				echo "cp -a "${ks2}"/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
+				echo "cp -a ${ks2}/grub/{*.cfg,*.png} ./boot/grub"
+				echo "cp -a ${ks2}/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
 			fi
 		;;
 		*)
@@ -260,7 +265,7 @@ bootloader() {
 after_bl() {
 
 	sudo chown -R 1000:1000 ${1}/${TARGET_DIGESTS_dir}
-	sudo chmod u+w ${1}/${TARGET_DIGESTS_dir}/"${TARGET_DIGESTS_file0}"* 
+	sudo chmod u+w ${1}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file0}* 
 	sudo chmod u+w ${1}/${TARGET_DIGESTS_dir}/*.gpg
 
 	sudo touch ${1}/${TARGET_pad_dir}/*

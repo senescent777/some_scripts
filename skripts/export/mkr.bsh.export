@@ -4,6 +4,7 @@
 . ./common_funcs.sh
 
 dir=""
+dir2=${CONF_target}
 
 usage() {
 	echo "prepare dirs 4 mf.bsh"
@@ -20,11 +21,15 @@ parse_opts_real() {
 		--in|--target)
 			dir=${2}
 		;;
+		--dir2)
+			dir2=${2}
+		;;
 	esac
 }
 
 parse_opts ${1} ${2}
 parse_opts ${3} ${4}
+parse_opts ${5} ${6}
 
 [ x"${dir}" != "x" ] || exit 666
 [ -d ${dir} ] || exit 666
@@ -42,7 +47,7 @@ defecate() {
 	local olddir=$(pwd)
 
 	cd ${CONF_BASEDIR}/lib/${2}
-	local flist=$(find . -type f)
+	local flist=$(find . -type f | grep -v '.OLD' | grep -v '.old')
 	local d=""
 	local f=""
 
@@ -86,7 +91,7 @@ dethrone() {
 mutilate() {
 
 	[ -d ${1} ] || exit 666
-	[ -s ${1}/${2} ] || exit 666
+	[ -s ${1}/${2} ] || return
 
 	local lokal_h="TARGET_pad_bak TARGET_pad_dir TARGET_DIGESTS TARGET_DT"
 
@@ -104,13 +109,30 @@ mutilate() {
 	sudo chmod a-w  ${1}/${3}
 }
 
-sudo rm ${dir}/extras/${TARGET_pad2}/upload_*
-sudo rm ${dir}/extras/${TARGET_pad2}/patch*
 
-sudo rm ${dir}/${TARGET_patch_name}/${TARGET_pad2}/patch*	
-sudo rm ${dir}/${TARGET_patch_name}/${TARGET_pad2}/*.conf
-sudo rm ${dir}/${TARGET_patch_name}/${TARGET_pad2}/0/${TARGET_DIGESTS_file0}.*
+exterminate() {
+	[ x"${1}" != "x" ] || exit 666
+	[ -d ${d} ] || exit 666
+	
+	local olddir=$(pwd)
+	local d2=""
+	local e=""
+	local f=""
 
+	for d2 in ${MKR_the_list} ; do
+		cd ${d2} 
+	
+		for e in ${MKR_types} ; do
+			for f in $(find . -type f -name ${e}) ; do
+				sudo rm ${f}
+			done
+		done		
+	done
+
+	cd ${olddir}
+}
+
+exterminate  ${dir}
 
 if [ -s ${dir}/mf.conf ] ; then 
 	. ${dir}/mf.conf
@@ -121,16 +143,31 @@ defecate ${dir} mkq
 
 
 
-mutilate ${dir} patch0 patch.sh
+for tget in ${CONF_MKR_LIST} ; do
+	mutilate ${dir} ${tget} ${tget}.sh
+done
+
 
 for f in ${TARGET_patch_list_1} ; do 
 	dethrone ${dir} ${f} ${TARGET_patch_name}/${TARGET_pad2} 
 done
 
-sudo cp ${CONF_target}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file0}.2* ${dir}/${TARGET_patch_name}/${TARGET_pad2}/0
-sudo cp ${CONF_target}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file0}.4 ${dir}/${TARGET_patch_name}/${TARGET_pad2}/0
-sudo cp ${CONF_target}/${TARGET_pad_dir}/devuan.conf ${dir}/${TARGET_patch_name}/${TARGET_pad2}
 
 for f in ${TARGET_patch_list_3} ; do 
 	dethrone ${dir} ${f} ${TARGET_patch_name}/${TARGET_pad2} 
 done
+
+for f in ${CONF_MKR_LIST} ; do 
+	dethrone ${dir} ${f}.sh ${TARGET_patch_name}/${TARGET_pad2} 
+done
+
+finalize() {
+
+
+	sudo cp ${CONF_target}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file0}.{2,4}* ${1}/${TARGET_patch_name}/${TARGET_DIGESTS_dir}
+
+	sudo cp ${2}/${TARGET_pad_dir}/*.conf  ${1}/${TARGET_patch_name}/${TARGET_pad2}
+
+}
+
+finalize ${dir} ${dir2}

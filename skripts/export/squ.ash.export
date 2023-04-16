@@ -14,60 +14,60 @@ parse_opts_real() {
 
 	case ${1} in
 		--dir2)
-			dir2="${2}"
-			[ -d "${2}" ] || exit 666
+			dir2=${2}
+			[ -d ${2} ] || exit 666
 		;;
 		-x|-y|-i|-j)
-			if [ -s "$2" ] || [ -d "$2" ] ; then
-				par="${2}"
+			if [ -s ${2} ] || [ -d ${2} ] ; then
+				par=${2}
 			fi
 		;;
 		-c)
-			par="${2}"
+			par=${2}
 		;;
 		-mp|--mp)
-			mp="${2}"
+			mp=${2}
 		;;
 		-md|--md)
-			md="${2}"
+			md=${2}
 		;;
 		-ms|--ms)
-			ms="${2}"
+			ms=${2}
 		;;
 	esac
 }
 
 single_param() {
-	cmd="${1}"
+	cmd=${1}
 	echo "sp"
-
 }
 
-parse_opts "${1}" "${2}"
-parse_opts "${3}" "${4}"
-parse_opts "${5}" "${6}"
-parse_opts "${7}" "${8}"
-parse_opts "${9}" "${10}"
+parse_opts ${1} ${2}
+parse_opts ${3} ${4}
+parse_opts ${5} ${6}
+parse_opts ${7} ${8}
+parse_opts ${9} ${10}
+
 
 xxx() {
 	if [ x"${CONF_squash0}" != "x" ]; then
-		[ -d "${CONF_squash0}" ] || sudo mkdir "${CONF_squash0}"
-		cd "${CONF_squash0}"
+		[ -d ${CONF_squash0} ] || sudo mkdir ${CONF_squash0}
+		cd ${CONF_squash0}
 		unsq=$(sudo which unsquashfs)
 
 		if [ x"${unsq}" != "x" ] ; then 
-			sudo ${unsq} "${1}"
+			sudo ${unsq} ${1}
 		else
 			echo "sudo apt-get install squashfs-utils"
 		fi
 
-		sudo chown 0:0 "${CONF_squash0}"
+		sudo chown 0:0 ${CONF_squash0}
 	fi
 }
 
 fix_sudo() {
 	if [ x"${CONF_squash_dir}" != "x" ]; then
-		cd "${CONF_squash_dir}"
+		cd ${CONF_squash_dir}
 
 		sudo chown -R 0:0 ./etc/sudo*
 		sudo chmod -R a-w ./etc/sudo*
@@ -91,8 +91,8 @@ bbb() {
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 
-		if [ -d "${CONF_squash_dir}" ] ; then 
-			cd "${CONF_squash_dir}"
+		if [ -d ${CONF_squash_dir} ] ; then 
+			cd ${CONF_squash_dir}
 
 			sudo rm -rf ./run/live
 			sudo rm -rf ./boot/grub/*
@@ -109,89 +109,115 @@ bbb() {
 
 			sudo rm ./root/.bash_history
 			sudo rm ./home/devuan/.bash_history
+			
 		fi
 	fi
+
 }
 
-jlk1() {
+jlk_main() {
+
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -x ?"
-		[ -d "${CONF_squash_dir}"/"${TARGET_pad2}" ] || sudo mkdir -p "${CONF_squash_dir}"/"${TARGET_pad2}"
+		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || sudo mkdir -p ${CONF_squash_dir}/${TARGET_pad2}
 
-		cd "${CONF_squash_dir}"/"${TARGET_pad2}"
+		cd ${CONF_squash_dir}/${TARGET_pad2}
 		[ x"${1}" != "x" ] || exit 666
 
-		sudo cp "${1}"/"${TARGET_pad_dir}"/*.sh .
+
+
+		local d
+		for d in sh bz2 bz3 ; do sudo cp ${1}/${TARGET_pad_dir}/*.${d} . ; done
+		for d in sh bz2 bz3 conf ; do sudo chmod 0444 ./*.${d} ; done
 		sudo chmod 0555 ./*.sh
 
-		sudo cp "${1}"/"${TARGET_pad_dir}"/*.bz2 .
-		sudo chmod 0444 ./*.bz2
-
-		sudo cp "${1}"/"${TARGET_pad_dir}"/*.bz3 .
-		sudo chmod 0444 ./*.bz3
-
-		sudo cp "${1}"/"${TARGET_pad_dir}"/*.conf .
-		sudo chmod 0444 ./*.conf
 
 		sudo chown -R root:root ./*
 	fi
 }
 
-jlk1_5() {
+jlk_conf() {
 
 	if [ x"${CONF_squash_dir}" != "x" ] && [ y"${1}" != "y" ] ; then
-		if [ -d "${1}" ] ; then 
-			cd "${CONF_squash_dir}"/"${TARGET_pad2}"
+		if [ -d ${1}/${TARGET_pad_dir} ] ; then 
+
+			if [ ! -s ${1}/${TARGET_pad_dir}/${2}.conf ] ; then
+				echo "ERROR:NO CONFIG FILE TO COPY!!!" 
+				exit 666
+			fi
+
+			cd ${CONF_squash_dir}/${TARGET_pad2}
 
 			sudo rm ./mf*;sudo rm ./root.conf
+			sudo rm ./${2}.conf
+
 
 			sudo touch ./root.conf 
 			sudo chmod a+w ./root.conf 
-			grep -v to_ram "${1}"/"${TARGET_pad_dir}"/"${2}".conf > ./root.conf 
-	
-	        	echo "to_ram=1" >> ./root.conf
+
+			grep -v TARGET_to_ram ${1}/${TARGET_pad_dir}/${2}.conf > ./root.conf 
+
+	        	echo "TARGET_to_ram=1" >> ./root.conf
 
 			sudo chown -R root:root ./*
 			sudo chmod 0444 ./*.conf
 
+		else
 		fi
 	fi
 
 }
 
-jlk2() {
-	[ x"${1}" != "x" ] || exit 666
-	[ -d ./0 ] || sudo mkdir -p ./0 
+jlk_sums() {
 
-	sudo cp -a "${1}"/"${TARGET_DIGESTS_dir}"/* ./0
+	[ x"${1}" != "x" ] || exit 666
+	[ -d ${1} ] || echo "no such thing as ${1}"
+
+	cd ${CONF_squash_dir}/${TARGET_pad2}
+
+	sudo chattr -R -ui .
+	sudo chmod o+w .
+	
+	[ -d ./0 ] || sudo mkdir -p ./0 ;sleep 6
+	sudo chmod o+w ./0
+
+	sudo cp -a ${1}/${TARGET_DIGESTS_dir}/* ./0
+
+	sudo chmod 0755 .
+	sudo chmod 0755 ./0
+
+		ls -las ./0;sleep 5
+		cd ..
+		${sh5} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
+
 }
 
 rst() {
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
-		cd "${CONF_squash_dir}"
+		cd ${CONF_squash_dir}
 
-		if [ "${md}" -eq 1 ] ; then
+		if [ ${md} -gt 0 ] ; then
 			sudo mount -o bind /dev ./dev 
 		fi
 
-		if [ "${ms}" -eq 1 ] ; then
+		if [ ${ms} -gt 0 ] ; then
 			sudo mount -o bind /sys ./sys
 		fi
 
-		if [ "${mp}" -eq 1 ] ; then
+		if [ ${mp} -gt 0 ] ; then
 			sudo mount -o bind /proc ./proc 
 			sudo ln -s ./proc/mounts ./etc/mtab
 		fi		 
 
-		sudo mv "${CONF_squash_dir}"/etc/hosts "${CONF_squash_dir}"/etc/hosts.bak	
-		sudo cp /etc/hosts "${CONF_squash_dir}"/etc
+		sudo mv ${CONF_squash_dir}/etc/hosts ${CONF_squash_dir}/etc/hosts.bak	
+		sudo cp /etc/hosts ${CONF_squash_dir}/etc
 		
 		sudo chroot ./ ./bin/bash 
 				
 		sudo mv ./etc/hosts.bak ./etc/hosts
 		sudo rm ./etc/mtab
-		[ "$?" -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
+		[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
 		sleep 3
 	
 		sudo umount ./dev 
@@ -207,13 +233,13 @@ cfd() {
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -b ?"
 
-		cd "${CONF_squash_dir}"
+		cd ${CONF_squash_dir}
 
-		[ -s "${1}" ] && rm "${1}"
+		[ -s ${1} ] && rm ${1}
 		msq=$(sudo which mksquashfs)
 
-		if [ x"${msq}" != "x" ] ; then 
-			sudo ${msq} . "${1}" -comp xz -b 1048576
+		if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
+			sudo ${msq} . ${1} -comp xz -b 1048576
 		else
 			echo "sudo apt-get install squashfs-utils"
 		fi
@@ -223,14 +249,17 @@ usage() {
 	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0}"
 	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0}"
 	echo "-b is supposed to be run just Before -c but after -r"
-	echo "-d Destroys contents of ${CONF_squash0}/ and ${CONF_tmpdir} \n"
-	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n"
+	echo "-d Destroys contents of ${CONF_squash0}/ and ${CONF_tmpdir} "
+	echo "\t if possible, use -b insted\n"
 
+	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n"
 	echo "-r :runs chRoot in ${CONF_squash_dir}"
 	
 	echo "-i <src> : Installs scripts 2 chroot_dir "
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir"
-	echo "\t --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} \n"
+	echo "\t to state the obvious:"
+	echo "\t --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
+	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
 
 	echo "-f attempts to Fix some problems w/ sudo"
 	echo "--v 1 adds Verbosity\n"
@@ -243,35 +272,36 @@ ijk() {
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -x ?"
 		
-		previous="$(pwd)"
-		sudo mkdir -p "${CONF_squash_dir}"/"${TARGET_pad2}"
-		cd "${CONF_squash_dir}"/"${TARGET_pad2}"
+		previous=$(pwd)
+		sudo mkdir -p ${CONF_squash_dir}/${TARGET_pad2}
+		cd ${CONF_squash_dir}/${TARGET_pad2}
 	
-		[ x"${1}" != x ] || exit 666
-		[ -d "${1}" ] || exit 666
+		[ x"${1}" != "x" ] || exit 666
+		[ -d ${1} ] || exit 666
 
-		for d in ${TARGET_patch_list_2} ; do sudo cp "${1}"/"${TARGET_pad_dir}"/"${d}" . ; done
+		local d
+		for d in ${TARGET_patch_list_2} ; do sudo cp ${1}/${TARGET_pad_dir}/${d} . ; done
 
 		sudo touch root.conf 
 		sudo chmod a+w root.conf
-		grep -v to_ram devuan.conf > root.conf 
+		grep -v TARGET_to_ram devuan.conf > root.conf 
 	
 		sudo rm devuan.conf
-		echo "to_ram=1" >> root.conf
+		echo "TARGET_to_ram=1" >> root.conf
 		sudo chmod 0444 root.conf
-		cd "${previous}"
+		cd ${previous}
 	fi
 }
 
-case "${cmd}" in
+case ${cmd} in
 	-x)
-		xxx "${par}"
+		xxx ${par}
 	;;
 	-y)
-		[ -d "${CONF_source}" ] || sudo mkdir -p "${CONF_source}"
-		sudo mount -o loop,ro "${par}" "${CONF_source}"
-		xxx "${CONF_source}"/live/filesystem.squashfs
-		sudo umount "${CONF_source}"
+		[ -d ${CONF_source} ] || sudo mkdir -p ${CONF_source}
+		sudo mount -o loop,ro ${par} ${CONF_source}
+		xxx ${CONF_source}/live/filesystem.squashfs
+		sudo umount ${CONF_source}
 	;;
 	-b) 
 		bbb		
@@ -279,30 +309,31 @@ case "${cmd}" in
 	-d)
 
 		if [ x"${CONF_squash0}" != "x" ]; then
-			echo "sudo rm -rf "${CONF_squash0}"/* IN 6 SECS";sleep 6
-			sudo chattr -R -ui "${CONF_squash0}"/*
-			sudo rm -rf "${CONF_squash0}"/*
+			echo "sudo rm -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
+			sudo chattr -R -ui ${CONF_squash0}/*
+			sudo rm -rf ${CONF_squash0}/*
 		fi
 
 		if [ x"${CONF_tmpdir}" != "x" ]; then 
 			echo "sudo rm -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
-			sudo chattr -R -ui "${CONF_tmpdir}"/*
-			sudo rm -rf "${CONF_tmpdir}"/*
+			sudo chattr -R -ui ${CONF_tmpdir}/*
+			sudo rm -rf ${CONF_tmpdir}/*
 		fi
 	;;
 	-c)
-		cfd "${par}"
+		cfd ${par}
 	;;
 	-r)
 		rst
 	;;
 	-j)
-		jlk1 "${par}"
+		jlk_main ${par}
 
-		[ -d "${dir2}" ] || echo "--dir2 "
-		jlk1_5 "${dir2}" devuan
+		[ z"${dir2}" != "z" ] || echo "--dir2 "
+		[ -d ${dir2} ] || echo "--dir2 "
+		jlk_conf ${dir2} devuan
 
-		jlk2 "${dir2}"
+		jlk_sums ${dir2}
 		fix_sudo
 	;;
 	-f)

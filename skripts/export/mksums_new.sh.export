@@ -1,4 +1,5 @@
 #!/bin/sh
+b=1
 
 . ./common.conf
 . ./common_funcs.sh
@@ -9,36 +10,42 @@ usage() {
 
 parse_opts_real() {
 	echo "parse_opts_real()"
+
+	case ${1} in
+		-b)
+			b=${2}
+		;;
+	esac
 }
 
 single_param() {
-	case "${1}" in
+	case ${1} in
 		--iso)
-			sudo chmod o+w "$(pwd)"
-			${gg} -u "${CONF_kay2name}" -sb ./*.iso
-			[ "$?" -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
-			sudo chmod o-w "$(pwd)"
+			sudo chmod o+w $(pwd)
+			${gg} -u ${CONF_kay2name} -sb ./*.iso
+			[ $? -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
+			sudo chmod o-w $(pwd)
 			exit 666
 		;;
 		--pkgs)
-			[ x"${CONF_BASEDIR}" != x ] || exit 664
-			[ x"${CONF_pkgsdir2}" != x ] || exit 665
+			[ x"${CONF_BASEDIR}" != "x" ] || exit 664
+			[ x"${CONF_pkgsdir2}" != "x" ] || exit 665
 
-			sudo chmod o+w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}" || exit 667
-			sudo chattr -ui "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig || exit 667
-			sudo rm "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig || exit 667
+			sudo chmod o+w ${CONF_BASEDIR}/${CONF_pkgsdir2} || exit 667
+			sudo chattr -ui ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig || exit 667
+			sudo rm ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig || exit 667
 	
-			cd "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
 
-			${gg} -u "${CONF_kay2name}" -sb ./*.deb
-			[ "$?" -eq 0 ]  && ${gg} -u "${CONF_kay2name}" -sb ./*.bz2
-			[ "$?" -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
+			${gg} -u ${CONF_kay2name} -sb ./*.deb
+			[ $? -eq 0 ]  && ${gg} -u ${CONF_kay2name} -sb ./*.bz2
+			[ $? -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
 			
-			sudo chmod 0444 "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig
-			sudo chown root:root "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig
-			sudo chattr +ui  "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"/*.sig
+			sudo chmod 0444 ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig
+			sudo chown root:root ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig
+			sudo chattr +ui  ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig
 
-			sudo chmod a-w "${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+			sudo chmod a-w ${CONF_BASEDIR}/${CONF_pkgsdir2}
 			exit 666
 		;;
 		--h)
@@ -47,19 +54,23 @@ single_param() {
 	esac
 }
 
+MKS_parts="1 2 3"
+
 part0() {
-	sudo chmod a+w ${TARGET_DIGESTS_dir}
-	
+	[ -d ${TARGET_DIGESTS_dir} ] || exit 666
+	[ z"${TARGET_DIGESTS_file}" != "z" ] || exit 666
+
+	sudo chmod a+w ${TARGET_DIGESTS_dir}	
 
 	if [ x"{TARGET_DIGESTS_file}" != "x" ] ; then
-		echo "rm ${TARGET_DIGESTS_file}* in 5 secs";sleep 5 
 		rm ${TARGET_DIGESTS_file}*
 	else
 		exit 666
 	fi
 
 	rm ${TARGET_DIGESTS_dir}/*.sig
-	for i in 1 2 3 4 ; do touch ${TARGET_DIGESTS_file}.${i} ; done
+	local i
+	for i in ${MKS_parts} 4 ;  do touch ${TARGET_DIGESTS_file}.${i} ; done
 }
 
 part1() {
@@ -79,60 +90,47 @@ part1() {
 
 }
 
+part1234() {
+	local olddir=$(pwd)	
+	[ -d ./${TARGET_DIGESTS_dir} ] || echo "https://www.youtube.com/watch?v=PjotFePip2M";exit 666
+	cd ./${TARGET_DIGESTS_dir}
 
-part2() {
 
-	if [ -s ${TARGET_DIGESTS_dir}/SAM.2.0 ] ; then 
-		sudo mv ${TARGET_DIGESTS_dir}/SAM.2.0 ${TARGET_DIGESTS_file}.2
-		sudo cat ${TARGET_DIGESTS_dir}/SAM.2.1 >> ${TARGET_DIGESTS_file}.2	
-	else
-		if [ x"${TARGET_pad_dir}" != "x" ] ; then 
-			${sh5} ${TARGET_pad_dir}/* | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} > ${TARGET_DIGESTS_file}.2
-		else
-			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
-		fi
+	local f
+
+	for f in $(find . -name SAM.${1}.*) ; do
+		echo	
+	done
+
+	cd ${olddir}
+}
+
+part123() {
+	
+	cd ${CONF_target} 
+
+
+	if [ ! -s ./${TARGET_DIGESTS_file}.${1} ] ; then
+		
+		${sh5} ./${2}/* | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0}  | grep -v boot.cat | grep -v isolinux.bin > ./${TARGET_DIGESTS_file}.${1};sleep 1
 	fi
+
 }
 
-part3() {
+part456() {
 
-	if [ -s ${TARGET_DIGESTS_dir}/SAM.3 ] ; then
-		mv ${TARGET_DIGESTS_dir}/SAM.3 ${TARGET_DIGESTS_file}.3
+	if [ -s ./${TARGET_DIGESTS_file}.${1} ] ; then
+				${sh5} -c ./${TARGET_DIGESTS_file}.${1} --ignore-missing
 	else
-		${sh5} ./live/* > ${TARGET_DIGESTS_file}.3
+		echo "no such thing as ./${TARGET_DIGESTS_file}.${1}"		 
 	fi
-}
 
-part4() {
-
-		echo "IS ${TARGET_DIGESTS_file}.1 ok?"
-		${sh5} -c ${TARGET_DIGESTS_file}.1
-		[ $? -eq 0 ] || exit
-}
-
-part5() {
-		echo "ENTER part5()"
-
-			sleep 2
-			echo "IS ${TARGET_DIGESTS_file}.2 ok?"
-			${sh5} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
-
-		echo "EXIT part5()"
-}
-
-part6() {
-		echo "ENTER part6()"
-
-		if [ -s ${TARGET_DIGESTS_file}.3 ] ; then
-			${sh5} -c ${TARGET_DIGESTS_file}.3
-		fi
-
-		echo "EXIT part6()"
 }
 
 part6_5() {
+	local i
 
-	for i in 1 2 3 ; do
+	for i in ${MKS_parts} ; do
 		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_file}.${i}
 		[ $? -eq 0 ] || echo "install-keys --i"
 		echo "$?"
@@ -151,8 +149,9 @@ part7() {
 	sleep 2
 	
 		${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
+		local i
 
-		for i in 1 2 3 ; do
+		for i in ${MKS_parts} ; do
 			echo "${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}"
 			${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}			
 			sleep 2
@@ -161,38 +160,35 @@ part7() {
 	echo $?
 }
 
-part66() {
-
-	if [ $? -eq 0 ]; then 
-
-
-		if [ x"${gg}" != "x" ] ; then 
-			part6_5
-		fi
-	else 
-		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
-		exit 666
-	fi
-
-}
-
 part8() {
 
 	sudo chmod a+w ./${TARGET_pad_dir}
 	sudo chown 1000:1000 ./${TARGET_pad_dir}
-	cd ./${TARGET_pad_dir}
 
-	[ -f ./${TARGET_patch_name}.tar.bz2.sig ] && sudo rm ./${TARGET_patch_name}.tar.bz2.sig
-	${gg} -u ${CONF_kay2name} -sb ./${TARGET_patch_name}.tar.bz2
-	echo $?
+	local tfile=./${TARGET_patch_name}.tar.bz2
+	cd ./${TARGET_pad_dir}	
+	[ -f ${tfile}.sig ] && sudo rm ${tfile}.sig
 
-		sleep 6
-		echo "${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ./${TARGET_patch_name}.tar.bz2.sig ./${TARGET_patch_name}.tar.bz2"
-		${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ./${TARGET_patch_name}.tar.bz2.sig ./${TARGET_patch_name}.tar.bz2	
-	fi
+	case ${1} in
+		1)
+			${gg} -u ${CONF_kay2name} -sb ${tfile}
+			echo $?
 
-	sudo chmod a-w ./${TARGET_patch_name}.*
-	sudo chown root:root ./${TARGET_patch_name}.*
+				sleep 6
+				echo "${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}"
+				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}	
+			fi
+		;;
+		2)
+
+		;;
+		*)
+			echo "https://www.youtube.com/watch?v=PjotFePip2M";exit 666
+		;;
+	esac 
+
+	sudo chmod a-w ${tfile}*
+	sudo chown root:root ${tfile}*
 	
 	cd ..
 	sudo chmod a-w ./${TARGET_pad_dir}
@@ -205,15 +201,20 @@ part9() {
 
 	cd ${CONF_tmpdir}/out
 
-	sudo tar -v -jf ${CONF_target}/${TARGET_pad_dir}/${TARGET_patch_name}.tar.bz2 -x ./${TARGET_pad2}/patch.sh
+	local tfile=./${TARGET_patch_name}.tar.bz2
+	local tfile2=./${TARGET_pad2}/${CONF_MKR_FRIST}
+
+	sudo tar -v -jf ${1}/${TARGET_pad_dir}/${tfile} -x ${tfile2}.sh
 	
 	sudo chown -R 1000:1000 ./${TARGET_pad2}
 	sudo chmod a+w ./${TARGET_pad2}/*
 
-	[ -s  ./${TARGET_pad2}/patch.sh.asc ] && rm ./${TARGET_pad2}/patch.sh.asc
-	${gg} -u ${CONF_kay2name} -s --clearsign ./${TARGET_pad2}/patch.sh
+	[ -s ${tfile2}.sh.asc ] && rm ${tfile2}.sh.asc
+	${gg} -u ${CONF_kay2name} -s --clearsign ${tfile2}.sh
 	
 
+	sudo chown -R root:root . 
+	sudo chmod -R go-w  . 
 	cd ${olddir}
 
 }
@@ -222,10 +223,9 @@ enforce_deps
 parse_opts ${1} ${2}
 parse_opts ${3} ${4}
 
-cd ${CONF_targetdir} 
 pwd
 
-[ x"${TARGET_DIGESTS_dir}" != x ] || exit 1
+[ x"${TARGET_DIGESTS_dir}" != "x" ] || exit 1
 
 if [ ! -d ${TARGET_DIGESTS_dir} ] ; then 
 	mkdir -p ${TARGET_DIGESTS_dir}
@@ -234,22 +234,23 @@ fi
 sudo chmod a+w ${TARGET_DIGESTS_dir};sleep 1
 part0 
 
+cd ${CONF_target} 
+pwd
 part1 ${TARGET_DIGESTS_dir}
-sleep 2
 
-part2
-part3
+part123 2 ${TARGET_pad_dir}
+part123 3 live
 
-part4
-part5
+cd ${CONF_target}
+for p in ${MKS_parts} ; do part456 ${p} ; done
 
-part6
-part66
+if [ x"${gg}" != "x" ] ; then 
+	part6_5
+fi
 
 part7 
-part8
-part9
-
+part8 ${b}
+part9 ${CONF_target}
 
 if [ -d ${TARGET_DIGESTS_dir} ] ; then 
 	sudo rm ${TARGET_DIGESTS_dir}/SAM*
@@ -261,12 +262,7 @@ sudo chmod 0555 ${TARGET_DIGESTS_dir}
 sudo chown -R root:root ${TARGET_DIGESTS_dir}
 sudo chmod 0444 ${TARGET_DIGESTS_dir}/*
 
-	echo "	${sh5} -c ${TARGET_DIGESTS_file}.4" 
-	sleep 2
-
-	${sh5} -c ${TARGET_DIGESTS_file}.4
-	echo $?
-	sleep 2
+part456 4
 
 	ls -laRs ${TARGET_DIGESTS_dir}
 	sleep 2

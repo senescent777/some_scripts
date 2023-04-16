@@ -5,27 +5,28 @@ sh5=$(sudo which sha512sum)
 gg=$(sudo which gpg)
 gv=$(sudo which gpgv)
 gi=$(sudo which genisoimage)
+gmk=$(sudo which grub-mkrescue)
+xi=$(sudo which xorriso)
 
 griffindor() {
 	pwd
 	local of2
 
-	if [ x"$1" != "x" ] ; then 
-		of2="${1}"
+	if [ x"${1}" != "x" ] ; then 
+		of2=${1}
 	else
-		of2="${TARGET_DIGESTS_file}".1
+		of2=${TARGET_DIGESTS_file}.1
 	fi
 
-	${sh5} ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > "${of2}"
+	${sh5} ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > ${of2}
 }
 
-
 slithering() {
-	${sh5} ./boot/* > "${TARGET_DIGESTS_file}".1
+	${sh5} ./boot/* > ${TARGET_DIGESTS_file}.1
 }
 
 malfoy() {
-	${sh5} ./boot/* > "${1}"
+	${sh5} ./boot/* > ${1}
 }
 
 parse_opts() {
@@ -34,38 +35,38 @@ parse_opts() {
 
 	if [ x"$1" != "x" ] ; then 
 		if [ x"$2" != "x" ] ; then
-			case "$1" in
+			case ${1} in
 				-v|-V|--v|--V)
 					common_pars=1
 				;;
 			esac
 
-			[ "${common_pars}" -eq 0 ] && parse_opts_real "$1" "$2"
+			[ ${common_pars} -eq 0 ] && parse_opts_real ${1} ${2}
 		else
-			case "$1" in
+			case ${1} in
 				-h|--h)
 					common_pars=1
 					usage
 				;;		
 			esac
 
-			[ "${common_pars}" -eq 0 ] && single_param "$1"
+			[ ${common_pars} -eq 0 ] && single_param ${1}
 		fi
 
 		if [ x"${cmd}" != "x" ] ; then
 			echo "1"
 		else
-			if [ "${common_pars}" -eq 0 ] ; then
+			if [ ${common_pars} -eq 0 ] ; then
 				echo 0
-				cmd="$1"
+				cmd=${1}
 			fi
 		fi
 	fi
 }
 
 mk_bkup() { 
-	if [ -s "${1}" ] ; then
-		sudo mv "${1}" "${1}".OLD
+	if [ -s ${1} ] ; then
+		sudo mv ${1} ${1}.OLD
 	fi
 }
 
@@ -76,74 +77,93 @@ slaughter0() {
 	fn2=$(echo $1 | awk '{print $1}') 
 	ts2=$(sha512sum ${fn2})
 
-	echo ${ts2} | awk '{print $1,$2}' >> "$2"
+	echo ${ts2} | awk '{print $1,$2}' >> ${2}
 }
 
 enforce_deps() {
 	pwd
 
 	local doIt=0
-	local doIt2
-	local pkgsdir="{CONF_pkgsdir2}"
+	local doIt2=0
+	local pkgsdir={CONF_pkgsdir2}
 
 
-	if [ -d ./"${pkgsdir}" ] ; then 
+	if [ -d ./${pkgsdir} ] ; then 
 		doIt2=1
 	else
-		pkgsdir="${CONF_BASEDIR}"/"${CONF_pkgsdir2}"
+		pkgsdir=${CONF_BASEDIR}/${CONF_pkgsdir2}
 
-		if [ -d "${pkgsdir}" ] ; then 
+		if [ -d ${pkgsdir} ] ; then 
 			doIt2=1
 		else
 			doIt2=2
 		fi
 	fi
 
-	if [ x"${gg}" != "x" ] ; then 
+	if [ x"${gg}" != "x" ] && [ -x ${gg} ] && [ -s ${gg} ] ; then 
 	else
 		echo "sudo apt-get install gpg*"
-		doIt="${doIt2}"
+		doIt=${doIt2}
 	fi
 
 
-	if [ y"${gv}" != "y" ] ; then 
+	if [ y"${gv}" != "y" ] && [ -x ${gv} ] && [ -s ${gv} ] ; then 
 	else
 		echo "sudo apt-get install gpgv*"
-		doIt="${doIt2}"
+		doIt=${doIt2}
 	fi
 
-	if [ z"{sh5}" != "z" ] ; then 
+	if [ z"{sh5}" != "z" ] && [ -x ${sh5} ] && [ -s ${sh5} ] ; then 
 	else
-		doIt="${doIt2}"
+		doIt=${doIt2}
 	fi
 	
-	if [ w"${gi}" != "w" ] ; then
+	if [ w"${gi}" != "w" ] && [ -x ${gi} ] && [ -s ${gi} ] ; then 
 	else
 		echo "no genisoimage"
-		doIt="${doIt2}"
+		doIt=${doIt2}
 	fi	
 
-	case "${doIt}" in 
+	if [ v"${gmk}" != "v" ] && [ -x ${gmk} ] && [ -s ${gmk} ] ; then 
+	else
+		echo "no grub-mkrescue"
+	fi
+	
+	if [ u"${xi}" != "u" ] &&  [ -x ${xi} ] && [ -s ${xi} ] ; then 
+	else
+		echo "no xorriso"
+	fi
+
+	case ${doIt} in 
 		0)
+			echo
 		;;
 		1)
-		
+			echo "doIt(1)"
 
 			echo "cd ${CONF_keys_dir}"
 
-			echo -n "for f in ";echo -n ${TARGET_Dkeylist}
-			echo -n " ; do ${gg} --import ";echo -n "$";echo "{f}; done "
+			echo -n "for f in "
+			echo -n ${TARGET_Dkeylist}
+			echo -n " ; do ${gg} --import "
+			echo -n "$"	
+			echo "{f}; done "
 		
 			echo "cd ${pkgsdir}"
 			echo "ls *.deb || ls *.bz2"
 
-			echo -n "for f in ";echo -n "$"
+			echo -n "for f in "
+			echo -n "$"
 			echo -n "(ls ./{*.deb,*.bz2}) ; do "
 			echo -n "${gv} --keyring ${CONF_keys_dir}/${TARGET_Dkname2} "
-			echo -n "$";echo -n "f.sig ";echo -n "$"
+			echo -n "$"
+			echo -n "f.sig "
+			echo -n "$"
 			echo "f; done"
 
-			echo -n "[ ";echo -n "$";echo "?==0 ] || exit"
+			echo -n "[ "
+			echo -n "$"
+			echo "?==0 ] || exit"
 			echo "sudo dpkg -i ./*.deb"
 
 			echo "sudo tar -jxvf ./*.bz2"
@@ -153,30 +173,30 @@ enforce_deps() {
 			echo "sudo rm .${TARGET_pkgdir}/*.deb"	
 		;;
 		2)
-			echo "sudo apt-get update;sudo apt-get install gpg* wodim genisoimage squashfs-utils"
+			echo "sudo apt-get update;sudo apt-get install gpg* wodim genisoimage squashfs-utils xorriso grub*"
 		;;
 		*)
 			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 		;;
 	esac
 
-	[ "${doIt}" -gt 0 ] && exit 666
+	[ ${doIt} -gt 0 ] && exit 666
 }
 
 inst_dep() {
 	echo "inst.dep ${1}"
 	
-	case "${1}" in
+	case ${1} in
 		0)
 			echo "sudo apt-get install genisoimage wodim gpg*"
 		;;
 		1)
-			for f in $(ls "${CONF_pkgsdir2}"/*.deb) ; do
-				${gv} --keyring "${CONF_target}"/"${TARGET_Dpubkg}" "${f}".sig "${f}"
+			for f in $(ls ${CONF_pkgsdir2}/*.deb) ; do
+				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${f}.sig ${f}
 			done
 
-			if [ "$?" -eq 0 ] ; then 
-				sudo dpkg -i "${CONF_pkgsdir2}"/*.deb
+			if [ $? -eq 0 ] ; then 
+				sudo dpkg -i ${CONF_pkgsdir2}/*.deb
 			fi
 		;;
 		*)

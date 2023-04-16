@@ -61,7 +61,6 @@ sudo chmod go-w ${lsrc}
 sudo mount /dev/${TARGET_backup_part} ${TARGET_archdir0} || exit 77
 sudo chmod a+w ${TARGET_archdir0}/${TARGET_patch_dir}
 
-kalat="${kalat} patch.sh"
 
 for kala in ${kalat} ; do 
 	sudo mv ${TARGET_archdir0}/${TARGET_patch_dir}/${kala} ${TARGET_archdir0}/${TARGET_patch_dir}/${kala}.OLD 
@@ -74,10 +73,12 @@ sudo chown 1000:1000 ${CONF_tmpdir}/out
 sudo chmod a+w ${CONF_tmpdir}/out
 cd ${CONF_tmpdir}/out
 
-sudo mv ./${TARGET_pad2}/patch.sh* ${TARGET_archdir0}/${TARGET_patch_dir}
+sudo mv ./${TARGET_pad2}/${CONF_MKR_FRIST}* ${TARGET_archdir0}/${TARGET_patch_dir}
+
 sudo chmod go-w ${TARGET_archdir0}/${TARGET_patch_dir}
 
 sudo chown root:root ${CONF_tmpdir}/out
 sudo chmod go-w ${CONF_tmpdir}/out
 
+sudo mount -o remount,ro ${TARGET_archdir0};sleep 6
 sudo umount ${TARGET_archdir0}
