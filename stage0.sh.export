@@ -7,7 +7,6 @@
 
 base=""
 source2=""
-
 n=devuan 
 
 usage() {
@@ -57,48 +56,5 @@ parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
 
-t_count=$(grep ${CONF_tmpdir0} /proc/mounts | wc -l)
-[ ${t_count} -eq 0 ] && mount ${CONF_tmpdir0}
-
-source_n_target ${base}
-
-[ x"${CONF_target}" != "x" ] || exit 99
-[ -d ${CONF_target} ] || exit 100
-
-
-[ -d ${CONF_target}/live ] || sudo mkdir ${CONF_target}/live
-olddir=$(pwd)
-cd ${source2}/../live
-echo $?
-[ -d ${CONF_target}/${TARGET_DIGESTS_dir} ] || sudo mkdir -p ${CONF_target}/${TARGET_DIGESTS_dir}
-
-live1 ${source2}/../live ${CONF_target}/live
-live2 ${source2}/../live ${CONF_target}/live
-live3 ${source2}/../live ${CONF_target}/live
-
-sleep 3
-cd ${olddir}
-
-copy_main ${CONF_BASEDIR}/${source2} ${CONF_target}/${TARGET_pad_dir} 
-copy_conf ${CONF_BASEDIR}/${source2} ${n} ${CONF_target}/${TARGET_pad_dir}
-copy_sums ${CONF_BASEDIR}/${source2} ${CONF_target}/${TARGET_DIGESTS_dir}
-
-cd ${CONF_BASEDIR}
-klist="${source2}/0 ${CONF_keys_dir}"
-
-for x in ${klist} ; do
-
-	if [ -s ${x}/${TARGET_Dkname1} ] ; then 
-		keyz ${x} ${CONF_target}/${TARGET_DIGESTS_dir}
-		break
-	else
-		echo "n.s.t.a ${x}/${TARGET_Dkname1}"
-	fi	
-done
-
-bootloader ${CONF_bloader} ${CONF_BASEDIR}/${source2} ${CONF_target}/${TARGET_DIGESTS_dir}
-after_bl ${CONF_target} ${CONF_BASEDIR}
-
-cleanup
 
 echo "MKSUMS.SH" 

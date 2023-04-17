@@ -20,7 +20,6 @@ griffindor() {
 
 	${sh5} ./isolinux/* | grep -v boot.cat | grep -v isolinux.bin > ${of2}
 }
-
 slithering() {
 	${sh5} ./boot/* > ${TARGET_DIGESTS_file}.1
 }

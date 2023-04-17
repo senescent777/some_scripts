@@ -258,14 +258,14 @@ usage() {
 	echo "-i <src> : Installs scripts 2 chroot_dir "
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir"
 	echo "\t to state the obvious:"
-	echo "\t --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
+	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
 	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
 
 	echo "-f attempts to Fix some problems w/ sudo"
 	echo "--v 1 adds Verbosity\n"
 
-	echo "--mp, --md, --ms:self-explanatory opts 4 -r" 
-	echo "\t potentially dangerous, so disabled by default"
+	echo "--mp,--md, --ms:self-explanatory opts 4 -r" 
+	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
 ijk() {

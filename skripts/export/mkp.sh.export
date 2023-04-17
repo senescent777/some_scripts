@@ -73,7 +73,12 @@ sudo chown 1000:1000 ${CONF_tmpdir}/out
 sudo chmod a+w ${CONF_tmpdir}/out
 cd ${CONF_tmpdir}/out
 
-sudo mv ./${TARGET_pad2}/${CONF_MKR_FRIST}* ${TARGET_archdir0}/${TARGET_patch_dir}
+
+
+for f in ${CONF_MKR_FRIST} ; do 
+	sudo mv ${TARGET_archdir0}/${TARGET_patch_dir}/${f} ${TARGET_archdir0}/${TARGET_patch_dir}/${f}.OLD
+	sudo mv ./${TARGET_pad2}/${f}* ${TARGET_archdir0}/${TARGET_patch_dir}
+done
 
 sudo chmod go-w ${TARGET_archdir0}/${TARGET_patch_dir}
 

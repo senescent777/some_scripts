@@ -63,6 +63,7 @@ part0() {
 	sudo chmod a+w ${TARGET_DIGESTS_dir}	
 
 	if [ x"{TARGET_DIGESTS_file}" != "x" ] ; then
+		echo "rm ${TARGET_DIGESTS_file}* in 5 secs"
 		rm ${TARGET_DIGESTS_file}*
 	else
 		exit 666
@@ -109,10 +110,9 @@ part123() {
 	
 	cd ${CONF_target} 
 
-
 	if [ ! -s ./${TARGET_DIGESTS_file}.${1} ] ; then
 		
-		${sh5} ./${2}/* | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0}  | grep -v boot.cat | grep -v isolinux.bin > ./${TARGET_DIGESTS_file}.${1};sleep 1
+		${sh5} ./${2}/* | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0}  | grep -v boot.cat | grep -v isolinux.bin > ./${TARGET_DIGESTS_file}.${1}
 	fi
 
 }
@@ -124,7 +124,6 @@ part456() {
 	else
 		echo "no such thing as ./${TARGET_DIGESTS_file}.${1}"		 
 	fi
-
 }
 
 part6_5() {
@@ -146,15 +145,13 @@ part7() {
 	
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
 	[ $? -eq 0 ] || echo "install-keys --kdir <kdir> --i"
-	sleep 2
 	
 		${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
 		local i
 
 		for i in ${MKS_parts} ; do
 			echo "${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}"
-			${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}			
-			sleep 2
+			${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}
 		done
 
 	echo $?
@@ -174,13 +171,11 @@ part8() {
 			${gg} -u ${CONF_kay2name} -sb ${tfile}
 			echo $?
 
-				sleep 6
 				echo "${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}"
 				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}	
 			fi
 		;;
 		2)
-
 		;;
 		*)
 			echo "https://www.youtube.com/watch?v=PjotFePip2M";exit 666
@@ -199,19 +194,25 @@ part8() {
 part9() {
 	local olddir=$(pwd)
 
+	[ -d ${CONF_tmpdir}/out ] || sudo mkdir ${CONF_tmpdir}/out
 	cd ${CONF_tmpdir}/out
 
+	sudo chown -R 1000:1000 .
+	sudo chmod -R a+w . 
+
 	local tfile=./${TARGET_patch_name}.tar.bz2
-	local tfile2=./${TARGET_pad2}/${CONF_MKR_FRIST}
+	local tfile2="" 
+	sudo rm  ./${TARGET_pad2}/*.asc
 
-	sudo tar -v -jf ${1}/${TARGET_pad_dir}/${tfile} -x ${tfile2}.sh
-	
-	sudo chown -R 1000:1000 ./${TARGET_pad2}
-	sudo chmod a+w ./${TARGET_pad2}/*
+	for tfile2 in ${CONF_MKR_FRIST} ; do 
+		sudo tar -v -jf ${1}/${TARGET_pad_dir}/${tfile} -x ./${TARGET_pad2}/${tfile2}.sh
 
-	[ -s ${tfile2}.sh.asc ] && rm ${tfile2}.sh.asc
-	${gg} -u ${CONF_kay2name} -s --clearsign ${tfile2}.sh
-	
+		sudo chown 1000:1000 ./${TARGET_pad2}/${tfile2}.sh
+		sudo chmod a+w ./${TARGET_pad2}/${tfile2}.sh
+
+		${gg} -u ${CONF_kay2name} -s --clearsign ./${TARGET_pad2}/${tfile2}.sh
+	 done
+
 
 	sudo chown -R root:root . 
 	sudo chmod -R go-w  . 
@@ -231,7 +232,7 @@ if [ ! -d ${TARGET_DIGESTS_dir} ] ; then
 	mkdir -p ${TARGET_DIGESTS_dir}
 fi
 
-sudo chmod a+w ${TARGET_DIGESTS_dir};sleep 1
+sudo chmod a+w ${TARGET_DIGESTS_dir}
 part0 
 
 cd ${CONF_target} 
@@ -265,6 +266,5 @@ sudo chmod 0444 ${TARGET_DIGESTS_dir}/*
 part456 4
 
 	ls -laRs ${TARGET_DIGESTS_dir}
-	sleep 2
 
 echo "loits_new | mkq"
