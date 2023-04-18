@@ -3,6 +3,7 @@ b=1
 
 . ./common.conf
 . ./common_funcs.sh
+protect_system
 
 usage() {
 	echo "TODO"
@@ -18,34 +19,31 @@ parse_opts_real() {
 	esac
 }
 
+[ x$"{TARGET_DIGESTS_dir}" != "x" ] || exit 666
+[ x$"{CONF_BASEDIR}" != "x" ] || exit 666
+[ x"${CONF_target}" != "x" ] || exit 666
+
+echo "conf ok (kind of)"
+
 single_param() {
 	case ${1} in
 		--iso)
-			sudo chmod o+w $(pwd)
+	
 			${gg} -u ${CONF_kay2name} -sb ./*.iso
 			[ $? -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
-			sudo chmod o-w $(pwd)
+		
 			exit 666
 		;;
 		--pkgs)
 			[ x"${CONF_BASEDIR}" != "x" ] || exit 664
 			[ x"${CONF_pkgsdir2}" != "x" ] || exit 665
 
-			sudo chmod o+w ${CONF_BASEDIR}/${CONF_pkgsdir2} || exit 667
-			sudo chattr -ui ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig || exit 667
-			sudo rm ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig || exit 667
-	
 			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
 
 			${gg} -u ${CONF_kay2name} -sb ./*.deb
 			[ $? -eq 0 ]  && ${gg} -u ${CONF_kay2name} -sb ./*.bz2
 			[ $? -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
 			
-			sudo chmod 0444 ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig
-			sudo chown root:root ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig
-			sudo chattr +ui  ${CONF_BASEDIR}/${CONF_pkgsdir2}/*.sig
-
-			sudo chmod a-w ${CONF_BASEDIR}/${CONF_pkgsdir2}
 			exit 666
 		;;
 		--h)
@@ -55,46 +53,28 @@ single_param() {
 }
 
 MKS_parts="1 2 3"
+n=$(whoami)
 
 part0() {
 	[ -d ${TARGET_DIGESTS_dir} ] || exit 666
 	[ z"${TARGET_DIGESTS_file}" != "z" ] || exit 666
 
-	sudo chmod a+w ${TARGET_DIGESTS_dir}	
-
 	if [ x"{TARGET_DIGESTS_file}" != "x" ] ; then
-		echo "rm ${TARGET_DIGESTS_file}* in 5 secs"
+		echo "rm ${TARGET_DIGESTS_file}* in 5 secs";sleep 5
+		cd ${CONF_target}
 		rm ${TARGET_DIGESTS_file}*
 	else
 		exit 666
 	fi
 
-	rm ${TARGET_DIGESTS_dir}/*.sig
 	local i
 	for i in ${MKS_parts} 4 ;  do touch ${TARGET_DIGESTS_file}.${i} ; done
 }
 
-part1() {
-	[ -d ${1} ] || exit 666
-
-	if [ -s ${1}/SAM.1.0 ] || [ -s ${1}/SAM.1.1 ] ; then
-		[ -s ${1}/SAM.1.0 ] && sudo mv ${1}/SAM.1.0 ${1}.1
-		[ -s ${1}/SAM.1.1 ] && sudo cat ${1}/SAM.1.1 >> ${1}.1
-	else
- 
-		if [ -d ./isolinux ] ; then
-			griffindor
-		else
-			slithering
-		fi
-	fi
-
-}
 
 part1234() {
 	local olddir=$(pwd)	
 	[ -d ./${TARGET_DIGESTS_dir} ] || echo "https://www.youtube.com/watch?v=PjotFePip2M";exit 666
-	cd ./${TARGET_DIGESTS_dir}
 
 
 	local f
@@ -108,16 +88,21 @@ part1234() {
 
 part123() {
 	
+	[ z"${1}" != "z" ] || exit 666
+	[ -d ${2} ] || exit 666
+
 	cd ${CONF_target} 
 
 	if [ ! -s ./${TARGET_DIGESTS_file}.${1} ] ; then
 		
 		${sh5} ./${2}/* | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0}  | grep -v boot.cat | grep -v isolinux.bin > ./${TARGET_DIGESTS_file}.${1}
+		[ $? -eq 0 ] || echo "sudo chown ${n}:${n} ./${TARGET_DIGESTS_dir} && chmod 0755  ./${TARGET_DIGESTS_dir}"	
 	fi
 
 }
 
 part456() {
+	[ z"${1}" != "z" ] || exit 666
 
 	if [ -s ./${TARGET_DIGESTS_file}.${1} ] ; then
 				${sh5} -c ./${TARGET_DIGESTS_file}.${1} --ignore-missing
@@ -131,7 +116,7 @@ part6_5() {
 
 	for i in ${MKS_parts} ; do
 		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_file}.${i}
-		[ $? -eq 0 ] || echo "install-keys --i"
+		[ $? -eq 0 ] || echo "install-keys --i || sudo chown ${n}:${n} ./${TARGET_DIGESTS_dir} && chmod 0755 ./${TARGET_DIGESTS_dir}"
 		echo "$?"
 	done
 
@@ -158,13 +143,16 @@ part7() {
 }
 
 part8() {
+	[ x"${TARGET_patch_name}" != "x" ] || exit 665
+	[ x"${1}" != "x" ] || exit 665
 
-	sudo chmod a+w ./${TARGET_pad_dir}
-	sudo chown 1000:1000 ./${TARGET_pad_dir}
+	local tfile=${TARGET_patch_name}.tar.bz2
+	[ -s ./${TARGET_pad_dir}/${tfile} ] || exit 666		
 
-	local tfile=./${TARGET_patch_name}.tar.bz2
-	cd ./${TARGET_pad_dir}	
-	[ -f ${tfile}.sig ] && sudo rm ${tfile}.sig
+
+	local olddir=$(pwd)	
+	cp ./${TARGET_pad_dir}/${tfile} ../out
+	cd ../out
 
 	case ${1} in
 		1)
@@ -176,48 +164,19 @@ part8() {
 			fi
 		;;
 		2)
+			echo "sudo mv ${tfile}.gpg ${tfile}.gpg.OLD"
+			echo "${gg} -r ${CONF_kay2name} -se ${tfile}"
+			echo "${gg} --verify ${tfile}"
 		;;
 		*)
 			echo "https://www.youtube.com/watch?v=PjotFePip2M";exit 666
 		;;
 	esac 
 
-	sudo chmod a-w ${tfile}*
-	sudo chown root:root ${tfile}*
-	
-	cd ..
-	sudo chmod a-w ./${TARGET_pad_dir}
-	sudo chown root:root ./${TARGET_pad_dir}
-
+	cd ${olddir}
 }
 
 part9() {
-	local olddir=$(pwd)
-
-	[ -d ${CONF_tmpdir}/out ] || sudo mkdir ${CONF_tmpdir}/out
-	cd ${CONF_tmpdir}/out
-
-	sudo chown -R 1000:1000 .
-	sudo chmod -R a+w . 
-
-	local tfile=./${TARGET_patch_name}.tar.bz2
-	local tfile2="" 
-	sudo rm  ./${TARGET_pad2}/*.asc
-
-	for tfile2 in ${CONF_MKR_FRIST} ; do 
-		sudo tar -v -jf ${1}/${TARGET_pad_dir}/${tfile} -x ./${TARGET_pad2}/${tfile2}.sh
-
-		sudo chown 1000:1000 ./${TARGET_pad2}/${tfile2}.sh
-		sudo chmod a+w ./${TARGET_pad2}/${tfile2}.sh
-
-		${gg} -u ${CONF_kay2name} -s --clearsign ./${TARGET_pad2}/${tfile2}.sh
-	 done
-
-
-	sudo chown -R root:root . 
-	sudo chmod -R go-w  . 
-	cd ${olddir}
-
 }
 
 enforce_deps
@@ -232,13 +191,11 @@ if [ ! -d ${TARGET_DIGESTS_dir} ] ; then
 	mkdir -p ${TARGET_DIGESTS_dir}
 fi
 
-sudo chmod a+w ${TARGET_DIGESTS_dir}
 part0 
 
 cd ${CONF_target} 
 pwd
-part1 ${TARGET_DIGESTS_dir}
-
+part123 1 ${CONF_bloader}
 part123 2 ${TARGET_pad_dir}
 part123 3 live
 
@@ -250,20 +207,17 @@ if [ x"${gg}" != "x" ] ; then
 fi
 
 part7 
-part8 ${b}
-part9 ${CONF_target}
 
-if [ -d ${TARGET_DIGESTS_dir} ] ; then 
-	sudo rm ${TARGET_DIGESTS_dir}/SAM*
-fi
+pwd
+part8 ${b}
 
 ${sh5} ${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ${TARGET_DIGESTS_file}.4
-
-sudo chmod 0555 ${TARGET_DIGESTS_dir}
-sudo chown -R root:root ${TARGET_DIGESTS_dir}
-sudo chmod 0444 ${TARGET_DIGESTS_dir}/*
+[ $? -eq 0 ] && echo "sudo chown ${n}:${n} ./${TARGET_DIGESTS_dir} && chmod 0755 ./${TARGET_DIGESTS_dir"
 
 part456 4
+sudo chown -R 0:0 ${CONF_target}/${TARGET_DIGESTS_dir}
+sudo chmod 0555 ${CONF_target}/${TARGET_DIGESTS_dir}
+sudo chmod 0444 ${CONF_target}/${TARGET_DIGESTS_dir}/*
 
 	ls -laRs ${TARGET_DIGESTS_dir}
 

@@ -56,5 +56,4 @@ parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
 
-
 echo "MKSUMS.SH" 

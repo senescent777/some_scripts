@@ -1,6 +1,7 @@
 #!/bin/sh
 . ./common.conf
 . ./common_funcs.sh
+protect_system
 
 
 dir2=""
@@ -61,7 +62,6 @@ xxx() {
 			echo "sudo apt-get install squashfs-utils"
 		fi
 
-		sudo chown 0:0 ${CONF_squash0}
 	fi
 }
 
@@ -125,14 +125,12 @@ jlk_main() {
 		[ x"${1}" != "x" ] || exit 666
 
 
-
 		local d
 		for d in sh bz2 bz3 ; do sudo cp ${1}/${TARGET_pad_dir}/*.${d} . ; done
-		for d in sh bz2 bz3 conf ; do sudo chmod 0444 ./*.${d} ; done
-		sudo chmod 0555 ./*.sh
 
 
-		sudo chown -R root:root ./*
+
+	
 	fi
 }
 
@@ -152,15 +150,11 @@ jlk_conf() {
 			sudo rm ./${2}.conf
 
 
-			sudo touch ./root.conf 
-			sudo chmod a+w ./root.conf 
 
 			grep -v TARGET_to_ram ${1}/${TARGET_pad_dir}/${2}.conf > ./root.conf 
 
 	        	echo "TARGET_to_ram=1" >> ./root.conf
 
-			sudo chown -R root:root ./*
-			sudo chmod 0444 ./*.conf
 
 		else
 		fi
@@ -175,16 +169,10 @@ jlk_sums() {
 
 	cd ${CONF_squash_dir}/${TARGET_pad2}
 
-	sudo chattr -R -ui .
-	sudo chmod o+w .
-	
 	[ -d ./0 ] || sudo mkdir -p ./0 ;sleep 6
-	sudo chmod o+w ./0
+
 
 	sudo cp -a ${1}/${TARGET_DIGESTS_dir}/* ./0
-
-	sudo chmod 0755 .
-	sudo chmod 0755 ./0
 
 		ls -las ./0;sleep 5
 		cd ..
@@ -282,8 +270,6 @@ ijk() {
 		local d
 		for d in ${TARGET_patch_list_2} ; do sudo cp ${1}/${TARGET_pad_dir}/${d} . ; done
 
-		sudo touch root.conf 
-		sudo chmod a+w root.conf
 		grep -v TARGET_to_ram devuan.conf > root.conf 
 	
 		sudo rm devuan.conf
@@ -308,15 +294,13 @@ case ${cmd} in
 	;;
 	-d)
 
-		if [ x"${CONF_squash0}" != "x" ]; then
+		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "sudo rm -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
-			sudo chattr -R -ui ${CONF_squash0}/*
 			sudo rm -rf ${CONF_squash0}/*
 		fi
 
-		if [ x"${CONF_tmpdir}" != "x" ]; then 
+		if [ x"${CONF_tmpdir}" != "x" ] ; then 
 			echo "sudo rm -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
-			sudo chattr -R -ui ${CONF_tmpdir}/*
 			sudo rm -rf ${CONF_tmpdir}/*
 		fi
 	;;

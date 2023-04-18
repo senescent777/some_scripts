@@ -2,12 +2,13 @@
 
 . ./common.conf
 . ./common_funcs.sh
+protect_system
 
 post=stable
 b=1
 
 usage() {
-	echo "$0 [-t <type> ] [ --v <verbosity> ] [-b <sign_or_not> ]"
+	echo "${0} [-t <type> ] [ --v <verbosity> ] [-b <sign_or_not> ]"
 	echo "-b 1:just signs"
 }
 
@@ -53,18 +54,20 @@ part2() {
 	
 	local opts=""
 
-	sudo tar ${opts} -jcpf ${1} ${CONF_scripts_dir} ${CONF_BASEDIR}/${CONF_stg0file} ${CONF_BASEDIR}/lib 
-	sudo tar ${opts} -jcpf ${1}.e ${CONF_scripts_dir}/export ${CONF_BASEDIR}/${CONF_stg0file}.export
 
+	sudo tar ${opts} -jcpf ${1} ${CONF_scripts_dir} ${CONF_BASEDIR}/stage0* ${CONF_BASEDIR}/lib 
+	sudo tar ${opts} -jcpf ${1}.e ${CONF_scripts_dir}/export ${CONF_BASEDIR}/stage0*.export 
 }
 
 part3() {
 	[ x"${1}" != "x" ] || exit 666
 	[ -s ${1} ] || exit 666
+
+	pwd
 	local g
 
 	for g in ${1} ${1}.sig ${1}.gpg ; do
-		sudo mv ${2}/${g} ${2}/${g}.OLD
+		mk_bkup ${2}/${g}
 	done
 
 	case ${3} in
@@ -74,6 +77,7 @@ part3() {
 			${gg} -u ${CONF_kay2name} -sb ./${1}
 		;;
 		2)
+			echo "${gg} -r ${CONF_kay2name} --symmetric -se ./${1}"			
 		;;
 	esac
 
@@ -99,15 +103,13 @@ enforce_deps
 check_params ${b}
 
 
-	 sudo mount /dev/${TARGET_backup_part} ${TARGET_archdir0}
+	sudo mount /dev/${TARGET_backup_part} ${TARGET_archdir0}
 
-if [ $? -eq 0 ] ; then 
+if [ $? -eq 0 ] ; then
 else
 	echo "sudo umount ${TARGET_archdir0}";exit 555
 fi
 
-sudo chmod a+w ./out
-sudo chown 1000:1000 .
 cd ./out
 
 part1 ${TARGET_pad_bak_file} ${post}
@@ -122,9 +124,6 @@ done
 cd ..
 
 	ls -las ${TARGET_archdir};sleep 10
+fi 
 
 sudo umount ${TARGET_archdir0}
-
-sudo chmod a-w .
-sudo chmod a-w ./out
-sudo chown root:root ./out

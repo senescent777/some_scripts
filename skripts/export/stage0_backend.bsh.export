@@ -1,8 +1,8 @@
-
+protect_system
+protect_system
 
 mangle_conf() {
 }
-
 
 get_devuan() {
 	[ -d ${CONF_distros_dir} ] || sudo mkdir ${CONF_distros_dir}
@@ -26,26 +26,23 @@ make_src_dirs() {
 cleanup() {
 	sudo umount ${CONF_source}
 }
+
 copy_main() {
 	[ x"${1}" != "x" ] || exit 2
 	[ -d ${2} ] || exit 2 
+
+	[ y"${CONF_tmpdir}" != "y" ] || exit 33
+	[ -d ${CONF_tmpdir} ] || exit 34
 
 	[ z"${CONF_scripts_dir}" != "z" ] || echo "n.s.t.as ${CONF_scripts_dir}"
 
 	if [ -d ${CONF_scripts_dir} ]; then 
 		sudo cp -a ${CONF_scripts_dir}/*.sh ${CONF_tmpdir}
-		sudo chmod 0555 ${CONF_tmpdir}/*.sh
-		sudo chown root:root ${CONF_tmpdir}/*.sh
+
 	fi
 
 	sudo cp -a ${1}/*.sh ${2} 
-	sudo chmod 0555 ${2}/*.sh 
-	sudo chown root:root ${2}/*.sh
-
-
 	sudo cp -a ${1}/*.bz2 ${2}
-	sudo chmod 0444 ${2}/*.bz2
-	sudo chown root:root ${2}/*.bz2
 
 }
 
@@ -57,10 +54,6 @@ copy_conf() {
 		sudo cp -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
 	fi
 
-	sudo chmod a+w ${3}
-	sudo chown ${n}:${n} ${3}
-	sudo touch ${3}/${2}.conf
-	sudo chown ${n}:${n} ${3}/${2}.conf
 
 
 	if [ -s ${3}/upload.sh ] || [ -s ${3}/extras.tar.bz2 ] ; then 
@@ -68,7 +61,6 @@ copy_conf() {
 	fi
 
 	utfile=${3}/${2}.conf
-	sudo chmod a+w ${utfile};sleep 1
 
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
@@ -96,17 +88,14 @@ copy_conf() {
 
 	sudo cat ${1}/${2}.conf >> ${utfile}
 
-	sudo chmod a-w ${utfile};sleep 1
-	sudo chmod 0444 ${3}/*.conf
-	sudo chown root:root ${3}/*.conf
-
-	sudo chmod go-w ${3}
-	sudo chown root:root ${3}
 
 	sleep 1
 }
 
 copy_sums() {
+
+	[ x"${1}" != "x" ] || exit 2
+	[ -d ${2} ] || exit 2 
 }
 
 bootloader() {
@@ -146,36 +135,58 @@ bootloader() {
 
 }
 
-after_bl() {
-
-	sudo chown -R 1000:1000 ${1}/${TARGET_DIGESTS_dir}
-	sudo chmod u+w ${1}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file0}* 
-	sudo chmod u+w ${1}/${TARGET_DIGESTS_dir}/*.gpg
-
-	sudo touch ${1}/${TARGET_pad_dir}/*
-
-
-	sudo chmod  go-w  ${1}
-	sudo chown root:root ${1}
-
-}
-
 make_tgt_dirs() {
 	echo "MAKE_DIRS"
 
 	[ x"${CONF_target}" != "x" ] || exit 99
+	[ x"${CONF_target}" != "/" ] || exit 100
+	echo "${CONF_target} ok"
 
-	if [ -d ${CONF_target} ] ; then 
+	[ y"${CONF_source}" != "y" ] || exit 101
+	[ -d ${CONF_source} ] || sudo mkdir -p ${CONF_source}
+	sudo chown 0:0 ${CONF_source}
+	sudo chmod 0755 ${CONF_source}
+
+	
+	sudo chown -R ${n}:${n} ${CONF_target}
+	sudo chmod 0755 ${CONF_target}	
+
+	if [ ! -d ${CONF_target} ] ; then
+		echo "mkdir ${CONF_target}";sleep 6
 		sudo mkdir -p ${CONF_target}
 	else
+		echo "rm  ${CONF_target}";sleep 6
 		sudo rm -rf ${CONF_target};sleep 1
 	fi
 
-	[ -d ${CONF_source} ] || sudo mkdir -p ${CONF_source}
-	[ -d ${CONF_target}/live ] || sudo mkdir ${CONF_target}/live
+
+	[ -d ${CONF_target}/live ] || sudo mkdir -p ${CONF_target}/live
+	sudo chown -R ${n}:${n} ${CONF_target}/live
+
 	[ -d ${CONF_target}/${TARGET_DIGESTS_dir} ] || sudo mkdir -p ${CONF_target}/${TARGET_DIGESTS_dir}
+	sudo chown -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}/..
+
 	[ -d ${CONF_target}/${CONF_bloader} ] || sudo mkdir -p ${CONF_target}/${CONF_bloader}
+	sudo chown -R ${n}:${n} ${CONF_target}/${CONF_bloader}
 
+	sudo chown 0:0 ${CONF_target}
+	
+	[ -d ${CONF_target}/../out ] || sudo mkdir -p ${CONF_target}/../out
+	sudo chown -R ${n}:${n} ${CONF_target}/../out
+	sudo chmod 0755 ${CONF_target}/../out
 
+	ls -la  ${CONF_target};sleep 6
 	echo "...done"
+}
+
+default_process() {
+	echo "nt default_process(${1})"
+
+	[ -d ${1} ] || exit 666
+
+	sudo chown -R 0:0 ${1}
+	sudo chmod 0755 ${1}
+	sudo chmod 0444 ${1}/*
+
+	echo "xt default_process(${1})"
 }

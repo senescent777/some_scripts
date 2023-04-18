@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ridk=""
 
@@ -6,9 +6,9 @@ ridk=""
 . ./common_funcs.sh
 
 usage() {
-	echo "$0 --kdir <kdir> --i Imports keys from <kdir>"
-	echo "$0 --kdir <kdir> --e Exports keys to <kdir>"
-	echo "$0 --kdir <kdir> --m Makes 2 keys , <kdir> still needed"
+	echo "${0} --kdir <kdir> --i Imports keys from <kdir>"
+	echo "${0} --kdir <kdir> --e Exports keys to <kdir>"
+	echo "${0} --kdir <kdir> --m Makes 2 keys , <kdir> still needed"
 }
 
 tpop() {
@@ -32,7 +32,6 @@ tpop ${3} ${4}
 [ x"${ridk}" != "x" ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 [ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 
-VAIH:inst_dep käyttöön? kuten loits_new ?
 
 case ${cmd} in
 	--i)
@@ -41,20 +40,17 @@ case ${cmd} in
 			${gg} --import ${ridk}/${f}
 		done
 
+
 	;;
 	--e) 
 		[ x"${CONF_kay1name}" != "x" ] || exit 666
 		[ x"${CONF_kay2name}" != "x" ] || exit 666
 
-		sudo chmod a+w ${ridk}
 		sudo rm ${ridk}/${TARGET_Dkname1}*
 		sudo rm ${ridk}/${TARGET_Dkname2}*
 
 		${gg} --export ${CONF_kay1name} > ${ridk}/${TARGET_Dkname1}
 		${gg} --export ${CONF_kay2name} > ${ridk}/${TARGET_Dkname2}
-			
-		sudo chmod a-w ${ridk}
-		ls -las ${ridk}
 	;;
 	--m)
 		cd ~
@@ -63,9 +59,9 @@ case ${cmd} in
 		sleep 5
 		${gg} --generate-key
 		sleep 5
-		sudo chmod a+w ${ridk}
+	
 		cd ~;tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg
-		sudo chmod a-w ${ridk}
+	
 		${gg} --list-keys
 		nano ${CONF_scripts_dir}/common.conf
 	;;

@@ -205,3 +205,19 @@ inst_dep() {
 
 	exit 666
 }
+
+protect_system() {
+	sudo chattr +ui /sys
+	
+		sudo chattr +ui /run
+		sudo chattr +ui /etc
+		sudo chattr +ui /usr
+		sudo chattr +ui /bin
+		sudo chattr +ui /sbin
+		sudo chattr +ui /dev
+		sudo chattr +ui /proc
+		sudo chattr +ui /root
+		sudo chattr +ui /home
+		sudo chattr +ui /usr
+		sudo chattr +ui /var
+}

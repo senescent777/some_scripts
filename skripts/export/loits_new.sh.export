@@ -1,13 +1,13 @@
-
-
+#!/bin/sh
 . ./common.conf
 . ./common_funcs.sh
+protect_system
 
 ltarget="" 
 bloader=""
 
 usage() {
-	echo "$0 --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
+	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666
 }
 
@@ -65,39 +65,37 @@ enforce_deps
 
 
 mk_pad_bak() {
-
-
 	[ -s ./${1} ] && sudo mv ${1} ${1}.OLD
 	
 	if [ ! -d ../out ] ; then 
 		sudo mkdir ../out
 	fi
 
-	sudo chown 1000:1000 ../out
-	sudo chmod a+w  ../out
-
-	sudo chown -R root:root ./*
-	sudo chmod -R a-w ./${TARGET_pad_dir}/*
-	sudo chmod a-w ./${TARGET_pad_dir}/ 
-
 	local tpop=""
-	sudo tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ../out/${1} ./${2}			
+	tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ../out/${1} ./${2}			
 
 }
+
+n=$(whoami)
+[ x"${CONF_TARGET}" != "x" ] || exit 666
+
+sudo chown -R ${n}:${n} ${CONF_TARGET}/out
+sudo chmod -R 0755 ${CONF_TARGET}/out
 
 cd ${lsrcdir}
 
 mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir}
 sleep 1
 
-sudo chmod a+w ../out	
+
 
 case ${bloader} in
 	isolinux)
 		
-		sudo chmod a+w ./isolinux/isolinux.bin
-		${gi} -o ../out/${ltarget} ${CONF_gi_opts} .
-		sudo chmod -R a-w ./isolinux
+		sudo chown -R ${n}:${n} .
+		sudo chmod -R 0755 .
+
+		${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} .
 
 	;;
 	grub)
@@ -115,11 +113,7 @@ case ${bloader} in
 	;;
 esac
 
-sudo chmod go-w .
-sudo chmod go-w ..
-sudo chmod o-w ../out
-
-ls -las ../out
+sudo chown -R 0:0 ${CONF_TARGET}
 
 sleep 1
 echo "stick.sh ?"

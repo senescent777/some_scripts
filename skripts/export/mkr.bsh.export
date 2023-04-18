@@ -2,13 +2,14 @@
 
 . ./common.conf
 . ./common_funcs.sh
+protect_system
 
 dir=""
 dir2=${CONF_target}
 
 usage() {
 	echo "prepare dirs 4 mf.bsh"
-	echo "$0 --in <input dir> [--v <verbosity leVel>]"
+	echo "${0} --in <input dir> [--v <verbosity leVel>]"
 	exit 666
 }
 
@@ -97,7 +98,6 @@ mutilate() {
 	local lokal_h="TARGET_pad_bak TARGET_pad_dir TARGET_DIGESTS TARGET_DT"
 
 	sudo touch ${1}/${3}
-	sudo chmod a+w ${1}/${3}
 	head -n 1 ${1}/${2} > ${1}/${3}
 	
 	for f in ${lokal_g} ; do
@@ -107,7 +107,7 @@ mutilate() {
 	for f in ${lokal_h} ; do
 	done
 	
-	sudo chmod a-w  ${1}/${3}
+
 }
 
 

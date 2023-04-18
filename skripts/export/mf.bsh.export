@@ -2,6 +2,7 @@
 
 . ./common.conf
 . ./common_funcs.sh
+protect_system
 
 ltgtdir=""
 cleanup=0
@@ -34,7 +35,8 @@ process_dir() {
 	if [ x"${1}" != "x" ] ; then 
 		if [ -d ./${1} ] ; then
 			sudo chmod -R a-w ${1}/*
-			sudo chown -R root:root ${1}/*.sh ${1}/*.conf
+			sudo chown -R root:root ${1}/*.sh
+			sudo chown ${1}/*.conf
 			sudo chown -R root:root ${1}/tmp/*
 
 			cd ./${1}
@@ -72,6 +74,7 @@ fi
 
 [ x"${TARGET_DIGESTS_dir}" != "x" ] || exit 1
 [ x"${tgtfile}" != "x" ] || exit 1
+
 enforce_deps
 
 cd ${ltgtdir}/..
@@ -81,16 +84,18 @@ if [ x"${TARGET_DIGESTS_dir}"  != "x" ] ; then
 	[ -d ${TARGET_DIGESTS_dir}  ] || sudo mkdir -p ${TARGET_DIGESTS_dir} 
 
 	if [ x"${tgtfile}"  != "x" ] ; then 
-		[ -s ${TARGET_DIGESTS_dir}/${tgtfile} ] && sudo rm ${TARGET_DIGESTS_dir}/${tgtfile} 
+		[ -s ${TARGET_DIGESTS_dir}/${tgtfile} ] && mk_bkup ${TARGET_DIGESTS_dir}/${tgtfile}  
 	fi
 
-	sudo touch ${TARGET_DIGESTS_dir}/${tgtfile} ;sleep 2
+	sudo touch ${TARGET_DIGESTS_dir}/${tgtfile}
+	sleep 2
 	sudo chmod a+w ${TARGET_DIGESTS_dir}/${tgtfile} 
 fi
 
 cd ${ltgtdir}
 
 if [ ${cleanup} -eq 1 ] ; then
+	mk_bkup ${TARGET_DIGESTS_dir}/SAM.*
 	exit 1
 fi
 

@@ -1,18 +1,15 @@
 #!/bin/sh
-
 . ./common.conf
 . ./common_funcs.sh
 
-lsrc=""
+lsrc="out"
 mode=1
 tfile=""
 
 usage() {
-	echo "$0 --in <directory containing ${TARGET_patch_name}.tar.bz2> [--mode <gpg_mode> ] [ --v <dbg_level> ]"
+	echo "${0} --in <directory containing ${TARGET_patch_name}.tar.bz2> [--mode <gpg_mode> ] [ --v <dbg_level> ]"
 }
 
-	usage
-	exit 666
 
 parse_opts_real() {
 	case ${1} in
@@ -28,7 +25,6 @@ parse_opts_real() {
 parse_opts ${1} ${2}
 parse_opts ${3} ${4}
 parse_opts ${5} ${6}
-[ -d ${lsrc} ] || exit 666
 
 tfile0=${TARGET_patch_name}.tar.bz2
 tfile=${lsrc}/${tfile0}
@@ -40,13 +36,14 @@ case ${mode} in
 	1)
 		kalat="${kalat} ${kalat}.sig" 
 
-			echo "kalat=${kalat}" 
-			echo "sudo mv ${tfile}.sig ${tfile}.sig.OLD"
+			echo "kalat=${kalat}"
 			${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile} 
 		fi	
 	;;
 	2)
 		kalat="${kalat} ${kalat}.gpg" 
+		echo "mk_bkup ${tfile}.gpg "
+		echo "${gg} -u ${CONF_kay2name} -se ${tfile}"
 	;;
 	*)
 		echo "https://www.youtube.com/watch?v=PjotFePip2M"
@@ -55,35 +52,25 @@ case ${mode} in
 esac
 
 
-sudo chown root:root ${lsrc}
-sudo chmod go-w ${lsrc}
-
 sudo mount /dev/${TARGET_backup_part} ${TARGET_archdir0} || exit 77
-sudo chmod a+w ${TARGET_archdir0}/${TARGET_patch_dir}
 
 
-for kala in ${kalat} ; do 
-	sudo mv ${TARGET_archdir0}/${TARGET_patch_dir}/${kala} ${TARGET_archdir0}/${TARGET_patch_dir}/${kala}.OLD 
+for kala in ${kalat} ; do
+	mk_bkup ${TARGET_archdir0}/${TARGET_patch_dir}/${kala}
 
 	sudo cp ${lsrc}/${kala} ${TARGET_archdir0}/${TARGET_patch_dir}
 done 
 
 
-sudo chown 1000:1000 ${CONF_tmpdir}/out
-sudo chmod a+w ${CONF_tmpdir}/out
 cd ${CONF_tmpdir}/out
 
 
 
-for f in ${CONF_MKR_FRIST} ; do 
-	sudo mv ${TARGET_archdir0}/${TARGET_patch_dir}/${f} ${TARGET_archdir0}/${TARGET_patch_dir}/${f}.OLD
+for f in ${CONF_MKR_FRIST} ; do
+	mk_bkup ${TARGET_archdir0}/${TARGET_patch_dir}/${f}	
 	sudo mv ./${TARGET_pad2}/${f}* ${TARGET_archdir0}/${TARGET_patch_dir}
 done
 
-sudo chmod go-w ${TARGET_archdir0}/${TARGET_patch_dir}
-
-sudo chown root:root ${CONF_tmpdir}/out
-sudo chmod go-w ${CONF_tmpdir}/out
 
 sudo mount -o remount,ro ${TARGET_archdir0};sleep 6
 sudo umount ${TARGET_archdir0}
