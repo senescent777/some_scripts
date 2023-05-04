@@ -1,7 +1,6 @@
 #!/bin/sh
 
 ridk=""
-
 . ./common.conf
 . ./common_funcs.sh
 

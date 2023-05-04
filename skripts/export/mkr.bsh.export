@@ -6,7 +6,6 @@ protect_system
 
 dir=""
 dir2=${CONF_target}
-
 usage() {
 	echo "prepare dirs 4 mf.bsh"
 	echo "${0} --in <input dir> [--v <verbosity leVel>]"
@@ -36,11 +35,6 @@ parse_opts ${5} ${6}
 [ -d ${dir} ] || exit 666
 echo "PARAMS OK"
 
-if [ -d ${CONF_BASEDIR}/lib ] ; then 
-	sudo chmod -R 0755 ${CONF_BASEDIR}/lib
-	sudo chown -R root:root ${CONF_BASEDIR}/lib
-	sudo chattr -R +ui ${CONF_BASEDIR}/lib
-fi
 
 defecate() {
 	[ x"${1}" != "x" ] || exit 666
@@ -49,7 +43,7 @@ defecate() {
 
 	cd ${CONF_BASEDIR}/lib/${2}
 
-	local flist=$(find . -type f | grep -v '.OLD' | grep -v '.old')
+	flist=$(find . -type f | grep -v '.OLD' | grep -v '.old')
 	local d=""
 	local f=""
 

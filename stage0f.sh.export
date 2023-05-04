@@ -22,22 +22,34 @@ part0() {
 		fi
 	done
 
+	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
+
+	sudo chmod o+w ${CONF_target}/${TARGET_pad_dir}
+	sudo touch ${CONF_target}/${TARGET_pad_dir}/${n}.conf
+	sudo chmod 0644 ${CONF_target}/${TARGET_pad_dir}/${n}.conf
+	sudo chown ${n}:${n} ${CONF_target}/${TARGET_pad_dir}/${n}.conf
+	sudo chmod o-w ${CONF_target}/${TARGET_pad_dir}
+
 	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir}
 	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
-	copy_sums ${src2} ${CONF_target}/${TARGET_pad_dir}
-
-	sudo chown 1000:1000 ${CONF_target}/${TARGET_DIGESTS_dir}
-	sudo chmod a+w  ${CONF_target}/${TARGET_DIGESTS_dir}
-
-	${gg} --export ${CONF_kay1name} > ${CONF_target}/${TARGET_DIGESTS_dir}/${TARGET_Dkname1}
-	${gg} --export ${CONF_kay2name} > ${CONF_target}/${TARGET_DIGESTS_dir}/${TARGET_Dkname2}
+	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
 	
-	sudo chmod go-w  ${CONF_target}/${TARGET_DIGESTS_dir}
-	sudo chown root:root ${CONF_target}/${TARGET_DIGESTS_dir}
+	sudo touch ${CONF_target}/${TARGET_pad_dir}/*
+	sudo chmod 0444 ${CONF_tmpdir}/*.conf
+	sudo chmod 0755 ${CONF_tmpdir}/*.sh
+	
+	sudo cp ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
+
+	default_process ${CONF_target}/${TARGET_pad_dir}
+	sudo chmod 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
+	sudo chown -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
 
 	bootloader ${CONF_bloader} ${src2}/.. ${CONF_source}
-	after_bl ${CONF_target} ${CONF_BASEDIR}
+	sudo touch ${CONF_target}/${CONF_bloader}/*
+	
+	sudo chmod 0555 ${CONF_target}/live
+	sudo chmod 0755 ${CONF_target}/${TARGET_DIGESTS_dir}
 }
 
 if [ -s ${1} ] ; then

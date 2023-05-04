@@ -1,22 +1,20 @@
 #!/bin/sh
 
+
 mfngle() {
 
 	[ x"${1}" != "x" ] || exit
 	[ -s ${1}.export ] && sudo mv ${1}.export ${1}.export.old
-
-	sudo touch ${1}.export
-	sudo chmod a+w ${1}.export
+	
+	touch ${1}.export
 
 	head -n 1 ${1} >> ${1}.export
 
-	sudo chmod a-w ${1}.export
 }
 
 
 if [ -d ./${1} ] ; then
 	[ -d ./${1}/export ] || mkdir -p ./${1}/export
-	sudo chmod a+w ./${1}/export
 
 	for e in ash bsh ; do
 		for f in $(find ./${1} -name *.${e}) ; do
@@ -30,8 +28,6 @@ if [ -d ./${1} ] ; then
 		mfngle ${f} 
 		sudo mv  ${f}.export ./${1}/export
 	done
-
-	sudo chmod go-w  ./${1}/export
 else
 	if [ -s ./${1} ] ; then
 		[ -d ./export ] || sudo mkdir -p ./export		

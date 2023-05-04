@@ -10,7 +10,7 @@ source2=""
 n=devuan 
 
 usage() {
-	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--bl <BOOTLOADER>] [--luser <loser>] [--v <verbosity_level>]"
+	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--v <verbosity_level>]"
 	echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})"
 	echo "${0} --get-devuan <download_dir>"
 	echo "${0} --make-dirs"
@@ -23,11 +23,6 @@ parse_opts_real() {
 		;;
 		--add)
 			source2=${2}/${TARGET_pad_dir}
-		;;
-		--bl)
-		;;
-		--luser)
-			n=${2}
 		;;
 		--get-devuan)
 			get_devuan ${2}
@@ -56,4 +51,5 @@ parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
 
-echo "MKSUMS.SH" 
+echo "./stage0f ${base} ${source2} <verbosity_level>"
+

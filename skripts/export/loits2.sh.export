@@ -5,7 +5,6 @@ protect_system
 
 ltarget="" 
 bloader=""
-
 usage() {
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666

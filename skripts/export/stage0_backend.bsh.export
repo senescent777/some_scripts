@@ -3,7 +3,6 @@ protect_system
 
 mangle_conf() {
 }
-
 get_devuan() {
 	[ -d ${CONF_distros_dir} ] || sudo mkdir ${CONF_distros_dir}
 	cd ${CONF_distros_dir}

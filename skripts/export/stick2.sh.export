@@ -11,7 +11,6 @@ usage() {
 	echo "${0} [-t <type> ] [ --v <verbosity> ] [-b <sign_or_not> ]"
 	echo "-b 1:just signs"
 }
-
 parse_opts_real() {
 	case ${1} in
 		-t)

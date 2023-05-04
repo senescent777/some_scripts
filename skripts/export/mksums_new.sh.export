@@ -6,11 +6,9 @@ b=1
 protect_system
 
 usage() {
-	echo "TODO"
+	echo
 }
-
 parse_opts_real() {
-	echo "parse_opts_real()"
 
 	case ${1} in
 		-b)
@@ -23,14 +21,12 @@ parse_opts_real() {
 [ x$"{CONF_BASEDIR}" != "x" ] || exit 666
 [ x"${CONF_target}" != "x" ] || exit 666
 
-echo "conf ok (kind of)"
 
 single_param() {
 	case ${1} in
 		--iso)
 	
 			${gg} -u ${CONF_kay2name} -sb ./*.iso
-			[ $? -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
 		
 			exit 666
 		;;
@@ -42,7 +38,6 @@ single_param() {
 
 			${gg} -u ${CONF_kay2name} -sb ./*.deb
 			[ $? -eq 0 ]  && ${gg} -u ${CONF_kay2name} -sb ./*.bz2
-			[ $? -eq 0 ] || echo "install-keys --kdir ${CONF_keys_dir} --i"
 			
 			exit 666
 		;;
@@ -60,7 +55,6 @@ part0() {
 	[ z"${TARGET_DIGESTS_file}" != "z" ] || exit 666
 
 	if [ x"{TARGET_DIGESTS_file}" != "x" ] ; then
-		echo "rm ${TARGET_DIGESTS_file}* in 5 secs";sleep 5
 		cd ${CONF_target}
 		rm ${TARGET_DIGESTS_file}*
 	else
@@ -74,7 +68,6 @@ part0() {
 
 part1234() {
 	local olddir=$(pwd)	
-	[ -d ./${TARGET_DIGESTS_dir} ] || echo "https://www.youtube.com/watch?v=PjotFePip2M";exit 666
 
 
 	local f
@@ -96,7 +89,6 @@ part123() {
 	if [ ! -s ./${TARGET_DIGESTS_file}.${1} ] ; then
 		
 		${sh5} ./${2}/* | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0}  | grep -v boot.cat | grep -v isolinux.bin > ./${TARGET_DIGESTS_file}.${1}
-		[ $? -eq 0 ] || echo "sudo chown ${n}:${n} ./${TARGET_DIGESTS_dir} && chmod 0755  ./${TARGET_DIGESTS_dir}"	
 	fi
 
 }
@@ -116,12 +108,10 @@ part6_5() {
 
 	for i in ${MKS_parts} ; do
 		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_file}.${i}
-		[ $? -eq 0 ] || echo "install-keys --i || sudo chown ${n}:${n} ./${TARGET_DIGESTS_dir} && chmod 0755 ./${TARGET_DIGESTS_dir}"
 		echo "$?"
 	done
 
 	if [ $? -gt 0 ] ; then
-		echo "install-keys --i"
 	fi
 
 }
@@ -129,13 +119,11 @@ part6_5() {
 part7() {
 	
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
-	[ $? -eq 0 ] || echo "install-keys --kdir <kdir> --i"
 	
 		${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
 		local i
 
 		for i in ${MKS_parts} ; do
-			echo "${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}"
 			${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}
 		done
 
@@ -159,24 +147,16 @@ part8() {
 			${gg} -u ${CONF_kay2name} -sb ${tfile}
 			echo $?
 
-				echo "${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}"
 				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}	
 			fi
 		;;
 		2)
-			echo "sudo mv ${tfile}.gpg ${tfile}.gpg.OLD"
-			echo "${gg} -r ${CONF_kay2name} -se ${tfile}"
-			echo "${gg} --verify ${tfile}"
 		;;
 		*)
-			echo "https://www.youtube.com/watch?v=PjotFePip2M";exit 666
 		;;
 	esac 
 
 	cd ${olddir}
-}
-
-part9() {
 }
 
 enforce_deps
@@ -212,7 +192,6 @@ pwd
 part8 ${b}
 
 ${sh5} ${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ${TARGET_DIGESTS_file}.4
-[ $? -eq 0 ] && echo "sudo chown ${n}:${n} ./${TARGET_DIGESTS_dir} && chmod 0755 ./${TARGET_DIGESTS_dir"
 
 part456 4
 sudo chown -R 0:0 ${CONF_target}/${TARGET_DIGESTS_dir}
@@ -221,4 +200,3 @@ sudo chmod 0444 ${CONF_target}/${TARGET_DIGESTS_dir}/*
 
 	ls -laRs ${TARGET_DIGESTS_dir}
 
-echo "loits_new | mkq"
