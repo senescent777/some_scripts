@@ -139,11 +139,42 @@ sleep 3
 #exit
 
 #tämän kanssa oli vielä jotain pientä 
-sudo adduser --system stubby
-sleep 5
-sudo /etc/init.d/stubby start
-sleep 5
+#kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
+#sudo adduser --system stubby
+#sleep 5
+#sudo /etc/init.d/stubby start
+#sleep 5
 #190624:tähän asti vissiin ok
+
+ns2() {
+	sudo chmod u+w /home
+
+	sudo /usr/sbin/userdel $1
+
+	sudo adduser --system $1
+
+	sudo chmod go-w /home
+	ls -las /home;sleep 7
+}
+
+ns2 stubby
+
+ns4() {
+
+	sudo chmod u+w /run
+	sudo touch /run/$1.pid
+	sudo chmod 0600 /run/$1.pid
+	sudo chown $1:65534 /run/$1.pid
+	sudo chmod u-w /run
+	sleep 5
+
+	#whack $1
+	sudo /usr/bin/pkill --signal 9 ${1}*
+	sleep 5
+	sudo -u $1 $1 -g
+}
+
+ns4 stubby
 
 #VAIH:varmista tämä kohdan toimivuus
 #https://raw.githubusercontent.com/senescent777/project/main/sbin/dhclient-script.new
