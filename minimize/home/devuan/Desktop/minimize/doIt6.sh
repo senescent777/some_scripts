@@ -94,6 +94,20 @@ add_snd() {
 	sudo ${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT 
 }
 
+astral_sleep() {
+	sudo ${ip6tr} /etc/iptables/rules.v6
+	sudo ${iptr} /etc/iptables/${tblz4}
+
+	for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do add_doT ${s} ; done
+	for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do  add_snd ${s} ; done
+
+	[ ${debug} -eq 1 ] && sudo ${ipt} -L
+	[ ${debug} -eq 1 ] && sudo ${ip6t} -L
+	[ ${debug} -eq 1 ] && sleep 5
+}
+
+#clouds() {}
+
 #Tässä kohtaa mielekästä ajaa tables-komentoja vain jos s.a.autoremove:a EI ajettu.
 if [ ${the_ar} -eq 1 ] ; then 
 	if [ ${debug} -eq 1 ] ; then 
@@ -104,15 +118,7 @@ if [ ${the_ar} -eq 1 ] ; then
 		echo "sudo ${ip6t} -L;sleep 5"
 	fi
 else
-	sudo ${ip6tr} /etc/iptables/rules.v6
-	sudo ${iptr} /etc/iptables/${tblz4}
-
-	for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do add_doT ${s} ; done
-	for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do  add_snd ${s} ; done
-
-	[ ${debug} -eq 1 ] && sudo ${ipt} -L
-	[ ${debug} -eq 1 ] && sudo ${ip6t} -L
-	[ ${debug} -eq 1 ] && sleep 5
+	astral_sleep
 fi
 
 #exit
@@ -162,6 +168,8 @@ sudo dpkg -i /var/cache/apt/archives/*.deb
 [ $? -eq 0 ] && sudo rm -rf /var/cache/apt/archives/*.deb
 [ ${debug} -eq 1 ] && sleep 2
 
+#exit
+[ ${the_ar} -eq 1 ] && astral_sleep
 #exit
 
 #sudo /etc/init.d/netfilter-persistent restart #VARMEMPI TOISELLA TAVALLA PRKL
