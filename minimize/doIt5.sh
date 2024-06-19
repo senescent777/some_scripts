@@ -85,9 +85,11 @@ sleep 5
 
 #TODO:varmista tämä kohdan toimivuus
 #https://raw.githubusercontent.com/senescent777/project/main/sbin/dhclient-script.new
-sudo chmod 0555 /sbin/dhclient*
-sudo chown root:root /sbin/dhclient*
+
 sudo mv /sbin/dhclient-script /sbin/dhclient-script.OLD
 sudo mv /sbin/dhclient-script.new /sbin/dhclient-script
+
+sudo chmod 0555 /sbin/dhclient*
+sudo chown root:root /sbin/dhclient*
 
 echo "sudo /sbin/ifup eth0"
