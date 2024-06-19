@@ -6,6 +6,10 @@ the_ar=0
 tblz4=rules.v4.180624
 install=0 #debug ja install komentoriviparam kautta jatkossa
 tgtfile=/mnt/186/nu.tar
+ipt=$(sudo which iptables)
+ip6t=$(sudo which ip6tables)
+iptr=$(sudo which iptables-restore)
+ip6tr=$(sudo which ip6tables-restore)
 
 #ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 sudo chown root:root /home
@@ -38,17 +42,37 @@ sudo ip link set ${iface} down
 /sbin/ifconfig;sleep 5
 #exit
 
-sudo /usr/sbin/iptables -P INPUT DROP
-sudo /usr/sbin/ip6tables -P INPUT DROP
-sudo /usr/sbin/iptables -P OUTPUT DROP
-sudo /usr/sbin/ip6tables -P OUTPUT DROP
-sudo /usr/sbin/iptables -P FORWARD DROP
-sudo /usr/sbin/ip6tables -P FORWARD DROP
-sudo /usr/sbin/iptables -L;sleep 5
-sudo /usr/sbin/ip6tables -L;sleep 5
+#sudo ${ipt} -F INPUT
+#sudo ${ipt} -P INPUT DROP
+#
+#sudo ${ip6t} -F INPUT
+#sudo ${ip6t} -P INPUT DROP
+#
+#sudo ${ipt} -F OUTPUT
+#sudo ${ipt} -P OUTPUT DROP
+#
+#sudo ${ip6t} -F OUTPUT
+#sudo ${ip6t} -P OUTPUT DROP
+#
+#sudo ${ipt} -F FORWARD
+#sudo ${ipt} -P FORWARD DROP
+#
+#sudo ${ip6t} -F FORWARD
+#sudo ${ip6t} -P FORWARD DROP
+
+for t in INPUT OUTPUT FORWARD ; do sudo ${ipt} -P ${t} DROP ; done
+for t in INPUT OUTPUT FORWARD ; do sudo ${ip6t} -P ${t} DROP ; done
+for t in INPUT OUTPUT FORWARD b c e f ; do sudo ${ipt} -F ${t} ; done
+for t in INPUT OUTPUT FORWARD  ; do sudo ${ip6t} -F ${t} ; done
+
+[ ${debug} -eq 1 ] && sudo ${ipt} -L
+[ ${debug} -eq 1 ] && sudo ${ip6t} -L
+[ ${debug} -eq 1 ] && sleep 5
+
+#exit
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors ; do
-sudo /etc/init.d/$s stop
+sudo /etc/init.d/${s} stop
 sleep 1
 done
 
@@ -68,80 +92,103 @@ sleep 3
 if [ ${the_ar} -eq 1 ] ; then 
 	sudo apt autoremove --yes
 else
-	echo "autoremove postponed"
+	[ ${debug} -eq 1 ] && echo "autoremove postponed"
 fi
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
-sudo netstat -tulpan;sleep 5
+
+[ ${debug} -eq 1 ] && sudo netstat -tulpan
+[ ${debug} -eq 1 ] && sleep 5
 
 add_doT() {
 
-	echo "$sipt -A b -p tcp --sport 853 -s $1 -j c"
+	sudo ${ipt} -A b -p tcp --sport 853 -s ${1} -j c
 
-	echo "$sipt -A e -p tcp --dport 853 -d $1 -j f"
+	sudo ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
 }
 
-for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do echo "add_doT($s)" ; done
-for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do echo "doSomerhing($s)" ; done
+add_snd() {
+	sudo ${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
+	sudo ${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT 
+}
 
 #Tässä kohtaa mielekästä ajaa tables-komentoja vain jos s.a.autoremove:a EI ajettu.
 if [ ${the_ar} -eq 1 ] ; then 
-	echo "sudo /usr/sbin/ip6tables-restore /etc/iptables/rules.v6"
-	#VAIH:lennosta rules.v4 mutilointia, yhdestä sun toisesta projektista mallia
-	echo "sudo /usr/sbin/iptables-restore /etc/iptables/${tblz4}"
-	echo "sudo /usr/sbin/iptables -L;sleep 5"
-	echo "sudo /usr/sbin/ip6tables -L;sleep 5"
+	if [ ${debug} -eq 1 ] ; then 
+		echo "sudo ${ip6tr} /etc/iptables/rules.v6"
+		#VAIH:lennosta rules.v4 mutilointia, yhdestä sun toisesta projektista mallia
+		echo "sudo ${iptr} /etc/iptables/${tblz4}"
+		echo "sudo ${ipt} -L;sleep 5"
+		echo "sudo ${ip6t} -L;sleep 5"
+	fi
 else
-	sudo /usr/sbin/ip6tables-restore /etc/iptables/rules.v6
-	echo "sudo /usr/sbin/iptables-restore /etc/iptables/${tblz4}"
-	sudo /usr/sbin/iptables -L
-	sudo /usr/sbin/iptables -L
-	sleep 5
+	sudo ${ip6tr} /etc/iptables/rules.v6
+	sudo ${iptr} /etc/iptables/${tblz4}
+
+	for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do add_doT ${s} ; done
+	for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do  add_snd ${s} ; done
+
+	[ ${debug} -eq 1 ] && sudo ${ipt} -L
+	[ ${debug} -eq 1 ] && sudo ${ip6t} -L
+	[ ${debug} -eq 1 ] && sleep 5
 fi
 
 #exit
 
 #VAIH:komentoriviparametrin mukaisella ehdolla kaiutettavien komentojen ajo oikeasti
 if [ ${install} -eq 1 ] ; then 
-	echo "sudo /sbin/ifup ${iface}"
-	echo "sudo apt-get update"
-	echo "sudo apt-get --no-install-recommends reinstall libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables"
-	sudo rm -rf /run/live/medium/live/initrd.img*
+	if [ ${debug} -eq 1 ] ; then 
+		echo "sudo /sbin/ifup ${iface}"
+		echo "sudo apt-get update"
+		echo "sudo apt-get --no-install-recommends reinstall libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables"
+		sudo rm -rf /run/live/medium/live/initrd.img*
 
-	echo "sudo apt-get --no-install-recommends reinstall init-system-helpers netfilter-persistent iptables-persistent"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+		echo "sudo apt-get --no-install-recommends reinstall init-system-helpers netfilter-persistent iptables-persistent"
+		echo "sudo rm -rf /run/live/medium/live/initrd.img*"
 
-	#VAIH:ntps-juttui mukaan koska tar-nalkutus päiväyksistä
-	echo "sudo apt-get --no-install-recommends python3-ntp ntpsec-ntpdate"
+		#VAIH:ntps-juttui mukaan koska tar-nalkutus päiväyksistä
+		echo "sudo apt-get --no-install-recommends python3-ntp ntpsec-ntpdate"
 
-	echo "sudo apt-get --no-install-recommends reinstall dnsmasq-base runit-helper"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+		echo "sudo apt-get --no-install-recommends reinstall dnsmasq-base runit-helper"
+		echo "sudo rm -rf /run/live/medium/live/initrd.img*"
 
-	echo "sudo apt-get --no-install-recommends reinstall libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+		echo "sudo apt-get --no-install-recommends reinstall libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby"
+		echo "sudo rm -rf /run/live/medium/live/initrd.img*"
 
-	#TODO:muutama muukin juttu mukaan, mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh
-
-	echo "sudo tar -rvpf ${tgtfile}  /var/cache/apt/archives/*.deb"
-	echo "sudo /sbin/ifdown ${iface}"
+		#VAIH:muutama muukin juttu mukaan, mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh
+		echo "sudo cp /sbin/dhclient-script /sbin/dhclient-script.OLD"
+		echo "sudo cp /etc/dhcp/dhclient.conf /etc/dhcp/dhclient.conf.OLD"
+		echo "sudo cp /etc/resolv.conf /etc/resolv.conf.OLD"
+		echo "sudo cp /etc/iptables/rules.v4 /etc/iptables/rules.v4.OLD"
+		echo "sudo tar -cvpf ${tgtfile} /sbin/dhclient-script* /etc/dhcp/dhclient.conf* /etc/resolv.conf* /etc/iptables/rules*"
+		
+		echo "sudo tar -rvpf ${tgtfile} /var/cache/apt/archives/*.deb"
+		echo "sudo /sbin/ifdown ${iface}"
+	fi
 else
-	echo "not fetching pkgs"
+	[ ${debug} -eq 1 ] && echo "not fetching pkgs"
 fi
 
 #exit
 
-echo "sleep 5"
+[ ${debug} -eq 1 ] && echo "sleep 5"
 sudo dpkg -i /var/cache/apt/archives/dns-root-data*.deb ; sudo rm -rf /var/cache/apt/archives/dns-root-data*.deb
 sudo dpkg -i /var/cache/apt/archives/lib*.deb
 [ $? -eq  0 ] && sudo rm -rf /var/cache/apt/archives/lib*.deb
+#HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
 sudo dpkg -i /var/cache/apt/archives/*.deb
 [ $? -eq 0 ] && sudo rm -rf /var/cache/apt/archives/*.deb
-sleep 2
+[ ${debug} -eq 1 ] && sleep 2
+
+#exit
 
 #sudo /etc/init.d/netfilter-persistent restart #VARMEMPI TOISELLA TAVALLA PRKL
-sudo /usr/sbin/ip6tables-restore /etc/iptables/rules.v6
-sudo /usr/sbin/iptables-restore /etc/iptables/${tblz4}.b 
+sudo ${ip6tr} /etc/iptables/rules.v6
+#sudo ${iptr} /etc/iptables/${tblz4}.b #ei ehk trv jatqs
+sudo ${ipt} -D e 3; sudo ${ipt} -D e 2
+sudo ${ipt} -D b 3; sudo ${ipt} -D b 2
+sudo ${ipt} -D INPUT 5; sudo ${ipt} -D OUTPUT 6
 
 sudo /etc/init.d/dnsmasq restart
 sleep 3
@@ -158,12 +205,12 @@ sleep 3
 ns2() {
 	sudo chmod u+w /home
 
-	sudo /usr/sbin/userdel $1
+	sudo /usr/sbin/userdel ${1}
 
-	sudo adduser --system $1
+	sudo adduser --system ${1}
 
 	sudo chmod go-w /home
-	ls -las /home;sleep 7
+	[ ${debug} -eq 1 ] && ls -las /home;sleep 7
 }
 
 ns2 stubby
@@ -171,21 +218,21 @@ ns2 stubby
 ns4() {
 
 	sudo chmod u+w /run
-	sudo touch /run/$1.pid
-	sudo chmod 0600 /run/$1.pid
-	sudo chown $1:65534 /run/$1.pid
+	sudo touch /run/${1}.pid
+	sudo chmod 0600 /run/${1}.pid
+	sudo chown $1:65534 /run/${1}.pid
 	sudo chmod u-w /run
 	sleep 5
 
 	#whack $1
 	sudo /usr/bin/pkill --signal 9 ${1}*
 	sleep 5
-	sudo -u $1 $1 -g
+	sudo -u ${1} ${1} -g
 }
 
 ns4 stubby
 
-#VAIH:varmista tämä kohdan toimivuus
+#HUOM.200624:vissiin toimii jo stubby 
 #https://raw.githubusercontent.com/senescent777/project/main/sbin/dhclient-script.new
 
 #HUOM.190624:parempi jotta mv, Daedalus nalkutti linkityksestä

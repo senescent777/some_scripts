@@ -1,9 +1,9 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=do_it6
+Name=ifup
 Comment=
-Exec=/home/devuan/Desktop/minimize/doIt6.sh
+Exec=sudo /sbin/ifup eth0
 Icon=
 Path=
 Terminal=true
