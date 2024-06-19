@@ -3,8 +3,9 @@
 #ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 sudo chown root:root /home
 sudo chmod 0755 /home
-sudo chown devuan:devuan home/devuan/
-sudo chown devuan:devuan home/devuan/Desktop/
+sudo chown -R devuan:devuan /home/devuan/
+#sudo chown devuan:devuan /home/devuan/Desktop/
+sudo chmod -R 0755 /home/devuan/Desktop/minimize
 
 #TODO:testaa tästä eteenpäin ch-kikkailut
 sudo chown -R root:root /sbin
