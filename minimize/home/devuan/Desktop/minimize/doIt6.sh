@@ -41,11 +41,13 @@ sudo ip link set ${iface} down
 /sbin/ifconfig;sleep 5
 #exit
 
-#TODO:yhdistelyä
-for t in INPUT OUTPUT FORWARD ; do sudo ${ipt} -P ${t} DROP ; done
-for t in INPUT OUTPUT FORWARD ; do sudo ${ip6t} -P ${t} DROP ; done
+for t in INPUT OUTPUT FORWARD ; do 
+	sudo ${ipt} -P ${t} DROP
+	sudo ${ip6t} -P ${t} DROP
+	sudo ${ip6t} -F ${t}
+done
+
 for t in INPUT OUTPUT FORWARD b c e f ; do sudo ${ipt} -F ${t} ; done
-for t in INPUT OUTPUT FORWARD  ; do sudo ${ip6t} -F ${t} ; done
 
 [ ${debug} -eq 1 ] && sudo ${ipt} -L
 [ ${debug} -eq 1 ] && sudo ${ip6t} -L
