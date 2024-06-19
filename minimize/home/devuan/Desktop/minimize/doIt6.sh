@@ -15,7 +15,6 @@ ip6tr=$(sudo which ip6tables-restore)
 sudo chown root:root /home
 sudo chmod 0755 /home
 sudo chown -R devuan:devuan /home/devuan/
-#sudo chown devuan:devuan /home/devuan/Desktop/
 sudo chmod -R 0755 /home/devuan/Desktop/minimize
 sudo chown -R 101:65534 /home/stubby/
 
@@ -41,24 +40,6 @@ echo "man date; sudo date --set if necessary" #jos tar nalkuttaa päiväyksistä
 sudo ip link set ${iface} down
 /sbin/ifconfig;sleep 5
 #exit
-
-#sudo ${ipt} -F INPUT
-#sudo ${ipt} -P INPUT DROP
-#
-#sudo ${ip6t} -F INPUT
-#sudo ${ip6t} -P INPUT DROP
-#
-#sudo ${ipt} -F OUTPUT
-#sudo ${ipt} -P OUTPUT DROP
-#
-#sudo ${ip6t} -F OUTPUT
-#sudo ${ip6t} -P OUTPUT DROP
-#
-#sudo ${ipt} -F FORWARD
-#sudo ${ipt} -P FORWARD DROP
-#
-#sudo ${ip6t} -F FORWARD
-#sudo ${ip6t} -P FORWARD DROP
 
 for t in INPUT OUTPUT FORWARD ; do sudo ${ipt} -P ${t} DROP ; done
 for t in INPUT OUTPUT FORWARD ; do sudo ${ip6t} -P ${t} DROP ; done
@@ -185,7 +166,6 @@ sudo dpkg -i /var/cache/apt/archives/*.deb
 
 #sudo /etc/init.d/netfilter-persistent restart #VARMEMPI TOISELLA TAVALLA PRKL
 sudo ${ip6tr} /etc/iptables/rules.v6
-#sudo ${iptr} /etc/iptables/${tblz4}.b #ei ehk trv jatqs
 sudo ${ipt} -D e 3; sudo ${ipt} -D e 2
 sudo ${ipt} -D b 3; sudo ${ipt} -D b 2
 sudo ${ipt} -D INPUT 5; sudo ${ipt} -D OUTPUT 6
@@ -194,13 +174,7 @@ sudo /etc/init.d/dnsmasq restart
 sleep 3
 #exit
 
-#tämän kanssa oli vielä jotain pientä 
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
-#sudo adduser --system stubby
-#sleep 5
-#sudo /etc/init.d/stubby start
-#sleep 5
-#190624:tähän asti vissiin ok
 
 ns2() {
 	sudo chmod u+w /home
@@ -224,7 +198,6 @@ ns4() {
 	sudo chmod u-w /run
 	sleep 5
 
-	#whack $1
 	sudo /usr/bin/pkill --signal 9 ${1}*
 	sleep 5
 	sudo -u ${1} ${1} -g
