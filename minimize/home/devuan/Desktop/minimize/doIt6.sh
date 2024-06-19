@@ -17,11 +17,11 @@ sudo chown -R 101:65534 /home/stubby/
 
 if [ ${debug} -eq 1 ] ; then 
 	#TODO:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
-	echo "https://raw.githubusercontent.com/senescent777/project/main/sbin/ can be used as /sbin"
+	echo "https://github.com/senescent777/project/tree/main/sbin can be used as /sbin"
 	echo "sudo chown -R root:root /sbin"
 	echo "sudo chmod -R 0755 /sbin"
 
-	echo "https://raw.githubusercontent.com/senescent777/project/main/etc can be used as /etc except for stubby-related stuff"
+	echo "https://github.com/senescent777/project/tree/main/etc can be used as /etc except for stubby-related stuff"
 	echo "sudo chown -R root:root /etc"
 	echo "sudo chmod -R go-w /etc"
 
@@ -102,14 +102,18 @@ if [ ${install} -eq 1 ] ; then
 
 	echo "sudo apt-get --no-install-recommends reinstall init-system-helpers netfilter-persistent iptables-persistent"
 	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-	#TODO:ntps-juttui mukaan koska tar-nalkutus päiväyksistä
+
+	#VAIH:ntps-juttui mukaan koska tar-nalkutus päiväyksistä
+	echo "sudo apt-get --no-install-recommends python3-ntp ntpsec-ntpdate"
+
 	echo "sudo apt-get --no-install-recommends reinstall dnsmasq-base runit-helper"
 	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
 
 	echo "sudo apt-get --no-install-recommends reinstall libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby"
 	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
 
-	#VAIH:mja
+	#TODO:muutama muukin juttu mukaan, mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh
+
 	echo "sudo tar -rvpf ${tgtfile}  /var/cache/apt/archives/*.deb"
 	echo "sudo /sbin/ifdown ${iface}"
 else
