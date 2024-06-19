@@ -37,4 +37,7 @@ sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes vim* xorriso
 sudo apt autoremove --yes
+
 sudo rm -rf /run/live/medium/live/initrd.img*
+sudo shred -fu /var/cache/apt/archives/*.deb
+sudo shred -fu /tmp/*
