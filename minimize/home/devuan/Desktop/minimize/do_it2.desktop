@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=do_it5
+Comment=
+Exec=/home/devuan/Desktop/doIt5.sh
+Icon=
+Path=
+Terminal=true
+StartupNotify=false
