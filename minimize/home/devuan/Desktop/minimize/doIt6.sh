@@ -41,6 +41,7 @@ sudo ip link set ${iface} down
 /sbin/ifconfig;sleep 5
 #exit
 
+#TODO:yhdistelyä
 for t in INPUT OUTPUT FORWARD ; do sudo ${ipt} -P ${t} DROP ; done
 for t in INPUT OUTPUT FORWARD ; do sudo ${ip6t} -P ${t} DROP ; done
 for t in INPUT OUTPUT FORWARD b c e f ; do sudo ${ipt} -F ${t} ; done
@@ -98,6 +99,7 @@ astral_sleep() {
 	sudo ${ip6tr} /etc/iptables/rules.v6
 	sudo ${iptr} /etc/iptables/${tblz4}
 
+	local s
 	for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do add_doT ${s} ; done
 	for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do  add_snd ${s} ; done
 
@@ -112,7 +114,7 @@ astral_sleep() {
 if [ ${the_ar} -eq 1 ] ; then 
 	if [ ${debug} -eq 1 ] ; then 
 		echo "sudo ${ip6tr} /etc/iptables/rules.v6"
-		#VAIH:lennosta rules.v4 mutilointia, yhdestä sun toisesta projektista mallia
+		#DONE:lennosta rules.v4 mutilointia, yhdestä sun toisesta projektista mallia
 		echo "sudo ${iptr} /etc/iptables/${tblz4}"
 		echo "sudo ${ipt} -L;sleep 5"
 		echo "sudo ${ip6t} -L;sleep 5"
@@ -149,7 +151,7 @@ if [ ${install} -eq 1 ] ; then
 		echo "sudo cp /etc/resolv.conf /etc/resolv.conf.OLD"
 		echo "sudo cp /etc/iptables/rules.v4 /etc/iptables/rules.v4.OLD"
 		echo "sudo tar -cvpf ${tgtfile} /sbin/dhclient-script* /etc/dhcp/dhclient.conf* /etc/resolv.conf* /etc/iptables/rules*"
-		
+		echo "sudo tar -rvpf ${tgtfile} ~/Desktop/minimize"
 		echo "sudo tar -rvpf ${tgtfile} /var/cache/apt/archives/*.deb"
 		echo "sudo /sbin/ifdown ${iface}"
 	fi
