@@ -75,11 +75,20 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
 sudo netstat -tulpan;sleep 5
 
+add_doT() {
+
+	echo "$sipt -A b -p tcp --sport 853 -s $1 -j c"
+
+	echo "$sipt -A e -p tcp --dport 853 -d $1 -j f"
+}
+
+for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do echo "add_doT($s)" ; done
+for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do echo "doSomerhing($s)" ; done
 
 #Tässä kohtaa mielekästä ajaa tables-komentoja vain jos s.a.autoremove:a EI ajettu.
 if [ ${the_ar} -eq 1 ] ; then 
 	echo "sudo /usr/sbin/ip6tables-restore /etc/iptables/rules.v6"
-	#TODO:lennosta rules.v4 mutilointia, yhdestä sun toisesta projektista mallia
+	#VAIH:lennosta rules.v4 mutilointia, yhdestä sun toisesta projektista mallia
 	echo "sudo /usr/sbin/iptables-restore /etc/iptables/${tblz4}"
 	echo "sudo /usr/sbin/iptables -L;sleep 5"
 	echo "sudo /usr/sbin/ip6tables -L;sleep 5"
