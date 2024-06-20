@@ -1,7 +1,7 @@
 #!/bin/sh
 
-iface=eth0
-debug=1
+iface=eth0 #grep /e/n/i ?
+debug=0
 the_ar=0
 tblz4=rules.v4.180624
 install=0 #debug ja install komentoriviparam kautta jatkossa
@@ -11,6 +11,26 @@ ip6t=$(sudo which ip6tables)
 iptr=$(sudo which iptables-restore)
 ip6tr=$(sudo which ip6tables-restore)
 
+parse_opts() {
+	case "${1}" in
+		-v|--v)
+			debug=${2}
+		;;
+		--ar)
+			the_ar=${2}
+		;;
+		--install)
+			install=${2}
+		;;
+	esac
+}
+
+if [ $# -gt 1 ] ; then
+	parse_opts ${1} ${2}
+	parse_opts ${3} ${4}
+	parse_opts ${5} ${6}
+fi
+
 #ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 sudo chown root:root /home
 sudo chmod 0755 /home
@@ -19,7 +39,7 @@ sudo chmod -R 0755 /home/devuan/Desktop/minimize
 sudo chown -R 101:65534 /home/stubby/
 
 if [ ${debug} -eq 1 ] ; then 
-	#TODO:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
+	#VAIH:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
 	echo "https://github.com/senescent777/project/tree/main/sbin can be used as /sbin"
 	echo "sudo chown -R root:root /sbin"
 	echo "sudo chmod -R 0755 /sbin"
@@ -34,11 +54,17 @@ if [ ${debug} -eq 1 ] ; then
 	echo "sudo chmod 0755 /"
 else
 	echo "changing /sbin , /etc and /var 4 real"
+	sudo chown -R root:root /sbin
+	sudo chmod -R 0755 /sbin
+	sudo chown -R root:root /etc
+	sudo chown -R root:root /var
+	sudo chmod -R go-w /var
+	sudo chmod 0755 /
 fi
 
 echo "man date; sudo date --set if necessary" #jos tar nalkuttaa päiväyksistä niin date --set hoitaa
 sudo ip link set ${iface} down
-/sbin/ifconfig;sleep 5
+/sbin/ifconfig;sleep 5 #debug?
 #exit
 
 for t in INPUT OUTPUT FORWARD ; do 
@@ -56,8 +82,8 @@ for t in INPUT OUTPUT FORWARD b c e f ; do sudo ${ipt} -F ${t} ; done
 #exit
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors ; do
-sudo /etc/init.d/${s} stop
-sleep 1
+	sudo /etc/init.d/${s} stop
+	sleep 1
 done
 
 sleep 3 
@@ -86,9 +112,7 @@ sleep 3
 [ ${debug} -eq 1 ] && sleep 5
 
 add_doT() {
-
 	sudo ${ipt} -A b -p tcp --sport 853 -s ${1} -j c
-
 	sudo ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
 }
 
@@ -130,7 +154,7 @@ fi
 #VAIH:komentoriviparametrin mukaisella ehdolla kaiutettavien komentojen ajo oikeasti
 if [ ${install} -eq 1 ] ; then 
 	if [ ${debug} -eq 1 ] ; then 
-		echo "sudo /sbin/ifup ${iface}"
+		echo "sudo /sbin/ifup ${iface} | sudo /sbin/ifup -a" #if there is > 1 interfaces...
 		echo "sudo apt-get update"
 		echo "sudo apt-get --no-install-recommends reinstall libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables"
 		sudo rm -rf /run/live/medium/live/initrd.img*
@@ -153,9 +177,9 @@ if [ ${install} -eq 1 ] ; then
 		echo "sudo cp /etc/resolv.conf /etc/resolv.conf.OLD"
 		echo "sudo cp /etc/iptables/rules.v4 /etc/iptables/rules.v4.OLD"
 		echo "sudo tar -cvpf ${tgtfile} /sbin/dhclient-script* /etc/dhcp/dhclient.conf* /etc/resolv.conf* /etc/iptables/rules*"
-		echo "sudo tar -rvpf ${tgtfile} ~/Desktop/minimize"
+		echo "sudo tar -rvpf ${tgtfile} ~/Desktop/minimize /etc/apt /etc/sysctl.conf /etc/network /etc/init.d/stubby"
 		echo "sudo tar -rvpf ${tgtfile} /var/cache/apt/archives/*.deb"
-		echo "sudo /sbin/ifdown ${iface}"
+		echo "sudo /sbin/ifdown ${iface} | sudo /sbin/ifdown -a"
 	fi
 else
 	[ ${debug} -eq 1 ] && echo "not fetching pkgs"
@@ -190,11 +214,8 @@ sleep 3
 
 ns2() {
 	sudo chmod u+w /home
-
 	sudo /usr/sbin/userdel ${1}
-
 	sudo adduser --system ${1}
-
 	sudo chmod go-w /home
 	[ ${debug} -eq 1 ] && ls -las /home;sleep 7
 }
@@ -227,4 +248,4 @@ sudo mv /sbin/dhclient-script.new /sbin/dhclient-script
 sudo chmod 0555 /sbin/dhclient*
 sudo chown root:root /sbin/dhclient*
 
-echo "sudo /sbin/ifup ${iface}"
+echo "sudo /sbin/ifup ${iface} | sudo /sbin/ifup -a"
