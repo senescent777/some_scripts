@@ -4,11 +4,12 @@
 iface=eth0 #grep /e/n/i ?
 debug=0
 the_ar=0
-tblz4=rules.v4.180624
+tblz4=rules.v4.180624 #TODO:jatkossa pelkkä .v4
 install=0 
-tgtfile=/mnt/186/nu.tar
+tgtfile=/mnt/186/nu.tar #TODO:jatkossa thjää
 enforce=0
 no_mas=0
+pkgdir=/var/cache/apt/archives
 
 ipt=$(sudo which iptables)
 ip6t=$(sudo which ip6tables)
@@ -65,7 +66,7 @@ function check_params() {
 
 	case ${install} in
 		0|1)
-			dqb "install ok(${install} )"
+			dqb "install = ${install} "
 		;;
 		*)
 			dqb "P.V.H.H"
@@ -281,6 +282,44 @@ function make_tar() {
 	echo "sudo /sbin/ifdown ${iface} | sudo /sbin/ifdown -a"
 }
 
+ns2() {
+	dqb "ns2( ${1} )"
+	${scm} u+w /home
+
+	sudo /usr/sbin/userdel ${1}
+	[ ${debug} -eq 1 ] && sleep 3
+
+	sudo adduser --system ${1}
+	${scm} go-w /home
+
+	if [ ${debug} -eq 1 ] ; then
+		ls -las /home;sleep 7
+	fi #
+}
+
+ns4() {
+	dqb "ns4( ${1} )"
+
+	${scm} u+w /run
+	sudo touch /run/${1}.pid
+	${scm} 0600 /run/${1}.pid
+	${sco} $1:65534 /run/${1}.pid
+	${scm} u-w /run
+
+	[ ${debug} -eq 1 ] && sleep 5
+	${whack} ${1}*
+
+	if [ ${debug} -eq 1 ] ; then
+		sleep 5
+		echo "starting ${1} in 5 secs"
+		sleep 5
+	fi #
+
+	sudo -u ${1} ${1} -g
+	echo $?
+	[ ${debug} -eq 1 ] && sleep 5
+}
+
 #==================================PART 1============================================================
 
 if [ $# -gt 0 ] ; then
@@ -338,7 +377,11 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
 #exit
 
-#TODO:ehdollinen autoremove pois jatkossa
+${ip6tr} /etc/iptables/rules.v6
+${iptr} /etc/iptables/${tblz4}
+clouds 0
+
+#TODO:autoremove:n ehdollisuus pois jatkossa?
 if [ ${the_ar} -eq 1 ] ; then 
 	if [ ${debug} -eq 1 ] ; then
 		echo "autoremove in 5 secs"; sleep 5 #
@@ -350,6 +393,7 @@ else
 	sleep 5
 fi
 
+#TODO:testi, miten tables-säännöt toimivat autoremove'n jälkeen
 sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
 
@@ -359,15 +403,43 @@ if [ ${debug} -eq 1 ] ; then
 fi #
 #exit
 
-${ip6tr} /etc/iptables/rules.v6
-${iptr} /etc/iptables/${tblz4}
-clouds 0
-
 if [ ${install} -eq 1 ] ; then
-	#TODO:huomioimaan the_ar ?
+	if [ ${the_ar} -eq 1 ] ; then 
+		dqb "make_tar may not work"
+		sleep 3
+	fi
+
 	make_tar
 else
 	dqb "not fetching pkgs"
 fi
 
-#===================================================PART 3=================================
+#===================================================PART 3===========================================================
+dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 3 SECS"
+[ ${debug} -eq 1 ] && sleep 3
+
+${sdi} ${pkgdir}/dns-root-data*.deb 
+[ $? -eq 0 ] && sudo rm -rf ${pkgdir}/dns-root-data*.deb
+
+${sdi} /var/cache/apt/archives/lib*.deb
+[ $? -eq  0 ] && sudo rm -rf ${pkgdir}/lib*.deb
+
+#HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
+${sdi} ${pkgdir}/*.deb
+[ $? -eq 0 ] && sudo rm -rf ${pkgdir}/*.deb
+[ ${debug} -eq 1 ] && sleep 2
+
+#missäköhän kohtaa kuuluisi tmän olla?
+if [ ${no_mas} -eq 1 ] ; then
+	dqb "no mas senor"
+	exit 	
+fi
+
+#===================================================PART 5==========================================================
+#tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
+sudo /etc/init.d/dnsmasq restart
+clouds 1
+ns2 stubby
+ns4 stubby
+[ ${debug} -eq 1 ] && ${snt} -tulpan
+echo "sudo /sbin/ifup whåtever"
