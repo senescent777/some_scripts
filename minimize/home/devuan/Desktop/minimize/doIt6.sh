@@ -41,7 +41,7 @@ if [ $# -gt 1 ] ; then
 	parse_opts ${5} ${6}
 fi
 
-#TODO:tables-juttujen toiminnan tarkistus tähän samaan
+#DONE:tables-juttujen toiminnan tarkistus tähän samaan
 check_params() {
 	case ${the_ar} in
 		0|1)
@@ -85,6 +85,15 @@ check_params() {
 			exit 4
 		;;
 	esac
+
+	#TODO:muutkin binäärit + ekspliittinen sudo pois missä mahd
+	[ -x ${ipt} ] || exit 5
+	[ -x ${ip6t} ] || exit 5
+	[ -x ${iptr} ] || exit 5
+	[ -x ${ip6tr} ] || exit 5
+
+	[ ${debug} -eq 1 ] && echo "b1nar135 0k"
+	[ ${debug} -eq 1 ] && sleep 3
 }
 
 check_params
