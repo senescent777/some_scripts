@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 iface=eth0 #grep /e/n/i ?
 debug=0
