@@ -19,7 +19,7 @@ whack=$(sudo which pkill)
 sag=$(sudo which apt-get)
 sa=$(sudo which apt)
 sip=$(sudo which ip)
-snt=$(sudo netstat)
+snt=$(sudo which netstat)
 sdi=$(sudo which dpkg)
 
 #DONE:optioiden parsintaan parannusta, nyt vain -o tarvitsee $2 oikeasti
