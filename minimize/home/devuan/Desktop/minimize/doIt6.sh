@@ -163,9 +163,9 @@ fi
 
 [ -s /sbin/dclient-script.OLD ] || sudo cp /sbin/dhclient-script /sbin/dhclient-script.OLD
 
-echo "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" #jos tar nalkuttaa päiväyksistä niin date --set hoitaa
+[ ${debug} -eq 1 ] && echo "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" #jos tar nalkuttaa päiväyksistä niin date --set hoitaa
 sudo ip link set ${iface} down
-/sbin/ifconfig;sleep 5 #debug?
+[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 #exit
 
 for t in INPUT OUTPUT FORWARD ; do 
