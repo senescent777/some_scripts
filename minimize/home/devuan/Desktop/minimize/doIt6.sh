@@ -2,7 +2,7 @@
 
 iface=eth0 #grep /e/n/i ?
 debug=0
-the_ar=1
+the_ar=0
 tblz4=rules.v4.180624
 install=0 #debug ja install komentoriviparam kautta jatkossa
 tgtfile=/mnt/186/nu.tar
@@ -14,20 +14,25 @@ ip6t=$(sudo which ip6tables)
 iptr=$(sudo which iptables-restore)
 ip6tr=$(sudo which ip6tables-restore)
 
-#TODO:optioiden parsintaan parannusta, nyt vain -o tarvitsee $2 oikeasti
-parse_opts() {
+#DONE:optioiden parsintaan parannusta, nyt vain -o tarvitsee $2 oikeasti
+parse_opts_2() {
 	case "${1}" in
-		-v|--v)
-			debug=${2}
-		;;
-		--ar)
-			the_ar=${2}
-		;;
-		--install)
-			install=${2}
-		;;
 		-o )
 			tgtfile=${2}
+		;;
+	esac
+}
+
+parse_opts_1() {
+	case "${1}" in
+		-v|--v)
+			debug=1
+		;;
+		--ar)
+			the_ar=1
+		;;
+		--install)
+			install=1
 		;;
 		--no)
 			no_mas=1
@@ -35,10 +40,12 @@ parse_opts() {
 	esac
 }
 
-if [ $# -gt 1 ] ; then
-	parse_opts ${1} ${2}
-	parse_opts ${3} ${4}
-	parse_opts ${5} ${6}
+if [ $# -gt 0 ] ; then
+	parse_opts_2 ${1} ${2}
+	#parse_opts ${3} ${4}
+	#parse_opts ${5} ${6}
+
+	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
 #DONE:tables-juttujen toiminnan tarkistus tähän samaan
