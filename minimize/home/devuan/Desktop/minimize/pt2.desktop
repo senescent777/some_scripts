@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=pt2
+Comment=remove more stuff
+Exec=/home/devuan/Desktop/minimize/pt2.sh
+Icon=
+Path=
+Terminal=true
+StartupNotify=false
