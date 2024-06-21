@@ -13,6 +13,14 @@ ipt=$(sudo which iptables)
 ip6t=$(sudo which ip6tables)
 iptr=$(sudo which iptables-restore)
 ip6tr=$(sudo which ip6tables-restore)
+sco=$(sudo which chown)
+scm=$(sudo which chmod)
+whack=$(sudo which pkill)
+sag=$(sudo which apt-get)
+sa=$(sudo which apt)
+sip=$(sudo which ip)
+snt=$(sudo netstat)
+sdi=$(sudo which dpkg)
 
 #DONE:optioiden parsintaan parannusta, nyt vain -o tarvitsee $2 oikeasti
 parse_opts_2() {
@@ -92,18 +100,29 @@ check_params() {
 			exit 4
 		;;
 	esac
+}
 
-	#TODO:muutkin binäärit + ekspliittinen sudo pois missä mahd
+check_binaries() {
+	#VAIH:muutkin binäärit + ekspliittinen sudo pois missä mahd
 	[ -x ${ipt} ] || exit 5
 	[ -x ${ip6t} ] || exit 5
 	[ -x ${iptr} ] || exit 5
 	[ -x ${ip6tr} ] || exit 5
+	[ -x ${sco} ] || exit 5
+	[ -x ${scm} ] || exit 5
+	[ -x ${whack} ] || exit 5
+	[ -x ${sag} ] || exit 5
+	[ -x ${sa} ] || exit 5
+	[ -x ${sip} ] || exit 5
+	[ -x ${snt} ] || exit 5
+	[ -x ${sdi} ] || exit 5
 
 	[ ${debug} -eq 1 ] && echo "b1nar135 0k"
 	[ ${debug} -eq 1 ] && sleep 3
 }
 
 check_params
+check_binaries
 
 #ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 sudo chown root:root /home
