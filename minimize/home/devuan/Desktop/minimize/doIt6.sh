@@ -251,6 +251,7 @@ clouds() {
 	fi #
 }
 
+#TODO:väh komentoi pois echon sisältä
 function make_tar() {
 	echo "sudo /sbin/ifup ${iface} | sudo /sbin/ifup -a" #if there is > 1 interfaces...
 	echo "${sag} update"
