@@ -259,7 +259,6 @@ function make_tar() {
 
 	echo "${shary} init-system-helpers netfilter-persistent iptables-persistent"
 	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-
 	echo "${shary} python3-ntp ntpsec-ntpdate"
 
 	echo "${shary} dnsmasq-base runit-helper"
@@ -268,13 +267,15 @@ function make_tar() {
 	echo "${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby"
 	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
 
-	#(ao. juttu vaiheessa)
-	#Hostilta orig interfaces, tables, dhc, dhc-scr ja res.
-	#Lisäksi dnsm, stu.
-	#Loput ghub:ista?
+	#some kind of retrovirus
+	echo "sudo tar -cvpf ${tgtfile} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/dnsmasq* /etc/stubby* /etc/network/interfaces* "
+	echo "sudo tar -rvpf ${tgtfile} /etc/sudoers.d/user_shutdown /home/stubby"
+	echo "sudo tar -rvpf ${tgtfile} /etc/init.d/{stubby,networking,dnsmasq,netfilter-persistent}"
+	echo "sudo tar -rvpf ${tgtfile} /etc/rcS.d/{S14netfilter-persistent,S15networking}"
+	echo "sudo tar -rvpf ${tgtfile} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}"
+	echo "sudo tar -rvpf ${tgtfile} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}"	
 
-	echo "sudo tar -cvpf ${tgtfile} /var/cache/apt/archives/*.deb ~/Desktop/minimize"
-
+	#add some stuff from ghub
 	echo "${shary} git"
 	echo "local p"
 	echo "local q"
@@ -283,18 +284,18 @@ function make_tar() {
 	echo "cd \$q"
 	echo "git clone https://github.com/senescent777/project.git"
 	echo "cd project"
+
 	echo "sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD"
 	echo "sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD"
-	echo "sudo cp /etc/iptables/rules.v4 ./etc/iptables/rules.v4.OLD"
-	echo "TODO: cp right_rules_file ./etc/iptables;ln -s right_rules_file /etc/iptables/rules.v4"
 	echo "sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD"	
-	echo "sudo cp -a /etc/network ./etc;sudo cp -a /etc/dnsmasq* ./etc;sudo cp -a /etc/stubby* ./etc"
-	echo "TODO: /e/init.d , /e/rc?.d"	
+
+	echo "${sco} -R root:root ./etc; ${scm} -R a-w ./etc"
+	echo "${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin"	
 	echo "sudo tar -rvpf ${tgtfile} ./etc ./sbin"
-
 	echo "cd \$p"
-
-	echo "sudo tar -rvpf ${tgtfile}  "
+	
+	echo "sudo tar -tf  ${tgtfile} > MANIFEST"
+	echo "sudo tar -rvpf ${tgtfile} ${p}/MANIFEST"
 	echo "sudo /sbin/ifdown ${iface} | sudo /sbin/ifdown -a"
 }
 
@@ -412,7 +413,7 @@ fi
 #TODO:testi, miten tables-säännöt toimivat autoremove'n jälkeen
 sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
-#TODO:selvitä+korjaa miksei stubby starttaa kun the_ar=0 , jos vielä toistuu
+#VAIH:selvitä+korjaa miksei stubby starttaa kun the_ar=0 , jos vielä toistuu (liittynee "-v"-optioon)
 
 if [ ${debug} -eq 1 ] ; then
 	${snt} -tulpan
