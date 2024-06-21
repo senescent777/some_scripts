@@ -4,9 +4,9 @@
 iface=eth0 #grep /e/n/i ?
 debug=0
 the_ar=0
-tblz4=rules.v4.180624 #TODO:jatkossa pelkkä .v4
+tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 install=0 
-tgtfile=/mnt/186/nu.tar #TODO:jatkossa thjää
+tgtfile=out.tar
 enforce=0
 no_mas=0
 pkgdir=/var/cache/apt/archives
@@ -74,11 +74,13 @@ function check_params() {
 		;;
 	esac
 
-	[ -s ${tgtfile} ] && echo "${tgtfile} alr3ady 3x1st5"
-	local d
-	d=$(dirname ${tgtfile})
-	[ -d ${d} ] || echo "no such dir ad ${d}"	
-	
+	if [ ${install} -eq 1 ] ; then
+		[ -s ${tgtfile} ] && echo "${tgtfile} alr3ady 3x1st5"
+		local d
+		d=$(dirname ${tgtfile})
+		[ -d ${d} ] || echo "no such dir ad ${d}"	
+	fi
+
 	case ${no_mas} in
 		0|1)
 			dqb " ok ${no_mas}"
