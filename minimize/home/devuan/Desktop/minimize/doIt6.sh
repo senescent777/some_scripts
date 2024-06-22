@@ -85,8 +85,14 @@ function check_params() {
 	if [ ${install} -eq 1 ] ; then
 		[ -s ${tgtfile} ] && echo "${tgtfile} alr3ady 3x1st5"
 		local d
+	
 		d=$(dirname ${tgtfile})
 		[ -d ${d} ] || echo "no such dir as ${d}"	
+	
+		if [ ${the_ar} -eq 1 ] ; then 
+			dqb "make_tar may not work"
+			sleep 3
+		fi
 	fi
 
 	case ${no_mas} in
@@ -448,11 +454,6 @@ fi #
 #exit
 
 if [ ${install} -eq 1 ] ; then
-	if [ ${the_ar} -eq 1 ] ; then #TODO:urputus aiemmaksi, check_params
-		dqb "make_tar may not work"
-		sleep 3
-	fi
-
 	make_tar
 else
 	dqb "not fetching pkgs"
