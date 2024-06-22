@@ -1,9 +1,9 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=do_it6
-Comment=
-Exec=/home/devuan/Desktop/minimize/doIt6.sh -v
+Name=pt2
+Comment=remove more stuff
+Exec=/home/devuan/Desktop/minimize/pt2.sh
 Icon=
 Path=
 Terminal=true
