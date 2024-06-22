@@ -45,11 +45,15 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 #lms pois, mariadb, lvm2 ja mailcap ic
 sudo apt-get remove --purge --yes lm-sensors 
 
-#220624.3:tähän asti ok (ei vielä kernel poistu)
+
+
+sudo apt-get remove --purge --yes lvm2 
+sudo apt autoremove --yes
+
+#220624.5:tähän asti ok (ei vielä kernel poistu)
 echo "NOT YET READY FOR PRODUCTION USE"
 exit
 
-sudo apt-get remove --purge --yes lvm2 
 sudo apt-get remove --purge --yes mailcap 
 sudo apt-get remove --purge --yes mariadb-common
 #mokutil poisrui, orca, musql ja openssh ic-tilassa
