@@ -437,9 +437,10 @@ ${whack} nm-applet
 sleep 3
 
 #===================================================PART 2===================================
-${sharpy} libblu* network* libcupsfilters* libgphoto* #libopts?
+${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
-${sharpy} rpc* nfs* ntp* sntp*
+${sharpy} rpc* nfs* 
+${sharpy} ntp* sntp*
 ${sharpy} modem* wireless* wpa* iw lm-sensors
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
