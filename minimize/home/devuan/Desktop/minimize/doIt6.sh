@@ -150,7 +150,8 @@ function check_binaries() {
 	sip="sudo ${sip} "
 	sa="sudo ${sa} "
 }
-#TODO:mangle_s() tähän ja käyttöön?
+
+#TODO:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
 mangle2() {
 	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
 		dqb "MANGLED $1";sleep 1
@@ -166,8 +167,8 @@ function enforce_access() {
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
 	${scm} 0755 /home
-	${sco} -R devuan:devuan /home/devuan/
-	${scm} -R 0755 /home/devuan/Desktop/minimize
+	${sco} -R devuan:devuan /home/devuan/ #~
+	${scm} -R 0755 /home/devuan/Desktop/minimize #~/Desktop/minimize
 	${sco} -R 101:65534 /home/stubby/
 
 	if [ ${enforce} -eq 1 ] ; then #käykähän jatkossa turhaksi tämä if-blokki?
@@ -380,11 +381,10 @@ fi
 check_params
 check_binaries
 enforce_access
-#exit
+
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" #jos tar nalkuttaa päiväyksistä niin date --set hoitaa
 ${sip} link set ${iface} down
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
-#exit
 
 for t in INPUT OUTPUT FORWARD ; do 
 	${ipt} -P ${t} DROP
@@ -441,7 +441,6 @@ fi
 
 csleep 5
 
-#DONE:testi, miten tables-säännöt toimivat autoremove'n jälkeen
 sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
 
@@ -449,7 +448,6 @@ if [ ${debug} -eq 1 ] ; then
 	${snt} -tulpan
 	sleep 5
 fi #
-#exit
 
 if [ ${install} -eq 1 ] ; then
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
