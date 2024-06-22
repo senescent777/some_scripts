@@ -11,6 +11,10 @@ enforce=0
 no_mas=0
 pkgdir=/var/cache/apt/archives
 
+odus=$(which sudo)
+[ -x ${odus} ] || exit 666
+#exit
+
 ipt=$(sudo which iptables)
 ip6t=$(sudo which ip6tables)
 iptr=$(sudo which iptables-restore)
@@ -108,8 +112,8 @@ function check_params() {
 
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
+	dqb "sudo= ${odus} "
 
-	#TODO:sudo:lle vastaava tarkistus, vähän aiemmaksi
 	[ -x ${ipt} ] || exit 5
 	[ -x ${ip6t} ] || exit 5
 	[ -x ${iptr} ] || exit 5
