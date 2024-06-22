@@ -7,7 +7,9 @@ the_ar=0
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 install=0 
 tgtfile=out.tar
-enforce=0
+
+enforce=1 #kokeeksi näin
+
 no_mas=0
 pkgdir=/var/cache/apt/archives
 
@@ -155,8 +157,10 @@ mangle2() {
 	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
 		#chattr -ui ${1}
 		dqb "MANGLED $1";sleep 1
-		chmod o-rwx ${1}
-		chown root:root ${1}
+
+		${scm} o-rwx ${1}
+		${sco} root:root ${1}
+
 		csleep 1
 		#chattr +ui ${1}
 	fi
@@ -458,6 +462,8 @@ fi #
 if [ ${install} -eq 1 ] ; then
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
 	make_tar
+	sudo /sbin/ifdown -a
+
 	exit
 else
 	dqb "not fetching pkgs"
@@ -487,7 +493,7 @@ if [ ${no_mas} -eq 1 ] ; then
 fi
 
 #autoremove tähän takaisin jos the_ar ?
-#[ ${the_ar} -eq 1 ] && ${sa} autoremove --yes
+[ ${the_ar} -eq 1 ] || ${sa} autoremove --yes
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
