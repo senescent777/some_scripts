@@ -78,7 +78,7 @@ function check_params() {
 		[ -s ${tgtfile} ] && echo "${tgtfile} alr3ady 3x1st5"
 		local d
 		d=$(dirname ${tgtfile})
-		[ -d ${d} ] || echo "no such dir ad ${d}"	
+		[ -d ${d} ] || echo "no such dir as ${d}"	
 	fi
 
 	case ${no_mas} in
@@ -105,7 +105,7 @@ function check_params() {
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
 
-	#VAIH:muutkin binäärit + ekspliittinen sudo pois missä mahd
+	#TODO:sudo:lle vastaava tarkistus, vähän aiemmaksi
 	[ -x ${ipt} ] || exit 5
 	[ -x ${ip6t} ] || exit 5
 	[ -x ${iptr} ] || exit 5
@@ -156,6 +156,7 @@ function enforce_access() {
 		${sco} -R root:root /etc
 		${sco} -R root:root /var
 		${scm} -R go-w /var
+		#TODO:sudo-juttujen pakotus?
 		${scm} 0755 /
 	else
 		if [ ${debug} -eq 1 ] ; then 
@@ -283,6 +284,7 @@ function make_tar() {
 	echo "p=$(pwd)"
 	echo "q=$(mktemp -d)"	
 	echo "cd \$q"
+	#TODO:jos ei tarvitsisi koko projektia vetää
 	echo "git clone https://github.com/senescent777/project.git"
 	echo "cd project"
 
@@ -300,19 +302,19 @@ function make_tar() {
 	echo "sudo /sbin/ifdown ${iface} | sudo /sbin/ifdown -a"
 }
 
+#HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
 ns2() {
 	dqb "ns2( ${1} )"
 	${scm} u+w /home
 
 	sudo /usr/sbin/userdel ${1}
-	[ ${debug} -eq 1 ] && sleep 3
+	sleep 3
 
 	sudo adduser --system ${1}
 	${scm} go-w /home
 
-	if [ ${debug} -eq 1 ] ; then
-		ls -las /home;sleep 7
-	fi #
+	[ ${debug} -eq 1 ]  && ls -las /home
+	sleep 7
 }
 
 ns4() {
@@ -324,18 +326,16 @@ ns4() {
 	${sco} $1:65534 /run/${1}.pid
 	${scm} u-w /run
 
-	[ ${debug} -eq 1 ] && sleep 5
+	sleep 5
 	${whack} ${1}*
+	sleep 5
 
-	if [ ${debug} -eq 1 ] ; then
-		sleep 5
-		echo "starting ${1} in 5 secs"
-		sleep 5
-	fi #
+	dqb "starting ${1} in 5 secs"
 
+	sleep 5
 	sudo -u ${1} ${1} -g
 	echo $?
-	[ ${debug} -eq 1 ] && sleep 5
+	sleep 5
 }
 
 #==================================PART 1============================================================
@@ -423,7 +423,7 @@ fi #
 #exit
 
 if [ ${install} -eq 1 ] ; then
-	if [ ${the_ar} -eq 1 ] ; then 
+	if [ ${the_ar} -eq 1 ] ; then #TODO:urputus aiemmaksi, check_params
 		dqb "make_tar may not work"
 		sleep 3
 	fi
@@ -446,7 +446,7 @@ ${sdi} /var/cache/apt/archives/lib*.deb
 #HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
 ${sdi} ${pkgdir}/*.deb
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/*.deb
-[ ${debug} -eq 1 ] && sleep 2
+[ ${debug} -eq 1 ] && sleep 2 #TODO:tämmöisestä fktio
 
 #missäköhän kohtaa kuuluisi tmän olla?
 if [ ${no_mas} -eq 1 ] ; then
