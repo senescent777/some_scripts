@@ -318,7 +318,7 @@ function make_tar() {
 	echo "p=$(pwd)"
 	echo "q=$(mktemp -d)"	
 	echo "cd \$q"
-	#TODO:jos ei tarvitsisi koko projektia vetää
+	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
 	echo "git clone https://github.com/senescent777/project.git"
 	echo "cd project"
 
@@ -443,7 +443,7 @@ fi
 
 csleep 5
 
-#TODO:testi, miten tables-säännöt toimivat autoremove'n jälkeen
+#DONE:testi, miten tables-säännöt toimivat autoremove'n jälkeen
 sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
 
