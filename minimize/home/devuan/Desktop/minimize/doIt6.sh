@@ -489,4 +489,4 @@ clouds 1
 ns2 stubby
 ns4 stubby
 [ ${debug} -eq 1 ] && ${snt} -tulpan
-echo "sudo /sbin/ifup whåtever"
+echo "sudo /sbin/ifup ${iface} or whåtever"
