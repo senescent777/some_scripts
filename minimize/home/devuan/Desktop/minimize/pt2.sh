@@ -32,29 +32,29 @@ sudo apt autoremove --yes
 #HUOM.210624:näillä main saattaa olla vielä jotain ongelmaa
 
 #220624.3:tähän asti ok (ei vielä kernel poistu)
-echo "NOT YET READY FOR PRODUCTION USE"
-exit
+#echo "NOT YET READY FOR PRODUCTION USE"
+#exit
 
 #htop poistui, mikrokoodi rc , iucode ii , libgtreamer-paketteja jäi pari ii-tilaan
+sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes htop intel-microcode
 sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
 
 
 #220624.5:tähän asti ok (ei vielä kernel poistu)
-echo "NOT YET READY FOR PRODUCTION USE"
-exit
+
 
 #lms pois, mariadb, lvm2 ja mailcap ic
 #The following additional packages will be installed:
 #  blt libtcl8.6 libtk8.6 python3-tk tk8.6-blt2.5
 #mikä aiheuttaa?
 
-sudo apt-get remove --purge --yes lm-sensors 
+#sudo apt-get remove --purge --yes lm-sensors #löytyykö tätä enää asennetuista?
 
 
 
-sudo apt-get remove --purge --yes lvm2 
+sudo apt-get remove --purge --yes lvm2 #mdadm mukaan?
 sudo apt autoremove --yes
 
 
@@ -67,7 +67,9 @@ sudo apt-get remove --purge --yes mailcap #poistuiko jo aiemmin?
 sudo apt-get remove --purge --yes mariadb-common
 sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
-exit
+#exit
+
+
 
 #mokutil poisrui, orca, musql ja openssh ic-tilassa
 sudo apt-get remove --purge --yes mokutil mysql-common orca
@@ -76,6 +78,8 @@ sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 #nämäkin jäivät
+
+
 
 #shim, ristretto ja screen ainakin jäivät ii-tilaan
 #mikä yrittää poistaa kerneliä?
@@ -91,20 +95,33 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes vim*
 sudo apt autoremove --yes
 
+
+
 #seuraavat vielä jäivät dpkg -l listaan
 sudo apt-get remove --purge --yes xorriso xfburn
 sudo apt autoremove --yes
 
 sudo apt-get remove --purge --yes iucode-tool 
 sudo apt-get remove --purge --yes libgstreamer*
+#sudo apt autoremove --yes
 sudo apt-get remove --purge --yes os-prober po*
-sudo apt-get remove --purge --yes ppp proc*
+
+echo "NOT YET READY FOR PRODUCTION USE"
+exit
+
+#=================================================
+#sudo apt-get remove --purge --yes ppp proc* jälkimmäinen liikaa?
+#=================================================
+sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes ristretto screen 
+sudo apt autoremove --yes
+
+sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes shim* samba*
 sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb
-sudo shred -fu /tmp/*
+#sudo shred -fu /tmp/*
 
 df
