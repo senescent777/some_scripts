@@ -1,6 +1,5 @@
 #!/bin/sh
-echo "NOT YET READY FOR PRODUCTION USE"
-exit
+
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 #amd-mc+at-spi ic, coinor poistui
@@ -12,6 +11,7 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes dirmngr discover* distro-info-data 
 #ao. rivi ok
 sudo apt-get remove --purge --yes efibootmgr exfalso ftp gcr
+
 sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
@@ -19,6 +19,9 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes ghostscript gir* gdisk gpg-*
 sudo apt-get remove --purge --yes gpg-agent gpgconf gpgsm gparted
 sudo apt autoremove --yes
+#220624.2:tähän asti ok (ei vielä kernel poistu)
+echo "NOT YET READY FOR PRODUCTION USE"
+exit
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 #gsasl+gstreamer+gsfonts poistui
