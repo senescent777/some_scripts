@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 sudo rm -rf /run/live/medium/live/initrd.img*
 #amd-mc+at-spi ic, coinor poistui
 sudo apt-get remove --purge --yes amd64-microcode atril* at-spi2-core coinor*
@@ -31,19 +30,11 @@ sudo apt-get remove --purge --yes gstreamer*
 sudo apt autoremove --yes
 #HUOM.210624:näillä main saattaa olla vielä jotain ongelmaa
 
-#220624.3:tähän asti ok (ei vielä kernel poistu)
-#echo "NOT YET READY FOR PRODUCTION USE"
-#exit
-
 #htop poistui, mikrokoodi rc , iucode ii , libgtreamer-paketteja jäi pari ii-tilaan
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes htop intel-microcode
 sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
-
-
-#220624.5:tähän asti ok (ei vielä kernel poistu)
-
 
 #lms pois, mariadb, lvm2 ja mailcap ic
 #The following additional packages will be installed:
@@ -52,24 +43,16 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 
 #sudo apt-get remove --purge --yes lm-sensors #löytyykö tätä enää asennetuista?
 
-
-
-sudo apt-get remove --purge --yes lvm2 #mdadm mukaan?
+sudo apt-get remove --purge --yes lvm2 mdadm #mdadm mukaan?
 sudo apt autoremove --yes
-
-
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes mailcap #poistuiko jo aiemmin?
-
-
 
 sudo apt-get remove --purge --yes mariadb-common
 sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
 #exit
-
-
 
 #mokutil poisrui, orca, musql ja openssh ic-tilassa
 sudo apt-get remove --purge --yes mokutil mysql-common orca
@@ -78,8 +61,6 @@ sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 #nämäkin jäivät
-
-
 
 #shim, ristretto ja screen ainakin jäivät ii-tilaan
 #mikä yrittää poistaa kerneliä?
@@ -95,8 +76,6 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes vim*
 sudo apt autoremove --yes
 
-
-
 #seuraavat vielä jäivät dpkg -l listaan
 sudo apt-get remove --purge --yes xorriso xfburn
 sudo apt autoremove --yes
@@ -106,19 +85,21 @@ sudo apt-get remove --purge --yes libgstreamer*
 #sudo apt autoremove --yes
 sudo apt-get remove --purge --yes os-prober po*
 
-echo "NOT YET READY FOR PRODUCTION USE"
-exit
+#echo "NOT YET READY FOR PRODUCTION USE"
+#exit
 
 #=================================================
-#sudo apt-get remove --purge --yes ppp proc* jälkimmäinen liikaa?
+#sudo apt-get remove --purge --yes proc* liikaa? jos tyytyisi procmailiin
 #=================================================
 sudo rm -rf /run/live/medium/live/initrd.img*
-sudo apt-get remove --purge --yes ristretto screen 
+sudo apt-get remove --purge --yes ppp ristretto screen 
 sudo apt autoremove --yes
+sleep 6
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes shim* samba*
 sudo apt autoremove --yes
+sleep 6
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb

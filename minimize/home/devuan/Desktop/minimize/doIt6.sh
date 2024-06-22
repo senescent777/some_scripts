@@ -7,9 +7,13 @@ the_ar=0
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 install=0 
 tgtfile=out.tar
-enforce=0
+enforce=1 #kokeeksi näin
 no_mas=0
 pkgdir=/var/cache/apt/archives
+
+odus=$(which sudo)
+[ -x ${odus} ] || exit 666
+#exit
 
 ipt=$(sudo which iptables)
 ip6t=$(sudo which ip6tables)
@@ -53,6 +57,10 @@ function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
 }
 
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+
 function check_params() {
 	case ${the_ar} in
 		0|1)
@@ -77,8 +85,14 @@ function check_params() {
 	if [ ${install} -eq 1 ] ; then
 		[ -s ${tgtfile} ] && echo "${tgtfile} alr3ady 3x1st5"
 		local d
+	
 		d=$(dirname ${tgtfile})
-		[ -d ${d} ] || echo "no such dir ad ${d}"	
+		[ -d ${d} ] || echo "no such dir as ${d}"	
+	
+		if [ ${the_ar} -eq 1 ] ; then 
+			dqb "make_tar may not work"
+			sleep 3
+		fi
 	fi
 
 	case ${no_mas} in
@@ -104,8 +118,8 @@ function check_params() {
 
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
+	dqb "sudo= ${odus} "
 
-	#VAIH:muutkin binäärit + ekspliittinen sudo pois missä mahd
 	[ -x ${ipt} ] || exit 5
 	[ -x ${ip6t} ] || exit 5
 	[ -x ${iptr} ] || exit 5
@@ -119,10 +133,8 @@ function check_binaries() {
 	[ -x ${snt} ] || exit 5
 	[ -x ${sdi} ] || exit 5
 	
-	if [ ${debug} -eq 1 ] ; then
-		echo "b1nar135 0k" #
-		sleep 3 #
-	fi #
+	dqb "b1nar135 0k" 
+	csleep 3
 
 	ipt="sudo ${ipt} "
 	ip6t="sudo ${ip6t} "
@@ -139,6 +151,17 @@ function check_binaries() {
 	sa="sudo ${sa} "
 }
 
+mangle2() {
+	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
+		#chattr -ui ${1}
+		dqb "MANGLED $1";sleep 1
+		${scm} o-rwx ${1}
+		${sco} root:root ${1}
+		csleep 1
+		#chattr +ui ${1}
+	fi
+}
+
 function enforce_access() {
 	dqb "3nf0rc3_acc355()"
 
@@ -153,26 +176,40 @@ function enforce_access() {
 		echo "changing /sbin , /etc and /var 4 real"
 		${sco} -R root:root /sbin
 		${scm} -R 0755 /sbin
+
+		
+		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		${sco} -R root:root /etc
+		${scm} -R 0755 /etc
+		local f
+		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
+
+		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
+			dqb "666!!! SODOMIZING ${f} 666!!!"
+			mangle2 ${f}
+			csleep 6
+		done
+
+		#sudoersin sisältöä voisi kai tiukentaa kanssa
 		${sco} -R root:root /var
 		${scm} -R go-w /var
+
 		${scm} 0755 /
-	else
-		if [ ${debug} -eq 1 ] ; then 
-			#VAIH:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
-			echo "#https://github.com/senescent777/project/tree/main/sbin can be used as /sbin"
-			echo "#${sco} -R root:root /sbin"
-			echo "#${scm} -R 0755 /sbin"
-		
-			echo "#https://github.com/senescent777/project/tree/main/etc can be used as /etc except for stubby-related stuff"
-			echo "#${sco} -R root:root /etc"
-			echo "#${scm} -R go-w /etc"
-		
-			echo "#${sco} -R root:root /var"
-			echo "#${scm} -R go-w /var"
-			echo "#${sco} root:root /"
-			echo "#${scm} 0755 /"
-		fi #
+		${sco} root:root /
+	#else
+	#	if [ ${debug} -eq 1 ] ; then 
+	#		#VAIH:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
+	#		echo "#${sco} -R root:root /sbin"
+	#		echo "#${scm} -R 0755 /sbin"
+	#	
+	#		echo "#${sco} -R root:root /etc"
+	#		echo "#${scm} -R go-w /etc"
+	#	
+	#		echo "#${sco} -R root:root /var"
+	#		echo "#${scm} -R go-w /var"
+	#		echo "#${sco} root:root /"
+	#		echo "#${scm} 0755 /"
+	#	fi #
 	fi
 	
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
@@ -283,6 +320,7 @@ function make_tar() {
 	echo "p=$(pwd)"
 	echo "q=$(mktemp -d)"	
 	echo "cd \$q"
+	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
 	echo "git clone https://github.com/senescent777/project.git"
 	echo "cd project"
 
@@ -300,19 +338,19 @@ function make_tar() {
 	echo "sudo /sbin/ifdown ${iface} | sudo /sbin/ifdown -a"
 }
 
+#HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
 ns2() {
 	dqb "ns2( ${1} )"
 	${scm} u+w /home
 
 	sudo /usr/sbin/userdel ${1}
-	[ ${debug} -eq 1 ] && sleep 3
+	sleep 3
 
 	sudo adduser --system ${1}
 	${scm} go-w /home
 
-	if [ ${debug} -eq 1 ] ; then
-		ls -las /home;sleep 7
-	fi #
+	[ ${debug} -eq 1 ]  && ls -las /home
+	sleep 7
 }
 
 ns4() {
@@ -324,18 +362,16 @@ ns4() {
 	${sco} $1:65534 /run/${1}.pid
 	${scm} u-w /run
 
-	[ ${debug} -eq 1 ] && sleep 5
+	sleep 5
 	${whack} ${1}*
+	sleep 5
 
-	if [ ${debug} -eq 1 ] ; then
-		sleep 5
-		echo "starting ${1} in 5 secs"
-		sleep 5
-	fi #
+	dqb "starting ${1} in 5 secs"
 
+	sleep 5
 	sudo -u ${1} ${1} -g
 	echo $?
-	[ ${debug} -eq 1 ] && sleep 5
+	sleep 5
 }
 
 #==================================PART 1============================================================
@@ -348,7 +384,7 @@ fi
 check_params
 check_binaries
 enforce_access
-
+#exit
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" #jos tar nalkuttaa päiväyksistä niin date --set hoitaa
 ${sip} link set ${iface} down
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
@@ -385,7 +421,7 @@ ${whack} nm-applet
 sleep 3
 
 #===================================================PART 2===================================
-${sharpy} libblu* network* libcupsfilters* libgphoto*
+${sharpy} libblu* network* libcupsfilters* libgphoto* #libopts?
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* ntp* sntp*
 ${sharpy} modem* wireless* wpa* iw lm-sensors
@@ -401,20 +437,17 @@ clouds 0
 
 #TODO:autoremove:n ehdollisuus pois jatkossa?
 if [ ${the_ar} -eq 1 ] ; then 
-	if [ ${debug} -eq 1 ] ; then
-		echo "autoremove in 5 secs"; sleep 5 #
-	fi #
-
+	dqb "autoremove in 5 secs"
 	${sa} autoremove --yes
 else
 	dqb "autoremove postponed"
-	sleep 5
 fi
 
-#TODO:testi, miten tables-säännöt toimivat autoremove'n jälkeen
+csleep 5
+
+#DONE:testi, miten tables-säännöt toimivat autoremove'n jälkeen
 sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
-#VAIH:selvitä+korjaa miksei stubby starttaa kun the_ar=0 , jos vielä toistuu (liittynee "-v"-optioon)
 
 if [ ${debug} -eq 1 ] ; then
 	${snt} -tulpan
@@ -423,19 +456,19 @@ fi #
 #exit
 
 if [ ${install} -eq 1 ] ; then
-	if [ ${the_ar} -eq 1 ] ; then 
-		dqb "make_tar may not work"
-		sleep 3
-	fi
-
+	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
 	make_tar
+	sudo /sbin/ifdown -a
+	exit
 else
 	dqb "not fetching pkgs"
 fi
 
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 3 SECS"
-[ ${debug} -eq 1 ] && sleep 3
+csleep 3
+echo "DO NOT ANSWER \"Yes\"  TO A QUESTION ABOUT IPTABLES";sleep 1
+echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 6
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/dns-root-data*.deb
@@ -446,13 +479,16 @@ ${sdi} /var/cache/apt/archives/lib*.deb
 #HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
 ${sdi} ${pkgdir}/*.deb
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/*.deb
-[ ${debug} -eq 1 ] && sleep 2
+csleep 2
 
 #missäköhän kohtaa kuuluisi tmän olla?
 if [ ${no_mas} -eq 1 ] ; then
 	dqb "no mas senor"
 	exit 	
 fi
+
+#autoremove tähän takaisin jos the_ar ?
+[ ${the_ar} -eq 1 ] || ${sa} autoremove --yes
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
@@ -461,4 +497,4 @@ clouds 1
 ns2 stubby
 ns4 stubby
 [ ${debug} -eq 1 ] && ${snt} -tulpan
-echo "sudo /sbin/ifup whåtever"
+echo "sudo /sbin/ifup ${iface} or whåtever"
