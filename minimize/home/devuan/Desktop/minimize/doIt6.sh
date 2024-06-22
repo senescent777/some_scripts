@@ -7,9 +7,7 @@ the_ar=0
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 install=0 
 tgtfile=out.tar
-
 enforce=1 #kokeeksi näin
-
 no_mas=0
 pkgdir=/var/cache/apt/archives
 
@@ -152,17 +150,13 @@ function check_binaries() {
 	sip="sudo ${sip} "
 	sa="sudo ${sa} "
 }
-
+#TODO:mangle_s() tähän ja käyttöön?
 mangle2() {
 	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
-		#chattr -ui ${1}
 		dqb "MANGLED $1";sleep 1
-
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
-
 		csleep 1
-		#chattr +ui ${1}
 	fi
 }
 
@@ -181,7 +175,6 @@ function enforce_access() {
 		${sco} -R root:root /sbin
 		${scm} -R 0755 /sbin
 
-		
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		${sco} -R root:root /etc
 		${scm} -R 0755 /etc
@@ -189,7 +182,6 @@ function enforce_access() {
 		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
-			dqb "666!!! SODOMIZING ${f} 666!!!"
 			mangle2 ${f}
 			csleep 6
 		done
@@ -463,7 +455,6 @@ if [ ${install} -eq 1 ] ; then
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
 	make_tar
 	sudo /sbin/ifdown -a
-
 	exit
 else
 	dqb "not fetching pkgs"
