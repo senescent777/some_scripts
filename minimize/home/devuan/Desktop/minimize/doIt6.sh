@@ -53,6 +53,10 @@ function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
 }
 
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+
 function check_params() {
 	case ${the_ar} in
 		0|1)
@@ -119,10 +123,8 @@ function check_binaries() {
 	[ -x ${snt} ] || exit 5
 	[ -x ${sdi} ] || exit 5
 	
-	if [ ${debug} -eq 1 ] ; then
-		echo "b1nar135 0k" #
-		sleep 3 #
-	fi #
+	dqb "b1nar135 0k" 
+	csleep 3
 
 	ipt="sudo ${ipt} "
 	ip6t="sudo ${ip6t} "
@@ -348,7 +350,7 @@ fi
 check_params
 check_binaries
 enforce_access
-
+exit
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" #jos tar nalkuttaa päiväyksistä niin date --set hoitaa
 ${sip} link set ${iface} down
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
@@ -401,15 +403,13 @@ clouds 0
 
 #TODO:autoremove:n ehdollisuus pois jatkossa?
 if [ ${the_ar} -eq 1 ] ; then 
-	if [ ${debug} -eq 1 ] ; then
-		echo "autoremove in 5 secs"; sleep 5 #
-	fi #
-
+	dqb "autoremove in 5 secs"
 	${sa} autoremove --yes
 else
 	dqb "autoremove postponed"
-	sleep 5
 fi
+
+csleep 5
 
 #TODO:testi, miten tables-säännöt toimivat autoremove'n jälkeen
 sudo rm -rf /run/live/medium/live/initrd.img*
@@ -434,8 +434,9 @@ fi
 
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 3 SECS"
-[ ${debug} -eq 1 ] && sleep 3
-echo "DO NOT ANSWER \"Yes\"  TO A QUESTION ABOUT IPTABLES";sleep 7
+csleep 3
+echo "DO NOT ANSWER \"Yes\"  TO A QUESTION ABOUT IPTABLES";sleep 1
+echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 6
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/dns-root-data*.deb
@@ -446,7 +447,7 @@ ${sdi} /var/cache/apt/archives/lib*.deb
 #HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
 ${sdi} ${pkgdir}/*.deb
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/*.deb
-[ ${debug} -eq 1 ] && sleep 2 #TODO:tämmöisestä fktio
+csleep 2
 
 #missäköhän kohtaa kuuluisi tmän olla?
 if [ ${no_mas} -eq 1 ] ; then
