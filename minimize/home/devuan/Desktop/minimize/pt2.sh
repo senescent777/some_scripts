@@ -41,8 +41,15 @@ sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
 
 
+#220624.5:tähän asti ok (ei vielä kernel poistu)
+echo "NOT YET READY FOR PRODUCTION USE"
+exit
 
 #lms pois, mariadb, lvm2 ja mailcap ic
+#The following additional packages will be installed:
+#  blt libtcl8.6 libtk8.6 python3-tk tk8.6-blt2.5
+#mikä aiheuttaa?
+
 sudo apt-get remove --purge --yes lm-sensors 
 
 
@@ -50,14 +57,21 @@ sudo apt-get remove --purge --yes lm-sensors
 sudo apt-get remove --purge --yes lvm2 
 sudo apt autoremove --yes
 
-#220624.5:tähän asti ok (ei vielä kernel poistu)
-echo "NOT YET READY FOR PRODUCTION USE"
+
+
+sudo rm -rf /run/live/medium/live/initrd.img*
+sudo apt-get remove --purge --yes mailcap #poistuiko jo aiemmin?
+
+
+
+sudo apt-get remove --purge --yes mariadb-common
+sudo apt autoremove --yes
+sudo rm -rf /run/live/medium/live/initrd.img*
 exit
 
-sudo apt-get remove --purge --yes mailcap 
-sudo apt-get remove --purge --yes mariadb-common
 #mokutil poisrui, orca, musql ja openssh ic-tilassa
-sudo apt-get remove --purge --yes mokutil mysql-common openssh* orca
+sudo apt-get remove --purge --yes mokutil mysql-common orca
+sudo apt-get remove --purge --yes openssh*
 sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
