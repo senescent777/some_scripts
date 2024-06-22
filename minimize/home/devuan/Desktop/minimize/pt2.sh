@@ -17,16 +17,23 @@ sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
 #seur 2 riviä ok minimoitu 
 sudo apt-get remove --purge --yes ghostscript gir* gdisk gpg-*
+#gpg-juttujen kanssa samalla kertaa voisi poistaa:libreoffice
 sudo apt-get remove --purge --yes gpg-agent gpgconf gpgsm gparted
 sudo apt autoremove --yes
-#220624.2:tähän asti ok (ei vielä kernel poistu)
-echo "NOT YET READY FOR PRODUCTION USE"
-exit
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 #gsasl+gstreamer+gsfonts poistui
-sudo apt-get remove --purge --yes gsasl* gstreamer* gsfonts* 
+sudo apt-get remove --purge --yes gsasl* 
+sudo rm -rf /run/live/medium/live/initrd.img*
+sudo apt-get remove --purge --yes gsfonts* 
+sudo apt autoremove --yes
+sudo apt-get remove --purge --yes gstreamer*
+sudo apt autoremove --yes
 #HUOM.210624:näillä main saattaa olla vielä jotain ongelmaa
+
+#220624.3:tähän asti ok (ei vielä kernel poistu)
+echo "NOT YET READY FOR PRODUCTION USE"
+exit
 
 #htop poistui, mikrokoodi rc , iucode ii , libgtreamer-paketteja jäi pari ii-tilaan
 sudo apt-get remove --purge --yes htop intel-microcode
