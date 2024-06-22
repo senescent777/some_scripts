@@ -145,6 +145,17 @@ function check_binaries() {
 	sa="sudo ${sa} "
 }
 
+mangle2() {
+	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
+		#chattr -ui ${1}
+		dqb "MANGLED $1";sleep 1
+		chmod o-rwx ${1}
+		chown root:root ${1}
+		csleep 1
+		#chattr +ui ${1}
+	fi
+}
+
 function enforce_access() {
 	dqb "3nf0rc3_acc355()"
 
@@ -159,25 +170,38 @@ function enforce_access() {
 		echo "changing /sbin , /etc and /var 4 real"
 		${sco} -R root:root /sbin
 		${scm} -R 0755 /sbin
+
+		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		${sco} -R root:root /etc
+		${scm} -R 0755 /etc
+		local f
+		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
+
+		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
+			dqb "666!!! SODOMIZING ${f} 666!!!"
+			mangle2 ${f}
+			csleep 6
+		done
+
 		${sco} -R root:root /var
 		${scm} -R go-w /var
-		#TODO:sudo-juttujen pakotus?
+
 		${scm} 0755 /
-	else
-		if [ ${debug} -eq 1 ] ; then 
-			#VAIH:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
-			echo "#${sco} -R root:root /sbin"
-			echo "#${scm} -R 0755 /sbin"
-		
-			echo "#${sco} -R root:root /etc"
-			echo "#${scm} -R go-w /etc"
-		
-			echo "#${sco} -R root:root /var"
-			echo "#${scm} -R go-w /var"
-			echo "#${sco} root:root /"
-			echo "#${scm} 0755 /"
-		fi #
+		${sco} root:root /
+	#else
+	#	if [ ${debug} -eq 1 ] ; then 
+	#		#VAIH:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
+	#		echo "#${sco} -R root:root /sbin"
+	#		echo "#${scm} -R 0755 /sbin"
+	#	
+	#		echo "#${sco} -R root:root /etc"
+	#		echo "#${scm} -R go-w /etc"
+	#	
+	#		echo "#${sco} -R root:root /var"
+	#		echo "#${scm} -R go-w /var"
+	#		echo "#${sco} root:root /"
+	#		echo "#${scm} 0755 /"
+	#	fi #
 	fi
 	
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
