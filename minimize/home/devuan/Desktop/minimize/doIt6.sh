@@ -421,7 +421,7 @@ ${whack} nm-applet
 sleep 3
 
 #===================================================PART 2===================================
-${sharpy} libblu* network* libcupsfilters* libgphoto*
+${sharpy} libblu* network* libcupsfilters* libgphoto* #libopts?
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* ntp* sntp*
 ${sharpy} modem* wireless* wpa* iw lm-sensors
@@ -485,7 +485,9 @@ if [ ${no_mas} -eq 1 ] ; then
 	dqb "no mas senor"
 	exit 	
 fi
+
 #autoremove tähän takaisin jos the_ar ?
+#[ ${the_ar} -eq 1 ] && ${sa} autoremove --yes
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
