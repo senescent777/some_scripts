@@ -38,10 +38,20 @@ exit
 #htop poistui, mikrokoodi rc , iucode ii , libgtreamer-paketteja jäi pari ii-tilaan
 sudo apt-get remove --purge --yes htop intel-microcode
 sudo apt autoremove --yes
-
 sudo rm -rf /run/live/medium/live/initrd.img*
+
+
+
 #lms pois, mariadb, lvm2 ja mailcap ic
-sudo apt-get remove --purge --yes lm-sensors lvm2 mailcap mariadb-common
+sudo apt-get remove --purge --yes lm-sensors 
+
+#220624.3:tähän asti ok (ei vielä kernel poistu)
+echo "NOT YET READY FOR PRODUCTION USE"
+exit
+
+sudo apt-get remove --purge --yes lvm2 
+sudo apt-get remove --purge --yes mailcap 
+sudo apt-get remove --purge --yes mariadb-common
 #mokutil poisrui, orca, musql ja openssh ic-tilassa
 sudo apt-get remove --purge --yes mokutil mysql-common openssh* orca
 sudo apt autoremove --yes
