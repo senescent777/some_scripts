@@ -197,8 +197,8 @@ function enforce_access() {
 		${scm} -R 0755 /etc
 		local f
 
-		#erillinen mangle2 /e/s.d tarpeellinen?
-		#for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
+		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
+		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
 			mangle2 ${f}
@@ -397,11 +397,12 @@ if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
+#TODO:näiltä main part1 loppuun funktioksi ja "kirjastoon"
 check_params
 check_binaries
 enforce_access
 
-dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" #jos tar nalkuttaa päiväyksistä niin date --set hoitaa
+dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 ${sip} link set ${iface} down
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
@@ -440,11 +441,10 @@ ${sharpy} libblu* network* libcupsfilters* libgphoto* #libopts?
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* ntp* sntp*
 ${sharpy} modem* wireless* wpa* iw lm-sensors
-#${sharpy} mdadm  mdadm  poisTo saattaa olla huono idea
+#paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
-#exit
 
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
@@ -511,3 +511,5 @@ ns2 stubby
 ns4 stubby
 [ ${debug} -eq 1 ] && ${snt} -tulpan
 echo "sudo /sbin/ifup ${iface} or whåtever"
+
+#TODO:.desktiop stubbyn käynniststä varten, varm vuoksi
