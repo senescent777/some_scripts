@@ -7,9 +7,7 @@ the_ar=0
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 install=0 
 tgtfile=out.tar
-
 enforce=1 #kokeeksi näin
-
 no_mas=0
 pkgdir=/var/cache/apt/archives
 
@@ -153,16 +151,29 @@ function check_binaries() {
 	sa="sudo ${sa} "
 }
 
+#VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
+
+mangle_s() {
+	if [ -s ${1} ] ; then 
+		#chattr -ui ${1}
+		[ ${debug} -eq 1 ] && echo "W3NGL3 $1";sleep 5
+		chmod 0555 ${1}
+		chown root:root  ${1} #uutena tämä
+		#chattr +ui ${1}
+
+		echo -n "devuan localhost=NOPASSWD: sha256:" >> /etc/sudoers.d/meshuggah
+		local s
+		s=$(sha256sum ${1})
+		echo ${s} >> /etc/sudoers.d/meshuggah
+	fi
+}
+
 mangle2() {
 	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
-		#chattr -ui ${1}
 		dqb "MANGLED $1";sleep 1
-
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
-
 		csleep 1
-		#chattr +ui ${1}
 	fi
 }
 
@@ -172,8 +183,8 @@ function enforce_access() {
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
 	${scm} 0755 /home
-	${sco} -R devuan:devuan /home/devuan/
-	${scm} -R 0755 /home/devuan/Desktop/minimize
+	${sco} -R devuan:devuan /home/devuan/ #~
+	${scm} -R 0755 /home/devuan/Desktop/minimize #~/Desktop/minimize
 	${sco} -R 101:65534 /home/stubby/
 
 	if [ ${enforce} -eq 1 ] ; then #käykähän jatkossa turhaksi tämä if-blokki?
@@ -181,17 +192,17 @@ function enforce_access() {
 		${sco} -R root:root /sbin
 		${scm} -R 0755 /sbin
 
-		
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		${sco} -R root:root /etc
 		${scm} -R 0755 /etc
 		local f
-		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
+
+		#erillinen mangle2 /e/s.d tarpeellinen?
+		#for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
-			dqb "666!!! SODOMIZING ${f} 666!!!"
 			mangle2 ${f}
-			csleep 6
+			csleep 5
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
@@ -292,54 +303,55 @@ clouds() {
 	fi #
 }
 
-#TODO:väh komentoi pois echon sisältä
+#VAIH:väh komentoi pois echon sisältä
 function make_tar() {
 	echo "sudo /sbin/ifup ${iface} | sudo /sbin/ifup -a" #if there is > 1 interfaces...
-	echo "${sag} update"
-	echo "${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables"
+	${sag} update
+	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
 	sudo rm -rf /run/live/medium/live/initrd.img*
 
-	echo "${shary} init-system-helpers netfilter-persistent iptables-persistent"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-	echo "${shary} python3-ntp ntpsec-ntpdate"
+	${shary} init-system-helpers netfilter-persistent iptables-persistent
+	sudo rm -rf /run/live/medium/live/initrd.img*
+	${shary} python3-ntp ntpsec-ntpdate
 
-	echo "${shary} dnsmasq-base runit-helper"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+	${shary} dnsmasq-base runit-helper
+	sudo rm -rf /run/live/medium/live/initrd.img*
 
-	echo "${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+	${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
+	sudo rm -rf /run/live/medium/live/initrd.img*
 
 	#some kind of retrovirus
-	echo "sudo tar -cvpf ${tgtfile} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/dnsmasq* /etc/stubby* /etc/network/interfaces* "
-	echo "sudo tar -rvpf ${tgtfile} /etc/sudoers.d/user_shutdown /home/stubby"
-	echo "sudo tar -rvpf ${tgtfile} /etc/init.d/{stubby,networking,dnsmasq,netfilter-persistent}"
-	echo "sudo tar -rvpf ${tgtfile} /etc/rcS.d/{S14netfilter-persistent,S15networking}"
-	echo "sudo tar -rvpf ${tgtfile} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}"
-	echo "sudo tar -rvpf ${tgtfile} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}"	
+	sudo tar -cvpf ${tgtfile} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/dnsmasq* /etc/stubby* /etc/network/interfaces* 
+	sudo tar -rvpf ${tgtfile} /etc/sudoers.d/user_shutdown /home/stubby
+	sudo tar -rvpf ${tgtfile} /etc/init.d/{stubby,networking,dnsmasq,netfilter-persistent}
+	sudo tar -rvpf ${tgtfile} /etc/rcS.d/{S14netfilter-persistent,S15networking}
+	sudo tar -rvpf ${tgtfile} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
+	sudo tar -rvpf ${tgtfile} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
 
 	#add some stuff from ghub
-	echo "${shary} git"
-	echo "local p"
-	echo "local q"
-	echo "p=$(pwd)"
-	echo "q=$(mktemp -d)"	
-	echo "cd \$q"
+	${shary} git
+	local p
+	local q
+	p=$(pwd)
+	q=$(mktemp -d)
+	cd $q
+
 	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
-	echo "git clone https://github.com/senescent777/project.git"
-	echo "cd project"
+	git clone https://github.com/senescent777/project.git
+	cd project
 
-	echo "sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD"
-	echo "sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD"
-	echo "sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD"	
+	sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
+	sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD
+	sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD	
 
-	echo "${sco} -R root:root ./etc; ${scm} -R a-w ./etc"
-	echo "${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin"	
-	echo "sudo tar -rvpf ${tgtfile} ./etc ./sbin"
-	echo "cd \$p"
+	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
+	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
+	sudo tar -rvpf ${tgtfile} ./etc ./sbin
+	cd $p
 	
-	echo "sudo tar -tf  ${tgtfile} > MANIFEST"
-	echo "sudo tar -rvpf ${tgtfile} ${p}/MANIFEST"
-	echo "sudo /sbin/ifdown ${iface} | sudo /sbin/ifdown -a"
+	sudo tar -tf  ${tgtfile} > MANIFEST
+	sudo tar -rvpf ${tgtfile} ${p}/MANIFEST
+	sudo /sbin/ifdown ${iface} | sudo /sbin/ifdown -a
 }
 
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
@@ -388,11 +400,10 @@ fi
 check_params
 check_binaries
 enforce_access
-#exit
+
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" #jos tar nalkuttaa päiväyksistä niin date --set hoitaa
 ${sip} link set ${iface} down
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
-#exit
 
 for t in INPUT OUTPUT FORWARD ; do 
 	${ipt} -P ${t} DROP
@@ -449,7 +460,6 @@ fi
 
 csleep 5
 
-#DONE:testi, miten tables-säännöt toimivat autoremove'n jälkeen
 sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
 
@@ -457,13 +467,11 @@ if [ ${debug} -eq 1 ] ; then
 	${snt} -tulpan
 	sleep 5
 fi #
-#exit
 
 if [ ${install} -eq 1 ] ; then
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
 	make_tar
 	sudo /sbin/ifdown -a
-
 	exit
 else
 	dqb "not fetching pkgs"
