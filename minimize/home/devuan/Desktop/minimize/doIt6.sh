@@ -163,11 +163,9 @@ function enforce_access() {
 	else
 		if [ ${debug} -eq 1 ] ; then 
 			#VAIH:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
-			echo "#https://github.com/senescent777/project/tree/main/sbin can be used as /sbin"
 			echo "#${sco} -R root:root /sbin"
 			echo "#${scm} -R 0755 /sbin"
 		
-			echo "#https://github.com/senescent777/project/tree/main/etc can be used as /etc except for stubby-related stuff"
 			echo "#${sco} -R root:root /etc"
 			echo "#${scm} -R go-w /etc"
 		
@@ -350,7 +348,7 @@ fi
 check_params
 check_binaries
 enforce_access
-exit
+#exit
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" #jos tar nalkuttaa päiväyksistä niin date --set hoitaa
 ${sip} link set ${iface} down
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
