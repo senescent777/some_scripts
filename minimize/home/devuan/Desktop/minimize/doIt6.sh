@@ -151,7 +151,23 @@ function check_binaries() {
 	sa="sudo ${sa} "
 }
 
-#TODO:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
+#VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
+
+mangle_s() {
+	if [ -s ${1} ] ; then 
+		#chattr -ui ${1}
+		[ ${debug} -eq 1 ] && echo "W3NGL3 $1";sleep 5
+		chmod 0555 ${1}
+		chown root:root  ${1} #uutena tämä
+		#chattr +ui ${1}
+
+		echo -n "devuan localhost=NOPASSWD: sha256:" >> /etc/sudoers.d/meshuggah
+		local s
+		s=$(sha256sum ${1})
+		echo ${s} >> /etc/sudoers.d/meshuggah
+	fi
+}
+
 mangle2() {
 	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
 		dqb "MANGLED $1";sleep 1
