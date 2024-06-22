@@ -7,7 +7,9 @@ the_ar=0
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 install=0 
 tgtfile=out.tar
+
 enforce=1 #kokeeksi näin
+
 no_mas=0
 pkgdir=/var/cache/apt/archives
 
@@ -155,8 +157,10 @@ mangle2() {
 	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
 		#chattr -ui ${1}
 		dqb "MANGLED $1";sleep 1
+
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
+
 		csleep 1
 		#chattr +ui ${1}
 	fi
@@ -459,6 +463,7 @@ if [ ${install} -eq 1 ] ; then
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
 	make_tar
 	sudo /sbin/ifdown -a
+
 	exit
 else
 	dqb "not fetching pkgs"

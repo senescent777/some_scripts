@@ -1,4 +1,6 @@
 #!/bin/sh
+echo "NOT YET READY FOR PRODUCTION USE"
+exit
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 #amd-mc+at-spi ic, coinor poistui
@@ -22,9 +24,11 @@ sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 #gsasl+gstreamer+gsfonts poistui
+
 sudo apt-get remove --purge --yes gsasl* 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes gsfonts* 
+
 sudo apt autoremove --yes
 sudo apt-get remove --purge --yes gstreamer*
 sudo apt autoremove --yes
@@ -33,6 +37,7 @@ sudo apt autoremove --yes
 #htop poistui, mikrokoodi rc , iucode ii , libgtreamer-paketteja jäi pari ii-tilaan
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes htop intel-microcode
+
 sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
 
@@ -52,14 +57,7 @@ sudo apt-get remove --purge --yes mailcap #poistuiko jo aiemmin?
 sudo apt-get remove --purge --yes mariadb-common
 sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
-#exit
 
-#mokutil poisrui, orca, musql ja openssh ic-tilassa
-sudo apt-get remove --purge --yes mokutil mysql-common orca
-sudo apt-get remove --purge --yes openssh*
-sudo apt autoremove --yes
-
-sudo rm -rf /run/live/medium/live/initrd.img*
 #nämäkin jäivät
 
 #shim, ristretto ja screen ainakin jäivät ii-tilaan
@@ -67,6 +65,7 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 #sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
+
 #ao. jutut poistuneet + seur rivi kanssa
 sudo apt-get remove --purge --yes speech* system-config* telnet tex*
 sudo apt-get remove --purge --yes udisks2 uno* ure* upower
@@ -78,6 +77,7 @@ sudo apt autoremove --yes
 
 #seuraavat vielä jäivät dpkg -l listaan
 sudo apt-get remove --purge --yes xorriso xfburn
+
 sudo apt autoremove --yes
 
 sudo apt-get remove --purge --yes iucode-tool 
@@ -103,6 +103,8 @@ sleep 6
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb
+
 #sudo shred -fu /tmp/*
+
 
 df
