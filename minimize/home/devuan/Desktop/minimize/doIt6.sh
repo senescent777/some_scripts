@@ -455,6 +455,7 @@ fi #
 
 if [ ${install} -eq 1 ] ; then
 	make_tar
+	exit
 else
 	dqb "not fetching pkgs"
 fi
@@ -481,6 +482,7 @@ if [ ${no_mas} -eq 1 ] ; then
 	dqb "no mas senor"
 	exit 	
 fi
+#autoremove tähän takaisin jos the_ar ?
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
