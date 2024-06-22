@@ -487,6 +487,7 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 6
 ${sdi} ${pkgdir}/dns-root-data*.deb 
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/dns-root-data*.deb
 
+#TODO:pari seur. blokkia ennen no_mas, fktioksi myös
 ${sdi} /var/cache/apt/archives/lib*.deb
 [ $? -eq  0 ] && sudo rm -rf ${pkgdir}/lib*.deb
 
