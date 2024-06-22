@@ -196,11 +196,13 @@ function enforce_access() {
 		${sco} -R root:root /etc
 		${scm} -R 0755 /etc
 		local f
-		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
+
+		#erillinen mangle2 /e/s.d tarpeellinen?
+		#for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
 			mangle2 ${f}
-			csleep 6
+			csleep 5
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
