@@ -414,7 +414,6 @@ fi
 #TODO:testi, miten tables-säännöt toimivat autoremove'n jälkeen
 sudo rm -rf /run/live/medium/live/initrd.img*
 sleep 3
-#VAIH:selvitä+korjaa miksei stubby starttaa kun the_ar=0 , jos vielä toistuu (liittynee "-v"-optioon)
 
 if [ ${debug} -eq 1 ] ; then
 	${snt} -tulpan
@@ -436,6 +435,7 @@ fi
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 3 SECS"
 [ ${debug} -eq 1 ] && sleep 3
+echo "DO NOT ANSWER \"Yes\"  TO A QUESTION ABOUT IPTABLES";sleep 7
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/dns-root-data*.deb
