@@ -177,6 +177,7 @@ function enforce_access() {
 		${sco} -R root:root /sbin
 		${scm} -R 0755 /sbin
 
+		
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		${sco} -R root:root /etc
 		${scm} -R 0755 /etc
@@ -189,6 +190,7 @@ function enforce_access() {
 			csleep 6
 		done
 
+		#sudoersin sisältöä voisi kai tiukentaa kanssa
 		${sco} -R root:root /var
 		${scm} -R go-w /var
 
@@ -454,6 +456,7 @@ fi #
 #exit
 
 if [ ${install} -eq 1 ] ; then
+	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
 	make_tar
 	exit
 else
