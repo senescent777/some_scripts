@@ -8,21 +8,8 @@ odio=$(which sudo)
 [ -x ${odio} ] || exit 666
 #exit
 
-#TODO: -> check_binaries
-ipt=$(sudo which iptables)
-ip6t=$(sudo which ip6tables)
-iptr=$(sudo which iptables-restore)
-ip6tr=$(sudo which ip6tables-restore)
-sco=$(sudo which chown)
-scm=$(sudo which chmod)
-whack=$(sudo which pkill)
-sag=$(sudo which apt-get)
-sa=$(sudo which apt)
-sip=$(sudo which ip)
-snt=$(sudo which netstat)
-sdi=$(sudo which dpkg)
-sifu=$(sudo which ifup)
-sifd=$(sudo which ifdown)
+
+
 
 function parse_opts_2() {
 	case "${1}" in
@@ -57,11 +44,28 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
-
-
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
 	dqb "sudo= ${odio} "
+	csleep 1
+
+	ipt=$(sudo which iptables)
+	ip6t=$(sudo which ip6tables)
+	iptr=$(sudo which iptables-restore)
+	ip6tr=$(sudo which ip6tables-restore)
+	sco=$(sudo which chown)
+	scm=$(sudo which chmod)
+	whack=$(sudo which pkill)
+	sag=$(sudo which apt-get)
+	sa=$(sudo which apt)
+	sip=$(sudo which ip)
+	snt=$(sudo which netstat)
+	sdi=$(sudo which dpkg)
+	sifu=$(sudo which ifup)
+	sifd=$(sudo which ifdown)
+
+	dqb "half_fdone"
+	csleep 1
 
 	[ -x ${ipt} ] || exit 5
 	[ -x ${ip6t} ] || exit 5
