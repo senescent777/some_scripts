@@ -3,17 +3,14 @@
 iface=eth0 #grep /e/n/i ?
 debug=0
 the_ar=0
-tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 install=0 
-tgtfile=out.tar
-enforce=1 #kokeeksi näin
 no_mas=0
-pkgdir=/var/cache/apt/archives
 
 odio=$(which sudo)
 [ -x ${odio} ] || exit 666
 #exit
 
+#TODO: -> check_binaries
 ipt=$(sudo which iptables)
 ip6t=$(sudo which ip6tables)
 iptr=$(sudo which iptables-restore)
@@ -150,7 +147,8 @@ check_binaries2(){
 	snt="sudo ${snt} "
 	sharpy="sudo ${sag} remove --purge --yes "
 	sdi="sudo ${sdi} -i "
-	shary="sudo ${sag} --no-install-recommends reinstall "
+	shary="sudo ${sag} --no-install-recommends reinstall --yes "
+	sag_u="sudo ${sag} update "
 	sco="sudo ${sco} "
 	scm="sudo ${scm} "
 	sip="sudo ${sip} "
@@ -320,10 +318,6 @@ clouds() {
 		${ip6t} -L #
 		sleep 5
 	fi #
-}
-
-function make_tar() {
-	echo "run ./make_tar.sh"
 }
 
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen

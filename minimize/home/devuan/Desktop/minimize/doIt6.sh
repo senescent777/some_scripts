@@ -1,5 +1,11 @@
 #!/bin/bash
+
+enforce=0 #kokeilu ohi toistaiseksi
+tgtfile=out.tar #jos siirtäisi -> make_tar.sh
+pkgdir=/var/cache/apt/archives
+tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 . ./lib
+
 #==================================PART 1============================================================
 
 if [ $# -gt 0 ] ; then
@@ -8,7 +14,7 @@ if [ $# -gt 0 ] ; then
 fi
 
 #VAIH:part1 käyttöön?
-check_params
+check_params #kuuluisikohan sittenkin tähän eikä kirjastoon?
 check_binaries
 [ ${enforce} -eq 1 ] && pre_enforce
 check_binaries2
@@ -52,12 +58,13 @@ ${whack} dnsmasq*
 ${whack} stubby*
 ${whack} nm-applet
 sleep 3
+#exit
 
 #===================================================PART 2===================================
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* 
-${sharpy} ntp* sntp*
+#${sharpy} ntp* sntp*
 ${sharpy} modem* wireless* wpa* iw lm-sensors
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
@@ -87,12 +94,11 @@ fi #
 
 if [ ${install} -eq 1 ] ; then
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
-	make_tar
+	echo "run ./make_tar.sh 0"
 	exit
 else
 	dqb "not fetching pkgs"
 fi
-
 
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
@@ -102,7 +108,6 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/dns-root-data*.deb
-
 part3
 
 #missäköhän kohtaa kuuluisi tmän olla?
