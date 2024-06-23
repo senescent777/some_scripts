@@ -303,7 +303,7 @@ clouds() {
 	fi #
 }
 
-#TODO:erilliseksi skriptiksi
+#VAIH:erilliseksi skriptiksi
 #TODO:verkkoyhteyden aktivointi mukaan kanssa
 function make_tar() {
 	echo "sudo /sbin/ifup ${iface} | sudo /sbin/ifup -a" #if there is > 1 interfaces...
