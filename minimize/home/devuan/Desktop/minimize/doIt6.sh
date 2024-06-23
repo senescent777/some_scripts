@@ -136,7 +136,10 @@ function check_binaries() {
 	
 	dqb "b1nar135 0k" 
 	csleep 3
+}
 
+check_binaries2(){
+	dqb "ch3ck_b1nar135()"
 	ipt="sudo ${ipt} "
 	ip6t="sudo ${ip6t} "
 	iptr="sudo ${iptr} "
@@ -344,6 +347,7 @@ fi
 #TODO:näiltä main part1 loppuun funktioksi ja "kirjastoon"
 check_params
 check_binaries
+check_binaries2
 enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
