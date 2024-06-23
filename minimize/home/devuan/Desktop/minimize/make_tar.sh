@@ -23,6 +23,7 @@ function make_tar() {
 	sudo rm -rf /run/live/medium/live/initrd.img*
 
 	#some kind of retrovirus
+	#TODO:find /etc -type f -name 'stubby*' | -name 'dns*'
 	sudo tar -cvpf ${tgtfile} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/dnsmasq* /etc/stubby* /etc/network/interfaces* 
 	sudo tar -rvpf ${tgtfile} /etc/sudoers.d/user_shutdown /home/stubby
 	sudo tar -rvpf ${tgtfile} /etc/init.d/{stubby,networking,dnsmasq,netfilter-persistent}

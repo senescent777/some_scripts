@@ -159,22 +159,31 @@ check_binaries2(){
 	sifd="sudo ${sifd} "
 }
 
-##VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
-##HUOM. _s - kutsun oltava ennenq check_binaries() kutsutaan tjsp.
-#mangle_s() {
-#	if [ -s ${1} ] ; then 
-#		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-#		[ ${debug} -eq 1 ] && echo "W3NGL3 $1";sleep 5
-#		chmod 0555 ${1}
-#		chown root:root  ${1} #uutena tämä
-#		#chattr +ui ${1}
-#
-#		echo -n "devuan localhost=NOPASSWD: sha256:" >> /etc/sudoers.d/meshuggah
-#		local s
-#		s=$(sha256sum ${1})
-#		echo ${s} >> /etc/sudoers.d/meshuggah
-#	fi
-#}
+#VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
+#HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
+mangle_s() {
+	if [ -s ${1} ] ; then 
+		[ -f /etc/sudoers.d/meshuggah ] || sudo touch /etc/sudoers.d/meshuggah
+		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
+		${dqb} "W3NGL3 $1";sleep 5
+		
+		sudo chmod 0555 ${1}
+		sudo chown root:root  ${1} #uutena tämä
+		#chattr +ui ${1}
+
+		sudo chmod a+w  /etc/sudoers.d/meshuggah
+		sleep 1
+		sudo echo -n "devuan localhost=NOPASSWD: sha256:" >> /etc/sudoers.d/meshuggah
+
+		local s
+		s=$(sha256sum ${1})
+
+		sudo echo ${s} >> /etc/sudoers.d/meshuggah
+		sleep 1
+		sudo chmod a-w  /etc/sudoers.d/meshuggah
+		sleep 1
+	fi
+}
 
 mangle2() {
 	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
@@ -183,6 +192,15 @@ mangle2() {
 		${sco} root:root ${1}
 		csleep 1
 	fi
+}
+
+function pre_enforce() {
+	for f in /sbin/ifup /sbin/ifdown /sbin/alt /sbin/reboot /etc/init.d/stubby ; do
+		mangle_s ${f}
+	done
+
+	sudo chown root:root /etc/sudoers.d/meshuggah
+	sudo chmod 0440 /etc/sudoers.d/meshuggah
 }
 
 function enforce_access() {
@@ -378,3 +396,5 @@ part3() {
 	[ $? -eq 0 ] && sudo rm -rf ${pkgdir}/*.deb
 	csleep 2
 }
+
+#part1?

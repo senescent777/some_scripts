@@ -7,9 +7,10 @@ if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
-#VAIH:näiltä main part1 loppuun funktioksi ja "kirjastoon"
+#VAIH:part1 käyttöön?
 check_params
 check_binaries
+[ ${enforce} -eq 1 ] && pre_enforce
 check_binaries2
 enforce_access
 
