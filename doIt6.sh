@@ -403,7 +403,6 @@ check_binaries
 enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-
 ${sip} link set ${iface} down
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
