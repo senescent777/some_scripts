@@ -1,6 +1,9 @@
-Some_scripts that i made for a certain purpose. 
+Some_scripts that i made for a certain purpose. Remastering Debian-based livecd:s, that is.
+
 During covid i had to find something to do. And i kept going after that. Recently i decided to show the world "what i did last summer".
 
-There is some remains of debug-clutter that have to be removed.  After that, this  should work, at least for me. I think i got the most of it.
+There may still be some debug-clutter left. So the scripts may not work perfectly.
+But at least files under minimize work for me.
 
-Although, i will not give any guarantees. And if you choose to use this repository, the risk is 100% yours. Consider yourself warned.
+Although, i will not give any guarantees. 
+And if you choose to use this repository, the risk is 100% yours. Consider yourself warned.
