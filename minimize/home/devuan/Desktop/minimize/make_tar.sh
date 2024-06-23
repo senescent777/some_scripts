@@ -16,6 +16,14 @@ function parse_opts_1 () {
 	esac
 }
 
+function check_params() {
+	[ -s ${tgtfile} ] && echo "${tgtfile} alr3ady 3x1st5"
+	local d
+	
+	d=$(dirname ${tgtfile})
+	[ -d ${d} ] || echo "no such dir as ${d}"
+}
+
 function make_tar() {
 	dqb "${sifu} ${iface}"
 
@@ -105,6 +113,7 @@ fi
 #main()
 case ${mode} in
 	0)
+		check_params
 		make_tar
 	;;
 	*)

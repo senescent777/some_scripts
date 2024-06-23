@@ -30,11 +30,7 @@ function check_params() {
 	esac
 
 	if [ ${install} -eq 1 ] ; then
-		[ -s ${tgtfile} ] && echo "${tgtfile} alr3ady 3x1st5"
-		local d
 	
-		d=$(dirname ${tgtfile})
-		[ -d ${d} ] || echo "no such dir as ${d}"	
 	
 		if [ ${the_ar} -eq 1 ] ; then 
 			dqb "make_tar may not work"
