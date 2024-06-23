@@ -339,12 +339,34 @@ ns4() {
 	sleep 5
 	sudo -u ${1} ${1} -g
 	echo $?
+	sleep 1
+	pgrep stubby*
 	sleep 5
 }
-#=========================PART 0 ENDS HERE==========================================
+#=========================PART 0 ENDS HERE=================================================================
 
 part1() {
-	echo "#TODO:part1"
+	#jos jokin näistä kolmesta hoitaisi homman...
+	${sifd} ${iface}
+	${sifd} -a
+	${sip} link set ${iface} down
+
+	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
+	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
+
+	for t in INPUT OUTPUT FORWARD ; do 
+		${ipt} -P ${t} DROP
+		${ip6t} -P ${t} DROP
+		${ip6t} -F ${t}
+	done
+
+	for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
+
+	if [ ${debug} -eq 1 ] ; then
+		${ipt} -L #
+		${ip6t} -L #
+		sleep 5 
+	fi #
 }
 
 part3() {
