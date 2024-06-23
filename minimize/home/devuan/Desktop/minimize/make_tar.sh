@@ -125,5 +125,10 @@ function make_tar() {
 	
 	sudo tar -tf  ${tgtfile} > MANIFEST
 	sudo tar -rvpf ${tgtfile} ${p}/MANIFEST
-	sudo /sbin/ifdown ${iface} | sudo /sbin/ifdown -a
+	
+	sudo /sbin/ifdown ${iface}
+	[ $? -eq 0 ] || ${sip} link set ${iface} down
+	[ $? -eq 0 ] || sudo /sbin/ifdown -a
+	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
+	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 }
