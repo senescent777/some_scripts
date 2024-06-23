@@ -27,6 +27,7 @@ sa=$(sudo which apt)
 sip=$(sudo which ip)
 snt=$(sudo which netstat)
 sdi=$(sudo which dpkg)
+#TODO:ifu ja ifd
 
 function parse_opts_2() {
 	case "${1}" in
@@ -152,10 +153,10 @@ function check_binaries() {
 }
 
 #VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
-
+#HUOM. _s - kutsun oltava ennenq check_binaries() kutsutaan tjsp.
 mangle_s() {
 	if [ -s ${1} ] ; then 
-		#chattr -ui ${1}
+		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		[ ${debug} -eq 1 ] && echo "W3NGL3 $1";sleep 5
 		chmod 0555 ${1}
 		chown root:root  ${1} #uutena tämä
@@ -183,8 +184,12 @@ function enforce_access() {
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
 	${scm} 0755 /home
-	${sco} -R devuan:devuan /home/devuan/ #~
-	${scm} -R 0755 /home/devuan/Desktop/minimize #~/Desktop/minimize
+
+	local n
+	n=$(whoami)
+
+	${sco} -R ${n}:${n} ~
+	${scm} -R 0755 ~/Desktop/minimize
 	${sco} -R 101:65534 /home/stubby/
 
 	if [ ${enforce} -eq 1 ] ; then #käykähän jatkossa turhaksi tämä if-blokki?
@@ -211,20 +216,6 @@ function enforce_access() {
 
 		${scm} 0755 /
 		${sco} root:root /
-	#else
-	#	if [ ${debug} -eq 1 ] ; then 
-	#		#VAIH:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
-	#		echo "#${sco} -R root:root /sbin"
-	#		echo "#${scm} -R 0755 /sbin"
-	#	
-	#		echo "#${sco} -R root:root /etc"
-	#		echo "#${scm} -R go-w /etc"
-	#	
-	#		echo "#${sco} -R root:root /var"
-	#		echo "#${scm} -R go-w /var"
-	#		echo "#${sco} root:root /"
-	#		echo "#${scm} 0755 /"
-	#	fi #
 	fi
 	
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
@@ -303,55 +294,8 @@ clouds() {
 	fi #
 }
 
-#VAIH:väh komentoi pois echon sisältä
 function make_tar() {
-	echo "sudo /sbin/ifup ${iface} | sudo /sbin/ifup -a" #if there is > 1 interfaces...
-	${sag} update
-	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
-	sudo rm -rf /run/live/medium/live/initrd.img*
-
-	${shary} init-system-helpers netfilter-persistent iptables-persistent
-	sudo rm -rf /run/live/medium/live/initrd.img*
-	${shary} python3-ntp ntpsec-ntpdate
-
-	${shary} dnsmasq-base runit-helper
-	sudo rm -rf /run/live/medium/live/initrd.img*
-
-	${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
-	sudo rm -rf /run/live/medium/live/initrd.img*
-
-	#some kind of retrovirus
-	sudo tar -cvpf ${tgtfile} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/dnsmasq* /etc/stubby* /etc/network/interfaces* 
-	sudo tar -rvpf ${tgtfile} /etc/sudoers.d/user_shutdown /home/stubby
-	sudo tar -rvpf ${tgtfile} /etc/init.d/{stubby,networking,dnsmasq,netfilter-persistent}
-	sudo tar -rvpf ${tgtfile} /etc/rcS.d/{S14netfilter-persistent,S15networking}
-	sudo tar -rvpf ${tgtfile} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
-	sudo tar -rvpf ${tgtfile} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
-
-	#add some stuff from ghub
-	${shary} git
-	local p
-	local q
-	p=$(pwd)
-	q=$(mktemp -d)
-	cd $q
-
-	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
-	git clone https://github.com/senescent777/project.git
-	cd project
-
-	sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
-	sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD
-	sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD	
-
-	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
-	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
-	sudo tar -rvpf ${tgtfile} ./etc ./sbin
-	cd $p
-	
-	sudo tar -tf  ${tgtfile} > MANIFEST
-	sudo tar -rvpf ${tgtfile} ${p}/MANIFEST
-	sudo /sbin/ifdown ${iface} | sudo /sbin/ifdown -a
+	echo "run ./make_tar.sh"
 }
 
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
@@ -403,8 +347,10 @@ check_binaries
 enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-
-${sip} link set ${iface} down
+sudo /sbin/ifdown ${iface}
+[ $? -eq 0 ] || ${sip} link set ${iface} down
+[ $? -eq 0 ] || sudo /sbin/ifdown -a
+[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
 for t in INPUT OUTPUT FORWARD ; do 
@@ -473,7 +419,6 @@ fi #
 if [ ${install} -eq 1 ] ; then
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
 	make_tar
-	sudo /sbin/ifdown -a
 	exit
 else
 	dqb "not fetching pkgs"
@@ -503,7 +448,6 @@ if [ ${no_mas} -eq 1 ] ; then
 	exit 	
 fi
 
-#autoremove tähän takaisin jos the_ar ?
 [ ${the_ar} -eq 1 ] || ${sa} autoremove --yes
 
 #===================================================PART 4(final)==========================================================
@@ -512,7 +456,13 @@ sudo /etc/init.d/dnsmasq restart
 clouds 1
 ns2 stubby
 ns4 stubby
-[ ${debug} -eq 1 ] && ${snt} -tulpan
-echo "sudo /sbin/ifup ${iface} or whåtever"
 
-#TODO:.desktiop stubbyn käynniststä varten, varm vuoksi
+if [ ${debug} -eq 1 ] ; then 
+	${snt} -tulpan
+	sleep 5
+	pgrep stubby*
+	sleep 5
+fi
+
+echo "sudo /sbin/ifup ${iface} or whåtever"
+echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
