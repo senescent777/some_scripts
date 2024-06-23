@@ -1,8 +1,20 @@
 #!/bin/bash
-tgtfile=out.tar #jos siirtäisi -> make_tar.sh
+tgtfile=out.tar 
 . ./lib
-check_binaries
+check_binaries #jos lib hoitaisi tän+seur...
 check_binaries2
+mode=0
+
+function parse_opts_1 () {
+	case ${1} in
+		-v|--v)
+			debug=1
+		;;
+		*)
+			mode=${1}
+		;;
+	esac
+}
 
 function make_tar() {
 	dqb "${sifu} ${iface}"
@@ -80,5 +92,22 @@ function make_tar() {
 	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 }
 
-#TODO:parse_opts(), main()
-make_tar
+#VAIH:parse_opts(), main()
+#make_tar
+
+if [ $# -gt 0 ] ; then
+	#parse_opts_2 ${1} ${2}
+	for opt in $@ ; do parse_opts_1 ${opt} ; done
+else
+	echo "$0 -h"
+fi
+
+#main()
+case ${mode} in
+	0)
+		make_tar
+	;;
+	*)
+		echo "-h"
+	;;
+esac

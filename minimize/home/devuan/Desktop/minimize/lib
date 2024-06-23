@@ -106,9 +106,9 @@ check_binaries2(){
 	sifd="sudo ${sifd} "
 }
 
-#VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
-mangle_s() {
+#HUOM.2. ei niitä {sco}-juttuja ao. fktioon
+function mangle_s() {
 	if [ -s ${1} ] ; then 
 		[ -f /etc/sudoers.d/meshuggah ] || sudo touch /etc/sudoers.d/meshuggah
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
@@ -132,8 +132,8 @@ mangle_s() {
 	fi
 }
 
-mangle2() {
-	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
+function mangle2() {
+	if [ -f ${1} ] ; then 
 		dqb "MANGLED $1";sleep 1
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
@@ -201,6 +201,7 @@ function enforce_access() {
 }
 
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
+#TODO: sittenkin /opt alle erillinen skripti mikä renkkaa nämä dns-jutut eestaas
 tod_dda() {
 	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
 	${ipt} -A e -p tcp --dport 853 -d ${1} -j f
