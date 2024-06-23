@@ -16,8 +16,8 @@ enforce_access
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 
 #jos jokin näistä kolmesta hoitaisi homman...
-sudo /sbin/ifdown ${iface}
-sudo /sbin/ifdown -a
+${sifd} ${iface}
+${sifd} -a
 ${sip} link set ${iface} down
 [ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
@@ -52,7 +52,6 @@ ${whack} stubby*
 ${whack} nm-applet
 sleep 3
 
-
 #===================================================PART 2===================================
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
@@ -68,7 +67,7 @@ ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
 clouds 0
 
-#TODO:autoremove:n ehdollisuus pois jatkossa?
+#autoremove:n ehdollisuus pois jatkossa?
 if [ ${the_ar} -eq 1 ] ; then 
 	dqb "autoremove in 5 secs"
 	${sa} autoremove --yes
@@ -128,5 +127,5 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 5
 fi
 
-echo "sudo /sbin/ifup ${iface} or whåtever"
+echo "${sifu} ${iface} or whåtever"
 echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "

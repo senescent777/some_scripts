@@ -26,7 +26,8 @@ sa=$(sudo which apt)
 sip=$(sudo which ip)
 snt=$(sudo which netstat)
 sdi=$(sudo which dpkg)
-#TODO:ifu ja ifd
+sifu=$(sudo which ifup)
+sifd=$(sudo which ifdown)
 
 function parse_opts_2() {
 	case "${1}" in
@@ -132,7 +133,9 @@ function check_binaries() {
 	[ -x ${sip} ] || exit 5
 	[ -x ${snt} ] || exit 5
 	[ -x ${sdi} ] || exit 5
-	
+	[ -x ${sifu} ] || exit 5
+	[ -x ${sifd} ] || exit 5
+
 	dqb "b1nar135 0k" 
 	csleep 3
 }
@@ -152,6 +155,8 @@ check_binaries2(){
 	scm="sudo ${scm} "
 	sip="sudo ${sip} "
 	sa="sudo ${sa} "
+	sifu="sudo ${sifu} "
+	sifd="sudo ${sifd} "
 }
 
 ##VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
