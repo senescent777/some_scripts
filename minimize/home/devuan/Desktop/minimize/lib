@@ -195,6 +195,8 @@ mangle2() {
 }
 
 function pre_enforce() {
+	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
+
 	for f in /sbin/ifup /sbin/ifdown /sbin/alt /sbin/reboot /etc/init.d/stubby ; do
 		mangle_s ${f}
 	done
