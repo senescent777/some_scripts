@@ -303,7 +303,8 @@ clouds() {
 	fi #
 }
 
-#VAIH:väh komentoi pois echon sisältä
+#TODO:erilliseksi skriptiksi
+#TODO:verkkoyhteyden aktivointi mukaan kanssa
 function make_tar() {
 	echo "sudo /sbin/ifup ${iface} | sudo /sbin/ifup -a" #if there is > 1 interfaces...
 	${sag} update
@@ -403,8 +404,8 @@ check_binaries
 enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-
 ${sip} link set ${iface} down
+#TODO:ifdown vielä
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
 for t in INPUT OUTPUT FORWARD ; do 
@@ -473,6 +474,7 @@ fi #
 if [ ${install} -eq 1 ] ; then
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
 	make_tar
+	#TODO:ip link down varm. vuoksi
 	sudo /sbin/ifdown -a
 	exit
 else
@@ -503,7 +505,6 @@ if [ ${no_mas} -eq 1 ] ; then
 	exit 	
 fi
 
-#autoremove tähän takaisin jos the_ar ?
 [ ${the_ar} -eq 1 ] || ${sa} autoremove --yes
 
 #===================================================PART 4(final)==========================================================
@@ -512,7 +513,14 @@ sudo /etc/init.d/dnsmasq restart
 clouds 1
 ns2 stubby
 ns4 stubby
-[ ${debug} -eq 1 ] && ${snt} -tulpan
+
+if [ ${debug} -eq 1 ] ; then 
+	${snt} -tulpan
+	sleep 5
+	pgrep stubby*
+	sleep 10
+	#TODO:.desktop stubbyn käynnistystä varten, varm vuoksi
+fi
+
 echo "sudo /sbin/ifup ${iface} or whåtever"
 
-#TODO:.desktiop stubbyn käynniststä varten, varm vuoksi
