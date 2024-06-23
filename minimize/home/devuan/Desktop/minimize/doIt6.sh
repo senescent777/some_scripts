@@ -212,20 +212,6 @@ function enforce_access() {
 
 		${scm} 0755 /
 		${sco} root:root /
-	#else
-	#	if [ ${debug} -eq 1 ] ; then 
-	#		#VAIH:testaa tästä eteenpäin ch-kikkailut (tilap jemmassa)
-	#		echo "#${sco} -R root:root /sbin"
-	#		echo "#${scm} -R 0755 /sbin"
-	#	
-	#		echo "#${sco} -R root:root /etc"
-	#		echo "#${scm} -R go-w /etc"
-	#	
-	#		echo "#${sco} -R root:root /var"
-	#		echo "#${scm} -R go-w /var"
-	#		echo "#${sco} root:root /"
-	#		echo "#${scm} 0755 /"
-	#	fi #
 	fi
 	
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
@@ -304,8 +290,6 @@ clouds() {
 	fi #
 }
 
-#VAIH:erilliseksi skriptiksi
-#TODO:verkkoyhteyden aktivointi mukaan kanssa
 function make_tar() {
 	echo "run ./make_tar.sh"
 }
@@ -431,8 +415,6 @@ fi #
 if [ ${install} -eq 1 ] ; then
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
 	make_tar
-	#TODO:ip link down varm. vuoksi
-	sudo /sbin/ifdown -a
 	exit
 else
 	dqb "not fetching pkgs"
