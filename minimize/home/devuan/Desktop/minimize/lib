@@ -1,3 +1,4 @@
+
 #=================================================PART 0=====================================
 iface=eth0 #grep /e/n/i ?
 debug=0
@@ -9,8 +10,8 @@ enforce=1 #kokeeksi näin
 no_mas=0
 pkgdir=/var/cache/apt/archives
 
-odus=$(which sudo)
-[ -x ${odus} ] || exit 666
+odio=$(which sudo)
+[ -x ${odio} ] || exit 666
 #exit
 
 ipt=$(sudo which iptables)
@@ -117,7 +118,7 @@ function check_params() {
 
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
-	dqb "sudo= ${odus} "
+	dqb "sudo= ${odio} "
 
 	[ -x ${ipt} ] || exit 5
 	[ -x ${ip6t} ] || exit 5
@@ -137,7 +138,7 @@ function check_binaries() {
 }
 
 check_binaries2(){
-	dqb "ch3ck_b1nar135()"
+	dqb "ch3ck_b1nar135.2()"
 	ipt="sudo ${ipt} "
 	ip6t="sudo ${ip6t} "
 	iptr="sudo ${iptr} "
@@ -153,22 +154,22 @@ check_binaries2(){
 	sa="sudo ${sa} "
 }
 
-#VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
-#HUOM. _s - kutsun oltava ennenq check_binaries() kutsutaan tjsp.
-mangle_s() {
-	if [ -s ${1} ] ; then 
-		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		[ ${debug} -eq 1 ] && echo "W3NGL3 $1";sleep 5
-		chmod 0555 ${1}
-		chown root:root  ${1} #uutena tämä
-		#chattr +ui ${1}
-
-		echo -n "devuan localhost=NOPASSWD: sha256:" >> /etc/sudoers.d/meshuggah
-		local s
-		s=$(sha256sum ${1})
-		echo ${s} >> /etc/sudoers.d/meshuggah
-	fi
-}
+##VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
+##HUOM. _s - kutsun oltava ennenq check_binaries() kutsutaan tjsp.
+#mangle_s() {
+#	if [ -s ${1} ] ; then 
+#		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
+#		[ ${debug} -eq 1 ] && echo "W3NGL3 $1";sleep 5
+#		chmod 0555 ${1}
+#		chown root:root  ${1} #uutena tämä
+#		#chattr +ui ${1}
+#
+#		echo -n "devuan localhost=NOPASSWD: sha256:" >> /etc/sudoers.d/meshuggah
+#		local s
+#		s=$(sha256sum ${1})
+#		echo ${s} >> /etc/sudoers.d/meshuggah
+#	fi
+#}
 
 mangle2() {
 	if [ -f ${1} ] ; then #onkohan tää testi hyvä idea?
@@ -189,8 +190,9 @@ function enforce_access() {
 	local n
 	n=$(whoami)
 
-	${sco} -R ${n}:${n} ~
 	${scm} -R 0755 ~/Desktop/minimize
+	dqb "${sco} -R ${n}:${n} ~"
+	${sco} -R ${n}:${n} ~
 	${sco} -R 101:65534 /home/stubby/
 
 	if [ ${enforce} -eq 1 ] ; then #käykähän jatkossa turhaksi tämä if-blokki?
@@ -208,7 +210,7 @@ function enforce_access() {
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
 			mangle2 ${f}
-			csleep 5
+			csleep 1
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
@@ -227,19 +229,19 @@ function enforce_access() {
 }
 
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
-add_doT() {
+tod_dda() {
 	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
 	${ipt} -A e -p tcp --dport 853 -d ${1} -j f
 }
 
-add_snd() {
+dda_snd() {
 	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT 
 }
 
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
 clouds() {
-	[ ${debug} -eq 1 ] && echo "coluds(${1})"
+	dqb "coluds(${1})"
 
 	sudo rm /etc/resolv.conf
 	sudo rm /etc/dhcp/dhclient.conf
@@ -258,7 +260,7 @@ clouds() {
 
 			${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
 			${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
-			for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do add_snd ${s} ; done	
+			for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
 		;;
 		1)
 			sudo ln -s /etc/resolv.conf.new /etc/resolv.conf
@@ -267,7 +269,7 @@ clouds() {
 		
 			${ipt} -A INPUT -p tcp -m tcp --sport 853 -j b
 			${ipt} -A OUTPUT -p tcp -m tcp --dport 853 -j e
-			for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do add_doT ${s} ; done
+			for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do tod_dda ${s} ; done
 		;;
 	esac
 
@@ -320,7 +322,7 @@ ns4() {
 	${scm} u+w /run
 	sudo touch /run/${1}.pid
 	${scm} 0600 /run/${1}.pid
-	${sco} $1:65534 /run/${1}.pid
+	${sco} ${1}:65534 /run/${1}.pid
 	${scm} u-w /run
 
 	sleep 5
@@ -334,16 +336,18 @@ ns4() {
 	echo $?
 	sleep 5
 }
+#=========================PART 0 ENDS HERE==========================================
 
-#TODO
 part1() {
+	echo "#TODO:part1"
 }
-part3() {
-${sdi} /var/cache/apt/archives/lib*.deb
-[ $? -eq  0 ] && sudo rm -rf ${pkgdir}/lib*.deb
 
-#HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
-${sdi} ${pkgdir}/*.deb
-[ $? -eq 0 ] && sudo rm -rf ${pkgdir}/*.deb
-csleep 2
+part3() {
+	${sdi} /var/cache/apt/archives/lib*.deb
+	[ $? -eq  0 ] && sudo rm -rf ${pkgdir}/lib*.deb
+
+	#HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
+	${sdi} ${pkgdir}/*.deb
+	[ $? -eq 0 ] && sudo rm -rf ${pkgdir}/*.deb
+	csleep 2
 }
