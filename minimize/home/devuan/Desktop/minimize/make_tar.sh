@@ -1,5 +1,5 @@
 #!/bin/bash
-tgtfile=out.tar 
+tgtfile=/tmp/out.tar 
 . ./lib
 check_binaries #jos lib hoitaisi tän+seur...
 check_binaries2
