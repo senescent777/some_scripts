@@ -1,10 +1,67 @@
 #!/bin/bash
 
 enforce=0 #kokeilu ohi toistaiseksi
-tgtfile=out.tar #jos siirtäisi -> make_tar.sh
+the_ar=0
+install=0 #saattaa poistua jatkossa
+no_mas=0
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 . ./lib
+
+function check_params() {
+	case ${the_ar} in
+		0|1)
+			dqb "the_ar ok (${the_ar})"
+		;;
+		*)
+			dqb "P.V.H.H"
+			exit 1
+		;;
+	esac
+
+	case ${install} in
+		0|1)
+			dqb "install = ${install} "
+		;;
+		*)
+			dqb "P.V.H.H"
+			exit 2
+		;;
+	esac
+
+	if [ ${install} -eq 1 ] ; then
+		[ -s ${tgtfile} ] && echo "${tgtfile} alr3ady 3x1st5"
+		local d
+	
+		d=$(dirname ${tgtfile})
+		[ -d ${d} ] || echo "no such dir as ${d}"	
+	
+		if [ ${the_ar} -eq 1 ] ; then 
+			dqb "make_tar may not work"
+			sleep 3
+		fi
+	fi
+
+	case ${no_mas} in
+		0|1)
+			dqb " ok ${no_mas}"
+		;;
+		*)
+			dqb "te quiero puta"
+			exit 3
+		;;
+	esac
+
+	case ${debug} in
+		0|1)
+			dqb "ko"
+		;;
+		*)
+			echo "MEE HIMAAS LEIKKIMÄÄN"
+			exit 4
+		;;
+	esac
+}
 
 #==================================PART 1============================================================
 

@@ -2,9 +2,7 @@
 #=================================================PART 0=====================================
 iface=eth0 #grep /e/n/i ?
 debug=0
-the_ar=0
-install=0 
-no_mas=0
+
 
 odio=$(which sudo)
 [ -x ${odio} ] || exit 666
@@ -59,60 +57,7 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
-function check_params() {
-	case ${the_ar} in
-		0|1)
-			dqb "the_ar ok (${the_ar})"
-		;;
-		*)
-			dqb "P.V.H.H"
-			exit 1
-		;;
-	esac
 
-	case ${install} in
-		0|1)
-			dqb "install = ${install} "
-		;;
-		*)
-			dqb "P.V.H.H"
-			exit 2
-		;;
-	esac
-
-	if [ ${install} -eq 1 ] ; then
-		[ -s ${tgtfile} ] && echo "${tgtfile} alr3ady 3x1st5"
-		local d
-	
-		d=$(dirname ${tgtfile})
-		[ -d ${d} ] || echo "no such dir as ${d}"	
-	
-		if [ ${the_ar} -eq 1 ] ; then 
-			dqb "make_tar may not work"
-			sleep 3
-		fi
-	fi
-
-	case ${no_mas} in
-		0|1)
-			dqb " ok ${no_mas}"
-		;;
-		*)
-			dqb "te quiero puta"
-			exit 3
-		;;
-	esac
-
-	case ${debug} in
-		0|1)
-			dqb "ko"
-		;;
-		*)
-			echo "MEE HIMAAS LEIKKIMÄÄN"
-			exit 4
-		;;
-	esac
-}
 
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"

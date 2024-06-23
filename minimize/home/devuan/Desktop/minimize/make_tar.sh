@@ -1,4 +1,5 @@
 #!/bin/bash
+tgtfile=out.tar #jos siirtäisi -> make_tar.sh
 . ./lib
 check_binaries
 check_binaries2
