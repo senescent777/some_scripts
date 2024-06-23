@@ -153,7 +153,7 @@ function check_binaries() {
 }
 
 #VAIH:mangle_s() tähän ja käyttöön? /e/sudoers.d/live kanssa mäkeen?
-
+#HUOM. _s - kutsun oltava ennenq check_binaries() kutsutaaj, tjsp.
 mangle_s() {
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1}
@@ -457,8 +457,8 @@ if [ ${debug} -eq 1 ] ; then
 	${snt} -tulpan
 	sleep 5
 	pgrep stubby*
-	sleep 10
+	sleep 5
 fi
 
 echo "sudo /sbin/ifup ${iface} or whåtever"
-
+echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
