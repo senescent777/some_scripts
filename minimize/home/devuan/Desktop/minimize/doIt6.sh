@@ -343,9 +343,10 @@ check_binaries
 enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
+#jos jokin näistä kolmesta hoitaisi homman...
 sudo /sbin/ifdown ${iface}
-[ $? -eq 0 ] || ${sip} link set ${iface} down
-[ $? -eq 0 ] || sudo /sbin/ifdown -a
+sudo /sbin/ifdown -a
+${sip} link set ${iface} down
 [ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 [ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
