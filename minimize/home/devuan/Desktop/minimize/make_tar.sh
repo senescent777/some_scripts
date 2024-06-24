@@ -131,9 +131,8 @@ function make_tar2() {
 }
 
 function make_upgrade() {
-	#echo "${sag_u} "
-	echo "${sag} upgrade -u"
-	echo "sudo tar -cvpf /tmp/upgrade.tar /var/cache/apt/archives "
+	${sag} upgrade -u
+	sudo tar -cvpf /tmp/upgrade.tar /var/cache/apt/archives 
 }
 
 if [ $# -gt 0 ] ; then
