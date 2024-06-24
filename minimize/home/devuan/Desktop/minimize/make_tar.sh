@@ -79,41 +79,48 @@ function make_tar() {
 
 function make_tar2() {
 	echo "#add some stuff from ghub"
-	echo "${shary} git"
-	echo "#csleep 5"
 
-	echo "local p"
-	echo "local q"
+	local p
+	local q	
+	local tig
+	tig=$(sudo which git)
+	
+	if [ x"${tig}" == "x" ] ; then
+		${shary} git
+	fi
+
+	echo "#csleep 5"
+	tig=$(sudo which git)
 
 	p=$(pwd)
-	echo "p=${p}"
+	dqb "p=${p}"
 
-	echo "q=$(mktemp -d)"
+	dqb "q=$(mktemp -d)"
 	q=$(mktemp -d)
 
 	echo "#dqb cd ${q}"
-	echo "cd ${q}"
+	cd ${q}
 	echo "#csleep 6"
 
 	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
-	echo "git clone https://github.com/senescent777/project.git"
+	${tig} clone https://github.com/senescent777/project.git
 	echo "#csleep 5"
-	echo "cd project"
+	cd project
 	echo "#[ ${debug} -eq 1 ] && ls -laRs;sleep 10"
 
-	echo "sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD"
-	echo "sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD"
-	echo "sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD"	
+	sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
+	sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD
+	sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD
 
 	echo "#[ ${debug} -eq 1 ] && ls -laRs ./etc | less"
 
-	echo "${sco} -R root:root ./etc; ${scm} -R a-w ./etc"
-	echo "${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin"
-	echo "sudo tar -rvpf ${tgtfile} ./etc ./sbin"
-	echo "cd ${p}"
+	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
+	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
+	sudo tar -rvpf ${tgtfile} ./etc ./sbin
+	cd ${p}
 	
-	echo "sudo tar -tf  ${tgtfile} > MANIFEST"
-	echo "sudo tar -rvpf ${tgtfile} ${p}/MANIFEST"
+	sudo tar -tf  ${tgtfile} > MANIFEST
+	sudo tar -rvpf ${tgtfile} ${p}/MANIFEST
 	
 #	echo "${sifd} ${iface}	"
 #	echo "${sifd} -a"
