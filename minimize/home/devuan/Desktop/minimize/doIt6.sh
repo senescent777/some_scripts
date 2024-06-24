@@ -19,6 +19,7 @@ function check_params() {
 		;;
 	esac
 
+	#TODO:install-jutut vähitellen pois
 	case ${install} in
 		0|1)
 			dqb "install = ${install} "
@@ -62,7 +63,7 @@ function check_params() {
 #==================================PART 1============================================================
 
 if [ $# -gt 0 ] ; then
-	parse_opts_2 ${1} ${2}
+	#parse_opts_2 ${1} ${2}
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
@@ -128,6 +129,7 @@ sleep 3
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
 clouds 0
+#exit
 
 #autoremove:n ehdollisuus pois jatkossa?
 if [ ${the_ar} -eq 1 ] ; then 

@@ -1,6 +1,8 @@
 #!/bin/bash
+
 tgtfile=/tmp/out.tar 
 . ./lib
+
 check_binaries #jos lib hoitaisi tän+seur...
 check_binaries2
 mode=0
@@ -12,6 +14,15 @@ function parse_opts_1 () {
 		;;
 		*)
 			mode=${1}
+		;;
+	esac
+}
+
+#VAIH:-> make_tar
+function parse_opts_2() {
+	case "${1}" in
+		-o )
+			tgtfile=${2}
 		;;
 	esac
 }
