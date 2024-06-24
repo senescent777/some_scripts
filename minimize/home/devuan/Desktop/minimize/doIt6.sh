@@ -2,7 +2,7 @@
 
 enforce=0 #kokeilu ohi toistaiseksi
 the_ar=0
-install=0 #saattaa poistua jatkossa
+#install=0 #saattaa poistua jatkossa
 no_mas=0
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
@@ -19,25 +19,24 @@ function check_params() {
 		;;
 	esac
 
-	#TODO:install-jutut vähitellen pois
-	case ${install} in
-		0|1)
-			dqb "install = ${install} "
-		;;
-		*)
-			dqb "P.V.H.H"
-			exit 2
-		;;
-	esac
-
-	if [ ${install} -eq 1 ] ; then
-	
-	
-		if [ ${the_ar} -eq 1 ] ; then 
-			dqb "make_tar may not work"
-			sleep 3
-		fi
-	fi
+#	#VAIH:install-jutut vähitellen pois
+#	case ${install} in
+#		0|1)
+#			dqb "install = ${install} "
+#		;;
+#		*)
+#			dqb "P.V.H.H"
+#			exit 2
+#		;;
+#	esac
+#
+#	if [ ${install} -eq 1 ] ; then
+#	
+#	
+#		if [ ${the_ar} -eq 1 ] ; then 
+#			sleep 3
+#		fi
+#	fi
 
 	case ${no_mas} in
 		0|1)
