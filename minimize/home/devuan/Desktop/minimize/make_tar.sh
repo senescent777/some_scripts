@@ -41,8 +41,6 @@ function check_params() {
 }
 
 . ./lib
-#check_binaries #jos lib hoitaisi tän+seur... mahd myös optioiden parsintaa
-#check_binaries2
 
 function make_tar() {
 	dqb "make_tar ( ${1} )"
