@@ -111,12 +111,12 @@ function check_params() {
 #	#echo "[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 #	#echo "[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 #}
-#
-#function make_upgrade() {
-#	echo "${sag_u} "
-#	echo "${sag} upgrade -u"
-#	echo "sudo tar -cvpf /tmp/upgrade.tar /var/cache/apt/archives "
-#}
+
+function make_upgrade() {
+	echo "${sag_u} "
+	echo "${sag} upgrade -u"
+	echo "sudo tar -cvpf /tmp/upgrade.tar /var/cache/apt/archives "
+}
 
 if [ $# -gt 0 ] ; then
 	#parse_opts_2 ${1} ${2}
