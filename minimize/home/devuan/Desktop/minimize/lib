@@ -117,66 +117,6 @@ function mangle2() {
 	fi
 }
 
-#TODO: -f sekä ch-jutut _s:stä tähän
-function pre_enforce() {
-	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
-
-	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
-		mangle_s ${f}
-	done
-
-	sudo chown root:root /etc/sudoers.d/meshuggah
-	sudo chmod 0440 /etc/sudoers.d/meshuggah
-}
-
-function enforce_access() {
-	dqb "3nf0rc3_acc355()"
-
-	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
-	${sco} root:root /home
-	${scm} 0755 /home
-
-	local n
-	n=$(whoami)
-
-	${scm} -R 0755 ~/Desktop/minimize
-	dqb "${sco} -R ${n}:${n} ~"
-	${sco} -R ${n}:${n} ~
-	${sco} -R 101:65534 /home/stubby/
-
-	if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
-		echo "changing /sbin , /etc and /var 4 real"
-		${sco} -R root:root /sbin
-		${scm} -R 0755 /sbin
-
-		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
-		${sco} -R root:root /etc
-		${scm} -R 0755 /etc
-		local f
-
-		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
-		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
-
-		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
-			mangle2 ${f}
-			csleep 1
-		done
-
-		#sudoersin sisältöä voisi kai tiukentaa kanssa
-		${sco} -R root:root /var
-		${scm} -R go-w /var
-
-		${scm} 0755 /
-		${sco} root:root /
-	fi
-	
-	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
-		sudo rm /etc/resolv.conf
-	fi
-
-	[ -s /sbin/dclient-script.OLD ] || sudo cp /sbin/dhclient-script /sbin/dhclient-script.OLD
-}
-
 #VAIH:(wrapper vielä josqs pois)
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
 function clouds() {

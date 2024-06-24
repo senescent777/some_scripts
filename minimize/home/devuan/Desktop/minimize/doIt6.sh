@@ -1,11 +1,13 @@
 #!/bin/bash
+
 iface=eth0 
 enforce=0 #kokeilu ohi toistaiseksi
 the_ar=0
-#install=0 #saattaa poistua jatkossa
+
 no_mas=0
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
+
 . ./lib
 
 function parse_opts_1() {
@@ -57,10 +59,69 @@ function check_params() {
 	esac
 }
 
+#TODO: -f sekä ch-jutut _s:stä tähän
+function pre_enforce() {
+	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
+
+	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
+		mangle_s ${f}
+	done
+
+	sudo chown root:root /etc/sudoers.d/meshuggah
+	sudo chmod 0440 /etc/sudoers.d/meshuggah
+}
+
+function enforce_access() {
+	dqb "3nf0rc3_acc355()"
+
+	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
+	${sco} root:root /home
+	${scm} 0755 /home
+
+	local n
+	n=$(whoami)
+
+	${scm} -R 0755 ~/Desktop/minimize
+	dqb "${sco} -R ${n}:${n} ~"
+	${sco} -R ${n}:${n} ~
+	${sco} -R 101:65534 /home/stubby/
+
+	if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
+		echo "changing /sbin , /etc and /var 4 real"
+		${sco} -R root:root /sbin
+		${scm} -R 0755 /sbin
+
+		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
+		${sco} -R root:root /etc
+		${scm} -R 0755 /etc
+		local f
+
+		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
+		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
+
+		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
+			mangle2 ${f}
+			csleep 1
+		done
+
+		#sudoersin sisältöä voisi kai tiukentaa kanssa
+		${sco} -R root:root /var
+		${scm} -R go-w /var
+
+		${scm} 0755 /
+		${sco} root:root /
+	fi
+	
+	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
+		sudo rm /etc/resolv.conf
+	fi
+
+	[ -s /sbin/dclient-script.OLD ] || sudo cp /sbin/dhclient-script /sbin/dhclient-script.OLD
+}
+
 #==================================PART 1============================================================
 
 if [ $# -gt 0 ] ; then
-	#parse_opts_2 ${1} ${2}
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
@@ -68,7 +129,7 @@ check_params
 check_binaries
 [ ${enforce} -eq 1 ] && pre_enforce
 check_binaries2
-enforce_access #TODO:tämä ja pre_e takaisin tähän tdstoon
+enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
