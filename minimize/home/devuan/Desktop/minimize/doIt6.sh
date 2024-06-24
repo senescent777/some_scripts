@@ -56,9 +56,10 @@ function check_params() {
 	esac
 }
 
-#TODO: -f sekä ch-jutut _s:stä tähän
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
+	[ -f /etc/sudoers.d/meshuggah ] || sudo touch /etc/sudoers.d/meshuggah
+	sudo chmod a+w  /etc/sudoers.d/meshuggah	
 
 	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
 		mangle_s ${f}
