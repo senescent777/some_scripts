@@ -16,14 +16,12 @@ function parse_opts_1() {
 		--ar)
 			the_ar=1
 		;;
-#		--install)
-#			install=1
-#		;;
 		--no)
 			no_mas=1
 		;;
 	esac
 }
+
 . ./lib
 
 function check_params() {
@@ -124,10 +122,10 @@ if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
-#check_params 
+check_params 
 #check_binaries
 [ ${enforce} -eq 1 ] && pre_enforce
-check_binaries2
+#check_binaries2
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
