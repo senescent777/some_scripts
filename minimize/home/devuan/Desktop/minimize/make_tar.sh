@@ -46,35 +46,35 @@ function make_tar() {
 #	echo "#csleep 5"
 #
 #	echo ""
-	echo "${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-	echo "#csleep 5"
+	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
+	sudo rm -rf /run/live/medium/live/initrd.img*
+	csleep 5
 
-	echo "${shary} init-system-helpers netfilter-persistent iptables-persistent"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-	echo "${shary} python3-ntp ntpsec-ntpdate"
-	echo "#csleep 5"
+	${shary} init-system-helpers netfilter-persistent iptables-persistent
+	sudo rm -rf /run/live/medium/live/initrd.img*
+	${shary} python3-ntp ntpsec-ntpdate
+	csleep 5
 
-	echo "${shary} dnsmasq-base runit-helper"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+	${shary} dnsmasq-base runit-helper
+	sudo rm -rf /run/live/medium/live/initrd.img*
 
-	echo "${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby"
-	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-	echo "#csleep 5"
+	${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
+	sudo rm -rf /run/live/medium/live/initrd.img*
+	csleep 5
 
 	#some kind of retrovirus
-	echo "sudo tar -cvpf ${tgtfile} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/network/interfaces*"
-	echo "sudo tar -rvpf ${tgtfile} /etc/sudoers.d/user_shutdown /etc/sudoers.d/meshuggah /home/stubby"
-	echo "local f;for f in $(find /etc -type f -name 'stubby*') ; do tar -rvpf /tmp/out.tar $f ; done"
-	echo "for f in $(find /etc -type f -name 'dns*') ; do tar -rvpf /tmp/out.tar $f ; done"
-	echo "sudo tar -rvpf ${tgtfile} /etc/init.d/net*"
-	echo "sudo tar -rvpf ${tgtfile} /etc/rcS.d/S*net*"
+	sudo tar -cvpf ${tgtfile} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/network/interfaces*
+	sudo tar -rvpf ${tgtfile} /etc/sudoers.d/user_shutdown /etc/sudoers.d/meshuggah /home/stubby
+	local f;for f in $(find /etc -type f -name 'stubby*') ; do tar -rvpf /tmp/out.tar $f ; done
+	for f in $(find /etc -type f -name 'dns*') ; do tar -rvpf /tmp/out.tar $f ; done
+	sudo tar -rvpf ${tgtfile} /etc/init.d/net*
+	sudo tar -rvpf ${tgtfile} /etc/rcS.d/S*net*
 
 #HUOM. on kai joitain komentoja joilla nuo K01-linkit voisi luoda
-#	echo "sudo tar -rvpf ${tgtfile} /etc/rcS.d/{S14netfilter-persistent,S15networking}"
-	echo "sudo tar -rvpf ${tgtfile} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}"
-	echo "sudo tar -rvpf ${tgtfile} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}"	
-	echo "#csleep 5"
+#	sudo tar -rvpf ${tgtfile} /etc/rcS.d/{S14netfilter-persistent,S15networking}
+	sudo tar -rvpf ${tgtfile} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
+	sudo tar -rvpf ${tgtfile} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
+	csleep 5
 }
 
 function make_tar2() {
