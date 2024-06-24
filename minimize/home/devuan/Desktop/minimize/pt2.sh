@@ -26,6 +26,7 @@ sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes lvm2 mdadm mawk mtools
 sudo apt autoremove --yes
+sleep 6
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes mailcap mariadb-common
@@ -54,17 +55,21 @@ sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes ppp 
 sudo apt autoremove --yes
+sleep 1
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes ristretto
 sudo apt autoremove --yes 
+sleep 1
 
 sudo apt-get remove --purge --yes screen shim* samba* 
 sudo apt autoremove --yes
+sleep 1
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes procmail
 sudo apt autoremove --yes
+sleep 1
 
 sudo apt-get remove --purge --yes squashfs-tools
 sudo apt autoremove --yes

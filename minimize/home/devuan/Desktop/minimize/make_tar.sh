@@ -156,6 +156,11 @@ case ${mode} in
 	2)
 		cd /
 		sudo tar -xvpf ${tgtfile}
+		
+		#joutaisikohan grub mäkeen? (pt2)
+		${sdi} /var/cache/apt/archives/perl-modules-5.32*.deb
+		[ $? -eq  0 ] && sudo rm -rf ${pkgdir}/perl-modules-5.32*.deb
+
 		part3
 	;;
 	*)
