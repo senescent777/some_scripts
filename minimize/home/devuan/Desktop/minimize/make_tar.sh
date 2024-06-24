@@ -46,22 +46,22 @@ function make_tar() {
 #	echo "#csleep 5"
 #
 #	echo ""
-#	echo "${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables"
-#	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-#	echo "#csleep 5"
-#
-#	echo "${shary} init-system-helpers netfilter-persistent iptables-persistent"
-#	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-#	echo "${shary} python3-ntp ntpsec-ntpdate"
-#	echo "#csleep 5"
-#
-#	echo "${shary} dnsmasq-base runit-helper"
-#	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-#
-#	echo "${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby"
-#	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
-#	echo "#csleep 5"
-#
+	echo "${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables"
+	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+	echo "#csleep 5"
+
+	echo "${shary} init-system-helpers netfilter-persistent iptables-persistent"
+	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+	echo "${shary} python3-ntp ntpsec-ntpdate"
+	echo "#csleep 5"
+
+	echo "${shary} dnsmasq-base runit-helper"
+	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+
+	echo "${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby"
+	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
+	echo "#csleep 5"
+
 #	#some kind of retrovirus
 #	#TODO:find /etc -type f -name 'stubby*' | -name 'dns*'
 #	echo "sudo tar -cvpf ${tgtfile} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/dnsmasq* /etc/stubby* /etc/network/interfaces*# 
