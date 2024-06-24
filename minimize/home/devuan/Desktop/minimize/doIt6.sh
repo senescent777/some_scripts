@@ -1,5 +1,5 @@
 #!/bin/bash
-
+iface=eth0 
 enforce=0 #kokeilu ohi toistaiseksi
 the_ar=0
 #install=0 #saattaa poistua jatkossa
@@ -8,7 +8,6 @@ pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 . ./lib
 
-#VAIH:->doIt
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -36,25 +35,6 @@ function check_params() {
 			exit 1
 		;;
 	esac
-
-#	#VAIH:install-jutut vähitellen pois
-#	case ${install} in
-#		0|1)
-#			dqb "install = ${install} "
-#		;;
-#		*)
-#			dqb "P.V.H.H"
-#			exit 2
-#		;;
-#	esac
-#
-#	if [ ${install} -eq 1 ] ; then
-#	
-#	
-#		if [ ${the_ar} -eq 1 ] ; then 
-#			sleep 3
-#		fi
-#	fi
 
 	case ${no_mas} in
 		0|1)
@@ -84,7 +64,6 @@ if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
-#VAIH:part1 käyttöön?
 check_params 
 check_binaries
 [ ${enforce} -eq 1 ] && pre_enforce
@@ -93,30 +72,7 @@ enforce_access #TODO:tämä ja pre_e takaisin tähän tdstoon
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
-
-#jos jokin näistä kolmesta hoitaisi homman...
-#${sifd} ${iface}
-#${sifd} -a
-#${sip} link set ${iface} down
-#[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
-#[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
-#
-#for t in INPUT OUTPUT FORWARD ; do 
-#	${ipt} -P ${t} DROP
-#	${ip6t} -P ${t} DROP
-#	${ip6t} -F ${t}
-#done
-#
-#for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
-#
-#if [ ${debug} -eq 1 ] ; then
-#	${ipt} -L #
-#	${ip6t} -L #
-#	sleep 5 
-#fi #
-#
-#exit
-#TODO:johonkin ospivaan kohtaan /e/a/s.list sorkinta sed'in avulla
+#TODO:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	sudo /etc/init.d/${s} stop
@@ -137,7 +93,6 @@ sleep 3
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* 
-#${sharpy} ntp* sntp*
 ${sharpy} modem* wireless* wpa* iw lm-sensors
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
@@ -207,5 +162,5 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 5
 fi
 
-echo "${sifu} ${iface} or whåtever"
+echo "time to ${sifu} ${iface} or whåtever"
 echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "

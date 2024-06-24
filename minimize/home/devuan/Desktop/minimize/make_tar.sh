@@ -45,16 +45,7 @@ function check_params() {
 function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
-#	dqb "${sifu} ${iface}"
-#
-#	echo "${sip} link set ${iface} up"
-#	echo "${sifu} ${iface}	"
-#	echo "${sifu} -a"
-#	
-#	#echo "[ $? -eq 0 ] || echo  \"PROBLEMS WITH NETWORK CONNECTION\""
-#	echo "#csleep 5"
-#
-#	echo ""
+
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
 	sudo rm -rf /run/live/medium/live/initrd.img*
 	csleep 5
@@ -80,7 +71,6 @@ function make_tar() {
 	sudo tar -rvpf ${1} /etc/rcS.d/S*net*
 
 #HUOM. on kai joitain komentoja joilla nuo K01-linkit voisi luoda
-#	sudo tar -rvpf ${1} /etc/rcS.d/{S14netfilter-persistent,S15networking}
 	sudo tar -rvpf ${1} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
 	sudo tar -rvpf ${1} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
 	csleep 5
@@ -131,13 +121,7 @@ function make_tar2() {
 	
 	sudo tar -tf ${1} > MANIFEST
 	sudo tar -rvpf ${1} ${p}/MANIFEST
-	
-#	echo "${sifd} ${iface}	"
-#	echo "${sifd} -a"
-#	echo "${sip} link set ${iface} down"
-#
-#	#echo "[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
-#	#echo "[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
+
 }
 
 function make_upgrade() {

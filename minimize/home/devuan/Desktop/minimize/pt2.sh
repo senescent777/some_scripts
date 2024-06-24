@@ -15,7 +15,6 @@ sudo apt-get remove --purge --yes ghostscript gir* gdisk gpg-* gpgconf gpgsm gpa
 sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
-#gsasl+gstreamer+gsfonts poistui
 sudo apt-get remove --purge --yes gsasl* gsfonts* gstreamer*
 sudo apt autoremove --yes
 
@@ -32,13 +31,10 @@ sudo apt-get remove --purge --yes mailcap mariadb-common
 sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
 
-#mokutil poisrui, orca, musql ja openssh ic-tilassa
 sudo apt-get remove --purge --yes mokutil mysql-common orca openssh*
 sudo apt autoremove --yes
-
 sudo rm -rf /run/live/medium/live/initrd.img*
 
-#ao. jutut poistuneet + seur rivi kanssa
 sudo apt-get remove --purge --yes speech* system-config* telnet tex* udisks2 uno* ure* upower
 sudo apt autoremove --yes
 
@@ -60,7 +56,5 @@ sleep 6
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb
-#sudo shred -fu /tmp/*
-
 df
 #mimimize-hmiston siivous kanssa?
