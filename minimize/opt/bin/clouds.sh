@@ -5,10 +5,11 @@ debug=1
 check_binaries
 check_binaries2
 
-#TODO:voisi kai speksata sudolle asioita ettei tarvitse koko skiptiä sallia
+#TODO:/etc/network/if*.d/ alaiset skriptit, voisiko niiden kanssa leipoa yhteen jotenkin?
+
+#TODO:voisi kai speksata sudolle asioita ettei tarvitse koko skriptiä sallia
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
 
-#VAIH: sittenkin /opt alle erillinen skripti mikä renkkaa nämä dns-jutut eestaas
 function tod_dda() {
 	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
 	${ipt} -A e -p tcp --dport 853 -d ${1} -j f
@@ -20,7 +21,7 @@ function dda_snd() {
 }
 
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
-#clouds() {
+
 dqb "coluds(${1})"
 
 sudo rm /etc/resolv.conf
@@ -79,4 +80,3 @@ if [ ${debug} -eq 1 ] ; then
 	${ip6t} -L #
 	sleep 5
 fi #
-#}
