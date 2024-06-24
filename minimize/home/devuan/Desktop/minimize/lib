@@ -6,9 +6,6 @@ debug=0
 odio=$(which sudo)
 [ -x ${odio} ] || exit 666
 #exit
-#
-
-
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -60,8 +57,9 @@ function check_binaries() {
 	csleep 3
 }
 
-check_binaries2(){
+function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
+
 	ipt="sudo ${ipt} "
 	ip6t="sudo ${ip6t} "
 	iptr="sudo ${iptr} "
@@ -176,7 +174,7 @@ function enforce_access() {
 
 #VAIH:siirtymä kohti erillistä skriptiä(wrapper vielä josqs pois)
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
-clouds() {
+function clouds() {
 	dqb "coluds(${1})"
 	/opt/bin/clouds.sh ${1}
 #
@@ -235,8 +233,9 @@ clouds() {
 }
 
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-ns2() {
+function ns2() {
 	dqb "ns2( ${1} )"
+
 	${scm} u+w /home
 
 	sudo /usr/sbin/userdel ${1}
@@ -249,7 +248,7 @@ ns2() {
 	sleep 7
 }
 
-ns4() {
+function ns4() {
 	dqb "ns4( ${1} )"
 
 	${scm} u+w /run
@@ -273,7 +272,7 @@ ns4() {
 }
 #=========================PART 0 ENDS HERE=================================================================
 
-part1() {
+function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}
 	${sifd} -a
@@ -297,7 +296,7 @@ part1() {
 	fi #
 }
 
-part3() {
+function part3() {
 	${sdi} /var/cache/apt/archives/lib*.deb
 	[ $? -eq  0 ] && sudo rm -rf ${pkgdir}/lib*.deb
 
