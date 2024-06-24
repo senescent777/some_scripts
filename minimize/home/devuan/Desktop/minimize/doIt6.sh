@@ -91,7 +91,7 @@ function enforce_access() {
 
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		${sco} -R root:root /etc
-		${scm} -R 0755 /etc
+		${scm} -R 0755 /etc #konftdstoja ei tarvinne suorittaa?
 		local f
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
