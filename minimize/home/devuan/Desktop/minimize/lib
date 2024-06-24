@@ -68,8 +68,11 @@ function check_binaries2() {
 	snt="sudo ${snt} "
 	sharpy="sudo ${sag} remove --purge --yes "
 	sdi="sudo ${sdi} -i "
+
 	shary="sudo ${sag} --no-install-recommends reinstall --yes "
 	sag_u="sudo ${sag} update "
+	sag="sudo ${sag} " #HUOM. TÄMÄ VIIMEISENÄ
+
 	sco="sudo ${sco} "
 	scm="sudo ${scm} "
 	sip="sudo ${sip} "
