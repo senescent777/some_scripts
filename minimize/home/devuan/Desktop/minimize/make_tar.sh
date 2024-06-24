@@ -1,10 +1,4 @@
 #!/bin/bash
-
-tgtfile=/tmp/out.tar 
-. ./lib
-
-check_binaries #jos lib hoitaisi tän+seur...
-check_binaries2
 mode=0
 frist=0
 
@@ -42,6 +36,12 @@ function check_params() {
 	[ -d ${d} ] || echo "no such dir as ${d}"
 }
 
+tgtfile=/tmp/out.tar 
+. ./lib
+
+check_binaries #jos lib hoitaisi tän+seur... mahd myös optioiden parsintaa
+check_binaries2
+
 function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
@@ -65,12 +65,14 @@ function make_tar() {
 	#some kind of retrovirus
 	sudo tar -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/network/interfaces*
 	sudo tar -rvpf ${1} /etc/sudoers.d/user_shutdown /etc/sudoers.d/meshuggah /home/stubby
+	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do tar -rvpf /tmp/out.tar $f ; done
 	for f in $(find /etc -type f -name 'dns*') ; do tar -rvpf /tmp/out.tar $f ; done
+
 	sudo tar -rvpf ${1} /etc/init.d/net*
 	sudo tar -rvpf ${1} /etc/rcS.d/S*net*
 
-#HUOM. on kai joitain komentoja joilla nuo K01-linkit voisi luoda
+	#HUOM. on kai joitain komentoja joilla nuo K01-linkit voisi luoda (doIt olisi sopiva paikka kutsua)
 	sudo tar -rvpf ${1} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
 	sudo tar -rvpf ${1} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
 	csleep 5
@@ -100,19 +102,16 @@ function make_tar2() {
 
 	echo "#dqb cd ${q}"
 	cd ${q}
-	echo "#csleep 6"
 
 	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
 	${tig} clone https://github.com/senescent777/project.git
-	echo "#csleep 5"
+
 	cd project
 	echo "#[ ${debug} -eq 1 ] && ls -laRs;sleep 10"
 
 	sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
 	sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD
 	sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD
-
-	echo "#[ ${debug} -eq 1 ] && ls -laRs ./etc | less"
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
@@ -121,7 +120,6 @@ function make_tar2() {
 	
 	sudo tar -tf ${1} > MANIFEST
 	sudo tar -rvpf ${1} ${p}/MANIFEST
-
 }
 
 function make_upgrade() {
@@ -136,7 +134,7 @@ if [ $# -gt 0 ] ; then
 	parse_opts_2 ${2} ${3}
 	for opt in $@ ; do parse_opts_1 ${opt} ; done
 
-	${sag_u} #tilap pois pelistä 24.6.24
+	${sag_u} #oli tilap pois pelistä 24.6.24
 	[ $? -eq 0 ] || echo "/o/b/clouds.sh <mode> | ${sifu} -a | ${sifu} ${iface}";exit
 else
 	echo "$0 -h";exit
