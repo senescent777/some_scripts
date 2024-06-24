@@ -74,28 +74,29 @@ check_binaries2
 enforce_access #TODO:tämä ja pre_e takaisin tähän tdstoon
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
+part1
 
 #jos jokin näistä kolmesta hoitaisi homman...
-${sifd} ${iface}
-${sifd} -a
-${sip} link set ${iface} down
-[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
-[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
-
-for t in INPUT OUTPUT FORWARD ; do 
-	${ipt} -P ${t} DROP
-	${ip6t} -P ${t} DROP
-	${ip6t} -F ${t}
-done
-
-for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
-
-if [ ${debug} -eq 1 ] ; then
-	${ipt} -L #
-	${ip6t} -L #
-	sleep 5 
-fi #
-
+#${sifd} ${iface}
+#${sifd} -a
+#${sip} link set ${iface} down
+#[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
+#[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
+#
+#for t in INPUT OUTPUT FORWARD ; do 
+#	${ipt} -P ${t} DROP
+#	${ip6t} -P ${t} DROP
+#	${ip6t} -F ${t}
+#done
+#
+#for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
+#
+#if [ ${debug} -eq 1 ] ; then
+#	${ipt} -L #
+#	${ip6t} -L #
+#	sleep 5 
+#fi #
+#
 #exit
 #TODO:johonkin ospivaan kohtaan /e/a/s.list sorkinta sed'in avulla
 
