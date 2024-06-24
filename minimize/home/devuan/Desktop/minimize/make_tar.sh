@@ -80,7 +80,9 @@ function make_tar2() {
 
 	echo "local p"
 	echo "local q"
-	echo "p=$(pwd)"
+
+	p=$(pwd)
+	echo "p=${p}"
 
 	echo "q=$(mktemp -d)"
 	q=$(mktemp -d)
@@ -93,20 +95,22 @@ function make_tar2() {
 	echo "git clone https://github.com/senescent777/project.git"
 	echo "#csleep 5"
 	echo "cd project"
-	echo "#[ ${debug} -eq 1 ] && ls -las;sleep 10"
+	echo "#[ ${debug} -eq 1 ] && ls -laRs;sleep 10"
 
-#	echo "sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD"
-#	echo "sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD"
-#	echo "sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD"	
-#	echo "[ ${debug} -eq 1 ] && ls -laRs ./etc | less"
-#	echo "${sco} -R root:root ./etc; ${scm} -R a-w ./etc"
-#	echo "${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin"
-#	echo "sudo tar -rvpf ${tgtfile} ./etc ./sbin"
-#	echo "cd ${p}"
-#	
-#	echo "sudo tar -tf  ${tgtfile} > MANIFEST"
-#	echo "sudo tar -rvpf ${tgtfile} ${p}/MANIFEST"
-#	
+	echo "sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD"
+	echo "sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD"
+	echo "sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD"	
+
+	echo "#[ ${debug} -eq 1 ] && ls -laRs ./etc | less"
+
+	echo "${sco} -R root:root ./etc; ${scm} -R a-w ./etc"
+	echo "${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin"
+	echo "sudo tar -rvpf ${tgtfile} ./etc ./sbin"
+	echo "cd ${p}"
+	
+	echo "sudo tar -tf  ${tgtfile} > MANIFEST"
+	echo "sudo tar -rvpf ${tgtfile} ${p}/MANIFEST"
+	
 #	echo "${sifd} ${iface}	"
 #	echo "${sifd} -a"
 #	echo "${sip} link set ${iface} down"
