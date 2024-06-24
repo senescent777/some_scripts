@@ -136,8 +136,8 @@ if [ $# -gt 0 ] ; then
 	parse_opts_2 ${2} ${3}
 	for opt in $@ ; do parse_opts_1 ${opt} ; done
 
-	${sag_u} #oli tilap pois pelistä 24.6.24
-	[ $? -eq 0 ] || echo "/o/b/clouds.sh <mode> | ${sifu} -a | ${sifu} ${iface}";exit
+	${sag_u} 
+	#[ $? -eq 0 ] || echo "/o/b/clouds.sh <mode> | ${sifu} -a | ${sifu} ${iface}";exit
 else
 	echo "$0 -h";exit
 fi
