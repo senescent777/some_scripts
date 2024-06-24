@@ -8,6 +8,24 @@ pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 . ./lib
 
+#VAIH:->doIt
+function parse_opts_1() {
+	case "${1}" in
+		-v|--v)
+			debug=1
+		;;
+		--ar)
+			the_ar=1
+		;;
+		--install)
+			install=1
+		;;
+		--no)
+			no_mas=1
+		;;
+	esac
+}
+
 function check_params() {
 	case ${the_ar} in
 		0|1)

@@ -8,23 +8,7 @@ odio=$(which sudo)
 #exit
 #
 
-#TODO:->doIt
-function parse_opts_1() {
-	case "${1}" in
-		-v|--v)
-			debug=1
-		;;
-		--ar)
-			the_ar=1
-		;;
-		--install)
-			install=1
-		;;
-		--no)
-			no_mas=1
-		;;
-	esac
-}
+
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
