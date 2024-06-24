@@ -45,7 +45,7 @@ function make_tar() {
 #	#echo "[ $? -eq 0 ] || echo  \"PROBLEMS WITH NETWORK CONNECTION\""
 #	#echo "csleep 5"
 #
-#	echo "${sag_u} "
+#	echo ""
 #	echo "${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables"
 #	echo "sudo rm -rf /run/live/medium/live/initrd.img*"
 #	#echo "csleep 5"
@@ -122,6 +122,7 @@ function make_upgrade() {
 if [ $# -gt 0 ] ; then
 	#parse_opts_2 ${1} ${2}
 	for opt in $@ ; do parse_opts_1 ${opt} ; done
+	${sag_u} 
 else
 	echo "$0 -h"
 fi
