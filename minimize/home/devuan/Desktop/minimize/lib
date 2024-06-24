@@ -1,6 +1,5 @@
 #=================================================PART 0=====================================
 #grep /e/n/i ?
-debug=0
 
 odio=$(which sudo)
 [ -x ${odio} ] || exit 666
@@ -199,5 +198,5 @@ function part3() {
 }
 
 #part1?
-#check_binaries
-#check_inaries2
+check_binaries
+check_inaries2

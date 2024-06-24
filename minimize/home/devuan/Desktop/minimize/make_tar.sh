@@ -1,6 +1,9 @@
 #!/bin/bash
+
 mode=0
 frist=0
+debug=0
+tgtfile=/tmp/out.tar 
 
 function parse_opts_1 () {
 	case ${1} in
@@ -9,6 +12,7 @@ function parse_opts_1 () {
 		;;
 		-h)
 			echo "$0 <mode> [-o ouftile] [-i infile] [-v]"
+			exit
 		;;
 		*)
 			if [ ${frist} -eq 0 ] ; then 
@@ -36,11 +40,9 @@ function check_params() {
 	[ -d ${d} ] || echo "no such dir as ${d}"
 }
 
-tgtfile=/tmp/out.tar 
 . ./lib
-
-check_binaries #jos lib hoitaisi tän+seur... mahd myös optioiden parsintaa
-check_binaries2
+#check_binaries #jos lib hoitaisi tän+seur... mahd myös optioiden parsintaa
+#check_binaries2
 
 function make_tar() {
 	dqb "make_tar ( ${1} )"

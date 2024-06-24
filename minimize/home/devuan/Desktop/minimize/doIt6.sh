@@ -3,12 +3,10 @@
 iface=eth0 
 enforce=0 #kokeilu ohi toistaiseksi
 the_ar=0
-
+debug=0
 no_mas=0
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
-
-. ./lib
 
 function parse_opts_1() {
 	case "${1}" in
@@ -18,14 +16,15 @@ function parse_opts_1() {
 		--ar)
 			the_ar=1
 		;;
-		--install)
-			install=1
-		;;
+#		--install)
+#			install=1
+#		;;
 		--no)
 			no_mas=1
 		;;
 	esac
 }
+. ./lib
 
 function check_params() {
 	case ${the_ar} in
@@ -125,8 +124,8 @@ if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
-check_params 
-check_binaries
+#check_params 
+#check_binaries
 [ ${enforce} -eq 1 ] && pre_enforce
 check_binaries2
 enforce_access 
