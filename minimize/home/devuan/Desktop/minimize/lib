@@ -144,7 +144,7 @@ function mangle2() {
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 
-	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds ; do
+	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
 		mangle_s ${f}
 	done
 
@@ -200,22 +200,11 @@ function enforce_access() {
 	[ -s /sbin/dclient-script.OLD ] || sudo cp /sbin/dhclient-script /sbin/dhclient-script.OLD
 }
 
-#kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
-#VAIH: sittenkin /opt alle erillinen skripti mikä renkkaa nämä dns-jutut eestaas
-tod_dda() {
-	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
-	${ipt} -A e -p tcp --dport 853 -d ${1} -j f
-}
-
-dda_snd() {
-	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
-	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT 
-}
-
 #VAIH:siirtymä kohti erillistä skriptiä
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
 clouds() {
 	dqb "coluds(${1})"
+	dqb "TODO: /opt/bin/clouds.sh ${1}"
 
 	sudo rm /etc/resolv.conf
 	sudo rm /etc/dhcp/dhclient.conf
