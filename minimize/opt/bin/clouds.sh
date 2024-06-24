@@ -3,9 +3,6 @@
 debug=1
 . ~/Desktop/minimize/lib
 
-#check_binaries
-#check_binaries2
-
 #TODO:/etc/network/if*.d/ alaiset skriptit, voisiko niiden kanssa leipoa yhteen jotenkin?
 #TODO:voisi kai speksata sudolle asioita ettei tarvitse koko skriptiä sallia
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
@@ -23,7 +20,6 @@ function dda_snd() {
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
 
 dqb "coluds(${1})"
-
 sudo rm /etc/resolv.conf
 sudo rm /etc/dhcp/dhclient.conf
 sudo rm /sbin/dhclient-script
