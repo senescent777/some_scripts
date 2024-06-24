@@ -22,8 +22,9 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes htop intel-microcode
 sudo apt autoremove --yes
 
+#HUOM.240624:mawk ja mtools uutena, takas pois jos qsee
 sudo rm -rf /run/live/medium/live/initrd.img*
-sudo apt-get remove --purge --yes lvm2 mdadm #mdadm mukaan?
+sudo apt-get remove --purge --yes lvm2 mdadm mawk mtools
 sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
@@ -49,8 +50,23 @@ sudo apt autoremove --yes
 #sudo apt-get remove --purge --yes proc* liikaa? jos tyytyisi procmailiin
 #=================================================
 
+#240625 näytti siltä wettä ppp tau procmail ei poistunut, kts toistuuko
 sudo rm -rf /run/live/medium/live/initrd.img*
-sudo apt-get remove --purge --yes ppp ristretto screen shim* samba* procmail
+sudo apt-get remove --purge --yes ppp 
+sudo apt autoremove --yes
+
+sudo rm -rf /run/live/medium/live/initrd.img*
+sudo apt-get remove --purge --yes ristretto
+sudo apt autoremove --yes 
+
+sudo apt-get remove --purge --yes screen shim* samba* 
+sudo apt autoremove --yes
+
+sudo rm -rf /run/live/medium/live/initrd.img*
+sudo apt-get remove --purge --yes procmail
+sudo apt autoremove --yes
+
+sudo apt-get remove --purge --yes squashfs-tools
 sudo apt autoremove --yes
 sleep 6
 
