@@ -144,7 +144,7 @@ function mangle2() {
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 
-	for f in /sbin/ifup /sbin/ifdown /sbin/alt /sbin/reboot /etc/init.d/stubby ; do
+	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds ; do
 		mangle_s ${f}
 	done
 
@@ -201,7 +201,7 @@ function enforce_access() {
 }
 
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
-#TODO: sittenkin /opt alle erillinen skripti mikä renkkaa nämä dns-jutut eestaas
+#VAIH: sittenkin /opt alle erillinen skripti mikä renkkaa nämä dns-jutut eestaas
 tod_dda() {
 	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
 	${ipt} -A e -p tcp --dport 853 -d ${1} -j f
@@ -212,6 +212,7 @@ dda_snd() {
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT 
 }
 
+#VAIH:siirtymä kohti erillistä skriptiä
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
 clouds() {
 	dqb "coluds(${1})"
@@ -344,3 +345,5 @@ part3() {
 }
 
 #part1?
+#check_binaries
+#check_inaries2

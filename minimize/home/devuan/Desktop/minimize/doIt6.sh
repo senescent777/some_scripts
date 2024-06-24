@@ -67,11 +67,11 @@ if [ $# -gt 0 ] ; then
 fi
 
 #VAIH:part1 käyttöön?
-check_params #kuuluisikohan sittenkin tähän eikä kirjastoon?
+check_params 
 check_binaries
 [ ${enforce} -eq 1 ] && pre_enforce
 check_binaries2
-enforce_access
+enforce_access #TODO:tämä ja pre_e takaisin tähän tdstoon
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 
@@ -97,6 +97,7 @@ if [ ${debug} -eq 1 ] ; then
 fi #
 
 #exit
+#TODO:johonkin ospivaan kohtaan /e/a/s.list sorkinta sed'in avulla
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	sudo /etc/init.d/${s} stop
