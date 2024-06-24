@@ -71,7 +71,14 @@ sudo apt-get remove --purge --yes procmail
 sudo apt autoremove --yes
 sleep 1
 
+sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes squashfs-tools
+sudo apt autoremove --yes
+sleep 6
+
+#uutena 250624, pois jos qsee
+sudo rm -rf /run/live/medium/live/initrd.img*
+sudo apt-get remove --purge --yes grub*
 sudo apt autoremove --yes
 sleep 6
 

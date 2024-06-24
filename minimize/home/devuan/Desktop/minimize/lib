@@ -196,4 +196,11 @@ function part3() {
 #part1?
 check_binaries
 check_binaries2
+
+#prevopt=""
+#for opt in $@ ; do 
+#	parse_opts_1 ${opt}
+#	parse_opts_2 ${prevopt} ${opt}
+#	prevopt=opt
+#done
 #check_params ?
