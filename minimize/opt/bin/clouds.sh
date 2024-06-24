@@ -1,12 +1,12 @@
 #!/bin/bash
 
-. ~/Desktop/minimize/lib
 debug=1
-check_binaries
-check_binaries2
+. ~/Desktop/minimize/lib
+
+#check_binaries
+#check_binaries2
 
 #TODO:/etc/network/if*.d/ alaiset skriptit, voisiko niiden kanssa leipoa yhteen jotenkin?
-
 #TODO:voisi kai speksata sudolle asioita ettei tarvitse koko skriptiä sallia
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
 
