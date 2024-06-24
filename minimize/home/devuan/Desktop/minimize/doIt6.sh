@@ -1,7 +1,7 @@
 #!/bin/bash
 
 iface=eth0 
-enforce=0 #kokeilu ohi toistaiseksi
+enforce=1 #kokeilu taas testiin 250624
 the_ar=0
 debug=0
 no_mas=0
@@ -124,9 +124,7 @@ if [ $# -gt 0 ] ; then
 fi
 
 check_params 
-#check_binaries
 [ ${enforce} -eq 1 ] && pre_enforce
-#check_binaries2
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
