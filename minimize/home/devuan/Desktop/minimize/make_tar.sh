@@ -34,7 +34,8 @@ function check_params() {
 	[ -d ${d} ] || echo "no such dir as ${d}"
 }
 
-#function make_tar() {
+function make_tar() {
+	dqb "make_tar (demo)"
 #	dqb "${sifu} ${iface}"
 #
 #	echo "${sip} link set ${iface} up"
@@ -70,14 +71,14 @@ function check_params() {
 #	echo "sudo tar -rvpf ${tgtfile} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}"
 #	echo "sudo tar -rvpf ${tgtfile} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}"	
 #	#echo "csleep 5"
-#}
-#
-#function make_tar2() {
-#	echo "#add some stuff from ghub"
-#	echo "${shary} git"
-#	#echo "csleep 5"
-#	#exit
-#
+}
+
+function make_tar2() {
+	echo "add some stuff from ghub"
+	echo "${shary} git"
+	echo "csleep 5"
+	#exit
+
 #	echo "local p"
 #	echo "local q"
 #	echo "p=$(pwd)"
@@ -110,7 +111,7 @@ function check_params() {
 #
 #	#echo "[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 #	#echo "[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
-#}
+}
 
 function make_upgrade() {
 	echo "${sag_u} "
