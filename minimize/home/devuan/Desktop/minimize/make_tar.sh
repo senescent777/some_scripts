@@ -165,10 +165,12 @@ case ${mode} in
 	;;
 	3)
 		#TODO:joitain gpg:n huomioiva versio make_upgtade():sta tähän
+		echo "gpgtar -c"
 	;;
 	4)
 		#TODO:gpg-allekrijoitukset huomioiva tar-purku tähän
 		#TODO:myös mount ja umount mukaan?
+		echo "mount;gpgtar -x"
 	;;
 	*)
 		echo "-h"
