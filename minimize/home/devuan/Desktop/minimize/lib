@@ -125,7 +125,8 @@ function mangle_s() {
 
 function mangle2() {
 	if [ -f ${1} ] ; then 
-		dqb "MANGLED ${1}";sleep 1
+		dqb "MANGLED ${1}"
+		sleep 1
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
 		csleep 1
@@ -149,6 +150,7 @@ function ns2() {
 	sleep 3
 
 	sudo adduser --system ${1}
+	sleep 1
 	${scm} go-w /home
 
 	[ ${debug} -eq 1 ]  && ls -las /home
