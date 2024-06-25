@@ -58,7 +58,9 @@ function check_binaries() {
 	[ -x ${slinky} ] || exit 5
 	[ -x ${spc} ] || exit 5
 
+	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 	ENF_LST="${smr} ${slinky} ${spc}"
+
 	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
 	csleep 3
@@ -109,14 +111,15 @@ function mangle_s() {
 		sudo chown root:root ${1} #uutena tämä
 		#chattr +ui ${1}
 
-		sleep 1
-		sudo echo -n "devuan localhost=NOPASSWD: sha256:" >> /etc/sudoers.d/meshuggah
-
+		csleep 1
 		local s
-		s=$(sha256sum ${1})
+		local n
+		n=$(whoami) #olisi myös %users...
 
+		sudo echo -n "${n} localhost=NOPASSWD: sha256:" >> /etc/sudoers.d/meshuggah
+		s=$(sha256sum ${1})
 		sudo echo ${s} >> /etc/sudoers.d/meshuggah
-		sleep 1
+		csleep 1
 	fi
 }
 
