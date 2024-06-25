@@ -149,14 +149,12 @@ case ${mode} in
 		make_tar2 ${tgtfile}
 	;;
 	1)
-		#TODO:joitain gpg-juttuja näille main?
-
+		
 		make_upgrade ${tgtfile}
 	;;
 	2)
 		cd /
-		#TODO:joitain gpg-juttuja näille main?
-
+		
 		sudo tar -xvpf ${tgtfile}
 		
 		#joutaisikohan grub mäkeen? (pt2)
@@ -164,6 +162,13 @@ case ${mode} in
 		[ $? -eq  0 ] && sudo rm -rf ${pkgdir}/perl-modules-5.32*.deb
 
 		part3
+	;;
+	3)
+		#TODO:joitain gpg:n huomioiva versio make_upgtade():sta tähän
+	;;
+	4)
+		#TODO:gpg-allekrijoitukset huomioiva tar-purku tähän
+		#TODO:myös mount ja umount mukaan?
 	;;
 	*)
 		echo "-h"
