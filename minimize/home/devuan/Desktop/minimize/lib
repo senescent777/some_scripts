@@ -32,6 +32,9 @@ function check_binaries() {
 	sdi=$(sudo which dpkg)
 	sifu=$(sudo which ifup)
 	sifd=$(sudo which ifdown)
+	smr=$(sudo which rm)
+	slinky=$(sudo which ln)
+	spc=$(sudo which cp)
 
 	dqb "half_fdone"
 	csleep 1
@@ -51,6 +54,11 @@ function check_binaries() {
 	[ -x ${sifu} ] || exit 5
 	[ -x ${sifd} ] || exit 5
 
+	[ -x ${smr} ] || exit 5
+	[ -x ${slinky} ] || exit 5
+	[ -x ${spc} ] || exit 5
+
+	#TODO:näille main taulukko-olion alustusta pre_enforce() varten
 	dqb "b1nar135 0k" 
 	csleep 3
 }
@@ -80,6 +88,9 @@ function check_binaries2() {
 	sa="sudo ${sa} "
 	sifu="sudo ${sifu} "
 	sifd="sudo ${sifd} "
+	smr="sudo ${smr} "
+	slinky="sudo ${slinky} -s "
+	spc="sudo ${pc} "
 }
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
