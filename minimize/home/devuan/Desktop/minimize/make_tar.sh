@@ -181,7 +181,7 @@ case ${mode} in
 		fi
 
 		#VAIH:gpg-allekIRjoitukset huomioiva tar-purku tähän
-		#TODO:myös mount ja umount mukaan?
+		#TODO:myös mount ja umount mukaan? (import liittyy)
 		echo "mount;gpgtar -x"
 	;;
 	*)

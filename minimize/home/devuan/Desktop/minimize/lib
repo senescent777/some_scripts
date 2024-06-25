@@ -233,5 +233,5 @@ function gpo() {
 	done
 }
 
-#gpo?
+#TODO:gpo jo käyttöön?
 #check_params ?

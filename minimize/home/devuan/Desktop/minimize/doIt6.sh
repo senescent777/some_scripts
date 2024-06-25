@@ -50,6 +50,7 @@ function pre_enforce() {
 	local f
 	#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
 	for f in ${ENF_LST} ; do mangle_s ${f} ; done
+	#TODO:joko enf_lst mukaiset eri tdstoon tai /e/d.s/m listaan sittenkin /o/b/c.sh
 
 	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby ; do
 		mangle_s ${f}
@@ -124,7 +125,7 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-#exit
+#exit #TODO:ojllain vivulla ajamaan vain part1 ?
 part1
 
 #VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
