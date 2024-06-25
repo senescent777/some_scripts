@@ -20,10 +20,10 @@ function dda_snd() {
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
 
 dqb "coluds(${1})"
-#TODO:rm ja muut, toisella tavalla
-sudo rm /etc/resolv.conf
-sudo rm /etc/dhcp/dhclient.conf
-sudo rm /sbin/dhclient-script
+#VAIH:rm ja muut, toisella tavalla
+${smr} /etc/resolv.conf
+${smr} /etc/dhcp/dhclient.conf
+${smr} /sbin/dhclient-script
 
 #tässä oikea paikka tables-muutoksille vai ei?
 ${ipt} -F b
@@ -34,18 +34,18 @@ ${ipt} -D OUTPUT 6
 
 case ${1} in 
 	0)
-		sudo ln -s /etc/resolv.conf.OLD /etc/resolv.conf
-		sudo ln -s /etc/dhcp/dhclient.conf.OLD /etc/dhcp/dhclient.conf
-		sudo cp /sbin/dhclient-script.OLD /sbin/dhclient-script
+		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
+		${slinky} /etc/dhcp/dhclient.conf.OLD /etc/dhcp/dhclient.conf
+		${spc} /sbin/dhclient-script.OLD /sbin/dhclient-script
 
 		${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
 		${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
 		for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
 	;;
 	1)
-		sudo ln -s /etc/resolv.conf.new /etc/resolv.conf
-		sudo ln -s /etc/dhcp/dhclient.conf.new /etc/dhcp/dhclient.conf
-		sudo cp /sbin/dhclient-script.new /sbin/dhclient-script
+		${slinky} /etc/resolv.conf.new /etc/resolv.conf
+		${slinky} /etc/dhcp/dhclient.conf.new /etc/dhcp/dhclient.conf
+		${spc} /sbin/dhclient-script.new /sbin/dhclient-script
 	
 		${ipt} -A INPUT -p tcp -m tcp --sport 853 -j b
 		${ipt} -A OUTPUT -p tcp -m tcp --dport 853 -j e
