@@ -59,6 +59,7 @@ function check_binaries() {
 	[ -x ${spc} ] || exit 5
 
 	ENF_LST="${smr} ${slinky} ${spc}"
+	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
 	csleep 3
 }
@@ -90,7 +91,11 @@ function check_binaries2() {
 	sifd="sudo ${sifd} "
 	smr="sudo ${smr} "
 	slinky="sudo ${slinky} -s "
-	spc="sudo ${pc} "
+	spc="sudo ${spc} "
+
+	dqb "spc= ${spc}"
+	dqb "b1nar135.2 0k.2" 
+	csleep 3
 }
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.

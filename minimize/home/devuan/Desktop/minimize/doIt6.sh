@@ -1,7 +1,7 @@
 #!/bin/bash
 
 iface=eth0 
-enforce=1 #kokeilu taas testiin 250624
+enforce=0 
 the_ar=0
 debug=0
 no_mas=0
@@ -73,8 +73,8 @@ function pre_enforce() {
 #	sudo chown root:root /etc/sudoers.d/meshuggah
 #	sudo chmod 0440 /etc/sudoers.d/meshuggah
 #josko näin parempi:
-	sudo chmod -R 0440 /etc/sudoers.d
-	sudo chown root:root /etc/sudoers.d
+	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
+	sudo chown -R root:root /etc/sudoers.d
 
 	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 }
