@@ -1,10 +1,9 @@
 #!/bin/bash
 
-debug=1
+debug=1 #TODO:jos komentoriviparametriksi
 . ~/Desktop/minimize/lib
 
 #TODO:/etc/network/if*.d/ alaiset skriptit, voisiko niiden kanssa leipoa yhteen jotenkin?
-#VAIH:voisi kai speksata sudolle asioita ettei tarvitse koko skriptiä sallia
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
 
 function tod_dda() {
@@ -37,7 +36,7 @@ csleep 1
 dqb "spc= ${spc}"
 csleep 1
 
-case ${1} in 
+case ${1} in #{$mode} jatkossa
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
 		${slinky} /etc/dhcp/dhclient.conf.OLD /etc/dhcp/dhclient.conf
