@@ -1,10 +1,10 @@
 #!/bin/bash
 
-debug=1
+debug=1 #TODO:jos komentoriviparametriksi
 . ~/Desktop/minimize/lib
 
+#TODO:josko sittenkin tämä skripti /e/s/d alle niiden yksittäiusten komenotjen sijaan? vaiko ei? arpoo arpoo
 #TODO:/etc/network/if*.d/ alaiset skriptit, voisiko niiden kanssa leipoa yhteen jotenkin?
-#VAIH:voisi kai speksata sudolle asioita ettei tarvitse koko skriptiä sallia
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
 
 function tod_dda() {
@@ -20,7 +20,6 @@ function dda_snd() {
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
 
 dqb "coluds(${1})"
-#VAIH:rm ja muut, toisella tavalla
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
@@ -37,7 +36,7 @@ csleep 1
 dqb "spc= ${spc}"
 csleep 1
 
-case ${1} in 
+case ${1} in #{$mode} jatkossa
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
 		${slinky} /etc/dhcp/dhclient.conf.OLD /etc/dhcp/dhclient.conf
