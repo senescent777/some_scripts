@@ -139,7 +139,11 @@ enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
-#TODO:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
+
+#VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
+#echo "sed -i 's/q_${d}/${v}/g' ${1}/1/init-user-db.sql.tmp" >> ${2}
+#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
+dqb "sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list"
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	sudo /etc/init.d/${s} stop
