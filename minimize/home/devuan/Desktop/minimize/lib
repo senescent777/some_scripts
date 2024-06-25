@@ -58,7 +58,7 @@ function check_binaries() {
 	[ -x ${slinky} ] || exit 5
 	[ -x ${spc} ] || exit 5
 
-	#TODO:näille main taulukko-olion alustusta pre_enforce() varten
+	ENF_LST="${smr} ${slinky} ${spc}"
 	dqb "b1nar135 0k" 
 	csleep 3
 }
@@ -117,7 +117,7 @@ function mangle_s() {
 
 function mangle2() {
 	if [ -f ${1} ] ; then 
-		dqb "MANGLED $1";sleep 1
+		dqb "MANGLED ${1}";sleep 1
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
 		csleep 1

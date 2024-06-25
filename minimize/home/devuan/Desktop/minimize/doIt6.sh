@@ -61,7 +61,11 @@ function pre_enforce() {
 	[ -f /etc/sudoers.d/meshuggah ] || sudo touch /etc/sudoers.d/meshuggah
 	sudo chmod a+w /etc/sudoers.d/meshuggah	
 
-	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
+	local f
+	#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
+	for f in ${ENF_LST} ; do mangle_s ${f} ; done
+
+	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby ; do
 		mangle_s ${f}
 	done
 
@@ -151,6 +155,9 @@ ${whack} stubby*
 ${whack} nm-applet
 sleep 3
 #exit
+
+#TODO:K01avahi-jutut sopivaan kohtaan?
+#TODO:passwd sekä ulosheitto myös?
 
 #===================================================PART 2===================================
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
