@@ -124,6 +124,7 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
+#exit
 part1
 
 #VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
@@ -132,7 +133,7 @@ part1
 dqb "sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list"
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
-	sudo /etc/init.d/${s} stop
+	${odio} /etc/init.d/${s} stop
 	sleep 1
 done
 
@@ -156,7 +157,7 @@ ${sharpy} rpc* nfs*
 ${sharpy} modem* wireless* wpa* iw lm-sensors
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
-sudo rm -rf /run/live/medium/live/initrd.img*
+${odio} rm -rf /run/live/medium/live/initrd.img*
 sleep 3
 
 ${ip6tr} /etc/iptables/rules.v6
@@ -165,7 +166,7 @@ clouds 0
 #exit
 
 csleep 5
-sudo rm -rf /run/live/medium/live/initrd.img*
+${odio} rm -rf /run/live/medium/live/initrd.img*
 sleep 3
 
 if [ ${debug} -eq 1 ] ; then
@@ -180,14 +181,14 @@ echo "DO NOT ANSWER \"Yes\"  TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
-[ $? -eq 0 ] && sudo rm -rf ${pkgdir}/dns-root-data*.deb
+[ $? -eq 0 ] && ${odio} rm -rf ${pkgdir}/dns-root-data*.deb
 part3
 
 #missäköhän kohtaa kuuluisi tmän olla?
 if [ ${no_mas} -eq 1 ] ; then
 	echo "passwd"
-	echo "sudo passwd"
-	echo "sudo pkill --signal 9 xfce*"
+	echo "${odio} passwd"
+	echo "${odio} pkill --signal 9 xfce*"
 	dqb "no mas senor"
 	exit 	
 fi
@@ -197,7 +198,7 @@ ${sa} autoremove --yes
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
-sudo /etc/init.d/dnsmasq restart
+${odio} /etc/init.d/dnsmasq restart
 clouds 1
 ns2 stubby
 ns4 stubby

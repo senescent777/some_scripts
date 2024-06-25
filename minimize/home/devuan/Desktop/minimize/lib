@@ -69,30 +69,30 @@ function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
 
 	#odio?
-	ipt="sudo ${ipt} "
-	ip6t="sudo ${ip6t} "
-	iptr="sudo ${iptr} "
-	ip6tr="sudo ${ip6tr} "
+	ipt="${odio} ${ipt} "
+	ip6t="${odio} ${ip6t} "
+	iptr="${odio} ${iptr} "
+	ip6tr="${odio} ${ip6tr} "
 
-	whack="sudo ${whack} --signal 9 "
-	snt="sudo ${snt} "
-	sharpy="sudo ${sag} remove --purge --yes "
-	sdi="sudo ${sdi} -i "
+	whack="${odio} ${whack} --signal 9 "
+	snt="${odio} ${snt} "
+	sharpy="${odio} ${sag} remove --purge --yes "
+	sdi="${odio} ${sdi} -i "
 
 	#HUOM. ${sag} VIIMEISENÄ
-	shary="sudo ${sag} --no-install-recommends reinstall --yes "
-	sag_u="sudo ${sag} update "
-	sag="sudo ${sag} "
+	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
+	sag_u="${odio} ${sag} update "
+	sag="${odio} ${sag} "
 
-	sco="sudo ${sco} "
-	scm="sudo ${scm} "
-	sip="sudo ${sip} "
-	sa="sudo ${sa} "
-	sifu="sudo ${sifu} "
-	sifd="sudo ${sifd} "
-	smr="sudo ${smr} "
-	slinky="sudo ${slinky} -s "
-	spc="sudo ${spc} "
+	sco="${odio} ${sco} "
+	scm="${odio} ${scm} "
+	sip="${odio} ${sip} "
+	sa="${odio} ${sa} "
+	sifu="${odio} ${sifu} "
+	sifd="${odio} ${sifd} "
+	smr="${odio} ${smr} "
+	slinky="${odio} ${slinky} -s "
+	spc="${odio} ${spc} "
 
 	dqb "spc= ${spc}"
 	dqb "b1nar135.2 0k.2" 
@@ -145,10 +145,10 @@ function ns2() {
 
 	${scm} u+w /home
 
-	sudo /usr/sbin/userdel ${1}
+	${odio} /usr/sbin/userdel ${1}
 	sleep 3
 
-	sudo adduser --system ${1}
+	${odio} adduser --system ${1}
 	sleep 1
 	${scm} go-w /home
 
@@ -160,7 +160,7 @@ function ns4() {
 	dqb "ns4( ${1} )"
 
 	${scm} u+w /run
-	sudo touch /run/${1}.pid
+	${odio} touch /run/${1}.pid
 	${scm} 0600 /run/${1}.pid
 	${sco} ${1}:65534 /run/${1}.pid
 	${scm} u-w /run
@@ -172,7 +172,7 @@ function ns4() {
 	dqb "starting ${1} in 5 secs"
 
 	sleep 5
-	sudo -u ${1} ${1} -g
+	${odio} -u ${1} ${1} -g
 	echo $?
 	sleep 1
 	pgrep stubby*
@@ -206,11 +206,11 @@ function part1() {
 
 function part3() {
 	${sdi} /var/cache/apt/archives/lib*.deb
-	[ $? -eq  0 ] && sudo rm -rf ${pkgdir}/lib*.deb
+	[ $? -eq  0 ] && ${odio} rm -rf ${pkgdir}/lib*.deb
 
 	#HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
 	${sdi} ${pkgdir}/*.deb
-	[ $? -eq 0 ] && sudo rm -rf ${pkgdir}/*.deb
+	[ $? -eq 0 ] && ${odio} rm -rf ${pkgdir}/*.deb
 	csleep 2
 }
 
