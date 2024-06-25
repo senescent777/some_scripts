@@ -157,7 +157,7 @@ sleep 3
 #exit
 
 #TODO:K01avahi-jutut sopivaan kohtaan?
-#TODO:passwd sekä ulosheitto myös?
+#TODO:passwd sekä ulosheitto myös? (esim. juuri ennen no_mas?)
 
 #===================================================PART 2===================================
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25

@@ -209,11 +209,17 @@ function part3() {
 check_binaries
 check_binaries2
 
-#TODO:generic_parse_opt()
-#prevopt=""
-#for opt in $@ ; do 
-#	parse_opts_1 ${opt}
-#	parse_opts_2 ${prevopt} ${opt}
-#	prevopt=opt
-#done
+function gpo() {
+	local prevopt
+	local opt
+	prevopt=""
+
+	for opt in $@ ; do 
+		parse_opts_1 ${opt}
+		parse_opts_2 ${prevopt} ${opt}
+		prevopt=opt
+	done
+}
+
+#gpo?
 #check_params ?
