@@ -41,6 +41,7 @@ function check_params() {
 }
 
 . ./lib
+gz=$(sudo which gpgtar)
 
 function make_tar() {
 	dqb "make_tar ( ${1} )"
@@ -165,11 +166,21 @@ case ${mode} in
 		part3
 	;;
 	3)
-		#TODO:joitain gpg:n huomioiva versio make_upgtade():sta tähän
-		echo "gpgtar -c"
+		if [ x"$gz" == "x" ] ; then 
+			${sag} install gpg
+		fi
+	
+		[ -d ~/.gnupg ] || gpg --quick-generate-key tester
+		#VAIH:joitain gpg:n huomioiva versio make_upgtade():sta tähän
+		${gz} --sign --create ${tgtfile}.s /var/cache/apt/archives/
 	;;
 	4)
-		#TODO:gpg-allekrijoitukset huomioiva tar-purku tähän
+		
+		if [ x"$gz" == "x" ] ; then 
+			${sag} install gpg
+		fi
+
+		#VAIH:gpg-allekIRjoitukset huomioiva tar-purku tähän
 		#TODO:myös mount ja umount mukaan?
 		echo "mount;gpgtar -x"
 	;;
