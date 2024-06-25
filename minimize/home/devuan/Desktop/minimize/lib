@@ -105,7 +105,8 @@ function check_binaries2() {
 function mangle_s() {
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		${dqb} "W3NGL3 ${1}";sleep 5 #vieläkö nalkuttaa?
+		${dqb} "W3NGL3 ${1}"
+		csleep 5 #vieläkö nalkuttaa?
 		
 		sudo chmod 0555 ${1}
 		sudo chown root:root ${1} #uutena tämä
@@ -118,7 +119,7 @@ function mangle_s() {
 		n=$(whoami) #olisi myös %users...
 		s=$(sha256sum ${1})
 		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> /etc/sudoers.d/meshuggah
-		csleep 1
+		sleep 1
 	fi
 }
 
