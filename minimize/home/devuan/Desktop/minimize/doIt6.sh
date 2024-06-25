@@ -1,7 +1,7 @@
 #!/bin/bash
 
 iface=eth0 
-enforce=0
+enforce=1
 debug=0
 no_mas=0
 pkgdir=/var/cache/apt/archives
