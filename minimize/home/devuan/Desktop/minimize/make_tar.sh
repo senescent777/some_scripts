@@ -54,7 +54,7 @@ function make_tar() {
 	sudo rm -rf /run/live/medium/live/initrd.img*
 	${shary} python3-ntp ntpsec-ntpdate
 	csleep 5
-
+#TODO:smr ja srat käyttöön
 	${shary} dnsmasq-base runit-helper
 	sudo rm -rf /run/live/medium/live/initrd.img*
 
@@ -72,9 +72,9 @@ function make_tar() {
 	sudo tar -rvpf ${1} /etc/init.d/net*
 	sudo tar -rvpf ${1} /etc/rcS.d/S*net*
 
-	#HUOM. on kai joitain komentoja joilla nuo K01-linkit voisi luoda (doIt olisi sopiva paikka kutsua)
-	sudo tar -rvpf ${1} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
-	sudo tar -rvpf ${1} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
+#	#HUOM. on kai joitain komentoja joilla nuo K01-linkit voisi luoda (doIt olisi sopiva paikka kutsua)
+#	sudo tar -rvpf ${1} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
+#	sudo tar -rvpf ${1} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
 	csleep 5
 }
 
