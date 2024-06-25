@@ -2,7 +2,7 @@
 
 iface=eth0 
 enforce=0 
-the_ar=0
+#the_ar=0
 debug=0
 no_mas=0
 pkgdir=/var/cache/apt/archives
@@ -13,9 +13,9 @@ function parse_opts_1() {
 		-v|--v)
 			debug=1
 		;;
-		--ar)
-			the_ar=1
-		;;
+		#--ar)
+		#	the_ar=1
+		#;;
 		--no)
 			no_mas=1
 		;;
@@ -25,15 +25,15 @@ function parse_opts_1() {
 . ./lib
 
 function check_params() {
-	case ${the_ar} in
-		0|1)
-			dqb "the_ar ok (${the_ar})"
-		;;
-		*)
-			dqb "P.V.H.H"
-			exit 1
-		;;
-	esac
+#	case ${the_ar} in
+#		0|1)
+#			dqb "the_ar ok (${the_ar})"
+#		;;
+#		*)
+#			dqb "P.V.H.H"
+#			exit 1
+#		;;
+#	esac
 
 	case ${no_mas} in
 		0|1)
@@ -179,12 +179,12 @@ clouds 0
 #exit
 
 #autoremove:n ehdollisuus pois jatkossa?
-if [ ${the_ar} -eq 1 ] ; then 
-	dqb "autoremove in 5 secs"
-	${sa} autoremove --yes
-else
-	dqb "autoremove postponed"
-fi
+#if [ ${the_ar} -eq 1 ] ; then 
+#	dqb "autoremove in 5 secs"
+#	${sa} autoremove --yes
+#else
+#	dqb "autoremove postponed"
+#fi
 
 csleep 5
 sudo rm -rf /run/live/medium/live/initrd.img*
@@ -195,13 +195,13 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 5
 fi #
 
-if [ ${install} -eq 1 ] ; then #tämä mja kenties pois+siihen liitt
-	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
-	echo "run ./make_tar.sh 0"
-	exit
-else
-	dqb "not fetching pkgs"
-fi
+#if [ ${install} -eq 1 ] ; then #tämä mja kenties pois+siihen liitt
+#	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
+#	echo "run ./make_tar.sh 0"
+#	exit
+#else
+#	dqb "not fetching pkgs"
+#fi
 
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
@@ -222,7 +222,8 @@ if [ ${no_mas} -eq 1 ] ; then
 	exit 	
 fi
 
-[ ${the_ar} -eq 1 ] || ${sa} autoremove --yes
+#[ ${the_ar} -eq 1 ] || 
+${sa} autoremove --yes
 #exit
 
 #===================================================PART 4(final)==========================================================
