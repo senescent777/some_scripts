@@ -70,9 +70,6 @@ function pre_enforce() {
 	done
 
 	sudo chmod a-w /etc/sudoers.d/meshuggah	
-#	sudo chown root:root /etc/sudoers.d/meshuggah
-#	sudo chmod 0440 /etc/sudoers.d/meshuggah
-#josko näin parempi:
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
 	sudo chown -R root:root /etc/sudoers.d
 
