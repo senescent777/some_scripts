@@ -1,12 +1,11 @@
 #!/bin/bash
 
 iface=eth0 
-enforce=0 
-the_ar=0
+enforce=1
+#the_ar=0
 debug=0
 no_mas=0
 pkgdir=/var/cache/apt/archives
-
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 
 function parse_opts_1() {
@@ -14,9 +13,9 @@ function parse_opts_1() {
 		-v|--v)
 			debug=1
 		;;
-		--ar)
-			the_ar=1
-		;;
+		#--ar)
+		#	the_ar=1
+		#;;
 		--no)
 			no_mas=1
 		;;
@@ -26,15 +25,15 @@ function parse_opts_1() {
 . ./lib
 
 function check_params() {
-	case ${the_ar} in
-		0|1)
-			dqb "the_ar ok (${the_ar})"
-		;;
-		*)
-			dqb "P.V.H.H"
-			exit 1
-		;;
-	esac
+#	case ${the_ar} in
+#		0|1)
+#			dqb "the_ar ok (${the_ar})"
+#		;;
+#		*)
+#			dqb "P.V.H.H"
+#			exit 1
+#		;;
+#	esac
 
 	case ${no_mas} in
 		0|1)
@@ -70,11 +69,7 @@ function pre_enforce() {
 		mangle_s ${f}
 	done
 
-
 	sudo chmod a-w /etc/sudoers.d/meshuggah	
-#	sudo chown root:root /etc/sudoers.d/meshuggah
-#	sudo chmod 0440 /etc/sudoers.d/meshuggah
-#josko näin parempi:
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
 	sudo chown -R root:root /etc/sudoers.d
 
@@ -87,6 +82,9 @@ function enforce_access() {
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
 	${scm} 0755 /home
+
+	${sco} -R root:root /opt
+	${scm} -R 0555 /opt
 
 	local n
 	n=$(whoami)
@@ -141,7 +139,11 @@ enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
-#TODO:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
+
+#VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
+#echo "sed -i 's/q_${d}/${v}/g' ${1}/1/init-user-db.sql.tmp" >> ${2}
+#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
+dqb "sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list"
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	sudo /etc/init.d/${s} stop
@@ -159,13 +161,12 @@ sleep 3
 #exit
 
 #TODO:K01avahi-jutut sopivaan kohtaan?
-#TODO:passwd sekä ulosheitto myös? (esim. juuri ennen no_mas?)
+#VAIH:passwd sekä ulosheitto myös? (esim. juuri ennen no_mas?)
 
 #===================================================PART 2===================================
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* 
-
 ${sharpy} modem* wireless* wpa* iw lm-sensors
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
@@ -178,12 +179,12 @@ clouds 0
 #exit
 
 #autoremove:n ehdollisuus pois jatkossa?
-if [ ${the_ar} -eq 1 ] ; then 
-	dqb "autoremove in 5 secs"
-	${sa} autoremove --yes
-else
-	dqb "autoremove postponed"
-fi
+#if [ ${the_ar} -eq 1 ] ; then 
+#	dqb "autoremove in 5 secs"
+#	${sa} autoremove --yes
+#else
+#	dqb "autoremove postponed"
+#fi
 
 csleep 5
 sudo rm -rf /run/live/medium/live/initrd.img*
@@ -194,15 +195,13 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 5
 fi #
 
-if [ ${install} -eq 1 ] ; then
-	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
-
-	echo "run ./make_tar.sh 0"
-
-	exit
-else
-	dqb "not fetching pkgs"
-fi
+#if [ ${install} -eq 1 ] ; then #tämä mja kenties pois+siihen liitt
+#	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
+#	echo "run ./make_tar.sh 0"
+#	exit
+#else
+#	dqb "not fetching pkgs"
+#fi
 
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
@@ -212,17 +211,19 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/dns-root-data*.deb
-
 part3
-
 
 #missäköhän kohtaa kuuluisi tmän olla?
 if [ ${no_mas} -eq 1 ] ; then
+	echo "passwd"
+	echo "sudo passwd"
+	echo "sudo pkill --signal 9 xfce*"
 	dqb "no mas senor"
 	exit 	
 fi
 
-[ ${the_ar} -eq 1 ] || ${sa} autoremove --yes
+#[ ${the_ar} -eq 1 ] || 
+${sa} autoremove --yes
 #exit
 
 #===================================================PART 4(final)==========================================================
@@ -238,7 +239,6 @@ if [ ${debug} -eq 1 ] ; then
 	pgrep stubby*
 	sleep 5
 fi
-
 
 echo "time to ${sifu} ${iface} or whåtever"
 echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
