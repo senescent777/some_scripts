@@ -4,7 +4,7 @@ debug=1
 . ~/Desktop/minimize/lib
 
 #TODO:/etc/network/if*.d/ alaiset skriptit, voisiko niiden kanssa leipoa yhteen jotenkin?
-#TODO:voisi kai speksata sudolle asioita ettei tarvitse koko skriptiä sallia
+#VAIH:voisi kai speksata sudolle asioita ettei tarvitse koko skriptiä sallia
 #kts. https://github.com/senescent777/some_scripts/blob/main/lib/d227D33.sh.export liittyen
 
 function tod_dda() {
@@ -20,6 +20,7 @@ function dda_snd() {
 #mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
 
 dqb "coluds(${1})"
+#TODO:rm ja muut, toisella tavalla
 sudo rm /etc/resolv.conf
 sudo rm /etc/dhcp/dhclient.conf
 sudo rm /sbin/dhclient-script
@@ -69,7 +70,7 @@ ${scm} 0755 /sbin
 ${sco} -R root:root /etc/iptables
 ${scm} 0400 /etc/iptables/*
 ${scm} 0750 /etc/iptables
- sleep 2
+sleep 2
 
 if [ ${debug} -eq 1 ] ; then
 	${ipt} -L  #
