@@ -24,6 +24,7 @@ dqb "coluds(${1})"
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
+csleep 1
 
 #tässä oikea paikka tables-muutoksille vai ei?
 ${ipt} -F b
@@ -31,6 +32,10 @@ ${ipt} -F e
 ${ipt} -D INPUT 5
 ${ipt} -D OUTPUT 6
 #local s #/opt/bin/clouds.sh: line 33: local: can only be used in a function
+csleep 1
+
+dqb "spc= ${spc}"
+csleep 1
 
 case ${1} in 
 	0)
@@ -75,5 +80,6 @@ sleep 2
 if [ ${debug} -eq 1 ] ; then
 	${ipt} -L  #
 	${ip6t} -L #
+	ls -las /sbin/dhc*
 	sleep 5
 fi #
