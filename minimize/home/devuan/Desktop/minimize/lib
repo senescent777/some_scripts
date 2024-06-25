@@ -114,11 +114,10 @@ function mangle_s() {
 		csleep 1
 		local s
 		local n
-		n=$(whoami) #olisi myös %users...
 
-		sudo echo -n "${n} localhost=NOPASSWD: sha256:" >> /etc/sudoers.d/meshuggah
+		n=$(whoami) #olisi myös %users...
 		s=$(sha256sum ${1})
-		sudo echo ${s} >> /etc/sudoers.d/meshuggah
+		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> /etc/sudoers.d/meshuggah
 		csleep 1
 	fi
 }
