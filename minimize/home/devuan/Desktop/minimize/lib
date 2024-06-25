@@ -58,6 +58,7 @@ function check_binaries() {
 function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
 
+	#odio?
 	ipt="sudo ${ipt} "
 	ip6t="sudo ${ip6t} "
 	iptr="sudo ${iptr} "
@@ -86,10 +87,10 @@ function check_binaries2() {
 function mangle_s() {
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		${dqb} "W3NGL3 $1";sleep 5
+		${dqb} "W3NGL3 ${1}";sleep 5 #vieläkö nalkuttaa?
 		
 		sudo chmod 0555 ${1}
-		sudo chown root:root  ${1} #uutena tämä
+		sudo chown root:root ${1} #uutena tämä
 		#chattr +ui ${1}
 
 		sleep 1
@@ -197,6 +198,7 @@ function part3() {
 check_binaries
 check_binaries2
 
+#TODO:generic_parse_opt()
 #prevopt=""
 #for opt in $@ ; do 
 #	parse_opts_1 ${opt}

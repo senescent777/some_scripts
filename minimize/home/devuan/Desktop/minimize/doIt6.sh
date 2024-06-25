@@ -59,14 +59,20 @@ function check_params() {
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	[ -f /etc/sudoers.d/meshuggah ] || sudo touch /etc/sudoers.d/meshuggah
-	sudo chmod a+w  /etc/sudoers.d/meshuggah	
+	sudo chmod a+w /etc/sudoers.d/meshuggah	
 
 	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
 		mangle_s ${f}
 	done
 
-	sudo chown root:root /etc/sudoers.d/meshuggah
-	sudo chmod 0440 /etc/sudoers.d/meshuggah
+	sudo chmod a-w /etc/sudoers.d/meshuggah	
+#	sudo chown root:root /etc/sudoers.d/meshuggah
+#	sudo chmod 0440 /etc/sudoers.d/meshuggah
+#josko näin parempi:
+	sudo chmod -R 0440 /etc/sudoers.d
+	sudo chown root:root /etc/sudoers.d
+
+	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 }
 
 function enforce_access() {
@@ -91,7 +97,7 @@ function enforce_access() {
 
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		${sco} -R root:root /etc
-		${scm} -R 0755 /etc #konftdstoja ei tarvinne suorittaa?
+		${scm} -R o-wx /etc #konftdstoja ei tarvinne suorittaa? parempi näin?
 		local f
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia

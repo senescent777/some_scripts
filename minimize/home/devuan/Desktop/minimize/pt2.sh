@@ -24,9 +24,18 @@ sudo apt autoremove --yes
 
 #HUOM.240624:mawk ja mtools uutena, takas pois jos qsee
 sudo rm -rf /run/live/medium/live/initrd.img*
-sudo apt-get remove --purge --yes lvm2 mdadm mawk mtools
+sudo apt-get remove --purge --yes lvm2 mdadm
 sudo apt autoremove --yes
 sleep 6
+
+sudo rm -rf /run/live/medium/live/initrd.img*
+sudo apt-get remove --purge --yes mawk
+sudo apt autoremove --yes
+sleep 6
+
+sudo rm -rf /run/live/medium/live/initrd.img*
+sudo apt-get remove --purge --yes mtools
+sudo apt autoremove --yes
 
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes mailcap mariadb-common
@@ -79,6 +88,12 @@ sleep 6
 #uutena 250624, pois jos qsee
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes grub*
+sudo apt autoremove --yes
+sleep 6
+
+#uutena 250624, pois jos qsee
+sudo rm -rf /run/live/medium/live/initrd.img*
+sudo apt-get remove --purge --yes libgsm*
 sudo apt autoremove --yes
 sleep 6
 
