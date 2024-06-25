@@ -46,6 +46,9 @@ function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
 
+	${sa} --fix-broken install
+	csleep 1
+
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
