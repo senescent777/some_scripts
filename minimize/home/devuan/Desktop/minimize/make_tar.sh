@@ -150,11 +150,13 @@ case ${mode} in
 	;;
 	1)
 		#TODO:joitain gpg-juttuja näille main?
+
 		make_upgrade ${tgtfile}
 	;;
 	2)
 		cd /
 		#TODO:joitain gpg-juttuja näille main?
+
 		sudo tar -xvpf ${tgtfile}
 		
 		#joutaisikohan grub mäkeen? (pt2)

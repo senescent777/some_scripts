@@ -1,11 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=ifdown
+Name=ifup
 Comment=
-Exec=/home/devuan/Desktop/minimize/pt2.sh
+Exec=sudo /etc/init.d/stubby restart
 Icon=
 Path=
 Terminal=true
 StartupNotify=false
-GenericName=remove more stuff

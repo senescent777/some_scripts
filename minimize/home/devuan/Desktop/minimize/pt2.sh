@@ -22,6 +22,7 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes htop intel-microcode
 sudo apt autoremove --yes
 
+
 #HUOM.240624:mawk ja mtools uutena, takas pois jos qsee
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes lvm2 mdadm
@@ -46,6 +47,7 @@ sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes mokutil mysql-common orca openssh*
 sudo apt autoremove --yes
 sudo rm -rf /run/live/medium/live/initrd.img*
+
 
 sudo apt-get remove --purge --yes speech* system-config* telnet tex* udisks2 uno* ure* upower
 sudo apt autoremove --yes
@@ -81,6 +83,7 @@ sudo apt-get remove --purge --yes procmail
 sudo apt autoremove --yes
 sleep 1
 
+
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes squashfs-tools
 sudo apt autoremove --yes
@@ -89,12 +92,16 @@ sleep 6
 #uutena 250624, pois jos qsee
 sudo rm -rf /run/live/medium/live/initrd.img*
 sudo apt-get remove --purge --yes grub*
+
 sudo apt autoremove --yes
 sleep 6
 
 #uutena 250624, pois jos qsee
 sudo rm -rf /run/live/medium/live/initrd.img*
+
 sudo apt-get remove --purge --yes libgsm*
+remove --purge --yes grub*
+
 sudo apt autoremove --yes
 sleep 6
 
