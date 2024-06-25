@@ -47,34 +47,34 @@ function make_tar() {
 	csleep 1
 
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
-	sudo rm -rf /run/live/medium/live/initrd.img*
+	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
 	${shary} init-system-helpers netfilter-persistent iptables-persistent
-	sudo rm -rf /run/live/medium/live/initrd.img*
+	${smr} -rf /run/live/medium/live/initrd.img*
 	${shary} python3-ntp ntpsec-ntpdate
 	csleep 5
 
 	${shary} dnsmasq-base runit-helper
-	sudo rm -rf /run/live/medium/live/initrd.img*
+	${smr} -rf /run/live/medium/live/initrd.img*
 
 	${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
-	sudo rm -rf /run/live/medium/live/initrd.img*
+	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
 	#some kind of retrovirus
-	sudo tar -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/network/interfaces*
-	sudo tar -rvpf ${1} /etc/sudoers.d/user_shutdown /etc/sudoers.d/meshuggah /home/stubby
+	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/network/interfaces*
+	${srat} -rvpf ${1} /etc/sudoers.d/user_shutdown /etc/sudoers.d/meshuggah /home/stubby
 	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do tar -rvpf /tmp/out.tar $f ; done
 	for f in $(find /etc -type f -name 'dns*') ; do tar -rvpf /tmp/out.tar $f ; done
 
-	sudo tar -rvpf ${1} /etc/init.d/net*
-	sudo tar -rvpf ${1} /etc/rcS.d/S*net*
+	${srat} -rvpf ${1} /etc/init.d/net*
+	${srat} -rvpf ${1} /etc/rcS.d/S*net*
 
-	#HUOM. on kai joitain komentoja joilla nuo K01-linkit voisi luoda (doIt olisi sopiva paikka kutsua)
-	sudo tar -rvpf ${1} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
-	sudo tar -rvpf ${1} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
+#	#HUOM. on kai joitain komentoja joilla nuo K01-linkit voisi luoda (doIt olisi sopiva paikka kutsua)
+#	${srat} -rvpf ${1} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
+#	${srat} -rvpf ${1} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
 	csleep 5
 }
 
@@ -109,17 +109,17 @@ function make_tar2() {
 	cd project
 	echo "#[ ${debug} -eq 1 ] && ls -laRs;sleep 10"
 
-	sudo cp /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
-	sudo cp /etc/resolv.conf ./etc/resolv.conf.OLD
-	sudo cp /sbin/dhclient-script ./sbin/dhclient-script.OLD
+	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
+	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
+	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
-	sudo tar -rvpf ${1} ./etc ./sbin
+	${srat} -rvpf ${1} ./etc ./sbin
 	cd ${p}
 	
-	sudo tar -tf ${1} > MANIFEST
-	sudo tar -rvpf ${1} ${p}/MANIFEST
+	${srat} -tf ${1} > MANIFEST
+	${srat} -rvpf ${1} ${p}/MANIFEST
 }
 
 function make_upgrade() {
@@ -127,7 +127,7 @@ function make_upgrade() {
 	dqb "${sag} upgrade -u"
 
 	${sag} upgrade -u
-	sudo tar -cvpf ${1} /var/cache/apt/archives 
+	${srat} -cvpf ${1} /var/cache/apt/archives 
 }
 
 if [ $# -gt 0 ] ; then
@@ -149,21 +149,26 @@ case ${mode} in
 		make_tar2 ${tgtfile}
 	;;
 	1)
-		#TODO:joitain gpg-juttuja näille main?
-
+		
 		make_upgrade ${tgtfile}
 	;;
 	2)
 		cd /
-		#TODO:joitain gpg-juttuja näille main?
-
-		sudo tar -xvpf ${tgtfile}
+		${srat} -xvpf ${tgtfile}
 		
-		#joutaisikohan grub mäkeen? (pt2)
 		${sdi} /var/cache/apt/archives/perl-modules-5.32*.deb
-		[ $? -eq  0 ] && sudo rm -rf ${pkgdir}/perl-modules-5.32*.deb
+		[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/perl-modules-5.32*.deb
 
 		part3
+	;;
+	3)
+		#TODO:joitain gpg:n huomioiva versio make_upgtade():sta tähän
+		echo "gpgtar -c"
+	;;
+	4)
+		#TODO:gpg-allekrijoitukset huomioiva tar-purku tähän
+		#TODO:myös mount ja umount mukaan?
+		echo "mount;gpgtar -x"
 	;;
 	*)
 		echo "-h"

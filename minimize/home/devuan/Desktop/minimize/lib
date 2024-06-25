@@ -34,6 +34,7 @@ function check_binaries() {
 	smr=$(sudo which rm)
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
+	srat=$(sudo which tar)
 
 	dqb "half_fdone"
 	csleep 1
@@ -56,6 +57,7 @@ function check_binaries() {
 	[ -x ${smr} ] || exit 5
 	[ -x ${slinky} ] || exit 5
 	[ -x ${spc} ] || exit 5
+	[ -x ${srat} ] || exit 5
 
 	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 	ENF_LST="${smr} ${slinky} ${spc}"
@@ -93,6 +95,7 @@ function check_binaries2() {
 	smr="${odio} ${smr} "
 	slinky="${odio} ${slinky} -s "
 	spc="${odio} ${spc} "
+	srat="${odio} ${srat} "
 
 	dqb "spc= ${spc}"
 	dqb "b1nar135.2 0k.2" 
