@@ -1,8 +1,8 @@
 #!/bin/bash
 
 iface=eth0 
-enforce=1
-#the_ar=0
+enforce=0 #kokeilu ohi toistaiseksi
+the_ar=0
 debug=0
 no_mas=0
 pkgdir=/var/cache/apt/archives
@@ -13,9 +13,9 @@ function parse_opts_1() {
 		-v|--v)
 			debug=1
 		;;
-		#--ar)
-		#	the_ar=1
-		#;;
+		--ar)
+			the_ar=1
+		;;
 		--no)
 			no_mas=1
 		;;
@@ -25,15 +25,15 @@ function parse_opts_1() {
 . ./lib
 
 function check_params() {
-#	case ${the_ar} in
-#		0|1)
-#			dqb "the_ar ok (${the_ar})"
-#		;;
-#		*)
-#			dqb "P.V.H.H"
-#			exit 1
-#		;;
-#	esac
+	case ${the_ar} in
+		0|1)
+			dqb "the_ar ok (${the_ar})"
+		;;
+		*)
+			dqb "P.V.H.H"
+			exit 1
+		;;
+	esac
 
 	case ${no_mas} in
 		0|1)
@@ -59,21 +59,14 @@ function check_params() {
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	[ -f /etc/sudoers.d/meshuggah ] || sudo touch /etc/sudoers.d/meshuggah
-	sudo chmod a+w /etc/sudoers.d/meshuggah	
+	sudo chmod a+w  /etc/sudoers.d/meshuggah	
 
-	local f
-	#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
-	for f in ${ENF_LST} ; do mangle_s ${f} ; done
-
-	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby ; do
+	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
 		mangle_s ${f}
 	done
 
-	sudo chmod a-w /etc/sudoers.d/meshuggah	
-	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
-	sudo chown -R root:root /etc/sudoers.d
-
-	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
+	sudo chown root:root /etc/sudoers.d/meshuggah
+	sudo chmod 0440 /etc/sudoers.d/meshuggah
 }
 
 function enforce_access() {
@@ -82,9 +75,6 @@ function enforce_access() {
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
 	${scm} 0755 /home
-
-	${sco} -R root:root /opt
-	${scm} -R 0555 /opt
 
 	local n
 	n=$(whoami)
@@ -101,7 +91,7 @@ function enforce_access() {
 
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		${sco} -R root:root /etc
-		${scm} -R o-wx /etc #konftdstoja ei tarvinne suorittaa? parempi näin?
+		${scm} -R 0755 /etc
 		local f
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
@@ -134,16 +124,14 @@ if [ $# -gt 0 ] ; then
 fi
 
 check_params 
+#check_binaries
 [ ${enforce} -eq 1 ] && pre_enforce
+#check_binaries2
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
-
-#VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
-#echo "sed -i 's/q_${d}/${v}/g' ${1}/1/init-user-db.sql.tmp" >> ${2}
-#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
-dqb "sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list"
+#TODO:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	sudo /etc/init.d/${s} stop
@@ -159,9 +147,6 @@ ${whack} stubby*
 ${whack} nm-applet
 sleep 3
 #exit
-
-#TODO:K01avahi-jutut sopivaan kohtaan?
-#VAIH:passwd sekä ulosheitto myös? (esim. juuri ennen no_mas?)
 
 #===================================================PART 2===================================
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
@@ -179,12 +164,12 @@ clouds 0
 #exit
 
 #autoremove:n ehdollisuus pois jatkossa?
-#if [ ${the_ar} -eq 1 ] ; then 
-#	dqb "autoremove in 5 secs"
-#	${sa} autoremove --yes
-#else
-#	dqb "autoremove postponed"
-#fi
+if [ ${the_ar} -eq 1 ] ; then 
+	dqb "autoremove in 5 secs"
+	${sa} autoremove --yes
+else
+	dqb "autoremove postponed"
+fi
 
 csleep 5
 sudo rm -rf /run/live/medium/live/initrd.img*
@@ -195,13 +180,13 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 5
 fi #
 
-#if [ ${install} -eq 1 ] ; then #tämä mja kenties pois+siihen liitt
-#	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
-#	echo "run ./make_tar.sh 0"
-#	exit
-#else
-#	dqb "not fetching pkgs"
-#fi
+if [ ${install} -eq 1 ] ; then
+	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
+	echo "run ./make_tar.sh 0"
+	exit
+else
+	dqb "not fetching pkgs"
+fi
 
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
@@ -215,15 +200,11 @@ part3
 
 #missäköhän kohtaa kuuluisi tmän olla?
 if [ ${no_mas} -eq 1 ] ; then
-	echo "passwd"
-	echo "sudo passwd"
-	echo "sudo pkill --signal 9 xfce*"
 	dqb "no mas senor"
 	exit 	
 fi
 
-#[ ${the_ar} -eq 1 ] || 
-${sa} autoremove --yes
+[ ${the_ar} -eq 1 ] || ${sa} autoremove --yes
 #exit
 
 #===================================================PART 4(final)==========================================================

@@ -32,9 +32,6 @@ function check_binaries() {
 	sdi=$(sudo which dpkg)
 	sifu=$(sudo which ifup)
 	sifd=$(sudo which ifdown)
-	smr=$(sudo which rm)
-	slinky=$(sudo which ln)
-	spc=$(sudo which cp)
 
 	dqb "half_fdone"
 	csleep 1
@@ -54,12 +51,6 @@ function check_binaries() {
 	[ -x ${sifu} ] || exit 5
 	[ -x ${sifd} ] || exit 5
 
-	[ -x ${smr} ] || exit 5
-	[ -x ${slinky} ] || exit 5
-	[ -x ${spc} ] || exit 5
-
-	ENF_LST="${smr} ${slinky} ${spc}"
-	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
 	csleep 3
 }
@@ -67,7 +58,6 @@ function check_binaries() {
 function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
 
-	#odio?
 	ipt="sudo ${ipt} "
 	ip6t="sudo ${ip6t} "
 	iptr="sudo ${iptr} "
@@ -89,13 +79,6 @@ function check_binaries2() {
 	sa="sudo ${sa} "
 	sifu="sudo ${sifu} "
 	sifd="sudo ${sifd} "
-	smr="sudo ${smr} "
-	slinky="sudo ${slinky} -s "
-	spc="sudo ${spc} "
-
-	dqb "spc= ${spc}"
-	dqb "b1nar135.2 0k.2" 
-	csleep 3
 }
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
@@ -103,10 +86,10 @@ function check_binaries2() {
 function mangle_s() {
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		${dqb} "W3NGL3 ${1}";sleep 5 #vieläkö nalkuttaa?
+		${dqb} "W3NGL3 $1";sleep 5
 		
 		sudo chmod 0555 ${1}
-		sudo chown root:root ${1} #uutena tämä
+		sudo chown root:root ${1} 
 		#chattr +ui ${1}
 
 		sleep 1
@@ -122,7 +105,7 @@ function mangle_s() {
 
 function mangle2() {
 	if [ -f ${1} ] ; then 
-		dqb "MANGLED ${1}";sleep 1
+		dqb "MANGLED $1";sleep 1
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
 		csleep 1
@@ -213,18 +196,4 @@ function part3() {
 #part1?
 check_binaries
 check_binaries2
-
-function gpo() {
-	local prevopt
-	local opt
-	prevopt=""
-
-	for opt in $@ ; do 
-		parse_opts_1 ${opt}
-		parse_opts_2 ${prevopt} ${opt}
-		prevopt=opt
-	done
-}
-
-#gpo?
 #check_params ?
