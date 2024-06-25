@@ -6,7 +6,6 @@ the_ar=0
 debug=0
 no_mas=0
 pkgdir=/var/cache/apt/archives
-
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 
 function parse_opts_1() {
@@ -69,7 +68,6 @@ function pre_enforce() {
 	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby ; do
 		mangle_s ${f}
 	done
-
 
 	sudo chmod a-w /etc/sudoers.d/meshuggah	
 #	sudo chown root:root /etc/sudoers.d/meshuggah
@@ -159,13 +157,12 @@ sleep 3
 #exit
 
 #TODO:K01avahi-jutut sopivaan kohtaan?
-#TODO:passwd sekä ulosheitto myös? (esim. juuri ennen no_mas?)
+#VAIH:passwd sekä ulosheitto myös? (esim. juuri ennen no_mas?)
 
 #===================================================PART 2===================================
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* 
-
 ${sharpy} modem* wireless* wpa* iw lm-sensors
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
@@ -194,11 +191,9 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 5
 fi #
 
-if [ ${install} -eq 1 ] ; then
+if [ ${install} -eq 1 ] ; then #tämä mja kenties pois+siihen liitt
 	#HUOM. m_t tässä kohtaa siltä varalta errä squbby ei toimi
-
 	echo "run ./make_tar.sh 0"
-
 	exit
 else
 	dqb "not fetching pkgs"
@@ -212,12 +207,13 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
 [ $? -eq 0 ] && sudo rm -rf ${pkgdir}/dns-root-data*.deb
-
 part3
-
 
 #missäköhän kohtaa kuuluisi tmän olla?
 if [ ${no_mas} -eq 1 ] ; then
+	echo "passwd"
+	echo "sudo passwd"
+	echo "sudo pkill --signal 9 xfce*"
 	dqb "no mas senor"
 	exit 	
 fi
@@ -238,7 +234,6 @@ if [ ${debug} -eq 1 ] ; then
 	pgrep stubby*
 	sleep 5
 fi
-
 
 echo "time to ${sifu} ${iface} or whåtever"
 echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
