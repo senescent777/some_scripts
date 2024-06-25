@@ -86,6 +86,9 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
+	${sco} -R root:root /opt
+	${scm} -R 0555 /opt
+
 	local n
 	n=$(whoami)
 
