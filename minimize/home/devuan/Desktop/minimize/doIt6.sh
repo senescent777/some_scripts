@@ -69,8 +69,8 @@ function pre_enforce() {
  	else
 		sudo touch /etc/sudoers.d/meshuggah
 		sudo chmod a+w /etc/sudoers.d/meshuggah	
-		sudo touch /etc/sudoers.d/c0lu
-		sudo chmod a+w /etc/sudoers.d/c0lu	
+		#sudo touch /etc/sudoers.d/c0lu
+		#sudo chmod a+w /etc/sudoers.d/c0lu	
 
 		local f
 		CB_LIST2="${CB_LIST1}  /etc/init.d/stubby /opt/bin/clouds.sh /sbin/halt /sbin/reboot "

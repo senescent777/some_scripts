@@ -62,7 +62,7 @@ function check_binaries() {
 
 	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 	#ENF_LST=""
-	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc}
+	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc}"
 
 	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 

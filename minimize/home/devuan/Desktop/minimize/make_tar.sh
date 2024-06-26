@@ -2,7 +2,7 @@
 
 mode=0
 frist=0
-debug=0
+debug=1
 tgtfile=/tmp/out.tar 
 
 function parse_opts_1 () {
@@ -46,6 +46,8 @@ gz=$(sudo which gpgtar)
 function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
+	dqb "sa= ${sa}"
+	csleep 5
 
 	${sa} --fix-broken install
 	csleep 1
