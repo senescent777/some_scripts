@@ -50,8 +50,7 @@ function mangle_s() {
 	if [ y"${2}" == "y" ] ; then
 		tgt=/etc/sudoers.d/meshuggah
 	else
-		#TODO:/e/s.d pakottaminen
-		tgt=${2}
+		tgt=/etc/sudoers.d/${2}
 	fi
 
 	if [ -s ${1} ] ; then 
@@ -77,7 +76,7 @@ function mangle_s() {
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
-		dqg "a51a kun05a"
+		dqb "a51a kun05a"
  	else
 		sudo touch /etc/sudoers.d/meshuggah
 		sudo chmod a+w /etc/sudoers.d/meshuggah	
@@ -87,7 +86,7 @@ function pre_enforce() {
 
 		local f
 		#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
-		for f in ${ENF_LST} ; do mangle_s ${f} /etc/sudoers.d/c0lu ; done
+		for f in ${ENF_LST} ; do mangle_s ${f} c0lu ; done
 
 		for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
 			mangle_s ${f}
