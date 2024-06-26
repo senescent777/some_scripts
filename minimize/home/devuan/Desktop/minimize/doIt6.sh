@@ -152,10 +152,12 @@ dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necess
 part1
 [ ${mode} -eq 0 ] && exit
 
-#VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla (joko jo tänään?)
-#echo "sed -i 's/q_${d}/${v}/g' ${1}/1/init-user-db.sql.tmp" >> ${2}
-#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
-dqb "sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list"
+if [ ${enforce} -eq 1 ] ; then 
+	#echo "sed -i 's/q_${d}/${v}/g' ${1}/1/init-user-db.sql.tmp" >> ${2}
+	#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
+	${spc} /etc/apt/sources.list /etc/apt/sources.list.tmp
+	${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list
+fi
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	${odio} /etc/init.d/${s} stop
