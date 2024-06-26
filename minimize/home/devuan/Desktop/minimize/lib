@@ -70,7 +70,6 @@ function check_binaries() {
 function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
 
-	#odio?
 	ipt="${odio} ${ipt} "
 	ip6t="${odio} ${ip6t} "
 	iptr="${odio} ${iptr} "
@@ -100,29 +99,6 @@ function check_binaries2() {
 	dqb "spc= ${spc}"
 	dqb "b1nar135.2 0k.2" 
 	csleep 3
-}
-
-#HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
-#HUOM.2. ei niitä {sco}-juttuja ao. fktioon
-function mangle_s() {
-	if [ -s ${1} ] ; then 
-		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		${dqb} "W3NGL3 ${1}"
-		csleep 5 #vieläkö nalkuttaa?
-		
-		sudo chmod 0555 ${1}
-		sudo chown root:root ${1} #uutena tämä
-		#chattr +ui ${1}
-
-		csleep 1
-		local s
-		local n
-
-		n=$(whoami) #olisi myös %users...
-		s=$(sha256sum ${1})
-		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> /etc/sudoers.d/meshuggah
-		sleep 1
-	fi
 }
 
 function mangle2() {
@@ -181,6 +157,7 @@ function ns4() {
 	pgrep stubby*
 	sleep 5
 }
+
 #=========================PART 0 ENDS HERE=================================================================
 
 function part1() {

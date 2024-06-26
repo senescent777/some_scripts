@@ -3,7 +3,7 @@
 iface=eth0 
 enforce=1
 debug=0
-no_mas=0
+no_mas=0 #TODO:jokin mode-juttu tilalle
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 
@@ -42,25 +42,63 @@ function check_params() {
 	esac
 }
 
+#HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
+#HUOM.2. ei niitä {sco}-juttuja ao. fktioon
+function mangle_s() {
+	local tgt
+
+	if [ y"${2}" == "y" ] ; then
+		tgt=/etc/sudoers.d/meshuggah
+	else
+		#TODO:/e/s.d pakottaminen
+		tgt=${2}
+	fi
+
+	if [ -s ${1} ] ; then 
+		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
+		${dqb} "W3NGL3 ${1}"
+		csleep 5 #vieläkö nalkuttaa?
+		
+		sudo chmod 0555 ${1}
+		sudo chown root:root ${1} #uutena tämä
+		#chattr +ui ${1}
+
+		csleep 1
+		local s
+		local n
+
+		n=$(whoami) #olisi myös %users...
+		s=$(sha256sum ${1})
+		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
+		sleep 1
+	fi
+}
+
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
-	[ -f /etc/sudoers.d/meshuggah ] || sudo touch /etc/sudoers.d/meshuggah
-	sudo chmod a+w /etc/sudoers.d/meshuggah	
+	if [ -f /etc/sudoers.d/meshuggah ] ; then
+		dqg "a51a kun05a"
+ 	else
+		sudo touch /etc/sudoers.d/meshuggah
+		sudo chmod a+w /etc/sudoers.d/meshuggah	
 
-	local f
-	#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
-	for f in ${ENF_LST} ; do mangle_s ${f} ; done
-	#TODO:joko enf_lst mukaiset eri tdstoon tai /e/d.s/m listaan sittenkin /o/b/c.sh
+		sudo touch /etc/sudoers.d/c0lu
+		sudo chmod a+w /etc/sudoers.d/c0lu	
 
-	for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby ; do
-		mangle_s ${f}
-	done
+		local f
+		#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
+		for f in ${ENF_LST} ; do mangle_s ${f} /etc/sudoers.d/c0lu ; done
 
-	sudo chmod a-w /etc/sudoers.d/meshuggah	
+		for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
+			mangle_s ${f}
+		done
+
+		sudo chmod a-w /etc/sudoers.d/meshuggah	
+		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
+	fi
+
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
 	sudo chown -R root:root /etc/sudoers.d
-
-	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 }
 
 function enforce_access() {
@@ -127,6 +165,7 @@ enforce_access
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 #exit #TODO:ojllain vivulla ajamaan vain part1 ?
 part1
+#exit
 
 #VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
 #echo "sed -i 's/q_${d}/${v}/g' ${1}/1/init-user-db.sql.tmp" >> ${2}
