@@ -46,7 +46,11 @@ gz=$(sudo which gpgtar)
 function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
+
 	dqb "sa= ${sa}"
+	csleep 5
+
+	dqb "shary= ${shary}"
 	csleep 5
 
 	${sa} --fix-broken install
