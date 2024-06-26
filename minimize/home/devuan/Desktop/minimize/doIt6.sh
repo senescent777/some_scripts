@@ -57,11 +57,11 @@ function mangle_s() {
 
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		${dqb} "W3NGL3 ${1}"
+		#${dqb} "W3NGL3 ${1}"
 		csleep 5 #vieläkö nalkuttaa?
 		
 		sudo chmod 0555 ${1}
-		sudo chown root:root ${1} #uutena tämä
+		sudo chown root:root ${1} 
 		#chattr +ui ${1}
 
 		csleep 1
@@ -83,14 +83,15 @@ function pre_enforce() {
 		sudo touch /etc/sudoers.d/meshuggah
 		sudo chmod a+w /etc/sudoers.d/meshuggah	
 
-		if [ -f /etc/sudoers.d/c0lu ] ; then
-			dqb "jankk0n bet0n1"
-		else
+		#if [ -f /etc/sudoers.d/c0lu ] ; then
+		#	dqb "jankk0n bet0n1"
+		#else
 			sudo touch /etc/sudoers.d/c0lu
 			sudo chmod a+w /etc/sudoers.d/c0lu	
-		fi
+		#fi
 
 		local f
+		#TODO:tähän alle TAAS jotain muutoksia (lib liittyy niihin)
 		#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
 		for f in ${ENF_LST} ; do mangle_s ${f} c0lu ; done
 
@@ -171,7 +172,7 @@ dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necess
 part1
 [ ${mode} -eq 0 ] && exit
 
-#VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla (joko jo?)
+#VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla (joko jo tänään?)
 #echo "sed -i 's/q_${d}/${v}/g' ${1}/1/init-user-db.sql.tmp" >> ${2}
 #https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
 dqb "sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list"
@@ -224,7 +225,7 @@ echo "DO NOT ANSWER \"Yes\"  TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
-[ $? -eq 0 ] && ${odio} rm -rf ${pkgdir}/dns-root-data*.deb
+[ $? -eq 0 ] && ${odio} rm -rf ${pkgdir}/dns-root-data*.deb #TODO:smr
 part3
 
 #missäköhän kohtaa kuuluisi tmän olla?
@@ -233,6 +234,7 @@ if [ ${mode} -eq 1 ] ; then
 	${odio} passwd
 	${whack} xfce*
 
+#toimii miten toimii tämä if-blokki
 #	dqb "no mas senor"
 	exit 	
 fi

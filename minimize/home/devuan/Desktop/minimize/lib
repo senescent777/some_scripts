@@ -35,6 +35,7 @@ function check_binaries() {
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 	srat=$(sudo which tar)
+	#TODO:näiden juttujen kasaaminen taulukko-olioon pre_enforce() varten
 
 	dqb "half_fdone"
 	csleep 1
