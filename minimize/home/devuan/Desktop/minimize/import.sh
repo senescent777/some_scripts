@@ -1,6 +1,22 @@
 #!/bin/bash
 
 . ~/Desktop/minimize/conf
+#TODO:lib käyttöön?
+
+function parse_opts_1() {
+	case "${1}" in
+		-v|--v)
+			debug=1
+		;;
+		*)
+			archive=${1}
+		;;
+	esac
+}
+
+if [ $# -gt 0 ] ; then
+	for opt in $@ ; do parse_opts_1 $opt ; done
+fi
 
 cd /
 sudo mount $part $dir -o ro

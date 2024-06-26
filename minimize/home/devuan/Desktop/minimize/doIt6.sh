@@ -129,6 +129,7 @@ function enforce_access() {
 		${sco} root:root /
 	fi
 	
+	#TODO:konftdstoista toisetkin vkopiot
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
 		sudo rm /etc/resolv.conf
 	fi
@@ -150,13 +151,13 @@ dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necess
 part1
 [ ${mode} -eq 0 ] && exit
 
-if [ -s /etc/apt/sources.list.tmp ] ; then
-	if [ ${enforce} -eq 1 ] ; then 
-		#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
-		${spc} /etc/apt/sources.list /etc/apt/sources.list.tmp
-		${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list
-	fi
-fi
+#if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain
+#	if [ ${enforce} -eq 1 ] ; then 
+#		#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
+#		${spc} /etc/apt/sources.list /etc/apt/sources.list.tmp
+#		${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list
+#	fi
+#fi
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	${odio} /etc/init.d/${s} stop
@@ -199,7 +200,8 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 5
 fi #
 
-#TODO:huomioitava tilanne missä libev4 pois pelistä->ei voi asentaa dnsmasq eikä stubby
+#VAIH:huomioitava tilanne missä libev4 tjsp pois pelistä->ei voi asentaa dnsmasq eikä stubby
+#...jospa part3 sanomaan exit
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
 csleep 3
@@ -221,7 +223,7 @@ if [ ${mode} -eq 1 ] ; then
 	exit 	
 fi
 
-#TODO:ao-komennolle oma alias yjsp
+#TODO:ao-komennolle oma alias yjsp+käyttöön
 ${sa} autoremove --yes
 #exit
 

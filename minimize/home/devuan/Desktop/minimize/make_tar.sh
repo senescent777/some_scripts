@@ -85,9 +85,8 @@ function make_tar() {
 
 	#some kind of retrovirus
 	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/network/interfaces*
-	${srat} -rvpf ${1} /etc/sudoers.d/user_shutdown /etc/sudoers.d/meshuggah /home/stubby /opt/bin
+	${srat} -rvpf ${1} /etc/sudoers.d/meshuggah /home/stubby /opt/bin
 	
-	#VAIH:muuttujaksi tuo out.tar
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rvpf ${1} ${f} ; done
 	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rvpf ${1} ${f} ; done
 
