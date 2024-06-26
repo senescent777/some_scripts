@@ -83,8 +83,12 @@ function pre_enforce() {
 		sudo touch /etc/sudoers.d/meshuggah
 		sudo chmod a+w /etc/sudoers.d/meshuggah	
 
-		sudo touch /etc/sudoers.d/c0lu
-		sudo chmod a+w /etc/sudoers.d/c0lu	
+		if [ -f /etc/sudoers.d/c0lu ] ; then
+			dqb "jankk0n bet0n1"
+		else
+			sudo touch /etc/sudoers.d/c0lu
+			sudo chmod a+w /etc/sudoers.d/c0lu	
+		fi
 
 		local f
 		#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
