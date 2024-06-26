@@ -152,8 +152,7 @@ dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necess
 part1
 [ ${mode} -eq 0 ] && exit
 
-if [ ${enforce} -eq 1 ] ; then 
-	#echo "sed -i 's/q_${d}/${v}/g' ${1}/1/init-user-db.sql.tmp" >> ${2}
+if [ -s /etc/apt/sources.list.tmp ] ; then 
 	#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
 	${spc} /etc/apt/sources.list /etc/apt/sources.list.tmp
 	${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list
