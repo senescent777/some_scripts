@@ -1,8 +1,6 @@
 #!/bin/bash
 
-part=/dev/sdax
-dir=/mnt/y
-archive=arhcive.tar
+. ~/Desktop/minimize/conf
 
 cd /
 sudo mount $part $dir -o ro

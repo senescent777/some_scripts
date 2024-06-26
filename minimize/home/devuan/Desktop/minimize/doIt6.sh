@@ -45,7 +45,7 @@ function mangle_s() {
 
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		csleep 5 #vieläkö nalkuttaa?
+		csleep 1
 		
 		sudo chmod 0555 ${1}
 		sudo chown root:root ${1} 
@@ -59,6 +59,8 @@ function mangle_s() {
 		s=$(sha256sum ${1})
 		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
 		sleep 1
+	else
+		dqb "no sucg file as ${1} "
 	fi
 }
 
@@ -68,23 +70,19 @@ function pre_enforce() {
 		dqb "a51a kun05a"
  	else
 		sudo touch /etc/sudoers.d/meshuggah
+		#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
 		sudo chmod a+w /etc/sudoers.d/meshuggah	
-		#sudo touch /etc/sudoers.d/c0lu
-		#sudo chmod a+w /etc/sudoers.d/c0lu	
 
-		local f
-		CB_LIST2="${CB_LIST1}  /etc/init.d/stubby /opt/bin/clouds.sh /sbin/halt /sbin/reboot "
-		
-		for f in ${CB_LIST2} ; do
-			mangle_s ${f}
-		done
+		local f 
+		for f in ${CB_LIST1} ; do mangle_s ${f} ; done
+		for f in /etc/init.d/stubby /opt/bin/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
 
 		sudo chmod a-w /etc/sudoers.d/meshuggah	
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	fi
 
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
-	sudo chmod 0750 /etc/sudoers.d #uskaltaakohan?
+	#sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? ehkä ei
 	sudo chown -R root:root /etc/sudoers.d
 }
 
@@ -152,7 +150,7 @@ dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necess
 part1
 [ ${mode} -eq 0 ] && exit
 
-if [ -s /etc/apt/sources.list.tmp ] ; then 
+if [ -s /etc/apt/sources.list.tmp ] ; then
 	#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
 	${spc} /etc/apt/sources.list /etc/apt/sources.list.tmp
 	${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list
@@ -199,9 +197,11 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 5
 fi #
 
+#TODO:huomioitava tilanne missä libev4 pois pelistä->ei voi asentaa dnsmasq eikä stubby
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
 csleep 3
+
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
@@ -209,17 +209,17 @@ ${sdi} ${pkgdir}/dns-root-data*.deb
 [ $? -eq 0 ] && ${smr} -rf ${pkgdir}/dns-root-data*.deb 
 part3
 
-#missäköhän kohtaa kuuluisi tmän olla?
-if [ ${mode} -eq 1 ] ; then
-	passwd
-	${odio} passwd
-	${whack} xfce*
-
 #toimii miten toimii tämä if-blokki
+if [ ${mode} -eq 1 ] ; then
+	echo "passwd"
+	echo "${odio} passwd"
+	echo "${whack} xfce*"
+
 #	dqb "no mas senor"
 	exit 	
 fi
 
+#TODO:ao-komennolle oma alias yjsp
 ${sa} autoremove --yes
 #exit
 

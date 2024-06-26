@@ -53,27 +53,39 @@ function make_tar() {
 	csleep 1
 
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
+	[ $? -eq 0 ] || exit 1	
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
 	${shary} init-system-helpers netfilter-persistent iptables-persistent
+	[ $? -eq 0 ] || exit 2
 	${smr} -rf /run/live/medium/live/initrd.img*
 	${shary} python3-ntp ntpsec-ntpdate
+	[ $? -eq 0 ] || exit 3
 	csleep 5
 
 	${shary} dnsmasq-base runit-helper
+	[ $? -eq 0 ] || exit 4
 	${smr} -rf /run/live/medium/live/initrd.img*
+	csleep 5
+
+	${shary} libev4 
+	[ $? -eq 0 ] || exit 5
+	${smr} -rf /run/live/medium/live/initrd.img*
+	csleep 5
 
 	${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
+	[ $? -eq 0 ] || exit 6
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
 	#some kind of retrovirus
 	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/network/interfaces*
-	${srat} -rvpf ${1} /etc/sudoers.d/user_shutdown /etc/sudoers.d/meshuggah /home/stubby
+	${srat} -rvpf ${1} /etc/sudoers.d/user_shutdown /etc/sudoers.d/meshuggah /home/stubby /opt/bin
 	
-	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rvpf /tmp/out.tar $f ; done
-	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rvpf /tmp/out.tar $f ; done
+	#VAIH:muuttujaksi tuo out.tar
+	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rvpf ${1} ${f} ; done
+	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rvpf ${1} ${f} ; done
 
 	${srat} -rvpf ${1} /etc/init.d/net*
 	${srat} -rvpf ${1} /etc/rcS.d/S*net*
@@ -91,10 +103,12 @@ function make_tar2() {
 	
 	if [ x"${tig}" == "x" ] ; then
 		${shary} git
+		[ $? -eq 0 ] || exit 7
 	fi
 
 	csleep 5
 	tig=$(sudo which git)
+	[ -x ${tig} ] || exit 87
 
 	p=$(pwd)
 	dqb "p=${p}"
