@@ -151,9 +151,11 @@ part1
 [ ${mode} -eq 0 ] && exit
 
 if [ -s /etc/apt/sources.list.tmp ] ; then
-	#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
-	${spc} /etc/apt/sources.list /etc/apt/sources.list.tmp
-	${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list
+	if [ ${enforce} -eq 1 ] ; then 
+		#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
+		${spc} /etc/apt/sources.list /etc/apt/sources.list.tmp
+		${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list
+	fi
 fi
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
