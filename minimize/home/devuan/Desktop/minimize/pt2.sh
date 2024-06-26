@@ -26,7 +26,6 @@ ${smr} -rf /run/live/medium/live/initrd.img*
 ${sharpy} htop intel-microcode
 ${sa} autoremove --yes
 
-#HUOM.240624:mawk ja mtools uutena, takas pois jos qsee
 ${smr} -rf /run/live/medium/live/initrd.img*
 ${sharpy} lvm2 mdadm
 ${sa} autoremove --yes
@@ -51,7 +50,6 @@ ${sa} autoremove --yes
 ${sharpy} iucode-tool libgstreamer* os-prober po*
 ${sa} autoremove --yes
 
-#240625 näytti siltä wettä ppp tau procmail ei poistunut, kts toistuuko
 ${smr} -rf /run/live/medium/live/initrd.img*
 ${sharpy} ppp 
 ${sa} autoremove --yes
@@ -76,13 +74,11 @@ ${sharpy} squashfs-tools
 ${sa} autoremove --yes
 sleep 6
 
-#uutena 250624, pois jos qsee
 ${smr} -rf /run/live/medium/live/initrd.img*
 ${sharpy} grub*
 ${sa} autoremove --yes
 sleep 6
 
-#uutena 250624, pois jos qsee
 ${smr} -rf /run/live/medium/live/initrd.img*
 ${sharpy} libgsm*
 ${sa} autoremove --yes

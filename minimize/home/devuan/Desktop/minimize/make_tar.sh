@@ -75,10 +75,6 @@ function make_tar() {
 
 	${srat} -rvpf ${1} /etc/init.d/net*
 	${srat} -rvpf ${1} /etc/rcS.d/S*net*
-
-#	#HUOM. on kai joitain komentoja joilla nuo K01-linkit voisi luoda (doIt olisi sopiva paikka kutsua)
-#	${srat} -rvpf ${1} /etc/rc2.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}
-#	${srat} -rvpf ${1} /etc/rc3.d/{K01avahi-daemon,K01cups,K01cups-browsed,S03dnsmasq,S03stubby}	
 	csleep 5
 }
 
@@ -111,8 +107,6 @@ function make_tar2() {
 	${tig} clone https://github.com/senescent777/project.git
 
 	cd project
-	echo "#[ ${debug} -eq 1 ] && ls -laRs;sleep 10"
-
 	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
 	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
 	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
@@ -181,7 +175,6 @@ case ${mode} in
 		fi
 
 		#VAIH:gpg-allekIRjoitukset huomioiva tar-purku tähän
-		#TODO:myös mount ja umount mukaan? (import liittyy)
 		echo "mount;gpgtar -x"
 	;;
 	*)

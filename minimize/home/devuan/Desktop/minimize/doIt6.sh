@@ -12,8 +12,6 @@ function parse_opts_1() {
 		-v|--v)
 			debug=1
 		;;
-#		--no)
-#			no_mas=1
 		*)
 			mode=${1}
 		;;
@@ -23,16 +21,6 @@ function parse_opts_1() {
 . ./lib
 
 function check_params() {
-#	case ${no_mas} in
-#		0|1)
-#			dqb " ok ${no_mas}"
-#		;;
-#		*)
-#			dqb "te quiero puta"
-#			exit 3
-#		;;
-#	esac
-
 	case ${debug} in
 		0|1)
 			dqb "ko"
@@ -57,7 +45,6 @@ function mangle_s() {
 
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		#${dqb} "W3NGL3 ${1}"
 		csleep 5 #vieläkö nalkuttaa?
 		
 		sudo chmod 0555 ${1}
@@ -82,17 +69,10 @@ function pre_enforce() {
  	else
 		sudo touch /etc/sudoers.d/meshuggah
 		sudo chmod a+w /etc/sudoers.d/meshuggah	
-
-		#if [ -f /etc/sudoers.d/c0lu ] ; then
-		#	dqb "jankk0n bet0n1"
-		#else
-			sudo touch /etc/sudoers.d/c0lu
-			sudo chmod a+w /etc/sudoers.d/c0lu	
-		#fi
+		sudo touch /etc/sudoers.d/c0lu
+		sudo chmod a+w /etc/sudoers.d/c0lu	
 
 		local f
-		#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
-		#for f in ${ENF_LST} ; do mangle_s ${f} c0lu ; done
 		CB_LIST2="${CB_LIST1}  /etc/init.d/stubby /opt/bin/clouds.sh /sbin/halt /sbin/reboot "
 		
 		for f in ${CB_LIST2} ; do
@@ -132,8 +112,8 @@ function enforce_access() {
 		${scm} -R 0755 /sbin
 
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
+		#HUOM! ei sitten sorkita /etc sisältöä tässä!!!!
 		${sco} -R root:root /etc
-		#${scm} -R o-wx /etc #tämä lienee liikaa
 		local f
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
@@ -147,7 +127,6 @@ function enforce_access() {
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
 		${sco} -R root:root /var
 		${scm} -R go-w /var
-
 		${scm} 0755 /
 		${sco} root:root /
 	fi
@@ -222,7 +201,7 @@ fi #
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
 csleep 3
-echo "DO NOT ANSWER \"Yes\"  TO A QUESTION ABOUT IPTABLES";sleep 2
+echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
