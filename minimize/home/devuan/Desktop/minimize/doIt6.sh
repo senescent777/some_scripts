@@ -187,7 +187,6 @@ sleep 3
 #exit
 
 #TODO:K01avahi-jutut sopivaan kohtaan?
-#VAIH:passwd sekä ulosheitto myös? (esim. juuri ennen no_mas?)
 
 #===================================================PART 2===================================
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
@@ -225,10 +224,11 @@ part3
 
 #missäköhän kohtaa kuuluisi tmän olla?
 if [ ${no_mas} -eq 1 ] ; then
-	echo "passwd"
-	echo "${odio} passwd"
-	echo "${odio} pkill --signal 9 xfce*"
-	dqb "no mas senor"
+	passwd
+	${odio} passwd
+	${whack} xfce*
+
+#	dqb "no mas senor"
 	exit 	
 fi
 
