@@ -3,17 +3,19 @@
 iface=eth0 
 enforce=1
 debug=0
-no_mas=0 #TODO:jokin mode-juttu tilalle
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
+mode=2
 
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
 			debug=1
 		;;
-		--no)
-			no_mas=1
+#		--no)
+#			no_mas=1
+		*)
+			mode=${1}
 		;;
 	esac
 }
@@ -21,15 +23,15 @@ function parse_opts_1() {
 . ./lib
 
 function check_params() {
-	case ${no_mas} in
-		0|1)
-			dqb " ok ${no_mas}"
-		;;
-		*)
-			dqb "te quiero puta"
-			exit 3
-		;;
-	esac
+#	case ${no_mas} in
+#		0|1)
+#			dqb " ok ${no_mas}"
+#		;;
+#		*)
+#			dqb "te quiero puta"
+#			exit 3
+#		;;
+#	esac
 
 	case ${debug} in
 		0|1)
@@ -162,11 +164,10 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-#exit #TODO:ojllain vivulla ajamaan vain part1 ?
 part1
-#exit
+[ ${mode} -eq 0 ] && exit
 
-#VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla
+#VAIH:johonkin sopivaan kohtaan /e/a/s.list sorkinta sed'in avulla (joko jo?)
 #echo "sed -i 's/q_${d}/${v}/g' ${1}/1/init-user-db.sql.tmp" >> ${2}
 #https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
 dqb "sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list"
@@ -223,7 +224,7 @@ ${sdi} ${pkgdir}/dns-root-data*.deb
 part3
 
 #missäköhän kohtaa kuuluisi tmän olla?
-if [ ${no_mas} -eq 1 ] ; then
+if [ ${mode} -eq 1 ] ; then
 	passwd
 	${odio} passwd
 	${whack} xfce*
