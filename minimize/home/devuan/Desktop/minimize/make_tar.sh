@@ -72,8 +72,8 @@ function make_tar() {
 	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/network/interfaces*
 	${srat} -rvpf ${1} /etc/sudoers.d/user_shutdown /etc/sudoers.d/meshuggah /home/stubby
 	
-	local f;for f in $(find /etc -type f -name 'stubby*') ; do tar -rvpf /tmp/out.tar $f ; done
-	for f in $(find /etc -type f -name 'dns*') ; do tar -rvpf /tmp/out.tar $f ; done
+	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rvpf /tmp/out.tar $f ; done
+	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rvpf /tmp/out.tar $f ; done
 
 	${srat} -rvpf ${1} /etc/init.d/net*
 	${srat} -rvpf ${1} /etc/rcS.d/S*net*
