@@ -181,11 +181,11 @@ function part1() {
 
 function part3() {
 	${sdi} /var/cache/apt/archives/lib*.deb
-	[ $? -eq  0 ] && ${odio} rm -rf ${pkgdir}/lib*.deb
+	[ $? -eq  0 ] && ${smr} -rf ${pkgdir}/lib*.deb
 
 	#HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
 	${sdi} ${pkgdir}/*.deb
-	[ $? -eq 0 ] && ${odio} rm -rf ${pkgdir}/*.deb
+	[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/*.deb
 	csleep 2
 }
 

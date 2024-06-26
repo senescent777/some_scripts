@@ -193,7 +193,7 @@ ${whack} nm-applet
 sleep 3
 #exit
 
-#TODO:K01avahi-jutut sopivaan kohtaan?
+#K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
@@ -202,7 +202,7 @@ ${sharpy} rpc* nfs*
 ${sharpy} modem* wireless* wpa* iw lm-sensors
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
-${odio} rm -rf /run/live/medium/live/initrd.img*
+${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
 
 ${ip6tr} /etc/iptables/rules.v6
@@ -211,7 +211,7 @@ ${iptr} /etc/iptables/${tblz4}
 #exit
 
 csleep 5
-${odio} rm -rf /run/live/medium/live/initrd.img*
+${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
 
 if [ ${debug} -eq 1 ] ; then
@@ -226,7 +226,7 @@ echo "DO NOT ANSWER \"Yes\"  TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 ${sdi} ${pkgdir}/dns-root-data*.deb 
-[ $? -eq 0 ] && ${odio} rm -rf ${pkgdir}/dns-root-data*.deb #TODO:smr
+[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/dns-root-data*.deb 
 part3
 
 #missäköhän kohtaa kuuluisi tmän olla?
