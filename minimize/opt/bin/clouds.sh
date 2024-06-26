@@ -2,9 +2,9 @@
 
 . ~/Desktop/minimize/lib
 
-sudo rm /etc/resolv.conf
-sudo rm /etc/dhcp/dhclient.conf
-sudo rm /sbin/dhclient-script
+${smr} /etc/resolv.conf
+${smr} /etc/dhcp/dhclient.conf
+${smr} /sbin/dhclient-script
 
 #tässä oikea paikka tables-muutoksille vai ei?
 ${ipt} -F b
