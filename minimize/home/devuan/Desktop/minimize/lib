@@ -35,12 +35,12 @@ function check_binaries() {
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 	srat=$(sudo which tar)
-	#TODO:näiden juttujen kasaaminen taulukko-olioon pre_enforce() varten
 
 	dqb "half_fdone"
 	csleep 1
 
 	[ -x ${ipt} ] || exit 5
+	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
 	[ -x ${ip6t} ] || exit 5
 	[ -x ${iptr} ] || exit 5
 	[ -x ${ip6tr} ] || exit 5
@@ -61,7 +61,8 @@ function check_binaries() {
 	[ -x ${srat} ] || exit 5
 
 	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-	ENF_LST="${smr} ${slinky} ${spc}"
+	#ENF_LST=""
+	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc}
 
 	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 

@@ -91,11 +91,11 @@ function pre_enforce() {
 		#fi
 
 		local f
-		#TODO:tähän alle TAAS jotain muutoksia (lib liittyy niihin)
 		#clouds tarvitsee:/u/sbin/iptables, /bin/rm, /bin/ln, /bin/cp
-		for f in ${ENF_LST} ; do mangle_s ${f} c0lu ; done
-
-		for f in /sbin/ifup /sbin/ifdown /sbin/halt /sbin/reboot /etc/init.d/stubby /opt/bin/clouds.sh ; do
+		#for f in ${ENF_LST} ; do mangle_s ${f} c0lu ; done
+		CB_LIST2="${CB_LIST1}  /etc/init.d/stubby /opt/bin/clouds.sh /sbin/halt /sbin/reboot "
+		
+		for f in ${CB_LIST2} ; do
 			mangle_s ${f}
 		done
 
@@ -104,6 +104,7 @@ function pre_enforce() {
 	fi
 
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
+	sudo chmod 0750 /etc/sudoers.d #uskaltaakohan?
 	sudo chown -R root:root /etc/sudoers.d
 }
 
