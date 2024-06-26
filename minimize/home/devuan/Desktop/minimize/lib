@@ -111,13 +111,6 @@ function mangle2() {
 	fi
 }
 
-#VAIH:(wrapper vielä josqs pois)
-#mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
-function clouds() {
-	dqb "coluds(${1})"
-	/opt/bin/clouds.sh ${1}
-}
-
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
 function ns2() {
 	dqb "ns2( ${1} )"

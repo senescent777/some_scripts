@@ -205,7 +205,7 @@ sleep 3
 
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
-clouds 0
+/opt/bin/clouds.sh 0
 #exit
 
 csleep 5
@@ -243,7 +243,7 @@ ${sa} autoremove --yes
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 ${odio} /etc/init.d/dnsmasq restart
-clouds 1
+/opt/bin/clouds.sh 1
 ns2 stubby
 ns4 stubby
 
