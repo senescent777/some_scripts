@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#. ~/Desktop/minimize/lib
-#VAIH:josko lib mäkeen tässä kuitenkin?
 smr=$(sudo which rm)
 ipt=$(sudo which iptables)
 slinky=$(sudo which ln)
@@ -10,13 +8,13 @@ slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
 
-#4 backwards compability
-smr="sudo ${smr}"
-ipt="sudo ${ipt}"
-slinky="sudo ${slinky}"
-spc="sudo ${spc}"
-sco="sudo ${sco}"
-scm="sudo ${scm}"
+##4 backwards compability
+#smr="sudo ${smr}"
+#ipt="sudo ${ipt}"
+#slinky="sudo ${slinky}"
+#spc="sudo ${spc}"
+#sco="sudo ${sco}"
+#scm="sudo ${scm}"
 
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
@@ -27,7 +25,6 @@ ${ipt} -F b
 ${ipt} -F e
 ${ipt} -D INPUT 5
 ${ipt} -D OUTPUT 6
-#local s
 
 function tod_dda() { 
 	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
@@ -38,8 +35,6 @@ function dda_snd() {
 	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
 }
-
-#VAIH:slinky ja spc takaisin josqs
 
 case ${1} in 
 	0)
