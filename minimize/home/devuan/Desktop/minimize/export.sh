@@ -1,7 +1,9 @@
 #!/bin/bash
 . ./conf
 
-#TODO:tuplavarmistus että validi /e/n/i tulee mukaan
+#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
+#(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
+
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -23,7 +25,7 @@ fi
 #exit
 cd /
 
-${som} $part $dir -o rw
+${som} ${part} ${dir} -o rw
 [ $? -eq 0 ] || exit 1
 sleep 3
 
@@ -32,7 +34,8 @@ sleep 3
 [ -f /tmp/${archive} ] && ${spc} /tmp/${archive} ${dir}
 
 sleep 3
-#jos -T kätevämpi?
+#jos -T kätevämpi? /sbin tarpeellinen?
+#TODO:jatkossa ~/.gnupg mukaan?
 ${srat} -uvpf ${dir}/${archive} /opt/bin ~/Desktop/minimize /etc/iptables /etc/network/interfaces* /etc/sudoers.d/meshuggah /etc/dhcp/dhclient* /etc/resolv.conf* /sbin/dhclient-*  
 
 csleep 3

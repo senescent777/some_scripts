@@ -162,6 +162,7 @@ function make_tar() {
 	csleep 1
 
 	#some kind of retrovirus
+	#TODO:jatkossa ~/.gnupg mukaan?
 	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize  /opt/bin
 	${srat} -rvpf ${1} /home/stubby /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
@@ -220,7 +221,7 @@ function make_tar2() {
 	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
 
 	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp
-	sudo mv ./etc/network/interfaces  ./etc/network/interfaces.tmp
+	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
