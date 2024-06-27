@@ -155,15 +155,31 @@ enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
-[ ${mode} -eq 0 ] && exit
 
-#if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain
-	if [ ${enforce} -eq 1 ] ; then 
-#		#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
-#		${spc} /etc/apt/sources.list /etc/apt/sources.list.tmp
-		${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list >> /etc/apt/sources.list
-	fi
-#fi
+if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain
+#	if [ ${enforce} -eq 1 ] ; then 
+		dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
+		csleep 5
+		${scm} a+ẃ /etc/apt #tarpeen?
+		g=$(date +%F)
+		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+
+		sudo touch /etc/apt/sources.list			
+		${scm} a+w /etc/apt/sources.list
+
+		${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
+		sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
+
+		${scm} a-w /etc/apt/sources.list
+		${sco} -R root:root /etc/apt #/sources.list
+		${scm} -R a-w /etc/apt/
+
+		[ ${debug} -eq 1 ] && ls -las /etc/apt
+		csleep 5
+#	fi
+fi
+
+[ ${mode} -eq 0 ] && exit
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	${odio} /etc/init.d/${s} stop
@@ -194,7 +210,7 @@ sleep 3
 
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
-/opt/bin/clouds.sh 0
+#HUOM.270624:oli aikaisemmin tässä /o/b/clouds.sh 0
 #exit
 
 csleep 5
@@ -229,9 +245,16 @@ if [ ${mode} -eq 1 ] ; then
 	exit 	
 fi
 
-#${sa} autoremove --yes
 ${asy}
-#exit
+sleep 5
+/opt/bin/clouds.sh 0
+sleep 5
+/opt/bin/clouds.sh 0
+sleep 5
+/opt/bin/clouds.sh 0
+sleep 5
+exit
+#HUOM.270624:keskeytetään tähän kunnes paketin dnsmasq saa taas asentumaan, varm vuoksi myös clouds 0 JIT
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä

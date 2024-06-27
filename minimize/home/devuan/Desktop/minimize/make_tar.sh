@@ -129,6 +129,7 @@ function make_tar2() {
 	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
 	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
 	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
+	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin

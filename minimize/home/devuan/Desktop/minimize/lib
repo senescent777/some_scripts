@@ -183,6 +183,7 @@ function part3() {
 	${sdi} /var/cache/apt/archives/lib*.deb
 
 	if [ $? -eq  0 ] ; then
+		#nköjään ei riittävästitehty dnsmasq kannalta
 		dqb "part3.1 ok"
 		sleep 5
 		${smr} -rf ${pkgdir}/lib*.deb
