@@ -265,6 +265,10 @@ fi
 check_params ${tgtfile}
 
 #main()
+
+#TODO:josko gpg allekirjoittamaan tar:it mikäli .gnupg olemassa ja täts it
+#https://github.com/senescent777/some_scripts/blob/main/skripts/export/mksums_new.sh.export voisi ottaa mallia
+#gpg -u <param1> -sb <file> lienee se keskeinen juttu 
 case ${mode} in
 	0)
 		make_tar ${tgtfile}
@@ -285,6 +289,9 @@ case ${mode} in
 	;;
 	3)
 		if [ x"$gz" == "x" ] ; then 
+			sudo /opt/bin/clouds.sh ${dnsm}
+			csleep 1
+	
 			${sag} install gpg
 		fi
 	
@@ -295,6 +302,9 @@ case ${mode} in
 	4)
 		
 		if [ x"$gz" == "x" ] ; then 
+			sudo /opt/bin/clouds.sh ${dnsm}
+			csleep 1
+
 			${sag} install gpg
 		fi
 
