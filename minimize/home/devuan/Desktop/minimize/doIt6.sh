@@ -133,7 +133,7 @@ function enforce_access() {
 	f=$(date +%F)
 	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
 	[ -f /sbin/dhclient-script.${f} ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.${f}
-	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfacesc/etc/network/interfaces.${f}
+	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfaces /etc/network/interfaces.${f}
 
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
 		sudo rm /etc/resolv.conf
