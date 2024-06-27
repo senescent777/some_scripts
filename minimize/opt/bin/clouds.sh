@@ -1,7 +1,14 @@
 #!/bin/bash
 
-. ~/Desktop/minimize/lib
-#TODO:josko lib mäkeen tässä kuitenkin?
+#. ~/Desktop/minimize/lib
+#VAIH:josko lib mäkeen tässä kuitenkin?
+smr=$(sudo which rm)
+ipt=$(sudo which iptables)
+slinky=$(sudo which ln)
+spc=$(sudo which cp)
+slinky="${slinky} -s "
+sco=$(sudo which chown)
+scm=$(sudo which chmod)
 
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
