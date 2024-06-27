@@ -184,7 +184,7 @@ case ${mode} in
 		fi
 	
 		[ -d ~/.gnupg ] || gpg --quick-generate-key tester
-		#VAIH:joitain gpg:n huomioiva versio make_upgtade():sta tähän
+		#VAIH:joitain gpg:n huomioiva versio make_upgRade():sta tähän
 		${gz} --sign --create ${tgtfile}.s /var/cache/apt/archives/
 	;;
 	4)

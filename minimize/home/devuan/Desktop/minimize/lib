@@ -181,13 +181,28 @@ function part1() {
 
 function part3() {
 	${sdi} /var/cache/apt/archives/lib*.deb
-	[ $? -eq  0 ] || exit 666
-	#&& ${smr} -rf ${pkgdir}/lib*.deb
+
+	if [ $? -eq  0 ] ; then
+		dqb "part3.1 ok"
+		sleep 5
+		${smr} -rf ${pkgdir}/lib*.deb
+	else
+	 	exit 66
+	fi
+	
+	#&&
 
 	#HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
 	${sdi} ${pkgdir}/*.deb
-	[ $? -eq 0 ] || exit 667
-	#&& ${smr} -rf ${pkgdir}/*.deb
+	
+	if [ $? -eq  0 ] ; then
+		dqb "part3.2 ok"
+		sleep 5
+		${smr} -rf ${pkgdir}/lib*.deb
+	else
+	 	exit 67
+	fi
+
 	csleep 2
 }
 

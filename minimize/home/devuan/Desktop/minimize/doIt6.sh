@@ -114,7 +114,6 @@ function enforce_access() {
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		#HUOM! ei sitten sorkita /etc sisältöä tässä!!!!
 		${sco} -R root:root /etc
-		
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
 		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
@@ -132,8 +131,8 @@ function enforce_access() {
 	fi
 	
 	f=$(date +%F)
-	[ -f /etc/resolv.conf.${f} ] || cp /etc/resolv.conf /etc/resolv.conf.${f}
-	[ -f /sbin/dhclient-script.${f} ] || cp /sbin/dhclient-script /sbin/dhclient-script.${f}
+	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
+	[ -f /sbin/dhclient-script.${f} ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.${f}
 
 	#VAIH:konftdstoista toisetkin vkopiot
 
@@ -159,11 +158,11 @@ part1
 [ ${mode} -eq 0 ] && exit
 
 #if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain
-#	if [ ${enforce} -eq 1 ] ; then 
+	if [ ${enforce} -eq 1 ] ; then 
 #		#https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh
 #		${spc} /etc/apt/sources.list /etc/apt/sources.list.tmp
-#		${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp >> /etc/apt/sources.list
-#	fi
+		${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list >> /etc/apt/sources.list
+	fi
 #fi
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
@@ -229,7 +228,6 @@ if [ ${mode} -eq 1 ] ; then
 #	dqb "no mas senor"
 	exit 	
 fi
-
 
 #${sa} autoremove --yes
 ${asy}
