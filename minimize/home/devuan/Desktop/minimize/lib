@@ -97,7 +97,7 @@ function check_binaries2() {
 	slinky="${odio} ${slinky} -s "
 	spc="${odio} ${spc} "
 	srat="${odio} ${srat} "
-
+	asy="${odio} ${sa} autoremove --yes"
 	dqb "spc= ${spc}"
 	dqb "b1nar135.2 0k.2" 
 	csleep 3

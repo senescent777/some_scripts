@@ -104,6 +104,8 @@ function enforce_access() {
 	${sco} -R ${n}:${n} ~
 	${sco} -R 101:65534 /home/stubby/
 
+	local f
+
 	if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
 		echo "changing /sbin , /etc and /var 4 real"
 		${sco} -R root:root /sbin
@@ -112,7 +114,7 @@ function enforce_access() {
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		#HUOM! ei sitten sorkita /etc sisältöä tässä!!!!
 		${sco} -R root:root /etc
-		local f
+		
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
 		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
@@ -129,7 +131,12 @@ function enforce_access() {
 		${sco} root:root /
 	fi
 	
-	#TODO:konftdstoista toisetkin vkopiot
+	f=$(date +%F)
+	[ -f /etc/resolv.conf.${f} ] || cp /etc/resolv.conf /etc/resolv.conf.${f}
+	[ -f /sbin/dhclient-script.${f} ] || cp /sbin/dhclient-script /sbin/dhclient-script.${f}
+
+	#VAIH:konftdstoista toisetkin vkopiot
+
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
 		sudo rm /etc/resolv.conf
 	fi
@@ -223,8 +230,9 @@ if [ ${mode} -eq 1 ] ; then
 	exit 	
 fi
 
-#TODO:ao-komennolle oma alias yjsp+käyttöön
-${sa} autoremove --yes
+
+#${sa} autoremove --yes
+${asy}
 #exit
 
 #===================================================PART 4(final)==========================================================
