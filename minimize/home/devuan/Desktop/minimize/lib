@@ -35,6 +35,8 @@ function check_binaries() {
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 	srat=$(sudo which tar)
+	som=$(sudo which mount)
+	uom=$(sudo which umount)
 
 	dqb "half_fdone"
 	csleep 1
@@ -59,10 +61,11 @@ function check_binaries() {
 	[ -x ${slinky} ] || exit 5
 	[ -x ${spc} ] || exit 5
 	[ -x ${srat} ] || exit 5
+	[ -x ${som} ] || exit 5
+	[ -x ${uom} ] || exit 5
 
 	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-	#ENF_LST=""
-	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc}"
+	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
 
 	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
@@ -98,8 +101,13 @@ function check_binaries2() {
 	spc="${odio} ${spc} "
 	srat="${odio} ${srat} "
 	asy="${odio} ${sa} autoremove --yes"
-	dqb "spc= ${spc}"
+
+	som="${odio} ${som} "
+	uom="${odio} ${uom} "	
+
+#	dqb "spc= ${spc}"
 	dqb "b1nar135.2 0k.2" 
+
 	csleep 3
 }
 

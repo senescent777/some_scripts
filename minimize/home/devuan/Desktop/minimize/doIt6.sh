@@ -86,7 +86,6 @@ function pre_enforce() {
 	sudo chown -R root:root /etc/sudoers.d
 }
 
-#TODO:mount mukaan sudon listaan koska import ja export
 function enforce_access() {
 	dqb "3nf0rc3_acc355()"
 

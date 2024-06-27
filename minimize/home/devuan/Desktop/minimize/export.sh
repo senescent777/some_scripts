@@ -20,6 +20,7 @@ fi
 [ ${debug} -eq 1 ] && echo "part= $part , dir=$dir, archive= $archive"
 #exit
 cd /
+#TODO:${som} ja ${uom} jatkossa
 sudo mount $part $dir -o rw
 [ $? -eq 0 ] || exit 1
 sleep 3
