@@ -57,6 +57,12 @@ function make_tar() {
 	${sa} --fix-broken install
 	csleep 1
 
+	${shary} dnsmasq-base runit-helper dnsmasq libev4
+	${shary} dnsmasq-base runit-helper dnsmasq libev4
+	${shary} dnsmasq-base runit-helper dnsmasq libev4
+	${shary} dnsmasq-base runit-helper dnsmasq libev4
+	csleep 9
+		
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
 	[ $? -eq 0 ] || exit 1	
 	${smr} -rf /run/live/medium/live/initrd.img*
@@ -78,14 +84,20 @@ function make_tar() {
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
-	dqb "${shary} dnsmasq-base runit-helper"
-	csleep 5
+	#dqb "${shary} dnsmasq-base runit-helper"
+	c#sleep 5
 
 	dqb "${shary} libev4 "
 	csleep 5
 
 	${shary} libev4 
 	[ $? -eq 0 ] || exit 5
+	${shary} libev4 
+	${shary} libev4 
+	${shary} libev4 
+	${shary} libev4 
+	${shary} libev4 
+
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
@@ -94,6 +106,18 @@ function make_tar() {
 
 	${shary} dnsmasq
 	[ $? -eq 0 ] || exit 55
+	${shary} dnsmasq	
+	${shary} dnsmasq
+	${shary} dnsmasq
+	${smr} -rf /run/live/medium/live/initrd.img*
+	csleep 5
+
+	${shary} dnsmasq-base runit-helper dnsmasq libev4
+	${shary} dnsmasq-base runit-helper dnsmasq libev4
+	${shary} dnsmasq-base runit-helper dnsmasq libev4
+	${shary} dnsmasq-base runit-helper dnsmasq libev4
+		
+	[ $? -eq 0 ] || exit 56
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
@@ -170,7 +194,12 @@ function make_upgrade() {
 if [ $# -gt 0 ] ; then
 	parse_opts_2 ${2} ${3}
 	for opt in $@ ; do parse_opts_1 ${opt} ; done
+	
+	/opt/bin/clouds.sh 0
+	/opt/bin/clouds.sh 0
+	/opt/bin/clouds.sh 0
 
+	${asy}
 	${sag_u} 
 	#[ $? -eq 0 ] || echo "/o/b/clouds.sh <mode> | ${sifu} -a | ${sifu} ${iface}";exit
 else
