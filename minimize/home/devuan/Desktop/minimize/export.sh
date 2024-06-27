@@ -22,8 +22,8 @@ fi
 [ ${debug} -eq 1 ] && echo "part= $part , dir=$dir, archive= $archive"
 #exit
 cd /
-#TODO:${som} ja ${uom} jatkossa
-sudo mount $part $dir -o rw
+
+${som} $part $dir -o rw
 [ $? -eq 0 ] || exit 1
 sleep 3
 
@@ -38,8 +38,8 @@ sudo tar -uvpf $dir/$archive /opt/bin ~/Desktop/minimize /etc/iptables /etc/netw
 [ ${debug} -eq 1 ] && ls -las $dir;sleep 5
 sleep 6
 
-sudo umount $part
+${uom} $part
 echo $?
-sudo umount $dir
+${uom} $dir
 cd ~/Desktop/minimize
 mount | grep /dev

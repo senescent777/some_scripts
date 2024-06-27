@@ -19,13 +19,12 @@ if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
-#TODO:${som} ja ${uom} jatkossa
-#TODO:oleelisista hmistoista backup ennen purkua?
+#TODO:oleelllisista hmistoista backup ennen purkua?
 
 cd /
-sudo mount $part $dir -o ro
+${som} $part $dir -o ro
 sudo tar -xvpf $dir/$archive
-sudo umount $part
+${uom} $part
 cd ~/Desktop/minimize
 
 #HUOM. tämän olisi kuvakkeen kanssa tarkoitus mennä jatkossa filesystem.squashfs sisälle
