@@ -1,7 +1,6 @@
 #!/bin/bash
 
 . ~/Desktop/minimize/conf
-#TODO:lib käyttöön?
 
 function parse_opts_1() {
 	case "${1}" in
@@ -14,11 +13,15 @@ function parse_opts_1() {
 	esac
 }
 
+. ./lib
+
 if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
+
 #TODO:${som} ja ${uom} jatkossa
 #TODO:oleelisista hmistoista backup ennen purkua?
+
 cd /
 sudo mount $part $dir -o ro
 sudo tar -xvpf $dir/$archive
