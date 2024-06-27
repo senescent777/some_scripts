@@ -253,7 +253,7 @@ sleep 5
 sleep 5
 /opt/bin/clouds.sh 0
 sleep 5
-exit
+#exit
 #HUOM.270624:keskeytetään tähän kunnes paketin dnsmasq saa taas asentumaan, varm vuoksi myös clouds 0 JIT
 
 #===================================================PART 4(final)==========================================================

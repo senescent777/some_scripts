@@ -127,8 +127,8 @@ function make_tar() {
 	csleep 5
 
 	#some kind of retrovirus
-	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize /etc/iptables /etc/network/interfaces*
-	${srat} -rvpf ${1} /etc/sudoers.d/meshuggah /home/stubby /opt/bin
+	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize
+	${srat} -rvpf ${1} /etc/sudoers.d/meshuggah /home/stubby /opt/bin /etc/iptables /etc/network/interfaces*
 	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rvpf ${1} ${f} ; done
 	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rvpf ${1} ${f} ; done
@@ -194,10 +194,11 @@ function make_upgrade() {
 if [ $# -gt 0 ] ; then
 	parse_opts_2 ${2} ${3}
 	for opt in $@ ; do parse_opts_1 ${opt} ; done
-	
-	/opt/bin/clouds.sh 0
-	/opt/bin/clouds.sh 0
-	/opt/bin/clouds.sh 0
+
+	dqb "if this script doesn't work, try /opt/bin/clouds.sh"	
+#	/opt/bin/clouds.sh 0
+#	/opt/bin/clouds.sh 0
+#	/opt/bin/clouds.sh 0
 
 	${asy}
 	${sag_u} 
