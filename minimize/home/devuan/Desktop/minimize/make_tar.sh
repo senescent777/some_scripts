@@ -173,8 +173,8 @@ function make_tar() {
 	csleep 5
 }
 
-#TODO:tuplavarmistus että validi /e/n/i tulee mukaan
-#TODO:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
+#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
+#VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
@@ -218,7 +218,9 @@ function make_tar2() {
 	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
 	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
 	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
+
 	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp
+	sudo mv ./etc/network/interfaces  ./etc/network/interfaces.tmp
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
