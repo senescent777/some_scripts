@@ -1,7 +1,7 @@
 #!/bin/bash
 . ./conf
 #TODO:lib käyttöön?
-
+#TODO:tuplavarmistus että validi /e/n/i tulee mukaan
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -36,4 +36,7 @@ sudo tar -uvpf $dir/$archive /opt/bin ~/Desktop/minimize /etc/iptables /etc/netw
 sleep 6
 
 sudo umount $part
+echo $?
+sudo umount $dir
 cd ~/Desktop/minimize
+mount | grep /dev

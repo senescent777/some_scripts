@@ -86,6 +86,7 @@ function pre_enforce() {
 	sudo chown -R root:root /etc/sudoers.d
 }
 
+#TODO:mount mukaan sudon listaan koska import ja export
 function enforce_access() {
 	dqb "3nf0rc3_acc355()"
 
@@ -133,8 +134,7 @@ function enforce_access() {
 	f=$(date +%F)
 	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
 	[ -f /sbin/dhclient-script.${f} ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.${f}
-
-	#VAIH:konftdstoista toisetkin vkopiot
+	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfacesc/etc/network/interfaces.${f}
 
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
 		sudo rm /etc/resolv.conf
@@ -160,7 +160,7 @@ if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä 
 #	if [ ${enforce} -eq 1 ] ; then 
 		dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
 		csleep 5
-		${scm} a+ẃ /etc/apt #tarpeen?
+		${scm} a+w/etc/apt #tarpeen?
 		g=$(date +%F)
 		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
@@ -222,8 +222,6 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 5
 fi #
 
-#VAIH:huomioitava tilanne missä libev4 tjsp pois pelistä->ei voi asentaa dnsmasq eikä stubby
-#...jospa part3 sanomaan exit
 #===================================================PART 3===========================================================
 dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
 csleep 3
@@ -246,12 +244,13 @@ if [ ${mode} -eq 1 ] ; then
 fi
 
 ${asy}
-sleep 5
-/opt/bin/clouds.sh 0
-sleep 5
-/opt/bin/clouds.sh 0
-sleep 5
-/opt/bin/clouds.sh 0
+#sleep 5
+#/opt/bin/clouds.sh 0
+#sleep 5
+#/opt/bin/clouds.sh 0
+#sleep 5
+
+sudo /opt/bin/clouds.sh 0
 sleep 5
 #exit
 #HUOM.270624:keskeytetään tähän kunnes paketin dnsmasq saa taas asentumaan, varm vuoksi myös clouds 0 JIT
@@ -259,7 +258,7 @@ sleep 5
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 ${odio} /etc/init.d/dnsmasq restart
-/opt/bin/clouds.sh 1
+sudo /opt/bin/clouds.sh 1
 ns2 stubby
 ns4 stubby
 
