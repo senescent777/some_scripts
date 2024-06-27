@@ -42,7 +42,7 @@ function check_params() {
 }
 
 . ./lib
-gz=$(sudo which gpgtar)
+#gz=$(sudo which gpgtar)
 
 #HUOM. löytyy myös se out4.tar
 function make_tar() {
@@ -266,55 +266,73 @@ else
 fi
 
 check_params ${tgtfile}
-
 #main()
+gg=$(sudo which gpg)
 
-#TODO:josko gpg allekirjoittamaan tar:it mikäli .gnupg olemassa ja täts it
+#VAIH:josko gpg allekirjoittamaan tar:it mikäli .gnupg olemassa ja täts it
 #https://github.com/senescent777/some_scripts/blob/main/skripts/export/mksums_new.sh.export voisi ottaa mallia
 #gpg -u <param1> -sb <file> lienee se keskeinen juttu 
+
 case ${mode} in
 	0)
 		make_tar ${tgtfile}
 		make_tar2 ${tgtfile}
 	;;
 	1)
-		
+		#päällekkäinen toiminto export.sh kanssa?
 		make_upgrade ${tgtfile}
 	;;
-	2)
-		cd /
-		${srat} -xvpf ${tgtfile}
-		
-		${sdi} /var/cache/apt/archives/perl-modules-5.32*.deb
-		[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/perl-modules-5.32*.deb
-
-		part3
-	;;
+#	2)
+#		cd /
+#		${srat} -xvpf ${tgtfile}
+#		#vöib mennä päällekkäin import.sh kanssa
+#		${sdi} /var/cache/apt/archives/perl-modules-5.32*.deb
+#		[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/perl-modules-5.32*.deb
+#
+#		part3
+#	;;
 	3)
-		if [ x"$gz" == "x" ] ; then 
+		if [ x"$gg" == "x" ] ; then 
 			sudo /opt/bin/clouds.sh ${dnsm}
+			csleep 1	
+			${sag} install gpg pinentry-tty gpg-agent
+
 			csleep 1
-	
-			${sag} install gpg
+			sudo /sbin/ifdown -a
+			csleep 4
+
+			gg=$(sudo which gpg)
+			${gg} --quick-generate-key tester
 		fi
 	
-		[ -d ~/.gnupg ] || gpg --quick-generate-key tester
+		#fiksumpi ehto sopisi löytyä
+		#[ -d ~/.gnupg ] ||
+
 		#VAIH:joitain gpg:n huomioiva versio make_upgRade():sta tähän
-		${gz} --sign --create ${tgtfile}.s /var/cache/apt/archives/
+		#${gz} --sign --create ${tgtfile}.s /var/cache/apt/archives/
 	;;
-	4)
-		
-		if [ x"$gz" == "x" ] ; then 
-			sudo /opt/bin/clouds.sh ${dnsm}
-			csleep 1
-
-			${sag} install gpg
-		fi
-
-		#VAIH:gpg-allekIRjoitukset huomioiva tar-purku tähän
-		echo "mount;gpgtar -x"
-	;;
+#	4)
+#		
+#		if [ x"$gz" == "x" ] ; then 
+#			sudo /opt/bin/clouds.sh ${dnsm}
+#			csleep 1
+#
+#			${sag} install gpg
+#		fi
+#
+	#	#VAIH:gpg-allekIRjoitukset huomioiva tar-purku tähän
+	#	echo "mount;gpgtar -x"
+	#;;
 	*)
 		echo "-h"
 	;;
 esac
+
+
+
+if [ -x ${gg} ] ; then
+	if [ -s  ${tgtfile} ] ; then
+		gpg -u tester -sb ${tgtfile}
+		dqb "cp ${tgtfile}* targetdir"
+	fi
+fi
