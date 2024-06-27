@@ -4,6 +4,7 @@ mode=0
 frist=0
 debug=1
 tgtfile=/tmp/out.tar 
+dnsm=1
 
 function parse_opts_1 () {
 	case ${1} in
@@ -58,45 +59,64 @@ function make_tar() {
 	csleep 1
 
 	${shary} dnsmasq-base runit-helper dnsmasq libev4
-	${shary} dnsmasq-base runit-helper dnsmasq libev4
-	${shary} dnsmasq-base runit-helper dnsmasq libev4
-	${shary} dnsmasq-base runit-helper dnsmasq libev4
+#	${shary} dnsmasq-base runit-helper dnsmasq libev4
+#	${shary} dnsmasq-base runit-helper dnsmasq libev4
+#	${shary} dnsmasq-base runit-helper dnsmasq libev4
 	csleep 9
-		
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 1
+	
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
 	[ $? -eq 0 ] || exit 1	
 	${smr} -rf /run/live/medium/live/initrd.img*
+	
+	csleep 5
+	/opt/bin/clouds.sh ${dnsm}
 	csleep 5
 
 	${shary} init-system-helpers netfilter-persistent iptables-persistent
 	[ $? -eq 0 ] || exit 2
 	${smr} -rf /run/live/medium/live/initrd.img*
+
+	csleep 5
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
+
 	${shary} python3-ntp ntpsec-ntpdate
 	[ $? -eq 0 ] || exit 3
 	csleep 5
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
 
 	dqb "${shary} dnsmasq-base runit-helper"
-	csleep 5
+	csleep 1
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.85-1
 	${shary} dnsmasq-base runit-helper
 	[ $? -eq 0 ] || exit 4
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
 
 	#dqb "${shary} dnsmasq-base runit-helper"
-	c#sleep 5
+	csleep 1
 
 	dqb "${shary} libev4 "
-	csleep 5
+	csleep 1
 
 	${shary} libev4 
 	[ $? -eq 0 ] || exit 5
-	${shary} libev4 
-	${shary} libev4 
-	${shary} libev4 
-	${shary} libev4 
-	${shary} libev4 
+
+	csleep 5
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
+
+#	${shary} libev4 
+#	${shary} libev4 
+#	${shary} libev4 
+#	${shary} libev4 
+#	${shary} libev4 
 
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
@@ -105,25 +125,32 @@ function make_tar() {
 	csleep 5
 
 	${shary} dnsmasq
-	[ $? -eq 0 ] || exit 55
-	${shary} dnsmasq	
-	${shary} dnsmasq
-	${shary} dnsmasq
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
+
+#	[ $? -eq 0 ] || exit 55
+#	${shary} dnsmasq	
+#	${shary} dnsmasq
+#	${shary} dnsmasq
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
-	${shary} dnsmasq-base runit-helper dnsmasq libev4
-	${shary} dnsmasq-base runit-helper dnsmasq libev4
-	${shary} dnsmasq-base runit-helper dnsmasq libev4
-	${shary} dnsmasq-base runit-helper dnsmasq libev4
-		
-	[ $? -eq 0 ] || exit 56
-	${smr} -rf /run/live/medium/live/initrd.img*
+#	${shary} dnsmasq-base runit-helper dnsmasq libev4
+#	${shary} dnsmasq-base runit-helper dnsmasq libev4
+#	${shary} dnsmasq-base runit-helper dnsmasq libev4
+#	${shary} dnsmasq-base runit-helper dnsmasq libev4
+#		
+#	[ $? -eq 0 ] || exit 56
+#	${smr} -rf /run/live/medium/live/initrd.img*
+#	csleep 5
+	/opt/bin/clouds.sh ${dnsm}
 	csleep 5
 
 	${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
 	[ $? -eq 0 ] || exit 6
 	${smr} -rf /run/live/medium/live/initrd.img*
+	csleep 5
+	/opt/bin/clouds.sh ${dnsm}
 	csleep 5
 
 	#some kind of retrovirus
@@ -147,6 +174,9 @@ function make_tar2() {
 	local tig
 	tig=$(sudo which git)
 	
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
+
 	if [ x"${tig}" == "x" ] ; then
 		${shary} git
 		[ $? -eq 0 ] || exit 7
@@ -165,8 +195,14 @@ function make_tar2() {
 	echo "#dqb cd ${q}"
 	cd ${q}
 
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
+
 	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
 	${tig} clone https://github.com/senescent777/project.git
+
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
 
 	cd project
 	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
@@ -187,8 +223,15 @@ function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	dqb "${sag} upgrade -u"
 
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
+
 	${sag} upgrade -u
 	${srat} -cvpf ${1} /var/cache/apt/archives 
+
+	
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
 }
 
 if [ $# -gt 0 ] ; then
@@ -196,12 +239,16 @@ if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 ${opt} ; done
 
 	dqb "if this script doesn't work, try /opt/bin/clouds.sh"	
-#	/opt/bin/clouds.sh 0
-#	/opt/bin/clouds.sh 0
-#	/opt/bin/clouds.sh 0
+
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
 
 	${asy}
 	${sag_u} 
+
+	/opt/bin/clouds.sh ${dnsm}
+	csleep 5
+
 	#[ $? -eq 0 ] || echo "/o/b/clouds.sh <mode> | ${sifu} -a | ${sifu} ${iface}";exit
 else
 	echo "$0 -h";exit
