@@ -53,6 +53,7 @@ function make_tar() {
 	dqb "shary= ${shary}"
 	csleep 5
 
+	dqb "${sa} --fix-broken install"
 	${sa} --fix-broken install
 	csleep 1
 
@@ -68,13 +69,31 @@ function make_tar() {
 	[ $? -eq 0 ] || exit 3
 	csleep 5
 
+	dqb "${shary} dnsmasq-base runit-helper"
+	csleep 5
+
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.85-1
 	${shary} dnsmasq-base runit-helper
 	[ $? -eq 0 ] || exit 4
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
+	dqb "${shary} dnsmasq-base runit-helper"
+	csleep 5
+
+	dqb "${shary} libev4 "
+	csleep 5
+
 	${shary} libev4 
 	[ $? -eq 0 ] || exit 5
+	${smr} -rf /run/live/medium/live/initrd.img*
+	csleep 5
+
+	dqb "${shary} dnsmasq"
+	csleep 5
+
+	${shary} dnsmasq
+	[ $? -eq 0 ] || exit 55
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
 
