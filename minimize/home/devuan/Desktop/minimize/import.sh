@@ -1,5 +1,4 @@
 #!/bin/bash
-
 . ~/Desktop/minimize/conf
 
 function parse_opts_1() {
@@ -16,15 +15,16 @@ function parse_opts_1() {
 . ./lib
 
 if [ $# -gt 0 ] ; then
-	for opt in $@ ; do parse_opts_1 $opt ; done
+	for opt in $@ ; do parse_opts_1 ${opt} ; done
 fi
 
-#TODO:oleelllisista hmistoista backup ennen purkua?
+#VAIH:oleelllisista hmistoista backup ennen purkua?
+${srat} -cvpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
 
 cd /
-${som} $part $dir -o ro
-sudo tar -xvpf $dir/$archive
-${uom} $part
+${som} ${part} ${dir} -o ro
+${srat} -xvpf ${dir}/${archive}
+${uom} ${part}
 cd ~/Desktop/minimize
 
 #HUOM. tämän olisi kuvakkeen kanssa tarkoitus mennä jatkossa filesystem.squashfs sisälle
