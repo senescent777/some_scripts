@@ -160,7 +160,7 @@ if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä 
 #	if [ ${enforce} -eq 1 ] ; then 
 		dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
 		csleep 5
-		${scm} a+w/etc/apt #tarpeen?
+		${scm} a+w /etc/apt #tarpeen?
 		g=$(date +%F)
 		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
