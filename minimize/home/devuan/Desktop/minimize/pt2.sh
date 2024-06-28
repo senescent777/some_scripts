@@ -53,7 +53,6 @@ ${asy}
 ${smr} -rf /run/live/medium/live/initrd.img*
 ${sharpy} ppp 
 ${asy}
-
 sleep 1
 
 ${smr} -rf /run/live/medium/live/initrd.img*
@@ -85,15 +84,7 @@ ${sharpy} libgsm*
 ${asy} 
 sleep 6
 
-
-#uutena 250624, pois jos qsee
-sudo rm -rf /run/live/medium/live/initrd.img*
-sudo apt-get remove --purge --yes libgsm*
-sudo apt autoremove --yes
-sleep 6
-
-sudo rm -rf /run/live/medium/live/initrd.img*
-
+${smr} -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb
 df
 #mimimize-hmiston siivous kanssa?
