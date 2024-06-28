@@ -1,11 +1,14 @@
 #!/bin/bash
 
 iface=eth0 
-enforce=1
+enforce=0
 debug=0
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 mode=2
+
+#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
+#(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
 
 function parse_opts_1() {
 	case "${1}" in

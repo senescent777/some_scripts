@@ -1,9 +1,6 @@
 #!/bin/bash
 . ./conf
 
-#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
-#(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
-
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -35,8 +32,14 @@ sleep 3
 
 sleep 3
 #jos -T kätevämpi? /sbin tarpeellinen?
-#TODO:jatkossa ~/.gnupg mukaan?
-${srat} -uvpf ${dir}/${archive} /opt/bin ~/Desktop/minimize /etc/iptables /etc/network/interfaces* /etc/sudoers.d/meshuggah /etc/dhcp/dhclient* /etc/resolv.conf* /sbin/dhclient-*  
+${srat} -uvpf ${dir}/${archive} /opt/bin ~/Desktop/minimize ~/.gnupg /etc/iptables /etc/network/interfaces* /etc/sudoers.d/meshuggah /etc/dhcp/dhclient* /etc/resolv.conf* /sbin/dhclient-*  
+
+#gg=$(sudo which gpg)
+#if [ -x ${gg} ] ; then
+#	if [ -s  ${tgtfile} ] ; then
+#		gpg -u tester -sb ${dir}/${archive}
+#	fi
+#fi
 
 csleep 3
 [ ${debug} -eq 1 ] && ls -las ${dir};sleep 5
