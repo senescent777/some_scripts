@@ -42,7 +42,6 @@ function check_params() {
 }
 
 . ./lib
-#gz=$(sudo which gpgtar)
 
 #HUOM. löytyy myös se out4.tar
 function make_tar() {
@@ -61,9 +60,7 @@ function make_tar() {
 	sudo /opt/bin/clouds.sh ${dnsm}
 
 	${shary} dnsmasq-base runit-helper dnsmasq libev4
-#	${shary} dnsmasq-base runit-helper dnsmasq libev4
-#	${shary} dnsmasq-base runit-helper dnsmasq libev4
-#	${shary} dnsmasq-base runit-helper dnsmasq libev4
+	${smr} -rf /run/live/medium/live/initrd.img*
 
 	csleep 1
 	sudo /opt/bin/clouds.sh ${dnsm}
@@ -104,9 +101,6 @@ function make_tar() {
 	sudo /opt/bin/clouds.sh ${dnsm}
 	csleep 1
 
-	#dqb "${shary} dnsmasq-base runit-helper"
-	csleep 1
-
 	dqb "${shary} libev4 "
 	csleep 1
 
@@ -117,15 +111,7 @@ function make_tar() {
 	sudo /opt/bin/clouds.sh ${dnsm}
 	csleep 1
 
-#	${shary} libev4 
-#	${shary} libev4 
-#	${shary} libev4 
-#	${shary} libev4 
-#	${shary} libev4 
-
 	${smr} -rf /run/live/medium/live/initrd.img*
-#	csleep 5
-
 	dqb "${shary} dnsmasq"
 	csleep 1
 
@@ -133,22 +119,8 @@ function make_tar() {
 	sudo /opt/bin/clouds.sh ${dnsm}
 	csleep 1
 
-#	[ $? -eq 0 ] || exit 55
-#	${shary} dnsmasq	
-#	${shary} dnsmasq
-#	${shary} dnsmasq
-
 	${smr} -rf /run/live/medium/live/initrd.img*
 	csleep 5
-
-#	${shary} dnsmasq-base runit-helper dnsmasq libev4
-#	${shary} dnsmasq-base runit-helper dnsmasq libev4
-#	${shary} dnsmasq-base runit-helper dnsmasq libev4
-#	${shary} dnsmasq-base runit-helper dnsmasq libev4
-#		
-#	[ $? -eq 0 ] || exit 56
-#	${smr} -rf /run/live/medium/live/initrd.img*
-#	csleep 5
 
 	sudo /opt/bin/clouds.sh ${dnsm}
 	csleep 1
@@ -264,7 +236,6 @@ else
 fi
 
 check_params ${tgtfile}
-#main()
 gg=$(sudo which gpg)
 
 #VAIH:josko gpg allekirjoittamaan tar:it mikäli .gnupg olemassa ja täts it
@@ -280,15 +251,6 @@ case ${mode} in
 		#päällekkäinen toiminto export.sh kanssa?
 		make_upgrade ${tgtfile}
 	;;
-#	2)
-#		cd /
-#		${srat} -xvpf ${tgtfile}
-#		#vöib mennä päällekkäin import.sh kanssa
-#		${sdi} /var/cache/apt/archives/perl-modules-5.32*.deb
-#		[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/perl-modules-5.32*.deb
-#
-#		part3
-#	;;
 	3)
 		if [ x"$gg" == "x" ] ; then 
 			sudo /opt/bin/clouds.sh ${dnsm}
@@ -302,25 +264,7 @@ case ${mode} in
 			gg=$(sudo which gpg)
 			${gg} --quick-generate-key tester
 		fi
-	
-		#fiksumpi ehto sopisi löytyä
-		#[ -d ~/.gnupg ] ||
-
-		#VAIH:joitain gpg:n huomioiva versio make_upgRade():sta tähän
-		#${gz} --sign --create ${tgtfile}.s /var/cache/apt/archives/
 	;;
-#	4)
-#		
-#		if [ x"$gz" == "x" ] ; then 
-#			sudo /opt/bin/clouds.sh ${dnsm}
-#			csleep 1
-#
-#			${sag} install gpg
-#		fi
-#
-	#	#VAIH:gpg-allekIRjoitukset huomioiva tar-purku tähän
-	#	echo "mount;gpgtar -x"
-	#;;
 	*)
 		echo "-h"
 	;;
