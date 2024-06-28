@@ -1,7 +1,6 @@
 #!/bin/bash
 . ./conf
 
-#TODO:tuplavarmistus että validi /e/n/i tulee mukaan
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -23,7 +22,7 @@ fi
 #exit
 cd /
 
-${som} $part $dir -o rw
+${som} ${part} ${dir} -o rw
 [ $? -eq 0 ] || exit 1
 sleep 3
 
@@ -32,8 +31,17 @@ sleep 3
 [ -f /tmp/${archive} ] && ${spc} /tmp/${archive} ${dir}
 
 sleep 3
-#jos -T kätevämpi?
-${srat} -uvpf ${dir}/${archive} /opt/bin ~/Desktop/minimize /etc/iptables /etc/network/interfaces* /etc/sudoers.d/meshuggah /etc/dhcp/dhclient* /etc/resolv.conf* /sbin/dhclient-*  
+
+#jos -T kätevämpi? /sbin tarpeellinen?
+${srat} -uvpf ${dir}/${archive} /opt/bin ~/Desktop/minimize ~/.gnupg /etc/iptables /etc/network/interfaces* /etc/sudoers.d/meshuggah /etc/dhcp/dhclient* /etc/resolv.conf* /sbin/dhclient-*  
+
+#gg=$(sudo which gpg)
+#if [ -x ${gg} ] ; then
+#	if [ -s  ${tgtfile} ] ; then
+#		gpg -u tester -sb ${dir}/${archive}
+#	fi
+#fi
+
 
 csleep 3
 [ ${debug} -eq 1 ] && ls -las ${dir};sleep 5

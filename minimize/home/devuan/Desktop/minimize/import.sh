@@ -23,10 +23,32 @@ ${srat} -cvpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
 
 cd /
 ${som} ${part} ${dir} -o ro
+
+#gg=$(sudo which gpg)
+#
+#if [ -x ${gg} ] ; then
+#	if [ -s ${dir}/${archive}.sig ] ; then
+#		gpg --verify ${dir}/${archive}.sig ${dir}/${archive}
+#		[ $? -eq 0 ] || exit 99
+#	fi
+#fi
+
+#		cd /
+#		${srat} -xvpf ${tgtfile}
+#		#vöib mennä päällekkäin import.sh kanssa
+#		${sdi} /var/cache/apt/archives/perl-modules-5.32*.deb
+#		[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/perl-modules-5.32*.deb
+#
+#		part3
+
+
 ${srat} -xvpf ${dir}/${archive}
 ${uom} ${part}
 cd ~/Desktop/minimize
 
 #HUOM. tämän olisi kuvakkeen kanssa tarkoitus mennä jatkossa filesystem.squashfs sisälle
-#TODO:make_tar:ista gpgtar-jutut
+
+#VAIH:make_tar:ista gpgtar-jutut
 #TODO:https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/skripts/export ja https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/lib/export soveötaen
+#VAIH:jatkossa myös pakettien päivitys tänän skriptin kautta?
+

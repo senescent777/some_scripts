@@ -3,7 +3,6 @@
 
 odio=$(which sudo)
 [ -x ${odio} ] || exit 666
-#exit
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -36,10 +35,17 @@ function check_binaries() {
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 
+	srat=$(sudo which tar)
+	som=$(sudo which mount)
+	uom=$(sudo which umount)
+
+
 	dqb "half_fdone"
 	csleep 1
 
 	[ -x ${ipt} ] || exit 5
+	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
+
 	[ -x ${ip6t} ] || exit 5
 	[ -x ${iptr} ] || exit 5
 	[ -x ${ip6tr} ] || exit 5
@@ -58,8 +64,12 @@ function check_binaries() {
 	[ -x ${slinky} ] || exit 5
 	[ -x ${spc} ] || exit 5
 
+	[ -x ${srat} ] || exit 5
+	[ -x ${som} ] || exit 5
+	[ -x ${uom} ] || exit 5
+
 	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-	ENF_LST="${smr} ${slinky} ${spc}"
+	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
 
 	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
@@ -69,58 +79,40 @@ function check_binaries() {
 function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
 
-	#odio?
-	ipt="sudo ${ipt} "
-	ip6t="sudo ${ip6t} "
-	iptr="sudo ${iptr} "
-	ip6tr="sudo ${ip6tr} "
+	ipt="${odio} ${ipt} "
+	ip6t="${odio} ${ip6t} "
+	iptr="${odio} ${iptr} "
+	ip6tr="${odio} ${ip6tr} "
 
-	whack="sudo ${whack} --signal 9 "
-	snt="sudo ${snt} "
-	sharpy="sudo ${sag} remove --purge --yes "
-	sdi="sudo ${sdi} -i "
+	whack="${odio} ${whack} --signal 9 "
+	snt="${odio} ${snt} "
+	sharpy="${odio} ${sag} remove --purge --yes "
+	sdi="${odio} ${sdi} -i "
 
 	#HUOM. ${sag} VIIMEISENÄ
-	shary="sudo ${sag} --no-install-recommends reinstall --yes "
-	sag_u="sudo ${sag} update "
-	sag="sudo ${sag} "
+	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
+	sag_u="${odio} ${sag} update "
+	sag="${odio} ${sag} "
 
-	sco="sudo ${sco} "
-	scm="sudo ${scm} "
-	sip="sudo ${sip} "
-	sa="sudo ${sa} "
-	sifu="sudo ${sifu} "
-	sifd="sudo ${sifd} "
-	smr="sudo ${smr} "
-	slinky="sudo ${slinky} -s "
-	spc="sudo ${spc} "
+	sco="${odio} ${sco} "
+	scm="${odio} ${scm} "
+	sip="${odio} ${sip} "
+	sa="${odio} ${sa} "
+	sifu="${odio} ${sifu} "
+	sifd="${odio} ${sifd} "
+	smr="${odio} ${smr} "
+	slinky="${odio} ${slinky} -s "
+	spc="${odio} ${spc} "
+	srat="${odio} ${srat} "
+	asy="${odio} ${sa} autoremove --yes"
 
-	dqb "spc= ${spc}"
+	som="${odio} ${som} "
+	uom="${odio} ${uom} "	
+
+#	dqb "spc= ${spc}"
 	dqb "b1nar135.2 0k.2" 
+
 	csleep 3
-}
-
-#HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
-#HUOM.2. ei niitä {sco}-juttuja ao. fktioon
-function mangle_s() {
-	if [ -s ${1} ] ; then 
-		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		${dqb} "W3NGL3 ${1}"
-		csleep 5 #vieläkö nalkuttaa?
-		
-		sudo chmod 0555 ${1}
-		sudo chown root:root ${1} #uutena tämä
-		#chattr +ui ${1}
-
-		csleep 1
-		local s
-		local n
-
-		n=$(whoami) #olisi myös %users...
-		s=$(sha256sum ${1})
-		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> /etc/sudoers.d/meshuggah
-		sleep 1
-	fi
 }
 
 function mangle2() {
@@ -133,23 +125,17 @@ function mangle2() {
 	fi
 }
 
-#VAIH:(wrapper vielä josqs pois)
-#mallia https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/opt/bin/install.sh , https://github.com/senescent777/project/blob/main/home/devuan/Dpckcer/buildr/source/scripts/part4.sh 
-function clouds() {
-	dqb "coluds(${1})"
-	/opt/bin/clouds.sh ${1}
-}
-
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
 function ns2() {
 	dqb "ns2( ${1} )"
 
 	${scm} u+w /home
 
-	sudo /usr/sbin/userdel ${1}
+	${odio} /usr/sbin/userdel ${1}
 	sleep 3
 
-	sudo adduser --system ${1}
+	${odio} adduser --system ${1}
+
 	sleep 1
 	${scm} go-w /home
 
@@ -161,7 +147,9 @@ function ns4() {
 	dqb "ns4( ${1} )"
 
 	${scm} u+w /run
-	sudo touch /run/${1}.pid
+
+	${odio} touch /run/${1}.pid
+
 	${scm} 0600 /run/${1}.pid
 	${sco} ${1}:65534 /run/${1}.pid
 	${scm} u-w /run
@@ -173,7 +161,9 @@ function ns4() {
 	dqb "starting ${1} in 5 secs"
 
 	sleep 5
-	sudo -u ${1} ${1} -g
+
+	${odio} -u ${1} ${1} -g
+
 	echo $?
 	sleep 1
 	pgrep stubby*
@@ -207,11 +197,30 @@ function part1() {
 
 function part3() {
 	${sdi} /var/cache/apt/archives/lib*.deb
-	[ $? -eq  0 ] && sudo rm -rf ${pkgdir}/lib*.deb
+  
+	if [ $? -eq  0 ] ; then
+		#nköjään ei riittävästitehty dnsmasq kannalta
+		dqb "part3.1 ok"
+		sleep 5
+		${smr} -rf ${pkgdir}/lib*.deb
+	else
+	 	exit 66
+	fi
+	
+	#&&
 
 	#HUOM. ei kannattane vastata myöntävästi tallennus-kysymykseen?
 	${sdi} ${pkgdir}/*.deb
-	[ $? -eq 0 ] && sudo rm -rf ${pkgdir}/*.deb
+	
+	if [ $? -eq  0 ] ; then
+		dqb "part3.2 ok"
+		sleep 5
+		${smr} -rf ${pkgdir}/lib*.deb
+	else
+	 	exit 67
+	fi
+
+
 	csleep 2
 }
 
@@ -231,5 +240,6 @@ function gpo() {
 	done
 }
 
-#gpo?
+#TODO:gpo jo käyttöön?
+
 #check_params ?
