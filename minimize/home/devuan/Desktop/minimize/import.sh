@@ -41,6 +41,7 @@ gg=$(sudo which gpg)
 
 if [ -x ${gg} ] ; then
 	if [ -s ${dir}/${archive}.sig ] ; then
+#${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
 		gpg --verify ${dir}/${archive}.sig ${dir}/${archive}
 
 		if [ $? -eq 0 ] ; then
