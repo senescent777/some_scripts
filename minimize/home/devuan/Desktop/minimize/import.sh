@@ -41,11 +41,14 @@ ${som} ${part} ${dir} -o ro
 #
 #		part3
 
+
 ${srat} -xvpf ${dir}/${archive}
 ${uom} ${part}
 cd ~/Desktop/minimize
 
 #HUOM. tämän olisi kuvakkeen kanssa tarkoitus mennä jatkossa filesystem.squashfs sisälle
+
 #VAIH:make_tar:ista gpgtar-jutut
 #TODO:https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/skripts/export ja https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/lib/export soveötaen
 #VAIH:jatkossa myös pakettien päivitys tänän skriptin kautta?
+

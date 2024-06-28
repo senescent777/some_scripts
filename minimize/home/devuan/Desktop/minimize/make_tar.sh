@@ -86,6 +86,7 @@ function make_tar() {
 	csleep 1
 
 	${shary} python3-ntp ntpsec-ntpdate
+
 	[ $? -eq 0 ] || exit 3
 	
 	csleep 1
@@ -96,6 +97,7 @@ function make_tar() {
 	csleep 1
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.85-1
+
 	${shary} dnsmasq-base runit-helper
 	[ $? -eq 0 ] || exit 4
 	${smr} -rf /run/live/medium/live/initrd.img*
@@ -169,6 +171,7 @@ function make_tar() {
 
 	${srat} -rvpf ${1} /etc/init.d/net*
 	${srat} -rvpf ${1} /etc/rcS.d/S*net*
+
 	csleep 5
 }
 
@@ -277,6 +280,7 @@ case ${mode} in
 		make_tar2 ${tgtfile}
 	;;
 	1)
+
 		#päällekkäinen toiminto export.sh kanssa?
 		make_upgrade ${tgtfile}
 	;;

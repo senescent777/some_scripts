@@ -34,15 +34,18 @@ function check_binaries() {
 	smr=$(sudo which rm)
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
+
 	srat=$(sudo which tar)
 	som=$(sudo which mount)
 	uom=$(sudo which umount)
+
 
 	dqb "half_fdone"
 	csleep 1
 
 	[ -x ${ipt} ] || exit 5
 	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
+
 	[ -x ${ip6t} ] || exit 5
 	[ -x ${iptr} ] || exit 5
 	[ -x ${ip6tr} ] || exit 5
@@ -60,6 +63,7 @@ function check_binaries() {
 	[ -x ${smr} ] || exit 5
 	[ -x ${slinky} ] || exit 5
 	[ -x ${spc} ] || exit 5
+
 	[ -x ${srat} ] || exit 5
 	[ -x ${som} ] || exit 5
 	[ -x ${uom} ] || exit 5
@@ -131,6 +135,7 @@ function ns2() {
 	sleep 3
 
 	${odio} adduser --system ${1}
+
 	sleep 1
 	${scm} go-w /home
 
@@ -142,7 +147,9 @@ function ns4() {
 	dqb "ns4( ${1} )"
 
 	${scm} u+w /run
+
 	${odio} touch /run/${1}.pid
+
 	${scm} 0600 /run/${1}.pid
 	${sco} ${1}:65534 /run/${1}.pid
 	${scm} u-w /run
@@ -154,13 +161,14 @@ function ns4() {
 	dqb "starting ${1} in 5 secs"
 
 	sleep 5
+
 	${odio} -u ${1} ${1} -g
+
 	echo $?
 	sleep 1
 	pgrep stubby*
 	sleep 5
 }
-
 #=========================PART 0 ENDS HERE=================================================================
 
 function part1() {
@@ -189,7 +197,7 @@ function part1() {
 
 function part3() {
 	${sdi} /var/cache/apt/archives/lib*.deb
-
+  
 	if [ $? -eq  0 ] ; then
 		#nköjään ei riittävästitehty dnsmasq kannalta
 		dqb "part3.1 ok"
@@ -212,6 +220,7 @@ function part3() {
 	 	exit 67
 	fi
 
+
 	csleep 2
 }
 
@@ -232,4 +241,5 @@ function gpo() {
 }
 
 #TODO:gpo jo käyttöön?
+
 #check_params ?

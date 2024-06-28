@@ -1,6 +1,7 @@
 #!/bin/bash
 
 iface=eth0 
+
 enforce=0
 debug=0
 pkgdir=/var/cache/apt/archives
@@ -10,6 +11,7 @@ mode=2
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
 
+
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -17,13 +19,14 @@ function parse_opts_1() {
 		;;
 		*)
 			mode=${1}
-		;;
+	;;
 	esac
 }
 
 . ./lib
 
 function check_params() {
+
 	case ${debug} in
 		0|1)
 			dqb "ko"
@@ -87,6 +90,7 @@ function pre_enforce() {
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
 	#sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? ehkä ei
 	sudo chown -R root:root /etc/sudoers.d
+
 }
 
 function enforce_access() {
@@ -106,6 +110,7 @@ function enforce_access() {
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
 	${sco} -R 101:65534 /home/stubby/
+
 
 	local f
 
@@ -158,8 +163,7 @@ enforce_access
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
 
-if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain
-#	if [ ${enforce} -eq 1 ] ; then 
+if [ -s /etc/apt/sources.list.tmp ] ; then
 		dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
 		csleep 5
 		${scm} a+w /etc/apt #tarpeen?
@@ -178,7 +182,6 @@ if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä 
 
 		[ ${debug} -eq 1 ] && ls -las /etc/apt
 		csleep 5
-#	fi
 fi
 
 [ ${mode} -eq 0 ] && exit
@@ -212,11 +215,13 @@ sleep 3
 
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
+
 #HUOM.270624:oli aikaisemmin tässä /o/b/clouds.sh 0
 #exit
 
 csleep 5
 ${smr} -rf /run/live/medium/live/initrd.img*
+
 sleep 3
 
 if [ ${debug} -eq 1 ] ; then
@@ -246,11 +251,6 @@ if [ ${mode} -eq 1 ] ; then
 fi
 
 ${asy}
-#sleep 5
-#/opt/bin/clouds.sh 0
-#sleep 5
-#/opt/bin/clouds.sh 0
-#sleep 5
 
 sudo /opt/bin/clouds.sh 0
 sleep 5

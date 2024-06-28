@@ -31,6 +31,7 @@ sleep 3
 [ -f /tmp/${archive} ] && ${spc} /tmp/${archive} ${dir}
 
 sleep 3
+
 #jos -T kätevämpi? /sbin tarpeellinen?
 ${srat} -uvpf ${dir}/${archive} /opt/bin ~/Desktop/minimize ~/.gnupg /etc/iptables /etc/network/interfaces* /etc/sudoers.d/meshuggah /etc/dhcp/dhclient* /etc/resolv.conf* /sbin/dhclient-*  
 
@@ -40,6 +41,7 @@ ${srat} -uvpf ${dir}/${archive} /opt/bin ~/Desktop/minimize ~/.gnupg /etc/iptabl
 #		gpg -u tester -sb ${dir}/${archive}
 #	fi
 #fi
+
 
 csleep 3
 [ ${debug} -eq 1 ] && ls -las ${dir};sleep 5

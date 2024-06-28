@@ -50,10 +50,13 @@ case ${1} in
 		${slinky} /etc/resolv.conf.new /etc/resolv.conf
 		${slinky} /etc/dhcp/dhclient.conf.new /etc/dhcp/dhclient.conf
 		${spc} /sbin/dhclient-script.new /sbin/dhclient-script
-		
+
 		${ipt} -A INPUT -p tcp -m tcp --sport 853 -j b
 		${ipt} -A OUTPUT -p tcp -m tcp --dport 853 -j e
 		for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do tod_dda ${s} ; done
+	;;
+	*)
+		echo "ERROR TERROR"
 	;;
 esac
 
@@ -71,6 +74,7 @@ ${scm} 0755 /sbin
 ${sco} -R root:root /etc/iptables
 ${scm} 0400 /etc/iptables/*
 ${scm} 0750 /etc/iptables
+
  
 sleep 2
 
@@ -81,4 +85,4 @@ sleep 2
 #fi #
 
 
-	
+
