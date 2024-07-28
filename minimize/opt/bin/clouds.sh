@@ -2,19 +2,12 @@
 
 smr=$(sudo which rm)
 ipt=$(sudo which iptables)
+ip6t=$(sudo which ip6tables)
 slinky=$(sudo which ln)
 spc=$(sudo which cp)
 slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
-
-##4 backwards compability
-#smr="sudo ${smr}"
-#ipt="sudo ${ipt}"
-#slinky="sudo ${slinky}"
-#spc="sudo ${spc}"
-#sco="sudo ${sco}"
-#scm="sudo ${scm}"
 
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
@@ -47,6 +40,16 @@ case ${1} in
 		for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
 	;;
 	1)
+		if [ -s /etc/resolv.conf.new ] ; then
+			echo "r30lv.c0nf alr3ady 3x15t5"
+		else
+			sudo touch /etc/resolv.conf.new
+			sudo chmod a+w /etc/resolv.conf.new
+			sudo echo "nameserver 127.0.0.1" > /etc/resolv.conf.new
+			sudo chmod 0444 /etc/resolv.conf.new
+			sudo chown root:root /etc/resolv.conf.new
+		fi
+
 		${slinky} /etc/resolv.conf.new /etc/resolv.conf
 		${slinky} /etc/dhcp/dhclient.conf.new /etc/dhcp/dhclient.conf
 		${spc} /sbin/dhclient-script.new /sbin/dhclient-script
@@ -54,9 +57,11 @@ case ${1} in
 		${ipt} -A INPUT -p tcp -m tcp --sport 853 -j b
 		${ipt} -A OUTPUT -p tcp -m tcp --dport 853 -j e
 		for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do tod_dda ${s} ; done
-	;;
-	*)
-		echo "ERROR TERROR"
+
+		echo "dns";sleep 2
+		pgrep dnsmasq
+		echo "stu";sleep 2
+		pgrep stubby
 	;;
 esac
 
@@ -74,7 +79,6 @@ ${scm} 0755 /sbin
 ${sco} -R root:root /etc/iptables
 ${scm} 0400 /etc/iptables/*
 ${scm} 0750 /etc/iptables
-
  
 sleep 2
 
@@ -83,6 +87,4 @@ sleep 2
 	${ip6t} -L #
 	sleep 5
 #fi #
-
-
 
