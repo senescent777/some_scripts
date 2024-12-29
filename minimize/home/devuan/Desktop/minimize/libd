@@ -129,6 +129,7 @@ function mangle2() {
 }
 
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
+#TODO:stubbyn asennus toimiimaan taas (261224)
 function ns2() {
 	dqb "ns2( ${1} )"
 
@@ -205,10 +206,8 @@ function part3() {
 		sleep 5
 		${smr} -rf ${pkgdir}/lib*.deb
 	else
-	 	exit 66
+	 	echo "exit 66"
 	fi
-	
-	#&&
 
 	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
 	${sdi} ${pkgdir}/*.deb
@@ -218,7 +217,7 @@ function part3() {
 		sleep 5
 		${smr} -rf ${pkgdir}/lib*.deb
 	else
-	 	exit 67
+	 	echo "exit 67"
 	fi
 
 	csleep 2

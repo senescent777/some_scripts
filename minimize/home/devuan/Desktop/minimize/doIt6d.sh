@@ -80,7 +80,7 @@ function pre_enforce() {
 
 		local f 
 		for f in ${CB_LIST1} ; do mangle_s ${f} ; done
-		for f in /etc/init.d/stubby /opt/bin/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
+		for f in /etc/init.d/stubby /opt/bin/clouds.sh /opt/bin/cloudsd.sh  /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
 
 		sudo chmod a-w /etc/sudoers.d/meshuggah	
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
@@ -107,6 +107,8 @@ function enforce_access() {
 	${scm} -R 0755 ~/Desktop/minimize
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
+
+	#TODO:ao. rivi, saattaa muuttua, uid ei-numeeriseksi
 	${sco} -R 101:65534 /home/stubby/
 
 	local f
@@ -280,6 +282,7 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 part3
 echo $?
 sleep 3
+${ip6tr} /etc/iptables/rules.v6
 
 #toimii miten toimii tämä if-blokki
 if [ ${mode} -eq 1 ] ; then
@@ -301,8 +304,8 @@ ${asy}
 #sleep 5
 
 dqb "GRADN BELIALAS KYE"
-#clouds uusix kanssa
-#sudo /opt/bin/clouds.sh 0
+#VAIH:clouds uusix kanssa
+sudo /opt/bin/cloudsd.sh 0
 sleep 5
 ${odio} /etc/init.d/dnsmasq stop
 ${odio} /etc/init.d/nstpsec stop
@@ -318,7 +321,7 @@ exit
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 echo "GRANDLE OF FILHTTT"; sleep 4
 ${odio} /etc/init.d/dnsmasq restart
-sudo /opt/bin/clouds.sh 1
+sudo /opt/bin/cloudsd.sh 1
 ns2 stubby
 ns4 stubby
 
