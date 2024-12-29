@@ -251,31 +251,31 @@ case ${mode} in
 		#päällekkäinen toiminto export.sh kanssa?
 		make_upgrade ${tgtfile}
 	;;
-
-	3)
-		if [ x"$gg" == "x" ] ; then 
-			sudo /opt/bin/cloudsd.sh ${dnsm}
-			csleep 1	
-			${sag} install gpg pinentry-tty gpg-agent
-
-			csleep 1
-			sudo /sbin/ifdown -a
-			csleep 4
-
-			gg=$(sudo which gpg)
-			${gg} --quick-generate-key tester
-		fi
-	
-		;;
-
+#
+#	3)
+#		if [ x"$gg" == "x" ] ; then 
+#			sudo /opt/bin/cloudsd.sh ${dnsm}
+#			csleep 1	
+#			${sag} install gpg pinentry-tty gpg-agent
+#
+#			csleep 1
+#			sudo /sbin/ifdown -a
+#			csleep 4
+#
+#			gg=$(sudo which gpg)
+#			${gg} --quick-generate-key tester
+#		fi
+#	
+#		;;
+#
 	*)
 		echo "-h"
 	;;
 esac
 
-if [ -x ${gg} ] ; then
-	if [ -s  ${tgtfile} ] ; then
-		gpg -u tester -sb ${tgtfile}
-		dqb "cp ${tgtfile}* targetdir"
-	fi
-fi
+#if [ -x ${gg} ] ; then
+#	if [ -s  ${tgtfile} ] ; then
+#		gpg -u tester -sb ${tgtfile}
+#		dqb "cp ${tgtfile}* targetdir"
+#	fi
+#fi
