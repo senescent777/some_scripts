@@ -12,10 +12,17 @@ ${asy}
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 sudo apt --fix-broken install
-${sharpy} dirmngr discover* distro-info-data efibootmgr exfalso ftp gcr
+${sharpy} dirmngr discover* distro-info-data
 ${asy}
 echo "WARNING 1"; sleep 6
+
+${smr} -rf /run/live/medium/live/initrd.img*
+sudo apt --fix-broken install
+${sharpy} efibootmgr exfalso ftp gcr
+${asy}
+
 sudo which dhclient; sudo which ifup; sleep 3
+echo "SFSGSW"; exit
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 sudo apt --fix-broken install
@@ -41,7 +48,7 @@ ${sharpy} lvm2 mdadm
 ${asy}
 sleep 6
 sudo which dhclient; sudo which ifup; sleep 3
-echo "WARNING 2"; sleep 6
+echo "WARNING 2"; exit
 #jossain kohtaa menevät lokaalit P.V.HH, KORJAA
 
 ${smr} -rf /run/live/medium/live/initrd.img*
