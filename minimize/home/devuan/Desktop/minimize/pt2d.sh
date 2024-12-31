@@ -22,14 +22,16 @@ ${sharpy} efibootmgr exfalso ftp gcr
 ${asy}
 
 sudo which dhclient; sudo which ifup; sleep 3
-echo "SFSGSW"; exit
+echo "SFSGSW"
 
 ${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
-${sharpy} ghostscript gir* gdisk gpg-* gpgconf gpgsm gparted
-${asy}
+#sudo apt --fix-broken install
+echo "SOMETHING GOES WRONG WITH ${sharpy} ghostscript gir* gdisk gpg-* gpgconf gpgsm gparted"
+#${asy}
 sudo which dhclient; sudo which ifup; sleep 3
+exit
 
+echo "R.I.P"
 ${smr} -rf /run/live/medium/live/initrd.img*
 sudo apt --fix-broken install
 ${sharpy} gsasl* gsfonts* gstreamer*
