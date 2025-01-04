@@ -6,116 +6,169 @@
 #==============================================================
 
 ${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
-${sharpy} amd64-microcode atril* at-spi2-core coinor*
-${asy} 
-
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
-${sharpy} dirmngr discover* distro-info-data
-${asy}
-echo "WARNING 1"; sleep 6
-
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
-${sharpy} efibootmgr exfalso ftp gcr
-${asy}
-
-sudo which dhclient; sudo which ifup; sleep 3
-echo "SFSGSW"
-
-${smr} -rf /run/live/medium/live/initrd.img*
 #sudo apt --fix-broken install
-echo "SOMETHING GOES WRONG WITH ${sharpy} ghostscript gir* gdisk gpg-* gpgconf gpgsm gparted"
-#${asy}
-sudo which dhclient; sudo which ifup; sleep 3
-exit
+${fib}
+echo "A-G1";sleep 6
 
-echo "R.I.P"
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
-${sharpy} gsasl* gsfonts* gstreamer*
-${asy}
-sudo which dhclient; sudo which ifup; sleep 3
+${sharpy} amd64-microcode at-spi2-core atril* coinor*
+${sharpy} dirmngr distro-info-data discover*
+${sharpy} efibootmgr exfalso ftp gcr
 
-
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
-${sharpy} htop intel-microcode
-${asy}
-sudo which dhclient; sudo which ifup; sleep 3
-
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} lvm2 mdadm
-${asy}
-sleep 6
-sudo which dhclient; sudo which ifup; sleep 3
-echo "WARNING 2"; exit
-#jossain kohtaa menevät lokaalit P.V.HH, KORJAA
-
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} mailcap mariadb-common
-${asy}
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo which dhclient; sudo which ifup; sleep 3
-sudo apt --fix-broken install
-
-${sharpy} mokutil mysql-common orca openssh*
-${asy}
-${smr} -rf /run/live/medium/live/initrd.img*
-
-${sharpy} speech* system-config* telnet tex* udisks2 uno* ure* upower
-${sa} autoremove --yes
-sudo which dhclient; sudo which ifup; sleep 3
-sudo apt --fix-broken install
-
-echo "FINAL WARNING"; sleep 6
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} vim* xorriso xfburn
-${asy}
-
-${sharpy} iucode-tool libgstreamer* os-prober po*
-${asy}
-
-sudo which dhclient; sudo which ifup; sleep 3
-sudo apt --fix-broken install
-
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} ppp 
-${asy}
-sleep 1
-
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} ristretto
-${asy}
-sleep 1
-
-${sharpy} screen shim* samba* 
-${asy}
-sleep 1
-
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} procmail
-${asy}
-sleep 1
-
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} squashfs-tools
-${asy}
-sleep 6
-
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} grub*
-${asy}
-sleep 6
-
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} libgsm*
 ${asy} 
-sleep 6
+${smr} -rf /run/live/medium/live/initrd.img*
+sleep 5;echo "SFSGSW"; exit
+
+${fib}
+echo "G2-I";sleep 6
+#TODO	: 2 viimeisintä pois koska seur rivi eiq ei
+${sharpy} ghostscript gdisk gparted gpgconf gpgsm
+${sharpy} gir* gpg-* gsasl* gsfonts* gstreamer*
+${sharpy} htop intel-microcode
+
+${asy} 
+${smr} -rf /run/live/medium/live/initrd.img*
+sleep 5;echo "R1P"; exit
+
+${fib}
+echo "J-O";sleep 6
+
+${sharpy} lvm2 mdadm
+${sharpy} mailcap mariadb-common
+${sharpy} mokutil mysql-common orca openssh*
+
+${asy} 
+${smr} -rf /run/live/medium/live/initrd.img*
+sleep 5;echo "Ct3"; exit
+
+${fib}
+echo "P-";sleep 6
+
+#iucode aikaisemmin?
+${sharpy} telnet upower udisks2 system-config* tex* uno* ure*
+${sharpy} xorriso xfburn vim*
+${sharpy} iucode-tool speech* libgstreamer* os-prober po*
+
+${asy} 
+${smr} -rf /run/live/medium/live/initrd.img*
+sleep 5;echo "Y0U"; exit
+
+${fib}
+echo "q-";sleep 6
+
+${sharpy} ppp ristretto 
+${sharpy} screen shim* samba*
+${sharpy} procmail squashfs-tools grub* libgsm*
+
+${asy} 
+${smr} -rf /run/live/medium/live/initrd.img*
+sleep 5;echo "R1\$K"; exit
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb
 df
 #mimimize-hmiston siivous kanssa?
 sudo which dhclient; sudo which ifup; sleep 3
+
+#sudo apt --fix-broken install
+#
+#${asy}
+#echo "WARNING 1"; sleep 6
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#sudo apt --fix-broken install
+#
+#${asy}
+#
+#sudo which dhclient; sudo which ifup; sleep 3
+#
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+##sudo apt --fix-broken install
+#echo "SOMETHING GOES WRONG WITH ${sharpy} "
+##${asy}
+#sudo which dhclient; sudo which ifup; sleep 3
+#exit
+#
+#echo "R.I.P"
+#${smr} -rf /run/live/medium/live/initrd.img*
+#sudo apt --fix-broken install
+#${sharpy}
+#${asy}
+#sudo which dhclient; sudo which ifup; sleep 3
+#
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#sudo apt --fix-broken install
+#${sharpy} 
+#${asy}
+#sudo which dhclient; sudo which ifup; sleep 3
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#${sharpy} 
+#${asy}
+#sleep 6
+#sudo which dhclient; sudo which ifup; sleep 3
+#echo "WARNING 2"; exit
+##jossain kohtaa menevät lokaalit P.V.HH, KORJAA
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#${sharpy} 
+#${asy}
+#${smr} -rf /run/live/medium/live/initrd.img*
+#sudo which dhclient; sudo which ifup; sleep 3
+#sudo apt --fix-broken install
+#
+#${sharpy} 
+#${asy}
+#${smr} -rf /run/live/medium/live/initrd.img*
+#
+#${sharpy}
+#${sa} autoremove --yes
+#sudo which dhclient; sudo which ifup; sleep 3
+#sudo apt --fix-broken install
+#
+#echo "FINAL WARNING"; sleep 6
+#${smr} -rf /run/live/medium/live/initrd.img*
+#${sharpy} 
+#${asy}
+#
+#${sharpy}
+#${asy}
+#
+#sudo which dhclient; sudo which ifup; sleep 3
+#sudo apt --fix-broken install
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#${sharpy} 
+#${asy}
+#sleep 1
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#${sharpy} 
+#${asy}
+#sleep 1
+#
+#${sharpy} 
+#${asy}
+#sleep 1
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#${sharpy}
+#${asy}
+#sleep 1
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#${sharpy}
+#${asy}
+#sleep 6
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#${sharpy} 
+#${asy}
+#sleep 6
+#
+#${smr} -rf /run/live/medium/live/initrd.img*
+#${sharpy}
+#${asy} 
+#sleep 6
+
