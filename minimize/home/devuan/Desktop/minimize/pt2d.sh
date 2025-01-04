@@ -16,11 +16,11 @@ ${sharpy} efibootmgr exfalso ftp gcr
 
 ${asy} 
 ${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "SFSGSW"; exit
+sleep 5;echo "SFSGSW" #; exit
 
 ${fib}
 echo "G2-I";sleep 6
-#TODO	: 2 viimeisintä pois koska seur rivi eiq ei
+
 ${sharpy} ghostscript gdisk gparted gpgconf gpgsm
 ${sharpy} gir* gpg-* gsasl* gsfonts* gstreamer*
 ${sharpy} htop intel-microcode
