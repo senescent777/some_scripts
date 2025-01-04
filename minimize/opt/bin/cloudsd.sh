@@ -110,8 +110,9 @@ sleep 2
 	#echo "PISDEO PRO SAnTANA"
 	${ipt} -L  #
 	sleep 6
-	#echo "666"
+	echo "666"
+	sleep 6
 	${ip6t} -L #
-	sleep 5
+	sleep 6
 #fi #
 
