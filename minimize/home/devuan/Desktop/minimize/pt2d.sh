@@ -1,9 +1,10 @@
 #!/bin/bash
-. ./libd
+. ./libd.sh
 
 #==============================================================
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
 #==============================================================
+#TODO:komentoriviparam + fktiot ... tai koko paska uusix
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 #sudo apt --fix-broken install
@@ -16,20 +17,30 @@ ${sharpy} efibootmgr exfalso ftp gcr
 
 ${asy} 
 ${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "SFSGSW" #; exit
+csleep 5;dqb "SFSGSW" #; exit
 
 ${fib}
-echo "G2-I";sleep 6
+dqb "G2-I";csleep 6
 
-${sharpy} ghostscript gdisk gparted gpgconf gpgsm
-${sharpy} gir* gpg-* gsasl* gsfonts* gstreamer*
-${sharpy} htop intel-microcode
+echo "#thworing sh1t ar0und, to s33 what st1cks"; csleep 10
+${sharpy} ghostscript gdisk gparted 
+csleep 10
+
+${sharpy} gpgconf gpgsm htop intel-microcode
+csleep 10
+
+${sharpy} gir* gpg-* gsasl*
+csleep 10
+
+${sharpy} gsfonts* gstreamer* gsettings*
+csleep 10
 
 ${asy} 
 ${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "R1P"; exit
+sleep 5;echo "R1P"
 
 ${fib}
+exit
 echo "J-O";sleep 6
 
 ${sharpy} lvm2 mdadm

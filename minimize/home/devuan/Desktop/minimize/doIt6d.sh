@@ -25,7 +25,7 @@ function parse_opts_1() {
 	esac
 }
 
-. ./libd
+. ./libd.sh
 
 function check_params() {
 	case ${debug} in
@@ -217,17 +217,17 @@ ${sharpy} libblu* network* libcupsfilters* libgphoto*
 # libopts25 ei tömmöistä daedaluksessa
 
 ${sharpy} avahi* blu* cups* exim*
-sudo which ifup; sleep 3
+#sudo which ifup; sleep 3
 
 ${sharpy} rpc* nfs* 
 ${sharpy} modem* wireless* wpa* iw lm-sensors
-sudo which ifup;sudo which ifup; sleep 3
+#sudo which ifup;sudo which ifup; sleep 3
 
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 #exit
 
 ${sharpy} ntp*
-sudo which ifup;sudo which ifup; sleep 3
+#sudo which ifup;sudo which ifup; sleep 3
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
