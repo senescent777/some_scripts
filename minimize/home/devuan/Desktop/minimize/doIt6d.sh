@@ -25,7 +25,7 @@ function parse_opts_1() {
 	esac
 }
 
-. ./libd
+. ./libd.sh
 
 function check_params() {
 	case ${debug} in
@@ -172,7 +172,7 @@ if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä 
 		g=$(date +%F)
 		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
-		sudo touch /etc/apt/sources.list			
+		sudo touch /etc/apt/sources.list
 		${scm} a+w /etc/apt/sources.list
 
 		${odio} sed -i 's/DISTRO/daedalus/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
@@ -206,8 +206,8 @@ ${whack} nm-applet
 #ntp ehkä takaisin myöhemmin
 ${whack} ntp*
 
-sleep 3
-echo "1937"
+csleep 3
+dqb "1937"
 #exit
 
 #K01avahi-jutut sopivaan kohtaan?
@@ -217,17 +217,17 @@ ${sharpy} libblu* network* libcupsfilters* libgphoto*
 # libopts25 ei tömmöistä daedaluksessa
 
 ${sharpy} avahi* blu* cups* exim*
-sudo which ifup; sleep 3
+#sudo which ifup; sleep 3
 
 ${sharpy} rpc* nfs* 
 ${sharpy} modem* wireless* wpa* iw lm-sensors
-sudo which ifup;sudo which ifup; sleep 3
+#sudo which ifup;sudo which ifup; sleep 3
 
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 #exit
 
 ${sharpy} ntp*
-sudo which ifup;sudo which ifup; sleep 3
+#sudo which ifup;sudo which ifup; sleep 3
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
@@ -310,22 +310,23 @@ dqb "GRADN BELIALAS KYE"
 sudo /opt/bin/cloudsd.sh 0
 sleep 5
 ${odio} /etc/init.d/dnsmasq stop
-${odio} /etc/init.d/nstpsec stop
-echo "TU QUEIRO PUTA"
-sleep 5
+${odio} /etc/init.d/ntpsec stop
+dqb "TU QUEIRO PUTA"
+csleep 5
 ${whack} dnsmasq*
 ${whack} ntp*
-echo "MUY CALIENTE"; sleep 6
-exit
-#HUOM.270624:keskeytetään tähän kunnes paketin dnsmasq saa taas asentumaan, varm vuoksi myös clouds 0 JIT
+dqb "LOCURA"
+csleep 6
+#exit
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
-echo "GRANDLE OF FILHTTT"; sleep 4
-${odio} /etc/init.d/dnsmasq restart
-sudo /opt/bin/cloudsd.sh 1
+#${odio} /etc/init.d/dnsmasq restart
+#sudo /opt/bin/cloudsd.sh 1
 ns2 stubby
 ns4 stubby
+dqb "MESSIAH OF IMPURITY AND DARKNESS"
+csleep 4
 
 if [ ${debug} -eq 1 ] ; then 
 	${snt} -tulpan
