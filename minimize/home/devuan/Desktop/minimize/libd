@@ -108,7 +108,7 @@ function check_binaries2() {
 	spc="${odio} ${spc} "
 	srat="${odio} ${srat} "
 	asy="${odio} ${sa} autoremove --yes"
-
+	fib="${odio} ${sa} --fix-broken install"
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
 
@@ -129,7 +129,7 @@ function mangle2() {
 }
 
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-#TODO:stubbyn asennus toimiimaan taas (261224)
+#VAIH:stubbyn asennus toimiimaan taas (261224)
 function ns2() {
 	dqb "ns2( ${1} )"
 
