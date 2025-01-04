@@ -11,7 +11,7 @@ sudo chmod a-wx /home/devuan/Desktop/minimize/{doIt6.sh,lib,pt2.sh,make_tar.sh}
 sudo chmod 0555 /home/devuan/Desktop/minimize/make_tar2.sh
 sudo chmod a-wx /opt/bin/clouds.sh
 
-#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
+#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan (vielä tarpoeen?)
 #(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
 
 function parse_opts_1() {
@@ -110,8 +110,8 @@ function enforce_access() {
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
 
-	#TODO:ao. rivi, saattaa muuttua, uid ei-numeeriseksi
-	${sco} -R 101:65534 /home/stubby/
+	#VAIH:ao. rivi, saattaa muuttua, uid ei-numeeriseksi
+	${sco} -R stubby:65534 /home/stubby/
 
 	local f
 
@@ -197,6 +197,7 @@ done
 
 dqb "shutting down some services (4 real) in 3 secs"
 sleep 3 
+
 ${whack} cups*
 ${whack} avahi*
 ${whack} dnsmasq*
@@ -217,17 +218,12 @@ ${sharpy} libblu* network* libcupsfilters* libgphoto*
 # libopts25 ei tömmöistä daedaluksessa
 
 ${sharpy} avahi* blu* cups* exim*
-#sudo which ifup; sleep 3
-
 ${sharpy} rpc* nfs* 
-${sharpy} modem* wireless* wpa* iw lm-sensors
-#sudo which ifup;sudo which ifup; sleep 3
+${sharpy} modem* wireless* wpa*
+${sharpy} iw lm-sensors
 
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
-#exit
-
 ${sharpy} ntp*
-#sudo which ifup;sudo which ifup; sleep 3
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
@@ -238,7 +234,6 @@ if [ $ic -gt 0 ] ; then
 fi
 
 #HUOM.270624:oli aikaisemmin tässä /o/b/clouds.sh 0
-#
 
 csleep 5
 ${smr} -rf /run/live/medium/live/initrd.img*
@@ -256,31 +251,6 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
-##${sdi} ${pkgdir}/dns-root-data*.deb 
-##[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/dns-root-data*.deb 
-##HUOM. 261224: ntp-juttujen kanssa jotain ongelmia, kts toistuuko
-##tällaista kikkailua kunnes åaketit ajan tasalla
-#
-#${smr} -rf ${pkgdir}/libnetf* 
-#${smr} -rf ${pkgdir}/libnf* 
-#${smr} -rf ${pkgdir}/libxtab* 
-#${smr} -rf ${pkgdir}/libunb*
-#${smr} -rf ${pkgdir}/libbsd*
-#${smr} -rf ${pkgdir}/libidn2*
-#
-##smr -rf ${pkgdir} 
-#
-#ls -las ${pkgdir}/lib*
-#sleep 6
-#
-#${smr} -rf ${pkgdir}/dnsmasq-base* 
-#${smr} -rf ${pkgdir}/init-system-helpers* 
-#${smr} -rf ${pkgdir}/python3-ntp*
-#${smr} -rf ${pkgdir}/runit-helper*
-#${smr} -rf ${pkgdir}/netbase*
-#ls -las ${pkgdir}
-#sleep 6
-
 part3
 echo $?
 sleep 3
@@ -297,16 +267,10 @@ if [ ${mode} -eq 1 ] ; then
 fi
 
 #exit
-
 ${asy}
-#sleep 5
-#/opt/bin/clouds.sh 0
-#sleep 5
-#/opt/bin/clouds.sh 0
-#sleep 5
-
 dqb "GRADN BELIALAS KYE"
-#VAIH:clouds uusix kanssa
+
+#VAIH:clouds uusix kanssa (case 1 vuelä)
 sudo /opt/bin/cloudsd.sh 0
 sleep 5
 ${odio} /etc/init.d/dnsmasq stop
@@ -317,7 +281,6 @@ ${whack} dnsmasq*
 ${whack} ntp*
 dqb "LOCURA"
 csleep 6
-#exit
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä

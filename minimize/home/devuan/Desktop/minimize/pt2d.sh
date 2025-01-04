@@ -4,7 +4,7 @@
 #==============================================================
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
 #==============================================================
-#TODO:komentoriviparam + fktiot ... tai koko paska uusix
+#TODO:komentoriviparam + fktiot ... tai mieluummin koko pasq uusix
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 #sudo apt --fix-broken install
@@ -12,69 +12,86 @@ ${fib}
 echo "A-G1";sleep 6
 
 ${sharpy} amd64-microcode at-spi2-core atril* coinor*
-${sharpy} dirmngr distro-info-data discover*
-${sharpy} efibootmgr exfalso ftp gcr
+${sharpy} distro-info-data discover*
+${sharpy} efibootmgr exfalso ftp
 
 ${asy} 
 ${smr} -rf /run/live/medium/live/initrd.img*
-csleep 5;dqb "SFSGSW" #; exit
+echo "SFSGSW"; sleep 10 
 
-${fib}
-dqb "G2-I";csleep 6
+##${fib} josko kerta riittäisi
+#dqb "G2-I"
+#sleep 6
+#
+#echo "next: thworing sh1t ar0und, to s33 what st1cks"
+#sleep 10
+#
+#${sharpy} gcr ghostscript gdisk gparted 
+#sleep 15
+#
+#${sharpy} gpgconf gpgsm htop intel-microcode
+#sleep 15
+#
+#${sharpy} gir* gsasl*
+#echo "NEXT: ${asy}"
+#sleep 15
+#${asy} 
+#sleep 15
+#
+#echo "th3r3 may b3 s0m3 pr0bl3m w1th ${sharpy} dirmngr gpg-* gsfonts* gstreamer* gsettings*"
+#sleep 15
+#
+#${asy} 
+#${smr} -rf /run/live/medium/live/initrd.img*
+#sleep 5;echo "R1P"
+#
+##${fib}
 
-echo "#thworing sh1t ar0und, to s33 what st1cks"; csleep 10
-${sharpy} ghostscript gdisk gparted 
-csleep 10
-
-${sharpy} gpgconf gpgsm htop intel-microcode
-csleep 10
-
-${sharpy} gir* gpg-* gsasl*
-csleep 10
-
-${sharpy} gsfonts* gstreamer* gsettings*
-csleep 10
-
-${asy} 
-${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "R1P"
-
-${fib}
-exit
 echo "J-O";sleep 6
 
-${sharpy} lvm2 mdadm
-${sharpy} mailcap mariadb-common
-${sharpy} mokutil mysql-common orca openssh*
+${sharpy} lvm2 mdadm mailcap mokutil 
+sleep 6
+${sharpy} mariadb-common mysql-common 
+sleep 6
+${sharpy} openssh*
+sleep 6
+${sharpy} orca
 
 ${asy} 
 ${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "Ct3"; exit
+sleep 5;echo "Ct3"
 
-${fib}
+#${fib}
 echo "P-";sleep 6
 
-#iucode aikaisemmin?
-${sharpy} telnet upower udisks2 system-config* tex* uno* ure*
-${sharpy} xorriso xfburn vim*
-${sharpy} iucode-tool speech* libgstreamer* os-prober po*
+#iucode aikaisemmin nyt
+${sharpy} telnet upower udisks2 iucode-tool os-prober xorriso xfburn
+${sharpy} system-config* tex* uno* ure*
+sleep 6
+
+${sharpy} vim*
+sleep 6
+
+${sharpy} speech* libgstreamer* po*
+sleep 6
 
 ${asy} 
 ${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "Y0U"; exit
+sleep 5;echo "Y0U"
 
-${fib}
+#${fib}
 echo "q-";sleep 6
 
-${sharpy} ppp ristretto 
-${sharpy} screen shim* samba*
-${sharpy} procmail squashfs-tools grub* libgsm*
+${sharpy} ppp ristretto screen procmail squashfs-tools
+sleep 6
+${sharpy} shim* samba*
+${sharpy} grub* libgsm*
 
 ${asy} 
 ${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "R1\$K"; exit
+sleep 5;echo "R1\$K"
 
-${smr} -rf /run/live/medium/live/initrd.img*
+#${smr} -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb
 df
 #mimimize-hmiston siivous kanssa?
@@ -98,7 +115,7 @@ sudo which dhclient; sudo which ifup; sleep 3
 #echo "SOMETHING GOES WRONG WITH ${sharpy} "
 ##${asy}
 #sudo which dhclient; sudo which ifup; sleep 3
-#exit
+
 #
 #echo "R.I.P"
 #${smr} -rf /run/live/medium/live/initrd.img*
@@ -119,8 +136,8 @@ sudo which dhclient; sudo which ifup; sleep 3
 #${asy}
 #sleep 6
 #sudo which dhclient; sudo which ifup; sleep 3
-#echo "WARNING 2"; exit
-##jossain kohtaa menevät lokaalit P.V.HH, KORJAA
+#echo "WARNING 2"
+##jossain kohtaa menevät pokaalit P.V.HH, KORJAA
 #
 #${smr} -rf /run/live/medium/live/initrd.img*
 #${sharpy} 
