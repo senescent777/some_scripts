@@ -11,7 +11,6 @@ slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
 
-#VAIH:mietittävä uusiksi nämä konftdsto-jutut
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
@@ -27,7 +26,7 @@ else
 	${ipt} -F b
 	${ipt} -F e
 
-	#pitäisiköhän liittyä nöiden noihin dns/dot-juyyuihin?
+	#pitäisiköhän liittyä nÄiden noihin dns/dot-juTTuihin? jep
 	${ipt} -D INPUT 5
 	${ipt} -D OUTPUT 5
 fi
