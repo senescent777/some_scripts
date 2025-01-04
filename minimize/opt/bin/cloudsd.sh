@@ -108,10 +108,10 @@ ${scm} 0750 /etc/iptables
 sleep 2
 
 #if [ ${debug} -eq 1 ] ; then
-	echo "PISDEO PRO SATANA"
+	#echo "PISDEO PRO SAnTANA"
 	${ipt} -L  #
 	sleep 6
-	echo "666"
+	#echo "666"
 	${ip6t} -L #
 	sleep 5
 #fi #
