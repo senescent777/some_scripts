@@ -164,7 +164,7 @@ enforce_access
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
 
-if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain
+if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
 #	if [ ${enforce} -eq 1 ] ; then 
 		dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
 		csleep 5
@@ -224,11 +224,12 @@ ${sharpy} iw lm-sensors
 
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 ${sharpy} ntp*
-
+#uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun 22 lopussa 
+${sharpy} pol* pkexec
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
 
-if [ $ic -gt 0 ] ; then
+if [ $ic -gt 0 ] ; then #TODO:tämä toisella taballa
 	${ip6tr} /etc/iptables/rules.v6
 	${iptr} /etc/iptables/${tblz4}
 fi
@@ -268,7 +269,7 @@ fi
 
 #exit
 ${asy}
-dqb "GRADN BELIALAS KYE"
+dqb "GR1DN BELIALAS KYE"
 
 #VAIH:clouds uusix kanssa (case 1 vuelä)
 sudo /opt/bin/cloudsd.sh 0
@@ -288,6 +289,7 @@ csleep 6
 #sudo /opt/bin/cloudsd.sh 1
 ns2 stubby
 ns4 stubby
+#TODO:stubby-jutut toimimaan
 dqb "MESSIAH OF IMPURITY AND DARKNESS"
 csleep 4
 
