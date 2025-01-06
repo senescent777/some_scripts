@@ -224,8 +224,10 @@ ${sharpy} iw lm-sensors
 
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 ${sharpy} ntp*
+
 #uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun 22 lopussa 
-${sharpy} pol* pkexec
+
+${sharpy} po* pkexec
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
 
