@@ -11,9 +11,6 @@ sudo chmod a-wx /home/devuan/Desktop/minimize/{doIt6.sh,lib,pt2.sh,make_tar.sh}
 sudo chmod 0555 /home/devuan/Desktop/minimize/make_tar2.sh
 sudo chmod a-wx /opt/bin/clouds.sh
 
-#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan (vielä tarpoeen?)
-#(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
-
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -162,6 +159,7 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
+#TODO:jos mahd ni tables asentumaan jo part1 tienoilla, mikäli puuttuu
 part1
 
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
@@ -231,7 +229,6 @@ ${sharpy} po* pkexec
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
 
-#if [ $ic -gt 0 ] ; then #VAIH:tämä toisella taballa
 if [ y"${ipt}" == "y" ] ; then
 	${ip6tr} /etc/iptables/rules.v6
 	${iptr} /etc/iptables/${tblz4}
