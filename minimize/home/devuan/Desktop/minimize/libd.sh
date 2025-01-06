@@ -13,6 +13,25 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
+function pre_part3() {
+	#060125: uutena tables-asennus ennen vbarsinaista asennusta
+	sudo dpkg -i ${pkgdir}/netfilter-persistent*.deb
+	[ $? -eq 0 ] && sudo rm ${pkgdir}/netfilter-persistent*.deb
+	csleep 5
+
+	sudo dpkg -i ${pkgdir}/libip*.deb
+	[ $? -eq 0 ] && sudo rm ${pkgdir}/libip*.deb
+	csleep 5
+
+	sudo dpkg -i ${pkgdir}/iptables_*.deb
+	[ $? -eq 0 ] && sudo rm ${pkgdir}/iptables_*.deb
+	csleep 5
+
+	sudo dpkg -i ${pkgdir}/iptables-*.deb
+	[ $? -eq 0 ] && sudo rm ${pkgdir}/iptables-*.deb
+	csleep 5
+}
+
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
 	dqb "sudo= ${odio} "
@@ -44,6 +63,8 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
+		#pre_part3 hoitaisi saman asian
+		
 		echo "cd \$pkgdir"
 		echo "sudo dpkg -i netfilter-persistent*.deb"
 		echo "sudo dpkg -i libip*.deb"
@@ -202,11 +223,12 @@ function part1() {
 		fi #
 	else
 		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+		#pre_part3 hoitaisi saman asian
 	fi
 }
 
 function part3() {
-	${sdi} /var/cache/apt/archives/lib*.deb
+	${sdi} ${pkgdir}/lib*.deb
 
 	if [ $? -eq  0 ] ; then
 		#nköjään ei riittävästitehty dnsmasq kannalta

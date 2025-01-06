@@ -228,7 +228,7 @@ ${sharpy} iw lm-sensors
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 ${sharpy} ntp*
 
-#uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun 22 lopussa 
+#uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun -22 lopussa 
 
 ${sharpy} po* pkexec
 ${smr} -rf /run/live/medium/live/initrd.img*
@@ -257,23 +257,7 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
-#060125: uutena tables-asennus ennen vbarsinaista asennusta
-sudo dpkg -i ${pkgdir}/netfilter-persistent*.deb
-[ $? -eq 0 ] && sudo rm ${pkgdir}/netfilter-persistent*.deb
-csleep 5
-
-sudo dpkg -i ${pkgdir}/libip*.deb
-[ $? -eq 0 ] && sudo rm ${pkgdir}/libip*.deb
-csleep 5
-
-sudo dpkg -i ${pkgdir}/iptables_*.deb
-[ $? -eq 0 ] && sudo rm ${pkgdir}/iptables_*.deb
-csleep 5
-
-sudo dpkg -i ${pkgdir}/iptables-*.deb
-[ $? -eq 0 ] && sudo rm ${pkgdir}/iptables-*.deb
-csleep 5
-
+pre_part3
 part3
 echo $?
 sleep 3
