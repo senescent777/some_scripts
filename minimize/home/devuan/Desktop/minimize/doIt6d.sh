@@ -9,7 +9,8 @@ mode=2
 
 sudo chmod a-wx /home/devuan/Desktop/minimize/{doIt6.sh,lib,pt2.sh,make_tar.sh}
 sudo chmod 0555 /home/devuan/Desktop/minimize/make_tar2.sh
-sudo chmod a-wx /opt/bin/clouds.sh
+sudo chmod a-wx /opt/bin/clouds*
+sudo chmod a-wx /home/devuan/Desktop/minimize/clouds.sh
 
 function parse_opts_1() {
 	case "${1}" in
@@ -79,7 +80,7 @@ function pre_enforce() {
 
 		local f 
 		for f in ${CB_LIST1} ; do mangle_s ${f} ; done
-		for f in /etc/init.d/stubby /opt/bin/clouds.sh /opt/bin/cloudsd.sh  /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
+		for f in /etc/init.d/stubby /home/devuan/Desktop/minimize/cloudsd.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
 
 		sudo chmod a-w /etc/sudoers.d/meshuggah	
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
@@ -216,15 +217,12 @@ ${sharpy} libblu* network* libcupsfilters* libgphoto*
 # libopts25 ei tömmöistä daedaluksessa
 
 ${sharpy} avahi* blu* cups* exim*
-
 ${sharpy} rpc* nfs* 
 ${sharpy} modem* wireless* wpa*
 ${sharpy} iw lm-sensors
 
-
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 ${sharpy} ntp*
-
 
 #uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun 22 lopussa 
 
@@ -237,7 +235,7 @@ if [ y"${ipt}" == "y" ] ; then
 	${iptr} /etc/iptables/${tblz4}
 fi
 
-#HUOM.270624:oli aikaisemmin tässä /o/b/clouds.sh 0
+#HUOM.270624:oli aikaisemmin tässä clouds.sh 0
 
 csleep 5
 ${smr} -rf /run/live/medium/live/initrd.img*
@@ -275,7 +273,7 @@ ${asy}
 dqb "GR1DN BELIALAS KYE"
 
 #VAIH:clouds uusix kanssa (case 1 vuelä)
-sudo /opt/bin/cloudsd.sh 0
+sudo ~/Desktop/minimize/cloudsd.sh 0
 sleep 5
 ${odio} /etc/init.d/dnsmasq stop
 ${odio} /etc/init.d/ntpsec stop
@@ -286,16 +284,13 @@ ${whack} ntp*
 dqb "LOCURA"
 csleep 6
 
-
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 #${odio} /etc/init.d/dnsmasq restart
-#sudo /opt/bin/cloudsd.sh 1
+#sudo ~/Desktop/minimize/cloudsd.sh 1
 ns2 stubby
 ns4 stubby
-
 #TODO:stubby-jutut toimimaan
-
 dqb "MESSIAH OF IMPURITY AND DARKNESS"
 csleep 4
 

@@ -11,7 +11,7 @@ slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
 
-#TODO:siirto toiseen hmistoon vähitellen
+#VAIH:siirto toiseen hmistoon vähitellen
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
