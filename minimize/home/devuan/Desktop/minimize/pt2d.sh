@@ -1,202 +1,126 @@
 #!/bin/bash
 . ./libd.sh
-
-#==============================================================
-#HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
-#==============================================================
-#VAIH:komentoriviparam + fktiot ... tai mieluummin koko pasq uusix
-
-${smr} -rf /run/live/medium/live/initrd.img*
-#sudo apt --fix-broken install
 ${fib}
-echo "A-G1";sleep 6
 
-${sharpy} amd64-microcode at-spi2-core atril* coinor*
-${sharpy} distro-info-data discover*
-${sharpy} efibootmgr exfalso ftp
+debug=0
+if [ $# -gt 0 ] ; then  
+	if [ "${1}" == "-v" ] ; then
+		debug=1
+	fi
+fi
 
+dqb "a-e"
+csleep 5
+
+#HUOM. ao. rivillä viimeisessä syystä vain core
+${sharpy} amd64-microcode iucode-tool arch-test at-spi2-core bubblewrap
+
+${sharpy} atril* coinor* cryptsetup debootstrap
+${sharpy} dmidecode discover* dirmngr #tuleeekohan viimeisestä omngelma?
+${sharpy} doc-debian docutils* 
+${sharpy} efibootmgr exfalso 
 ${asy} 
-${smr} -rf /run/live/medium/live/initrd.img*
-echo "SFSGSW"; sleep 10 
+${lftr}
+csleep 5
 
-##${fib} josko kerta riittäisi
-#dqb "G2-I"
-#sleep 6
-#
-#echo "next: thworing sh1t ar0und, to s33 what st1cks"
-#sleep 10
-#
-#${sharpy} gcr ghostscript gdisk gparted 
-#sleep 15
-#
-#${sharpy} gpgconf gpgsm htop intel-microcode
-#sleep 15
-#
-#${sharpy} gir* gsasl*
-#echo "NEXT: ${asy}"
-#sleep 15
-#${asy} 
-#sleep 15
-#
-#echo "th3r3 may b3 s0m3 pr0bl3m w1th ${sharpy} dirmngr gpg-* gsfonts* gstreamer* gsettings*"
-#sleep 15
-#
-#${asy} 
-#${smr} -rf /run/live/medium/live/initrd.img*
-#sleep 5;echo "R1P"
-#
-##${fib}
-
-echo "J-O";sleep 6
-
-${sharpy} lvm2 mdadm mailcap mokutil 
-sleep 6
-${sharpy} mariadb-common mysql-common 
-sleep 6
-${sharpy} openssh*
-sleep 6
-${sharpy} orca
-
+dqb "f1"
+csleep 5
+${sharpy} fdisk ftp*
+${sharpy} gdisk gcr
 ${asy} 
-${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "Ct3"
+${lftr}
+csleep 5
 
-#${fib}
-echo "P-";sleep 6
-
-#iucode aikaisemmin nyt
-${sharpy} telnet upower udisks2 iucode-tool os-prober xorriso xfburn
-${sharpy} system-config* tex* uno* ure*
-sleep 6
-
-${sharpy} vim*
-sleep 6
-
-${sharpy} speech* libgstreamer* po*
-sleep 6
-
+#gnupg poisto täs kohtaa hyvä idea? vai veikö dirmngr mukanaan jo=
+dqb "g2"
+csleep 5
+${sharpy} ghostscript gir* gnupg*
+${sharpy} gpg-* gpgconf gpgsm gsasl-common
+${sharpy} shim* grub* 
+${sharpy} gsfonts gstreamer*
 ${asy} 
-${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "Y0U"
+${lftr}
+csleep 5
 
-#${fib}
-echo "q-";sleep 6
+#gnome-* poisto veisi myös: task-desktop task-xfce-desktop
+#gpg* kanssa: The following packages have unmet dependencies:
+# apt : Depends: gpgv but it is not going to be installed or
+#                gpgv2 but it is not going to be installed or
+#                gpgv1 but it is not going to be installed
+#HUOM. grub* poisto voi johtaa shim-pakettien päivitykseen
+#gsettings* voi viedä paljon paketteja mukanaan
 
-${sharpy} ppp ristretto screen procmail squashfs-tools
-sleep 6
-${sharpy} shim* samba*
-${sharpy} grub* libgsm*
-
+dqb "iii"
+csleep 5
+${sharpy} intel-microcode iucode-tool
+${sharpy} htop inetutils-telnet
 ${asy} 
-${smr} -rf /run/live/medium/live/initrd.img*
-sleep 5;echo "R1\$K"
+${lftr}
+csleep 5
 
-#${smr} -rf /run/live/medium/live/initrd.img*
-sudo shred -fu /var/cache/apt/archives/*.deb
+#lib-paketteihin ei yleisessä tapakauksessa kande koskea eikä live-
+#... libgstreamerja libgsm uutena (060125)
+${sharpy} libpoppler* libuno* libreoffice* libgsm* libgstreamer*
+
+#HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
+dqb "l-o"
+csleep 5
+${sharpy} lvm2 mdadm  
+${sharpy} mailcap mlocate
+${sharpy} mokutil mariadb-common mysql-common
+${sharpy} netcat-traditional openssh*
+${sharpy} os-prober #orca saattaa poistua jo aiemmina
+${asy} 
+${lftr}
+csleep 5
+
+dqb "p"
+csleep 5
+${sharpy} ppp procmail ristretto 
+${sharpy} screen pkexec 
+${sharpy} po* refracta*
+#samba poistunee jo aiemmin?
+${sharpy} squashfs-tools samba* system-config*
+${asy} 
+${lftr}
+csleep 5
+
+dqb "t"
+csleep 5
+${sharpy} telnet 
+${sharpy} tex*
+${asy} 
+${lftr}
+csleep 5
+
+dqb "u"
+csleep 5
+${sharpy} uno* ure*
+${sharpy} upower vim* # udisks* saattaa poistua jo aiemmin
+${asy} 
+${lftr}
+csleep 5
+
+dqb "x"
+csleep 5
+${sharpy} xorriso xfburn
+${asy} 
+${sharpy} xorriso 
+${asy} 
+csleep 5
+ 
+dqb "y"
+csleep 5
+${sharpy} xfburn
+${asy} 
+csleep 5
+
+${lftr}
+${odio} shred -fu /var/cache/apt/archives/*.deb
 df
-#mimimize-hmiston siivous kanssa?
-sudo which dhclient; sudo which ifup; sleep 3
+${odio} which dhclient; ${odio} which ifup; sleep 6
 
-#sudo apt --fix-broken install
-#
-#${asy}
-#echo "WARNING 1"; sleep 6
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#sudo apt --fix-broken install
-#
-#${asy}
-#
-#sudo which dhclient; sudo which ifup; sleep 3
-#
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-##sudo apt --fix-broken install
-#echo "SOMETHING GOES WRONG WITH ${sharpy} "
-##${asy}
-#sudo which dhclient; sudo which ifup; sleep 3
+#whack xfce so that the ui is reset
+${whack} xfce*
 
-#
-#echo "R.I.P"
-#${smr} -rf /run/live/medium/live/initrd.img*
-#sudo apt --fix-broken install
-#${sharpy}
-#${asy}
-#sudo which dhclient; sudo which ifup; sleep 3
-#
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#sudo apt --fix-broken install
-#${sharpy} 
-#${asy}
-#sudo which dhclient; sudo which ifup; sleep 3
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#${sharpy} 
-#${asy}
-#sleep 6
-#sudo which dhclient; sudo which ifup; sleep 3
-#echo "WARNING 2"
-##jossain kohtaa menevät pokaalit P.V.HH, KORJAA
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#${sharpy} 
-#${asy}
-#${smr} -rf /run/live/medium/live/initrd.img*
-#sudo which dhclient; sudo which ifup; sleep 3
-#sudo apt --fix-broken install
-#
-#${sharpy} 
-#${asy}
-#${smr} -rf /run/live/medium/live/initrd.img*
-#
-#${sharpy}
-#${sa} autoremove --yes
-#sudo which dhclient; sudo which ifup; sleep 3
-#sudo apt --fix-broken install
-#
-#echo "FINAL WARNING"; sleep 6
-#${smr} -rf /run/live/medium/live/initrd.img*
-#${sharpy} 
-#${asy}
-#
-#${sharpy}
-#${asy}
-#
-#sudo which dhclient; sudo which ifup; sleep 3
-#sudo apt --fix-broken install
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#${sharpy} 
-#${asy}
-#sleep 1
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#${sharpy} 
-#${asy}
-#sleep 1
-#
-#${sharpy} 
-#${asy}
-#sleep 1
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#${sharpy}
-#${asy}
-#sleep 1
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#${sharpy}
-#${asy}
-#sleep 6
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#${sharpy} 
-#${asy}
-#sleep 6
-#
-#${smr} -rf /run/live/medium/live/initrd.img*
-#${sharpy}
-#${asy} 
-#sleep 6
 
