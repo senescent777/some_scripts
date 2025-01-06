@@ -41,10 +41,11 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
-	#TODO:toinenkin tapa tehdä tämä ipt-asdia...
-	ic=$(echo $ipt | wc -w)
-
-	if [ $ic -le 0 ] ; then
+	#VAIH:toinenkin tapa tehdä tämä ipt-asdia...
+	#ic=$(echo $ipt | wc -w)
+#
+#	if [ $ic -le 0 ] ; then
+	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
 	fi
 
@@ -183,7 +184,8 @@ function part1() {
 	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
-	if [ $ic -gt 0 ] ; then
+	#if [ $ic -gt 0 ] ; then
+	if [ y"${ipt}" == "y" ] ; then
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
 			${ip6t} -P ${t} DROP
@@ -197,6 +199,8 @@ function part1() {
 			${ip6t} -L #
 			sleep 5 
 		fi #
+	else
+		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
 	fi
 }
 

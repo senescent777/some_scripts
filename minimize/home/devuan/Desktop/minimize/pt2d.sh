@@ -4,7 +4,7 @@
 #==============================================================
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
 #==============================================================
-#TODO:komentoriviparam + fktiot ... tai mieluummin koko pasq uusix
+#VAIH:komentoriviparam + fktiot ... tai mieluummin koko pasq uusix
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 #sudo apt --fix-broken install

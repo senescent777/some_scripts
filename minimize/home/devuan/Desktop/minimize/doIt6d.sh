@@ -231,7 +231,8 @@ ${sharpy} po* pkexec
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
 
-if [ $ic -gt 0 ] ; then #TODO:tämä toisella taballa
+#if [ $ic -gt 0 ] ; then #VAIH:tämä toisella taballa
+if [ y"${ipt}" == "y" ] ; then
 	${ip6tr} /etc/iptables/rules.v6
 	${iptr} /etc/iptables/${tblz4}
 fi
