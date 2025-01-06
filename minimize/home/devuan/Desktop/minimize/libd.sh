@@ -2,6 +2,7 @@
 #grep /e/n/i ?
 
 odio=$(which sudo)
+#TODO:tähän toinenkin tarkistus ennen -x
 [ -x ${odio} ] || exit 666
 
 function dqb() {
@@ -41,10 +42,6 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
-	#VAIH:toinenkin tapa tehdä tämä ipt-asdia...
-	#ic=$(echo $ipt | wc -w)
-#
-#	if [ $ic -le 0 ] ; then
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
 	fi
@@ -116,9 +113,7 @@ function check_binaries2() {
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
 
-#	dqb "spc= ${spc}"
 	dqb "b1nar135.2 0k.2" 
-
 	csleep 3
 }
 
@@ -160,6 +155,7 @@ function ns4() {
 	${scm} u-w /run
 
 	sleep 5
+	#TODO:pitäisi kai tarkistaa parametrin validius ennenq...
 	${whack} ${1}*
 	sleep 5
 
@@ -184,7 +180,6 @@ function part1() {
 	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
-	#if [ $ic -gt 0 ] ; then
 	if [ y"${ipt}" == "y" ] ; then
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
@@ -230,11 +225,8 @@ function part3() {
 	csleep 2
 }
 
-#part1?
-#dqb "BIL-UR-SAG"
 check_binaries
 check_binaries2
-#dqb "UMULAMAHRI"
 
 function gpo() {
 	local prevopt
