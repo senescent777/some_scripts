@@ -216,12 +216,15 @@ ${sharpy} libblu* network* libcupsfilters* libgphoto*
 # libopts25 ei tömmöistä daedaluksessa
 
 ${sharpy} avahi* blu* cups* exim*
+
 ${sharpy} rpc* nfs* 
 ${sharpy} modem* wireless* wpa*
 ${sharpy} iw lm-sensors
 
+
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 ${sharpy} ntp*
+
 
 #uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun 22 lopussa 
 
@@ -283,13 +286,16 @@ ${whack} ntp*
 dqb "LOCURA"
 csleep 6
 
+
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 #${odio} /etc/init.d/dnsmasq restart
 #sudo /opt/bin/cloudsd.sh 1
 ns2 stubby
 ns4 stubby
+
 #TODO:stubby-jutut toimimaan
+
 dqb "MESSIAH OF IMPURITY AND DARKNESS"
 csleep 4
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 . ./libd.sh
+
 ${fib}
 
 debug=0
@@ -62,7 +63,9 @@ csleep 5
 #... libgstreamerja libgsm uutena (060125)
 ${sharpy} libpoppler* libuno* libreoffice* libgsm* libgstreamer*
 
+
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
+
 dqb "l-o"
 csleep 5
 ${sharpy} lvm2 mdadm  
@@ -118,9 +121,11 @@ csleep 5
 ${lftr}
 ${odio} shred -fu /var/cache/apt/archives/*.deb
 df
+
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
 #whack xfce so that the ui is reset
 ${whack} xfce*
+
 
 
