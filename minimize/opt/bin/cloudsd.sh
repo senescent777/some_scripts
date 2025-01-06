@@ -32,16 +32,13 @@ else
 fi
 
 function tod_dda() { 
-	echo "${ipt} -A b -p tcp --sport 853 -s ${1} -j c"
-        echo "${ipt} -A e -p tcp --dport 853 -d ${1} -j f"
+	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
+        ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
 }
 
 function dda_snd() {
 	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
-
-#	${ipt} -A INPUT -p udp -s ${1} -m udp  --sport 53 -j ACCEPT 
-#	${ipt} -A OUTPUT -p udp -d ${1} -m udp --dport 53 -j ACCEPT 
 }
 
 case ${1} in 
@@ -60,6 +57,8 @@ case ${1} in
 		fi
 	;;
 	1)
+		echo "WORK IN PROGRESS"
+
 		if [ -s /etc/resolv.conf.new ] ; then
 			echo "r30lv.c0nf alr3ady 3x15t5"
 		else
