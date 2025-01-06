@@ -11,7 +11,6 @@ slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
 
-#VAIH:mietittävä uusiksi nämä konftdsto-jutut
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
@@ -19,6 +18,7 @@ ${smr} /sbin/dhclient-script
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35"
+	#TODO:jos mahd ni jo tässä kohtaa tablesin asennus paketeista
 else
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
@@ -27,22 +27,20 @@ else
 	${ipt} -F b
 	${ipt} -F e
 
-	#pitäisiköhän liittyä nöiden noihin dns/dot-juyyuihin?
+	#pitäisiköhän liittyä nÄiden noihin dns/dot-juTTuihin? jep
 	${ipt} -D INPUT 5
 	${ipt} -D OUTPUT 5
+	#TODO: portin 80 käsittely jotenkin mukaan?
 fi
 
 function tod_dda() { 
-	echo "${ipt} -A b -p tcp --sport 853 -s ${1} -j c"
-        echo "${ipt} -A e -p tcp --dport 853 -d ${1} -j f"
+	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
+        ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
 }
 
 function dda_snd() {
 	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
-
-#	${ipt} -A INPUT -p udp -s ${1} -m udp  --sport 53 -j ACCEPT 
-#	${ipt} -A OUTPUT -p udp -d ${1} -m udp --dport 53 -j ACCEPT 
 }
 
 case ${1} in 
@@ -61,6 +59,8 @@ case ${1} in
 		fi
 	;;
 	1)
+		echo "WORK IN PROGRESS"
+
 		if [ -s /etc/resolv.conf.new ] ; then
 			echo "r30lv.c0nf alr3ady 3x15t5"
 		else
@@ -108,11 +108,12 @@ ${scm} 0750 /etc/iptables
 sleep 2
 
 #if [ ${debug} -eq 1 ] ; then
-	echo "PISDEO PRO SATANA"
+	#echo "PISDEO PRO SAnTANA"
 	${ipt} -L  #
 	sleep 6
 	echo "666"
+	sleep 6
 	${ip6t} -L #
-	sleep 5
+	sleep 6
 #fi #
 

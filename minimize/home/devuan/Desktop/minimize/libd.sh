@@ -2,6 +2,9 @@
 #grep /e/n/i ?
 
 odio=$(which sudo)
+
+#TODO:tähän toinenkin tarkistus ennen -x
+
 [ -x ${odio} ] || exit 666
 
 function dqb() {
@@ -41,10 +44,7 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
-	#TODO:toinenkin tapa tehdä tämä ipt-asdia...
-	ic=$(echo $ipt | wc -w)
-
-	if [ $ic -le 0 ] ; then
+	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
 	fi
 
@@ -103,7 +103,12 @@ function check_binaries2() {
 	sa="${odio} ${sa} "
 	sifu="${odio} ${sifu} "
 	sifd="${odio} ${sifd} "
+
+
 	smr="${odio} ${smr} "
+	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
+
+
 	slinky="${odio} ${slinky} -s "
 	spc="${odio} ${spc} "
 	srat="${odio} ${srat} "
@@ -112,7 +117,7 @@ function check_binaries2() {
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
 
-#	dqb "spc= ${spc}"
+
 	dqb "b1nar135.2 0k.2" 
 
 	csleep 3
@@ -129,7 +134,7 @@ function mangle2() {
 }
 
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-#VAIH:stubbyn asennus toimiimaan taas (261224)
+#VAIH:stubbyn asennus toimimaan taas (261224)
 function ns2() {
 	dqb "ns2( ${1} )"
 
@@ -156,6 +161,9 @@ function ns4() {
 	${scm} u-w /run
 
 	sleep 5
+
+	#TODO:pitäisi kai tarkistaa parametrin validius ennenq...
+
 	${whack} ${1}*
 	sleep 5
 
@@ -180,7 +188,9 @@ function part1() {
 	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
-	if [ $ic -gt 0 ] ; then
+
+	if [ y"${ipt}" == "y" ] ; then
+
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
 			${ip6t} -P ${t} DROP
@@ -194,6 +204,10 @@ function part1() {
 			${ip6t} -L #
 			sleep 5 
 		fi #
+
+	else
+		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+
 	fi
 }
 
@@ -223,11 +237,10 @@ function part3() {
 	csleep 2
 }
 
-#part1?
-#dqb "BIL-UR-SAG"
+
 check_binaries
 check_binaries2
-#dqb "UMULAMAHRI"
+
 
 function gpo() {
 	local prevopt
