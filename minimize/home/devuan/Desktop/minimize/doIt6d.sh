@@ -1,7 +1,7 @@
 #!/bin/bash
 
 iface=eth0 
-enforce=0
+enforce=1 #voisi olla konftdstossa
 debug=0
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
@@ -69,12 +69,15 @@ function mangle_s() {
 	fi
 }
 
-#TODO:jopsa testaisi p_e:n toiminnan pirkäsrä' aikaa
+#VAIH:joSPa testaisi p_e:n toiminnan piTkäsTä aikaa
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
+		sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
 		dqb "a51a kun05a"
- 	else
+	fi
+
+ 	#else
 		sudo touch /etc/sudoers.d/meshuggah
 		#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
 		sudo chmod a+w /etc/sudoers.d/meshuggah	
@@ -85,7 +88,7 @@ function pre_enforce() {
 
 		sudo chmod a-w /etc/sudoers.d/meshuggah	
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
-	fi
+	#fi
 
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
 	#sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? ehkä ei
