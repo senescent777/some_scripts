@@ -2,9 +2,7 @@
 #grep /e/n/i ?
 
 odio=$(which sudo)
-
 #TODO:tähän toinenkin tarkistus ennen -x
-
 [ -x ${odio} ] || exit 666
 
 function dqb() {
@@ -104,10 +102,8 @@ function check_binaries2() {
 	sifu="${odio} ${sifu} "
 	sifd="${odio} ${sifd} "
 
-
 	smr="${odio} ${smr} "
 	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
-
 
 	slinky="${odio} ${slinky} -s "
 	spc="${odio} ${spc} "
@@ -117,9 +113,7 @@ function check_binaries2() {
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
 
-
 	dqb "b1nar135.2 0k.2" 
-
 	csleep 3
 }
 
@@ -133,50 +127,48 @@ function mangle2() {
 	fi
 }
 
-#HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-#VAIH:stubbyn asennus toimimaan taas (261224)
-function ns2() {
-	dqb "ns2( ${1} )"
-
-	${scm} u+w /home
-
-	${odio} /usr/sbin/userdel ${1}
-	sleep 3
-
-	${odio} adduser --system ${1}
-	sleep 1
-	${scm} go-w /home
-
-	[ ${debug} -eq 1 ]  && ls -las /home
-	sleep 7
-}
-
-function ns4() {
-	dqb "ns4( ${1} )"
-
-	${scm} u+w /run
-	${odio} touch /run/${1}.pid
-	${scm} 0600 /run/${1}.pid
-	${sco} ${1}:65534 /run/${1}.pid
-	${scm} u-w /run
-
-	sleep 5
-
-	#TODO:pitäisi kai tarkistaa parametrin validius ennenq...
-
-	${whack} ${1}*
-	sleep 5
-
-	dqb "starting ${1} in 5 secs"
-
-	sleep 5
-	${odio} -u ${1} ${1} -g
-	echo $?
-	sleep 1
-	pgrep stubby*
-	sleep 5
-}
-
+##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
+##VAIH:stubbyn asennus toimiimaan taas (261224)
+#function ns2() {
+#	dqb "ns2( ${1} )"
+#
+#	${scm} u+w /home
+#
+#	${odio} /usr/sbin/userdel ${1}
+#	sleep 3
+#
+#	${odio} adduser --system ${1}
+#	sleep 1
+#	${scm} go-w /home
+#
+#	[ ${debug} -eq 1 ]  && ls -las /home
+#	sleep 7
+#}
+#
+#function ns4() {
+#	dqb "ns4( ${1} )"
+#
+#	${scm} u+w /run
+#	${odio} touch /run/${1}.pid
+#	${scm} 0600 /run/${1}.pid
+#	${sco} ${1}:65534 /run/${1}.pid
+#	${scm} u-w /run
+#
+#	sleep 5
+#	#TODO:pitäisi kai tarkistaa parametrin validius ennenq...
+#	${whack} ${1}*
+#	sleep 5
+#
+#	dqb "starting ${1} in 5 secs"
+#
+#	sleep 5
+#	${odio} -u ${1} ${1} -g
+#	echo $?
+#	sleep 1
+#	pgrep stubby*
+#	sleep 5
+#}
+#
 #=========================PART 0 ENDS HERE=================================================================
 
 function part1() {
@@ -188,9 +180,7 @@ function part1() {
 	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
-
 	if [ y"${ipt}" == "y" ] ; then
-
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
 			${ip6t} -P ${t} DROP
@@ -204,10 +194,8 @@ function part1() {
 			${ip6t} -L #
 			sleep 5 
 		fi #
-
 	else
 		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-
 	fi
 }
 
@@ -237,10 +225,8 @@ function part3() {
 	csleep 2
 }
 
-
 check_binaries
 check_binaries2
-
 
 function gpo() {
 	local prevopt

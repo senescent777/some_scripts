@@ -288,9 +288,10 @@ csleep 6
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 #${odio} /etc/init.d/dnsmasq restart
 #sudo ~/Desktop/minimize/cloudsd.sh 1
-ns2 stubby
-ns4 stubby
-#TODO:stubby-jutut toimimaan
+#ns2 stubby
+#ns4 stubby
+#VAIH:stubby-jutut toimimaan
+#ongelmana error: Could not bind on given addresses: Permission denied
 dqb "MESSIAH OF IMPURITY AND DARKNESS"
 csleep 4
 
