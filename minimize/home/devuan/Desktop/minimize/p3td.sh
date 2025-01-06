@@ -1,72 +1,126 @@
 #!/bin/bash
+. ./libd.sh
+${fib}
+
+debug=0
+if [ $# -gt 0 ] ; then  
+	if [ "${1}" == "-v" ] ; then
+		debug=1
+	fi
+fi
+
+dqb "a-e"
+csleep 5
 
 #HUOM. ao. rivillä viimeisessä syystä vain core
-sudo apt-get remove --purge amd64-microcode iucode-tool arch-test at-spi2-core bubblewrap
+${sharpy} amd64-microcode iucode-tool arch-test at-spi2-core bubblewrap
 
-sudo apt-get remove --purge atril* coinor* cryptsetup debootstrap
-sudo apt-get remove --purge dmidecode discover* dirmngr #tuleeekohan viimeisestä omngelma?
-sudo apt-get remove --purge doc-debian docutils* 
-sudo apt-get remove --purge efibootmgr exfalso 
-sudo apt autoremove --yes
+${sharpy} atril* coinor* cryptsetup debootstrap
+${sharpy} dmidecode discover* dirmngr #tuleeekohan viimeisestä omngelma?
+${sharpy} doc-debian docutils* 
+${sharpy} efibootmgr exfalso 
+${asy} 
+${lftr}
+csleep 5
 
-sudo apt-get remove --purge fdisk ftp*
-sudo apt-get remove --purge gdisk gcr
-sudo apt autoremove --yes
+dqb "f1"
+csleep 5
+${sharpy} fdisk ftp*
+${sharpy} gdisk gcr
+${asy} 
+${lftr}
+csleep 5
 
 #gnupg poisto täs kohtaa hyvä idea? vai veikö dirmngr mukanaan jo=
-sudo apt-get remove --purge ghostscript gir* gnupg*
-sudo apt-get remove --purge gpg-* gpgconf gpgsm gsasl-common
-sudo apt-get remove --purge shim* grub* 
-sudo apt-get remove --purge gsfonts gstreamer*
-sudo apt autoremove --yes
-
+dqb "g2"
+csleep 5
+${sharpy} ghostscript gir* gnupg*
+${sharpy} gpg-* gpgconf gpgsm gsasl-common
+${sharpy} shim* grub* 
+${sharpy} gsfonts gstreamer*
+${asy} 
+${lftr}
+csleep 5
 
 #gnome-* poisto veisi myös: task-desktop task-xfce-desktop
-
 #gpg* kanssa: The following packages have unmet dependencies:
 # apt : Depends: gpgv but it is not going to be installed or
 #                gpgv2 but it is not going to be installed or
 #                gpgv1 but it is not going to be installed
-
 #HUOM. grub* poisto voi johtaa shim-pakettien päivitykseen
-
 #gsettings* voi viedä paljon paketteja mukanaan
 
-
-sudo apt-get remove --purge intel-microcode iucode-tool
-sudo apt-get remove --purge htop inetutils-telnet
-sudo apt autoremove --yes
+dqb "iii"
+csleep 5
+${sharpy} intel-microcode iucode-tool
+${sharpy} htop inetutils-telnet
+${asy} 
+${lftr}
+csleep 5
 
 #lib-paketteihin ei yleisessä tapakauksessa kande koskea eikä live-
 #... libgstreamerja libgsm uutena (060125)
-sudo apt-get remove --purge libpoppler* libuno* libreoffice* libgsm* libgstreamer*
+${sharpy} libpoppler* libuno* libreoffice* libgsm* libgstreamer*
 
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
-sudo apt-get remove --purge lvm2 mdadm  
-sudo apt-get remove --purge mailcap mlocate
-sudo apt-get remove --purge mokutil mariadb-common mysql-common
-sudo apt-get remove --purge netcat-traditional openssh*
-sudo apt-get remove --purge os-prober #orca saattaa poistua jo aiemmina
-sudo apt autoremove --yes
+dqb "l-o"
+csleep 5
+${sharpy} lvm2 mdadm  
+${sharpy} mailcap mlocate
+${sharpy} mokutil mariadb-common mysql-common
+${sharpy} netcat-traditional openssh*
+${sharpy} os-prober #orca saattaa poistua jo aiemmina
+${asy} 
+${lftr}
+csleep 5
 
-sudo apt-get remove --purge ppp procmail ristretto 
-sudo apt-get remove --purge screen po* refracta*
+dqb "p"
+csleep 5
+${sharpy} ppp procmail ristretto 
+${sharpy} screen pkexec 
+${sharpy} po* refracta*
 #samba poistunee jo aiemmin?
-sudo apt-get remove --purge squashfs-tools samba* system-config*
-sudo apt autoremove --yes
+${sharpy} squashfs-tools samba* system-config*
+${asy} 
+${lftr}
+csleep 5
 
-sudo apt-get remove --purge telnet 
-sudo apt-get remove --purge tex*
-sudo apt autoremove --yes
+dqb "t"
+csleep 5
+${sharpy} telnet 
+${sharpy} tex*
+${asy} 
+${lftr}
+csleep 5
 
-sudo apt-get remove --purge uno* ure*
-sudo apt-get remove --purge upower vim* # udisks* saattaa poistua jo aiemmin
-sudo apt autoremove --yes
+sqb "u"
+csleep 5
+${sharpy} uno* ure*
+${sharpy} upower vim* # udisks* saattaa poistua jo aiemmin
+${asy} 
+${lftr}
+csleep 5
 
-sudo apt-get remove --purge xorriso xfburn
-sudo apt autoremove --yes
+dqb "x"
+csleep 5
+${sharpy} xorriso xfburn
+${asy} 
+${sharpy} xorriso 
+${asy} 
+csleep 5
+ 
+dqb "y"
+csleep 5
+${sharpy} xfburn
+${asy} 
+csleep 5
+
+${lftr}
+${odio} shred -fu /var/cache/apt/archives/*.deb
+df
+${odio} which dhclient; ${odio} which ifup; sleep 6
 
 #whack xfce so that the ui is reset
-sudo pkill --signal 9 xfce*
+${whack} xfce*
 
 

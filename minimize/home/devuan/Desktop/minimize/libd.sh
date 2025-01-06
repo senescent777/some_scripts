@@ -103,7 +103,10 @@ function check_binaries2() {
 	sa="${odio} ${sa} "
 	sifu="${odio} ${sifu} "
 	sifd="${odio} ${sifd} "
+
 	smr="${odio} ${smr} "
+	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
+
 	slinky="${odio} ${slinky} -s "
 	spc="${odio} ${spc} "
 	srat="${odio} ${srat} "
