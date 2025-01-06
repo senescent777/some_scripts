@@ -305,3 +305,9 @@ fi
 
 echo "time to ${sifu} ${iface} or whåtever"
 echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
+
+if [ ${debug} -eq 1 ] ; then 
+	sleep 5
+	#whack xfce so that the ui is reset
+	${whack} xfce*
+fi

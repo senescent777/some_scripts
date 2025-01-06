@@ -93,7 +93,7 @@ ${asy}
 ${lftr}
 csleep 5
 
-sqb "u"
+dqb "u"
 csleep 5
 ${sharpy} uno* ure*
 ${sharpy} upower vim* # udisks* saattaa poistua jo aiemmin
