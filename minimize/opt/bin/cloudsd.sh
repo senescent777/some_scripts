@@ -18,6 +18,7 @@ ${smr} /sbin/dhclient-script
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35"
+	#TODO:jos mahd ni jo tässä kohtaa tablesin asennus paketeista
 else
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
@@ -29,6 +30,7 @@ else
 	#pitäisiköhän liittyä nÄiden noihin dns/dot-juTTuihin? jep
 	${ipt} -D INPUT 5
 	${ipt} -D OUTPUT 5
+	#TODO: portin 80 käsittely jotenkin mukaan?
 fi
 
 function tod_dda() { 
