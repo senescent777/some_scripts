@@ -44,6 +44,12 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
+		echo "cd \$pkgdir"
+		echo "sudo dpkg -i netfilter-persistent*.deb"
+		echo "sudo dpkg -i libip*.deb"
+		echo "sudo dpkg -i iptables_*.deb"
+		echo "sudo dpkg -i iptables-*.deb"
+		exit 55
 	fi
 
 	[ -x ${ipt} ] || exit 5
