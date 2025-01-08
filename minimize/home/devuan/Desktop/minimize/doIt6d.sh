@@ -1,11 +1,16 @@
 #!/bin/bash
 
 iface=eth0 
-enforce=1 #voisi olla konftdstossa
+enforce=0 #1 #voisi olla konftdstossa
 debug=0
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 mode=2
+
+#TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
+#TODO:/v/c/man-nalkutus, tee jotain
+#TODO:sudon nalkutus yhdessä kohtaa
+#TODO:jokin neljäs juttu?
 
 sudo chmod a-wx /home/devuan/Desktop/minimize/{doIt6.sh,lib,pt2.sh,make_tar.sh}
 sudo chmod 0555 /home/devuan/Desktop/minimize/make_tar2.sh
@@ -52,7 +57,7 @@ function mangle_s() {
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		csleep 1
 		
-		sudo chmod 0555 ${1}
+		sudo chmod 0555 ${1} #HUOM. miksi juuri 5?
 		sudo chown root:root ${1} 
 		#chattr +ui ${1}
 
@@ -69,7 +74,6 @@ function mangle_s() {
 	fi
 }
 
-#VAIH:joSPa testaisi p_e:n toiminnan piTkäsTä aikaa
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
@@ -80,7 +84,7 @@ function pre_enforce() {
  	#else
 		sudo touch /etc/sudoers.d/meshuggah
 		#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
-		sudo chmod a+w /etc/sudoers.d/meshuggah	
+		sudo chmod a+w /etc/sudoers.d/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ?
 
 		local f 
 		for f in ${CB_LIST1} ; do mangle_s ${f} ; done
@@ -102,6 +106,7 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
+	#HUOM. turha sorkkia /opt jatkossa
 	${sco} -R root:root /opt
 	${scm} -R 0555 /opt
 
@@ -112,7 +117,7 @@ function enforce_access() {
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
 
-	#VAIH:ao. rivi, saattaa muuttua, uid ei-numeeriseksi
+	#HUOM. turhahko tässä kohtaa, kjä stubby luodaan vasta myöhemmin
 	${sco} -R stubby:65534 /home/stubby/
 
 	local f
@@ -127,6 +132,7 @@ function enforce_access() {
 		${sco} -R root:root /etc
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
+		#HUOM.080125:olikohan peräti tarpeellista että erikseen pre_e ja sitten tämä?		
 		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
@@ -135,8 +141,11 @@ function enforce_access() {
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
+		
+		#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
 		${sco} -R root:root /var
 		${scm} -R go-w /var
+
 		${scm} 0755 /
 		${sco} root:root /
 	fi

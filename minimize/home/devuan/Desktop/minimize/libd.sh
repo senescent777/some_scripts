@@ -5,6 +5,8 @@ odio=$(which sudo)
 #TODO:tähän toinenkin tarkistus ennen -x
 [ -x ${odio} ] || exit 666
 
+#Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
+
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
 }
@@ -14,7 +16,7 @@ function csleep() {
 }
 
 function pre_part3() {
-	#060125: uutena tables-asennus ennen vbarsinaista asennusta
+	#HUOM.060125: uutena tables-asennus ennen vbarsinaista asennusta
 	sudo dpkg -i ${pkgdir}/netfilter-persistent*.deb
 	[ $? -eq 0 ] && sudo rm ${pkgdir}/netfilter-persistent*.deb
 	csleep 5
@@ -167,7 +169,7 @@ function mangle2() {
 #	${odio} adduser --system ${1}
 #	sleep 1
 #	${scm} go-w /home
-#
+#TODO:se ch-jotain stubby:65534 näille main
 #	[ ${debug} -eq 1 ]  && ls -las /home
 #	sleep 7
 #}
@@ -207,6 +209,7 @@ function part1() {
 	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
+	#TODO:ehto P.V.H.H , KORJAA
 	if [ y"${ipt}" == "y" ] ; then
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
@@ -227,6 +230,7 @@ function part1() {
 	fi
 }
 
+#TODO:tämän käskytys toisestakin skriptistä käsin
 function part3() {
 	${sdi} ${pkgdir}/lib*.deb
 

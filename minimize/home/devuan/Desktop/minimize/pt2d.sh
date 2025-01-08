@@ -1,6 +1,5 @@
 #!/bin/bash
 . ./libd.sh
-
 ${fib}
 
 debug=0
@@ -63,16 +62,14 @@ csleep 5
 #... libgstreamerja libgsm uutena (060125)
 ${sharpy} libpoppler* libuno* libreoffice* libgsm* libgstreamer*
 
-
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
-
 dqb "l-o"
 csleep 5
 ${sharpy} lvm2 mdadm  
 ${sharpy} mailcap mlocate
 ${sharpy} mokutil mariadb-common mysql-common
 ${sharpy} netcat-traditional openssh*
-${sharpy} os-prober #orca saattaa poistua jo aiemmina
+${sharpy} os-prober #orca saattaa poistua jo aiemmin
 ${asy} 
 ${lftr}
 csleep 5
@@ -80,8 +77,13 @@ csleep 5
 dqb "p"
 csleep 5
 ${sharpy} ppp procmail ristretto 
-${sharpy} screen pkexec 
-${sharpy} po* refracta*
+${sharpy} screen
+${asy} 
+${lftr}
+csleep 5
+#HUOM.080125 screen ei suostunut poistumaan yänään, joten...
+
+${sharpy} pkexec  po* refracta*
 #samba poistunee jo aiemmin?
 ${sharpy} squashfs-tools samba* system-config*
 ${asy} 
@@ -121,11 +123,9 @@ csleep 5
 ${lftr}
 ${odio} shred -fu /var/cache/apt/archives/*.deb
 df
-
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
 #whack xfce so that the ui is reset
 ${whack} xfce*
-
 
 
