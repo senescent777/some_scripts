@@ -107,8 +107,8 @@ function enforce_access() {
 	${scm} 0755 /home
 
 	#HUOM. turha sorkkia /opt jatkossa
-	${sco} -R root:root /opt
-	${scm} -R 0555 /opt
+	#${sco} -R root:root /opt
+	#${scm} -R 0555 /opt
 
 	local n
 	n=$(whoami)
