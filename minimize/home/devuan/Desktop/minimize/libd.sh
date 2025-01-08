@@ -209,8 +209,10 @@ function part1() {
 	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
-	#TODO:ehto P.V.H.H , KORJAA
 	if [ y"${ipt}" == "y" ] ; then
+		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+		#pre_part3 hoitaisi saman asian
+	else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
 			${ip6t} -P ${t} DROP
@@ -224,9 +226,8 @@ function part1() {
 			${ip6t} -L #
 			sleep 5 
 		fi #
-	else
-		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-		#pre_part3 hoitaisi saman asian
+	
+		
 	fi
 }
 
