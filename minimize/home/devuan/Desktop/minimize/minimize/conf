@@ -1,4 +1,0 @@
-part=/dev/sdb2
-dir=/mnt
-archive=out2.tar
-debug=0
