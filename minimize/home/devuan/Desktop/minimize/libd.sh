@@ -65,7 +65,7 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
-		#pre_part3 hoitaisi saman asian
+		#pre_part3 hoitaisi saman asian(TODO)
 		
 		echo "cd \$pkgdir"
 		echo "sudo dpkg -i netfilter-persistent*.deb"
@@ -169,7 +169,7 @@ function mangle2() {
 #	${odio} adduser --system ${1}
 #	sleep 1
 #	${scm} go-w /home
-#TODO:se ch-jotain stubby:65534 näille main
+#${sco} -R stubby:65534 /home/stubby/
 #	[ ${debug} -eq 1 ]  && ls -las /home
 #	sleep 7
 #}

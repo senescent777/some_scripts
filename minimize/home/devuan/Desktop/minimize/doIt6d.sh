@@ -117,9 +117,6 @@ function enforce_access() {
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
 
-	#HUOM. turhahko tässä kohtaa, kjä stubby luodaan vasta myöhemmin
-	${sco} -R stubby:65534 /home/stubby/
-
 	local f
 
 	if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
