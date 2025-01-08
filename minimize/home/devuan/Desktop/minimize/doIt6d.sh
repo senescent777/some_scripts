@@ -8,8 +8,8 @@ tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 mode=2
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
-#TODO:/v/c/man-nalkutus, tee jotain
-#TODO:sudon nalkutus yhdessä kohtaa
+#VAIH:/v/c/man-nalkutus, tee jotain
+#TODO:sudon nalkutus yhdessä kohtaa (kun enforce=1)
 #TODO:jokin neljäs juttu?
 
 sudo chmod a-wx /home/devuan/Desktop/minimize/{doIt6.sh,lib,pt2.sh,make_tar.sh}
@@ -78,7 +78,7 @@ function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
 		sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
-		dqb "a51a kun05a"
+		[ $? -eq 0 ] && dqb "a51a kun05a"
 	fi
 
  	#else
@@ -140,6 +140,11 @@ function enforce_access() {
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
 		
 		#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
+		#pitäisi kai jotenkin huomioida:
+		#0 drwxrwsr-x 2 root staff   3 May 10  2023 local
+		#0 drwxr-xr-x 1 root root  360 Jan  8 21:46 log
+		#0 drwxrwsr-x 2 root mail    3 Jul 20  2023 mail
+		
 		${sco} -R root:root /var
 		${scm} -R go-w /var
 
@@ -216,8 +221,8 @@ ${whack} nm-applet
 #ntp ehkä takaisin myöhemmin
 ${whack} ntp*
 
-csleep 3
-dqb "1937"
+#csleep 3
+#dqb "1937"
 #exit
 
 #K01avahi-jutut sopivaan kohtaan?
@@ -240,7 +245,7 @@ ${sharpy} po* pkexec
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
 
-if [ y"${ipt}" == "y" ] ; then
+if [ y"${ipt}" != "y" ] ; then #muutkin vastaavat trark pitäisi katsoa uusiksi
 	${ip6tr} /etc/iptables/rules.v6
 	${iptr} /etc/iptables/${tblz4}
 fi

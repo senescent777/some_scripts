@@ -17,6 +17,7 @@ function csleep() {
 
 function pre_part3() {
 	#HUOM.060125: uutena tables-asennus ennen vbarsinaista asennusta
+	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	
 	sudo dpkg -i ${pkgdir}/netfilter-persistent*.deb
 	[ $? -eq 0 ] && sudo rm ${pkgdir}/netfilter-persistent*.deb
 	csleep 5
@@ -119,7 +120,7 @@ function check_binaries2() {
 	sharpy="${odio} ${sag} remove --purge --yes "
 	sdi="${odio} ${sdi} -i "
 
-	#HUOM. ${sag} VIIMEISENÄ
+	#HUOM. ${sag} OLTAVA VIIMEISENÄ
 	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
 	sag_u="${odio} ${sag} update "
 	sag="${odio} ${sag} "
@@ -169,7 +170,7 @@ function mangle2() {
 #	${odio} adduser --system ${1}
 #	sleep 1
 #	${scm} go-w /home
-#${sco} -R stubby:65534 /home/stubby/
+#	${sco} -R stubby:65534 /home/stubby/
 #	[ ${debug} -eq 1 ]  && ls -las /home
 #	sleep 7
 #}
@@ -233,6 +234,7 @@ function part1() {
 
 #TODO:tämän käskytys toisestakin skriptistä käsin
 function part3() {
+	#TODO: $pkgdir validiustark kanssa?
 	${sdi} ${pkgdir}/lib*.deb
 
 	if [ $? -eq  0 ] ; then
