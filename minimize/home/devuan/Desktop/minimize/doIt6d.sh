@@ -7,14 +7,6 @@
 #TODO:sudon nalkutus yhdessä kohtaa (kun enforce=1)
 #TODO:jokin neljäs juttu?
 
-#sudo chmod a-wx /home/devuan/Desktop/minimize/{doIt6.sh,lib,pt2.sh,make_tar.sh}
-#sudo chmod 0555 /home/devuan/Desktop/minimize/make_tar2.sh
-#sudo chmod a-wx /opt/bin/clouds*
-#sudo chmod a-wx /home/devuan/Desktop/minimize/clouds.sh
-#
-#echo "debug=${debug}"
-#exit
-
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -82,19 +74,17 @@ function pre_enforce() {
 		[ $? -eq 0 ] && dqb "a51a kun05a"
 	fi
 
- 	#else
-		sudo touch /etc/sudoers.d/meshuggah
-		#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
-		sudo chmod a+w /etc/sudoers.d/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ?
+	sudo touch /etc/sudoers.d/meshuggah
+	#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
+	sudo chmod a+w /etc/sudoers.d/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ?
 
-		local f 
-		for f in ${CB_LIST1} ; do mangle_s ${f} ; done
-		for f in /etc/init.d/stubby /home/devuan/Desktop/minimize/cloudsd.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
+	local f 
+	for f in ${CB_LIST1} ; do mangle_s ${f} ; done
+	for f in /etc/init.d/stubby /home/devuan/Desktop/minimize/cloudsd.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
 
-		sudo chmod a-w /etc/sudoers.d/meshuggah	
-		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
-	#fi
-
+	sudo chmod a-w /etc/sudoers.d/meshuggah	
+	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
+	
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
 	#sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? ehkä ei
 	sudo chown -R root:root /etc/sudoers.d
@@ -106,10 +96,6 @@ function enforce_access() {
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
 	${scm} 0755 /home
-
-	#HUOM. turha sorkkia /opt jatkossa
-	#${sco} -R root:root /opt
-	#${scm} -R 0555 /opt
 
 	local n
 	n=$(whoami)
@@ -179,26 +165,24 @@ dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necess
 part1
 
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
-#	if [ ${enforce} -eq 1 ] ; then 
-		dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
-		csleep 5
-		${scm} a+w /etc/apt #tarpeen?
-		g=$(date +%F)
-		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
+	csleep 5
+	${scm} a+w /etc/apt #tarpeen?
+	g=$(date +%F)
+	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
-		sudo touch /etc/apt/sources.list
-		${scm} a+w /etc/apt/sources.list
+	sudo touch /etc/apt/sources.list
+	${scm} a+w /etc/apt/sources.list
 
-		${odio} sed -i 's/DISTRO/daedalus/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
-		sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
+	${odio} sed -i 's/DISTRO/daedalus/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
+	sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
 
-		${scm} a-w /etc/apt/sources.list
-		${sco} -R root:root /etc/apt #/sources.list
-		${scm} -R a-w /etc/apt/
+	${scm} a-w /etc/apt/sources.list
+	${sco} -R root:root /etc/apt #/sources.list
+	${scm} -R a-w /etc/apt/
 
-		[ ${debug} -eq 1 ] && ls -las /etc/apt
-		csleep 5
-#	fi
+	[ ${debug} -eq 1 ] && ls -las /etc/apt
+	csleep 5
 fi
 
 [ ${mode} -eq 0 ] && exit
@@ -275,20 +259,15 @@ if [ ${mode} -eq 1 ] ; then
 	echo "${odio} passwd"
 	echo "${whack} xfce*"
 
-#	dqb "no mas senor"
 	exit 	
 fi
 
-#exit
 ${asy}
 dqb "GR1DN BELIALAS KYE"
 
 #VAIH:clouds uusix kanssa (case 1 vuelä)
 sudo ~/Desktop/minimize/cloudsd.sh 0
 sleep 5
-
-#dqb "TU QUEIRO PUTA"
-#csleep 5
 
 dqb "LOCURA"
 csleep 6

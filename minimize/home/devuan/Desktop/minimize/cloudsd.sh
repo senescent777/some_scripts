@@ -31,7 +31,6 @@ else
 	#pitäisiköhän liittyä nÄiden noihin dns/dot-juTTuihin? jep
 	${ipt} -D INPUT 6 #aiemmin oli 5
 	${ipt} -D OUTPUT 6
-	#VAIH: portin 80 käsittely jotenkin mukaan?
 fi
 
 function tod_dda() { 
@@ -119,7 +118,6 @@ ${scm} 0750 /etc/iptables
 sleep 2
 
 #if [ ${debug} -eq 1 ] ; then
-	#echo "PISDEO PRO SAnTANA"
 	${ipt} -L  #
 	sleep 6
 	echo "666"

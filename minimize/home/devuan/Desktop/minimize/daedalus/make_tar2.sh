@@ -1,12 +1,5 @@
 #!/bin/bash
-#VAIH:ensiksi toimimaan .deb-paketit sisältävien tar-pakettien rakennus ja sen jälkeen part3 käskyttäminen jotta ne saadaan asennettua
-#mode=0
-#frist=0
-#debug=1
-#tgtfile=/tmp/out.tar 
-#dnsm=0
-
-
+#VAIH: toimimaan .deb-paketit sisältävien tar-pakettien rakennus 
 
 function parse_opts_1 () {
 	case ${1} in
@@ -34,17 +27,7 @@ function parse_opts_2() {
 	esac
 }
 
-#function check_params() {
-#	dqb "check_params( ${1} )"
-#	[ -s ${1} ] && echo "${1} alr3ady 3x1st5"
-#	local d
-#	
-#	d=$(dirname ${1})
-#	[ -d ${d} ] || echo "no such dir as ${d}"
-#}
-#
-#. ./libd
-#
+
 ##HUOM. löytyy myös se out4.tar
 #function make_tar() {
 #	dqb "make_tar ( ${1} )"
@@ -227,28 +210,6 @@ function make_upgrade() {
 	csleep 1
 }
 
-#if [ $# -gt 0 ] ; then
-#	parse_opts_2 ${2} ${3}
-#	for opt in $@ ; do parse_opts_1 ${opt} ; done
-#
-#	dqb "if this script doesn't work, try /opt/bin/cloudsd.sh"	
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
-#	csleep 1
-#
-#	${asy}
-#	${sag_u} 
-#
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
-#	csleep 1
-#
-#	#[ $? -eq 0 ] || echo "/o/b/cloudsd.sh <mode> | ${sifu} -a | ${sifu} ${iface}";exit
-#else
-#	echo "$0 -h";exit
-#fi
-#
-#check_params ${tgtfile}
-##main()
-#gg=$(sudo which gpg)
 
 case ${mode} in
 	0)
@@ -259,31 +220,8 @@ case ${mode} in
 		#päällekkäinen toiminto export.sh kanssa?
 		make_upgrade ${tgtfile}
 	;;
-##
-##	3)
-##		if [ x"$gg" == "x" ] ; then 
-##			sudo /opt/bin/cloudsd.sh ${dnsm}
-##			csleep 1	
-##			${sag} install gpg pinentry-tty gpg-agent
-##
-##			csleep 1
-##			sudo /sbin/ifdown -a
-##			csleep 4
-##
-##			gg=$(sudo which gpg)
-##			${gg} --quick-generate-key tester
-##		fi
-##	
-##		;;
-##
 	*)
 		echo "-h"
 	;;
 esac
 
-##if [ -x ${gg} ] ; then
-##	if [ -s  ${tgtfile} ] ; then
-##		gpg -u tester -sb ${tgtfile}
-##		dqb "cp ${tgtfile}* targetdir"
-##	fi
-##fi

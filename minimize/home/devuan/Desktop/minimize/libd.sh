@@ -3,9 +3,7 @@
 
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 665 
-#echo "ddd"
 [ -x ${odio} ] || exit 666
-#exit
 
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
@@ -75,13 +73,6 @@ function check_binaries() {
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
 		pre_part3 ${pkgdir}
-		
-		#echo "cd \$pkgdir"
-		#echo "sudo dpkg -i netfilter-persistent*.deb"
-		#echo "sudo dpkg -i libip*.deb"
-		#echo "sudo dpkg -i iptables_*.deb"
-		#echo "sudo dpkg -i iptables-*.deb"
-		#exit 55
 
 		ipt=$(sudo which iptables)
 		ip6t=$(sudo which ip6tables)
@@ -230,7 +221,6 @@ function part1() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-		#pre_part3 hoitaisi saman asian
 	else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
@@ -258,7 +248,6 @@ function part3() {
 	${sdi} ${1}/lib*.deb
 
 	if [ $? -eq  0 ] ; then
-		#nköjään ei riittävästitehty dnsmasq kannalta
 		dqb "part3.1 ok"
 		sleep 5
 		${smr} -rf ${1}/lib*.deb
