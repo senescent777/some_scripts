@@ -51,6 +51,8 @@ function mangle_s() {
 		tgt=/etc/sudoers.d/${2}
 	fi
 
+	#TODO: $1 tarkistus ennen -s
+
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		csleep 1
@@ -173,7 +175,6 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-#VAih:jos mahd ni tables asentumaan jo part1 tienoilla, mikäli puuttuu
 part1
 
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
@@ -218,11 +219,6 @@ ${whack} nm-applet
 
 #ntp ehkä takaisin myöhemmin
 ${whack} ntp*
-
-#csleep 3
-#dqb "1937"
-#exit
-
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
@@ -238,7 +234,6 @@ ${sharpy} iw lm-sensors
 ${sharpy} ntp*
 
 #uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun -22 lopussa 
-
 ${sharpy} po* pkexec
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
@@ -289,13 +284,10 @@ dqb "GR1DN BELIALAS KYE"
 #VAIH:clouds uusix kanssa (case 1 vuelä)
 sudo ~/Desktop/minimize/cloudsd.sh 0
 sleep 5
-#TODO:nämäkin sammuttelut voisi olla toisessa skriptissä
-${odio} /etc/init.d/dnsmasq stop
-${odio} /etc/init.d/ntpsec stop
-dqb "TU QUEIRO PUTA"
-csleep 5
-${whack} dnsmasq*
-${whack} ntp*
+
+#dqb "TU QUEIRO PUTA"
+#csleep 5
+
 dqb "LOCURA"
 csleep 6
 

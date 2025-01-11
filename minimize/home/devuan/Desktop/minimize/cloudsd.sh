@@ -11,7 +11,6 @@ slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
 
-#VAIH:siirto toiseen hmistoon vähitellen
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
@@ -59,6 +58,12 @@ case ${1} in
 
 			for s in $(grep -v '#' /etc/resolv.conf | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
 		fi
+
+		${odio} /etc/init.d/dnsmasq stop
+		${odio} /etc/init.d/ntpsec stop
+		csleep 5
+		${whack} dnsmasq*
+		${whack} ntp*
 	;;
 	1)
 		echo "WORK IN PROGRESS"
