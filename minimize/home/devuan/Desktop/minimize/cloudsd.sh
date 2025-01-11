@@ -29,9 +29,9 @@ else
 	${ipt} -F e
 
 	#pitäisiköhän liittyä nÄiden noihin dns/dot-juTTuihin? jep
-	${ipt} -D INPUT 5
-	${ipt} -D OUTPUT 5
-	#TODO: portin 80 käsittely jotenkin mukaan?
+	${ipt} -D INPUT 6 #aiemmin oli 5
+	${ipt} -D OUTPUT 6
+	#VAIH: portin 80 käsittely jotenkin mukaan?
 fi
 
 function tod_dda() { 
