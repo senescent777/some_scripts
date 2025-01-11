@@ -44,6 +44,7 @@ function check_params() {
 #HUOM.2. ei niitä {sco}-juttuja ao. fktioon
 function mangle_s() {
 	local tgt
+	[ y"${1}" == "y" ] && exit
 
 	if [ y"${2}" == "y" ] ; then
 		tgt=/etc/sudoers.d/meshuggah
@@ -51,7 +52,7 @@ function mangle_s() {
 		tgt=/etc/sudoers.d/${2}
 	fi
 
-	#TODO: $1 tarkistus ennen -s
+	echo "fr0m mangle_s: params_OK"; sleep 3
 
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
