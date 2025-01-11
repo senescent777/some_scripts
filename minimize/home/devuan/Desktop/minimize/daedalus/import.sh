@@ -1,6 +1,7 @@
 #!/bin/bash
 . ~/Desktop/minimize/doIt6d.sh.conf #voisi nimen muuttaa
 install_pkgs=0
+debug=1
 
 #function parse_opts_1() {
 #	case "${1}" in
@@ -24,23 +25,25 @@ if [ $# -gt 0 ] ; then
 		0)
 			#jatkossa fktioon tämä
 			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
-			echo "KL"
-			sleep 3
+			dqb "KL"
+			csleep 3
 
 			[ -s ${2} ] || exit
-			echo "${2} IJ"
-			sleep 3
+			
+			dqb "${2} IJ"
+			csleep 3
 
 			cd /
 			${srat} -xvpf ${2}  #-f ${2} -xvp ${pkgdir}
-			sleep 3
+			csleep 3
 
-			pre_part3
-			part3
-			sleep 3
+			#daedaluksen kanssa pre ei vaikuttaisi olevan tarpeellinen, chimaeran kanssa vöib olla toinen juttu
+			pre_part3 ${pkgdir}
+			part3 ${pkgdir}
+			csleep 3
 
 			${odio} shred -fu  ${pkgdir}/*.deb
-			sleep 3
+			csleep 3
 		;;
 		*)
 			dqb "-h"
@@ -76,7 +79,7 @@ fi
 #	${sdi} /var/cache/apt/archives/perl-modules-5.32*.deb
 #	[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/perl-modules-5.32*.deb
 #
-#	part3
+#	part3 ${pkgdir}
 #fi
 #
 #${uom} ${part}

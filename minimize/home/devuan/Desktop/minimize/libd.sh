@@ -18,24 +18,26 @@ function csleep() {
 }
 
 function pre_part3() {
+	[ y"${1}" == "y" ] && exit
 	dqb "pp3"
+	[ -d {1} ] || exit
 
 	#HUOM.060125: uutena tables-asennus ennen vbarsinaista asennusta
 	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	
-	${odio} dpkg -i ${pkgdir}/netfilter-persistent*.deb
-	[ $? -eq 0 ] && ${odio} rm ${pkgdir}/netfilter-persistent*.deb
+	${odio} dpkg -i ${1}/netfilter-persistent*.deb
+	[ $? -eq 0 ] && ${odio} rm ${1}/netfilter-persistent*.deb
 	csleep 5
 
-	${odio} dpkg -i ${pkgdir}/libip*.deb
-	[ $? -eq 0 ] && ${odio} rm ${pkgdir}/libip*.deb
+	${odio} dpkg -i ${1}/libip*.deb
+	[ $? -eq 0 ] && ${odio} rm ${1}/libip*.deb
 	csleep 5
 
-	${odio} dpkg -i ${pkgdir}/iptables_*.deb
-	[ $? -eq 0 ] && ${odio} rm ${pkgdir}/iptables_*.deb
+	${odio} dpkg -i ${1}/iptables_*.deb
+	[ $? -eq 0 ] && ${odio} rm ${1}/iptables_*.deb
 	csleep 5
 
-	${odio} dpkg -i ${pkgdir}/iptables-*.deb
-	[ $? -eq 0 ] && ${odio} rm ${pkgdir}/iptables-*.deb
+	${odio} dpkg -i ${1}/iptables-*.deb
+	[ $? -eq 0 ] && ${odio} rm ${1}/iptables-*.deb
 	dqb "pp3 d0n3"
 	csleep 5
 }
@@ -71,7 +73,7 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
-		pre_part3 
+		pre_part3 ${pkgdir}
 		
 		#echo "cd \$pkgdir"
 		#echo "sudo dpkg -i netfilter-persistent*.deb"
@@ -247,30 +249,29 @@ function part1() {
 	fi
 }
 
-#VAIH:tämän käskytys toisestakin skriptistä käsin
 function part3() {
-	[ y"${pkgdir}" == "y" ] && exit 1
+	[ y"${1}" == "y" ] && exit 1
 	dqb "11"
-	[ -d ${pkgdir} ] || exit 2
+	[ -d ${1} ] || exit 2
 	dqb "22"
-	${sdi} ${pkgdir}/lib*.deb
+	${sdi} ${1}/lib*.deb
 
 	if [ $? -eq  0 ] ; then
 		#nköjään ei riittävästitehty dnsmasq kannalta
 		dqb "part3.1 ok"
 		sleep 5
-		${smr} -rf ${pkgdir}/lib*.deb
+		${smr} -rf ${1}/lib*.deb
 	else
 	 	dqb "exit 66"
 	fi
 
 	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
-	${sdi} ${pkgdir}/*.deb
+	${sdi} ${1}/*.deb
 	
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-		${smr} -rf ${pkgdir}/lib*.deb
+		${smr} -rf ${1}/lib*.deb
 	else
 	 	dqb "exit 67"
 	fi

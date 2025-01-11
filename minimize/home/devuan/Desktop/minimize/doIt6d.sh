@@ -266,8 +266,8 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
-pre_part3
-part3
+pre_part3 ${pkgdir}
+part3 ${pkgdir}
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
@@ -289,6 +289,7 @@ dqb "GR1DN BELIALAS KYE"
 #VAIH:clouds uusix kanssa (case 1 vuelä)
 sudo ~/Desktop/minimize/cloudsd.sh 0
 sleep 5
+#TODO:nämäkin sammuttelut voisi olla toisessa skriptissä
 ${odio} /etc/init.d/dnsmasq stop
 ${odio} /etc/init.d/ntpsec stop
 dqb "TU QUEIRO PUTA"
