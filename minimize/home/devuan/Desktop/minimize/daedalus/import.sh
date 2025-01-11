@@ -22,6 +22,10 @@ debug=1
 if [ $# -gt 0 ] ; then
 	#for opt in $@ ; do parse_opts_1 ${opt} ; done
 	case "${1}" in
+		-1)
+			${som} -o ro ${part} ${dir}
+			echo "NEXT: $0 0 <source> | $0 1 <source>"
+		;;
 		0)
 			#jatkossa fktioon tämä
 			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
@@ -44,6 +48,17 @@ if [ $# -gt 0 ] ; then
 
 			${odio} shred -fu  ${pkgdir}/*.deb
 			csleep 3
+			echo "NEXT: $0 2"
+		;;
+		1)
+			cd /
+			${srat} -xvpf ${2} 
+			csleep 3
+			echo "NEXT: $0 2"
+		;;
+		2)
+			${uom} $part
+			echo "NEXT: ~/Desktop/minimize/doIt6d.sh (maybe)"
 		;;
 		*)
 			dqb "-h"
