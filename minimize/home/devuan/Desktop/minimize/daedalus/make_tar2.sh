@@ -1,11 +1,16 @@
 #!/bin/bash
-#TODO:ensiksi toimimaan .deb-paketit sisältävien tar-pakettien rakennus ja sen jälkeen part3 käskyttäminen jotta ne saadaan asennettua
+#VAIH:ensiksi toimimaan .deb-paketit sisältävien tar-pakettien rakennus ja sen jälkeen part3 käskyttäminen jotta ne saadaan asennettua
 #mode=0
 #frist=0
 #debug=1
 #tgtfile=/tmp/out.tar 
 #dnsm=0
-#
+
+echo "sudo shred -fu /var/cache/apt/archives/*"
+echo "sudo apt-get update"
+echo "sudo apt-get upgrade -u"
+echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
+
 #function parse_opts_1 () {
 #	case ${1} in
 #		-v|--v)
