@@ -1,7 +1,7 @@
 #!/bin/bash
-#. ~/Desktop/minimize/conf
-#install_pkgs=0
-#
+. ~/Desktop/minimize/doIt6d.sh.conf #voisi nimen muuttaa
+install_pkgs=0
+
 #function parse_opts_1() {
 #	case "${1}" in
 #		-v|--v)
@@ -15,13 +15,41 @@
 #		;;
 #	esac
 #}
-#
-#. ./lib
-#
-#if [ $# -gt 0 ] ; then
-#	for opt in $@ ; do parse_opts_1 ${opt} ; done
-#fi
-#
+
+. ~/Desktop/minimize/libd.sh
+
+if [ $# -gt 0 ] ; then
+	#for opt in $@ ; do parse_opts_1 ${opt} ; done
+	case "${1}" in
+		0)
+			#jatkossa fktioon tämä
+			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
+			echo "KL"
+			sleep 3
+
+			[ -s ${2} ] || exit
+			echo "${2} IJ"
+			sleep 3
+
+			cd /
+			${srat} -xvpf ${2}  #-f ${2} -xvp ${pkgdir}
+			sleep 3
+
+			pre_part3
+			part3
+			sleep 3
+
+			${odio} shred -fu  ${pkgdir}/*.deb
+			sleep 3
+		;;
+		*)
+			dqb "-h"
+		;;
+	esac
+else
+	echo "$0 <mode> [other_params]"
+fi
+
 #if [ ! -s /OLD.tar ] ; then 
 #	${srat} -cvpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
 #fi

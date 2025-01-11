@@ -94,7 +94,10 @@ function check_binaries() {
 	
 	[ -x ${sco} ] || exit 5
 	[ -x ${scm} ] || exit 5
+
+	[ y"${whack}" == "y" ] && exit 5
 	[ -x ${whack} ] || exit 5
+
 	[ -x ${sag} ] || exit 5
 	[ -x ${sa} ] || exit 5
 	[ -x ${sip} ] || exit 5
@@ -244,7 +247,7 @@ function part1() {
 	fi
 }
 
-#TODO:tämän käskytys toisestakin skriptistä käsin
+#VAIH:tämän käskytys toisestakin skriptistä käsin
 function part3() {
 	[ y"${pkgdir}" == "y" ] && exit 1
 	dqb "11"
