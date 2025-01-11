@@ -6,37 +6,34 @@
 #tgtfile=/tmp/out.tar 
 #dnsm=0
 
-echo "sudo shred -fu /var/cache/apt/archives/*"
-echo "sudo apt-get update"
-echo "sudo apt-get upgrade -u"
-echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
 
-#function parse_opts_1 () {
-#	case ${1} in
-#		-v|--v)
-#			debug=1
-#		;;
-#		-h)
-#			echo "$0 <mode> [-o ouftile] [-i infile] [-v]"
-#			exit
-#		;;
-#		*)
-#			if [ ${frist} -eq 0 ] ; then 
-#				mode=${1}
-#				frist=1
-#			fi
-#		;;
-#	esac
-#}
-#
-#function parse_opts_2() {
-#	case "${1}" in
-#		-o|--o|-i|--i)
-#			tgtfile=${2}
-#		;;
-#	esac
-#}
-#
+
+function parse_opts_1 () {
+	case ${1} in
+		-v|--v)
+			debug=1
+		;;
+		-h)
+			echo "$0 <mode> [-o ouftile] [-i infile] [-v]"
+			exit
+		;;
+		*)
+			if [ ${frist} -eq 0 ] ; then 
+				mode=${1}
+				frist=1
+			fi
+		;;
+	esac
+}
+
+function parse_opts_2() {
+	case "${1}" in
+		-o|--o|-i|--i)
+			tgtfile=${2}
+		;;
+	esac
+}
+
 #function check_params() {
 #	dqb "check_params( ${1} )"
 #	[ -s ${1} ] && echo "${1} alr3ady 3x1st5"
@@ -209,9 +206,15 @@ echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
 #	${srat} -tf ${1} > MANIFEST
 #	${srat} -rvpf ${1} ${p}/MANIFEST
 #}
-#
-#function make_upgrade() {
-#	dqb "make_upgrade(${1} )"
+
+function make_upgrade() {
+	dqb "make_upgrade(${1} )"
+
+	echo "sudo shred -fu /var/cache/apt/archives/*"
+	echo "sudo apt-get update"
+	echo "sudo apt-get upgrade -u"
+	echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
+
 #	dqb "${sag} upgrade -u"
 #
 #	sudo /opt/bin/clouds.sh ${dnsm}
@@ -221,9 +224,9 @@ echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
 #	${srat} -cvpf ${1} /var/cache/apt/archives 
 #
 #	sudo /opt/bin/cloudsd.sh ${dnsm}
-#	csleep 1
-#}
-#
+	csleep 1
+}
+
 #if [ $# -gt 0 ] ; then
 #	parse_opts_2 ${2} ${3}
 #	for opt in $@ ; do parse_opts_1 ${opt} ; done
@@ -246,16 +249,16 @@ echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
 #check_params ${tgtfile}
 ##main()
 #gg=$(sudo which gpg)
-#
-#case ${mode} in
-#	0)
-#		make_tar ${tgtfile}
-#		make_tar2 ${tgtfile}
-#	;;
-#	1)
-#		#päällekkäinen toiminto export.sh kanssa?
-#		make_upgrade ${tgtfile}
-#	;;
+
+case ${mode} in
+	0)
+		echo "make_tar ${tgtfile}"
+		echo "make_tar2 ${tgtfile}"
+	;;
+	1)
+		#päällekkäinen toiminto export.sh kanssa?
+		make_upgrade ${tgtfile}
+	;;
 ##
 ##	3)
 ##		if [ x"$gg" == "x" ] ; then 
@@ -273,11 +276,11 @@ echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
 ##	
 ##		;;
 ##
-#	*)
-#		echo "-h"
-#	;;
-#esac
-#
+	*)
+		echo "-h"
+	;;
+esac
+
 ##if [ -x ${gg} ] ; then
 ##	if [ -s  ${tgtfile} ] ; then
 ##		gpg -u tester -sb ${tgtfile}
