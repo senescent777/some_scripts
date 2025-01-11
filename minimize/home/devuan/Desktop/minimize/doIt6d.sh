@@ -7,11 +7,11 @@
 #TODO:sudon nalkutus yhdessä kohtaa (kun enforce=1)
 #TODO:jokin neljäs juttu?
 
-sudo chmod a-wx /home/devuan/Desktop/minimize/{doIt6.sh,lib,pt2.sh,make_tar.sh}
-sudo chmod 0555 /home/devuan/Desktop/minimize/make_tar2.sh
-sudo chmod a-wx /opt/bin/clouds*
-sudo chmod a-wx /home/devuan/Desktop/minimize/clouds.sh
-
+#sudo chmod a-wx /home/devuan/Desktop/minimize/{doIt6.sh,lib,pt2.sh,make_tar.sh}
+#sudo chmod 0555 /home/devuan/Desktop/minimize/make_tar2.sh
+#sudo chmod a-wx /opt/bin/clouds*
+#sudo chmod a-wx /home/devuan/Desktop/minimize/clouds.sh
+#
 #echo "debug=${debug}"
 #exit
 

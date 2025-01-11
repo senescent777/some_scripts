@@ -19,8 +19,9 @@ function csleep() {
 
 function pre_part3() {
 	[ y"${1}" == "y" ] && exit
-	dqb "pp3"
-	[ -d {1} ] || exit
+	echo "pp3( ${1} )"
+	[ -d ${1} ] || exit
+	echo "pp3.2"
 
 	#HUOM.060125: uutena tables-asennus ennen vbarsinaista asennusta
 	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	
