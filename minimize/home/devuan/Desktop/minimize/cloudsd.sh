@@ -91,8 +91,12 @@ case ${1} in
 		fi
 
 		echo "dns";sleep 2
+		${odio} /etc/init.d/dnsmasq restart
 		pgrep dnsmasq
+
 		echo "stu";sleep 2
+		echo "#ns2 stubby"
+		echo "#ns4 stubby"
 		pgrep stubby
 	;;
 esac

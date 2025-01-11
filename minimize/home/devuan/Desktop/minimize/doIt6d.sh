@@ -203,7 +203,7 @@ fi
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
-for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ntpsec ntp ; do
+for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ntpsec ; do
 	${odio} /etc/init.d/${s} stop
 	sleep 1
 done
@@ -219,6 +219,7 @@ ${whack} nm-applet
 
 #ntp ehkä takaisin myöhemmin
 ${whack} ntp*
+${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
@@ -293,10 +294,9 @@ csleep 6
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
-#${odio} /etc/init.d/dnsmasq restart
-#sudo ~/Desktop/minimize/cloudsd.sh 1
-#ns2 stubby
-#ns4 stubby
+#
+echo "#sudo ~/Desktop/minimize/cloudsd.sh 1"
+
 #VAIH:stubby-jutut toimimaan
 #ongelmana error: Could not bind on given addresses: Permission denied
 dqb "MESSIAH OF IMPURITY AND DARKNESS"
