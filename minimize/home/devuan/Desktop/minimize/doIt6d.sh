@@ -1,11 +1,6 @@
 #!/bin/bash
 
-iface=eth0 
-enforce=0 #1 #voisi olla konftdstossa
-debug=0
-pkgdir=/var/cache/apt/archives
-tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
-mode=2
+. ./"$0".conf
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
 #VAIH:/v/c/man-nalkutus, tee jotain
@@ -16,6 +11,9 @@ sudo chmod a-wx /home/devuan/Desktop/minimize/{doIt6.sh,lib,pt2.sh,make_tar.sh}
 sudo chmod 0555 /home/devuan/Desktop/minimize/make_tar2.sh
 sudo chmod a-wx /opt/bin/clouds*
 sudo chmod a-wx /home/devuan/Desktop/minimize/clouds.sh
+
+#echo "debug=${debug}"
+#exit
 
 function parse_opts_1() {
 	case "${1}" in
