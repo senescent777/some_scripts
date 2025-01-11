@@ -175,7 +175,7 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-#TODO:jos mahd ni tables asentumaan jo part1 tienoilla, mikäli puuttuu
+#VAih:jos mahd ni tables asentumaan jo part1 tienoilla, mikäli puuttuu
 part1
 
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?

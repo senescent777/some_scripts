@@ -2,8 +2,10 @@
 #grep /e/n/i ?
 
 odio=$(which sudo)
-#TODO:tähän toinenkin tarkistus ennen -x
+[ y"${odio}" == "y" ] && exit 665 
+#echo "ddd"
 [ -x ${odio} ] || exit 666
+#exit
 
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
@@ -16,22 +18,25 @@ function csleep() {
 }
 
 function pre_part3() {
+	dqb "pp3"
+
 	#HUOM.060125: uutena tables-asennus ennen vbarsinaista asennusta
 	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	
-	sudo dpkg -i ${pkgdir}/netfilter-persistent*.deb
-	[ $? -eq 0 ] && sudo rm ${pkgdir}/netfilter-persistent*.deb
+	${odio} dpkg -i ${pkgdir}/netfilter-persistent*.deb
+	[ $? -eq 0 ] && ${odio} rm ${pkgdir}/netfilter-persistent*.deb
 	csleep 5
 
-	sudo dpkg -i ${pkgdir}/libip*.deb
-	[ $? -eq 0 ] && sudo rm ${pkgdir}/libip*.deb
+	${odio} dpkg -i ${pkgdir}/libip*.deb
+	[ $? -eq 0 ] && ${odio} rm ${pkgdir}/libip*.deb
 	csleep 5
 
-	sudo dpkg -i ${pkgdir}/iptables_*.deb
-	[ $? -eq 0 ] && sudo rm ${pkgdir}/iptables_*.deb
+	${odio} dpkg -i ${pkgdir}/iptables_*.deb
+	[ $? -eq 0 ] && ${odio} rm ${pkgdir}/iptables_*.deb
 	csleep 5
 
-	sudo dpkg -i ${pkgdir}/iptables-*.deb
-	[ $? -eq 0 ] && sudo rm ${pkgdir}/iptables-*.deb
+	${odio} dpkg -i ${pkgdir}/iptables-*.deb
+	[ $? -eq 0 ] && ${odio} rm ${pkgdir}/iptables-*.deb
+	dqb "pp3 d0n3"
 	csleep 5
 }
 
@@ -66,14 +71,19 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
-		#pre_part3 hoitaisi saman asian(TODO)
+		pre_part3 
 		
-		echo "cd \$pkgdir"
-		echo "sudo dpkg -i netfilter-persistent*.deb"
-		echo "sudo dpkg -i libip*.deb"
-		echo "sudo dpkg -i iptables_*.deb"
-		echo "sudo dpkg -i iptables-*.deb"
-		exit 55
+		#echo "cd \$pkgdir"
+		#echo "sudo dpkg -i netfilter-persistent*.deb"
+		#echo "sudo dpkg -i libip*.deb"
+		#echo "sudo dpkg -i iptables_*.deb"
+		#echo "sudo dpkg -i iptables-*.deb"
+		#exit 55
+
+		ipt=$(sudo which iptables)
+		ip6t=$(sudo which ip6tables)
+		iptr=$(sudo which iptables-restore)
+		ip6tr=$(sudo which ip6tables-restore)
 	fi
 
 	[ -x ${ipt} ] || exit 5
@@ -81,6 +91,7 @@ function check_binaries() {
 	[ -x ${ip6t} ] || exit 5
 	[ -x ${iptr} ] || exit 5
 	[ -x ${ip6tr} ] || exit 5
+	
 	[ -x ${sco} ] || exit 5
 	[ -x ${scm} ] || exit 5
 	[ -x ${whack} ] || exit 5
@@ -120,7 +131,7 @@ function check_binaries2() {
 	sharpy="${odio} ${sag} remove --purge --yes "
 	sdi="${odio} ${sdi} -i "
 
-	#HUOM. ${sag} OLTAVA VIIMEISENÄ
+	#HUOM. ${sag} OLTAVA VIIMEISENÄ NÄISTÄ KOLMESDTA
 	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
 	sag_u="${odio} ${sag} update "
 	sag="${odio} ${sag} "
@@ -177,7 +188,8 @@ function mangle2() {
 #
 #function ns4() {
 #	dqb "ns4( ${1} )"
-#
+#	[ z"{$1}" == "z" ] && exit 33
+#jospa kirjoittaisi /e/i.d aqlaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
 #	${scm} u+w /run
 #	${odio} touch /run/${1}.pid
 #	${scm} 0600 /run/${1}.pid
@@ -185,7 +197,7 @@ function mangle2() {
 #	${scm} u-w /run
 #
 #	sleep 5
-#	#TODO:pitäisi kai tarkistaa parametrin validius ennenq...
+#	#VAIJ:pitäisi kai tarkistaa parametrin validius ennenq...
 #	${whack} ${1}*
 #	sleep 5
 #
@@ -234,7 +246,10 @@ function part1() {
 
 #TODO:tämän käskytys toisestakin skriptistä käsin
 function part3() {
-	#TODO: $pkgdir validiustark kanssa?
+	[ y"${pkgdir}" == "y" ] && exit 1
+	dqb "11"
+	[ -d ${pkgdir} ] || exit 2
+	dqb "22"
 	${sdi} ${pkgdir}/lib*.deb
 
 	if [ $? -eq  0 ] ; then
