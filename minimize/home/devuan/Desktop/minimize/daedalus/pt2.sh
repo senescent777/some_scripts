@@ -1,8 +1,12 @@
 #!/bin/bash
-. ./lib.sh
-${fib}
+d=$(dirname $0)
 
+#. ~/Desktop/minimize/daedalus/lib.sh #jos jotenkin automaagisemmin jatqssa(VAIH)
+. ${d}/lib.sh
+${fib}
+#exit
 debug=0
+
 if [ $# -gt 0 ] ; then  
 	if [ "${1}" == "-v" ] ; then
 		debug=1
