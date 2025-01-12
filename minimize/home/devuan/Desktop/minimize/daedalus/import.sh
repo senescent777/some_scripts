@@ -1,12 +1,5 @@
 #!/bin/bash
-#. ~/Desktop/minimize/doIt6d.sh.conf #voisi nimen muuttaa
 . ~/Desktop/minimize/daedalus/conf
-
-#install_pkgs=0
-#debug=1
-#mode=1 
-
-#. ~/Desktop/minimize/libd.sh
 . ~/Desktop/minimize/daedalus/lib.sh
 
 if [ ! -s /OLD.tar ] ; then 

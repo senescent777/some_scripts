@@ -83,7 +83,10 @@ function check_binaries() {
 	smr=$(sudo which rm)
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
+
+	#TODO: debug-mjasta riippuva -v
 	srat=$(sudo which tar)
+
 	som=$(sudo which mount)
 	uom=$(sudo which umount)
 

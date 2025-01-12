@@ -5,31 +5,7 @@
 . ~/Desktop/minimize/daedalus/lib.sh
 ${scm} a-wx ~/Desktop/minimize/*.sh
 
-#function parse_opts_1 () {
-#	case ${1} in
-#		-v|--v)
-#			debug=1
-#		;;
-#		-h)
-#			echo "$0 <mode> [-o ouftile] [-v]"
-#			exit
-#		;;
-#		*)
-#			if [ ${frist} -eq 0 ] ; then 
-#				mode=${1}
-#				frist=1
-#			fi
-#		;;
-#	esac
-#}
-#
-#function parse_opts_2() {
-#	case "${1}" in
-#		-o|--o)
-#			tgtfile=${2}
-#		;;
-#	esac
-#}
+#TODO:skriptin nimeäminen uudestaan
 
 #HUOM. 120125:seur varmaankin tuo keskeisimpien .deb-pakettien kasaminen, eluksi helpommat lähteet
 function make_tar() {
@@ -127,10 +103,6 @@ function make_tar_15 () {
 #
 }
 function make_tar_1_75() {
-
-#
-
-#
 	echo "sudo /opt/bin/cloudsd.sh ${dnsm}"
 	csleep 1
 
@@ -204,13 +176,8 @@ function make_tar_1_75() {
 
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
-
-#	echo ""
-#	echo "sudo apt-get update"
-#	echo "sudo apt-get upgrade -u"
-#	echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
-
 	dqb "${sagu}; ${sag} upgrade -u"
+
 	${odio} shred -fu /var/cache/apt/archives/*
 	${odio} ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 	${sifu} ${iface}	
@@ -232,7 +199,7 @@ function make_upgrade() {
 mode=0
 tgtfile=""
 
-#parsetus josqs käyttöön
+#parsetus josqs käyttöön, ehkä
 if [ $# -gt 0 ] ; then
 	mode=${1}
 	tgtfile=${2}
