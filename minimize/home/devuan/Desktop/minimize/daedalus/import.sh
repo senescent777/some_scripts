@@ -3,14 +3,11 @@
 d=$(dirname $0)
 . ${d}/conf
 . ${d}/lib.sh
-
 ${scm} a-wx ~/Desktop/minimize/*.sh
 
 if [ ! -s /OLD.tar ] ; then 
 	${srat} -cpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
 fi
-
-${scm} a-wx ~/Desktop/minimize/*.sh
 
 if [ $# -gt 0 ] ; then
 	#for opt in $@ ; do parse_opts_1 ${opt} ; done
