@@ -228,7 +228,7 @@ function mangle2() {
 #}
 #
 #=========================PART 0 ENDS HERE=================================================================
-
+#HUOM.120125: onko oltava juuri tässä tdstossa tämänb?
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}

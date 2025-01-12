@@ -1,10 +1,7 @@
 #!/bin/bash
-
-
 d=$(dirname $0)
 . ${d}/conf
 . ${d}/lib.sh
-
 ${scm} a-wx ~/Desktop/minimize/*.sh
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
@@ -226,8 +223,8 @@ ${sharpy} ntp*
 
 #uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun -22 lopussa 
 ${sharpy} po* pkexec
-${smr} -rf /run/live/medium/live/initrd.img*
-sleep 3
+${lftr}
+csleep 3
 
 if [ y"${ipt}" != "y" ] ; then #muutkin vastaavat trark pitäisi katsoa uusiksi
 	${ip6tr} /etc/iptables/rules.v6
@@ -237,8 +234,8 @@ fi
 #HUOM.270624:oli aikaisemmin tässä clouds.sh 0
 
 csleep 5
-${smr} -rf /run/live/medium/live/initrd.img* #lftr
-sleep 3
+${lftr} 
+csleep 3
 
 if [ ${debug} -eq 1 ] ; then
 	${snt} -tulpan
