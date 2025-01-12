@@ -64,10 +64,10 @@ function make_tar_15() {
 }
 
 function make_tar_1_75() {
-	echo "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
+	#echo "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	csleep 1
 
-	${srat} -rpf ${1} /home/stubby /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
+	${srat} -rpf ${1}  /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 #	
 #	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rpf ${1} ${f} ; done
 #	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rpf ${1} ${f} ; done
