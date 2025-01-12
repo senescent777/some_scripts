@@ -50,9 +50,29 @@ function check_binaries() {
 	ip6t=$(sudo which ip6tables)
 	iptr=$(sudo which iptables-restore)
 	ip6tr=$(sudo which ip6tables-restore)
+
+	if [ y"${ipt}" == "y" ] ; then
+		echo "SHOULD INSTALL IPTABLES"
+		pre_part3 ${pkgdir}
+
+		ipt=$(sudo which iptables)
+		ip6t=$(sudo which ip6tables)
+		iptr=$(sudo which iptables-restore)
+		ip6tr=$(sudo which ip6tables-restore)
+	fi
+
 	sco=$(sudo which chown)
+	[ y"${sco}" == "y" ] && exit
+	dqb "${sco} OK"
+
 	scm=$(sudo which chmod)
+	[ y"${scm}" == "y" ] && exit
+	dqb "${scm} OK"
+	
 	whack=$(sudo which pkill)
+	[ y"${whack}" == "y" ] && exit 5
+	[ -x ${whack} ] || exit 5
+
 	sag=$(sudo which apt-get)
 	sa=$(sudo which apt)
 	sip=$(sudo which ip)
@@ -70,15 +90,6 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
-	if [ y"${ipt}" == "y" ] ; then
-		echo "SHOULD INSTALL IPTABLES"
-		pre_part3 ${pkgdir}
-
-		ipt=$(sudo which iptables)
-		ip6t=$(sudo which ip6tables)
-		iptr=$(sudo which iptables-restore)
-		ip6tr=$(sudo which ip6tables-restore)
-	fi
 
 	[ -x ${ipt} ] || exit 5
 	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
@@ -88,9 +99,6 @@ function check_binaries() {
 	
 	[ -x ${sco} ] || exit 5
 	[ -x ${scm} ] || exit 5
-
-	[ y"${whack}" == "y" ] && exit 5
-	[ -x ${whack} ] || exit 5
 
 	[ -x ${sag} ] || exit 5
 	[ -x ${sa} ] || exit 5

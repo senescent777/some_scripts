@@ -1,11 +1,14 @@
 #!/bin/bash
 
-. ./"$0".conf
+iface=eth0 
+enforce=0
+debug=0
+pkgdir=/var/cache/apt/archives
+tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
+mode=2
 
-#TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
-#VAIH:/v/c/man-nalkutus, tee jotain
-#TODO:sudon nalkutus yhdessä kohtaa (kun enforce=1)
-#TODO:jokin neljäs juttu?
+#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
+#(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
 
 function parse_opts_1() {
 	case "${1}" in
@@ -18,7 +21,7 @@ function parse_opts_1() {
 	esac
 }
 
-. ./libd.sh
+. ./lib
 
 function check_params() {
 	case ${debug} in
@@ -36,7 +39,6 @@ function check_params() {
 #HUOM.2. ei niitä {sco}-juttuja ao. fktioon
 function mangle_s() {
 	local tgt
-	[ y"${1}" == "y" ] && exit
 
 	if [ y"${2}" == "y" ] ; then
 		tgt=/etc/sudoers.d/meshuggah
@@ -44,13 +46,11 @@ function mangle_s() {
 		tgt=/etc/sudoers.d/${2}
 	fi
 
-	echo "fr0m mangle_s: params_OK"; sleep 3
-
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		csleep 1
 		
-		sudo chmod 0555 ${1} #HUOM. miksi juuri 5?
+		sudo chmod 0555 ${1}
 		sudo chown root:root ${1} 
 		#chattr +ui ${1}
 
@@ -70,21 +70,20 @@ function mangle_s() {
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
-		sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
-		[ $? -eq 0 ] && dqb "a51a kun05a"
+		dqb "a51a kun05a"
+ 	else
+		sudo touch /etc/sudoers.d/meshuggah
+		#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
+		sudo chmod a+w /etc/sudoers.d/meshuggah	
+
+		local f 
+		for f in ${CB_LIST1} ; do mangle_s ${f} ; done
+		for f in /etc/init.d/stubby /opt/bin/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
+
+		sudo chmod a-w /etc/sudoers.d/meshuggah	
+		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	fi
 
-	sudo touch /etc/sudoers.d/meshuggah
-	#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
-	sudo chmod a+w /etc/sudoers.d/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ?
-
-	local f 
-	for f in ${CB_LIST1} ; do mangle_s ${f} ; done
-	for f in /etc/init.d/stubby /home/devuan/Desktop/minimize/cloudsd.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
-
-	sudo chmod a-w /etc/sudoers.d/meshuggah	
-	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
-	
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
 	#sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? ehkä ei
 	sudo chown -R root:root /etc/sudoers.d
@@ -97,12 +96,16 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
+	${sco} -R root:root /opt
+	${scm} -R 0555 /opt
+
 	local n
 	n=$(whoami)
 
 	${scm} -R 0755 ~/Desktop/minimize
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
+	${sco} -R 101:65534 /home/stubby/
 
 	local f
 
@@ -116,7 +119,6 @@ function enforce_access() {
 		${sco} -R root:root /etc
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
-		#HUOM.080125:olikohan peräti tarpeellista että erikseen pre_e ja sitten tämä?		
 		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
@@ -125,16 +127,8 @@ function enforce_access() {
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
-		
-		#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
-		#pitäisi kai jotenkin huomioida:
-		#0 drwxrwsr-x 2 root staff   3 May 10  2023 local
-		#0 drwxr-xr-x 1 root root  360 Jan  8 21:46 log
-		#0 drwxrwsr-x 2 root mail    3 Jul 20  2023 mail
-		
 		${sco} -R root:root /var
 		${scm} -R go-w /var
-
 		${scm} 0755 /
 		${sco} root:root /
 	fi
@@ -164,72 +158,62 @@ enforce_access
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
 
-if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
-	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
-	csleep 5
-	${scm} a+w /etc/apt #tarpeen?
-	g=$(date +%F)
-	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain
+#	if [ ${enforce} -eq 1 ] ; then 
+		dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
+		csleep 5
+		${scm} a+w /etc/apt #tarpeen?
+		g=$(date +%F)
+		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
-	sudo touch /etc/apt/sources.list
-	${scm} a+w /etc/apt/sources.list
+		sudo touch /etc/apt/sources.list			
+		${scm} a+w /etc/apt/sources.list
 
-	${odio} sed -i 's/DISTRO/daedalus/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
-	sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
+		${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
+		sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
 
-	${scm} a-w /etc/apt/sources.list
-	${sco} -R root:root /etc/apt #/sources.list
-	${scm} -R a-w /etc/apt/
+		${scm} a-w /etc/apt/sources.list
+		${sco} -R root:root /etc/apt #/sources.list
+		${scm} -R a-w /etc/apt/
 
-	[ ${debug} -eq 1 ] && ls -las /etc/apt
-	csleep 5
+		[ ${debug} -eq 1 ] && ls -las /etc/apt
+		csleep 5
+#	fi
 fi
 
 [ ${mode} -eq 0 ] && exit
 
-#HUOM.261224: ntpsec uutena
-for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ntpsec ; do
+for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	${odio} /etc/init.d/${s} stop
 	sleep 1
 done
 
 dqb "shutting down some services (4 real) in 3 secs"
 sleep 3 
-
 ${whack} cups*
 ${whack} avahi*
 ${whack} dnsmasq*
 ${whack} stubby*
 ${whack} nm-applet
+sleep 3
+#exit
 
-#ntp ehkä takaisin myöhemmin
-${whack} ntp*
-${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
-${sharpy} libblu* network* libcupsfilters* libgphoto* 
-# libopts25 ei tömmöistä daedaluksessa
-
+${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* 
-${sharpy} modem* wireless* wpa*
-${sharpy} iw lm-sensors
-
+${sharpy} modem* wireless* wpa* iw lm-sensors
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
-${sharpy} ntp*
 
-#uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun -22 lopussa 
-${sharpy} po* pkexec
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
 
-if [ y"${ipt}" != "y" ] ; then #muutkin vastaavat trark pitäisi katsoa uusiksi
-	${ip6tr} /etc/iptables/rules.v6
-	${iptr} /etc/iptables/${tblz4}
-fi
-
-#HUOM.270624:oli aikaisemmin tässä clouds.sh 0
+${ip6tr} /etc/iptables/rules.v6
+${iptr} /etc/iptables/${tblz4}
+#HUOM.270624:oli aikaisemmin tässä /o/b/clouds.sh 0
+#exit
 
 csleep 5
 ${smr} -rf /run/live/medium/live/initrd.img*
@@ -247,11 +231,9 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
-pre_part3 ${pkgdir}
-part3 ${pkgdir}
-echo $?
-sleep 3
-${ip6tr} /etc/iptables/rules.v6
+${sdi} ${pkgdir}/dns-root-data*.deb 
+[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/dns-root-data*.deb 
+part3
 
 #toimii miten toimii tämä if-blokki
 if [ ${mode} -eq 1 ] ; then
@@ -259,28 +241,28 @@ if [ ${mode} -eq 1 ] ; then
 	echo "${odio} passwd"
 	echo "${whack} xfce*"
 
+#	dqb "no mas senor"
 	exit 	
 fi
 
 ${asy}
-dqb "GR1DN BELIALAS KYE"
+#sleep 5
+#/opt/bin/clouds.sh 0
+#sleep 5
+#/opt/bin/clouds.sh 0
+#sleep 5
 
-#VAIH:clouds uusix kanssa (case 1 vuelä)
-sudo ~/Desktop/minimize/cloudsd.sh 0
+sudo /opt/bin/clouds.sh 0
 sleep 5
-
-dqb "LOCURA"
-csleep 6
+#exit
+#HUOM.270624:keskeytetään tähän kunnes paketin dnsmasq saa taas asentumaan, varm vuoksi myös clouds 0 JIT
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
-#
-echo "#sudo ~/Desktop/minimize/cloudsd.sh 1"
-
-#VAIH:stubby-jutut toimimaan
-#ongelmana error: Could not bind on given addresses: Permission denied
-dqb "MESSIAH OF IMPURITY AND DARKNESS"
-csleep 4
+${odio} /etc/init.d/dnsmasq restart
+sudo /opt/bin/clouds.sh 1
+ns2 stubby
+ns4 stubby
 
 if [ ${debug} -eq 1 ] ; then 
 	${snt} -tulpan
@@ -291,9 +273,3 @@ fi
 
 echo "time to ${sifu} ${iface} or whåtever"
 echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
-
-if [ ${debug} -eq 1 ] ; then 
-	sleep 5
-	#whack xfce so that the ui is reset
-	${whack} xfce*
-fi

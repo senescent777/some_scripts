@@ -3,6 +3,8 @@
 smr=$(sudo which rm)
 ipt=$(sudo which iptables)
 ip6t=$(sudo which ip6tables)
+iptr=$(sudo which iptables-restore)
+ip6tr=$(sudo which ip6tables-restore)
 slinky=$(sudo which ln)
 spc=$(sudo which cp)
 slinky="${slinky} -s "
@@ -14,10 +16,22 @@ ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
 
 #tässä oikea paikka tables-muutoksille vai ei?
-${ipt} -F b
-${ipt} -F e
-${ipt} -D INPUT 5
-${ipt} -D OUTPUT 6
+if [ y"${ipt}" == "y" ] ; then
+	echo "SHOULD 1NSTALL TABL35"
+	. ./libd.sh
+	pre_part3 ${pkgdir}
+else
+	${iptr} /etc/iptables/rules.v4
+	${ip6tr} /etc/iptables/rules.v6
+	sleep 3
+
+	${ipt} -F b
+	${ipt} -F e
+
+	#pitäisiköhän liittyä nÄiden noihin dns/dot-juTTuihin? jep
+	${ipt} -D INPUT 6 #aiemmin oli 5
+	${ipt} -D OUTPUT 6
+fi
 
 function tod_dda() { 
 	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
@@ -35,11 +49,24 @@ case ${1} in
 		${slinky} /etc/dhcp/dhclient.conf.OLD /etc/dhcp/dhclient.conf
 		${spc} /sbin/dhclient-script.OLD /sbin/dhclient-script
 
-		${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
-		${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
-		for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
+		if [ y"${ipt}" == "y" ] ; then
+			echo "SHOULD 1NSTALL TABL35"
+		else
+			${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
+			${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
+
+			for s in $(grep -v '#' /etc/resolv.conf | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
+		fi
+
+		${odio} /etc/init.d/dnsmasq stop
+		${odio} /etc/init.d/ntpsec stop
+		csleep 5
+		${whack} dnsmasq*
+		${whack} ntp*
 	;;
 	1)
+		echo "WORK IN PROGRESS"
+
 		if [ -s /etc/resolv.conf.new ] ; then
 			echo "r30lv.c0nf alr3ady 3x15t5"
 		else
@@ -54,13 +81,21 @@ case ${1} in
 		${slinky} /etc/dhcp/dhclient.conf.new /etc/dhcp/dhclient.conf
 		${spc} /sbin/dhclient-script.new /sbin/dhclient-script
 
-		${ipt} -A INPUT -p tcp -m tcp --sport 853 -j b
-		${ipt} -A OUTPUT -p tcp -m tcp --dport 853 -j e
-		for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do tod_dda ${s} ; done
+		if [ y"${ipt}" == "y" ] ; then
+			echo "SHOULD 1NSTALL TABL35"
+		else
+			${ipt} -A INPUT -p tcp -m tcp --sport 853 -j b
+			${ipt} -A OUTPUT -p tcp -m tcp --dport 853 -j e
+			for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do tod_dda ${s} ; done
+		fi
 
 		echo "dns";sleep 2
+		${odio} /etc/init.d/dnsmasq restart
 		pgrep dnsmasq
+
 		echo "stu";sleep 2
+		echo "#ns2 stubby"
+		echo "#ns4 stubby"
 		pgrep stubby
 	;;
 esac
@@ -84,7 +119,10 @@ sleep 2
 
 #if [ ${debug} -eq 1 ] ; then
 	${ipt} -L  #
+	sleep 6
+	echo "666"
+	sleep 6
 	${ip6t} -L #
-	sleep 5
+	sleep 6
 #fi #
 

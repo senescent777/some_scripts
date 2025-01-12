@@ -11,7 +11,6 @@ slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
 
-#TODO:siirto toiseen hmistoon vähitellen
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
@@ -19,7 +18,8 @@ ${smr} /sbin/dhclient-script
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35"
-	#TODO:jos mahd ni jo tässä kohtaa tablesin asennus paketeista
+	. ./libd.sh
+	pre_part3 ${pkgdir}
 else
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
@@ -29,9 +29,8 @@ else
 	${ipt} -F e
 
 	#pitäisiköhän liittyä nÄiden noihin dns/dot-juTTuihin? jep
-	${ipt} -D INPUT 5
-	${ipt} -D OUTPUT 5
-	#TODO: portin 80 käsittely jotenkin mukaan?
+	${ipt} -D INPUT 6 #aiemmin oli 5
+	${ipt} -D OUTPUT 6
 fi
 
 function tod_dda() { 
@@ -58,6 +57,12 @@ case ${1} in
 
 			for s in $(grep -v '#' /etc/resolv.conf | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
 		fi
+
+		${odio} /etc/init.d/dnsmasq stop
+		${odio} /etc/init.d/ntpsec stop
+		csleep 5
+		${whack} dnsmasq*
+		${whack} ntp*
 	;;
 	1)
 		echo "WORK IN PROGRESS"
@@ -85,8 +90,12 @@ case ${1} in
 		fi
 
 		echo "dns";sleep 2
+		${odio} /etc/init.d/dnsmasq restart
 		pgrep dnsmasq
+
 		echo "stu";sleep 2
+		echo "#ns2 stubby"
+		echo "#ns4 stubby"
 		pgrep stubby
 	;;
 esac
@@ -109,7 +118,6 @@ ${scm} 0750 /etc/iptables
 sleep 2
 
 #if [ ${debug} -eq 1 ] ; then
-	#echo "PISDEO PRO SAnTANA"
 	${ipt} -L  #
 	sleep 6
 	echo "666"
