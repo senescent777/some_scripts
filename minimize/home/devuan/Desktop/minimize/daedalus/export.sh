@@ -1,5 +1,5 @@
 #!/bin/bash
-#VAIH: toimimaan .deb-paketit sisältävien tar-pakettien rakennus 
+#VAIH: toimimaan .deb-paketit sisältävien tar-pakettien rakennus , seur testaus
 
 d=$(dirname $0)
 . ${d}/conf
@@ -27,7 +27,7 @@ function make_tar_15() {
 	${fib} 
 	${sa} autoremove
 	csleep 1
-	#dqb "sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
+	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 
@@ -44,31 +44,11 @@ function make_tar_15() {
 	#${shary} bind9-dnsutils bind9-host libedit2  libjemalloc2 libkrb5-3 libprotobuf-c1 
 
 	${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
-
-	csleep 1
-	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
-	csleep 1
-
 	[ $? -eq 0 ] || exit 2
 	${lftr} 
 
-	csleep 1
-	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
-	csleep 1
-
 	#${shary} adduser lsb-base ntpsec netbase python3 python3-ntp tzdata libbsd0 libcap2 libssl3 
 	[ $? -eq 0 ] || exit 3
-	
-	csleep 1
-	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
-	csleep 1
-
-
-	${lftr}
-
-	csleep 1
-	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
-	csleep 1
 
 	#${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=stubby=1.6.0-3+b1
@@ -77,13 +57,10 @@ function make_tar_15() {
 	${shary} stubby
 	[ $? -eq 0 ] || exit 6
 	${lftr} 
-	
-	csleep 1
-	dqb "sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
-	csleep 1
 
 	#jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
 	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize #~/.gnupg /opt/bin
+	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
 function make_tar_1_75() {
