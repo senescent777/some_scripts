@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./"$0".conf
+. ./conf
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
 #VAIH:/v/c/man-nalkutus, tee jotain
@@ -18,7 +18,7 @@ function parse_opts_1() {
 	esac
 }
 
-. ./libd.sh
+. ./lib.sh 
 
 function check_params() {
 	case ${debug} in
@@ -232,7 +232,7 @@ fi
 #HUOM.270624:oli aikaisemmin tässä clouds.sh 0
 
 csleep 5
-${smr} -rf /run/live/medium/live/initrd.img*
+${smr} -rf /run/live/medium/live/initrd.img* #lftr
 sleep 3
 
 if [ ${debug} -eq 1 ] ; then

@@ -1,5 +1,5 @@
 #!/bin/bash
-. ./libd.sh
+. ./lib.sh
 ${fib}
 
 debug=0

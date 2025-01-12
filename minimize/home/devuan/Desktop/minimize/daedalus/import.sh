@@ -1,19 +1,12 @@
 #!/bin/bash
-#. ~/Desktop/minimize/doIt6d.sh.conf #voisi nimen muuttaa
 . ~/Desktop/minimize/daedalus/conf
-
-#install_pkgs=0
-#debug=1
-#mode=1 
-
-#. ~/Desktop/minimize/libd.sh
 . ~/Desktop/minimize/daedalus/lib.sh
 
 if [ ! -s /OLD.tar ] ; then 
 	${srat} -cvpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
 fi
 
-${sco} a-wx ~/Desktop/minimize/*.sh
+${scm} a-wx ~/Desktop/minimize/*.sh
 
 if [ $# -gt 0 ] ; then
 	#for opt in $@ ; do parse_opts_1 ${opt} ; done
@@ -70,7 +63,5 @@ else
 	echo "$0 <mode> [other_params]"
 fi
 
-
-
 ##HUOM. tämän olisi kuvakkeen kanssa tarkoitus mennä jatkossa filesystem.squashfs sisälle
-##TODO:https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/skripts/export ja https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/lib/export soveLtaen#
+##https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/skripts/export ja https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/lib/export soveLtaen?
