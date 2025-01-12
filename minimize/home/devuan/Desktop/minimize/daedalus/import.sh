@@ -1,8 +1,19 @@
 #!/bin/bash
-. ~/Desktop/minimize/doIt6d.sh.conf #voisi nimen muuttaa
-install_pkgs=0
-debug=1
-. ~/Desktop/minimize/libd.sh
+#. ~/Desktop/minimize/doIt6d.sh.conf #voisi nimen muuttaa
+. ~/Desktop/minimize/daedalus/conf
+
+#install_pkgs=0
+#debug=1
+#mode=1 
+
+#. ~/Desktop/minimize/libd.sh
+. ~/Desktop/minimize/daedalus/lib.sh
+
+if [ ! -s /OLD.tar ] ; then 
+	${srat} -cvpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
+fi
+
+${sco} a-wx ~/Desktop/minimize/*.sh
 
 if [ $# -gt 0 ] ; then
 	#for opt in $@ ; do parse_opts_1 ${opt} ; done
@@ -36,14 +47,20 @@ if [ $# -gt 0 ] ; then
 			echo "NEXT: $0 2"
 		;;
 		1)
+			[ x"${2}" == "x" ] && exit 
+			[ -s ${2} ] || exit
+
 			cd /
 			${srat} -xvpf ${2} 
 			csleep 3
 			echo "NEXT: $0 2"
 		;;
 		2)
-			${uom} $part
+			${uom} ${part}
+			csleep 3
+			${som} | grep /dev
 			echo "NEXT: ~/Desktop/minimize/doIt6d.sh (maybe)"
+			
 		;;
 		*)
 			dqb "-h"
@@ -53,9 +70,7 @@ else
 	echo "$0 <mode> [other_params]"
 fi
 
-#if [ ! -s /OLD.tar ] ; then 
-#	${srat} -cvpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
-#fi
+
 
 ##HUOM. tämän olisi kuvakkeen kanssa tarkoitus mennä jatkossa filesystem.squashfs sisälle
 ##TODO:https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/skripts/export ja https://github.com/senescent777/some_scripts/tree/senescent777-alt-version/lib/export soveLtaen#

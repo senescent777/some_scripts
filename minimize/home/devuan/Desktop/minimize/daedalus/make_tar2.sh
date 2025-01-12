@@ -1,53 +1,61 @@
 #!/bin/bash
 #VAIH: toimimaan .deb-paketit sisältävien tar-pakettien rakennus 
+#olisikohan sittenkin loogisempaa kutstua nimellä export
+. ~/Desktop/minimize/daedalus/conf
+. ~/Desktop/minimize/daedalus/lib.sh
+${scm} a-wx ~/Desktop/minimize/*.sh
 
-function parse_opts_1 () {
-	case ${1} in
-		-v|--v)
-			debug=1
-		;;
-		-h)
-			echo "$0 <mode> [-o ouftile] [-i infile] [-v]"
-			exit
-		;;
-		*)
-			if [ ${frist} -eq 0 ] ; then 
-				mode=${1}
-				frist=1
-			fi
-		;;
-	esac
+#function parse_opts_1 () {
+#	case ${1} in
+#		-v|--v)
+#			debug=1
+#		;;
+#		-h)
+#			echo "$0 <mode> [-o ouftile] [-v]"
+#			exit
+#		;;
+#		*)
+#			if [ ${frist} -eq 0 ] ; then 
+#				mode=${1}
+#				frist=1
+#			fi
+#		;;
+#	esac
+#}
+#
+#function parse_opts_2() {
+#	case "${1}" in
+#		-o|--o)
+#			tgtfile=${2}
+#		;;
+#	esac
+#}
+
+#HUOM. 120125:seur varmaankin tuo keskeisimpien .deb-pakettien kasaminen, eluksi helpommat lähteet
+function make_tar() {
+	dqb "make_tar ( ${1} )"
+	csleep 1
+	[ z"${1}" == "z" ] && exit
+	dqb "${srat} -cvpf ${1}"
+	${srat} -cvpf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby
 }
 
-function parse_opts_2() {
-	case "${1}" in
-		-o|--o|-i|--i)
-			tgtfile=${2}
-		;;
-	esac
-}
+function make_tar_15 () {
+	dqb "sa= ${sa}"
+	csleep 5
 
-
-##HUOM. löytyy myös se out4.tar
-#function make_tar() {
-#	dqb "make_tar ( ${1} )"
-#	csleep 1
-#
-#	dqb "sa= ${sa}"
-#	csleep 5
-#
 #	dqb "shary= ${shary}"
 #	csleep 5
 #
 #	dqb "${sa} --fix-broken install"
-#	${sa} --fix-broken install
+#	${fib} 
 #	csleep 1
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo ~/Desktop/minimize/${distro} ${dnsm}
 #
 #	${shary} dnsmasq-base runit-helper dnsmasq libev4
 #
 #	csleep 1
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro} ${dnsm}
 #	csleep 1
 #	
 #	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
@@ -102,17 +110,11 @@ function parse_opts_2() {
 #
 #	dqb "${shary} dnsmasq"
 #	csleep 1
-#
 #	${shary} dnsmasq
 #	sudo /opt/bin/cloudsd.sh ${dnsm}
 #	csleep 1
-#
 #	${smr} -rf /run/live/medium/live/initrd.img*
 #	csleep 5
-#
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
-#	csleep 1
-#
 #	${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
 #	[ $? -eq 0 ] || exit 6
 #	${smr} -rf /run/live/medium/live/initrd.img*
@@ -122,7 +124,17 @@ function parse_opts_2() {
 #	csleep 1
 #
 #	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize ~/.gnupg /opt/bin
-#	${srat} -rvpf ${1} /home/stubby /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
+#
+}
+function make_tar_1_75() {
+
+#
+
+#
+	echo "sudo /opt/bin/cloudsd.sh ${dnsm}"
+	csleep 1
+
+	${srat} -rvpf ${1} /home/stubby /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 #	
 #	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rvpf ${1} ${f} ; done
 #	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rvpf ${1} ${f} ; done
@@ -130,8 +142,8 @@ function parse_opts_2() {
 #	${srat} -rvpf ${1} /etc/init.d/net*
 #	${srat} -rvpf ${1} /etc/rcS.d/S*net*
 #	csleep 5
-#}
-#
+}
+
 ##VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 ##VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
 #function make_tar2() {
@@ -193,32 +205,51 @@ function parse_opts_2() {
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 
-	echo "sudo shred -fu /var/cache/apt/archives/*"
-	echo "sudo apt-get update"
-	echo "sudo apt-get upgrade -u"
-	echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
+#	echo ""
+#	echo "sudo apt-get update"
+#	echo "sudo apt-get upgrade -u"
+#	echo "sudo tar -jcvpf /tmp/out.tar.bz2 /var/cache/apt/archives "
 
-#	dqb "${sag} upgrade -u"
-#
-#	sudo /opt/bin/clouds.sh ${dnsm}
-#	csleep 1
-#
-#	${sag} upgrade -u
-#	${srat} -cvpf ${1} /var/cache/apt/archives 
-#
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
-	csleep 1
+	dqb "${sagu}; ${sag} upgrade -u"
+	${odio} shred -fu /var/cache/apt/archives/*
+	${odio} ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	${sifu} ${iface}	
+
+	sleep 6
+	${sag} autoremove
+	sleep 4
+	echo "${sag_u}"; sleep 4
+	${sag_u}
+	echo "${sag} upgrade -u";sleep 5
+	${sag} upgrade -u
+	${srat} -jcvpf ${1} /var/cache/apt/archives 
+
+	#sudo /opt/bin/cloudsd.sh ${dnsm}
+	${sifd} ${iface}
+	sleep 1
 }
 
+mode=0
+tgtfile=""
+
+#parsetus josqs käyttöön
+if [ $# -gt 0 ] ; then
+	mode=${1}
+	tgtfile=${2}
+else
+	echo "-h"
+fi
 
 case ${mode} in
 	0)
-		echo "make_tar ${tgtfile}"
+		make_tar ${tgtfile}
 		echo "make_tar2 ${tgtfile}"
 	;;
-	1)
-		#päällekkäinen toiminto export.sh kanssa?
+	1|upgrade)
 		make_upgrade ${tgtfile}
+	;;
+	-h)
+		echo "$0 0 tgtfile | $0 1 tgtfile"
 	;;
 	*)
 		echo "-h"
