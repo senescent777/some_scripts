@@ -1,8 +1,7 @@
 #!/bin/bash
 d=$(dirname $0)
-
-#. ~/Desktop/minimize/daedalus/lib.sh #jos jotenkin automaagisemmin jatqssa(VAIH)
 . ${d}/lib.sh
+
 ${fib}
 #exit
 debug=0

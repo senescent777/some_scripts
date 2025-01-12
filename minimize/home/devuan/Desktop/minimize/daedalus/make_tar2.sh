@@ -1,10 +1,11 @@
 #!/bin/bash
 #VAIH: toimimaan .deb-paketit sisältävien tar-pakettien rakennus 
-#olisikohan sittenkin loogisempaa kutstua nimellä export
-. ~/Desktop/minimize/daedalus/conf
-. ~/Desktop/minimize/daedalus/lib.sh
-${scm} a-wx ~/Desktop/minimize/*.sh
 
+d=$(dirname $0)
+. ${d}/conf
+. ${d}/lib.sh
+
+${scm} a-wx ~/Desktop/minimize/*.sh
 #TODO:skriptin nimeäminen uudestaan
 
 #HUOM. 120125:seur varmaankin tuo keskeisimpien .deb-pakettien kasaminen, eluksi helpommat lähteet
