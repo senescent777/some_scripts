@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./conf
+. ./conf #jos jotenkin automaagisemmin jatqssa(TODO)
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
 #VAIH:/v/c/man-nalkutus, tee jotain

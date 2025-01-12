@@ -1,5 +1,5 @@
 #!/bin/bash
-. ~/Desktop/minimize/daedalus/conf
+. ~/Desktop/minimize/daedalus/conf #jos jotenkin automaagisemmin jatqssa(TODO)
 . ~/Desktop/minimize/daedalus/lib.sh
 
 if [ ! -s /OLD.tar ] ; then 
