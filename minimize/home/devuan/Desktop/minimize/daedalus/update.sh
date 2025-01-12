@@ -1,6 +1,9 @@
 #!/bin/bash
-. ~/Desktop/minimize/daedalus/conf #jos jotenkin automaagisemmin jatqssa(TODO)
-. ~/Desktop/minimize/daedalus/lib.sh
+
+d=$(dirname $0)
+. ${d}/conf
+. ${d}/lib.sh
+
 ${scm} a-wx ~/Desktop/minimize/*.sh
 
 [ x"${1}" == "x" ] && exit
