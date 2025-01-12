@@ -27,23 +27,28 @@ function make_tar_15() {
 	${fib} 
 	${sa} autoremove
 	csleep 1
-	dqb "sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
+	#dqb "sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 
-	${shary} dnsmasq-base runit-helper dnsmasq libev4
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
+	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 
+	${shary} iptables 	
+	${shary} iptables-persistent init-system-helpers netfilter-persistent
+
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq-base=2.90-4~deb12u1
+	${shary} libdbus-1-3 libgmp10  libhogweed6 libidn2-0 libnettle8 
+	
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.90-4~deb12u1 	
+	${shary} runit-helper
+
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsutils=1:9.18.28-1~deb12u2
+	#${shary} bind9-dnsutils bind9-host libedit2  libjemalloc2 libkrb5-3 libprotobuf-c1 
+
+	${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
 
 	csleep 1
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	csleep 1
-	
-	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
-	[ $? -eq 0 ] || exit 1	
-	${lftr} 
-	
-	csleep 1
-	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}" #broken laptop forced me to do things this way
-	csleep 1
 
-	${shary} init-system-helpers netfilter-persistent iptables-persistent
 	[ $? -eq 0 ] || exit 2
 	${lftr} 
 
@@ -51,48 +56,25 @@ function make_tar_15() {
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	csleep 1
 
-#	#${shary} python3-ntp ntpsec-ntpdate #ei ehkjö tarpeen daeADLUksen kanssa
-#	[ $? -eq 0 ] || exit 3
+	#${shary} adduser lsb-base ntpsec netbase python3 python3-ntp tzdata libbsd0 libcap2 libssl3 
+	[ $? -eq 0 ] || exit 3
 	
 	csleep 1
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	csleep 1
 
-	dqb "${shary} dnsmasq-base runit-helper"
-	csleep 1
-
-	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.85-1
-	${shary} dnsmasq-base runit-helper
-	[ $? -eq 0 ] || exit 4
-	${lftr}
-
-	csleep 1
-	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
-	csleep 1
-
-#	#dqb "${shary} dnsmasq-base runit-helper"
-#	#csleep 1
-#
-	dqb "${shary} libev4 "
-	csleep 1
-
-	${shary} libev4 
-	[ $? -eq 0 ] || exit 5
-
-	csleep 1
-	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
-	csleep 1
 
 	${lftr}
 
-	dqb "${shary} dnsmasq"
 	csleep 1
-	${shary} dnsmasq
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	csleep 1
-	${lftr} 
-	csleep 5
-	${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
+
+	#${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=stubby=1.6.0-3+b1
+	
+	${shary} libgetdns10 libbsd0 libc6 libidn2-0 libssl3 libunbound8  libyaml-0-2
+	${shary} stubby
 	[ $? -eq 0 ] || exit 6
 	${lftr} 
 	
@@ -100,7 +82,7 @@ function make_tar_15() {
 	dqb "sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	csleep 1
 
-	#jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin
+	#jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
 	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize #~/.gnupg /opt/bin
 }
 
