@@ -23,6 +23,8 @@ function pre_part3() {
 
 	#HUOM.060125: uutena tables-asennus ennen vbarsinaista asennusta
 	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	
+	
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${odio} dpkg -i ${1}/netfilter-persistent*.deb
 	[ $? -eq 0 ] && ${odio} rm ${1}/netfilter-persistent*.deb
 	csleep 5
@@ -84,8 +86,14 @@ function check_binaries() {
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 
-	#TODO: debug-mjasta riippuva -v
+	#jokin valmis palikka näille testauksille...
 	srat=$(sudo which tar)
+	[ z"{srat}" =="z" ] && exit
+	[ .x ${rat} ] || exit
+
+	if [ ${debug} -eq 1 ] ; then
+		srat="${rat} -v "
+	fi
 
 	som=$(sudo which mount)
 	uom=$(sudo which umount)

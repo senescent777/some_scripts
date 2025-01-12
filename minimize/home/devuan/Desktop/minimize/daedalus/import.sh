@@ -3,7 +3,7 @@
 . ~/Desktop/minimize/daedalus/lib.sh
 
 if [ ! -s /OLD.tar ] ; then 
-	${srat} -cvpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
+	${srat} -cpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
 fi
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
@@ -27,7 +27,7 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 
 			cd /
-			${srat} -xvpf ${2}  #-f ${2} -xvp ${pkgdir}
+			${srat} -xpf ${2}  #-f ${2} -xvp ${pkgdir}
 			csleep 3
 
 			#daedaluksen kanssa pre ei vaikuttaisi olevan tarpeellinen, chimaeran kanssa vöib olla toinen juttu
@@ -44,7 +44,7 @@ if [ $# -gt 0 ] ; then
 			[ -s ${2} ] || exit
 
 			cd /
-			${srat} -xvpf ${2} 
+			${srat} -xpf ${2} 
 			csleep 3
 			echo "NEXT: $0 2"
 		;;

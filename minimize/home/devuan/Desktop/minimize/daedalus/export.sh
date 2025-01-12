@@ -12,8 +12,8 @@ function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
 	[ z"${1}" == "z" ] && exit
-	dqb "${srat} -cvpf ${1}"
-	${srat} -cvpf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby
+	dqb "${srat} -cpf ${1}"
+	${srat} -cpf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby
 }
 
 function make_tar_15() {
@@ -59,7 +59,7 @@ function make_tar_15() {
 	${lftr} 
 
 	#jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize #~/.gnupg /opt/bin
+	${srat} -cpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize #~/.gnupg /opt/bin
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
@@ -67,13 +67,13 @@ function make_tar_1_75() {
 	echo "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	csleep 1
 
-	${srat} -rvpf ${1} /home/stubby /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
+	${srat} -rpf ${1} /home/stubby /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 #	
-#	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rvpf ${1} ${f} ; done
-#	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rvpf ${1} ${f} ; done
+#	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rpf ${1} ${f} ; done
+#	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rpf ${1} ${f} ; done
 #
-#	${srat} -rvpf ${1} /etc/init.d/net*
-#	${srat} -rvpf ${1} /etc/rcS.d/S*net*
+#	${srat} -rpf ${1} /etc/init.d/net*
+#	${srat} -rpf ${1} /etc/rcS.d/S*net*
 #	csleep 5
 }
 
@@ -128,11 +128,11 @@ function make_tar_1_75() {
 #
 #	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 #	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
-#	${srat} -rvpf ${1} ./etc ./sbin
+#	${srat} -rpf ${1} ./etc ./sbin
 #	cd ${p}
 #	
 #	${srat} -tf ${1} > MANIFEST
-#	${srat} -rvpf ${1} ${p}/MANIFEST
+#	${srat} -rpf ${1} ${p}/MANIFEST
 #}
 
 function make_upgrade() {
@@ -150,7 +150,7 @@ function make_upgrade() {
 	${sag_u}
 	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
-	${srat} -jcvpf ${1} /var/cache/apt/archives 
+	${srat} -jcpf ${1} /var/cache/apt/archives 
 
 	#sudo /opt/bin/cloudsd.sh ${dnsm}
 	${sifd} ${iface}
