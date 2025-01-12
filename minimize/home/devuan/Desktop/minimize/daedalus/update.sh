@@ -1,7 +1,7 @@
 #!/bin/bash
 . ~/Desktop/minimize/daedalus/conf #jos jotenkin automaagisemmin jatqssa(TODO)
 . ~/Desktop/minimize/daedalus/lib.sh
-${sco} a-wx ~/Desktop/minimize/*.sh
+${scm} a-wx ~/Desktop/minimize/*.sh
 
 [ x"${1}" == "x" ] && exit
 ${som} ${part} ${dir}
