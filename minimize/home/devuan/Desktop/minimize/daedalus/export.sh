@@ -26,12 +26,12 @@ function make_tar_15 () {
 #	dqb "${sa} --fix-broken install"
 #	${fib} 
 #	csleep 1
-#	sudo ~/Desktop/minimize/${distro} ${dnsm}
+#	sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #
 #	${shary} dnsmasq-base runit-helper dnsmasq libev4
 #
 #	csleep 1
-#	sudo  ~/Desktop/minimize/${distro} ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #	
 #	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 iptables
@@ -39,7 +39,7 @@ function make_tar_15 () {
 #	${smr} -rf /run/live/medium/live/initrd.img*
 #	
 #	csleep 1
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
 #	${shary} init-system-helpers netfilter-persistent iptables-persistent
@@ -47,14 +47,14 @@ function make_tar_15 () {
 #	${smr} -rf /run/live/medium/live/initrd.img*
 #
 #	csleep 1
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
 #	#${shary} python3-ntp ntpsec-ntpdate
 #	[ $? -eq 0 ] || exit 3
 #	
 #	csleep 1
-#	sudo /opt/bin/clouds.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
 #	dqb "${shary} dnsmasq-base runit-helper"
@@ -63,10 +63,10 @@ function make_tar_15 () {
 #	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.85-1
 #	${shary} dnsmasq-base runit-helper
 #	[ $? -eq 0 ] || exit 4
-#	${smr} -rf /run/live/medium/live/initrd.img*
+#	${lftr}
 #
 #	csleep 1
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
 #	#dqb "${shary} dnsmasq-base runit-helper"
@@ -79,31 +79,31 @@ function make_tar_15 () {
 #	[ $? -eq 0 ] || exit 5
 #
 #	csleep 1
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
-#	${smr} -rf /run/live/medium/live/initrd.img*
+#	${lftr}
 #
 #	dqb "${shary} dnsmasq"
 #	csleep 1
 #	${shary} dnsmasq
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
-#	${smr} -rf /run/live/medium/live/initrd.img*
+#	${lftr} 
 #	csleep 5
 #	${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
 #	[ $? -eq 0 ] || exit 6
-#	${smr} -rf /run/live/medium/live/initrd.img*
+#	${lftr} 
 #	
 #	csleep 1
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
 #	${srat} -cvpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize ~/.gnupg /opt/bin
 #
 }
 function make_tar_1_75() {
-	echo "sudo /opt/bin/cloudsd.sh ${dnsm}"
+	echo "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	csleep 1
 
 	${srat} -rvpf ${1} /home/stubby /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
@@ -127,7 +127,7 @@ function make_tar_1_75() {
 #	local tig
 #	tig=$(sudo which git)
 #	
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
 #	if [ x"${tig}" == "x" ] ; then
@@ -148,13 +148,13 @@ function make_tar_1_75() {
 #	echo "#dqb cd ${q}"
 #	cd ${q}
 #
-#	sudo /opt/bin/cloudsd.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
 #	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
 #	${tig} clone https://github.com/senescent777/project.git
 #
-#	sudo /opt/bin/cloudds.sh ${dnsm}
+#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
 #	cd project
