@@ -1,6 +1,11 @@
 #!/bin/bash
 
-. ./conf #jos jotenkin automaagisemmin jatqssa(TODO)
+
+d=$(dirname $0)
+. ${d}/conf
+. ${d}/lib.sh
+
+${scm} a-wx ~/Desktop/minimize/*.sh
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
 #VAIH:/v/c/man-nalkutus, tee jotain
