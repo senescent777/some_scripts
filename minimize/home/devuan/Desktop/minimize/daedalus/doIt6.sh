@@ -1,6 +1,7 @@
 #!/bin/bash
 d=$(dirname $0)
 . ${d}/conf
+dqb "base= ${d}"
 . ${d}/lib.sh
 ${scm} a-wx ~/Desktop/minimize/*.sh
 

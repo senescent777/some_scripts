@@ -3,7 +3,9 @@
 d=$(dirname $0)
 . ${d}/conf
 . ${d}/lib.sh
+#TODO:jokin fallback jos conf ja lib eivät käytettävissä
 ${scm} a-wx ~/Desktop/minimize/*.sh
+olddir=$(pwd)
 
 if [ ! -s /OLD.tar ] ; then 
 	${srat} -cpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
@@ -14,7 +16,9 @@ if [ $# -gt 0 ] ; then
 	case "${1}" in
 		-1)
 			${som} -o ro ${part} ${dir}
-			echo "NEXT: $0 0 <source> | $0 1 <source>"
+			csleep 5
+			${som} | grep ${part}
+			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 		;;
 		0)
 			#jatkossa fktioon tämä
@@ -38,6 +42,7 @@ if [ $# -gt 0 ] ; then
 
 			${odio} shred -fu  ${pkgdir}/*.deb
 			csleep 3
+			cd ${olddir}
 			echo "NEXT: $0 2"
 		;;
 		1)
@@ -47,12 +52,13 @@ if [ $# -gt 0 ] ; then
 			cd /
 			${srat} -xpf ${2} 
 			csleep 3
+			cd ${olddir}
 			echo "NEXT: $0 2"
 		;;
 		2)
 			${uom} ${part}
 			csleep 3
-			${som} | grep /dev
+			${som} | grep ${part}
 			echo "NEXT: ~/Desktop/minimize/doIt6d.sh (maybe)"
 			
 		;;

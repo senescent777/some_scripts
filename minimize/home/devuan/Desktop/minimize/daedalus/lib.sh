@@ -88,19 +88,20 @@ function check_binaries() {
 
 	#jokin valmis palikka näille testauksille...
 	srat=$(sudo which tar)
-	[ z"{srat}" =="z" ] && exit
-	[ .x ${rat} ] || exit
+	[ z"{srat}" == "z" ] && exit
+	[ -x ${rat} ] || exit
 
 	if [ ${debug} -eq 1 ] ; then
 		srat="${rat} -v "
 	fi
+
+	#HUOM. gpgtar olisi vähän parempi kuin pelkkä tar, silleen niinqu tavallaan
 
 	som=$(sudo which mount)
 	uom=$(sudo which umount)
 
 	dqb "half_fdone"
 	csleep 1
-
 
 	[ -x ${ipt} ] || exit 5
 	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää

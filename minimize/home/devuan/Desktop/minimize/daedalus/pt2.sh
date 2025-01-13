@@ -86,7 +86,7 @@ ${lftr}
 csleep 5
 #HUOM.080125 screen ei suostunut poistumaan yänään, joten...
 
-${sharpy} pkexec  po* refracta*
+${sharpy} pkexec po* refracta*
 #samba poistunee jo aiemmin?
 ${sharpy} squashfs-tools samba* system-config*
 ${asy} 

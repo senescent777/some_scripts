@@ -25,7 +25,7 @@ function make_tar_15() {
 
 	dqb "${sa} --fix-broken install"
 	${fib} 
-	${sa} autoremove
+	${asy} 
 	csleep 1
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 
@@ -144,7 +144,7 @@ function make_upgrade() {
 	${sifu} ${iface}	
 
 	sleep 6
-	${sag} autoremove
+	${asy} 
 	sleep 4
 	echo "${sag_u}"; sleep 4
 	${sag_u}
