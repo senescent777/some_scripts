@@ -1,10 +1,9 @@
 #!/bin/bash
 d=$(dirname $0)
-. ${d}/lib.sh
-
-${fib}
-#exit
 debug=0
+
+[ -s ${d}/lib.sh ] && . ${d}/lib.sh
+${fib}
 
 if [ $# -gt 0 ] ; then  
 	if [ "${1}" == "-v" ] ; then
@@ -129,6 +128,6 @@ df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
 #whack xfce so that the ui is reset
-${whack} xfce*
+${whack} xfce* #whack X
 
 

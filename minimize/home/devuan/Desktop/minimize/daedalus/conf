@@ -6,5 +6,5 @@ tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
 mode=2 #tarpeellinen muuten kuin doit6d'n kanssa?
 part=/dev/sdb2
 dir=/mnt
-distro=daedalus
+distro=daedalus #onkohan tarpeellinen jatkossa?
 dnsm=0

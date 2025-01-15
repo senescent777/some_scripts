@@ -1,8 +1,8 @@
 #!/bin/bash
 d=$(dirname $0)
-. ${d}/conf
-dqb "base= ${d}"
-. ${d}/lib.sh
+[ -s ${d}/conf ] && . ${d}/conf
+[ ${debug} -eq 1 ] && echo "base= ${d}"
+[ -s ${d}/lib.sh ] && . ${d}/lib.sh
 ${scm} a-wx ~/Desktop/minimize/*.sh
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
@@ -79,10 +79,11 @@ function pre_enforce() {
 
 	sudo touch /etc/sudoers.d/meshuggah
 	#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
-	sudo chmod a+w /etc/sudoers.d/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ?
+	sudo chmod 0660 /etc/sudoers.d/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ? eikä a+w...
 
 	local f 
 	for f in ${CB_LIST1} ; do mangle_s ${f} ; done
+	#TODO:clouds: a) nimeäminen fiksummin b) jotenkin toisin se sudoersiin lisäys
 	for f in /etc/init.d/stubby /home/devuan/Desktop/minimize/cloudsd.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
 
 	sudo chmod a-w /etc/sudoers.d/meshuggah	
@@ -260,7 +261,7 @@ ${ip6tr} /etc/iptables/rules.v6
 if [ ${mode} -eq 1 ] ; then
 	echo "passwd"
 	echo "${odio} passwd"
-	echo "${whack} xfce*"
+	echo "${whack} xfce*" #whack X
 
 	exit 	
 fi
@@ -277,7 +278,8 @@ csleep 6
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
-#
+#VAIH:sitten josqs tässä voisi olla mode-riippuvainen exit
+#[ ${mode} -eq 2 ] && exit 
 echo "#sudo ~/Desktop/minimize/cloudsd.sh 1"
 
 #VAIH:stubby-jutut toimimaan
@@ -298,5 +300,5 @@ echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
 if [ ${debug} -eq 1 ] ; then 
 	sleep 5
 	#whack xfce so that the ui is reset
-	${whack} xfce*
+	${whack} xfce* #X
 fi

@@ -10,10 +10,20 @@ spc=$(sudo which cp)
 slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
+debug=0
+
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
 
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
+[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT"
 
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
@@ -21,6 +31,7 @@ if [ y"${ipt}" == "y" ] ; then
 	. ./lib.sh #pitäisiköhän tässäkin olla se dirname-.jekku?
 	pre_part3 ${pkgdir}
 else
+	#töässö klohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
 	sleep 3
@@ -50,7 +61,7 @@ case ${1} in
 		${spc} /sbin/dhclient-script.OLD /sbin/dhclient-script
 
 		if [ y"${ipt}" == "y" ] ; then
-			echo "SHOULD 1NSTALL TABL35"
+			dqb "SHOULD 1NSTALL TABL35"
 		else
 			${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
 			${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
@@ -94,7 +105,9 @@ case ${1} in
 		pgrep dnsmasq
 
 		echo "stu";sleep 2
-		echo "#ns2 stubby"
+		#TODO:bissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
+		ns2 stubby
+
 		echo "#ns4 stubby"
 		pgrep stubby
 	;;
@@ -117,12 +130,12 @@ ${scm} 0750 /etc/iptables
  
 sleep 2
 
-#if [ ${debug} -eq 1 ] ; then
+if [ ${debug} -eq 1 ] ; then
 	${ipt} -L  #
 	sleep 6
 	echo "666"
 	sleep 6
 	${ip6t} -L #
 	sleep 6
-#fi #
+fi #
 

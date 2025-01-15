@@ -1,9 +1,8 @@
 #!/bin/bash
 
 d=$(dirname $0)
-. ${d}/conf
-. ${d}/lib.sh
-
+[ -s ${d}/conf ] && . ${d}/conf
+[ -s ${d}/lib.sh ] && . ${d}/lib.sh
 ${scm} a-wx ~/Desktop/minimize/*.sh
 
 [ x"${1}" == "x" ] && exit

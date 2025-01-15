@@ -1,10 +1,10 @@
 #!/bin/bash
 
 d=$(dirname $0)
-. ${d}/conf
-. ${d}/lib.sh
+[ -s ${d}/conf ] && . ${d}/conf
+[ -s ${d}/lib.sh ] && . ${d}/lib.sh
 #TODO:jokin fallback jos conf ja lib eivät käytettävissä
-${scm} a-wx ~/Desktop/minimize/*.sh
+${scm} a-wx ~/Desktop/minimize/*.sh #tämä voisi olla vaikka lib.sh'ssa joa oikeasti tarttee
 olddir=$(pwd)
 
 if [ ! -s /OLD.tar ] ; then 
@@ -12,7 +12,6 @@ if [ ! -s /OLD.tar ] ; then
 fi
 
 if [ $# -gt 0 ] ; then
-	#for opt in $@ ; do parse_opts_1 ${opt} ; done
 	case "${1}" in
 		-1)
 			${som} -o ro ${part} ${dir}
@@ -21,7 +20,7 @@ if [ $# -gt 0 ] ; then
 			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 		;;
 		0)
-			#jatkossa fktioon tämä
+			#jatkossa fktioon tämä?
 			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
 			dqb "KL"
 			csleep 3
@@ -32,7 +31,7 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 
 			cd /
-			${srat} -xpf ${2}  #-f ${2} -xvp ${pkgdir}
+			${srat} -xpf ${2}  
 			csleep 3
 
 			#daedaluksen kanssa pre ei vaikuttaisi olevan tarpeellinen, chimaeran kanssa vöib olla toinen juttu
@@ -40,7 +39,10 @@ if [ $# -gt 0 ] ; then
 			part3 ${pkgdir}
 			csleep 3
 
-			${odio} shred -fu  ${pkgdir}/*.deb
+			#TODO:jokin validiustark ennenq shred
+			#... tai tarvitseeko ko ko shred'iä tässä
+			${odio} shred -fu ${pkgdir}/*.deb
+
 			csleep 3
 			cd ${olddir}
 			echo "NEXT: $0 2"
@@ -59,6 +61,8 @@ if [ $# -gt 0 ] ; then
 			${uom} ${part}
 			csleep 3
 			${som} | grep ${part}
+
+			#TODO:kenties dirname-jekku täh'än alle
 			echo "NEXT: ~/Desktop/minimize/doIt6d.sh (maybe)"
 			
 		;;

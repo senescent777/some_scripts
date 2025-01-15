@@ -22,7 +22,7 @@ function pre_part3() {
 	echo "pp3.2"
 
 	#HUOM.060125: uutena tables-asennus ennen vbarsinaista asennusta
-	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	
+	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	(esim find)
 	
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${odio} dpkg -i ${1}/netfilter-persistent*.deb
@@ -76,7 +76,15 @@ function check_binaries() {
 	[ -x ${whack} ] || exit 5
 
 	sag=$(sudo which apt-get)
+	
+	[ z"{sag}" == "z" ] && exit
+	[ -x ${sag} ] || exit
+
 	sa=$(sudo which apt)
+	
+	[ z"{sa}" == "z" ] && exit
+	[ -x ${sa} ] || exit
+
 	sip=$(sudo which ip)
 	snt=$(sudo which netstat)
 	sdi=$(sudo which dpkg)
@@ -86,7 +94,7 @@ function check_binaries() {
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 
-	#jokin valmis palikka näille testauksille...
+	#jokin valmis palikka ati fktio näille testauksille...
 	srat=$(sudo which tar)
 	[ z"{srat}" == "z" ] && exit
 	[ -x ${rat} ] || exit
@@ -126,6 +134,8 @@ function check_binaries() {
 	[ -x ${srat} ] || exit 5
 	[ -x ${som} ] || exit 5
 	[ -x ${uom} ] || exit 5
+
+	#TODO:pitäisiköhänm /sbin/dhclient-script testata
 
 	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
@@ -186,7 +196,7 @@ function mangle2() {
 }
 
 ##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-##VAIH:stubbyn asennus toimiimaan taas (261224)
+##VAIH:stubbyn asennus toimimaan taas (261224)
 #function ns2() {
 #	dqb "ns2( ${1} )"
 #
@@ -206,7 +216,7 @@ function mangle2() {
 #function ns4() {
 #	dqb "ns4( ${1} )"
 #	[ z"{$1}" == "z" ] && exit 33
-#jospa kirjoittaisi /e/i.d aqlaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
+#jospa kirjoittaisi /e/i.d alaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
 #	${scm} u+w /run
 #	${odio} touch /run/${1}.pid
 #	${scm} 0600 /run/${1}.pid
@@ -275,13 +285,12 @@ function part3() {
 	 	dqb "exit 66"
 	fi
 
-	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
 	${sdi} ${1}/*.deb
 	
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-		${smr} -rf ${1}/lib*.deb
+		${smr} -rf ${1}/*.deb #HUOM.150125: oli:lib*.deb
 	else
 	 	dqb "exit 67"
 	fi
