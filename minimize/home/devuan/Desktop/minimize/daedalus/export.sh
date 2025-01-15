@@ -7,10 +7,21 @@ debug=1
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
 	. ${d}/lib.sh
-
-	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
 else
-	echo "#TODO:jokin fallback jos conf ja lib eivät käytettävissä"
+	srat="sudo /bin/tar"
+	som="sudo /bin/mount"
+	uom="sudo /bin/umount"
+	dir=/mnt
+	odio=$(which sudo)
+	debug=1
+	
+	function dqb() {
+		[ ${debug} -eq 1 ] && echo ${1}
+	}
+
+	function csleep() {
+		[ ${debug} -eq 1 ] && sleep ${1}
+	}	
 fi
 
 function make_tar() {
