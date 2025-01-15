@@ -4,18 +4,14 @@ d=$(dirname $0)
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
 	. ${d}/lib.sh
-
-	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
 else
-	echo "#TODO:jokin fallback jos conf ja lib eivät käytettävissä"
-
-	
+	echo "TO CONTINUE FURTHER IS POINTLESS, ESSENTIAL FILES MISSING"
+	exit	
 fi
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
 #VAIH:/v/c/man-nalkutus, tee jotain
 #TODO:sudon nalkutus yhdessä kohtaa (kun enforce=1)
-#TODO:jokin neljäs juttu?
 
 function parse_opts_1() {
 	case "${1}" in
@@ -29,7 +25,8 @@ function parse_opts_1() {
 }
 
 . ./lib.sh 
-
+#HUOM. mode otetaan jo parametriksi p_o_1:sessä, josko enforce kanssa?
+ 
 function check_params() {
 	case ${debug} in
 		0|1)
