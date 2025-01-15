@@ -6,7 +6,7 @@ if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
 	echo "TO CONTINUE FURTHER IS POINTLESS, ESSENTIAL FILES MISSING"
-	exit	
+	exit 111	
 fi
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
@@ -265,7 +265,7 @@ ${ip6tr} /etc/iptables/rules.v6
 if [ ${mode} -eq 1 ] ; then
 	echo "passwd"
 	echo "${odio} passwd"
-	echo "${whack} xfce*" #whack X
+	echo "${whack} X*" 
 
 	exit 	
 fi
@@ -304,5 +304,5 @@ echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
 if [ ${debug} -eq 1 ] ; then 
 	sleep 5
 	#whack xfce so that the ui is reset
-	${whack} xfce* #X
+	${whack} X* 
 fi
