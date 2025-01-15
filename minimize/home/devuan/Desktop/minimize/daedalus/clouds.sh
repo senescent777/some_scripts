@@ -105,8 +105,9 @@ case ${1} in
 		pgrep dnsmasq
 
 		echo "stu";sleep 2
-		#TODO:bissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
-		ns2 stubby
+		#VAIH:vissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
+		[ -f /home/stubby/.ripuli ] || ns2 stubby
+		sudo touch /home/stubby/.ripuli
 
 		echo "#ns4 stubby"
 		pgrep stubby
