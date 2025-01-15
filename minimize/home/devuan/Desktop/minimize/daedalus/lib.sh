@@ -135,7 +135,10 @@ function check_binaries() {
 	[ -x ${som} ] || exit 5
 	[ -x ${uom} ] || exit 5
 
-	#TODO:pitäisiköhänm /sbin/dhclient-script testata
+	dch=$(find /sbin -name dhclient-script)
+	#VAIH:pitäisiköhänm /sbin/dhclient-script testata
+	[x"${dch}" == "x" ] && exit 6
+	[ -x ${dch} ] || exit 6
 
 	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
@@ -182,7 +185,7 @@ function check_binaries2() {
 	fib="${odio} ${sa} --fix-broken install"
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
-
+	dch="${odio} ${dch}"
 	dqb "b1nar135.2 0k.2" 
 	csleep 3
 }
