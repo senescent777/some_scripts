@@ -1,7 +1,7 @@
 #!/bin/bash
 d=$(dirname $0)
 
-if [ -s ${d}/conf2 ] && [ -s ${d}/lib.sh2 ] ; then
+if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
 	. ${d}/lib.sh
 
@@ -81,9 +81,7 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			${som} | grep ${part}
 
-			#TODO:kenties dirname-jekku täh'än alle
-			echo "NEXT: ~/Desktop/minimize/doIt6d.sh (maybe)"
-			
+			echo "NEXT: ${d}/doIt6.sh (maybe)"
 		;;
 		*)
 			dqb "-h"
