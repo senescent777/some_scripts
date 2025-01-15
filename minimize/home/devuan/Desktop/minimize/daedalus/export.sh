@@ -2,10 +2,16 @@
 #VAIH:seur testaus haettujen .deb-pakettien suhteen
 
 d=$(dirname $0)
-[ -s ${d}/conf ] && . ${d}/conf
-[ -s ${d}/lib.sh ] && . ${d}/lib.sh
 debug=1
-${scm} a-wx ~/Desktop/minimize/*.sh
+
+if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
+	. ${d}/conf
+	. ${d}/lib.sh
+
+	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
+else
+	echo "#TODO:jokin fallback jos conf ja lib eivät käytettävissä"
+fi
 
 function make_tar() {
 	dqb "make_tar ( ${1} )"
