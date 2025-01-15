@@ -1,10 +1,17 @@
 #!/bin/bash
 
 d=$(dirname $0)
-[ -s ${d}/conf ] && . ${d}/conf
-[ -s ${d}/lib.sh ] && . ${d}/lib.sh
-#TODO:jokin fallback jos conf ja lib eivät käytettävissä
-${scm} a-wx ~/Desktop/minimize/*.sh #tämä voisi olla vaikka lib.sh'ssa joa oikeasti tarttee
+
+
+if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
+	. ${d}/conf
+	. ${d}/lib.sh
+
+	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
+else
+	echo "#TODO:jokin fallback jos conf ja lib eivät käytettävissä"
+fi
+
 olddir=$(pwd)
 
 if [ ! -s /OLD.tar ] ; then 
