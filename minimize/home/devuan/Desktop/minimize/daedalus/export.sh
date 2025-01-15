@@ -107,6 +107,7 @@ function make_tar_1_75() {
 	csleep 5
 }
 
+#TODO:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
 function make_tar2() {
@@ -144,7 +145,7 @@ function make_tar2() {
 #
 #	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
 #	${tig} clone https://github.com/senescent777/project.git
-#
+#(jospa siirtäöisi nuo project-jutut jonnekin muualle?)
 #	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 #	csleep 1
 #
@@ -170,7 +171,7 @@ function make_upgrade() {
 	dqb "${sagu}; ${sag} upgrade -u"
 
 	${odio} shred -fu ${pkgdir}/*.deb 
-	${odio} ~/Desktop/minimize/${distro}/clouds.sh ${dnsm} #TODO:tai sitten dirname'n kanssa
+	${odio} ${d}/clouds.sh ${dnsm} 
 	${sifu} ${iface}	
 	sleep 6
 
@@ -182,7 +183,7 @@ function make_upgrade() {
 
 	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
-	${srat} -jcpf ${1} /var/cache/apt/archives 
+	${srat} -jcpf ${1} ${pkgdir}
 
 	#sudo /opt/bin/cloudsd.sh ${dnsm}
 	${sifd} ${iface}
