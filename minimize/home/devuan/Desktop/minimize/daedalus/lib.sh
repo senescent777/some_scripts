@@ -165,6 +165,8 @@ function check_binaries2() {
 
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
+	${scm} a-wx ~/Desktop/minimize/*.sh
+
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
 	sifu="${odio} ${sifu} "
