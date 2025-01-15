@@ -201,23 +201,7 @@ function mangle2() {
 }
 
 ##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-##VAIH:stubbyn asennus toimimaan taas (261224)
-#function ns2() {
-#	dqb "ns2( ${1} )"
-#
-#	${scm} u+w /home
-#
-#	${odio} /usr/sbin/userdel ${1}
-#	sleep 3
-#
-#	${odio} adduser --system ${1}
-#	sleep 1
-#	${scm} go-w /home
-#	${sco} -R stubby:65534 /home/stubby/
-#	[ ${debug} -eq 1 ]  && ls -las /home
-#	sleep 7
-#}
-#
+
 #function ns4() {
 #	dqb "ns4( ${1} )"
 #	[ z"{$1}" == "z" ] && exit 33

@@ -64,6 +64,23 @@ function dda_snd() {
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
 }
 
+#VAIH:stubbyn asennus toimimaan taas (261224)
+function ns2() {
+	dqb "ns2( ${1} )"
+
+	${scm} u+w /home
+
+	${odio} /usr/sbin/userdel ${1}
+	sleep 3
+
+	${odio} adduser --system ${1}
+	sleep 1
+	${scm} go-w /home
+	${sco} -R stubby:65534 /home/stubby/
+	[ ${debug} -eq 1 ]  && ls -las /home
+	sleep 7
+}
+
 case ${1} in 
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
@@ -116,8 +133,12 @@ case ${1} in
 
 		echo "stu";sleep 2
 		#VAIH:vissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
-		[ -f /home/stubby/.ripuli ] || ns2 stubby
-		sudo touch /home/stubby/.ripuli
+		if [ ! -f /home/stubby/.ripuli ] ; then
+			ns2 stubby
+			sudo touch /home/stubby/.ripuli
+		else
+			echo "N2S ALR3ADY D0N3"
+		fi
 
 		echo "#ns4 stubby"
 		pgrep stubby
