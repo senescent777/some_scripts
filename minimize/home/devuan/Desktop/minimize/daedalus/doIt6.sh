@@ -88,7 +88,7 @@ function pre_enforce() {
 	local f 
 	for f in ${CB_LIST1} ; do mangle_s ${f} ; done
 	#TODO:clouds: a) nimeäminen fiksummin b) jotenkin toisin se sudoersiin lisäys
-	for f in /etc/init.d/stubby /home/devuan/Desktop/minimize/cloudsd.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
+	for f in /etc/init.d/stubby ${d}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
 
 	sudo chmod a-w /etc/sudoers.d/meshuggah	
 	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
@@ -274,7 +274,8 @@ ${asy}
 dqb "GR1DN BELIALAS KYE"
 
 #VAIH:clouds uusix kanssa (case 1 vuelä)
-sudo ~/Desktop/minimize/cloudsd.sh 0
+#katsotaan kanssa miten tuo uusi versio pelittää
+sudo ${d}/clouds.sh 0
 sleep 5
 
 dqb "LOCURA"
@@ -284,7 +285,7 @@ csleep 6
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 #VAIH:sitten josqs tässä voisi olla mode-riippuvainen exit
 #[ ${mode} -eq 2 ] && exit 
-echo "#sudo ~/Desktop/minimize/cloudsd.sh 1"
+echo "#sudo ${d}/clouds.sh 1"
 
 #VAIH:stubby-jutut toimimaan
 #ongelmana error: Could not bind on given addresses: Permission denied
