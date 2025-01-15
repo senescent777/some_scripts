@@ -1,9 +1,16 @@
 #!/bin/bash
 d=$(dirname $0)
-[ -s ${d}/conf ] && . ${d}/conf
-[ ${debug} -eq 1 ] && echo "base= ${d}"
-[ -s ${d}/lib.sh ] && . ${d}/lib.sh
-${scm} a-wx ~/Desktop/minimize/*.sh
+
+if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
+	. ${d}/conf
+	. ${d}/lib.sh
+
+	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
+else
+	echo "#TODO:jokin fallback jos conf ja lib eivät käytettävissä"
+
+	
+fi
 
 #TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
 #VAIH:/v/c/man-nalkutus, tee jotain
