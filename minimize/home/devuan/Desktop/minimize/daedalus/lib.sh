@@ -26,19 +26,19 @@ function pre_part3() {
 	
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${odio} dpkg -i ${1}/netfilter-persistent*.deb
-	[ $? -eq 0 ] && ${odio} rm ${1}/netfilter-persistent*.deb
+	[ $? -eq 0 ] && ${odio} shred -fu ${1}/netfilter-persistent*.deb
 	csleep 5
 
 	${odio} dpkg -i ${1}/libip*.deb
-	[ $? -eq 0 ] && ${odio} rm ${1}/libip*.deb
+	[ $? -eq 0 ] && ${odio} shred -fu ${1}/libip*.deb
 	csleep 5
 
 	${odio} dpkg -i ${1}/iptables_*.deb
-	[ $? -eq 0 ] && ${odio} rm ${1}/iptables_*.deb
+	[ $? -eq 0 ] && ${odio} shred -fu ${1}/iptables_*.deb
 	csleep 5
 
 	${odio} dpkg -i ${1}/iptables-*.deb
-	[ $? -eq 0 ] && ${odio} rm ${1}/iptables-*.deb
+	[ $? -eq 0 ] && ${odio} shred -fu ${1}/iptables-*.deb
 	dqb "pp3 d0n3"
 	csleep 5
 }
@@ -285,7 +285,7 @@ function part3() {
 	if [ $? -eq  0 ] ; then
 		dqb "part3.1 ok"
 		sleep 5
-		${smr} -rf ${1}/lib*.deb
+		${odio} shred -fu ${1}/lib*.deb
 	else
 	 	dqb "exit 66"
 	fi
@@ -295,7 +295,7 @@ function part3() {
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-		${smr} -rf ${1}/*.deb #HUOM.150125: oli:lib*.deb
+		${odio} shred -fu ${1}/*.deb #HUOM.150125: oli:lib*.deb
 	else
 	 	dqb "exit 67"
 	fi

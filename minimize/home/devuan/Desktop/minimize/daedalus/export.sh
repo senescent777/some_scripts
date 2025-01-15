@@ -44,7 +44,7 @@ function make_tar_15() {
 	${asy} 
 	
 	if [ z"${pkgdir}" != "z" ] ; then 
-		${smr} ${pkgdir}/*.deb
+		${odio} shred -fu ${pkgdir}/*.deb
 	fi
 
 	${sag_u}
@@ -169,15 +169,17 @@ function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	dqb "${sagu}; ${sag} upgrade -u"
 
-	${odio} shred -fu /var/cache/apt/archives/* #${pkgdir}
-	${odio} ~/Desktop/minimize/${distro}/clouds.sh ${dnsm} #tai sitten dirnameän kanssa
+	${odio} shred -fu ${pkgdir}/*.deb 
+	${odio} ~/Desktop/minimize/${distro}/clouds.sh ${dnsm} #TODO:tai sitten dirname'n kanssa
 	${sifu} ${iface}	
-
 	sleep 6
+
 	${asy} 
 	sleep 4
+
 	echo "${sag_u}"; sleep 4
 	${sag_u}
+
 	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
 	${srat} -jcpf ${1} /var/cache/apt/archives 

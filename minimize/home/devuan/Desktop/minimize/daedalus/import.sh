@@ -58,9 +58,10 @@ if [ $# -gt 0 ] ; then
 			part3 ${pkgdir}
 			csleep 3
 
-			#TODO:jokin validiustark ennenq shred
+			#VAIH:jokin validiustark ennenq shred
 			#... tai tarvitseeko ko ko shred'iä tässä
-			${odio} shred -fu ${pkgdir}/*.deb
+			#${odio} shred -fu ${pkgdir}/*.deb
+			[ ${debug} -eq 1 ] && ls -las  ${pkgdir}/*.deb			
 
 			csleep 3
 			cd ${olddir}
