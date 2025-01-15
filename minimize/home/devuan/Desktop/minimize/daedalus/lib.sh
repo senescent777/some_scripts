@@ -137,7 +137,7 @@ function check_binaries() {
 
 	dch=$(find /sbin -name dhclient-script)
 	#VAIH:pitäisiköhänm /sbin/dhclient-script testata
-	[x"${dch}" == "x" ] && exit 6
+	[ x"${dch}" == "x" ] && exit 6
 	[ -x ${dch} ] || exit 6
 
 	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
