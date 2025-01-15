@@ -20,9 +20,19 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
-${smr} /etc/resolv.conf
-${smr} /etc/dhcp/dhclient.conf
-${smr} /sbin/dhclient-script
+if [ -s /etc/resolv.conf.new ] || [ -s /etc/resolv.conf.OLD ] ; then 
+	${smr} /etc/resolv.conf
+fi
+
+if [ -s /etc/dhcp/dhclient.conf.new ] || [ -s /etc/dhcp/dhclient.conf.OLD ] ; then 
+	${smr} /etc/dhcp/dhclient.conf
+fi
+
+#ei välttis suhtaudu hyvin lib.sh:n alkuun, tulisi siirtää seur. if-blokin jölkeen
+if [ -s /sbin/dhclient-script.new ] || [ -s /sbin/dhclient-script.OLD ] ; then 
+	${smr} /sbin/dhclient-script
+fi
+
 [ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT"
 
 #tässä oikea paikka tables-muutoksille vai ei?
