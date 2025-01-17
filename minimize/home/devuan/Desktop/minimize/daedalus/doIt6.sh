@@ -276,15 +276,17 @@ dqb "GR1DN BELIALAS KYE"
 #VAIH:clouds uusix kanssa (case 1 vuelä)
 #katsotaan kanssa miten tuo uusi versio pelittää
 sudo ${d}/clouds.sh 0
-sleep 5
+csleep 5
 
-dqb "LOCURA"
-csleep 6
+#dqb "LOCURA"
+#csleep 6
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 
 if [ ${mode} -eq 2 ] ; then
+	echo "time to ${sifu} ${iface} or whåtever"
+	csleep 5
 	${whack} xfce* 
  	exit 
 fi
