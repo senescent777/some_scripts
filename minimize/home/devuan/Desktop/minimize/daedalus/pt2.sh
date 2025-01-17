@@ -134,8 +134,9 @@ ${odio} which dhclient; ${odio} which ifup; sleep 6
 g=$(date +%F)
 [ ${debug} -eq 1 ] && ${spd} -l > ${d}/pkgs-${g}.txt.2
 
-dqb "${scm} a-wx $0 "
+dqb "${scm} a-wx $0 in 6 secs "
 csleep 6
+${scm} a-wx $0 
 
 #whack xfce so that the ui is reset
 ${whack} xfce*
