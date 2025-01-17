@@ -2,13 +2,13 @@
 d=$(dirname $0)
 debug=1
 
-#TODO:tämä paska toimimaan 
+#VAIH:tämä paska toimimaan 
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
 	. ${d}/lib.sh
 
-	echo "${scm} a-wx ~/Desktop/minimize/*.sh"
+	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
 else
 	echo "TODO:fallback"
 fi
@@ -29,7 +29,11 @@ dqb "find ${e} -name ${f}"
 csleep 3
 
 if [ -s ${1} ] ; then
-	${srat} -rpf ${1} ~/Desktop/*.desktop ~/Desktop/minimize
+	dqb "${srat} -f ${1} -rp ~/Desktop/*.desktop ~/Desktop/minimize in 3 s3cs"
+	csleep 3
+
+	${srat} -f ${1} -rp ~/Desktop/*.desktop ~/Desktop/minimize	
+	[ $? -eq 0 ] || echo "${sco} <smthng> ${1} or ${scm} <smthng> ${1} would be a good idea now"
 else
 	echo "NO SUCH THING AS ${1} "
 fi
