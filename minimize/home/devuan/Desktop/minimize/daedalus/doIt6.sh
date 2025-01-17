@@ -290,8 +290,8 @@ dqb "GR1DN BELIALAS KYE"
 sudo ${d}/clouds.sh 0
 csleep 5
 
-#dqb "LOCURA"
-#csleep 6
+dqb "${scm} a-wx $0 "
+csleep 6
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä

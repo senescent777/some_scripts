@@ -11,6 +11,9 @@ if [ $# -gt 0 ] ; then
 	fi
 fi
 
+[ ${debug} -eq 1 ] && ${spd} -l > ${d}/pkgs-${g}.txt.1
+csleep 5
+
 dqb "a-e"
 csleep 5
 
@@ -130,6 +133,9 @@ ${odio} which dhclient; ${odio} which ifup; sleep 6
 #voisi olla jatkossa debug-mjan takana
 g=$(date +%F)
 [ ${debug} -eq 1 ] && ${spd} -l > ${d}/pkgs-${g}.txt.2
+
+dqb "${scm} a-wx $0 "
+csleep 6
 
 #whack xfce so that the ui is reset
 ${whack} xfce*
