@@ -129,7 +129,7 @@ ${odio} which dhclient; ${odio} which ifup; sleep 6
 
 #voisi olla jatkossa debug-mjan takana
 g=$(date +%F)
-${spd} -l > ${d}/pkgs-${g}.txt.2
+[ ${debug} -eq 1 ] && ${spd} -l > ${d}/pkgs-${g}.txt.2
 
 #whack xfce so that the ui is reset
 ${whack} xfce*
