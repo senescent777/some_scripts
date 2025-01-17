@@ -10,7 +10,20 @@ if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 
 	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
 else
-	echo "TODO:fallback"
+	som="sudo /bin/mount"
+	uom="sudo /bin/umount"
+	srat="sudo /bin/tar"
+	sco="sudo /bin/chown"
+	scm="sudo /bin/chmod"
+
+	function dqb() {
+		[ ${debug} -eq 1 ] && echo ${1}
+	}
+	
+	function csleep() {
+		[ ${debug} -eq 1 ] && sleep ${1}
+	}
+
 fi
 
 debug=1
