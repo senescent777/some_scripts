@@ -24,7 +24,7 @@ function parse_opts_1() {
 	esac
 }
 
-. ./lib.sh 
+#. ./lib.sh 
 #HUOM. mode otetaan jo parametriksi p_o_1:sessä, josko enforce kanssa?
  
 function check_params() {
