@@ -100,31 +100,11 @@ function check_binaries() {
 		do ocs ${x} 
 	done
 
-#	echo ${CB_LIST1}
-#	exit
-
 	sco=$(sudo which chown)
-#	[ y"${sco}" == "y" ] && exit
-#	dqb "${sco} OK"
-#
 	scm=$(sudo which chmod)
-#	[ y"${scm}" == "y" ] && exit
-#	dqb "${scm} OK"
-#	
 	whack=$(sudo which pkill)
-#	[ y"${whack}" == "y" ] && exit 5
-#	[ -x ${whack} ] || exit 5
-#
 	sag=$(sudo which apt-get)
-#	
-#	[ z"{sag}" == "z" ] && exit
-#	[ -x ${sag} ] || exit
-#
 	sa=$(sudo which apt)
-#	
-#	[ z"{sa}" == "z" ] && exit
-#	[ -x ${sa} ] || exit
-#
 	sip=$(sudo which ip)
 	snt=$(sudo which netstat)
 	sdi=$(sudo which dpkg)
@@ -133,11 +113,7 @@ function check_binaries() {
 	smr=$(sudo which rm)
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
-#
-#	#VAIH;jokin valmis palikka ati fktio näille testauksille...
 	srat=$(sudo which tar)
-#	[ z"{srat}" == "z" ] && exit
-#	[ -x ${srat} ] || exit
 
 	if [ ${debug} -eq 1 ] ; then
 		srat="${srat} -v "
@@ -151,33 +127,11 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
-#	[ -x ${sco} ] || exit 5
-#	[ -x ${scm} ] || exit 5
-#
-#	[ -x ${sag} ] || exit 5
-#	[ -x ${sa} ] || exit 5
-#	[ -x ${sip} ] || exit 5
-#	[ -x ${snt} ] || exit 5
-#	[ -x ${sdi} ] || exit 5
-#	[ -x ${sifu} ] || exit 5
-#	[ -x ${sifd} ] || exit 5
-#
-#	[ -x ${smr} ] || exit 5
-#	[ -x ${slinky} ] || exit 5
-#	[ -x ${spc} ] || exit 5
-#	[ -x ${srat} ] || exit 5
-#	[ -x ${som} ] || exit 5
-#	[ -x ${uom} ] || exit 5
-
 	dch=$(find /sbin -name dhclient-script)
-	#VAIH:pitäisiköhänm /sbin/dhclient-script testata
 	[ x"${dch}" == "x" ] && exit 6
 	[ -x ${dch} ] || exit 6
 
 #	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-#	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
-#
-#	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
 	csleep 3
 }
