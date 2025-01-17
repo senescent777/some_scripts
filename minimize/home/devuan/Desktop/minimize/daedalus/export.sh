@@ -2,7 +2,7 @@
 #VAIH:seur testaus haettujen .deb-pakettien suhteen
 
 d=$(dirname $0)
-debug=1
+#debug=1
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
@@ -185,7 +185,6 @@ function make_upgrade() {
 	${sag} upgrade -u
 	${srat} -jcpf ${1} ${pkgdir}
 
-	#sudo /opt/bin/cloudsd.sh ${dnsm}
 	${sifd} ${iface}
 	sleep 1
 }

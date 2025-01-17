@@ -3,6 +3,7 @@ d=$(dirname $0)
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
+	#debug=1
 	. ${d}/lib.sh
 
 	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
@@ -25,10 +26,15 @@ else
 fi
 
 olddir=$(pwd)
+dqb "b3f0r3 0ld.tar"
+csleep 5
 
 if [ ! -s /OLD.tar ] ; then 
 	${srat} -cpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
 fi
+
+dqb "b3f0r3 par51ng tha param5"
+csleep 5
 
 if [ $# -gt 0 ] ; then
 	case "${1}" in
@@ -70,6 +76,9 @@ if [ $# -gt 0 ] ; then
 		1)
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
+
+			dqb "${srat} -xpf ${2} in 3 secs"	
+			csleep 3
 
 			cd /
 			${srat} -xpf ${2} 

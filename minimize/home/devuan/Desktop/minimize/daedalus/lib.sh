@@ -2,8 +2,8 @@
 #grep /e/n/i ?
 
 odio=$(which sudo)
-[ y"${odio}" == "y" ] && exit 665 
-[ -x ${odio} ] || exit 666
+[ y"${odio}" == "y" ] && exit 99 
+[ -x ${odio} ] || exit 100
 
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
@@ -46,11 +46,25 @@ function pre_part3() {
 function ocs() {
 	local tmp
 	tmp=$(sudo which ${1})
-	[ y"${tmp}" == "y" ] && exit 666 #fiksummatkinm koodin voisi keksiä
-	[ -x ${tmp} ] || exit 667
 
-	dqb "${tmp} ok"
+	if [ y"${tmp}" == "y" ] ; then
+		exit 66 #fiksummankin exit-koodin voisi keksiä
+	else
+		echo "fråm ocs(): ${tmp} exists"
+	fi
+
+##-x file
+##              True if file exists and is executable.
+##
+#mikä tässä qsee?
+#	if [ -x ${tmp} ] ; then	
+#		exit 77
+#	else
+#		echo "fråm ocs(): ${tmp} is executable"
+#	fi
+
 	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
+	dqb "fråm ocs(): ${tmp} add3d t0 l1st"
 }
 
 function check_binaries() {
@@ -81,9 +95,13 @@ function check_binaries() {
 
 	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} "
 	local x
-	for x in chown chmod pkill apt-get apt ip netstat dpkg ifup ifdown rm ln cp tar mount umount ; do ocs ${x} ; done
-	#echo ${CB_LIST1}
-	#exit
+	
+	for x in chown chmod pkill apt-get apt ip netstat dpkg ifup ifdown rm ln cp tar mount umount 
+		do ocs ${x} 
+	done
+
+#	echo ${CB_LIST1}
+#	exit
 
 	sco=$(sudo which chown)
 #	[ y"${sco}" == "y" ] && exit
@@ -117,12 +135,12 @@ function check_binaries() {
 	spc=$(sudo which cp)
 #
 #	#VAIH;jokin valmis palikka ati fktio näille testauksille...
-#	srat=$(sudo which tar)
-	[ z"{srat}" == "z" ] && exit
-	[ -x ${rat} ] || exit
+	srat=$(sudo which tar)
+#	[ z"{srat}" == "z" ] && exit
+#	[ -x ${srat} ] || exit
 
 	if [ ${debug} -eq 1 ] ; then
-		srat="${rat} -v "
+		srat="${srat} -v "
 	fi
 
 	#HUOM. gpgtar olisi vähän parempi kuin pelkkä tar, silleen niinqu tavallaan
@@ -159,7 +177,7 @@ function check_binaries() {
 #	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 #	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
 #
-	dqb "spc= ${spc}"
+#	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
 	csleep 3
 }

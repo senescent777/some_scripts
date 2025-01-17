@@ -9,7 +9,7 @@ else
 	exit 111	
 fi
 
-#TODO:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
+#VAIH:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
 #VAIH:/v/c/man-nalkutus, tee jotain
 #TODO:sudon nalkutus yhdessä kohtaa (kun enforce=1)
 
@@ -41,6 +41,7 @@ function check_params() {
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
 #HUOM.2. ei niitä {sco}-juttuja ao. fktioon
+#TODO:josko jatkossa kasattaisiin kohde-tsdto /tmp alla ja viimeisenä viskataan /e/s.d alle
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit
@@ -57,7 +58,7 @@ function mangle_s() {
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		csleep 1
 		
-		sudo chmod 0555 ${1} #HUOM. miksi juuri 5?
+		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaamn tdstoon ei tartte kirjoittaa
 		sudo chown root:root ${1} 
 		#chattr +ui ${1}
 
@@ -74,6 +75,8 @@ function mangle_s() {
 	fi
 }
 
+#170125:./daedalus/doIt6.sh: line 70: /etc/sudoers.d/meshuggah: Permission denied
+
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
@@ -83,7 +86,7 @@ function pre_enforce() {
 
 	sudo touch /etc/sudoers.d/meshuggah
 	#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
-	sudo chmod 0660 /etc/sudoers.d/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ? eikä a+w...
+	sudo chmod 0666 /etc/sudoers.d/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ? eikä a+w...
 
 	local f 
 	for f in ${CB_LIST1} ; do mangle_s ${f} ; done
@@ -142,6 +145,10 @@ function enforce_access() {
 		
 		${sco} -R root:root /var
 		${scm} -R go-w /var
+		
+		${sco} root:staff /var/local
+		${sco} root:mail /var/mail
+		#ainakin chmod vielä... (TODO)
 
 		${scm} 0755 /
 		${sco} root:root /
@@ -153,7 +160,7 @@ function enforce_access() {
 	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfaces /etc/network/interfaces.${f}
 
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
-		sudo rm /etc/resolv.conf
+		sudo rm /etc/resolv.conf #TODO:smr ja alempana spc
 	fi
 
 	[ -s /sbin/dclient-script.OLD ] || sudo cp /sbin/dhclient-script /sbin/dhclient-script.OLD
@@ -171,12 +178,13 @@ enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
+g=$(date +%F)
 
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
 	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
 	csleep 5
-	${scm} a+w /etc/apt #tarpeen?
-	g=$(date +%F)
+	#${scm} a+w /etc/apt #tarpeen?
+	
 	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
 	sudo touch /etc/apt/sources.list
@@ -216,6 +224,10 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
+${spd} -l > ${d}/pkgs-${g}.txt
+#debug-syistä tuo yo. rivi
+csleep 6
+
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
 
