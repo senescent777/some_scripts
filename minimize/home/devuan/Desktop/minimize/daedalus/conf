@@ -1,5 +1,5 @@
 iface=eth0 
-enforce=0
+enforce=1
 debug=0
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon

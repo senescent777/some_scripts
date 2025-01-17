@@ -43,6 +43,16 @@ function pre_part3() {
 	csleep 5
 }
 
+function ocs() {
+	local tmp
+	tmp=$(sudo which ${1})
+	[ y"${tmp}" == "y" ] && exit 666 #fiksummatkinm koodin voisi keksiä
+	[ -x ${tmp} ] || exit 667
+
+	dqb "${tmp} ok"
+	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
+}
+
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
 	dqb "sudo= ${odio} "
@@ -63,28 +73,40 @@ function check_binaries() {
 		ip6tr=$(sudo which ip6tables-restore)
 	fi
 
+	[ -x ${ipt} ] || exit 5
+	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
+	[ -x ${ip6t} ] || exit 5
+	[ -x ${iptr} ] || exit 5
+	[ -x ${ip6tr} ] || exit 5
+
+	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} "
+	local x
+	for x in chown chmod pkill apt-get apt ip netstat dpkg ifup ifdown rm ln cp tar mount umount ; do ocs ${x} ; done
+	#echo ${CB_LIST1}
+	#exit
+
 	sco=$(sudo which chown)
-	[ y"${sco}" == "y" ] && exit
-	dqb "${sco} OK"
-
+#	[ y"${sco}" == "y" ] && exit
+#	dqb "${sco} OK"
+#
 	scm=$(sudo which chmod)
-	[ y"${scm}" == "y" ] && exit
-	dqb "${scm} OK"
-	
+#	[ y"${scm}" == "y" ] && exit
+#	dqb "${scm} OK"
+#	
 	whack=$(sudo which pkill)
-	[ y"${whack}" == "y" ] && exit 5
-	[ -x ${whack} ] || exit 5
-
+#	[ y"${whack}" == "y" ] && exit 5
+#	[ -x ${whack} ] || exit 5
+#
 	sag=$(sudo which apt-get)
-	
-	[ z"{sag}" == "z" ] && exit
-	[ -x ${sag} ] || exit
-
+#	
+#	[ z"{sag}" == "z" ] && exit
+#	[ -x ${sag} ] || exit
+#
 	sa=$(sudo which apt)
-	
-	[ z"{sa}" == "z" ] && exit
-	[ -x ${sa} ] || exit
-
+#	
+#	[ z"{sa}" == "z" ] && exit
+#	[ -x ${sa} ] || exit
+#
 	sip=$(sudo which ip)
 	snt=$(sudo which netstat)
 	sdi=$(sudo which dpkg)
@@ -93,9 +115,9 @@ function check_binaries() {
 	smr=$(sudo which rm)
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
-
-	#jokin valmis palikka ati fktio näille testauksille...
-	srat=$(sudo which tar)
+#
+#	#VAIH;jokin valmis palikka ati fktio näille testauksille...
+#	srat=$(sudo which tar)
 	[ z"{srat}" == "z" ] && exit
 	[ -x ${rat} ] || exit
 
@@ -111,38 +133,32 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
-	[ -x ${ipt} ] || exit 5
-	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
-	[ -x ${ip6t} ] || exit 5
-	[ -x ${iptr} ] || exit 5
-	[ -x ${ip6tr} ] || exit 5
-	
-	[ -x ${sco} ] || exit 5
-	[ -x ${scm} ] || exit 5
-
-	[ -x ${sag} ] || exit 5
-	[ -x ${sa} ] || exit 5
-	[ -x ${sip} ] || exit 5
-	[ -x ${snt} ] || exit 5
-	[ -x ${sdi} ] || exit 5
-	[ -x ${sifu} ] || exit 5
-	[ -x ${sifd} ] || exit 5
-
-	[ -x ${smr} ] || exit 5
-	[ -x ${slinky} ] || exit 5
-	[ -x ${spc} ] || exit 5
-	[ -x ${srat} ] || exit 5
-	[ -x ${som} ] || exit 5
-	[ -x ${uom} ] || exit 5
+#	[ -x ${sco} ] || exit 5
+#	[ -x ${scm} ] || exit 5
+#
+#	[ -x ${sag} ] || exit 5
+#	[ -x ${sa} ] || exit 5
+#	[ -x ${sip} ] || exit 5
+#	[ -x ${snt} ] || exit 5
+#	[ -x ${sdi} ] || exit 5
+#	[ -x ${sifu} ] || exit 5
+#	[ -x ${sifd} ] || exit 5
+#
+#	[ -x ${smr} ] || exit 5
+#	[ -x ${slinky} ] || exit 5
+#	[ -x ${spc} ] || exit 5
+#	[ -x ${srat} ] || exit 5
+#	[ -x ${som} ] || exit 5
+#	[ -x ${uom} ] || exit 5
 
 	dch=$(find /sbin -name dhclient-script)
 	#VAIH:pitäisiköhänm /sbin/dhclient-script testata
 	[ x"${dch}" == "x" ] && exit 6
 	[ -x ${dch} ] || exit 6
 
-	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
-
+#	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
+#	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
+#
 	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
 	csleep 3
