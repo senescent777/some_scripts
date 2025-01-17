@@ -128,6 +128,6 @@ df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
 #whack xfce so that the ui is reset
-${whack} X*
+${whack} xfce*
 
 

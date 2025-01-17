@@ -265,7 +265,7 @@ ${ip6tr} /etc/iptables/rules.v6
 if [ ${mode} -eq 1 ] ; then
 	echo "passwd"
 	echo "${odio} passwd"
-	echo "${whack} X*" 
+	echo "${whack} xfce*" 
 
 	exit 	
 fi
@@ -283,9 +283,13 @@ csleep 6
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
-#VAIH:sitten josqs tässä voisi olla mode-riippuvainen exit
-#[ ${mode} -eq 2 ] && exit 
-echo "#sudo ${d}/clouds.sh 1"
+
+if [ ${mode} -eq 2 ] ; then
+	${whack} xfce* 
+ 	exit 
+fi
+
+sudo ${d}/clouds.sh 1
 
 #VAIH:stubby-jutut toimimaan
 #ongelmana error: Could not bind on given addresses: Permission denied
@@ -305,5 +309,5 @@ echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
 if [ ${debug} -eq 1 ] ; then 
 	sleep 5
 	#whack xfce so that the ui is reset
-	${whack} X* 
+	${whack} xfce* 
 fi
