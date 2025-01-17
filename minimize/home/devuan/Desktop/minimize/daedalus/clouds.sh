@@ -66,19 +66,24 @@ function dda_snd() {
 
 #VAIH:stubbyn asennus toimimaan taas (261224)
 function ns2() {
+	[ y"${1}" == "y" ] && exit
 	dqb "ns2( ${1} )"
-
 	${scm} u+w /home
+	csleep 3
 
 	${odio} /usr/sbin/userdel ${1}
 	sleep 3
 
 	${odio} adduser --system ${1}
-	sleep 1
+	sleep 3
+
 	${scm} go-w /home
-	${sco} -R stubby:65534 /home/stubby/
+	${sco} -R ${1}:65534 /home/${1}/ #dtubby
+	dqb "d0n3"
+	csleep 4	
+
 	[ ${debug} -eq 1 ]  && ls -las /home
-	sleep 7
+	csleep 3
 }
 
 case ${1} in 
