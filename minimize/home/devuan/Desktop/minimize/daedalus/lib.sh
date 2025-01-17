@@ -50,18 +50,18 @@ function ocs() {
 	if [ y"${tmp}" == "y" ] ; then
 		exit 66 #fiksummankin exit-koodin voisi keksiä
 	else
-		echo "fråm ocs(): ${tmp} exists"
+		dqb "fråm ocs(): ${tmp} exists"
 	fi
 
 ##-x file
 ##              True if file exists and is executable.
 ##
-#mikä tässä qsee?
-#	if [ -x ${tmp} ] ; then	
-#		exit 77
-#	else
-#		echo "fråm ocs(): ${tmp} is executable"
-#	fi
+
+	if [ -x ${tmp} ] ; then	
+		dqb "fråm ocs(): ${tmp} is executable"		
+	else
+		exit 77
+	fi
 
 	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
 	dqb "fråm ocs(): ${tmp} add3d t0 l1st"
