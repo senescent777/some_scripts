@@ -160,10 +160,10 @@ function enforce_access() {
 	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfaces /etc/network/interfaces.${f}
 
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
-		sudo rm /etc/resolv.conf #TODO:smr ja alempana spc
+		${smr} /etc/resolv.conf 
 	fi
 
-	[ -s /sbin/dclient-script.OLD ] || sudo cp /sbin/dhclient-script /sbin/dhclient-script.OLD
+	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
 }
 
 #==================================PART 1============================================================
