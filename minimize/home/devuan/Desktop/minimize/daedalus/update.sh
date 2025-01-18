@@ -56,3 +56,4 @@ csleep 3
 ${uom} ${part} 
 csleep 3
 ${som} | grep ${part}
+

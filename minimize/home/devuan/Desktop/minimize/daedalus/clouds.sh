@@ -38,13 +38,16 @@ fi
 
 [ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
 
+
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35"
+
 	. ./lib.sh #pitäisiköhän tässäkin olla se dirname-.jekku?
 	pre_part3 ${pkgdir}
 else
 	#töässö klohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
+
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
 	sleep 3
@@ -66,6 +69,7 @@ function dda_snd() {
 	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
 }
+
 
 #VAIH:stubbyn asennus toimimaan taas (261224)
 function ns2() {
@@ -89,6 +93,7 @@ function ns2() {
 	csleep 3
 }
 
+
 case ${1} in 
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
@@ -96,7 +101,9 @@ case ${1} in
 		${spc} /sbin/dhclient-script.OLD /sbin/dhclient-script
 
 		if [ y"${ipt}" == "y" ] ; then
+
 			dqb "SHOULD 1NSTALL TABL35"
+
 		else
 			${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
 			${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
@@ -140,6 +147,7 @@ case ${1} in
 		pgrep dnsmasq
 
 		echo "stu";sleep 2
+
 		#VAIH:vissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
 		if [ ! -f /home/stubby/.ripuli ] ; then
 			ns2 stubby
@@ -147,6 +155,7 @@ case ${1} in
 		else
 			echo "N2S ALR3ADY D0N3"
 		fi
+
 
 		echo "#ns4 stubby"
 		pgrep stubby
@@ -178,4 +187,5 @@ if [ ${debug} -eq 1 ] ; then
 	${ip6t} -L #
 	sleep 6
 fi #
+
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+
 d=$(dirname $0)
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
@@ -13,6 +14,7 @@ fi
 #VAIH:/v/c/man-nalkutus, tee jotain (kts oikeudet ennen sorkkimista vs jälkeen)
 #VAIH:sudon nalkutus yhdessä kohtaa (kun enforce=1) , vissiinkin se /tmp-jekku kokeiltava
 
+
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -24,9 +26,11 @@ function parse_opts_1() {
 	esac
 }
 
+
 #. ./lib.sh 
 #HUOM. mode otetaan jo parametriksi p_o_1:sessä, josko enforce kanssa?
  
+
 function check_params() {
 	case ${debug} in
 		0|1)
@@ -41,10 +45,11 @@ function check_params() {
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
 #HUOM.2. ei niitä {sco}-juttuja ao. fktioon
-#VAIH:josko jatkossa kasattaisiin kohde-tsdto /tmp alla ja viimeisenä viskataan /e/s.d alle
+
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit
+
 
 #	if [ y"${2}" == "y" ] ; then
 #		tgt=/etc/sudoers.d/meshuggah
@@ -64,13 +69,16 @@ function mangle_s() {
 		#chattr +ui ${1}
 
 		#csleep 1
+
 		local s
 		local n
 
 		n=$(whoami) #olisi myös %users...
 		s=$(sha256sum ${1})
 		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
+
 		#sleep 1
+
 	else
 		dqb "no sucg file as ${1} "
 	fi
@@ -116,6 +124,7 @@ function pre_enforce() {
 		sudo mv ${q}/meshuggah /etc/sudoers.d
 	fi
 
+
 	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
@@ -154,7 +163,9 @@ function enforce_access() {
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
 			mangle2 ${f}
+
 			#csleep 1
+
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
@@ -167,10 +178,12 @@ function enforce_access() {
 		
 		${sco} -R root:root /var
 		${scm} -R go-w /var
+
 		
 		${sco} root:staff /var/local
 		${sco} root:mail /var/mail
 		#ainakin chmod vielä... (TODO)
+
 
 		${scm} 0755 /
 		${sco} root:root /
@@ -182,10 +195,12 @@ function enforce_access() {
 	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfaces /etc/network/interfaces.${f}
 
 	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
+
 		${smr} /etc/resolv.conf 
 	fi
 
 	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
+
 }
 
 #==================================PART 1============================================================
@@ -197,17 +212,21 @@ fi
 check_params 
 [ ${enforce} -eq 1 ] && pre_enforce
 enforce_access 
+
 #exit
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
 g=$(date +%F)
 
+
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
 	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
 	csleep 5
+
 	#${scm} a+w /etc/apt #tarpeen?
 	
+
 	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
 	sudo touch /etc/apt/sources.list
@@ -247,9 +266,11 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
+
 [ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
 #debug-syistä tuo yo. rivi
 csleep 6
+
 
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
@@ -264,8 +285,10 @@ ${sharpy} ntp*
 
 #uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun -22 lopussa 
 ${sharpy} po* pkexec
+
 ${lftr}
 csleep 3
+
 
 if [ y"${ipt}" != "y" ] ; then #muutkin vastaavat trark pitäisi katsoa uusiksi
 	${ip6tr} /etc/iptables/rules.v6
@@ -301,7 +324,6 @@ if [ ${mode} -eq 1 ] ; then
 	echo "passwd"
 	echo "${odio} passwd"
 	echo "${whack} xfce*" 
-
 	exit 	
 fi
 
@@ -309,15 +331,18 @@ ${asy}
 dqb "GR1DN BELIALAS KYE"
 
 #VAIH:clouds uusix kanssa (case 1 vuelä)
+
 #katsotaan kanssa miten tuo uusi versio pelittää
 sudo ${d}/clouds.sh 0
 csleep 5
 
 dqb "${scm} a-wx $0 "
+
 csleep 6
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
+
 
 if [ ${mode} -eq 2 ] ; then
 	echo "time to ${sifu} ${iface} or whåtever"
@@ -327,6 +352,7 @@ if [ ${mode} -eq 2 ] ; then
 fi
 
 sudo ${d}/clouds.sh 1
+
 
 #VAIH:stubby-jutut toimimaan
 #ongelmana error: Could not bind on given addresses: Permission denied

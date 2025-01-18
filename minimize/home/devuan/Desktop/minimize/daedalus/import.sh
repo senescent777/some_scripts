@@ -71,6 +71,7 @@ if [ $# -gt 0 ] ; then
 
 			csleep 3
 			cd ${olddir}
+
 			echo "NEXT: $0 2"
 		;;
 		1)
@@ -84,13 +85,13 @@ if [ $# -gt 0 ] ; then
 			${srat} -xpf ${2} 
 			csleep 3
 			cd ${olddir}
+
 			echo "NEXT: $0 2"
 		;;
 		2)
 			${uom} ${part}
 			csleep 3
 			${som} | grep ${part}
-
 			echo "NEXT: ${d}/doIt6.sh (maybe)"
 		;;
 		*)
