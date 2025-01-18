@@ -11,7 +11,6 @@ if [ $# -gt 0 ] ; then
 	fi
 fi
 
-
 [ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.1
 csleep 5
 
@@ -90,7 +89,6 @@ csleep 5
 #HUOM.080125 screen ei suostunut poistumaan yänään, joten...
 
 ${sharpy} pkexec po* refracta*
-
 #samba poistunee jo aiemmin?
 ${sharpy} squashfs-tools samba* system-config*
 ${asy} 
@@ -128,7 +126,7 @@ ${asy}
 csleep 5
 
 ${lftr}
-${odio} shred -fu /var/cache/apt/archives/*.deb
+${odio} shred -fu /var/cache/apt/archives/*.deb #$pkgdir
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
@@ -141,3 +139,5 @@ ${scm} a-wx $0
 
 #whack xfce so that the ui is reset
 ${whack} xfce*
+
+
