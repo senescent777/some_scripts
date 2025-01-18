@@ -10,8 +10,8 @@ else
 fi
 
 #VAIH:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
-#VAIH:/v/c/man-nalkutus, tee jotain
-#TODO:sudon nalkutus yhdessä kohtaa (kun enforce=1)
+#VAIH:/v/c/man-nalkutus, tee jotain (kts oikeudet ennen sorkkimista vs jälkeen)
+#VAIH:sudon nalkutus yhdessä kohtaa (kun enforce=1) , vissiinkin se /tmp-jekku kokeiltava
 
 function parse_opts_1() {
 	case "${1}" in
@@ -41,35 +41,36 @@ function check_params() {
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
 #HUOM.2. ei niitä {sco}-juttuja ao. fktioon
-#TODO:josko jatkossa kasattaisiin kohde-tsdto /tmp alla ja viimeisenä viskataan /e/s.d alle
+#VAIH:josko jatkossa kasattaisiin kohde-tsdto /tmp alla ja viimeisenä viskataan /e/s.d alle
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit
 
-	if [ y"${2}" == "y" ] ; then
-		tgt=/etc/sudoers.d/meshuggah
-	else
-		tgt=/etc/sudoers.d/${2}
-	fi
+#	if [ y"${2}" == "y" ] ; then
+#		tgt=/etc/sudoers.d/meshuggah
+#	else
+#		#tgt=/etc/sudoers.d/${2}
+		tgt=${2}
+#	fi
 
-	echo "fr0m mangle_s: params_OK"; sleep 3
+	echo "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		csleep 1
+		#csleep 1
 		
 		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaamn tdstoon ei tartte kirjoittaa
 		sudo chown root:root ${1} 
 		#chattr +ui ${1}
 
-		csleep 1
+		#csleep 1
 		local s
 		local n
 
 		n=$(whoami) #olisi myös %users...
 		s=$(sha256sum ${1})
 		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
-		sleep 1
+		#sleep 1
 	else
 		dqb "no sucg file as ${1} "
 	fi
@@ -79,21 +80,42 @@ function mangle_s() {
 
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
+	local q
+	q=$(mktemp -d)	
+
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
 		sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
 		[ $? -eq 0 ] && dqb "a51a kun05a"
+	else	
+		dqb "sudo touch ${q}/meshuggah in 5 secs"
+		csleep 5
+		sudo touch ${q}/meshuggah
+
+		[ ${debug} -eq 1 ] && ls -las ${q}
+		csleep 6
+		[ -f ${q}/meshuggah ] || exit
+		dqb "ANNOYING AMOUNT OF DEBUG"
+
+		sudo chown 1000:1000 ${q}/meshuggah
+		sudo chmod 0660 ${q}/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ? eikä a+w...
+
+		local f 
+		for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
+	
+		#TODO:clouds: a) nimeäminen fiksummin b) jotenkin toisin se sudoersiin lisäys
+		#VAIH:clouds.sh mukaan aivan toisella tavalla(se aiempi)	
+		for f in /etc/init.d/stubby ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
+	fi
+	
+	if [ -s ${q}/meshuggah ] ; then
+		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
+		csleep 5
+
+		sudo chmod a-w ${q}/meshuggah
+		sudo chown root:root ${q}/meshuggah	
+		sudo mv ${q}/meshuggah /etc/sudoers.d
 	fi
 
-	sudo touch /etc/sudoers.d/meshuggah
-	#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
-	sudo chmod 0666 /etc/sudoers.d/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ? eikä a+w...
-
-	local f 
-	for f in ${CB_LIST1} ; do mangle_s ${f} ; done
-	#TODO:clouds: a) nimeäminen fiksummin b) jotenkin toisin se sudoersiin lisäys
-	for f in /etc/init.d/stubby ${d}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
-
-	sudo chmod a-w /etc/sudoers.d/meshuggah	
 	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
@@ -132,7 +154,7 @@ function enforce_access() {
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
 			mangle2 ${f}
-			csleep 1
+			#csleep 1
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
@@ -175,6 +197,7 @@ fi
 check_params 
 [ ${enforce} -eq 1 ] && pre_enforce
 enforce_access 
+#exit
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
@@ -224,7 +247,7 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
-[ ${debug} -eq 1 ] && ${spd} -l > ${d}/pkgs-${g}.txt
+[ ${debug} -eq 1 ] && ${sdi} -l > ${d}/pkgs-${g}.txt
 #debug-syistä tuo yo. rivi
 csleep 6
 

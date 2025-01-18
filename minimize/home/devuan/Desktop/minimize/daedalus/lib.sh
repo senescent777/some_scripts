@@ -156,6 +156,8 @@ function check_binaries2() {
 
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
+
+	#echo "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"; sleep 5
 	${scm} a-wx ~/Desktop/minimize/*.sh
 
 	sip="${odio} ${sip} "
@@ -181,10 +183,10 @@ function check_binaries2() {
 function mangle2() {
 	if [ -f ${1} ] ; then 
 		dqb "MANGLED ${1}"
-		sleep 1
+		#sleep 1
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
-		csleep 1
+		#csleep 1
 	fi
 }
 
