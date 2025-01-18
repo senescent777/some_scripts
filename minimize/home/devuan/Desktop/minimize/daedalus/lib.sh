@@ -157,8 +157,9 @@ function check_binaries2() {
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
 
-	#echo "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"; sleep 5
+	#dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"; csleep 5
 	${scm} a-wx ~/Desktop/minimize/*.sh
+	${scm} a-wx ~/Desktop/minimize/*.conf
 
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
