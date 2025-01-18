@@ -1,13 +1,19 @@
 #!/bin/bash
-. ./libd.sh
+d=$(dirname $0)
+debug=0
+
+[ -s ${d}/lib.sh ] && . ${d}/lib.sh
 ${fib}
 
-debug=0
 if [ $# -gt 0 ] ; then  
 	if [ "${1}" == "-v" ] ; then
 		debug=1
 	fi
 fi
+
+
+[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.1
+csleep 5
 
 dqb "a-e"
 csleep 5
@@ -83,7 +89,8 @@ ${lftr}
 csleep 5
 #HUOM.080125 screen ei suostunut poistumaan yänään, joten...
 
-${sharpy} pkexec  po* refracta*
+${sharpy} pkexec po* refracta*
+
 #samba poistunee jo aiemmin?
 ${sharpy} squashfs-tools samba* system-config*
 ${asy} 
@@ -125,7 +132,12 @@ ${odio} shred -fu /var/cache/apt/archives/*.deb
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
+g=$(date +%F)
+[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.2
+
+dqb "${scm} a-wx $0 in 6 secs "
+csleep 6
+${scm} a-wx $0 
+
 #whack xfce so that the ui is reset
 ${whack} xfce*
-
-

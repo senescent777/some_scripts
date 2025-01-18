@@ -2,8 +2,8 @@
 #grep /e/n/i ?
 
 odio=$(which sudo)
-[ y"${odio}" == "y" ] && exit 665 
-[ -x ${odio} ] || exit 666
+[ y"${odio}" == "y" ] && exit 99 
+[ -x ${odio} ] || exit 100
 
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
@@ -22,23 +22,49 @@ function pre_part3() {
 	echo "pp3.2"
 
 	#HUOM.060125: uutena tables-asennus ennen vbarsinaista asennusta
-	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	
+	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	(esim find)
+	
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${odio} dpkg -i ${1}/netfilter-persistent*.deb
-	[ $? -eq 0 ] && ${odio} rm ${1}/netfilter-persistent*.deb
+	[ $? -eq 0 ] && ${odio} shred -fu ${1}/netfilter-persistent*.deb
 	csleep 5
 
 	${odio} dpkg -i ${1}/libip*.deb
-	[ $? -eq 0 ] && ${odio} rm ${1}/libip*.deb
+	[ $? -eq 0 ] && ${odio} shred -fu ${1}/libip*.deb
 	csleep 5
 
 	${odio} dpkg -i ${1}/iptables_*.deb
-	[ $? -eq 0 ] && ${odio} rm ${1}/iptables_*.deb
+	[ $? -eq 0 ] && ${odio} shred -fu ${1}/iptables_*.deb
 	csleep 5
 
 	${odio} dpkg -i ${1}/iptables-*.deb
-	[ $? -eq 0 ] && ${odio} rm ${1}/iptables-*.deb
+	[ $? -eq 0 ] && ${odio} shred -fu ${1}/iptables-*.deb
 	dqb "pp3 d0n3"
 	csleep 5
+}
+
+function ocs() {
+	local tmp
+	tmp=$(sudo which ${1})
+
+	if [ y"${tmp}" == "y" ] ; then
+		exit 66 #fiksummankin exit-koodin voisi keksiä
+	else
+		dqb "fråm ocs(): ${tmp} exists"
+	fi
+
+##-x file
+##              True if file exists and is executable.
+##
+
+	if [ -x ${tmp} ] ; then	
+		dqb "fråm ocs(): ${tmp} is executable"		
+	else
+		exit 77
+	fi
+
+	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
+	dqb "fråm ocs(): ${tmp} add3d t0 l1st"
 }
 
 function check_binaries() {
@@ -61,17 +87,22 @@ function check_binaries() {
 		ip6tr=$(sudo which ip6tables-restore)
 	fi
 
-	sco=$(sudo which chown)
-	[ y"${sco}" == "y" ] && exit
-	dqb "${sco} OK"
+	[ -x ${ipt} ] || exit 5
+	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
+	[ -x ${ip6t} ] || exit 5
+	[ -x ${iptr} ] || exit 5
+	[ -x ${ip6tr} ] || exit 5
 
-	scm=$(sudo which chmod)
-	[ y"${scm}" == "y" ] && exit
-	dqb "${scm} OK"
+	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} "
+	local x
 	
+	for x in chown chmod pkill apt-get apt ip netstat dpkg ifup ifdown rm ln cp tar mount umount 
+		do ocs ${x} 
+	done
+
+	sco=$(sudo which chown)
+	scm=$(sudo which chmod)
 	whack=$(sudo which pkill)
-	[ y"${whack}" == "y" ] && exit 5
-	[ -x ${whack} ] || exit 5
 
 	sag=$(sudo which apt-get)
 	sa=$(sudo which apt)
@@ -84,9 +115,13 @@ function check_binaries() {
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 
-	#TODO: debug-mjasta riippuva -v
 	srat=$(sudo which tar)
 
+	if [ ${debug} -eq 1 ] ; then
+		srat="${srat} -v "
+	fi
+
+	#HUOM. gpgtar olisi vähän parempi kuin pelkkä tar, silleen niinqu tavallaan
 	som=$(sudo which mount)
 	uom=$(sudo which umount)
 
@@ -94,34 +129,12 @@ function check_binaries() {
 	csleep 1
 
 
-	[ -x ${ipt} ] || exit 5
-	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
-	[ -x ${ip6t} ] || exit 5
-	[ -x ${iptr} ] || exit 5
-	[ -x ${ip6tr} ] || exit 5
-	
-	[ -x ${sco} ] || exit 5
-	[ -x ${scm} ] || exit 5
+	dch=$(find /sbin -name dhclient-script)
+	[ x"${dch}" == "x" ] && exit 6
+	[ -x ${dch} ] || exit 6
 
-	[ -x ${sag} ] || exit 5
-	[ -x ${sa} ] || exit 5
-	[ -x ${sip} ] || exit 5
-	[ -x ${snt} ] || exit 5
-	[ -x ${sdi} ] || exit 5
-	[ -x ${sifu} ] || exit 5
-	[ -x ${sifd} ] || exit 5
+#	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 
-	[ -x ${smr} ] || exit 5
-	[ -x ${slinky} ] || exit 5
-	[ -x ${spc} ] || exit 5
-	[ -x ${srat} ] || exit 5
-	[ -x ${som} ] || exit 5
-	[ -x ${uom} ] || exit 5
-
-	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
-
-	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
 	csleep 3
 }
@@ -137,6 +150,8 @@ function check_binaries2() {
 	whack="${odio} ${whack} --signal 9 "
 	snt="${odio} ${snt} "
 	sharpy="${odio} ${sag} remove --purge --yes "
+
+	spd="${odio} ${sdi} -l "
 	sdi="${odio} ${sdi} -i "
 
 	#HUOM. ${sag} OLTAVA VIIMEISENÄ NÄISTÄ KOLMESDTA
@@ -146,6 +161,12 @@ function check_binaries2() {
 
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
+
+	dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"
+	csleep 5
+	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
+	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
+
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
 	sifu="${odio} ${sifu} "
@@ -162,6 +183,8 @@ function check_binaries2() {
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
 
+	dch="${odio} ${dch}"
+
 	dqb "b1nar135.2 0k.2" 
 	csleep 3
 }
@@ -169,35 +192,21 @@ function check_binaries2() {
 function mangle2() {
 	if [ -f ${1} ] ; then 
 		dqb "MANGLED ${1}"
-		sleep 1
+		#sleep 1
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
-		csleep 1
+		#csleep 1
 	fi
 }
 
 ##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-##VAIH:stubbyn asennus toimiimaan taas (261224)
-#function ns2() {
-#	dqb "ns2( ${1} )"
-#
-#	${scm} u+w /home
-#
-#	${odio} /usr/sbin/userdel ${1}
-#	sleep 3
-#
-#	${odio} adduser --system ${1}
-#	sleep 1
-#	${scm} go-w /home
-#	${sco} -R stubby:65534 /home/stubby/
-#	[ ${debug} -eq 1 ]  && ls -las /home
-#	sleep 7
-#}
-#
+
+
 #function ns4() {
 #	dqb "ns4( ${1} )"
 #	[ z"{$1}" == "z" ] && exit 33
-#jospa kirjoittaisi /e/i.d aqlaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
+#jospa kirjoittaisi /e/i.d alaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
+
 #	${scm} u+w /run
 #	${odio} touch /run/${1}.pid
 #	${scm} 0600 /run/${1}.pid
@@ -220,7 +229,7 @@ function mangle2() {
 #}
 #
 #=========================PART 0 ENDS HERE=================================================================
-
+#HUOM.120125: onko oltava juuri tässä tdstossa tämänb?
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}
@@ -261,18 +270,17 @@ function part3() {
 	if [ $? -eq  0 ] ; then
 		dqb "part3.1 ok"
 		sleep 5
-		${smr} -rf ${1}/lib*.deb
+		${odio} shred -fu ${1}/lib*.deb
 	else
 	 	dqb "exit 66"
 	fi
 
-	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
 	${sdi} ${1}/*.deb
 	
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-		${smr} -rf ${1}/lib*.deb
+		${odio} shred -fu ${1}/*.deb #HUOM.150125: oli:lib*.deb
 	else
 	 	dqb "exit 67"
 	fi

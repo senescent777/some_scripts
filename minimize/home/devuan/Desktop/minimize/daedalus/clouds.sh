@@ -10,17 +10,44 @@ spc=$(sudo which cp)
 slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
+debug=0
 
-${smr} /etc/resolv.conf
-${smr} /etc/dhcp/dhclient.conf
-${smr} /sbin/dhclient-script
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+
+if [ -s /etc/resolv.conf.new ] || [ -s /etc/resolv.conf.OLD ] ; then 
+	${smr} /etc/resolv.conf
+	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
+fi
+
+if [ -s /etc/dhcp/dhclient.conf.new ] || [ -s /etc/dhcp/dhclient.conf.OLD ] ; then 
+	${smr} /etc/dhcp/dhclient.conf
+	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
+fi
+
+#ei välttis suhtaudu hyvin lib.sh:n alkuun, tulisi siirtää seur. if-blokin jölkeen
+if [ -s /sbin/dhclient-script.new ] || [ -s /sbin/dhclient-script.OLD ] ; then 
+	${smr} /sbin/dhclient-script
+	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
+fi
+
+[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
+
 
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35"
-	. ./libd.sh
+
+	. ./lib.sh #pitäisiköhän tässäkin olla se dirname-.jekku?
 	pre_part3 ${pkgdir}
 else
+	#töässö klohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
+
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
 	sleep 3
@@ -43,6 +70,30 @@ function dda_snd() {
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
 }
 
+
+#VAIH:stubbyn asennus toimimaan taas (261224)
+function ns2() {
+	[ y"${1}" == "y" ] && exit
+	dqb "ns2( ${1} )"
+	${scm} u+w /home
+	csleep 3
+
+	${odio} /usr/sbin/userdel ${1}
+	sleep 3
+
+	${odio} adduser --system ${1}
+	sleep 3
+
+	${scm} go-w /home
+	${sco} -R ${1}:65534 /home/${1}/ #dtubby
+	dqb "d0n3"
+	csleep 4	
+
+	[ ${debug} -eq 1 ]  && ls -las /home
+	csleep 3
+}
+
+
 case ${1} in 
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
@@ -50,7 +101,9 @@ case ${1} in
 		${spc} /sbin/dhclient-script.OLD /sbin/dhclient-script
 
 		if [ y"${ipt}" == "y" ] ; then
-			echo "SHOULD 1NSTALL TABL35"
+
+			dqb "SHOULD 1NSTALL TABL35"
+
 		else
 			${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
 			${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
@@ -94,7 +147,16 @@ case ${1} in
 		pgrep dnsmasq
 
 		echo "stu";sleep 2
-		echo "#ns2 stubby"
+
+		#VAIH:vissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
+		if [ ! -f /home/stubby/.ripuli ] ; then
+			ns2 stubby
+			sudo touch /home/stubby/.ripuli
+		else
+			echo "N2S ALR3ADY D0N3"
+		fi
+
+
 		echo "#ns4 stubby"
 		pgrep stubby
 	;;
@@ -117,12 +179,13 @@ ${scm} 0750 /etc/iptables
  
 sleep 2
 
-#if [ ${debug} -eq 1 ] ; then
+if [ ${debug} -eq 1 ] ; then
 	${ipt} -L  #
 	sleep 6
 	echo "666"
 	sleep 6
 	${ip6t} -L #
 	sleep 6
-#fi #
+fi #
+
 

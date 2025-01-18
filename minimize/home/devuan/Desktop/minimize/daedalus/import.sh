@@ -1,22 +1,51 @@
 #!/bin/bash
-. ~/Desktop/minimize/daedalus/conf
-. ~/Desktop/minimize/daedalus/lib.sh
+d=$(dirname $0)
 
-if [ ! -s /OLD.tar ] ; then 
-	${srat} -cvpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
+if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
+	. ${d}/conf
+	#debug=1
+	. ${d}/lib.sh
+
+	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
+else
+	srat="sudo /bin/tar"
+	som="sudo /bin/mount"
+	uom="sudo /bin/umount"
+	dir=/mnt
+	odio=$(which sudo)
+	debug=1
+	
+	function dqb() {
+		[ ${debug} -eq 1 ] && echo ${1}
+	}
+
+	function csleep() {
+		[ ${debug} -eq 1 ] && sleep ${1}
+	}
+	
 fi
 
-${scm} a-wx ~/Desktop/minimize/*.sh
+olddir=$(pwd)
+dqb "b3f0r3 0ld.tar"
+csleep 5
+
+if [ ! -s /OLD.tar ] ; then 
+	${srat} -cpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
+fi
+
+dqb "b3f0r3 par51ng tha param5"
+csleep 5
 
 if [ $# -gt 0 ] ; then
-	#for opt in $@ ; do parse_opts_1 ${opt} ; done
 	case "${1}" in
 		-1)
 			${som} -o ro ${part} ${dir}
-			echo "NEXT: $0 0 <source> | $0 1 <source>"
+			csleep 5
+			${som} | grep ${part}
+			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 		;;
 		0)
-			#jatkossa fktioon tämä
+			#jatkossa fktioon tämä?
 			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
 			dqb "KL"
 			csleep 3
@@ -27,7 +56,7 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 
 			cd /
-			${srat} -xvpf ${2}  #-f ${2} -xvp ${pkgdir}
+			${srat} -xpf ${2}  
 			csleep 3
 
 			#daedaluksen kanssa pre ei vaikuttaisi olevan tarpeellinen, chimaeran kanssa vöib olla toinen juttu
@@ -35,25 +64,35 @@ if [ $# -gt 0 ] ; then
 			part3 ${pkgdir}
 			csleep 3
 
-			${odio} shred -fu  ${pkgdir}/*.deb
+			#VAIH:jokin validiustark ennenq shred
+			#... tai tarvitseeko ko ko shred'iä tässä
+			#${odio} shred -fu ${pkgdir}/*.deb
+			[ ${debug} -eq 1 ] && ls -las  ${pkgdir}/*.deb			
+
 			csleep 3
+			cd ${olddir}
+
 			echo "NEXT: $0 2"
 		;;
 		1)
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
 
-			cd /
-			${srat} -xvpf ${2} 
+			dqb "${srat} -xpf ${2} in 3 secs"	
 			csleep 3
+
+			cd /
+			${srat} -xpf ${2} 
+			csleep 3
+			cd ${olddir}
+
 			echo "NEXT: $0 2"
 		;;
 		2)
 			${uom} ${part}
 			csleep 3
-			${som} | grep /dev
-			echo "NEXT: ~/Desktop/minimize/doIt6d.sh (maybe)"
-			
+			${som} | grep ${part}
+			echo "NEXT: ${d}/doIt6.sh (maybe)"
 		;;
 		*)
 			dqb "-h"
