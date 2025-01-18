@@ -247,7 +247,7 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
-[ ${debug} -eq 1 ] && ${sdi} -l > ${d}/pkgs-${g}.txt
+[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
 #debug-syistä tuo yo. rivi
 csleep 6
 

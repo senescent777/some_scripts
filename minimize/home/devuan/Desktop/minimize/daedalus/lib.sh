@@ -147,6 +147,8 @@ function check_binaries2() {
 	whack="${odio} ${whack} --signal 9 "
 	snt="${odio} ${snt} "
 	sharpy="${odio} ${sag} remove --purge --yes "
+
+	spd="${odio} ${sdi} -l "
 	sdi="${odio} ${sdi} -i "
 
 	#HUOM. ${sag} OLTAVA VIIMEISENÄ NÄISTÄ KOLMESDTA
@@ -157,9 +159,10 @@ function check_binaries2() {
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
 
-	#dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"; csleep 5
-	${scm} a-wx ~/Desktop/minimize/*.sh
-	${scm} a-wx ~/Desktop/minimize/*.conf
+	dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"
+	csleep 5
+	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
+	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
 
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "

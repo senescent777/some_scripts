@@ -1,5 +1,5 @@
 #!/bin/bash
-#VAIH:seur testaus haettujen .deb-pakettien suhteen
+#VAIH:seur testaus haettujen .deb-pakettien suhteen (180125 vain libev4 vaikutti uupuvan)
 
 d=$(dirname $0)
 #debug=1
@@ -33,12 +33,6 @@ function make_tar() {
 }
 
 function make_tar_15() {
-#	dqb "sa= ${sa}"
-#	csleep 5
-#
-	#dqb "shary= ${shary}"
-	#csleep 5
-
 	dqb "${fib}; ${asy}"
 	${fib} 
 	${asy} 
@@ -79,11 +73,13 @@ function make_tar_15() {
 	#${shary} adduser lsb-base ntpsec netbase python3 python3-ntp tzdata libbsd0 libcap2 libssl3 
 	[ $? -eq 0 ] || exit 3
 
-	#${shary} libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
+	#${shary} libev4 libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=stubby=1.6.0-3+b1
-	
+
+	${shary} libev4
 	${shary} libgetdns10 libbsd0 libidn2-0 libssl3 libunbound8 libyaml-0-2 #sotkeekohan libc6 uudelleenas tässä?
 	${shary} stubby
+
 	[ $? -eq 0 ] || exit 6
 	${lftr} 
 

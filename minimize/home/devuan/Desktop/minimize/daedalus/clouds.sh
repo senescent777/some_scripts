@@ -22,21 +22,21 @@ function csleep() {
 
 if [ -s /etc/resolv.conf.new ] || [ -s /etc/resolv.conf.OLD ] ; then 
 	${smr} /etc/resolv.conf
-	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT"
+	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
 fi
 
 if [ -s /etc/dhcp/dhclient.conf.new ] || [ -s /etc/dhcp/dhclient.conf.OLD ] ; then 
 	${smr} /etc/dhcp/dhclient.conf
-	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT"
+	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
 fi
 
 #ei välttis suhtaudu hyvin lib.sh:n alkuun, tulisi siirtää seur. if-blokin jölkeen
 if [ -s /sbin/dhclient-script.new ] || [ -s /sbin/dhclient-script.OLD ] ; then 
 	${smr} /sbin/dhclient-script
-	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT"
+	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
 fi
 
-[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT"
+[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
 
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
