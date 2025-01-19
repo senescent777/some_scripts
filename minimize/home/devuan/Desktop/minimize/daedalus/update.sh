@@ -26,13 +26,16 @@ else
 
 fi
 
+part=/dev/disk/by-uuid/${part0}
 debug=1
 [ x"${1}" == "x" ] && exit
 
 dqb "BEFORE"
 ${som} ${part} ${dir}
+[ $? -eq 0 ] || exit
+
 csleep 3
-${som} | grep ${part} 
+${som} | grep ${dir} 
 csleep 3
 
 e=$(dirname ${1})
@@ -53,7 +56,6 @@ fi
 
 dqb "AFTER"
 csleep 3
-${uom} ${part} 
+${uom} ${dir} 
 csleep 3
-${som} | grep ${part}
-
+${som} | grep ${dir}

@@ -126,7 +126,7 @@ ${asy}
 csleep 5
 
 ${lftr}
-${odio} shred -fu /var/cache/apt/archives/*.deb #$pkgdir
+${odio} shred -fu ${pkgdir}/*.deb 
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 

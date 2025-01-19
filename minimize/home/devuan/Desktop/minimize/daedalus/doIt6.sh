@@ -75,7 +75,7 @@ function pre_enforce() {
 
 	#jotain tolkkua tähän if-blokkiin olisi hyvä saada
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
-		sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
+		#sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
 		[ $? -eq 0 ] && dqb "a51a kun05a"
 	else	
 		dqb "sudo touch ${q}/meshuggah in 5 secs"
@@ -106,10 +106,10 @@ function pre_enforce() {
 		sudo mv ${q}/meshuggah /etc/sudoers.d
 	fi
 
-	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
+	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
-	#sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? ehkä ei
+	sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? let's find out
 	sudo chown -R root:root /etc/sudoers.d
 }
 
@@ -303,7 +303,8 @@ dqb "GR1DN BELIALAS KYE"
 sudo ${d}/clouds.sh 0
 csleep 5
 
-dqb "TODO: ${scm} a-wx $0 " #kerta tulisi riittää
+${scm} a-wx ~/Desktop/minimize/*.sh
+${scm} a-wx $0 #kerta tulisi riittää
 csleep 6
 
 #===================================================PART 4(final)==========================================================

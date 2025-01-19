@@ -53,10 +53,6 @@ function ocs() {
 		dqb "fråm ocs(): ${tmp} exists"
 	fi
 
-##-x file
-##              True if file exists and is executable.
-##
-
 	if [ -x ${tmp} ] ; then	
 		dqb "fråm ocs(): ${tmp} is executable"		
 	else
@@ -103,7 +99,6 @@ function check_binaries() {
 	sco=$(sudo which chown)
 	scm=$(sudo which chmod)
 	whack=$(sudo which pkill)
-
 	sag=$(sudo which apt-get)
 	sa=$(sudo which apt)
 	sip=$(sudo which ip)
@@ -114,7 +109,6 @@ function check_binaries() {
 	smr=$(sudo which rm)
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
-
 	srat=$(sudo which tar)
 
 	if [ ${debug} -eq 1 ] ; then
@@ -122,19 +116,18 @@ function check_binaries() {
 	fi
 
 	#HUOM. gpgtar olisi vähän parempi kuin pelkkä tar, silleen niinqu tavallaan
+
 	som=$(sudo which mount)
 	uom=$(sudo which umount)
 
 	dqb "half_fdone"
 	csleep 1
 
-
 	dch=$(find /sbin -name dhclient-script)
 	[ x"${dch}" == "x" ] && exit 6
 	[ -x ${dch} ] || exit 6
 
 #	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-
 	dqb "b1nar135 0k" 
 	csleep 3
 }
@@ -162,6 +155,7 @@ function check_binaries2() {
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
 
+	#miksi ei doit6 ajaessa tee noita juttuja alla?
 	dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"
 	csleep 5
 	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
@@ -182,9 +176,7 @@ function check_binaries2() {
 	fib="${odio} ${sa} --fix-broken install"
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
-
 	dch="${odio} ${dch}"
-
 	dqb "b1nar135.2 0k.2" 
 	csleep 3
 }
@@ -201,12 +193,10 @@ function mangle2() {
 
 ##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
 
-
 #function ns4() {
 #	dqb "ns4( ${1} )"
 #	[ z"{$1}" == "z" ] && exit 33
 #jospa kirjoittaisi /e/i.d alaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
-
 #	${scm} u+w /run
 #	${odio} touch /run/${1}.pid
 #	${scm} 0600 /run/${1}.pid

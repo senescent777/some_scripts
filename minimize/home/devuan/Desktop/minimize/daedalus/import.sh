@@ -3,14 +3,12 @@ d=$(dirname $0)
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
-	#debug=1
 	. ${d}/lib.sh
-
-	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
 else
 	srat="sudo /bin/tar"
 	som="sudo /bin/mount"
 	uom="sudo /bin/umount"
+	#HUOM.190125:part tarttisi myös, tai siis part0
 	dir=/mnt
 	odio=$(which sudo)
 	debug=1
@@ -26,6 +24,7 @@ else
 fi
 
 olddir=$(pwd)
+part=/dev/disk/by-uuid/${part0}
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
@@ -41,7 +40,8 @@ if [ $# -gt 0 ] ; then
 		-1)
 			${som} -o ro ${part} ${dir}
 			csleep 5
-			${som} | grep ${part}
+			${som} | grep ${dir}
+
 			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 		;;
 		0)
@@ -64,14 +64,10 @@ if [ $# -gt 0 ] ; then
 			part3 ${pkgdir}
 			csleep 3
 
-			#VAIH:jokin validiustark ennenq shred
-			#... tai tarvitseeko ko ko shred'iä tässä
-			#${odio} shred -fu ${pkgdir}/*.deb
 			[ ${debug} -eq 1 ] && ls -las  ${pkgdir}/*.deb			
 
 			csleep 3
 			cd ${olddir}
-
 			echo "NEXT: $0 2"
 		;;
 		1)
@@ -85,13 +81,13 @@ if [ $# -gt 0 ] ; then
 			${srat} -xpf ${2} 
 			csleep 3
 			cd ${olddir}
-
 			echo "NEXT: $0 2"
 		;;
 		2)
-			${uom} ${part}
+			${uom} ${dir}
 			csleep 3
-			${som} | grep ${part}
+			${som} | grep ${dir}
+
 			echo "NEXT: ${d}/doIt6.sh (maybe)"
 		;;
 		*)
