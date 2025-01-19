@@ -30,6 +30,7 @@ function make_tar() {
 	[ z"${1}" == "z" ] && exit
 
 	${scm} -R a-wx ~/Desktop/minimize/*
+	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/{daedalus,chimaera}
 	${scm} a+x ~/Desktop/minimize/{daedalus,chimaera}/*.sh
 
 	dqb "${srat} -cpf ${1}"
