@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/bash
 d=$(dirname $0)
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
@@ -11,5 +10,6 @@ else
 fi
 
 ${smr} /etc/sudoers.d/live
+#TODO:kjän ryhistä vielä sudo pois
 csleep 5
 ${whack} xfce* 
