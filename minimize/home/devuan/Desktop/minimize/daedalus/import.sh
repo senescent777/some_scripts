@@ -8,6 +8,7 @@ else
 	srat="sudo /bin/tar"
 	som="sudo /bin/mount"
 	uom="sudo /bin/umount"
+	scm="sudo /bin/chmod"
 	#HUOM.190125:part tarttisi myös, tai siis part0
 	dir=/mnt
 	odio=$(which sudo)
@@ -24,7 +25,7 @@ else
 fi
 
 olddir=$(pwd)
-part=/dev/disk/by-uuid/${part0}
+part=/dev/disk/by-uuid/${part0} #em. laitetedton olemassaolo kantsisi varmaan testata
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
@@ -36,6 +37,19 @@ dqb "b3f0r3 par51ng tha param5"
 csleep 5
 
 if [ $# -gt 0 ] ; then
+	function common_part() {
+		cd /
+		dqb "DEBUG:${srat} -xpf ${1} "
+		csleep 3
+		${srat} -xpf ${1}  
+		csleep 3
+
+		${scm} a-wx ~/Desktop/minimize/*
+		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
+		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/{daedalus,chimaera}
+		${scm} a+x ~/Desktop/minimize/{daedalus,chimaera}/*.sh
+	}
+
 	case "${1}" in
 		-1)
 			${som} -o ro ${part} ${dir}
@@ -54,11 +68,8 @@ if [ $# -gt 0 ] ; then
 			
 			dqb "${2} IJ"
 			csleep 3
-
-			cd /
-			${srat} -xpf ${2}  
-			csleep 3
-
+			common_part ${2}
+			
 			#daedaluksen kanssa pre ei vaikuttaisi olevan tarpeellinen, chimaeran kanssa vöib olla toinen juttu
 			pre_part3 ${pkgdir}
 			part3 ${pkgdir}
@@ -74,11 +85,9 @@ if [ $# -gt 0 ] ; then
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
 
-			dqb "${srat} -xpf ${2} in 3 secs"	
-			csleep 3
-
-			cd /
-			${srat} -xpf ${2} 
+			#dqb "${srat} -xpf ${2} in 3 secs"	
+			#csleep 3
+			common_part ${2}
 			csleep 3
 			cd ${olddir}
 			echo "NEXT: $0 2"

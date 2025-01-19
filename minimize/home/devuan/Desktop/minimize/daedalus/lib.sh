@@ -123,6 +123,7 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
+	#CB_list'iin mukaan vai ei? vai oliko jo?
 	dch=$(find /sbin -name dhclient-script)
 	[ x"${dch}" == "x" ] && exit 6
 	[ -x ${dch} ] || exit 6

@@ -1,5 +1,5 @@
 #!/bin/bash
-#VAIH:seur testaus haettujen .deb-pakettien suhteen (180125 vain libev4 vaikutti uupuvan)
+#HUOM. 190125: vissiin o0ikeat paketit löytyvät mutta jotain muuta kusee make_tar_fktioiden ulosteessa, asia selvitettävä jakorjattava
 
 d=$(dirname $0)
 #debug=1
@@ -28,10 +28,15 @@ function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
 	[ z"${1}" == "z" ] && exit
+
+	${scm} -R a-wx ~/Desktop/minimize/*
+	${scm} a+x ~/Desktop/minimize/{daedalus,chimaera}/*.sh
+
 	dqb "${srat} -cpf ${1}"
 	${srat} -cpf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby
 }
 
+#tässä oli pari potentaiaalista ongelmien aiheuttajaa
 function make_tar_15() {
 	dqb "${fib}; ${asy}"
 	${fib} 
@@ -84,10 +89,11 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	${srat} -cpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize #~/.gnupg /opt/bin
+	${srat} -rpf ${1} ${pkgdir}/*.deb #~/Desktop/minimize #~/.gnupg /opt/bin
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
+#tässäkin se -c -r:n sijaan voi sotkea 
 function make_tar_1_75() {
 	#echo "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	dqb "make_tar_1_75( ${1} )"	
