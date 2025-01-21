@@ -30,14 +30,14 @@ function make_tar() {
 	[ z"${1}" == "z" ] && exit
 
 	${scm} -R a-wx ~/Desktop/minimize/*
-	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/{daedalus,chimaera}
-	${scm} a+x ~/Desktop/minimize/{daedalus,chimaera}/*.sh
+	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
+	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
 	dqb "${srat} -cpf ${1}"
 	${srat} -cpf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby
 }
 
-#tässä oli pari potentaiaalista ongelmien aiheuttajaa
+#tässä oli pari potentiaalista ongelmien aiheuttajaa
 function make_tar_15() {
 	dqb "${fib}; ${asy}"
 	${fib} 
@@ -90,7 +90,7 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	${srat} -rpf ${1} ${pkgdir}/*.deb #~/Desktop/minimize #~/.gnupg /opt/bin
+	${srat} -rpf ${1} ${pkgdir}/*.deb
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
@@ -169,6 +169,7 @@ function make_tar2() {
 	${srat} -rpf ${1} ${p}/MANIFEST
 }
 
+#TODO:$1 ei-tyhjyydenm tesdtaus
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	dqb "${sagu}; ${sag} upgrade -u"

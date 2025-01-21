@@ -46,8 +46,8 @@ if [ $# -gt 0 ] ; then
 
 		${scm} a-wx ~/Desktop/minimize/*
 		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
-		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/{daedalus,chimaera}
-		${scm} a+x ~/Desktop/minimize/{daedalus,chimaera}/*.sh
+		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
+		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 	}
 
 	case "${1}" in

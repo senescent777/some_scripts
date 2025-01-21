@@ -10,6 +10,6 @@ else
 fi
 
 ${smr} /etc/sudoers.d/live
-#TODO:kjän ryhistä vielä sudo pois
+sudo usermod -G devuan,cdrom,floppy,audio,dip,video,plugdev,netdev devuan
 csleep 5
 ${whack} xfce* 
