@@ -39,7 +39,7 @@ function check_params() {
 }
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
-#HUOM.2. ei niitä {sco}-juttuja ao. fktioon
+#HUOM.2. ei niitä {sco}-juttuja ao. fktioon, varm vuoksi
 
 function mangle_s() {
 	local tgt
@@ -305,6 +305,7 @@ csleep 5
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
 ${scm} a-wx $0 #kerta tulisi riittää
+[ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
 csleep 6
 
 #===================================================PART 4(final)==========================================================

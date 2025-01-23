@@ -4,6 +4,7 @@ debug=0
 
 [ -s ${d}/lib.sh ] && . ${d}/lib.sh
 ${fib}
+g=$(date +%F)
 
 if [ $# -gt 0 ] ; then  
 	if [ "${1}" == "-v" ] ; then
@@ -12,6 +13,7 @@ if [ $# -gt 0 ] ; then
 fi
 
 [ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.1
+[ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
 csleep 5
 
 dqb "a-e"
