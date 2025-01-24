@@ -14,6 +14,9 @@ fi
 
 [ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.1
 [ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
+${scm} -R a-wx ~/Desktop/minimize/*.txt #vaiko find?
+${scm} a-wx ~/Desktop/minimize/${distro}/conf 
+${scm} a-wx ~/Desktop/minimize/${distro}/*.txt
 csleep 5
 
 dqb "a-e"

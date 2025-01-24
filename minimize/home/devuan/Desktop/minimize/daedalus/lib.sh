@@ -156,7 +156,7 @@ function check_binaries2() {
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
 
-	#miksi ei doit6 ajaessa tee noita juttuja alla?
+	#miksi ei doit6 ajaessa tee noita juttuja alla? vei tekeekö?
 	dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"
 	csleep 5
 	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
@@ -271,7 +271,7 @@ function part3() {
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-		${odio} shred -fu ${1}/*.deb #HUOM.150125: oli:lib*.deb
+		${odio} shred -fu ${1}/*.deb 
 	else
 	 	dqb "exit 67"
 	fi

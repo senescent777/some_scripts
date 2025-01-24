@@ -38,13 +38,14 @@ csleep 5
 
 if [ $# -gt 0 ] ; then
 	function common_part() {
+		#TODO:$1 ei.ty7hjyyden tarkists
 		cd /
 		dqb "DEBUG:${srat} -xpf ${1} "
 		csleep 3
 		${srat} -xpf ${1}  
 		csleep 3
 
-		${scm} a-wx ~/Desktop/minimize/*
+		${scm} -R a-wx ~/Desktop/minimize/*
 		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
