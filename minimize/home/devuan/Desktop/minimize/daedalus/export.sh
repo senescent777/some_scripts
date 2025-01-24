@@ -100,6 +100,11 @@ function make_tar_1_75() {
 	dqb "make_tar_1_75( ${1} )"	
 	csleep 1
 	
+	[ y"${1}" == "y" ] && exit 1
+	[ -s ${1} ] || exit 2
+	dqb "paramz_0k"
+	csleep 1
+
 	${srat} -rpf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rpf ${1} ${f} ; done
@@ -115,6 +120,11 @@ function make_tar_1_75() {
 #VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
+	csleep 1
+
+	[ y"${1}" == "y" ] && exit 1
+	[ -s ${1} ] || exit 2
+	dqb "paramz_0k"
 	csleep 1
 
 	local p
@@ -169,9 +179,15 @@ function make_tar2() {
 	${srat} -rpf ${1} ${p}/MANIFEST
 }
 
-#TODO:$1 ei-tyhjyydenm tesdtaus
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
+	csleep 1
+	
+	[ y"${1}" == "y" ] && exit 1
+	[ -s ${1} ] || exit 2
+	dqb "paramz_0k"
+	csleep 1
+
 	dqb "${sagu}; ${sag} upgrade -u"
 
 	${odio} shred -fu ${pkgdir}/*.deb 

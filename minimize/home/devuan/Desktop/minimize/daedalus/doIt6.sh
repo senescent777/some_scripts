@@ -10,6 +10,8 @@ else
 fi
 
 #VAIH:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko (dpkg:n listoja vertailtava)
+#(jos jo tänä vkonloppuna...)
+#
 #VAIH:/v/c/man-nalkutus, tee jotain (kts oikeudet ennen sorkkimista vs jälkeen)
 #180125:/tmp-jekku kai toimii jo
 
@@ -101,7 +103,7 @@ function pre_enforce() {
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
 		csleep 5
 
-		sudo chmod a-w ${q}/meshuggah
+		sudo chmod a-wx ${q}/meshuggah
 		sudo chown root:root ${q}/meshuggah	
 		sudo mv ${q}/meshuggah /etc/sudoers.d
 	fi
@@ -306,6 +308,7 @@ csleep 5
 ${scm} a-wx ~/Desktop/minimize/*.sh
 ${scm} a-wx $0 #kerta tulisi riittää
 [ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
+${scm} -R a-wx ~/Desktop/minimize/*.txt #vaiko find?
 csleep 6
 
 #===================================================PART 4(final)==========================================================

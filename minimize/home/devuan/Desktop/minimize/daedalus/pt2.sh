@@ -68,8 +68,8 @@ ${asy}
 ${lftr}
 csleep 5
 
-#lib-paketteihin ei yleisessä tapakauksessa kande koskea eikä live-
-#... libgstreamerja libgsm uutena (060125)
+#lib-paketteihin ei yleisessä tapauksessa kande koskea eikä live-
+#... libgstreamer ja libgsm uutena (060125)
 ${sharpy} libpoppler* libuno* libreoffice* libgsm* libgstreamer*
 
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!

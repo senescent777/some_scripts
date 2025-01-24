@@ -9,6 +9,8 @@ else
 	exit 111	
 fi
 
+#TODO:testaus
+
 ${smr} /etc/sudoers.d/live
 sudo usermod -G devuan,cdrom,floppy,audio,dip,video,plugdev,netdev devuan
 csleep 5

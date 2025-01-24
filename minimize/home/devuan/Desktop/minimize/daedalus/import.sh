@@ -38,7 +38,10 @@ csleep 5
 
 if [ $# -gt 0 ] ; then
 	function common_part() {
-		#TODO:$1 ei.ty7hjyyden tarkists
+		[ y"${1}" == "y" ] && exit 1
+		[ -s ${1} ] || exit 2
+		dqb "paramz_0k"
+
 		cd /
 		dqb "DEBUG:${srat} -xpf ${1} "
 		csleep 3
