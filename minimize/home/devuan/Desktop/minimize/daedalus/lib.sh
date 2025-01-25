@@ -125,10 +125,11 @@ function check_binaries() {
 
 	#CB_list'iin mukaan vai ei? vai oliko jo?
 	dch=$(find /sbin -name dhclient-script)
-	[ x"${dch}" == "x" ] && exit 6
-	[ -x ${dch} ] || exit 6
+	#[ x"${dch}" == "x" ] && exit 6
+	#[ -x ${dch} ] || exit 6
+	ocs dhclient-script
 
-#	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
+	#HUOM:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 	dqb "b1nar135 0k" 
 	csleep 3
 }

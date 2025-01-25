@@ -2,13 +2,11 @@
 d=$(dirname $0)
 debug=1
 
-#VAIH:tämä paska toimimaan 
+#VAIH:tämä paska toimimaan (tai jokin git-viritys olisi kanssa idea)
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
 	. ${d}/lib.sh
-
-	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
 else
 	som="sudo /bin/mount"
 	uom="sudo /bin/umount"

@@ -10,9 +10,12 @@ else
 fi
 
 #VAIH:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko (dpkg:n listoja vertailtava)
-#(jos jo tänä vkonloppuna...)
+#(jos jo tänä vkonloppuna...) (enforce oli nollla kun 24.1 , 1 kun 25.1)
+#(df'n uloste ennnen import.sh talteen)
 #
-#VAIH:/v/c/man-nalkutus, tee jotain (kts oikeudet ennen sorkkimista vs jälkeen)
+#VAIH:/v/c/man-nalkutus, tee jotain (kts oikeudet ennen sorkkimista vs jälkeen tai jos KVG CACHEDIR.TAG+/usr/bin/mandb)
+#... tai jos 250125 aikaiset chmod+chown toimisivat
+#
 #180125:/tmp-jekku kai toimii jo
 
 function parse_opts_1() {
@@ -76,10 +79,10 @@ function pre_enforce() {
 	q=$(mktemp -d)	
 
 	#jotain tolkkua tähän if-blokkiin olisi hyvä saada
-	if [ -f /etc/sudoers.d/meshuggah ] ; then
-		#sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
-		[ $? -eq 0 ] && dqb "a51a kun05a"
-	else	
+	#if [ -f /etc/sudoers.d/meshuggah ] ; then
+	#	#sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
+	#	[ $? -eq 0 ] && dqb "a51a kun05a"
+	#else	
 		dqb "sudo touch ${q}/meshuggah in 5 secs"
 		csleep 5
 		sudo touch ${q}/meshuggah
@@ -97,7 +100,7 @@ function pre_enforce() {
 	
 		#TODO:clouds: a) nimeäminen fiksummin 
 		for f in /etc/init.d/stubby ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
-	fi
+	#fi
 	
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
@@ -110,8 +113,8 @@ function pre_enforce() {
 
 	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	
-	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
-	sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? let's find out
+	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
+	sudo chmod 0750 /etc/sudoers.d #vissiin uskaltaa
 	sudo chown -R root:root /etc/sudoers.d
 }
 
@@ -137,7 +140,13 @@ function enforce_access() {
 		${scm} -R 0755 /sbin
 
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
-		#HUOM! ei sitten sorkita /etc sisältöä tässä!!!!
+		#HUOM! ei sitten sorkita /etc sisältöä tässä (?)
+
+		#jos ennen enfdorce-kohtaa kuiteskin nämä 3
+		for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+		for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+		for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+
 		${sco} -R root:root /etc
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
@@ -162,7 +171,10 @@ function enforce_access() {
 		
 		${sco} root:staff /var/local
 		${sco} root:mail /var/mail
-		#ainakin chmod vielä... (TODO)
+		#ainakin chmod vielä... tai vissiin ei ennää /v/c/m nalkuta 240125
+
+		${sco} man:man /var/cache/man
+		${scm}  0755 /var/cache/man
 
 		${scm} 0755 /
 		${sco} root:root /
@@ -308,7 +320,10 @@ csleep 5
 ${scm} a-wx ~/Desktop/minimize/*.sh
 ${scm} a-wx $0 #kerta tulisi riittää
 [ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
-${scm} -R a-wx ~/Desktop/minimize/*.txt #vaiko find?
+for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+
 csleep 6
 
 #===================================================PART 4(final)==========================================================
