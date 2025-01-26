@@ -43,7 +43,7 @@ function check_params() {
 
 function mangle_s() {
 	local tgt
-	[ y"${1}" == "y" ] && exit
+	[ y"${1}" == "y" ] && exit #-f - tark myös?
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
@@ -51,7 +51,7 @@ function mangle_s() {
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		#csleep 1
 		
-		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaamn tdstoon ei tartte kirjoittaa
+		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
 		sudo chown root:root ${1} 
 		#chattr +ui ${1}
 
@@ -109,7 +109,7 @@ function pre_enforce() {
 	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	
 	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
-	sudo chmod 0750 /etc/sudoers.d #vissiin uskaltaa
+	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
 }
 
@@ -120,18 +120,23 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
-	local n
-	n=$(whoami)
-
-	${scm} -R 0755 ~/Desktop/minimize #TODO:voisi kai vähän jyrkentää, kts import tai export
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
+
+	local n
+	n=$(whoami)
+	
 	local f
+	#${scm} -R 0755 ~/Desktop/minimize #VAIH:voisi kai vähän jyrkentää, kts import tai export
+	${scm} 0755 ~/Desktop/minimize	
+	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
+	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
+	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
-	for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
-	for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
-	for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
-
+	#for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+	#for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+	#for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+	
 	if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
 		echo "changing /sbin , /etc and /var 4 real"
 		${sco} -R root:root /sbin
@@ -151,7 +156,8 @@ function enforce_access() {
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
-		
+		${scm} -R 0755 /etc
+
 		#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
 		#pitäisi kai jotenkin huomioida:
 		#0 drwxrwsr-x 2 root staff   3 May 10  2023 local
@@ -159,7 +165,7 @@ function enforce_access() {
 		#0 drwxrwsr-x 2 root mail    3 Jul 20  2023 mail
 		
 		${sco} -R root:root /var
-		${scm} -R go-w /var #(0755 sittenkin?)
+		${scm} -R 0755 /var #oli go-w
 		
 		${sco} root:staff /var/local
 		${sco} root:mail /var/mail
@@ -311,10 +317,13 @@ csleep 5
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
 ${scm} a-wx $0 #kerta tulisi riittää
-[ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
-for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
-for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
-for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+
+if [ ${debug} -eq 1 ] ; then 
+	${scm} a-wx ${d}/pkgs*
+	for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+	for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+	for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+fi
 
 csleep 6
 

@@ -128,50 +128,50 @@ function make_tar2() {
 	csleep 1
 
 	local p
-#	local q	
-#	local tig
-#	tig=$(sudo which git)
-#	
-#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-#	csleep 1
-#
-#	if [ x"${tig}" == "x" ] ; then
-#		${shary} git
-#		[ $? -eq 0 ] || exit 7
-#	fi
-#
-#	csleep 5
-#	tig=$(sudo which git)
-#	[ -x ${tig} ] || exit 87
+	local q	
+	local tig
+	tig=$(sudo which git)
+	
+	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	csleep 1
+
+	ff [ x"${tig}" == "x" ] ; then
+		${shary} git
+		[ $? -eq 0 ] || exit 7
+	fi
+
+	csleep 5
+	tig=$(sudo which git)
+	[ -x ${tig} ] || exit 87
 
 	p=$(pwd)
 	dqb "p=${p}"
 
-#	dqb "q=$(mktemp -d)"
-#	q=$(mktemp -d)
-#
-#	echo "#dqb cd ${q}"
-#	cd ${q}
-#
-#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-#	csleep 1
-#
-#	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
-#	${tig} clone https://github.com/senescent777/project.git
-#(jospa siirtäöisi nuo project-jutut jonnekin muualle?)
-#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-#	csleep 1
-#
-#	cd project
-#	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
-#	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
-#	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
-#
-#	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp
-#	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
-#
-#	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
-#	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
+	dqb "q=$(mktemp -d)"
+	q=$(mktemp -d)
+
+	echo "#dqb cd ${q}"
+	cd ${q}
+
+	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	csleep 1
+
+	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
+	${tig} clone https://github.com/senescent777/project.git
+	#(jospa siirtäöisi nuo project-jutut jonnekin muualle?)
+	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	csleep 1
+
+	cd project
+	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
+	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
+	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
+
+	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp
+	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
+
+	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
+	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
 #	${srat} -rpf ${1} ./etc ./sbin
 	cd ${p}
 	
