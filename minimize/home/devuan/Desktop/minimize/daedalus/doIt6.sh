@@ -131,8 +131,11 @@ function enforce_access() {
 	${scm} -R 0755 ~/Desktop/minimize
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
-
 	local f
+
+	for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+	for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+	for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
 
 	if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
 		echo "changing /sbin , /etc and /var 4 real"
@@ -141,12 +144,6 @@ function enforce_access() {
 
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 		#HUOM! ei sitten sorkita /etc sisältöä tässä (?)
-
-		#jos ennen enfdorce-kohtaa kuiteskin nämä 3
-		for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
-		for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
-		for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
-
 		${sco} -R root:root /etc
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
@@ -171,10 +168,10 @@ function enforce_access() {
 		
 		${sco} root:staff /var/local
 		${sco} root:mail /var/mail
-		#ainakin chmod vielä... tai vissiin ei ennää /v/c/m nalkuta 240125
-
-		${sco} man:man /var/cache/man
-		${scm}  0755 /var/cache/man
+		
+		#jokohan alkaisi nalkutus loppua?
+		${sco} -R man:man /var/cache/man
+		${scm} -R 0755 /var/cache/man
 
 		${scm} 0755 /
 		${sco} root:root /
@@ -271,7 +268,7 @@ ${sharpy} po* pkexec
 ${lftr}
 csleep 3
 
-if [ y"${ipt}" != "y" ] ; then #muutkin vastaavat trark pitäisi katsoa uusiksi
+if [ y"${ipt}" != "y" ] ; then 
 	${ip6tr} /etc/iptables/rules.v6
 	${iptr} /etc/iptables/${tblz4}
 fi
