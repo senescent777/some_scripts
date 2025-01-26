@@ -135,7 +135,7 @@ function make_tar2() {
 	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 	csleep 1
 
-	ff [ x"${tig}" == "x" ] ; then
+	if [ x"${tig}" == "x" ] ; then
 		${shary} git
 		[ $? -eq 0 ] || exit 7
 	fi
