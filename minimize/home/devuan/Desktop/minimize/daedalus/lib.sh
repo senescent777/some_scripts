@@ -125,9 +125,10 @@ function check_binaries() {
 
 	#CB_list'iin mukaan vai ei? vai oliko jo?
 	dch=$(find /sbin -name dhclient-script)
-	#[ x"${dch}" == "x" ] && exit 6
-	#[ -x ${dch} ] || exit 6
-	ocs dhclient-script
+	[ x"${dch}" == "x" ] && exit 6
+	[ -x ${dch} ] || exit 6
+	#ocs dhclient-script
+	#enforce'en mukaan find -name dhclient-script* tjsp?
 
 	#HUOM:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 	dqb "b1nar135 0k" 
@@ -157,11 +158,11 @@ function check_binaries2() {
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
 
-	#miksi ei doit6 ajaessa tee noita juttuja alla? vei tekeekö?
 	dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"
 	csleep 5
 	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
 	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
+	#[ $debug -eq 1 ] && ls -las ~/Desktop/minimize;sleep 6
 
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "

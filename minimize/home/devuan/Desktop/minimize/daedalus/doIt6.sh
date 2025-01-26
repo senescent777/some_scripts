@@ -9,13 +9,8 @@ else
 	exit 111	
 fi
 
-#VAIH:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko (dpkg:n listoja vertailtava)
-#(jos jo tänä vkonloppuna...) (enforce oli nollla kun 24.1 , 1 kun 25.1)
-#(df'n uloste ennnen import.sh talteen)
-#
-#VAIH:/v/c/man-nalkutus, tee jotain (kts oikeudet ennen sorkkimista vs jälkeen tai jos KVG CACHEDIR.TAG+/usr/bin/mandb)
-#... tai jos 250125 aikaiset chmod+chown toimisivat
-#
+#HUOM. 260125: suattaapi olla niinnii jotta "80 megaa vs 180" ei liity suoraan paketteihin
+#DONE?:/v/c/man-nalkutus (sopisi olla ainakin)
 #180125:/tmp-jekku kai toimii jo
 
 function parse_opts_1() {
@@ -93,7 +88,7 @@ function pre_enforce() {
 		dqb "ANNOYING AMOUNT OF DEBUG"
 
 		sudo chown 1000:1000 ${q}/meshuggah
-		sudo chmod 0660 ${q}/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ? eikä a+w...
+		sudo chmod 0660 ${q}/meshuggah	
 
 		local f 
 		for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
@@ -128,7 +123,7 @@ function enforce_access() {
 	local n
 	n=$(whoami)
 
-	${scm} -R 0755 ~/Desktop/minimize
+	${scm} -R 0755 ~/Desktop/minimize #TODO:voisi kai vähän jyrkentää, kts import tai export
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
 	local f
@@ -164,13 +159,13 @@ function enforce_access() {
 		#0 drwxrwsr-x 2 root mail    3 Jul 20  2023 mail
 		
 		${sco} -R root:root /var
-		${scm} -R go-w /var
+		${scm} -R go-w /var #(0755 sittenkin?)
 		
 		${sco} root:staff /var/local
 		${sco} root:mail /var/mail
 		
 		#jokohan alkaisi nalkutus loppua?
-		${sco} -R man:man /var/cache/man
+		${sco} -R man:man /var/cache/man #man:  ? 
 		${scm} -R 0755 /var/cache/man
 
 		${scm} 0755 /
@@ -301,7 +296,7 @@ ${ip6tr} /etc/iptables/rules.v6
 if [ ${mode} -eq 1 ] ; then
 	#echo "passwd"
 	${odio} passwd
-	${whack} xfce* 
+	${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
 
 	exit 	
 fi
