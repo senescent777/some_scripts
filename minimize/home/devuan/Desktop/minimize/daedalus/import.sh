@@ -29,8 +29,8 @@ part=/dev/disk/by-uuid/${part0} #em. laitetedton olemassaolo kantsisi varmaan te
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
-if [ ! -s /OLD.tar ] ; then 
-	${srat} -cpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
+if [ ! -s /OLD.tar ] ; then #HUOM.260125: -p wttuun varm. vuoksi   
+	${srat} -cf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
 fi
 
 dqb "b3f0r3 par51ng tha param5"
@@ -43,9 +43,9 @@ if [ $# -gt 0 ] ; then
 		dqb "paramz_0k"
 
 		cd /
-		dqb "DEBUG:${srat} -xpf ${1} "
+		dqb "DEBUG:${srat} -xf ${1} "
 		csleep 3
-		${srat} -xpf ${1}  
+		${srat} -xf ${1} #HUOM.260125: -p wttuun varm. vuoksi  
 		csleep 3
 
 		${scm} -R a-wx ~/Desktop/minimize/*
@@ -88,7 +88,7 @@ if [ $# -gt 0 ] ; then
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
 
-			#dqb "${srat} -xpf ${2} in 3 secs"	
+			#dqb "${srat} -xf ${2} in 3 secs"	 #HUOM.260125: -p wttuun varm. vuoksi  
 			#csleep 3
 			common_part ${2}
 			csleep 3

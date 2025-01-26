@@ -122,20 +122,21 @@ function enforce_access() {
 
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
+	csleep 5
 
 	local n
 	n=$(whoami)
 	
 	local f
-	#${scm} -R 0755 ~/Desktop/minimize #VAIH:voisi kai vähän jyrkentää, kts import tai export
-	${scm} 0755 ~/Desktop/minimize	
-	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
-	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
-	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
+	${scm} -R 0755 ~/Desktop/minimize #VAIH:voisi kai vähän jyrkentää, kts import tai export
+	#${scm} 0755 ~/Desktop/minimize	
+	#for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
+	#for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
+	#${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
-	#for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
-	#for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
-	#for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+	for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+	for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+	for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
 	
 	if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
 		echo "changing /sbin , /etc and /var 4 real"
@@ -156,7 +157,7 @@ function enforce_access() {
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
-		${scm} -R 0755 /etc
+		#${scm} 0755 /etc meneekö tä'ssä kohtaa login-hommat vituiksi?
 
 		#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
 		#pitäisi kai jotenkin huomioida:
@@ -165,7 +166,7 @@ function enforce_access() {
 		#0 drwxrwsr-x 2 root mail    3 Jul 20  2023 mail
 		
 		${sco} -R root:root /var
-		${scm} -R 0755 /var #oli go-w
+		${scm} -R go-w /var #HUOM.260125: tässä go-w saattaa toimia, 0755 suattaa olla toimimatta   
 		
 		${sco} root:staff /var/local
 		${sco} root:mail /var/mail

@@ -9,7 +9,7 @@ else
 	exit 111	
 fi
 
-#HUOM.260215: ainakin onnistuu loggaamaan takaisin sisään tämän ajon jälkeen
+#260125: vaikuttaisi toimivan jnkn verran, ainakin sisään loggaus onnistuu
 
 ${smr} /etc/sudoers.d/live
 sudo usermod -G devuan,cdrom,floppy,audio,dip,video,plugdev,netdev devuan

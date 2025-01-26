@@ -33,8 +33,8 @@ function make_tar() {
 	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
-	dqb "${srat} -cpf ${1}"
-	${srat} -cpf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby
+	dqb "${srat} -cf ${1}"  #HUOM.260125: -p wttuun varm. vuoksi  
+	${srat} -cf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 }
 
 #tässä oli pari potentiaalista ongelmien aiheuttajaa
@@ -90,7 +90,7 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	${srat} -rpf ${1} ${pkgdir}/*.deb
+	${srat} -rf ${1} ${pkgdir}/*.deb  #HUOM.260125: -p wttuun varm. vuoksi  
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
@@ -105,13 +105,14 @@ function make_tar_1_75() {
 	dqb "paramz_0k"
 	csleep 1
 
-	${srat} -rpf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
+	 #HUOM.260125: -p wttuun varm. vuoksi  
+	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
-	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rpf ${1} ${f} ; done
-	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rpf ${1} ${f} ; done
+	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
+	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rf ${1} ${f} ; done
 
-	${srat} -rpf ${1} /etc/init.d/net*
-	${srat} -rpf ${1} /etc/rcS.d/S*net*
+	${srat} -rf ${1} /etc/init.d/net*
+	${srat} -rf ${1} /etc/rcS.d/S*net*
 	csleep 5
 }
 
@@ -172,11 +173,11 @@ function make_tar2() {
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
-#	${srat} -rpf ${1} ./etc ./sbin
+#	${srat} -rf ${1} ./etc ./sbin
 	cd ${p}
 	
 	${srat} -tf ${1} > MANIFEST
-	${srat} -rpf ${1} ${p}/MANIFEST
+	${srat} -rf ${1} ${p}/MANIFEST
 }
 
 function make_upgrade() {
@@ -203,7 +204,7 @@ function make_upgrade() {
 
 	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
-	${srat} -jcpf ${1} ${pkgdir}
+	${srat} -jcf ${1} ${pkgdir}
 
 	${sifd} ${iface}
 	sleep 1
