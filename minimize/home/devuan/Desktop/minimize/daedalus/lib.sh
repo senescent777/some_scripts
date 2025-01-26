@@ -4,6 +4,7 @@
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
+${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tyehdä tämä? no ainakin loppuu nalkutukset m,ahd aikaisin
 
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 

@@ -113,6 +113,7 @@ function pre_enforce() {
 	sudo chown -R root:root /etc/sudoers.d
 }
 
+#HUOM.260125: uskaltaisikohanjokupäivä kokeilla taas että enforce=1 
 function enforce_access() {
 	dqb "3nf0rc3_acc355()"
 
@@ -120,12 +121,12 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
+	#HUOM.260125: swaattopipa loginin pykiminen aihtutua alustamatt0omasta mjasta n (tai sit ei)
+	local n
+	n=$(whoami)
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
 	csleep 5
-
-	local n
-	n=$(whoami)
 	
 	local f
 	${scm} -R 0755 ~/Desktop/minimize #VAIH:voisi kai vähän jyrkentää, kts import tai export
@@ -157,7 +158,7 @@ function enforce_access() {
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
-		#${scm} 0755 /etc meneekö tä'ssä kohtaa login-hommat vituiksi?
+		#${scm} 0755 /etc 
 
 		#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
 		#pitäisi kai jotenkin huomioida:
@@ -172,7 +173,7 @@ function enforce_access() {
 		${sco} root:mail /var/mail
 		
 		#jokohan alkaisi nalkutus loppua?
-		${sco} -R man:man /var/cache/man #man:  ? 
+		${sco} -R man:man /var/cache/man 
 		${scm} -R 0755 /var/cache/man
 
 		${scm} 0755 /
@@ -250,9 +251,9 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
-[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
-#debug-syistä tuo yo. rivi
-csleep 6
+#[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
+##debug-syistä tuo yo. rivi
+#csleep 6
 
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
@@ -319,14 +320,14 @@ csleep 5
 ${scm} a-wx ~/Desktop/minimize/*.sh
 ${scm} a-wx $0 #kerta tulisi riittää
 
-if [ ${debug} -eq 1 ] ; then 
-	${scm} a-wx ${d}/pkgs*
-	for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
-	for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
-	for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
-fi
-
-csleep 6
+#if [ ${debug} -eq 1 ] ; then 
+#	${scm} a-wx ${d}/pkgs*
+#	for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+#	for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+#	for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+#fi
+#
+#csleep 6
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
