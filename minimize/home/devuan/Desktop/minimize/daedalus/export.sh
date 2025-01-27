@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #HUOM. 190125: vissiin o0ikeat paketit löytyvät mutta jotain muuta kusee make_tar_fktioiden ulosteessa, asia selvitettävä jakorjattava
-
+#280125: jospa muistaIsi testata -xvf vs -xvpf sen tar'in kanssa(TODO)
+#TODO:xfce-asetukset mukaan varm. vuoksi?
 
 d=$(dirname $0)
 #debug=1
@@ -31,7 +32,6 @@ function make_tar() {
 	csleep 1
 	[ z"${1}" == "z" ] && exit
 
-
 	${scm} -R a-wx ~/Desktop/minimize/*
 	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
@@ -41,7 +41,6 @@ function make_tar() {
 }
 
 #tässä oli pari potentiaalista ongelmien aiheuttajaa
-
 function make_tar_15() {
 	dqb "${fib}; ${asy}"
 	${fib} 
@@ -94,18 +93,16 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-
 	${srat} -rf ${1} ${pkgdir}/*.deb  #HUOM.260125: -p wttuun varm. vuoksi  
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
 #tässäkin se -c -r:n sijaan voi sotkea 
-
 function make_tar_1_75() {
 	#echo "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	dqb "make_tar_1_75( ${1} )"	
 	csleep 1
-
+	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
 	dqb "paramz_0k"
@@ -119,17 +116,15 @@ function make_tar_1_75() {
 
 	${srat} -rf ${1} /etc/init.d/net*
 	${srat} -rf ${1} /etc/rcS.d/S*net*
-
 	csleep 5
 }
 
-#TODO:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75
+#VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
-
 
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
@@ -153,10 +148,8 @@ function make_tar2() {
 	tig=$(sudo which git)
 	[ -x ${tig} ] || exit 87
 
-
 	p=$(pwd)
 	dqb "p=${p}"
-
 
 	dqb "q=$(mktemp -d)"
 	q=$(mktemp -d)
@@ -183,17 +176,15 @@ function make_tar2() {
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
-#	${srat} -rf ${1} ./etc ./sbin
+	${srat} -rf ${1} ./etc ./sbin #joskus varmaankin pois kommenteista
 	cd ${p}
 	
 	${srat} -tf ${1} > MANIFEST
 	${srat} -rf ${1} ${p}/MANIFEST
-
 }
 
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
-
 	csleep 1
 	
 	[ y"${1}" == "y" ] && exit 1
