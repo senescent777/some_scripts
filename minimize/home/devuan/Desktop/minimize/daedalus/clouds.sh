@@ -10,6 +10,8 @@ spc=$(sudo which cp)
 slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
+
+whack=$(sudo which pkill)
 debug=0
 
 function dqb() {
@@ -36,8 +38,6 @@ if [ -s /sbin/dhclient-script.new ] || [ -s /sbin/dhclient-script.OLD ] ; then
 	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
 fi
 
-[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
-
 
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
@@ -46,7 +46,7 @@ if [ y"${ipt}" == "y" ] ; then
 	. ./lib.sh #pitäisiköhän tässäkin olla se dirname-.jekku?
 	pre_part3 ${pkgdir}
 else
-	#töässö klohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
+	#tässä kohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
 
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
@@ -148,6 +148,10 @@ case ${1} in
 
 		echo "stu";sleep 2
 
+		${whack} stubby*
+		sleep 3	
+		
+
 		#VAIH:vissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
 		if [ ! -f /home/stubby/.ripuli ] ; then
 			ns2 stubby
@@ -156,8 +160,8 @@ case ${1} in
 			echo "N2S ALR3ADY D0N3"
 		fi
 
-
 		echo "#ns4 stubby"
+		start-stop-daemon -S --pidfile /run/stubby.pid --make-pidfile --background --chuid stubby --startas /usr/bin/stubby #-- -g
 		pgrep stubby
 	;;
 esac

@@ -5,6 +5,9 @@ odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
 
+${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tyehdä tämä? no ainakin loppuu nalkutukset m,ahd aikaisin
+
+
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
 function dqb() {
@@ -53,10 +56,6 @@ function ocs() {
 		dqb "fråm ocs(): ${tmp} exists"
 	fi
 
-##-x file
-##              True if file exists and is executable.
-##
-
 	if [ -x ${tmp} ] ; then	
 		dqb "fråm ocs(): ${tmp} is executable"		
 	else
@@ -100,10 +99,10 @@ function check_binaries() {
 		do ocs ${x} 
 	done
 
+
 	sco=$(sudo which chown)
 	scm=$(sudo which chmod)
 	whack=$(sudo which pkill)
-
 	sag=$(sudo which apt-get)
 	sa=$(sudo which apt)
 	sip=$(sudo which ip)
@@ -122,18 +121,22 @@ function check_binaries() {
 	fi
 
 	#HUOM. gpgtar olisi vähän parempi kuin pelkkä tar, silleen niinqu tavallaan
+
 	som=$(sudo which mount)
 	uom=$(sudo which umount)
 
 	dqb "half_fdone"
 	csleep 1
 
-
+	#CB_list'iin mukaan vai ei? vai oliko jo?
 	dch=$(find /sbin -name dhclient-script)
 	[ x"${dch}" == "x" ] && exit 6
 	[ -x ${dch} ] || exit 6
+	#ocs dhclient-script
+	#enforce'en mukaan find -name dhclient-script* tjsp?
 
-#	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
+
+	#HUOM:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 
 	dqb "b1nar135 0k" 
 	csleep 3
@@ -166,6 +169,8 @@ function check_binaries2() {
 	csleep 5
 	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
 	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
+	#[ $debug -eq 1 ] && ls -las ~/Desktop/minimize;sleep 6
+
 
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
@@ -280,7 +285,9 @@ function part3() {
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-		${odio} shred -fu ${1}/*.deb #HUOM.150125: oli:lib*.deb
+
+		${odio} shred -fu ${1}/*.deb 
+
 	else
 	 	dqb "exit 67"
 	fi

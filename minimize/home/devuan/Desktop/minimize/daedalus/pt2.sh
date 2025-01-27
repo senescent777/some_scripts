@@ -4,6 +4,7 @@ debug=0
 
 [ -s ${d}/lib.sh ] && . ${d}/lib.sh
 ${fib}
+g=$(date +%F)
 
 if [ $# -gt 0 ] ; then  
 	if [ "${1}" == "-v" ] ; then
@@ -12,8 +13,14 @@ if [ $# -gt 0 ] ; then
 fi
 
 
-[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.1
-csleep 5
+#[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.1
+#[ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
+#
+#for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+#for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+#for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+#csleep 5
+
 
 dqb "a-e"
 csleep 5
@@ -64,8 +71,8 @@ ${asy}
 ${lftr}
 csleep 5
 
-#lib-paketteihin ei yleisessä tapakauksessa kande koskea eikä live-
-#... libgstreamerja libgsm uutena (060125)
+#lib-paketteihin ei yleisessä tapauksessa kande koskea eikä live-
+#... libgstreamer ja libgsm uutena (060125)
 ${sharpy} libpoppler* libuno* libreoffice* libgsm* libgstreamer*
 
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
@@ -128,12 +135,21 @@ ${asy}
 csleep 5
 
 ${lftr}
-${odio} shred -fu /var/cache/apt/archives/*.deb
+${odio} shred -fu ${pkgdir}/*.deb 
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
-g=$(date +%F)
-[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.2
+
+#g=$(date +%F)
+#[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.2
+
+dqb "${scm} a-wx $0 in 6 secs "
+csleep 6
+${scm} a-wx $0 
+
+#whack xfce so that the ui is reset
+${whack} xfce*
+
 
 dqb "${scm} a-wx $0 in 6 secs "
 csleep 6

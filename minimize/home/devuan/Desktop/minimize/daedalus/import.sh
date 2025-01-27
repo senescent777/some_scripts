@@ -1,16 +1,16 @@
 #!/bin/bash
 d=$(dirname $0)
 
+
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
-	#debug=1
 	. ${d}/lib.sh
-
-	#echo "${scm} a-wx ~/Desktop/minimize/*.sh"
 else
 	srat="sudo /bin/tar"
 	som="sudo /bin/mount"
 	uom="sudo /bin/umount"
+	scm="sudo /bin/chmod"
+	#HUOM.190125:part tarttisi myös, tai siis part0
 	dir=/mnt
 	odio=$(which sudo)
 	debug=1
@@ -26,26 +26,48 @@ else
 fi
 
 olddir=$(pwd)
+part=/dev/disk/by-uuid/${part0} #em. laitetedton olemassaolo kantsisi varmaan testata
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
-if [ ! -s /OLD.tar ] ; then 
-	${srat} -cpf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
+if [ ! -s /OLD.tar ] ; then #HUOM.260125: -p wttuun varm. vuoksi   
+	${srat} -cf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
+
 fi
 
 dqb "b3f0r3 par51ng tha param5"
 csleep 5
 
 if [ $# -gt 0 ] ; then
+	function common_part() {
+		[ y"${1}" == "y" ] && exit 1
+		[ -s ${1} ] || exit 2
+		dqb "paramz_0k"
+
+		cd /
+		dqb "DEBUG:${srat} -xf ${1} "
+		csleep 3
+		${srat} -xf ${1} #HUOM.260125: -p wttuun varm. vuoksi  
+		csleep 3
+
+		${scm} -R a-wx ~/Desktop/minimize/*
+		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
+		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
+		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
+	}
+
+
 	case "${1}" in
 		-1)
 			${som} -o ro ${part} ${dir}
 			csleep 5
-			${som} | grep ${part}
+
+			${som} | grep ${dir}
+
 			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 		;;
 		0)
-			#jatkossa fktioon tämä?
+
 			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
 			dqb "KL"
 			csleep 3
@@ -55,18 +77,15 @@ if [ $# -gt 0 ] ; then
 			dqb "${2} IJ"
 			csleep 3
 
-			cd /
-			${srat} -xpf ${2}  
-			csleep 3
+			common_part ${2}
+			
 
 			#daedaluksen kanssa pre ei vaikuttaisi olevan tarpeellinen, chimaeran kanssa vöib olla toinen juttu
 			pre_part3 ${pkgdir}
 			part3 ${pkgdir}
 			csleep 3
 
-			#VAIH:jokin validiustark ennenq shred
-			#... tai tarvitseeko ko ko shred'iä tässä
-			#${odio} shred -fu ${pkgdir}/*.deb
+
 			[ ${debug} -eq 1 ] && ls -las  ${pkgdir}/*.deb			
 
 			csleep 3
@@ -78,20 +97,22 @@ if [ $# -gt 0 ] ; then
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
 
-			dqb "${srat} -xpf ${2} in 3 secs"	
-			csleep 3
 
-			cd /
-			${srat} -xpf ${2} 
+			#dqb "${srat} -xf ${2} in 3 secs"	 #HUOM.260125: -p wttuun varm. vuoksi  
+			#csleep 3
+			common_part ${2}
 			csleep 3
 			cd ${olddir}
 
 			echo "NEXT: $0 2"
 		;;
 		2)
-			${uom} ${part}
+			${uom} ${dir}
 			csleep 3
-			${som} | grep ${part}
+
+			${som} | grep ${dir}
+
+
 			echo "NEXT: ${d}/doIt6.sh (maybe)"
 		;;
 		*)

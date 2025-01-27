@@ -1,5 +1,4 @@
 #!/bin/bash
-
 d=$(dirname $0)
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
@@ -10,9 +9,10 @@ else
 	exit 111	
 fi
 
-#VAIH:selvitä miksi df:ssä 100 megan ero aiempaan (pt2d) tai siis toistuuko
-#VAIH:/v/c/man-nalkutus, tee jotain (kts oikeudet ennen sorkkimista vs jälkeen)
-#VAIH:sudon nalkutus yhdessä kohtaa (kun enforce=1) , vissiinkin se /tmp-jekku kokeiltava
+
+#HUOM. 260125: suattaapi olla niinnii jotta "80 megaa vs 180" ei liity suoraan paketteihin
+#DONE?:/v/c/man-nalkutus (sopisi olla ainakin)
+#180125:/tmp-jekku kai toimii jo
 
 
 function parse_opts_1() {
@@ -27,7 +27,6 @@ function parse_opts_1() {
 }
 
 
-#. ./lib.sh 
 #HUOM. mode otetaan jo parametriksi p_o_1:sessä, josko enforce kanssa?
  
 
@@ -44,27 +43,23 @@ function check_params() {
 }
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
-#HUOM.2. ei niitä {sco}-juttuja ao. fktioon
+
+#HUOM.2. ei niitä {sco}-juttuja ao. fktioon, varm vuoksi
 
 function mangle_s() {
 	local tgt
-	[ y"${1}" == "y" ] && exit
+	[ y"${1}" == "y" ] && exit #-f - tark myös?
+	tgt=${2}
+	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
-
-#	if [ y"${2}" == "y" ] ; then
-#		tgt=/etc/sudoers.d/meshuggah
-#	else
-#		#tgt=/etc/sudoers.d/${2}
-		tgt=${2}
-#	fi
-
-	echo "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		#csleep 1
 		
-		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaamn tdstoon ei tartte kirjoittaa
+
+		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
+
 		sudo chown root:root ${1} 
 		#chattr +ui ${1}
 
@@ -91,10 +86,13 @@ function pre_enforce() {
 	local q
 	q=$(mktemp -d)	
 
-	if [ -f /etc/sudoers.d/meshuggah ] ; then
-		sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
-		[ $? -eq 0 ] && dqb "a51a kun05a"
-	else	
+
+	#jotain tolkkua tähän if-blokkiin olisi hyvä saada
+	#if [ -f /etc/sudoers.d/meshuggah ] ; then
+	#	#sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
+	#	[ $? -eq 0 ] && dqb "a51a kun05a"
+	#else	
+
 		dqb "sudo touch ${q}/meshuggah in 5 secs"
 		csleep 5
 		sudo touch ${q}/meshuggah
@@ -105,33 +103,38 @@ function pre_enforce() {
 		dqb "ANNOYING AMOUNT OF DEBUG"
 
 		sudo chown 1000:1000 ${q}/meshuggah
-		sudo chmod 0660 ${q}/meshuggah	#tulisi kai olla u=rw,g=rw,o=r ? eikä a+w...
+
+		sudo chmod 0660 ${q}/meshuggah	
+
 
 		local f 
 		for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
 	
-		#TODO:clouds: a) nimeäminen fiksummin b) jotenkin toisin se sudoersiin lisäys
-		#VAIH:clouds.sh mukaan aivan toisella tavalla(se aiempi)	
+
+		#TODO:clouds: a) nimeäminen fiksummin 
 		for f in /etc/init.d/stubby ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
-	fi
+	#fi
+
 	
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
 		csleep 5
 
-		sudo chmod a-w ${q}/meshuggah
+
+		sudo chmod a-wx ${q}/meshuggah
 		sudo chown root:root ${q}/meshuggah	
 		sudo mv ${q}/meshuggah /etc/sudoers.d
 	fi
 
+	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 
-	#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	
-	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
-	#sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? ehkä ei
+	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
+	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
 }
 
+#HUOM.260125: uskaltaisikohanjokupäivä kokeilla taas että enforce=1 
 function enforce_access() {
 	dqb "3nf0rc3_acc355()"
 
@@ -139,22 +142,31 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
+	#HUOM.260125: swaattopipa loginin pykiminen aihtutua alustamatt0omasta mjasta n (tai sit ei)
 	local n
 	n=$(whoami)
-
-	${scm} -R 0755 ~/Desktop/minimize
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
-
+	csleep 5
+	
 	local f
+	${scm} -R 0755 ~/Desktop/minimize #VAIH:voisi kai vähän jyrkentää, kts import tai export
+	#${scm} 0755 ~/Desktop/minimize	
+	#for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
+	#for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
+	#${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
+	for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+	for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+	for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+	
 	if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
 		echo "changing /sbin , /etc and /var 4 real"
 		${sco} -R root:root /sbin
 		${scm} -R 0755 /sbin
 
 		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
-		#HUOM! ei sitten sorkita /etc sisältöä tässä!!!!
+		#HUOM! ei sitten sorkita /etc sisältöä tässä (?)
 		${sco} -R root:root /etc
 
 		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
@@ -163,13 +175,12 @@ function enforce_access() {
 
 		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
 			mangle2 ${f}
-
 			#csleep 1
-
 		done
 
 		#sudoersin sisältöä voisi kai tiukentaa kanssa
-		
+		#${scm} 0755 /etc 
+
 		#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
 		#pitäisi kai jotenkin huomioida:
 		#0 drwxrwsr-x 2 root staff   3 May 10  2023 local
@@ -177,7 +188,14 @@ function enforce_access() {
 		#0 drwxrwsr-x 2 root mail    3 Jul 20  2023 mail
 		
 		${sco} -R root:root /var
-		${scm} -R go-w /var
+		${scm} -R go-w /var #HUOM.260125: tässä go-w saattaa toimia, 0755 suattaa olla toimimatta   
+		
+		${sco} root:staff /var/local
+		${sco} root:mail /var/mail
+		
+		#jokohan alkaisi nalkutus loppua?
+		${sco} -R man:man /var/cache/man 
+		${scm} -R 0755 /var/cache/man
 
 		
 		${sco} root:staff /var/local
@@ -220,12 +238,12 @@ part1
 g=$(date +%F)
 
 
+#roiskisikohan nuo sources.list ja muut part1:seen?
+
+
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
 	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
 	csleep 5
-
-	#${scm} a+w /etc/apt #tarpeen?
-	
 
 	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
@@ -267,9 +285,9 @@ ${odio} /etc/init.d/ntpsec stop
 
 #===================================================PART 2===================================
 
-[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
-#debug-syistä tuo yo. rivi
-csleep 6
+#[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
+##debug-syistä tuo yo. rivi
+#csleep 6
 
 
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
@@ -290,7 +308,7 @@ ${lftr}
 csleep 3
 
 
-if [ y"${ipt}" != "y" ] ; then #muutkin vastaavat trark pitäisi katsoa uusiksi
+if [ y"${ipt}" != "y" ] ; then 
 	${ip6tr} /etc/iptables/rules.v6
 	${iptr} /etc/iptables/${tblz4}
 fi
@@ -319,11 +337,13 @@ echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
 
-#toimii miten toimii tämä if-blokki
+#toimii miten toimii tämä if-blokki (let's find out?)
 if [ ${mode} -eq 1 ] ; then
-	echo "passwd"
-	echo "${odio} passwd"
-	echo "${whack} xfce*" 
+	#echo "passwd"
+	${odio} passwd
+	${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
+
+
 	exit 	
 fi
 
@@ -336,9 +356,18 @@ dqb "GR1DN BELIALAS KYE"
 sudo ${d}/clouds.sh 0
 csleep 5
 
-dqb "${scm} a-wx $0 "
+${scm} a-wx ~/Desktop/minimize/*.sh
+${scm} a-wx $0 #kerta tulisi riittää
 
-csleep 6
+#if [ ${debug} -eq 1 ] ; then 
+#	${scm} a-wx ${d}/pkgs*
+#	for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
+#	for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
+#	for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
+#fi
+#
+#csleep 6
+
 
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä

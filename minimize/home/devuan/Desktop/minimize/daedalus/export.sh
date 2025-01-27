@@ -1,5 +1,7 @@
 #!/bin/bash
-#VAIH:seur testaus haettujen .deb-pakettien suhteen (180125 vain libev4 vaikutti uupuvan)
+
+#HUOM. 190125: vissiin o0ikeat paketit löytyvät mutta jotain muuta kusee make_tar_fktioiden ulosteessa, asia selvitettävä jakorjattava
+
 
 d=$(dirname $0)
 #debug=1
@@ -28,9 +30,17 @@ function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
 	[ z"${1}" == "z" ] && exit
-	dqb "${srat} -cpf ${1}"
-	${srat} -cpf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby
+
+
+	${scm} -R a-wx ~/Desktop/minimize/*
+	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
+	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
+
+	dqb "${srat} -cf ${1}"  #HUOM.260125: -p wttuun varm. vuoksi  
+	${srat} -cf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 }
+
+#tässä oli pari potentiaalista ongelmien aiheuttajaa
 
 function make_tar_15() {
 	dqb "${fib}; ${asy}"
@@ -84,22 +94,32 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	${srat} -cpf ${1} /var/cache/apt/archives/*.deb ~/Desktop/minimize #~/.gnupg /opt/bin
+
+	${srat} -rf ${1} ${pkgdir}/*.deb  #HUOM.260125: -p wttuun varm. vuoksi  
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
+
+#tässäkin se -c -r:n sijaan voi sotkea 
 
 function make_tar_1_75() {
 	#echo "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	dqb "make_tar_1_75( ${1} )"	
 	csleep 1
-	
-	${srat} -rpf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
-	
-	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rpf ${1} ${f} ; done
-	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rpf ${1} ${f} ; done
 
-	${srat} -rpf ${1} /etc/init.d/net*
-	${srat} -rpf ${1} /etc/rcS.d/S*net*
+	[ y"${1}" == "y" ] && exit 1
+	[ -s ${1} ] || exit 2
+	dqb "paramz_0k"
+	csleep 1
+
+	 #HUOM.260125: -p wttuun varm. vuoksi  
+	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
+	
+	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
+	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rf ${1} ${f} ; done
+
+	${srat} -rf ${1} /etc/init.d/net*
+	${srat} -rf ${1} /etc/rcS.d/S*net*
+
 	csleep 5
 }
 
@@ -110,60 +130,77 @@ function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
 
+
+	[ y"${1}" == "y" ] && exit 1
+	[ -s ${1} ] || exit 2
+	dqb "paramz_0k"
+	csleep 1
+
 	local p
-#	local q	
-#	local tig
-#	tig=$(sudo which git)
-#	
-#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-#	csleep 1
-#
-#	if [ x"${tig}" == "x" ] ; then
-#		${shary} git
-#		[ $? -eq 0 ] || exit 7
-#	fi
-#
-#	csleep 5
-#	tig=$(sudo which git)
-#	[ -x ${tig} ] || exit 87
+	local q	
+	local tig
+	tig=$(sudo which git)
+	
+	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	csleep 1
+
+	if [ x"${tig}" == "x" ] ; then
+		${shary} git
+		[ $? -eq 0 ] || exit 7
+	fi
+
+	csleep 5
+	tig=$(sudo which git)
+	[ -x ${tig} ] || exit 87
+
 
 	p=$(pwd)
 	dqb "p=${p}"
 
-#	dqb "q=$(mktemp -d)"
-#	q=$(mktemp -d)
-#
-#	echo "#dqb cd ${q}"
-#	cd ${q}
-#
-#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-#	csleep 1
-#
-#	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
-#	${tig} clone https://github.com/senescent777/project.git
-#(jospa siirtäöisi nuo project-jutut jonnekin muualle?)
-#	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-#	csleep 1
-#
-#	cd project
-#	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
-#	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
-#	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
-#
-#	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp
-#	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
-#
-#	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
-#	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
-#	${srat} -rpf ${1} ./etc ./sbin
+
+	dqb "q=$(mktemp -d)"
+	q=$(mktemp -d)
+
+	echo "#dqb cd ${q}"
+	cd ${q}
+
+	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	csleep 1
+
+	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
+	${tig} clone https://github.com/senescent777/project.git
+	#(jospa siirtäöisi nuo project-jutut jonnekin muualle?)
+	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	csleep 1
+
+	cd project
+	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
+	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
+	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
+
+	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp
+	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
+
+	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
+	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
+#	${srat} -rf ${1} ./etc ./sbin
 	cd ${p}
 	
 	${srat} -tf ${1} > MANIFEST
-	${srat} -rpf ${1} ${p}/MANIFEST
+	${srat} -rf ${1} ${p}/MANIFEST
+
 }
 
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
+
+	csleep 1
+	
+	[ y"${1}" == "y" ] && exit 1
+	[ -s ${1} ] || exit 2
+	dqb "paramz_0k"
+	csleep 1
+
 	dqb "${sagu}; ${sag} upgrade -u"
 
 	${odio} shred -fu ${pkgdir}/*.deb 
@@ -179,7 +216,7 @@ function make_upgrade() {
 
 	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
-	${srat} -jcpf ${1} ${pkgdir}
+	${srat} -jcf ${1} ${pkgdir}
 
 	${sifd} ${iface}
 	sleep 1
