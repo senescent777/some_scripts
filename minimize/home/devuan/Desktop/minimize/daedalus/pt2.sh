@@ -12,6 +12,7 @@ if [ $# -gt 0 ] ; then
 	fi
 fi
 
+
 #[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.1
 #[ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
 #
@@ -19,6 +20,7 @@ fi
 #for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
 #for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
 #csleep 5
+
 
 dqb "a-e"
 csleep 5
@@ -95,6 +97,7 @@ csleep 5
 #HUOM.080125 screen ei suostunut poistumaan yänään, joten...
 
 ${sharpy} pkexec po* refracta*
+
 #samba poistunee jo aiemmin?
 ${sharpy} squashfs-tools samba* system-config*
 ${asy} 
@@ -136,6 +139,7 @@ ${odio} shred -fu ${pkgdir}/*.deb
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
+
 #g=$(date +%F)
 #[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.2
 
@@ -147,3 +151,9 @@ ${scm} a-wx $0
 ${whack} xfce*
 
 
+dqb "${scm} a-wx $0 in 6 secs "
+csleep 6
+${scm} a-wx $0 
+
+#whack xfce so that the ui is reset
+${whack} xfce*
