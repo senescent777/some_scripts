@@ -72,6 +72,7 @@ function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	local q
 	q=$(mktemp -d)	
+	local f 
 
 	#jotain tolkkua tähän if-blokkiin olisi hyvä saada
 	#if [ -f /etc/sudoers.d/meshuggah ] ; then
@@ -90,7 +91,7 @@ function pre_enforce() {
 		sudo chown 1000:1000 ${q}/meshuggah
 		sudo chmod 0660 ${q}/meshuggah	
 
-		local f 
+		
 		for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
 	
 		#TODO:clouds: a) nimeäminen fiksummin 
@@ -111,6 +112,46 @@ function pre_enforce() {
 	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
+
+	echo "changing /sbin , /etc and /var 4 real"
+	${sco} -R root:root /sbin
+	${scm} -R 0755 /sbin
+
+	#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
+	#HUOM! ei sitten sorkita /etc sisältöä tässä (?)
+	${sco} -R root:root /etc
+
+	#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
+	#HUOM.080125:olikohan peräti tarpeellista että erikseen pre_e ja sitten tämä?		
+	for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
+
+	#"find: ‘/etc/sudoers.d/’: Permission denied" jotain tarttis tehrä
+	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
+		mangle2 ${f}
+		#csleep 1
+	done
+
+	#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
+	${scm} 0755 /etc 
+
+	#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
+	#pitäisi kai jotenkin huomioida:
+	#0 drwxrwsr-x 2 root staff   3 May 10  2023 local
+	#0 drwxr-xr-x 1 root root  360 Jan  8 21:46 log
+	#0 drwxrwsr-x 2 root mail    3 Jul 20  2023 mail
+		
+	${sco} -R root:root /var
+	${scm} -R 0755 /var
+
+	${sco} root:staff /var/local
+	${sco} root:mail /var/mail
+		
+	#jokohan alkaisi nalkutus loppua?
+	${sco} -R man:man /var/cache/man 
+	${scm} -R 0755 /var/cache/man
+
+	${scm} 0755 /
+	${sco} root:root /
 }
 
 #HUOM.270125.1: pelkkä enforce=1 viimeisimmän mergen mukaisissa skripteissä -> login ok
@@ -136,48 +177,6 @@ function enforce_access() {
 	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
 	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
 	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
-
-	if [ ${enforce} -eq 1 ] ; then #voisi tämä blokki kai olla siinä pre_enfoŕce'ssakin
-		echo "changing /sbin , /etc and /var 4 real"
-		${sco} -R root:root /sbin
-		${scm} -R 0755 /sbin
-
-		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
-		#HUOM! ei sitten sorkita /etc sisältöä tässä (?)
-		${sco} -R root:root /etc
-
-		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
-		#HUOM.080125:olikohan peräti tarpeellista että erikseen pre_e ja sitten tämä?		
-		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
-
-		#"find: ‘/etc/sudoers.d/’: Permission denied" jotain tarttis tehrä
-		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
-			mangle2 ${f}
-			#csleep 1
-		done
-
-		#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
-		${scm} 0755 /etc 
-
-		#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
-		#pitäisi kai jotenkin huomioida:
-		#0 drwxrwsr-x 2 root staff   3 May 10  2023 local
-		#0 drwxr-xr-x 1 root root  360 Jan  8 21:46 log
-		#0 drwxrwsr-x 2 root mail    3 Jul 20  2023 mail
-		
-		${sco} -R root:root /var
-		${scm} -R 0755 /var #HUOM.260125: tässä go-w saattaa toimia, 0755 suattaa olla toimimatta   
-		
-		${sco} root:staff /var/local
-		${sco} root:mail /var/mail
-		
-		#jokohan alkaisi nalkutus loppua?
-		${sco} -R man:man /var/cache/man 
-		${scm} -R 0755 /var/cache/man
-
-		${scm} 0755 /
-		${sco} root:root /
-	fi
 	
 	f=$(date +%F)
 	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
