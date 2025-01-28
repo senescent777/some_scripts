@@ -188,6 +188,10 @@ function enforce_access() {
 	fi
 
 	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
+
+	#HUOM.280125:uutena seur rivit, poista jos pykii
+	${scm} 0777 /tmp
+	${sco} root:root /tmp
 }
 
 #==================================PART 1============================================================

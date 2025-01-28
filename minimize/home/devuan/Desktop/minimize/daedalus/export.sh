@@ -1,8 +1,9 @@
 #!/bin/bash
 
-#HUOM. 190125: vissiin o0ikeat paketit löytyvät mutta jotain muuta kusee make_tar_fktioiden ulosteessa, asia selvitettävä jakorjattava
-#280125: jospa muistaIsi testata -xvf vs -xvpf sen tar'in kanssa(TODO)
+#HUOM. 190125: vissiin o0ikeat paketit löytyvät mutta jotain muuta kusee make_tar_fktioiden ulosteessa(ainaksin ne login-jutut), asia selvitettävä jakorjattava
+#280125: jospa muistaIsi testata -xvf vs -xvpf sen tar'in kanssa(VAIH, 270125 uudemman oksennuksen kanssa)
 #TODO:xfce-asetukset mukaan varm. vuoksi?
+#VAIH:/tmp sorkinta varm. vuoksi (siis import, doit6)
 
 d=$(dirname $0)
 #debug=1

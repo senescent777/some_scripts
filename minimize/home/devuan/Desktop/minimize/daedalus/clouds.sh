@@ -10,7 +10,6 @@ spc=$(sudo which cp)
 slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
-
 whack=$(sudo which pkill)
 debug=0
 
@@ -38,16 +37,13 @@ if [ -s /sbin/dhclient-script.new ] || [ -s /sbin/dhclient-script.OLD ] ; then
 	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
 fi
 
-
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35"
-
 	. ./lib.sh #pitäisiköhän tässäkin olla se dirname-.jekku?
 	pre_part3 ${pkgdir}
 else
 	#tässä kohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
-
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
 	sleep 3
@@ -70,7 +66,6 @@ function dda_snd() {
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
 }
 
-
 #VAIH:stubbyn asennus toimimaan taas (261224)
 function ns2() {
 	[ y"${1}" == "y" ] && exit
@@ -85,14 +80,13 @@ function ns2() {
 	sleep 3
 
 	${scm} go-w /home
-	${sco} -R ${1}:65534 /home/${1}/ #dtubby
+	${sco} -R ${1}:65534 /home/${1}/ #HUOM.280125: tässä saattaa mennä metsään ... tai sitten se /r/s.pid
 	dqb "d0n3"
 	csleep 4	
 
 	[ ${debug} -eq 1 ]  && ls -las /home
 	csleep 3
 }
-
 
 case ${1} in 
 	0)
@@ -101,9 +95,7 @@ case ${1} in
 		${spc} /sbin/dhclient-script.OLD /sbin/dhclient-script
 
 		if [ y"${ipt}" == "y" ] ; then
-
 			dqb "SHOULD 1NSTALL TABL35"
-
 		else
 			${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
 			${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
@@ -147,21 +139,27 @@ case ${1} in
 		pgrep dnsmasq
 
 		echo "stu";sleep 2
-
 		${whack} stubby*
 		sleep 3	
 		
+		#HUOM.280125: tietenkin pitäisi sen /r/stubby.pid oikeudet ja omistajat laitt5aa kuntoon(ns4), koklataannyt kuitenkin toisella tavalla ensin	
+		##VAIH:vissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
+		#if [ ! -f /home/stubby/.ripuli ] ; then
+		#	ns2 stubby
+		#	sudo touch /home/stubby/.ripuli
+		#else
+		#	echo "N2S ALR3ADY D0N3"
+		#fi
+		#
+		#echo "#ns4 stubby"
+		#start-stop-daemon -S --pidfile /run/stubby.pid --make-pidfile --background --chuid stubby --startas /usr/bin/stubby #-- -g
+		
+		[ -f /run/stubby.pid ] || sudo touch /run/stubby.pid
+		${sco} devuan:devuan /run/stubby.pid 
+		${scm} 0644  /run/stubby.pid 
+		sleep 3
 
-		#VAIH:vissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
-		if [ ! -f /home/stubby/.ripuli ] ; then
-			ns2 stubby
-			sudo touch /home/stubby/.ripuli
-		else
-			echo "N2S ALR3ADY D0N3"
-		fi
-
-		echo "#ns4 stubby"
-		start-stop-daemon -S --pidfile /run/stubby.pid --make-pidfile --background --chuid stubby --startas /usr/bin/stubby #-- -g
+		su devuan /usr/bin/stubby -C /home/stubby/.stubby.yml -g
 		pgrep stubby
 	;;
 esac
@@ -191,5 +189,4 @@ if [ ${debug} -eq 1 ] ; then
 	${ip6t} -L #
 	sleep 6
 fi #
-
 

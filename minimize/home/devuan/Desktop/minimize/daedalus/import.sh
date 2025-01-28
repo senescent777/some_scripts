@@ -1,7 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
 
-
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
 	. ${d}/lib.sh
@@ -32,7 +31,6 @@ csleep 5
 
 if [ ! -s /OLD.tar ] ; then #HUOM.260125: -p wttuun varm. vuoksi   
 	${srat} -cf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
-
 fi
 
 dqb "b3f0r3 par51ng tha param5"
@@ -54,20 +52,21 @@ if [ $# -gt 0 ] ; then
 		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
-	}
 
+		#HUOM.280125:uutena seur rivit, poista jos pykii
+		${scm} 0777 /tmp
+		${sco} root:root /tmp
+	}
 
 	case "${1}" in
 		-1)
 			${som} -o ro ${part} ${dir}
 			csleep 5
-
 			${som} | grep ${dir}
 
 			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 		;;
 		0)
-
 			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
 			dqb "KL"
 			csleep 3
@@ -76,42 +75,34 @@ if [ $# -gt 0 ] ; then
 			
 			dqb "${2} IJ"
 			csleep 3
-
 			common_part ${2}
 			
-
 			#daedaluksen kanssa pre ei vaikuttaisi olevan tarpeellinen, chimaeran kanssa vöib olla toinen juttu
 			pre_part3 ${pkgdir}
 			part3 ${pkgdir}
 			csleep 3
 
-
 			[ ${debug} -eq 1 ] && ls -las  ${pkgdir}/*.deb			
 
 			csleep 3
 			cd ${olddir}
-
 			echo "NEXT: $0 2"
 		;;
 		1)
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
 
-
 			#dqb "${srat} -xf ${2} in 3 secs"	 #HUOM.260125: -p wttuun varm. vuoksi  
 			#csleep 3
 			common_part ${2}
 			csleep 3
 			cd ${olddir}
-
 			echo "NEXT: $0 2"
 		;;
 		2)
 			${uom} ${dir}
 			csleep 3
-
 			${som} | grep ${dir}
-
 
 			echo "NEXT: ${d}/doIt6.sh (maybe)"
 		;;

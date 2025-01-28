@@ -4,9 +4,7 @@
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
-
 ${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tyehdä tämä? no ainakin loppuu nalkutukset m,ahd aikaisin
-
 
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
@@ -99,7 +97,6 @@ function check_binaries() {
 		do ocs ${x} 
 	done
 
-
 	sco=$(sudo which chown)
 	scm=$(sudo which chmod)
 	whack=$(sudo which pkill)
@@ -113,7 +110,6 @@ function check_binaries() {
 	smr=$(sudo which rm)
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
-
 	srat=$(sudo which tar)
 
 	if [ ${debug} -eq 1 ] ; then
@@ -135,9 +131,7 @@ function check_binaries() {
 	#ocs dhclient-script
 	#enforce'en mukaan find -name dhclient-script* tjsp?
 
-
 	#HUOM:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-
 	dqb "b1nar135 0k" 
 	csleep 3
 }
@@ -171,7 +165,6 @@ function check_binaries2() {
 	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
 	#[ $debug -eq 1 ] && ls -las ~/Desktop/minimize;sleep 6
 
-
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
 	sifu="${odio} ${sifu} "
@@ -187,9 +180,7 @@ function check_binaries2() {
 	fib="${odio} ${sa} --fix-broken install"
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
-
 	dch="${odio} ${dch}"
-
 	dqb "b1nar135.2 0k.2" 
 	csleep 3
 }
@@ -205,13 +196,11 @@ function mangle2() {
 }
 
 ##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-
-
+#HUOM.280125: ao. fktion kanssa piotäisi vissiin jotain tehdä vähitellen
 #function ns4() {
 #	dqb "ns4( ${1} )"
 #	[ z"{$1}" == "z" ] && exit 33
 #jospa kirjoittaisi /e/i.d alaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
-
 #	${scm} u+w /run
 #	${odio} touch /run/${1}.pid
 #	${scm} 0600 /run/${1}.pid
@@ -285,9 +274,7 @@ function part3() {
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-
 		${odio} shred -fu ${1}/*.deb 
-
 	else
 	 	dqb "exit 67"
 	fi
