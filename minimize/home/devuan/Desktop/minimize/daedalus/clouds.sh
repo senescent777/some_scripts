@@ -142,7 +142,7 @@ case ${1} in
 		${whack} stubby*
 		sleep 3	
 		
-		#HUOM.280125: tietenkin pitäisi sen /r/stubby.pid oikeudet ja omistajat laitt5aa kuntoon(ns4), koklataannyt kuitenkin toisella tavalla ensin	
+		#HUOM.280125: tietenkin pitäisi sen /r/stubby.pid oikeudet ja omistajat laitt5aa kuntoon, koklataannyt kuitenkin toisella tavalla ensin	
 		##VAIH:vissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
 		#if [ ! -f /home/stubby/.ripuli ] ; then
 		#	ns2 stubby
@@ -155,7 +155,7 @@ case ${1} in
 		#start-stop-daemon -S --pidfile /run/stubby.pid --make-pidfile --background --chuid stubby --startas /usr/bin/stubby #-- -g
 		
 		[ -f /run/stubby.pid ] || sudo touch /run/stubby.pid
-		${sco} devuan:devuan /run/stubby.pid 
+		${sco} devuan:devuan /run/stubby.pid #$n
 		${scm} 0644  /run/stubby.pid 
 		sleep 3
 

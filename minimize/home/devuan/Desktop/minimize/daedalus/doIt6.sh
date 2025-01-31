@@ -12,6 +12,7 @@ fi
 #HUOM. 260125: suattaapi olla niinnii jotta "80 megaa vs 180" ei liity suoraan paketteihin
 #DONE?:/v/c/man-nalkutus (sopisi olla ainakin)
 #180125:/tmp-jekku kai toimii jo
+n=$(whoami)
 
 function parse_opts_1() {
 	case "${1}" in
@@ -43,7 +44,7 @@ function check_params() {
 
 function mangle_s() {
 	local tgt
-	[ y"${1}" == "y" ] && exit #-f - tark myös?
+	[ y"${1}" == "y" ] && exit 
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
@@ -57,9 +58,9 @@ function mangle_s() {
 
 		#csleep 1
 		local s
-		local n
-
-		n=$(whoami) #olisi myös %users...
+		#local n
+#
+		#n=$(whoami) #olisi myös %users...
 		s=$(sha256sum ${1})
 		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
 		#sleep 1
@@ -74,7 +75,7 @@ function pre_enforce() {
 	q=$(mktemp -d)	
 	local f 
 
-	#jotain tolkkua tähän if-blokkiin olisi hyvä saada
+	#jotain tolkkua tähän if-blokkiin olisi hyvä saada(esim mv pois)
 	#if [ -f /etc/sudoers.d/meshuggah ] ; then
 	#	#sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
 	#	[ $? -eq 0 ] && dqb "a51a kun05a"
@@ -88,9 +89,8 @@ function pre_enforce() {
 		[ -f ${q}/meshuggah ] || exit
 		dqb "ANNOYING AMOUNT OF DEBUG"
 
-		sudo chown 1000:1000 ${q}/meshuggah
+		sudo chown 1000:1000 ${q}/meshuggah #$n
 		sudo chmod 0660 ${q}/meshuggah	
-
 		
 		for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
 	
@@ -166,11 +166,15 @@ function enforce_access() {
 	${scm} 0755 /home
 
 	#HUOM.260125: saattoipa loginin pykiminen aiheutua alustamatt0omasta mjasta n (tai sit ei)
-	local n
-	n=$(whoami)
-	dqb "${sco} -R ${n}:${n} ~"
-	${sco} -R ${n}:${n} ~
-	csleep 5
+	#local n
+	#n=$(whoami)
+
+	if [ y"${n}" != "y" ] ; then
+		#josko vielä testaisi että $n asetettu ylipäänsä
+		dqb "${sco} -R ${n}:${n} ~"
+		${sco} -R ${n}:${n} ~
+		csleep 5
+	fi
 	
 	local f
 	${scm} 0755 ~/Desktop/minimize	
@@ -230,6 +234,7 @@ if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä 
 	csleep 5
 fi
 
+#HUOM.310125: muista testata ainakin tässä kohtaa meneekö slim rikki
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
@@ -298,6 +303,7 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 pre_part3 ${pkgdir}
 part3 ${pkgdir}
+#HUOM.310125.2: jospa testin merkeissä tästäkinn kohtaa poikki 
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6

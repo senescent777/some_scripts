@@ -42,6 +42,7 @@ function make_tar() {
 }
 
 #tässä oli pari potentiaalista ongelmien aiheuttajaa
+#TODO:katso uudestaan että tämäkin hakee kaikki tarvittavat, jotain nalkutusta saattoi olla
 function make_tar_15() {
 	dqb "${fib}; ${asy}"
 	${fib} 
@@ -109,7 +110,7 @@ function make_tar_1_75() {
 	dqb "paramz_0k"
 	csleep 1
 
-	 #HUOM.260125: -p wttuun varm. vuoksi  
+	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
@@ -152,7 +153,7 @@ function make_tar2() {
 	p=$(pwd)
 	dqb "p=${p}"
 
-	dqb "q=$(mktemp -d)"
+	dqb "q=\$(mktemp -d)"
 	q=$(mktemp -d)
 
 	echo "#dqb cd ${q}"
@@ -177,7 +178,7 @@ function make_tar2() {
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
-	${srat} -rf ${1} ./etc ./sbin #joskus varmaankin pois kommenteista
+	${srat} -rf ${1} ./etc ./sbin 
 	cd ${p}
 	
 	${srat} -tf ${1} > MANIFEST
