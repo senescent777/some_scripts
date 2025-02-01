@@ -41,10 +41,18 @@ function pre_part3() {
 	${odio} dpkg -i ${1}/iptables-*.deb
 	[ $? -eq 0 ] && ${odio} shred -fu ${1}/iptables-*.deb
 
-	#uutena(vielä menossa arpajaiset että tartteeko asentaa vaiko poistaa)
-	#${odio} dpkg -i ${1}/libdbus*.deb
-	#[ $? -eq 0 ] && 
-	${odio} shred -fu ${1}/libdbus*.deb
+	echo "pp3.3"
+	##uutena(vielä menossa arpajaiset että tartteeko asentaa vaiko poistaa)
+	##${odio} dpkg -i ${1}/libdbus*.deb
+	##[ $? -eq 0 ] && 
+	#${odio} shred -fu ${1}/libdbus*.deb
+
+	#ao. versio aiheesta kopsattu tdstodts import.sh, pois jos pykii
+	sudo shred -fu ${1}/libpam*
+	sudo shred -fu ${1}/libperl*
+	sudo shred -fu ${1}/libdbus*
+	sudo shred -fu ${1}/dbus*
+	sudo shred -fu ${1}/perl*
 
 	dqb "pp3 d0n3"
 	csleep 5

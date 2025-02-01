@@ -27,6 +27,8 @@ else
 	}	
 fi
 
+debug=1
+
 function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
