@@ -261,7 +261,7 @@ ${odio} /etc/init.d/ntpsec stop
 #[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
 ##debug-syistä tuo yo. rivi
 #csleep 6
-
+${sharpy} color* #uutena 010225
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
 
@@ -302,19 +302,26 @@ echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 pre_part3 ${pkgdir}
+#${whack} xfce* 
+#exit 	#HUOM.0101225:tässä kohtaa vielä kirjautuminen takaisin sisään onnaa
+
 part3 ${pkgdir}
-#HUOM.310125.2: jospa testin merkeissä tästäkinn kohtaa poikki 
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
 
 #toimii miten toimii tämä if-blokki (let's find out?)
 if [ ${mode} -eq 1 ] ; then
-	#echo "passwd"
+	dqb "R (in 10 secs)"; csleep 10
 	${odio} passwd
-	${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
 
-	exit 	
+	dqb "L (in 10 secs)"; csleep 10
+	passwd
+
+	if [ $? -eq 0 ] ; then
+		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
+		exit 	
+	fi
 fi
 
 ${asy}

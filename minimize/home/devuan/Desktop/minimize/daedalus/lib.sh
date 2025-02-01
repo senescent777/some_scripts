@@ -40,6 +40,12 @@ function pre_part3() {
 
 	${odio} dpkg -i ${1}/iptables-*.deb
 	[ $? -eq 0 ] && ${odio} shred -fu ${1}/iptables-*.deb
+
+	#uutena(vielä menossa arpajaiset että tartteeko asentaa vaiko poistaa)
+	#${odio} dpkg -i ${1}/libdbus*.deb
+	#[ $? -eq 0 ] && 
+	${odio} shred -fu ${1}/libdbus*.deb
+
 	dqb "pp3 d0n3"
 	csleep 5
 }

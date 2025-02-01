@@ -42,7 +42,8 @@ function make_tar() {
 }
 
 #tässä oli pari potentiaalista ongelmien aiheuttajaa
-#TODO:katso uudestaan että tämäkin hakee kaikki tarvittavat, jotain nalkutusta saattoi olla
+#VAIH:katso uudestaan että tämäkin hakee kaikki tarvittavat, jotain nalkutusta saattoi olla
+#toimiva vs toimimaton tar, klantsisi vilkaista mikä ero
 function make_tar_15() {
 	dqb "${fib}; ${asy}"
 	${fib} 
@@ -69,7 +70,8 @@ function make_tar_15() {
 	csleep 5
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq-base=2.90-4~deb12u1
-	${shary} libdbus-1-3 libgmp10  libhogweed6 libidn2-0 libnettle8 
+	#${shary} libdbus-1-3 #sotkee asioita, kokeeksi jemmaan
+	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8 
 	
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.90-4~deb12u1 	
 	${shary} runit-helper
@@ -185,6 +187,7 @@ function make_tar2() {
 	${srat} -rf ${1} ${p}/MANIFEST
 }
 
+#TODO:libpam-modules-bin , libperl5.36, libdbus-1-3 , tarttisko tehdä niille jotain?
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	csleep 1
