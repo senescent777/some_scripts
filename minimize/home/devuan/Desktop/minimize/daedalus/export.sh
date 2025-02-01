@@ -2,10 +2,11 @@
 
 #HUOM. 190125: vissiin o0ikeat paketit löytyvät mutta jotain muuta kusee make_tar_fktioiden ulosteessa(ainaksin ne login-jutut), asia selvitettävä jakorjattava
 #280125: jospa muistaIsi testata -xvf vs -xvpf sen tar'in kanssa(VAIH, 270125 uudemman oksennuksen kanssa)
+#020225: joskohan olisi login-ongelmaan ratkaisu löytynyt
 #TODO:xfce-asetukset mukaan varm. vuoksi?
 
 d=$(dirname $0)
-debug=1
+#debug=1
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
@@ -27,7 +28,7 @@ else
 	}	
 fi
 
-debug=1
+#debug=1
 
 function make_tar() {
 	dqb "make_tar ( ${1} )"
@@ -43,8 +44,6 @@ function make_tar() {
 }
 
 #tässä oli pari potentiaalista ongelmien aiheuttajaa
-#VAIH:katso uudestaan että tämäkin hakee kaikki tarvittavat, jotain nalkutusta saattoi olla
-#vissiin jotain eroavaisuutta toimivan vs toimimattoman välillä löydetty
 function make_tar_15() {
 	dqb "make_tar_15( ${1})"
 	csleep 4
@@ -129,7 +128,7 @@ function make_tar_1_75() {
 	csleep 5
 }
 
-#VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75
+#VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai vaikka niin että jos ei tiettyjä tdstoja löydy ni ajertaan)
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
 function make_tar2() {
