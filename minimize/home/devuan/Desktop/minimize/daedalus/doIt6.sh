@@ -261,7 +261,7 @@ ${odio} /etc/init.d/ntpsec stop
 #[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
 ##debug-syistä tuo yo. rivi
 #csleep 6
-${sharpy} color* #uutena 010225
+#${sharpy} color* #uutena 010225 (P.S. voisi selvittää miksi xorg yritetään poistaa)
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
 

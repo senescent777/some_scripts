@@ -81,7 +81,7 @@ if [ $# -gt 0 ] ; then
 			pre_part3 ${pkgdir}
 			#VAIH:jhnkin sopivaan väliin: rm/shred $pkgdir/{libpam*,libperl*,libdbus*,dbus*} 
 			
-			sudo shred -fu ${pkgdir}/{libpam*,libperl*,libdbus*,dbus*}
+			sudo shred -fu ${pkgdir}/{libpam*,libperl*,libdbus*,dbus*, perl*}
 
 			part3 ${pkgdir}
 			csleep 3

@@ -5,7 +5,7 @@
 #TODO:xfce-asetukset mukaan varm. vuoksi?
 
 d=$(dirname $0)
-#debug=1
+debug=1
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
@@ -42,11 +42,14 @@ function make_tar() {
 
 #tässä oli pari potentiaalista ongelmien aiheuttajaa
 #VAIH:katso uudestaan että tämäkin hakee kaikki tarvittavat, jotain nalkutusta saattoi olla
-#vissiin jotain eroavaisuutta toimivan vs toikmimattoman välillä löydetty
+#vissiin jotain eroavaisuutta toimivan vs toimimattoman välillä löydetty
 function make_tar_15() {
-	dqb "${fib}; ${asy}"
-	${fib} 
-	${asy} 
+	dqb "make_tar_15( ${1})"
+	csleep 4
+	
+	#dqb "${fib}; ${asy}" #HUOM.010225: tilapåäisetsi pois tämä+seur 2 riviä kunnes sekoilu loppunut
+	#${fib} 
+	#${asy} 
 	
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
@@ -95,7 +98,10 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	${srat} -rf ${1} ${pkgdir}/*.deb  #HUOM.260125: -p wttuun varm. vuoksi  
+	#TODO:$1 epätyhjyyden varmistus ennen ajoa
+	${srat} -rf ${1} ${pkgdir}/*.deb  
+	#HUOM.260125: -p wttuun varm. vuoksi  
+
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
