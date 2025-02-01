@@ -89,7 +89,7 @@ function pre_enforce() {
 		[ -f ${q}/meshuggah ] || exit
 		dqb "ANNOYING AMOUNT OF DEBUG"
 
-		sudo chown 1000:1000 ${q}/meshuggah #$n
+		sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
 		sudo chmod 0660 ${q}/meshuggah	
 		
 		for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
@@ -312,10 +312,10 @@ ${ip6tr} /etc/iptables/rules.v6
 
 #toimii miten toimii tämä if-blokki (let's find out?)
 if [ ${mode} -eq 1 ] ; then
-	dqb "R (in 10 secs)"; csleep 10
+	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd
 
-	dqb "L (in 10 secs)"; csleep 10
+	dqb "L (in 6 secs)"; csleep 6
 	passwd
 
 	if [ $? -eq 0 ] ; then

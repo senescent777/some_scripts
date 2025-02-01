@@ -3,7 +3,6 @@
 #HUOM. 190125: vissiin o0ikeat paketit löytyvät mutta jotain muuta kusee make_tar_fktioiden ulosteessa(ainaksin ne login-jutut), asia selvitettävä jakorjattava
 #280125: jospa muistaIsi testata -xvf vs -xvpf sen tar'in kanssa(VAIH, 270125 uudemman oksennuksen kanssa)
 #TODO:xfce-asetukset mukaan varm. vuoksi?
-#VAIH:/tmp sorkinta varm. vuoksi (siis import, doit6)
 
 d=$(dirname $0)
 #debug=1
@@ -43,7 +42,7 @@ function make_tar() {
 
 #tässä oli pari potentiaalista ongelmien aiheuttajaa
 #VAIH:katso uudestaan että tämäkin hakee kaikki tarvittavat, jotain nalkutusta saattoi olla
-#toimiva vs toimimaton tar, klantsisi vilkaista mikä ero
+#vissiin jotain eroavaisuutta toimivan vs toikmimattoman välillä löydetty
 function make_tar_15() {
 	dqb "${fib}; ${asy}"
 	${fib} 
@@ -70,8 +69,8 @@ function make_tar_15() {
 	csleep 5
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq-base=2.90-4~deb12u1
-	#${shary} libdbus-1-3 #sotkee asioita, kokeeksi jemmaan
-	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8 
+	#${shary} libdbus-1-3 #tämä erhkö qsee asioita
+	${shary} libgmp10  libhogweed6 libidn2-0 libnettle8 
 	
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.90-4~deb12u1 	
 	${shary} runit-helper
@@ -86,7 +85,6 @@ function make_tar_15() {
 	#${shary} adduser lsb-base ntpsec netbase python3 python3-ntp tzdata libbsd0 libcap2 libssl3 
 	[ $? -eq 0 ] || exit 3
 
-	#${shary} libev4 libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=stubby=1.6.0-3+b1
 
 	${shary} libev4
@@ -187,7 +185,6 @@ function make_tar2() {
 	${srat} -rf ${1} ${p}/MANIFEST
 }
 
-#TODO:libpam-modules-bin , libperl5.36, libdbus-1-3 , tarttisko tehdä niille jotain?
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	csleep 1
