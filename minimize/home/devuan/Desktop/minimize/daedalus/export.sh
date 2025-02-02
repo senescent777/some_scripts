@@ -1,7 +1,9 @@
 #!/bin/bash
 
-#HUOM. 190125: vissiin o0ikeat paketit löytyvät mutta jotain muuta kusee make_tar_fktioiden ulosteessa, asia selvitettävä jakorjattava
-
+#HUOM. 190125: vissiin o0ikeat paketit löytyvät mutta jotain muuta kusee make_tar_fktioiden ulosteessa(ainaksin ne login-jutut), asia selvitettävä jakorjattava
+#280125: jospa muistaIsi testata -xvf vs -xvpf sen tar'in kanssa(VAIH, 270125 uudemman oksennuksen kanssa)
+#020225: joskohan olisi login-ongelmaan ratkaisu löytynyt
+#TODO:xfce-asetukset mukaan varm. vuoksi?
 
 d=$(dirname $0)
 #debug=1
@@ -26,11 +28,12 @@ else
 	}	
 fi
 
+#debug=1
+
 function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
 	[ z"${1}" == "z" ] && exit
-
 
 	${scm} -R a-wx ~/Desktop/minimize/*
 	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
@@ -43,9 +46,12 @@ function make_tar() {
 #tässä oli pari potentiaalista ongelmien aiheuttajaa
 
 function make_tar_15() {
-	dqb "${fib}; ${asy}"
-	${fib} 
-	${asy} 
+	dqb "make_tar_15( ${1})"
+	csleep 4
+	
+	#dqb "${fib}; ${asy}" #HUOM.010225: tilapåäisetsi pois tämä+seur 2 riviä kunnes sekoilu loppunut
+	#${fib} 
+	#${asy} 
 	
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
@@ -68,7 +74,8 @@ function make_tar_15() {
 	csleep 5
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq-base=2.90-4~deb12u1
-	${shary} libdbus-1-3 libgmp10  libhogweed6 libidn2-0 libnettle8 
+	#${shary} libdbus-1-3 #tämä erhkö qsee asioita
+	${shary} libgmp10  libhogweed6 libidn2-0 libnettle8 
 	
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.90-4~deb12u1 	
 	${shary} runit-helper
@@ -83,7 +90,6 @@ function make_tar_15() {
 	#${shary} adduser lsb-base ntpsec netbase python3 python3-ntp tzdata libbsd0 libcap2 libssl3 
 	[ $? -eq 0 ] || exit 3
 
-	#${shary} libev4 libgetdns10 libbsd0 libidn2-0 libssl1.1 libunbound8 libyaml-0-2 stubby
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=stubby=1.6.0-3+b1
 
 	${shary} libev4
@@ -94,8 +100,10 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
+	#TODO:$1 epätyhjyyden varmistus ennen ajoa
+	${srat} -rf ${1} ${pkgdir}/*.deb  
+	#HUOM.260125: -p wttuun varm. vuoksi  
 
-	${srat} -rf ${1} ${pkgdir}/*.deb  #HUOM.260125: -p wttuun varm. vuoksi  
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
@@ -114,6 +122,14 @@ function make_tar_1_75() {
 	 #HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
+	[ y"${1}" == "y" ] && exit 1
+	[ -s ${1} ] || exit 2
+	dqb "paramz_0k"
+	csleep 1
+
+	#HUOM.260125: -p wttuun varm. vuoksi  
+	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
+	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
 	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rf ${1} ${f} ; done
 
@@ -123,13 +139,12 @@ function make_tar_1_75() {
 	csleep 5
 }
 
-#TODO:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75
+#VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai vaikka niin että jos ei tiettyjä tdstoja löydy ni ajertaan)
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
-
 
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
@@ -156,9 +171,8 @@ function make_tar2() {
 
 	p=$(pwd)
 	dqb "p=${p}"
+	dqb "q=\$(mktemp -d)"
 
-
-	dqb "q=$(mktemp -d)"
 	q=$(mktemp -d)
 
 	echo "#dqb cd ${q}"
@@ -183,17 +197,17 @@ function make_tar2() {
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
-#	${srat} -rf ${1} ./etc ./sbin
+
+	${srat} -rf ${1} ./etc ./sbin 
+
 	cd ${p}
 	
 	${srat} -tf ${1} > MANIFEST
 	${srat} -rf ${1} ${p}/MANIFEST
-
 }
 
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
-
 	csleep 1
 	
 	[ y"${1}" == "y" ] && exit 1

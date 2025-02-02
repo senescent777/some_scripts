@@ -97,7 +97,6 @@ csleep 5
 #HUOM.080125 screen ei suostunut poistumaan yänään, joten...
 
 ${sharpy} pkexec po* refracta*
-
 #samba poistunee jo aiemmin?
 ${sharpy} squashfs-tools samba* system-config*
 ${asy} 
@@ -134,11 +133,16 @@ ${sharpy} xfburn
 ${asy} 
 csleep 5
 
+#dqb "å"
+#csleep 5
+#${sharpy} perl* #tämän kanssa aina jotain härdelliä
+#${asy} 
+#csleep 5
+
 ${lftr}
 ${odio} shred -fu ${pkgdir}/*.deb 
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
-
 
 #g=$(date +%F)
 #[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.2
@@ -151,9 +155,3 @@ ${scm} a-wx $0
 ${whack} xfce*
 
 
-dqb "${scm} a-wx $0 in 6 secs "
-csleep 6
-${scm} a-wx $0 
-
-#whack xfce so that the ui is reset
-${whack} xfce*
