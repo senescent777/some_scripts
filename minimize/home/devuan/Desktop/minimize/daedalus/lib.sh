@@ -107,6 +107,7 @@ function check_binaries() {
 	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} "
 	local x
 	
+	#TODO:passwd mukaan listaan?
 	for x in chown chmod pkill apt-get apt ip netstat dpkg ifup ifdown rm ln cp tar mount umount 
 		do ocs ${x} 
 	done

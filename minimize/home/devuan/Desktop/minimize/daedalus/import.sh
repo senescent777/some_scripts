@@ -55,7 +55,7 @@ if [ $# -gt 0 ] ; then
 
 		#HUOM.280125:uutena seur rivit, poista jos pykii
 		${scm} 0777 /tmp
-		${sco} root:root /tmp
+		${sco} root:root /tmp #oik. o=rwt mutta twx kai tarpeeksi hyvä useimpiin tarkoituksiin
 	}
 
 	case "${1}" in

@@ -15,3 +15,4 @@ ${smr} /etc/sudoers.d/live
 sudo usermod -G devuan,cdrom,floppy,audio,dip,video,plugdev,netdev devuan
 csleep 5
 ${whack} xfce* 
+#HUOM. mitähän tekisi /e/i.d/slim restart? let's find out?

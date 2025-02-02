@@ -10,7 +10,6 @@ spc=$(sudo which cp)
 slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
-
 whack=$(sudo which pkill)
 debug=0
 
@@ -38,7 +37,6 @@ if [ -s /sbin/dhclient-script.new ] || [ -s /sbin/dhclient-script.OLD ] ; then
 	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
 fi
 
-
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35"
@@ -46,7 +44,6 @@ if [ y"${ipt}" == "y" ] ; then
 	pre_part3 ${pkgdir}
 else
 	#tässä kohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
-
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
 	sleep 3
@@ -159,11 +156,10 @@ case ${1} in
 		
 		[ -f /run/stubby.pid ] || sudo touch /run/stubby.pid
 		${sco} devuan:devuan /run/stubby.pid #$n
-		${scm} 0644  /run/stubby.pid 
+		${scm} 0644 /run/stubby.pid 
 		sleep 3
 
 		su devuan /usr/bin/stubby -C /home/stubby/.stubby.yml -g
-
 		pgrep stubby
 	;;
 esac

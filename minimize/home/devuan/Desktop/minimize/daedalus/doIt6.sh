@@ -258,9 +258,27 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
+#HUOM.020225:vissiin toimii jo ao. blokki, sitten siirto aie3mmaksi ettei pakettien poistelu vain paskoisi slim:in toimintaa
+if [ ${mode} -eq 1 ] ; then
+	dqb "R (in 6 secs)"; csleep 6
+	${odio} passwd
+	
+	if [ $? -eq 0 ] ; then
+		dqb "L (in 6 secs)"; csleep 6
+		passwd
+	fi
+
+	if [ $? -eq 0 ] ; then
+		#HUOM. mitähän tekisi /e/i.d/slim restart? let's find out?
+		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
+		exit 	
+	fi
+fi
+
 #[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
 ##debug-syistä tuo yo. rivi
 #csleep 6
+
 #${sharpy} color* #uutena 010225 (P.S. voisi selvittää miksi xorg yritetään poistaa)
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
@@ -309,20 +327,6 @@ part3 ${pkgdir}
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
-
-#vissiin toimii jo ao. blokki, josko siirtäisi aiemmaksi
-if [ ${mode} -eq 1 ] ; then
-	dqb "R (in 6 secs)"; csleep 6
-	${odio} passwd
-
-	dqb "L (in 6 secs)"; csleep 6
-	passwd
-
-	if [ $? -eq 0 ] ; then
-		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
-		exit 	
-	fi
-fi
 
 ${asy}
 dqb "GR1DN BELIALAS KYE"
