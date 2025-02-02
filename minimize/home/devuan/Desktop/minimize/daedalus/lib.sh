@@ -5,7 +5,6 @@ odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
 ${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tyehdä tämä? no ainakin loppuu nalkutukset m,ahd aikaisin
-
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
 function dqb() {
@@ -111,6 +110,7 @@ function check_binaries() {
 		do ocs ${x} 
 	done
 
+
 	sco=$(sudo which chown)
 	scm=$(sudo which chmod)
 	whack=$(sudo which pkill)
@@ -178,6 +178,7 @@ function check_binaries2() {
 	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
 	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
 	#[ $debug -eq 1 ] && ls -las ~/Desktop/minimize;sleep 6
+
 
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
@@ -289,6 +290,7 @@ function part3() {
 		dqb "part3.2 ok"
 		sleep 5
 		${odio} shred -fu ${1}/*.deb 
+
 	else
 	 	dqb "exit 67"
 	fi

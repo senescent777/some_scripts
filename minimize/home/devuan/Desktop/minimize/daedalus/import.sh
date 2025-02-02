@@ -1,6 +1,7 @@
 #!/bin/bash
 d=$(dirname $0)
 
+
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
 	. ${d}/lib.sh
@@ -58,15 +59,18 @@ if [ $# -gt 0 ] ; then
 		${sco} root:root /tmp
 	}
 
+
 	case "${1}" in
 		-1)
 			${som} -o ro ${part} ${dir}
 			csleep 5
+
 			${som} | grep ${dir}
 
 			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 		;;
 		0)
+
 			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
 			dqb "KL"
 			csleep 3

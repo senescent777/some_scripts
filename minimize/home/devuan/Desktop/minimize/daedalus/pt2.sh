@@ -12,6 +12,7 @@ if [ $# -gt 0 ] ; then
 	fi
 fi
 
+
 #[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.1
 #[ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
 #
@@ -19,6 +20,7 @@ fi
 #for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
 #for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
 #csleep 5
+
 
 dqb "a-e"
 csleep 5

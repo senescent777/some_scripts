@@ -14,6 +14,7 @@ fi
 #180125:/tmp-jekku kai toimii jo
 n=$(whoami)
 
+
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -24,6 +25,7 @@ function parse_opts_1() {
 		;;
 	esac
 }
+
 
 #HUOM. mode otetaan jo parametriksi p_o_1:sessä, josko enforce kanssa?
  
@@ -40,18 +42,20 @@ function check_params() {
 }
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
+
 #HUOM.2. ei niitä {sco}-juttuja ao. fktioon, varm vuoksi
 
 function mangle_s() {
 	local tgt
+
 	[ y"${1}" == "y" ] && exit 
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
+
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		#csleep 1
-		
 		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
 		sudo chown root:root ${1} 
 		#chattr +ui ${1}
@@ -76,6 +80,7 @@ function pre_enforce() {
 	local f 
 
 	#jotain tolkkua tähän if-blokkiin olisi hyvä saada(esim mv pois)
+
 	#if [ -f /etc/sudoers.d/meshuggah ] ; then
 	#	#sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
 	#	[ $? -eq 0 ] && dqb "a51a kun05a"
@@ -97,6 +102,7 @@ function pre_enforce() {
 		#TODO:clouds: a) nimeäminen fiksummin 
 		for f in /etc/init.d/stubby ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
 	#fi
+
 	
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
@@ -130,6 +136,7 @@ function pre_enforce() {
 		mangle2 ${f}
 		#csleep 1
 	done
+
 
 	#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
 	${scm} 0755 /etc 
@@ -217,7 +224,7 @@ g=$(date +%F)
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
 	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
 	csleep 5
-	
+
 	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
 	sudo touch /etc/apt/sources.list
@@ -262,6 +269,7 @@ ${odio} /etc/init.d/ntpsec stop
 ##debug-syistä tuo yo. rivi
 #csleep 6
 #${sharpy} color* #uutena 010225 (P.S. voisi selvittää miksi xorg yritetään poistaa)
+
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
 
