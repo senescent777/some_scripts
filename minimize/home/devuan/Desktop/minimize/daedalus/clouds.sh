@@ -159,7 +159,7 @@ case ${1} in
 		${scm} 0644 /run/stubby.pid 
 		sleep 3
 
-		su devuan /usr/bin/stubby -C /home/stubby/.stubby.yml -g
+		su devuan -c '/usr/bin/stubby -C /home/stubby/.stubby.yml -g'
 		pgrep stubby
 	;;
 esac
