@@ -27,7 +27,7 @@ csleep 5
 ${sharpy} amd64-microcode iucode-tool arch-test at-spi2-core bubblewrap
 
 ${sharpy} atril* coinor* cryptsetup debootstrap
-${sharpy} dmidecode discover* dirmngr #tuleeekohan viimeisestä omngelma?
+${sharpy} dmidecode discover* dirmngr #tuleeekohan viimeisestä ongelma? vissiin ei
 ${sharpy} doc-debian docutils* 
 ${sharpy} efibootmgr exfalso 
 ${asy} 
@@ -42,7 +42,7 @@ ${asy}
 ${lftr}
 csleep 5
 
-#gnupg poisto täs kohtaa hyvä idea? vai veikö dirmngr mukanaan jo=
+#gnupg poisto täs kohtaa hyvä idea? vai veikö dirmngr mukanaan jo?
 dqb "g2"
 csleep 5
 ${sharpy} ghostscript gir* gnupg*
@@ -151,6 +151,6 @@ ${scm} a-wx $0
 
 #whack xfce so that the ui is reset
 ${whack} xfce*
-#HUOM. mitähän tekisi /e/i.d/slim restart? let's find out?
+#sössön sössön
 
 

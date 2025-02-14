@@ -4,7 +4,7 @@
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
-${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tyehdä tämä? no ainakin loppuu nalkutukset m,ahd aikaisin
+${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? no ainakin loppuu nalkutukset mahd aikaisin
 
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
@@ -48,6 +48,7 @@ function pre_part3() {
 	#${odio} shred -fu ${1}/libdbus*.deb
 
 	#ao. versio aiheesta kopsattu tdstodts import.sh, pois jos pykii
+	#TODO:josko koettaisi masennella nuo ao. paketit ennen varsinaista masxennusta	
 	sudo shred -fu ${1}/libpam*
 	sudo shred -fu ${1}/libperl*
 	sudo shred -fu ${1}/libdbus*
@@ -238,36 +239,8 @@ function mangle2() {
 #}
 #
 #=========================PART 0 ENDS HERE=================================================================
-#HUOM.120125: onko oltava juuri tässä tdstossa tämänb?
-function part1() {
-	#jos jokin näistä kolmesta hoitaisi homman...
-	${sifd} ${iface}
-	${sifd} -a
-	${sip} link set ${iface} down
 
-	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
-	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
-	if [ y"${ipt}" == "y" ] ; then
-		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-	else
-		for t in INPUT OUTPUT FORWARD ; do 
-			${ipt} -P ${t} DROP
-			${ip6t} -P ${t} DROP
-			${ip6t} -F ${t}
-		done
-
-		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
-
-		if [ ${debug} -eq 1 ] ; then
-			${ipt} -L #
-			${ip6t} -L #
-			sleep 5 
-		fi #
-	
-		
-	fi
-}
 
 function part3() {
 	[ y"${1}" == "y" ] && exit 1
