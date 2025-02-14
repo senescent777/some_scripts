@@ -43,6 +43,7 @@ function make_tar() {
 
 #tässä oli pari potentiaalista ongelmien aiheuttajaa
 #HUOM.020225:vissiin kunnossa pakettien nuoto nyt 
+#HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin...
 function make_tar_15() {
 	dqb "make_tar_15( ${1})"
 	csleep 4

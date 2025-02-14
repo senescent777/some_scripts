@@ -46,17 +46,35 @@ function pre_part3() {
 	##${odio} dpkg -i ${1}/libdbus*.deb
 	##[ $? -eq 0 ] && 
 	#${odio} shred -fu ${1}/libdbus*.deb
+	dqb "pp3 d0n3"
+	csleep 5
+}
 
+pr4() {
 	#ao. versio aiheesta kopsattu tdstodts import.sh, pois jos pykii
-	#TODO:josko koettaisi masennella nuo ao. paketit ennen varsinaista masxennusta	
+	#VAIH:josko koettaisi masennella nuo ao. paketit ennen varsinaista masxennusta	
+	echo "${odio} dpkg -i ${1}/libpam-modules-bin_*.deb"
+	echo "${odio} dpkg -i ${1}/libpam-modules_*.deb"
+	echo "sudo shred -fu ${1}/libpam-modules*"
+	echo "${odio} dpkg -i ${1}/libpam*.deb"
+
+	echo "${odio} dpkg -i ${1}/perl-modules-*.deb libperl*.deb"
+	echo "sudo shred -fu ${1}/perl-modules-*.deb libperl*.deb"
+
+	echo "${odio} dpkg -i ${1}/perl*.deb"
+	echo "sudo shred -fu ${1}/perl*.deb"
+
+	echo "${odio} dpkg -i ${1}/libdbus*.deb"
+	echo "sudo shred -fu ${1}/libdbus*.deb"
+
+	echo "${odio} dpkg -i ${1}/dbus*.deb"
+	echo "sudo shred -fu ${1}/dbus*.deb"
+
 	sudo shred -fu ${1}/libpam*
 	sudo shred -fu ${1}/libperl*
 	sudo shred -fu ${1}/libdbus*
 	sudo shred -fu ${1}/dbus*
 	sudo shred -fu ${1}/perl*
-
-	dqb "pp3 d0n3"
-	csleep 5
 }
 
 function ocs() {
@@ -92,6 +110,7 @@ function check_binaries() {
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
 		pre_part3 ${pkgdir}
+		pr4 ${pkgdir}
 
 		ipt=$(sudo which iptables)
 		ip6t=$(sudo which ip6tables)

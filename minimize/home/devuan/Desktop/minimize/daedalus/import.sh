@@ -78,6 +78,7 @@ if [ $# -gt 0 ] ; then
 			common_part ${2}
 			
 			pre_part3 ${pkgdir}
+			pr4 ${pkgdir}
 			part3 ${pkgdir}
 			csleep 3
 
