@@ -53,22 +53,24 @@ function pre_part3() {
 pr4() {
 	#ao. versio aiheesta kopsattu tdstodts import.sh, pois jos pykii
 	#VAIH:josko koettaisi masennella nuo ao. paketit ennen varsinaista masxennusta	
-	echo "${odio} dpkg -i ${1}/libpam-modules-bin_*.deb"
-	echo "${odio} dpkg -i ${1}/libpam-modules_*.deb"
-	echo "sudo shred -fu ${1}/libpam-modules*"
-	echo "${odio} dpkg -i ${1}/libpam*.deb"
+	${odio} dpkg -i ${1}/libpam-modules-bin_*.deb
+	${odio} dpkg -i ${1}/libpam-modules_*.deb
+	sudo shred -fu ${1}/libpam-modules*
+	sleep 5
+	${odio} dpkg -i ${1}/libpam*.deb
 
-	echo "${odio} dpkg -i ${1}/perl-modules-*.deb libperl*.deb"
-	echo "sudo shred -fu ${1}/perl-modules-*.deb libperl*.deb"
+	${odio} dpkg -i ${1}/perl-modules-*.deb libperl*.deb
+	sudo shred -fu ${1}/perl-modules-*.deb libperl*.deb
+	sleep 5
 
-	echo "${odio} dpkg -i ${1}/perl*.deb"
-	echo "sudo shred -fu ${1}/perl*.deb"
+	${odio} dpkg -i ${1}/perl*.deb
+	#echo "sudo shred -fu ${1}/perl*.deb"
 
-	echo "${odio} dpkg -i ${1}/libdbus*.deb"
-	echo "sudo shred -fu ${1}/libdbus*.deb"
+	${odio} dpkg -i ${1}/libdbus*.deb
+	#echo "sudo shred -fu ${1}/libdbus*.deb"
 
-	echo "${odio} dpkg -i ${1}/dbus*.deb"
-	echo "sudo shred -fu ${1}/dbus*.deb"
+	${odio} dpkg -i ${1}/dbus*.deb
+	#echo "sudo shred -fu ${1}/dbus*.deb"
 
 	sudo shred -fu ${1}/libpam*
 	sudo shred -fu ${1}/libperl*

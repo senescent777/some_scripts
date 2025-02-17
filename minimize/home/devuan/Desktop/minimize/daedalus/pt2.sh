@@ -23,11 +23,11 @@ fi
 dqb "a-e"
 csleep 5
 
-#HUOM. ao. rivillä viimeisessä syystä vain core
+#HUOM. ao. rivillä 2. viimeisessä syystä vain core
 ${sharpy} amd64-microcode iucode-tool arch-test at-spi2-core bubblewrap
 
 ${sharpy} atril* coinor* cryptsetup debootstrap
-${sharpy} dmidecode discover* dirmngr #tuleeekohan viimeisestä ongelma? vissiin ei
+${sharpy} dmidecode discover* dirmngr #tuleekohan viimeisestä ongelma? vissiin ei
 ${sharpy} doc-debian docutils* 
 ${sharpy} efibootmgr exfalso 
 ${asy} 
