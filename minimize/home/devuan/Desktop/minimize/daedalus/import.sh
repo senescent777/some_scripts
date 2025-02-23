@@ -53,6 +53,7 @@ if [ $# -gt 0 ] ; then
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
+
 		#HUOM.280125:uutena seur rivit, poista jos pykii
 		${scm} 0777 /tmp
 		${sco} root:root /tmp #oik. o=rwt mutta twx kai tarpeeksi hyvä useimpiin tarkoituksiin
@@ -77,8 +78,10 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
+
 			pre_part3 ${pkgdir}
 			pr4 ${pkgdir}
+
 			part3 ${pkgdir}
 			csleep 3
 
@@ -91,6 +94,7 @@ if [ $# -gt 0 ] ; then
 		1)
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
+
 
 			common_part ${2}
 			csleep 3

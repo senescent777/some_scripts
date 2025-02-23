@@ -14,6 +14,7 @@ fi
 #180125:/tmp-jekku kai toimii jo
 n=$(whoami)
 
+
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -44,6 +45,7 @@ function check_params() {
 
 function mangle_s() {
 	local tgt
+
 	[ y"${1}" == "y" ] && exit 
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
@@ -51,7 +53,7 @@ function mangle_s() {
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		#csleep 1
-		
+
 		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
 		sudo chown root:root ${1} 
 		#chattr +ui ${1}
@@ -76,6 +78,7 @@ function pre_enforce() {
 	local f 
 
 	#jotain tolkkua tähän if-blokkiin olisi hyvä saada(esim mv pois)
+
 	#if [ -f /etc/sudoers.d/meshuggah ] ; then
 	#	#sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
 	#	[ $? -eq 0 ] && dqb "a51a kun05a"
@@ -113,13 +116,16 @@ function pre_enforce() {
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
 
+
 	echo "changing /sbin , /etc and /var 4 real"
 	${sco} -R root:root /sbin
 	${scm} -R 0755 /sbin
 
+
 	#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 	#HUOM! ei sitten sorkita /etc sisältöä tässä (?)
 	${sco} -R root:root /etc
+
 
 	#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
 	#HUOM.080125:olikohan peräti tarpeellista että erikseen pre_e ja sitten tämä?		
@@ -168,6 +174,7 @@ function enforce_access() {
 	#HUOM.260125: saattoipa loginin pykiminen aiheutua alustamatt0omasta mjasta n (tai sit ei)
 	#local n
 	#n=$(whoami)
+
 
 	if [ y"${n}" != "y" ] ; then
 		#josko vielä testaisi että $n asetettu ylipäänsä
@@ -309,6 +316,7 @@ fi
 #csleep 6
 
 #${sharpy} color* #uutena 010225 (P.S. voisi selvittää miksi xorg yritetään poistaa)
+
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
 
@@ -351,14 +359,17 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 #VAIH:p3, pp3 liittyviä muutox, josko nuo yhdet paketit kuitenkin saisi asennettua
 #TODO:kohtapuoliimn myytoksia ao. riveille
 pre_part3 ${pkgdir}
+
 pr4 ${pkgdir}
 #${whack} xfce* 
 #exit 	#HUOM.0101225:tässä kohtaa vielä kirjautuminen takaisin sisään onnaa
+
 part3 ${pkgdir}
 
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
+
 
 ${asy}
 dqb "GR1DN BELIALAS KYE"

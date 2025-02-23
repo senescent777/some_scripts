@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #HUOM.020225: sopisi olla slim:in login.ongelmat korjattu nyt
+
 #TODO:xfce-asetukset mukaan varm. vuoksi?
 
 d=$(dirname $0)
@@ -78,7 +79,9 @@ function make_tar_15() {
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq-base=2.90-4~deb12u1
 	#${shary} libdbus-1-3 #tämä erhkö qsee asioita
+
 	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8 
+
 	
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.90-4~deb12u1 	
 	${shary} runit-helper
@@ -104,7 +107,11 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
+
 	#TODO:jatkossa mv  ${pkgdir}/*.deb  ~/Desktop/minimize/${distro} ; $rat -rf  ~/Desktop/minimize/${distro}/*.deb
+
+
+
 	${srat} -rf ${1} ${pkgdir}/*.deb  
 	#HUOM.260125: -p wttuun varm. vuoksi  
 
@@ -125,6 +132,14 @@ function make_tar_1_75() {
 	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
+	[ y"${1}" == "y" ] && exit 1
+	[ -s ${1} ] || exit 2
+	dqb "paramz_0k"
+	csleep 1
+
+	#HUOM.260125: -p wttuun varm. vuoksi  
+	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
+	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
 	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rf ${1} ${f} ; done
 
@@ -133,7 +148,9 @@ function make_tar_1_75() {
 	csleep 5
 }
 
+
 #VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai niin että ajetaan m,ikäli joitain tiedostoja puuttuu)
+
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
 function make_tar2() {
@@ -164,8 +181,11 @@ function make_tar2() {
 
 	p=$(pwd)
 	dqb "p=${p}"
+	dqb "q=\$(mktemp -d)"
+
 
 	dqb "q=\$(mktemp -d)"
+
 	q=$(mktemp -d)
 
 	echo "#dqb cd ${q}"
@@ -190,7 +210,9 @@ function make_tar2() {
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
+
 	${srat} -rf ${1} ./etc ./sbin 
+
 	cd ${p}
 	
 	${srat} -tf ${1} > MANIFEST

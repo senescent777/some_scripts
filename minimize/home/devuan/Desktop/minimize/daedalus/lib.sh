@@ -4,7 +4,9 @@
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
+
 ${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? no ainakin loppuu nalkutukset mahd aikaisin
+
 
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
@@ -46,6 +48,7 @@ function pre_part3() {
 	##${odio} dpkg -i ${1}/libdbus*.deb
 	##[ $? -eq 0 ] && 
 	#${odio} shred -fu ${1}/libdbus*.deb
+
 	dqb "pp3 d0n3"
 	csleep 5
 }
