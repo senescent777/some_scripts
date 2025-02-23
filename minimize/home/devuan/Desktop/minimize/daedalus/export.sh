@@ -104,7 +104,7 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	
+	#TODO:jatkossa mv  ${pkgdir}/*.deb  ~/Desktop/minimize/${distro} ; $rat -rf  ~/Desktop/minimize/${distro}/*.deb
 	${srat} -rf ${1} ${pkgdir}/*.deb  
 	#HUOM.260125: -p wttuun varm. vuoksi  
 

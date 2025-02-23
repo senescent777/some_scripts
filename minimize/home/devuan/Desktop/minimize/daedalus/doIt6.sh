@@ -349,12 +349,13 @@ echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 #VAIH:p3, pp3 liittyviä muutox, josko nuo yhdet paketit kuitenkin saisi asennettua
+#TODO:kohtapuoliimn myytoksia ao. riveille
 pre_part3 ${pkgdir}
 pr4 ${pkgdir}
 #${whack} xfce* 
 #exit 	#HUOM.0101225:tässä kohtaa vielä kirjautuminen takaisin sisään onnaa
-
 part3 ${pkgdir}
+
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
