@@ -1,11 +1,15 @@
 #!/bin/bash
 
-iface=eth0 
-enforce=0
-debug=0
-pkgdir=/var/cache/apt/archives
-tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
-mode=2
+d=$(dirname $0)
+
+if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
+	. ${d}/conf
+	. ${d}/lib.sh
+else
+	echo "TO CONTINUE FURTHER IS POINTLESS, ESSENTIAL FILES MISSING"
+	exit 111	
+fi
+
 
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
@@ -21,7 +25,7 @@ function parse_opts_1() {
 	esac
 }
 
-. ./lib
+#. ./lib
 
 function check_params() {
 	case ${debug} in
@@ -234,6 +238,15 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 ${sdi} ${pkgdir}/dns-root-data*.deb 
 [ $? -eq 0 ] && ${smr} -rf ${pkgdir}/dns-root-data*.deb 
 part3
+
+#näiden kanssa ongelmia:
+# libbsd0:amd64
+# libgetdns10:amd64
+# libnftnl11:amd64
+# libssl3:amd64
+# libunbound8:amd64
+# libxtables12:amd64
+#pp3 hoitamaan? tai joa paketit minimize-hmiston alihakemistoihin?
 
 #toimii miten toimii tämä if-blokki
 if [ ${mode} -eq 1 ] ; then

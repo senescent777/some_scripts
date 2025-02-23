@@ -26,7 +26,6 @@ function parse_opts_1() {
 	esac
 }
 
-
 #HUOM. mode otetaan jo parametriksi p_o_1:sessä, josko enforce kanssa?
  
 function check_params() {
@@ -42,7 +41,6 @@ function check_params() {
 }
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
-
 #HUOM.2. ei niitä {sco}-juttuja ao. fktioon, varm vuoksi
 
 function mangle_s() {
@@ -52,10 +50,10 @@ function mangle_s() {
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
-
 	if [ -s ${1} ] ; then 
 		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
 		#csleep 1
+
 		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
 		sudo chown root:root ${1} 
 		#chattr +ui ${1}
@@ -102,7 +100,6 @@ function pre_enforce() {
 		#TODO:clouds: a) nimeäminen fiksummin 
 		for f in /etc/init.d/stubby ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
 	#fi
-
 	
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
@@ -119,13 +116,16 @@ function pre_enforce() {
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
 
+
 	echo "changing /sbin , /etc and /var 4 real"
 	${sco} -R root:root /sbin
 	${scm} -R 0755 /sbin
 
+
 	#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
 	#HUOM! ei sitten sorkita /etc sisältöä tässä (?)
 	${sco} -R root:root /etc
+
 
 	#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
 	#HUOM.080125:olikohan peräti tarpeellista että erikseen pre_e ja sitten tämä?		
@@ -136,7 +136,6 @@ function pre_enforce() {
 		mangle2 ${f}
 		#csleep 1
 	done
-
 
 	#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
 	${scm} 0755 /etc 
@@ -176,6 +175,7 @@ function enforce_access() {
 	#local n
 	#n=$(whoami)
 
+
 	if [ y"${n}" != "y" ] ; then
 		#josko vielä testaisi että $n asetettu ylipäänsä
 		dqb "${sco} -R ${n}:${n} ~"
@@ -206,6 +206,35 @@ function enforce_access() {
 }
 
 #==================================PART 1============================================================
+function part1() {
+	#jos jokin näistä kolmesta hoitaisi homman...
+	${sifd} ${iface}
+	${sifd} -a
+	${sip} link set ${iface} down
+
+	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
+	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
+
+	if [ y"${ipt}" == "y" ] ; then
+		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+	else
+		for t in INPUT OUTPUT FORWARD ; do 
+			${ipt} -P ${t} DROP
+			${ip6t} -P ${t} DROP
+			${ip6t} -F ${t}
+		done
+
+		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
+
+		if [ ${debug} -eq 1 ] ; then
+			${ipt} -L #
+			${ip6t} -L #
+			sleep 5 
+		fi #
+	
+		
+	fi
+}
 
 if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
@@ -224,7 +253,7 @@ g=$(date +%F)
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
 	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
 	csleep 5
-
+	
 	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
 	sudo touch /etc/apt/sources.list
@@ -265,9 +294,27 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
+#HUOM.020225:vissiin toimii jo ao. blokki, sitten siirto aie3mmaksi ettei pakettien poistelu vain paskoisi slim:in toimintaa
+if [ ${mode} -eq 1 ] ; then
+	dqb "R (in 6 secs)"; csleep 6
+	${odio} passwd
+	
+	if [ $? -eq 0 ] ; then
+		dqb "L (in 6 secs)"; csleep 6
+		passwd
+	fi
+
+	if [ $? -eq 0 ] ; then
+		#HUOM. mitähän tekisi /e/i.d/slim restart? let's find out?
+		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
+		exit 	
+	fi
+fi
+
 #[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
 ##debug-syistä tuo yo. rivi
 #csleep 6
+
 #${sharpy} color* #uutena 010225 (P.S. voisi selvittää miksi xorg yritetään poistaa)
 
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
@@ -309,28 +356,20 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
+#VAIH:p3, pp3 liittyviä muutox, josko nuo yhdet paketit kuitenkin saisi asennettua
+#TODO:kohtapuoliimn myytoksia ao. riveille
 pre_part3 ${pkgdir}
+
+pr4 ${pkgdir}
 #${whack} xfce* 
 #exit 	#HUOM.0101225:tässä kohtaa vielä kirjautuminen takaisin sisään onnaa
 
 part3 ${pkgdir}
+
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
 
-#toimii miten toimii tämä if-blokki (let's find out?)
-if [ ${mode} -eq 1 ] ; then
-	dqb "R (in 6 secs)"; csleep 6
-	${odio} passwd
-
-	dqb "L (in 6 secs)"; csleep 6
-	passwd
-
-	if [ $? -eq 0 ] ; then
-		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
-		exit 	
-	fi
-fi
 
 ${asy}
 dqb "GR1DN BELIALAS KYE"

@@ -4,7 +4,10 @@
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
-${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tyehdä tämä? no ainakin loppuu nalkutukset m,ahd aikaisin
+
+${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? no ainakin loppuu nalkutukset mahd aikaisin
+
+
 #Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
 function dqb() {
@@ -46,15 +49,37 @@ function pre_part3() {
 	##[ $? -eq 0 ] && 
 	#${odio} shred -fu ${1}/libdbus*.deb
 
+	dqb "pp3 d0n3"
+	csleep 5
+}
+
+pr4() {
 	#ao. versio aiheesta kopsattu tdstodts import.sh, pois jos pykii
+	#VAIH:josko koettaisi masennella nuo ao. paketit ennen varsinaista masxennusta	
+	${odio} dpkg -i ${1}/libpam-modules-bin_*.deb
+	${odio} dpkg -i ${1}/libpam-modules_*.deb
+	sudo shred -fu ${1}/libpam-modules*
+	sleep 5
+	${odio} dpkg -i ${1}/libpam*.deb
+
+	${odio} dpkg -i ${1}/perl-modules-*.deb libperl*.deb
+	sudo shred -fu ${1}/perl-modules-*.deb libperl*.deb
+	sleep 5
+
+	${odio} dpkg -i ${1}/perl*.deb
+	#echo "sudo shred -fu ${1}/perl*.deb"
+
+	${odio} dpkg -i ${1}/libdbus*.deb
+	#echo "sudo shred -fu ${1}/libdbus*.deb"
+
+	${odio} dpkg -i ${1}/dbus*.deb
+	#echo "sudo shred -fu ${1}/dbus*.deb"
+
 	sudo shred -fu ${1}/libpam*
 	sudo shred -fu ${1}/libperl*
 	sudo shred -fu ${1}/libdbus*
 	sudo shred -fu ${1}/dbus*
 	sudo shred -fu ${1}/perl*
-
-	dqb "pp3 d0n3"
-	csleep 5
 }
 
 function ocs() {
@@ -90,6 +115,7 @@ function check_binaries() {
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
 		pre_part3 ${pkgdir}
+		pr4 ${pkgdir}
 
 		ipt=$(sudo which iptables)
 		ip6t=$(sudo which ip6tables)
@@ -106,10 +132,10 @@ function check_binaries() {
 	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} "
 	local x
 	
+	#TODO:passwd mukaan listaan?
 	for x in chown chmod pkill apt-get apt ip netstat dpkg ifup ifdown rm ln cp tar mount umount 
 		do ocs ${x} 
 	done
-
 
 	sco=$(sudo which chown)
 	scm=$(sudo which chmod)
@@ -179,7 +205,6 @@ function check_binaries2() {
 	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
 	#[ $debug -eq 1 ] && ls -las ~/Desktop/minimize;sleep 6
 
-
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
 	sifu="${odio} ${sifu} "
@@ -238,36 +263,8 @@ function mangle2() {
 #}
 #
 #=========================PART 0 ENDS HERE=================================================================
-#HUOM.120125: onko oltava juuri tässä tdstossa tämänb?
-function part1() {
-	#jos jokin näistä kolmesta hoitaisi homman...
-	${sifd} ${iface}
-	${sifd} -a
-	${sip} link set ${iface} down
 
-	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
-	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
-	if [ y"${ipt}" == "y" ] ; then
-		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-	else
-		for t in INPUT OUTPUT FORWARD ; do 
-			${ipt} -P ${t} DROP
-			${ip6t} -P ${t} DROP
-			${ip6t} -F ${t}
-		done
-
-		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
-
-		if [ ${debug} -eq 1 ] ; then
-			${ipt} -L #
-			${ip6t} -L #
-			sleep 5 
-		fi #
-	
-		
-	fi
-}
 
 function part3() {
 	[ y"${1}" == "y" ] && exit 1
@@ -290,7 +287,6 @@ function part3() {
 		dqb "part3.2 ok"
 		sleep 5
 		${odio} shred -fu ${1}/*.deb 
-
 	else
 	 	dqb "exit 67"
 	fi

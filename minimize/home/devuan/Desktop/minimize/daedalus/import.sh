@@ -1,7 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
 
-
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
 	. ${d}/lib.sh
@@ -54,23 +53,21 @@ if [ $# -gt 0 ] ; then
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
+
 		#HUOM.280125:uutena seur rivit, poista jos pykii
 		${scm} 0777 /tmp
-		${sco} root:root /tmp
+		${sco} root:root /tmp #oik. o=rwt mutta twx kai tarpeeksi hyvä useimpiin tarkoituksiin
 	}
-
 
 	case "${1}" in
 		-1)
 			${som} -o ro ${part} ${dir}
 			csleep 5
-
 			${som} | grep ${dir}
 
 			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 		;;
 		0)
-
 			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
 			dqb "KL"
 			csleep 3
@@ -81,9 +78,10 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
-			#daedaluksen kanssa pre ei vaikuttaisi olevan tarpeellinen, chimaeran kanssa vöib olla toinen juttu
+
 			pre_part3 ${pkgdir}
-			
+			pr4 ${pkgdir}
+
 			part3 ${pkgdir}
 			csleep 3
 
@@ -97,8 +95,7 @@ if [ $# -gt 0 ] ; then
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
 
-			#dqb "${srat} -xf ${2} in 3 secs"	 #HUOM.260125: -p wttuun varm. vuoksi  
-			#csleep 3
+
 			common_part ${2}
 			csleep 3
 			cd ${olddir}

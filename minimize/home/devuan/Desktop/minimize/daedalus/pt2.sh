@@ -12,7 +12,6 @@ if [ $# -gt 0 ] ; then
 	fi
 fi
 
-
 #[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt.1
 #[ ${debug} -eq 1 ] && ${scm} a-wx ${d}/pkgs*
 #
@@ -21,15 +20,14 @@ fi
 #for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
 #csleep 5
 
-
 dqb "a-e"
 csleep 5
 
-#HUOM. ao. rivillä viimeisessä syystä vain core
+#HUOM. ao. rivillä 2. viimeisessä syystä vain core
 ${sharpy} amd64-microcode iucode-tool arch-test at-spi2-core bubblewrap
 
 ${sharpy} atril* coinor* cryptsetup debootstrap
-${sharpy} dmidecode discover* dirmngr #tuleeekohan viimeisestä omngelma?
+${sharpy} dmidecode discover* dirmngr #tuleekohan viimeisestä ongelma? vissiin ei
 ${sharpy} doc-debian docutils* 
 ${sharpy} efibootmgr exfalso 
 ${asy} 
@@ -44,7 +42,7 @@ ${asy}
 ${lftr}
 csleep 5
 
-#gnupg poisto täs kohtaa hyvä idea? vai veikö dirmngr mukanaan jo=
+#gnupg poisto täs kohtaa hyvä idea? vai veikö dirmngr mukanaan jo?
 dqb "g2"
 csleep 5
 ${sharpy} ghostscript gir* gnupg*
@@ -153,5 +151,6 @@ ${scm} a-wx $0
 
 #whack xfce so that the ui is reset
 ${whack} xfce*
+#sössön sössön
 
 
