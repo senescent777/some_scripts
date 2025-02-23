@@ -1,5 +1,18 @@
 #!/bin/bash
-. ./lib
+#. ./lib
+d=$(dirname $0)
+debug=0
+
+[ -s ${d}/lib.sh ] && . ${d}/lib.sh
+${fib}
+g=$(date +%F)
+
+if [ $# -gt 0 ] ; then  
+	if [ "${1}" == "-v" ] ; then
+		debug=1
+	fi
+fi
+
 
 #==============================================================
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
