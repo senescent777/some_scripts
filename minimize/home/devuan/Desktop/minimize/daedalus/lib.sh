@@ -4,11 +4,8 @@
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
-
 ${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? no ainakin loppuu nalkutukset mahd aikaisin
-
-
-#Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
+#josko jokin toinen komento vielä sudoersiin liittyen?
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -43,19 +40,16 @@ function pre_part3() {
 	${odio} dpkg -i ${1}/iptables-*.deb
 	[ $? -eq 0 ] && ${odio} shred -fu ${1}/iptables-*.deb
 
-	echo "pp3.3"
-	##uutena(vielä menossa arpajaiset että tartteeko asentaa vaiko poistaa)
-	##${odio} dpkg -i ${1}/libdbus*.deb
-	##[ $? -eq 0 ] && 
-	#${odio} shred -fu ${1}/libdbus*.deb
-
 	dqb "pp3 d0n3"
 	csleep 5
 }
 
 pr4() {
 	#ao. versio aiheesta kopsattu tdstodts import.sh, pois jos pykii
-	#VAIH:josko koettaisi masennella nuo ao. paketit ennen varsinaista masxennusta	
+	#VAIH:perlin ja libperlin kanssa asiat kuntoon vielä
+	dqb "pr4[ ${1})"
+	csleep 5
+
 	${odio} dpkg -i ${1}/libpam-modules-bin_*.deb
 	${odio} dpkg -i ${1}/libpam-modules_*.deb
 	sudo shred -fu ${1}/libpam-modules*
@@ -63,7 +57,8 @@ pr4() {
 	${odio} dpkg -i ${1}/libpam*.deb
 
 	${odio} dpkg -i ${1}/perl-modules-*.deb libperl*.deb
-	sudo shred -fu ${1}/perl-modules-*.deb libperl*.deb
+	sudo shred -fu ${1}/perl-modules-*.deb 
+	sudo shred -fu ${1}/libperl*.deb
 	sleep 5
 
 	${odio} dpkg -i ${1}/perl*.deb
@@ -114,8 +109,9 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
-		pre_part3 ${pkgdir}
-		pr4 ${pkgdir}
+		#konftdston muo9kkaaminen olisi ehkä helpompi
+		pre_part3 ~/Desktop/minimize/${distro} #${pkgdir}
+		pr4 ~/Desktop/minimize/${distro} # ${pkgdir}
 
 		ipt=$(sudo which iptables)
 		ip6t=$(sudo which ip6tables)
@@ -264,13 +260,11 @@ function mangle2() {
 #
 #=========================PART 0 ENDS HERE=================================================================
 
-
-
 function part3() {
 	[ y"${1}" == "y" ] && exit 1
 	dqb "11"
 	[ -d ${1} ] || exit 2
-	dqb "22"
+	dqb "22 ${1}"
 	${sdi} ${1}/lib*.deb
 
 	if [ $? -eq  0 ] ; then

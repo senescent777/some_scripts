@@ -1,11 +1,10 @@
 #!/bin/bash
 
 #HUOM.020225: sopisi olla slim:in login.ongelmat korjattu nyt
-
 #TODO:xfce-asetukset mukaan varm. vuoksi?
 
 d=$(dirname $0)
-#debug=1
+debug=1
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
@@ -79,9 +78,7 @@ function make_tar_15() {
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq-base=2.90-4~deb12u1
 	#${shary} libdbus-1-3 #tämä erhkö qsee asioita
-
 	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8 
-
 	
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=dnsmasq=2.90-4~deb12u1 	
 	${shary} runit-helper
@@ -107,15 +104,13 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-
-	#TODO:jatkossa mv  ${pkgdir}/*.deb  ~/Desktop/minimize/${distro} ; $rat -rf  ~/Desktop/minimize/${distro}/*.deb
-
-
-
-	${srat} -rf ${1} ${pkgdir}/*.deb  
+	${odio} shred -fu  ~/Desktop/minimize/${distro}/*.deb
+	csleep 4 
+	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
+	${srat} -rf ${1} ~/Desktop/minimize/${distro}/*.deb
 	#HUOM.260125: -p wttuun varm. vuoksi  
 
-	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
+	dqb "sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
 #tässäkin se -c -r:n sijaan voi sotkea 
@@ -123,14 +118,6 @@ function make_tar_1_75() {
 	#echo "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	dqb "make_tar_1_75( ${1} )"	
 	csleep 1
-	
-	[ y"${1}" == "y" ] && exit 1
-	[ -s ${1} ] || exit 2
-	dqb "paramz_0k"
-	csleep 1
-
-	#HUOM.260125: -p wttuun varm. vuoksi  
-	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
@@ -148,9 +135,7 @@ function make_tar_1_75() {
 	csleep 5
 }
 
-
 #VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai niin että ajetaan m,ikäli joitain tiedostoja puuttuu)
-
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
 function make_tar2() {
@@ -181,11 +166,8 @@ function make_tar2() {
 
 	p=$(pwd)
 	dqb "p=${p}"
-	dqb "q=\$(mktemp -d)"
-
 
 	dqb "q=\$(mktemp -d)"
-
 	q=$(mktemp -d)
 
 	echo "#dqb cd ${q}"
@@ -210,9 +192,7 @@ function make_tar2() {
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
-
 	${srat} -rf ${1} ./etc ./sbin 
-
 	cd ${p}
 	
 	${srat} -tf ${1} > MANIFEST
@@ -244,7 +224,8 @@ function make_upgrade() {
 
 	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
-	${srat} -jcf ${1} ${pkgdir}
+	${odio} mv  ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
+	${srat} -jcf ${1} ~/Desktop/minimize/${distro}/*.deb
 
 	${sifd} ${iface}
 	sleep 1

@@ -30,7 +30,7 @@ dqb "b3f0r3 0ld.tar"
 csleep 5
 
 if [ ! -s /OLD.tar ] ; then #HUOM.260125: -p wttuun varm. vuoksi   
-	${srat} -cf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
+	${srat} -cf /OLD.tar /etc /sbin /home/stubby /home/devuan/Desktop
 fi
 
 dqb "b3f0r3 par51ng tha param5"
@@ -52,7 +52,6 @@ if [ $# -gt 0 ] ; then
 		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
-
 
 		#HUOM.280125:uutena seur rivit, poista jos pykii
 		${scm} 0777 /tmp
@@ -78,11 +77,9 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
-
-			pre_part3 ${pkgdir}
-			pr4 ${pkgdir}
-
-			part3 ${pkgdir}
+			pre_part3  ~/Desktop/minimize/${distro} #${pkgdir}
+			pr4  ~/Desktop/minimize/${distro} #${pkgdir}
+			part3  ~/Desktop/minimize/${distro} #${pkgdir}
 			csleep 3
 
 			[ ${debug} -eq 1 ] && ls -las  ${pkgdir}/*.deb			
@@ -94,7 +91,6 @@ if [ $# -gt 0 ] ; then
 		1)
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
-
 
 			common_part ${2}
 			csleep 3
