@@ -242,25 +242,33 @@ part1
 g=$(date +%F)
 
 #roiskisikohan nuo sources.list ja muut part1:seen?
-
+#TODO:for x in ... do echo "https://smthing x y " >> /e/a/s.kusr ;M done tilalla toistaiseksi
 if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
-	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
-	csleep 5
-	
-	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
-
-	sudo touch /etc/apt/sources.list
-	${scm} a+w /etc/apt/sources.list
-
-	${odio} sed -i 's/DISTRO/daedalus/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
-	sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
-
+#	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
+#	csleep 5
+#	
+#	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+#
+#	sudo touch /etc/apt/sources.list
+#	${scm} a+w /etc/apt/sources.list
+#
+#	#ja sama jutska chimaera-hmistoonkin sitq toimii
+#	local cdm
+#	cdm="s/DISTRO/${distro}/g"
+#	cdm="sed -i '${cmd}'"
+#	#${odio} sed -i 's/DISTRO/${distro}/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
+#	${odio} ${cdm} /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
+#
+#	sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
+#
 	${scm} a-w /etc/apt/sources.list
-	${sco} -R root:root /etc/apt #/sources.list
+	${sco} -R root:root /etc/apt 
 	${scm} -R a-w /etc/apt/
-
-	[ ${debug} -eq 1 ] && ls -las /etc/apt
-	csleep 5
+#
+#	[ ${debug} -eq 1 ] && ls -las /etc/apt
+#	csleep 5
+#	[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
+#	csleep 5
 fi
 
 #HUOM.310125: muista testata ainakin tässä kohtaa meneekö slim rikki

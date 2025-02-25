@@ -107,7 +107,7 @@ function make_tar_15() {
 	${odio} shred -fu  ~/Desktop/minimize/${distro}/*.deb
 	csleep 4 
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
-	${srat} -rf ${1} ~/Desktop/minimize/${distro}/*.deb
+	${srat} -rf ${1} ~/Desktop/minimize/${distro}
 	#HUOM.260125: -p wttuun varm. vuoksi  
 
 	dqb "sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
@@ -135,9 +135,7 @@ function make_tar_1_75() {
 	csleep 5
 }
 
-#VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai niin että ajetaan m,ikäli joitain tiedostoja puuttuu)
-#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
-#VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
+#VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai niin että ajetaan m,ikäli joitain tiedostoja puuttuu?)
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
@@ -200,6 +198,7 @@ function make_tar2() {
 }
 
 #HUOM.020225:vissiin ao. fdktion tuotos toimii tällä hetkellä
+#TODO:tämänkin toimivuuden tarkistus taas
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	csleep 1
