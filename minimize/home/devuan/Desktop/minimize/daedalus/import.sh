@@ -55,7 +55,7 @@ if [ $# -gt 0 ] ; then
 
 		#HUOM.280125:uutena seur rivit, poista jos pykii
 		${scm} 0777 /tmp
-		${sco} root:root /tmp #oik. o=rwt mutta twx kai tarpeeksi hyvä useimpiin tarkoituksiin
+		${sco} root:root /tmp #oik. o=rwt mutta rwx kai tarpeeksi hyvä useimpiin tarkoituksiin
 	}
 
 	case "${1}" in
@@ -77,12 +77,11 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
-			pre_part3  ~/Desktop/minimize/${distro} #${pkgdir}
-			pr4  ~/Desktop/minimize/${distro} #${pkgdir}
-			part3  ~/Desktop/minimize/${distro} #${pkgdir}
+			pre_part3  ~/Desktop/minimize/${distro}
+			pr4  ~/Desktop/minimize/${distro}
+			part3  ~/Desktop/minimize/${distro}
 			csleep 3
-
-			[ ${debug} -eq 1 ] && ls -las  ${pkgdir}/*.deb			
+			#TODO:asxennuksen jälkeen paketit wttuun stokemasta
 
 			csleep 3
 			cd ${olddir}
