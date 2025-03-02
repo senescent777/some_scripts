@@ -31,7 +31,7 @@ if [ -s /etc/dhcp/dhclient.conf.new ] || [ -s /etc/dhcp/dhclient.conf.OLD ] ; th
 	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
 fi
 
-#ei välttis suhtaudu hyvin lib.sh:n alkuun, tulisi siirtää seur. if-blokin jölkeen
+#ei välttis suhtaudu hyvin lib.sh:n alkuun, tulisi siirtää seur. if-blokin jölkeen (?)
 if [ -s /sbin/dhclient-script.new ] || [ -s /sbin/dhclient-script.OLD ] ; then 
 	echo "${smr} /sbin/dhclient-script"	
 	${smr} /sbin/dhclient-script
@@ -42,6 +42,7 @@ fi
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35"
 	. ./lib.sh #pitäisiköhän tässäkin olla se dirname-.jekku?
+	#2 ao. riville kanssa muutoksia?
 	pre_part3 ${pkgdir}
 	pr4 ${pkgdir}
 else
@@ -158,12 +159,10 @@ case ${1} in
 		
 		[ -f /run/stubby.pid ] || sudo touch /run/stubby.pid
 		${sco} devuan:devuan /run/stubby.pid #$n
-
 		${scm} 0644 /run/stubby.pid 
 		sleep 3
 
 		su devuan -c '/usr/bin/stubby -C /home/stubby/.stubby.yml -g'
-
 		pgrep stubby
 	;;
 esac
