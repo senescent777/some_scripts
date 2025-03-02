@@ -241,16 +241,14 @@ dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necess
 part1
 g=$(date +%F)
 
-#roiskisikohan nuo sources.list ja muut part1:seen?
-#TODO:for x in ... do echo "https://smthing x y " >> /e/a/s.kusr ;M done tilalla toistaiseksi
-if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
+#if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
 #	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
-#	csleep 5
-#	
-#	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
-#
-#	sudo touch /etc/apt/sources.list
-#	${scm} a+w /etc/apt/sources.list
+	csleep 5
+	
+	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+
+	sudo touch /etc/apt/sources.list
+	${scm} a+w /etc/apt/sources.list
 #
 #	#ja sama jutska chimaera-hmistoonkin sitq toimii
 #	local cdm
@@ -260,16 +258,18 @@ if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä 
 #	${odio} ${cdm} /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
 #
 #	sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
-#
+
+	for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://devuan.keff.org/merged ${x} main non-free-firmware" >> /etc/apt/sources.list ; done
+
 	${scm} a-w /etc/apt/sources.list
 	${sco} -R root:root /etc/apt 
 	${scm} -R a-w /etc/apt/
-#
+
 #	[ ${debug} -eq 1 ] && ls -las /etc/apt
 #	csleep 5
 #	[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
 #	csleep 5
-fi
+#fi
 
 #HUOM.310125: muista testata ainakin tässä kohtaa meneekö slim rikki
 [ ${mode} -eq 0 ] && exit
