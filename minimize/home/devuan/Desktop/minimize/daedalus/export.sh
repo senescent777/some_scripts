@@ -41,8 +41,6 @@ function make_tar() {
 	${srat} -cf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 }
 
-#tässä oli pari potentiaalista ongelmien aiheuttajaa
-#HUOM.020225:vissiin kunnossa pakettien nuoto nyt 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin...
 function make_tar_15() {
 	dqb "make_tar_15( ${1})"
@@ -135,7 +133,7 @@ function make_tar_1_75() {
 	csleep 5
 }
 
-#VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai niin että ajetaan m,ikäli joitain tiedostoja puuttuu?)
+#VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai niin että ajetaan m,ikäli joitain tiedostoja puuttuu)
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
@@ -185,7 +183,7 @@ function make_tar2() {
 	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
 	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
 
-	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp
+	#sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp #ehkä pois jatqssa
 	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
@@ -197,8 +195,6 @@ function make_tar2() {
 	${srat} -rf ${1} ${p}/MANIFEST
 }
 
-#HUOM.020225:vissiin ao. fdktion tuotos toimii tällä hetkellä
-#TODO:tämänkin toimivuuden tarkistus taas
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	csleep 1
@@ -249,7 +245,7 @@ case ${mode} in
 
 		make_tar2 ${tgtfile}
 	;;
-	1|upgrade)
+	1|u|upgrade)
 		make_upgrade ${tgtfile}
 	;;
 	-h)
