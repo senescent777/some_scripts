@@ -1,5 +1,4 @@
 #!/bin/bash
-
 d=$(dirname $0)
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
@@ -25,8 +24,6 @@ function parse_opts_1() {
 	esac
 }
 
-#. ./lib
-
 function check_params() {
 	case ${debug} in
 		0|1)
@@ -41,6 +38,7 @@ function check_params() {
 
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
 #HUOM.2. ei niitä {sco}-juttuja ao. fktioon
+#tässä joutaisi kai ottaa mallia daedaluksen versiosta
 function mangle_s() {
 	local tgt
 
@@ -161,29 +159,18 @@ enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1
+g=$(date +%F)
+csleep 5
+[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
-if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain
-#	if [ ${enforce} -eq 1 ] ; then 
-		dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
-		csleep 5
-		${scm} a+w /etc/apt #tarpeen?
-		g=$(date +%F)
-		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+sudo touch /etc/apt/sources.list
+${scm} a+w /etc/apt/sources.list
 
-		sudo touch /etc/apt/sources.list			
-		${scm} a+w /etc/apt/sources.list
+for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://devuan.keff.org/merged ${x} main non-free-firmware" >> /etc/apt/sources.list ; done
 
-		${odio} sed -i 's/DISTRO/chimaera/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
-		sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
-
-		${scm} a-w /etc/apt/sources.list
-		${sco} -R root:root /etc/apt #/sources.list
-		${scm} -R a-w /etc/apt/
-
-		[ ${debug} -eq 1 ] && ls -las /etc/apt
-		csleep 5
-#	fi
-fi
+${scm} a-w /etc/apt/sources.list
+${sco} -R root:root /etc/apt 
+${scm} -R a-w /etc/apt/
 
 [ ${mode} -eq 0 ] && exit
 
