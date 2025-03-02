@@ -81,7 +81,7 @@ if [ $# -gt 0 ] ; then
 			pr4  ~/Desktop/minimize/${distro}
 			part3  ~/Desktop/minimize/${distro}
 			csleep 3
-			#TODO:asxennuksen jälkeen paketit wttuun stokemasta
+			#HUOM.part3 viimeistään poistaa asennellut paketit
 
 			csleep 3
 			cd ${olddir}
