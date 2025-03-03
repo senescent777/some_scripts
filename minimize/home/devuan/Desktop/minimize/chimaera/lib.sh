@@ -196,14 +196,19 @@ function part1() {
 	fi
 }
 
+function pre_part3() {
+	${sdi} ${1}/dns-root-data*.deb
+	${smr} -rf ${1}/dns-root-data*.deb
+}
+
 function part3() {
-	${sdi} /var/cache/apt/archives/lib*.deb
+	${sdi} ${1}/lib*.deb
 
 	if [ $? -eq  0 ] ; then
 		#nköjään ei riittävästitehty dnsmasq kannalta
 		dqb "part3.1 ok"
 		sleep 5
-		${smr} -rf ${pkgdir}/lib*.deb
+		${smr} -rf ${1}/lib*.deb
 	else
 	 	exit 66
 	fi
@@ -211,12 +216,12 @@ function part3() {
 	#&&
 
 	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
-	${sdi} ${pkgdir}/*.deb
+	${sdi} ${1}/*.deb
 	
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-		${smr} -rf ${pkgdir}/lib*.deb
+		${smr} -rf ${1}/lib*.deb
 	else
 	 	exit 67
 	fi

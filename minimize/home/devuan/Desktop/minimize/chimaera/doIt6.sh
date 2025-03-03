@@ -166,7 +166,8 @@ csleep 5
 sudo touch /etc/apt/sources.list
 ${scm} a+w /etc/apt/sources.list
 
-for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://devuan.keff.org/merged ${x} main non-free-firmware" >> /etc/apt/sources.list ; done
+#030325:tässä kusi hommat vähän
+for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://devuan.keff.org/merged ${x} main" >> /etc/apt/sources.list ; done
 
 ${scm} a-w /etc/apt/sources.list
 ${sco} -R root:root /etc/apt 
@@ -222,18 +223,11 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
-${sdi} ${pkgdir}/dns-root-data*.deb 
-[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/dns-root-data*.deb 
-part3
+#${sdi} ${pkgdir}/dns-root-data*.deb 
+#[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/dns-root-data*.deb 
+pre_part3  ~/Desktop/minimize/${distro} 
+part3 ~/Desktop/minimize/${distro} #olisi myöls se $d
 
-#näiden kanssa ongelmia:
-# libbsd0:amd64
-# libgetdns10:amd64
-# libnftnl11:amd64
-# libssl3:amd64
-# libunbound8:amd64
-# libxtables12:amd64
-#pp3 hoitamaan? tai joa paketit minimize-hmiston alihakemistoihin?
 
 #toimii miten toimii tämä if-blokki
 if [ ${mode} -eq 1 ] ; then
@@ -246,13 +240,9 @@ if [ ${mode} -eq 1 ] ; then
 fi
 
 ${asy}
-#sleep 5
-#/opt/bin/clouds.sh 0
-#sleep 5
-#/opt/bin/clouds.sh 0
-#sleep 5
 
-sudo /opt/bin/clouds.sh 0
+#sudo /opt/bin/clouds.sh 0
+sudo ${d}/clouds.sh 0
 sleep 5
 #exit
 #HUOM.270624:keskeytetään tähän kunnes paketin dnsmasq saa taas asentumaan, varm vuoksi myös clouds 0 JIT
@@ -260,7 +250,8 @@ sleep 5
 #===================================================PART 4(final)==========================================================
 #tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 ${odio} /etc/init.d/dnsmasq restart
-sudo /opt/bin/clouds.sh 1
+#sudo /opt/bin/clouds.sh 1
+sudo ${d}/clouds.sh 1
 ns2 stubby
 ns4 stubby
 
