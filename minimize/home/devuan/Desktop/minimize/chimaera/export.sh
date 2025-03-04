@@ -55,7 +55,8 @@ function make_tar_15() {
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
 	fi
-	
+
+	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
 	[ z"${1}" == "z" ] && exit 1
 	[ -s ${1} ] || exit 2
 	dqb "paramz_ok"
@@ -71,7 +72,6 @@ function make_tar_15() {
 	${shary} iptables-persistent init-system-helpers netfilter-persistent
 
 	#040325:tilapäisesti jemmaan, sotkee (tai siis nimenomaan pitäisi ajaa clouds iptables-pakettien uudelleenas jälkeen)
-
 	#no more broken laptop, but there seems to be some problems with the wireless connection, so...
 	csleep 5
 	sudo ${d}/clouds.sh ${dnsm}
@@ -106,7 +106,7 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	${odio} shred -fu  ~/Desktop/minimize/${distro}/*.deb
+	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
 	csleep 4 
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
 	${srat} -rf ${1} ~/Desktop/minimize/${distro}/*.deb
@@ -249,10 +249,10 @@ fi
 case ${mode} in
 	0)
 		make_tar ${tgtfile}
-		make_tar_15 ${tgtfile} #TODO:jatkossa tämän ajaminen viimeisenä
 		make_tar_1_75 ${tgtfile}
-
 		make_tar2 ${tgtfile}
+
+		make_tar_15 ${tgtfile} 
 	;;
 	1|u|upgrade)
 		make_upgrade ${tgtfile}

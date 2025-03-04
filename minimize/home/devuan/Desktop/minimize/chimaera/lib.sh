@@ -173,6 +173,11 @@ function ns4() {
 }
 
 #=========================PART 0 ENDS HERE=================================================================
+function pr4() {
+	echo "pr4 (${1})"
+}
+
+#TODO:perl-kikkailut daedaluksesta tähäbkin vrsioon
 
 function pre_part3() {
 	${sdi} ${1}/dns-root-data*.deb
