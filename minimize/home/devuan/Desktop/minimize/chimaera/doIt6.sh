@@ -149,6 +149,32 @@ function enforce_access() {
 
 #==================================PART 1============================================================
 
+function part1() {
+	#jos jokin näistä kolmesta hoitaisi homman...
+	${sifd} ${iface}
+	${sifd} -a
+	${sip} link set ${iface} down
+
+	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
+	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
+
+	if [ $ic -gt 0 ] ; then
+		for t in INPUT OUTPUT FORWARD ; do 
+			${ipt} -P ${t} DROP
+			${ip6t} -P ${t} DROP
+			${ip6t} -F ${t}
+		done
+
+		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
+
+		if [ ${debug} -eq 1 ] ; then
+			${ipt} -L #
+			${ip6t} -L #
+			sleep 5 
+		fi #
+	fi
+}
+
 if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
@@ -158,7 +184,7 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-part1
+part1 
 g=$(date +%F)
 csleep 5
 [ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
@@ -243,6 +269,8 @@ ${asy}
 
 #sudo /opt/bin/clouds.sh 0
 sudo ${d}/clouds.sh 0
+#TODO:clouds toimimaan, jotenkin
+
 sleep 5
 #exit
 #HUOM.270624:keskeytetään tähän kunnes paketin dnsmasq saa taas asentumaan, varm vuoksi myös clouds 0 JIT

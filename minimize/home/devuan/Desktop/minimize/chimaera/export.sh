@@ -26,11 +26,11 @@ else
 	}	
 fi
 
-#debug=1
+debug=1
 
 function make_tar() {
 	dqb "make_tar ( ${1} )"
-	csleep 1
+	csleep 5
 	[ z"${1}" == "z" ] && exit
 
 	${scm} -R a-wx ~/Desktop/minimize/*
@@ -62,13 +62,15 @@ function make_tar_15() {
 
 	${sag_u}
 	[ $? -eq 0 ] || exit	
-	csleep 1
-	#dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
+	csleep 5
+	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 
 	${shary} iptables 	
 	${shary} iptables-persistent init-system-helpers netfilter-persistent
+
+	#040325:tilapäisesti jemmaan, sotkee (tai siis nimenomaan pitäisi ajaa clouds iptables-pakettien uudelleenas jälkeen)
 
 	#no more broken laptop, but there seems to be some problems with the wireless connection, so...
 	csleep 5
@@ -87,12 +89,12 @@ function make_tar_15() {
 	#${shary} bind9-dnsutils bind9-host libedit2 libjemalloc2 libkrb5-3 libprotobuf-c1 
 
 	${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
-	[ $? -eq 0 ] || exit 2
+	#[ $? -eq 0 ] || exit 2
 	${lftr} 
 
 	#josqs ntp-jututkin mukaan?
 	#${shary} adduser lsb-base ntpsec netbase python3 python3-ntp tzdata libbsd0 libcap2 libssl3 
-	[ $? -eq 0 ] || exit 3
+	#[ $? -eq 0 ] || exit 3
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=stubby=1.6.0-3+b1
 
@@ -100,7 +102,7 @@ function make_tar_15() {
 	${shary} libgetdns10 libbsd0 libidn2-0 libssl3 libunbound8 libyaml-0-2 #sotkeekohan libc6 uudelleenas tässä?
 	${shary} stubby
 
-	[ $? -eq 0 ] || exit 6
+	#[ $? -eq 0 ] || exit 6
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
@@ -117,7 +119,7 @@ function make_tar_15() {
 function make_tar_1_75() {
 	#echo "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 	dqb "make_tar_1_75( ${1} )"	
-	csleep 1
+	csleep 5
 	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
@@ -138,7 +140,7 @@ function make_tar_1_75() {
 #VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai niin että ajetaan m,ikäli joitain tiedostoja puuttuu)
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
-#TODO:tämänkin toimivuuden tarkistus taas
+#VAIH:tämänkin toimivuuden tarkistus taas
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
@@ -153,8 +155,8 @@ function make_tar2() {
 	local tig
 	tig=$(sudo which git)
 	
-	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-	csleep 1
+	#sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	#csleep 1
 
 	if [ x"${tig}" == "x" ] ; then
 		${shary} git
@@ -174,14 +176,15 @@ function make_tar2() {
 	echo "#dqb cd ${q}"
 	cd ${q}
 
-	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-	csleep 1
+	#sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	#csleep 1
 
 	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
 	${tig} clone https://github.com/senescent777/project.git
+
 	#(jospa siirtäöisi nuo project-jutut jonnekin muualle?)
-	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-	csleep 1
+	#sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	#csleep 1
 
 	cd project
 	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
@@ -203,7 +206,7 @@ function make_tar2() {
 #HUOM.020225:vissiin ao. fdktion tuotos toimii tällä hetkellä
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
-	csleep 1
+	csleep 5
 	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] && exit 2
@@ -213,8 +216,8 @@ function make_upgrade() {
 	dqb "${sagu}; ${sag} upgrade -u"
 
 	${odio} shred -fu ${pkgdir}/*.deb 
-	${odio} ${d}/clouds.sh ${dnsm} 
-	${sifu} ${iface}	
+	#${odio} ${d}/clouds.sh ${dnsm} 
+	#${sifu} ${iface}	
 	sleep 6
 
 	${asy} 
@@ -225,10 +228,10 @@ function make_upgrade() {
 
 	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
-	${odio} mv  ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
+	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
 	${srat} -jcf ${1} ~/Desktop/minimize/${distro}/*.deb
 
-	${sifd} ${iface}
+	#${sifd} ${iface}
 	sleep 1
 }
 
@@ -246,12 +249,12 @@ fi
 case ${mode} in
 	0)
 		make_tar ${tgtfile}
-		make_tar_15 ${tgtfile}
+		make_tar_15 ${tgtfile} #TODO:jatkossa tämän ajaminen viimeisenä
 		make_tar_1_75 ${tgtfile}
 
 		make_tar2 ${tgtfile}
 	;;
-	1|upgrade)
+	1|u|upgrade)
 		make_upgrade ${tgtfile}
 	;;
 	-h)

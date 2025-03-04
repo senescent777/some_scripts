@@ -112,6 +112,10 @@ function check_binaries2() {
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
 
+
+	smr="${odio} ${smr} "
+	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
+
 #	dqb "spc= ${spc}"
 	dqb "b1nar135.2 0k.2" 
 
@@ -169,32 +173,6 @@ function ns4() {
 }
 
 #=========================PART 0 ENDS HERE=================================================================
-
-function part1() {
-	#jos jokin näistä kolmesta hoitaisi homman...
-	${sifd} ${iface}
-	${sifd} -a
-	${sip} link set ${iface} down
-
-	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
-	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
-
-	if [ $ic -gt 0 ] ; then
-		for t in INPUT OUTPUT FORWARD ; do 
-			${ipt} -P ${t} DROP
-			${ip6t} -P ${t} DROP
-			${ip6t} -F ${t}
-		done
-
-		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
-
-		if [ ${debug} -eq 1 ] ; then
-			${ipt} -L #
-			${ip6t} -L #
-			sleep 5 
-		fi #
-	fi
-}
 
 function pre_part3() {
 	${sdi} ${1}/dns-root-data*.deb
