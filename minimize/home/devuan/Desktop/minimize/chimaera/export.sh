@@ -126,7 +126,8 @@ function make_tar_1_75() {
 	dqb "paramz_0k"
 	csleep 1
 
-	#HUOM.260125: -p wttuun varm. vuoksi  
+	#HUOM.260125: -p wttuun varm. vuoksi 
+	#HUOM.060325: ensimmäisen tdston mukaan ottamisesta voi olla montaakin mieltä 
 	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
@@ -140,7 +141,7 @@ function make_tar_1_75() {
 #VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai niin että ajetaan m,ikäli joitain tiedostoja puuttuu)
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #VAIH:kts uudemman kerran mitä pakettiin tulee yllä, ettei päällekkäisyyksiä ghbin kanssa
-#VAIH:tämänkin toimivuuden tarkistus taas
+
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1

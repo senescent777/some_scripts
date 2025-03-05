@@ -9,7 +9,6 @@ else
 	exit 111	
 fi
 
-
 #VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
 #(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
 
@@ -92,17 +91,14 @@ function mangle_s() {
 	fi
 }
 
-
 function pre_enforce() {
+	local q
+	local f 
+
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
 		dqb "a51a kun05a"
- 	else
-		#sudo touch /etc/sudoers.d/meshuggah
-		##sudo chown 1000:1000  /etc/sudoers.d/meshuggah
-		#sudo chmod a+w /etc/sudoers.d/meshuggah	
-
-		local q
+ 	else		
 		q=$(mktemp -d)	
 		sudo touch ${q}/meshuggah
 		[ -f ${q}/meshuggah ] || exit
@@ -110,7 +106,6 @@ function pre_enforce() {
 		sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
 		sudo chmod 0660 ${q}/meshuggah	
 		
-		local f 
 		#HUOM. clouds ja stubby mukaan toisella tavalla jatkossa?
 		for f in ${CB_LIST1} ; do mangle_s ${f}  ${q}/meshuggah ; done
 		for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f}  ${q}/meshuggah ; done
@@ -123,8 +118,7 @@ function pre_enforce() {
 			sudo chown root:root ${q}/meshuggah	
 			sudo mv ${q}/meshuggah /etc/sudoers.d
 		fi
-
-		#sudo chmod a-w /etc/sudoers.d/meshuggah	
+	
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	fi
 
@@ -133,7 +127,11 @@ function pre_enforce() {
 	sudo chown -R root:root /etc/sudoers.d
 
 	#tässä vai enforce_access():issa parempi näiden?
-	#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
+	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
+		mangle2 ${f}
+		csleep 1
+	done	
+
 	${scm} 0755 /etc 
 	${sco} -R root:root /etc
 
@@ -156,53 +154,21 @@ function pre_enforce() {
 
 function enforce_access() {
 	dqb "3nf0rc3_acc355()"
+	local f
 
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
 	${scm} 0755 /home
-
-	#${sco} -R root:root /opt
-	#${scm} -R 0555 /opt
-
-	#HUOM.050325: local pois+if-blokki alemmas uutenam peruuta jos qsee
-	#local n
-	#n=$(whoami)
-
 	${scm} -R 0755 ~/Desktop/minimize
+	
 	if [ y"${n}" != "y" ] ; then
 		dqb "${sco} -R ${n}:${n} ~"
 		${sco} -R ${n}:${n} ~
 	fi
 
-	#${sco} -R 101:65534 /home/stubby/
-
-	local f
-#
-	#if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
-	#	echo "changing /sbin , /etc and /var 4 real"
-	#	${sco} -R root:root /sbin
-	#	${scm} -R 0755 /sbin
-	#
-	#		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
-	#		#HUOM! ei sitten sorkita /etc sisältöä tässä!!!!
-	#		#${sco} -R root:root /etc
-	#
-	#	#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
-	#	for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
-	#
-	#	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
-	#		mangle2 ${f}
-	#		csleep 1
-	#	done
-	#
-	#	#sudoersin sisältöä voisi kai tiukentaa kanssa
-	#	${sco} -R root:root /var
-	#	${scm} -R go-w /var
-	#	${scm} 0755 /
-	#	${sco} root:root /
-	#fi
-	
+	#${sco} -R 101:65534 /home/stubby/	
 	f=$(date +%F)
+
 	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
 	[ -f /sbin/dhclient-script.${f} ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.${f}
 	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfaces /etc/network/interfaces.${f}
@@ -298,7 +264,6 @@ sleep 3
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
 
-
 csleep 5
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
@@ -334,7 +299,6 @@ fi
 
 ${asy}
 sudo ${d}/clouds.sh 0
-
 sleep 5
 
 ##===================================================PART 4(final)==========================================================
