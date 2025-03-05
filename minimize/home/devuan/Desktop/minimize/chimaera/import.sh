@@ -77,11 +77,11 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
-			pre_part3  ~/Desktop/minimize/${distro}
-			pr4  ~/Desktop/minimize/${distro}
-			part3  ~/Desktop/minimize/${distro}
+			pre_part3 ~/Desktop/minimize/${distro}
+			pr4 ~/Desktop/minimize/${distro}
+			part3 ~/Desktop/minimize/${distro}
 			csleep 3
-			#HUOM. part3 siivonneen .deb-pakeitti asj älk jos kaikki ok
+			#HUOM. part3 siivonnee .deb-paketit asj älk jos kaikki ok
 
 			csleep 3
 			cd ${olddir}

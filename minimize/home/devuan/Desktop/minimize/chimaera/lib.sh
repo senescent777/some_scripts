@@ -177,11 +177,14 @@ function pr4() {
 	echo "pr4 (${1})"
 }
 
-#TODO:perl-kikkailut daedaluksesta tähäbkin vrsioon
-
 function pre_part3() {
 	${sdi} ${1}/dns-root-data*.deb
 	${smr} -rf ${1}/dns-root-data*.deb
+
+	#uutena, pois jos qsee	
+	${sdi} ${1}/perl-modules-*.deb
+	${smr} -rf ${1}/perl-modules-*.deb
+	
 }
 
 function part3() {
