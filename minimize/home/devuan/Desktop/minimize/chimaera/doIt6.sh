@@ -79,8 +79,9 @@ function pre_enforce() {
 		sudo chmod a+w /etc/sudoers.d/meshuggah	
 
 		local f 
+		#HUOM. clouds ja stubby mukaan toisella tavalla jatkossa?
 		for f in ${CB_LIST1} ; do mangle_s ${f} ; done
-		for f in /etc/init.d/stubby /opt/bin/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
+		for f in /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
 
 		sudo chmod a-w /etc/sudoers.d/meshuggah	
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
@@ -107,7 +108,7 @@ function enforce_access() {
 	${scm} -R 0755 ~/Desktop/minimize
 	dqb "${sco} -R ${n}:${n} ~"
 	${sco} -R ${n}:${n} ~
-	${sco} -R 101:65534 /home/stubby/
+	#${sco} -R 101:65534 /home/stubby/
 
 	local f
 
@@ -230,8 +231,7 @@ sleep 3
 
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
-#HUOM.270624:oli aikaisemmin tässä /o/b/clouds.sh 0
-#exit
+
 
 csleep 5
 ${smr} -rf /run/live/medium/live/initrd.img*
@@ -266,29 +266,23 @@ if [ ${mode} -eq 1 ] ; then
 fi
 
 ${asy}
-
-#sudo /opt/bin/clouds.sh 0
 sudo ${d}/clouds.sh 0
-#TODO:clouds toimimaan, jotenkin
 
 sleep 5
-#exit
-#HUOM.270624:keskeytetään tähän kunnes paketin dnsmasq saa taas asentumaan, varm vuoksi myös clouds 0 JIT
 
-#===================================================PART 4(final)==========================================================
-#tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
-${odio} /etc/init.d/dnsmasq restart
-#sudo /opt/bin/clouds.sh 1
-sudo ${d}/clouds.sh 1
-ns2 stubby
-ns4 stubby
-
-if [ ${debug} -eq 1 ] ; then 
-	${snt} -tulpan
-	sleep 5
-	pgrep stubby*
-	sleep 5
-fi
-
-echo "time to ${sifu} ${iface} or whåtever"
-echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
+##===================================================PART 4(final)==========================================================
+##tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
+#${odio} /etc/init.d/dnsmasq restart
+#sudo ${d}/clouds.sh 1
+#ns2 stubby
+#ns4 stubby
+#
+#if [ ${debug} -eq 1 ] ; then 
+#	${snt} -tulpan
+#	sleep 5
+#	pgrep stubby*
+#	sleep 5
+#fi
+#
+#echo "time to ${sifu} ${iface} or whåtever"
+#echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
