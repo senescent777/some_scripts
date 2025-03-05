@@ -39,6 +39,8 @@ function check_params() {
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit 
+	[ y"${2}" == "y" ] && exit 
+	[ -f ${2} ] || exit  
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
