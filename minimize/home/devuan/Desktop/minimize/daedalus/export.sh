@@ -148,7 +148,7 @@ function make_tar2() {
 	local tig
 	tig=$(sudo which git)
 	
-	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
 	csleep 1
 
 	if [ x"${tig}" == "x" ] ; then
@@ -219,7 +219,7 @@ function make_upgrade() {
 
 	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
-	${odio} mv  ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
+	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
 	${srat} -jcf ${1} ~/Desktop/minimize/${distro}/*.deb
 
 	${sifd} ${iface}
@@ -240,10 +240,9 @@ fi
 case ${mode} in
 	0)
 		make_tar ${tgtfile}
-		make_tar_15 ${tgtfile}
 		make_tar_1_75 ${tgtfile}
-
 		make_tar2 ${tgtfile}
+		make_tar_15 ${tgtfile}
 	;;
 	1|u|upgrade)
 		make_upgrade ${tgtfile}
