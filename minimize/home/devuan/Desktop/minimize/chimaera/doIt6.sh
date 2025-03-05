@@ -103,7 +103,7 @@ function pre_enforce() {
 		local f 
 		#HUOM. clouds ja stubby mukaan toisella tavalla jatkossa?
 		for f in ${CB_LIST1} ; do mangle_s ${f} ; done
-		for f in /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
+		for f in  ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
 
 		sudo chmod a-w /etc/sudoers.d/meshuggah	
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
