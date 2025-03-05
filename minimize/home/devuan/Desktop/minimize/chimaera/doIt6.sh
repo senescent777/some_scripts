@@ -74,6 +74,8 @@ n=$(whoami)
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit 
+	[ y"${2}" == "y" ] && exit 
+	[ -f ${2} ] || exit 
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
@@ -96,22 +98,60 @@ function pre_enforce() {
 	if [ -f /etc/sudoers.d/meshuggah ] ; then
 		dqb "a51a kun05a"
  	else
-		sudo touch /etc/sudoers.d/meshuggah
-		#sudo chown 1000:1000  /etc/sudoers.d/meshuggah
-		sudo chmod a+w /etc/sudoers.d/meshuggah	
+		#sudo touch /etc/sudoers.d/meshuggah
+		##sudo chown 1000:1000  /etc/sudoers.d/meshuggah
+		#sudo chmod a+w /etc/sudoers.d/meshuggah	
 
+		local q
+		q=$(mktemp -d)	
+		sudo touch ${q}/meshuggah
+		[ -f ${q}/meshuggah ] || exit
+
+		sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
+		sudo chmod 0660 ${q}/meshuggah	
+		
 		local f 
 		#HUOM. clouds ja stubby mukaan toisella tavalla jatkossa?
-		for f in ${CB_LIST1} ; do mangle_s ${f} ; done
-		for f in  ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ; done
+		for f in ${CB_LIST1} ; do mangle_s ${f}  ${q}/meshuggah ; done
+		for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f}  ${q}/meshuggah ; done
 
-		sudo chmod a-w /etc/sudoers.d/meshuggah	
+		if [ -s ${q}/meshuggah ] ; then
+			dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
+			csleep 5
+
+			sudo chmod a-wx ${q}/meshuggah
+			sudo chown root:root ${q}/meshuggah	
+			sudo mv ${q}/meshuggah /etc/sudoers.d
+		fi
+
+		#sudo chmod a-w /etc/sudoers.d/meshuggah	
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	fi
 
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
-	#sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? ehkä ei
+	sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? jos vaikka
 	sudo chown -R root:root /etc/sudoers.d
+
+	#tässä vai enforce_access():issa parempi näiden?
+	#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
+	${scm} 0755 /etc 
+	${sco} -R root:root /etc
+
+	#HUOM. mangle2 olisi keksitty... ja ne find-jutut alempana
+	${sco} -R root:root /sbin
+	${scm} -R 0755 /sbin
+	
+	${sco} -R root:root /var
+	${scm} -R 0755 /var
+
+	${sco} root:staff /var/local
+	${sco} root:mail /var/mail
+		
+	${sco} -R man:man /var/cache/man 
+	${scm} -R 0755 /var/cache/man
+
+	${scm} 0755 /
+	${sco} root:root /
 }
 
 function enforce_access() {
@@ -121,8 +161,8 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
-	${sco} -R root:root /opt
-	${scm} -R 0555 /opt
+	#${sco} -R root:root /opt
+	#${scm} -R 0555 /opt
 
 	#HUOM.050325: local pois+if-blokki alemmas uutenam peruuta jos qsee
 	#local n
@@ -137,30 +177,30 @@ function enforce_access() {
 	#${sco} -R 101:65534 /home/stubby/
 
 	local f
-
-	if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
-		echo "changing /sbin , /etc and /var 4 real"
-		${sco} -R root:root /sbin
-		${scm} -R 0755 /sbin
-
-		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
-		#HUOM! ei sitten sorkita /etc sisältöä tässä!!!!
-		${sco} -R root:root /etc
-
-		#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
-		for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
-
-		for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
-			mangle2 ${f}
-			csleep 1
-		done
-
-		#sudoersin sisältöä voisi kai tiukentaa kanssa
-		${sco} -R root:root /var
-		${scm} -R go-w /var
-		${scm} 0755 /
-		${sco} root:root /
-	fi
+#
+	#if [ ${enforce} -eq 1 ] ; then #käyköhän jatkossa turhaksi tämä if-blokki?
+	#	echo "changing /sbin , /etc and /var 4 real"
+	#	${sco} -R root:root /sbin
+	#	${scm} -R 0755 /sbin
+	#
+	#		#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
+	#		#HUOM! ei sitten sorkita /etc sisältöä tässä!!!!
+	#		#${sco} -R root:root /etc
+	#
+	#	#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
+	#	for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
+	#
+	#	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
+	#		mangle2 ${f}
+	#		csleep 1
+	#	done
+	#
+	#	#sudoersin sisältöä voisi kai tiukentaa kanssa
+	#	${sco} -R root:root /var
+	#	${scm} -R go-w /var
+	#	${scm} 0755 /
+	#	${sco} root:root /
+	#fi
 	
 	f=$(date +%F)
 	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
@@ -219,7 +259,7 @@ csleep 5
 sudo touch /etc/apt/sources.list
 ${scm} a+w /etc/apt/sources.list
 
-#030325:tässä kusi hommat vähän
+#030325:tässä kusi hommat vähän(jos nyt 050325 kunnossa)
 for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://devuan.keff.org/merged ${x} main" >> /etc/apt/sources.list ; done
 
 ${scm} a-w /etc/apt/sources.list
@@ -269,7 +309,7 @@ if [ ${debug} -eq 1 ] ; then
 fi #
 
 #===================================================PART 3===========================================================
-dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
+dqb "INSTALLING NEW PACKAGES IN 10 SECS"
 csleep 3
 
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
@@ -277,11 +317,12 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 #${sdi} ${pkgdir}/dns-root-data*.deb 
 #[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/dns-root-data*.deb 
+
+#HUOM.0505325:libgetdns10 kanssa oli jokin ongelma
 pre_part3  ~/Desktop/minimize/${distro} 
 part3 ~/Desktop/minimize/${distro} #olisi myöls se $d
 
-
-#toimii miten toimii tämä if-blokki
+#toimii miten toimii tämä if-blokki (daedalus-versiosta voinee koipsata apremmin toimivan)
 if [ ${mode} -eq 1 ] ; then
 	echo "passwd"
 	echo "${odio} passwd"
