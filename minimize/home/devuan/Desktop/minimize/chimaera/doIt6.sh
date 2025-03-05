@@ -39,35 +39,57 @@ function check_params() {
 #HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
 #HUOM.2. ei niitä {sco}-juttuja ao. fktioon
 #tässä joutaisi kai ottaa mallia daedaluksen versiosta
+#function mangle_s() {
+#	local tgt
+#
+#	if [ y"${2}" == "y" ] ; then
+#		tgt=/etc/sudoers.d/meshuggah
+#	else
+#		tgt=/etc/sudoers.d/${2}
+#	fi
+#
+#	if [ -s ${1} ] ; then 
+#		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
+#		csleep 1
+#		
+#		sudo chmod 0555 ${1}
+#		sudo chown root:root ${1} 
+#		#chattr +ui ${1}
+#
+#		csleep 1
+#		local s
+#		local n
+#
+#		n=$(whoami) #olisi myös %users...
+#		s=$(sha256sum ${1})
+#		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
+#		sleep 1
+#	else
+#		dqb "no sucg file as ${1} "
+#	fi
+#}
+
+n=$(whoami)
+
 function mangle_s() {
 	local tgt
-
-	if [ y"${2}" == "y" ] ; then
-		tgt=/etc/sudoers.d/meshuggah
-	else
-		tgt=/etc/sudoers.d/${2}
-	fi
+	[ y"${1}" == "y" ] && exit 
+	tgt=${2}
+	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
 	if [ -s ${1} ] ; then 
-		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		csleep 1
-		
-		sudo chmod 0555 ${1}
+		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
 		sudo chown root:root ${1} 
-		#chattr +ui ${1}
 
-		csleep 1
 		local s
-		local n
 
-		n=$(whoami) #olisi myös %users...
 		s=$(sha256sum ${1})
 		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
-		sleep 1
 	else
 		dqb "no sucg file as ${1} "
 	fi
 }
+
 
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
@@ -102,12 +124,16 @@ function enforce_access() {
 	${sco} -R root:root /opt
 	${scm} -R 0555 /opt
 
-	local n
-	n=$(whoami)
+	#HUOM.050325: local pois+if-blokki alemmas uutenam peruuta jos qsee
+	#local n
+	#n=$(whoami)
 
 	${scm} -R 0755 ~/Desktop/minimize
-	dqb "${sco} -R ${n}:${n} ~"
-	${sco} -R ${n}:${n} ~
+	if [ y"${n}" != "y" ] ; then
+		dqb "${sco} -R ${n}:${n} ~"
+		${sco} -R ${n}:${n} ~
+	fi
+
 	#${sco} -R 101:65534 /home/stubby/
 
 	local f
