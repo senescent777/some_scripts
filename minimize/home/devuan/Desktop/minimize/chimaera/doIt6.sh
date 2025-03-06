@@ -76,7 +76,8 @@ function pre_enforce() {
 		
 		#HUOM. clouds ja stubby mukaan toisella tavalla jatkossa?
 		for f in ${CB_LIST1} ; do mangle_s ${f}  ${q}/meshuggah ; done
-		for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f}  ${q}/meshuggah ; done
+		#for f in ~/Desktop/minimize/${distro}/clouds.sh 
+		for f in ${d}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f}  ${q}/meshuggah ; done
 
 		if [ -s ${q}/meshuggah ] ; then
 			dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
@@ -250,8 +251,8 @@ echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 #HUOM.0505325:libgetdns10 kanssa oli jokin ongelma
-pre_part3  ~/Desktop/minimize/${distro} 
-part3 ~/Desktop/minimize/${distro} #olisi myöls se $d
+pre_part3 ${d} 
+part3 ${d} 
 
 if [ ${mode} -eq 1 ] ; then
 	dqb "R (in 6 secs)"; csleep 6
