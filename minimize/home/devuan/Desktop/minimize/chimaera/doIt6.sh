@@ -9,7 +9,7 @@ else
 	exit 111	
 fi
 
-#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan
+#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan?
 #(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
 
 function parse_opts_1() {
@@ -35,38 +35,6 @@ function check_params() {
 	esac
 }
 
-#HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
-#HUOM.2. ei niitä {sco}-juttuja ao. fktioon
-#tässä joutaisi kai ottaa mallia daedaluksen versiosta
-#function mangle_s() {
-#	local tgt
-#
-#	if [ y"${2}" == "y" ] ; then
-#		tgt=/etc/sudoers.d/meshuggah
-#	else
-#		tgt=/etc/sudoers.d/${2}
-#	fi
-#
-#	if [ -s ${1} ] ; then 
-#		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-#		csleep 1
-#		
-#		sudo chmod 0555 ${1}
-#		sudo chown root:root ${1} 
-#		#chattr +ui ${1}
-#
-#		csleep 1
-#		local s
-#		local n
-#
-#		n=$(whoami) #olisi myös %users...
-#		s=$(sha256sum ${1})
-#		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
-#		sleep 1
-#	else
-#		dqb "no sucg file as ${1} "
-#	fi
-#}
 
 n=$(whoami)
 
@@ -122,6 +90,7 @@ function pre_enforce() {
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	fi
 
+	#TODO:nämä ch-jutut enforce():en
 	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
 	sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? jos vaikka
 	sudo chown -R root:root /etc/sudoers.d
@@ -226,12 +195,12 @@ sudo touch /etc/apt/sources.list
 ${scm} a+w /etc/apt/sources.list
 
 #030325:tässä kusi hommat vähän(jos nyt 050325 kunnossa)
+#(jatkossa conf:iin se pakettipalvelin?)
 for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://devuan.keff.org/merged ${x} main" >> /etc/apt/sources.list ; done
 
 ${scm} a-w /etc/apt/sources.list
 ${sco} -R root:root /etc/apt 
 ${scm} -R a-w /etc/apt/
-
 [ ${mode} -eq 0 ] && exit
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
@@ -280,14 +249,11 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
-#${sdi} ${pkgdir}/dns-root-data*.deb 
-#[ $? -eq 0 ] && ${smr} -rf ${pkgdir}/dns-root-data*.deb 
-
 #HUOM.0505325:libgetdns10 kanssa oli jokin ongelma
 pre_part3  ~/Desktop/minimize/${distro} 
 part3 ~/Desktop/minimize/${distro} #olisi myöls se $d
 
-#toimii miten toimii tämä if-blokki (daedalus-versiosta voinee koipsata apremmin toimivan)
+#TODO	:passwd-blokki deadalus-versiopsta
 if [ ${mode} -eq 1 ] ; then
 	echo "passwd"
 	echo "${odio} passwd"
