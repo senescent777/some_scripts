@@ -12,7 +12,7 @@ else
 
 	dir=/mnt
 	odio=$(which sudo)
-	debug=1
+	
 	
 	function dqb() {
 		[ ${debug} -eq 1 ] && echo ${1}
@@ -24,9 +24,10 @@ else
 	
 fi
 
+debug=1
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0} #VAIH: em. laitetedton olemassaolo kantsisi varmaan testata
-[ -b ${part} ] || echo "no such thing as ${part}"
+[ -b ${part} ] || dqb "no such thing as ${part}"
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
@@ -53,7 +54,8 @@ if [ $# -gt 0 ] ; then
 
 		#HUOM. for d in find type d ... ajanee saman asian (VAIH)
 		#${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
-		for f in $(find ~/Desktop/minimize -type d) ; do ${scm} a-wx ${d}/* ; done 
+		for f in $(find ~/Desktop/minimize -type d) ; do ${scm} a-wx ${f}/* ; done 
+		csleep 4
 
 		#HUOM. kuinkahan taropeellinen mja tuo distro jatkossa?
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
@@ -62,6 +64,7 @@ if [ $# -gt 0 ] ; then
 		#HUOM.280125:uutena seur rivit, poista jos pykii
 		${scm} 0777 /tmp
 		${sco} root:root /tmp #oik. o=rwt mutta rwx kai tarpeeksi hyvä useimpiin tarkoituksiin
+		dqb "common_part_done"
 	}
 
 	case "${1}" in
@@ -83,10 +86,10 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
-			#VAIH:$d
-			pre_part3 ${d} #~/Desktop/minimize/${distro}
-			pr4 ${d} #~/Desktop/minimize/${distro}
-			part3 ${d} #~/Desktop/minimize/${distro}
+			#VAIH:$d (tai sit ei)
+			pre_part3 ~/Desktop/minimize/${distro} #$d
+			pr4 ~/Desktop/minimize/${distro} #${d}
+			part3 ~/Desktop/minimize/${distro} # #${d} 
 			csleep 3
 			#HUOM. part3 siivonnee .deb-paketit asj älk jos kaikki ok
 
