@@ -9,7 +9,7 @@ else
 	som="sudo /bin/mount"
 	uom="sudo /bin/umount"
 	scm="sudo /bin/chmod"
-	#HUOM.190125:part tarttisi myös, tai siis part0
+
 	dir=/mnt
 	odio=$(which sudo)
 	debug=1
@@ -25,7 +25,7 @@ else
 fi
 
 olddir=$(pwd)
-part=/dev/disk/by-uuid/${part0} #em. laitetedton olemassaolo kantsisi varmaan testata
+part=/dev/disk/by-uuid/${part0} #TODO: em. laitetedton olemassaolo kantsisi varmaan testata
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
@@ -49,7 +49,11 @@ if [ $# -gt 0 ] ; then
 		csleep 3
 
 		${scm} -R a-wx ~/Desktop/minimize/*
+
+		#HUOM. for d in find type d ... ajanee saman asian (TODO)
 		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
+
+		#HUOM. kuinkahan taropeellinen mja tuo distro jatkossa?
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
@@ -77,6 +81,7 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
+			#TODO:$d
 			pre_part3 ~/Desktop/minimize/${distro}
 			pr4 ~/Desktop/minimize/${distro}
 			part3 ~/Desktop/minimize/${distro}
