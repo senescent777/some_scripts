@@ -83,10 +83,10 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
-			#TODO:$d
-			pre_part3 ~/Desktop/minimize/${distro}
-			pr4 ~/Desktop/minimize/${distro}
-			part3 ~/Desktop/minimize/${distro}
+			#VAIH:$d
+			pre_part3 ${d} #~/Desktop/minimize/${distro}
+			pr4 ${d} #~/Desktop/minimize/${distro}
+			part3 ${d} #~/Desktop/minimize/${distro}
 			csleep 3
 			#HUOM. part3 siivonnee .deb-paketit asj älk jos kaikki ok
 
