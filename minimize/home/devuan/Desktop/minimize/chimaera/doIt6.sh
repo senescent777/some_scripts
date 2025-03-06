@@ -253,14 +253,19 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 pre_part3  ~/Desktop/minimize/${distro} 
 part3 ~/Desktop/minimize/${distro} #olisi myöls se $d
 
-#TODO	:passwd-blokki deadalus-versiopsta
 if [ ${mode} -eq 1 ] ; then
-	echo "passwd"
-	echo "${odio} passwd"
-	echo "${whack} xfce*"
+	dqb "R (in 6 secs)"; csleep 6
+	${odio} passwd
+	
+	if [ $? -eq 0 ] ; then
+		dqb "L (in 6 secs)"; csleep 6
+		passwd
+	fi
 
-#	dqb "no mas senor"
-	exit 	
+	if [ $? -eq 0 ] ; then
+		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
+		exit 	
+	fi
 fi
 
 ${asy}
