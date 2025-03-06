@@ -78,7 +78,7 @@ function pre_enforce() {
 	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
 	
 	#TODO:clouds: a) nimeäminen fiksummin 
-	for f in /etc/init.d/stubby ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
+	for f in /etc/init.d/stubby ${d}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
 	
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
@@ -143,7 +143,7 @@ function enforce_access() {
 	${scm} 0755 ~/Desktop/minimize	
 	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
 	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
-	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
+	${scm} a+x ${d}/*.sh
 	
 	f=$(date +%F)
 	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
@@ -249,12 +249,10 @@ if [ ${mode} -eq 1 ] ; then
 	fi
 
 	if [ $? -eq 0 ] ; then
-		#HUOM. mitähän tekisi /e/i.d/slim restart? let's find out?
 		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
 		exit 	
 	fi
 fi
-
 
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
@@ -286,17 +284,16 @@ if [ ${debug} -eq 1 ] ; then
 fi #
 
 #===================================================PART 3===========================================================
-dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
+dqb "INSTALLING NEW PACKAGES IN 10 SECS"
 csleep 3
 
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
+pre_part3 ${d}
+pr4 ${d}
+part3 ${d}
 
-pre_part3 ~/Desktop/minimize/${distro}
-pr4  ~/Desktop/minimize/${distro}
-
-part3  ~/Desktop/minimize/${distro}    #${pkgdir}
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
