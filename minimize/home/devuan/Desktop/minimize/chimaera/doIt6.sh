@@ -90,11 +90,16 @@ function pre_enforce() {
 	
 		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	fi
+}
 
-	#TODO:nämä ch-jutut enforce():en
-	sudo chmod 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
-	sudo chmod 0750 /etc/sudoers.d #uskaltaakohan? jos vaikka
-	sudo chown -R root:root /etc/sudoers.d
+function enforce_access() {
+	dqb "3nf0rc3_acc355()"
+	local f
+
+	#HUOM. ennen /home:n sorkkimista olevat rivit aiemmin pre_enoirce():ssam takaisin jos qsee
+	${sco} 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
+	${scm} 0750 /etc/sudoers.d #uskaltaakohan? jos vaikka
+	${sco} -R root:root /etc/sudoers.d
 
 	#tässä vai enforce_access():issa parempi näiden?
 	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
@@ -120,11 +125,6 @@ function pre_enforce() {
 
 	${scm} 0755 /
 	${sco} root:root /
-}
-
-function enforce_access() {
-	dqb "3nf0rc3_acc355()"
-	local f
 
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
