@@ -25,7 +25,8 @@ else
 fi
 
 olddir=$(pwd)
-part=/dev/disk/by-uuid/${part0} #TODO: em. laitetedton olemassaolo kantsisi varmaan testata
+part=/dev/disk/by-uuid/${part0} #VAIH: em. laitetedton olemassaolo kantsisi varmaan testata
+[ -b ${part} ] || echo "no such thing as ${part}"
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
