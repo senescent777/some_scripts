@@ -51,8 +51,9 @@ if [ $# -gt 0 ] ; then
 
 		${scm} -R a-wx ~/Desktop/minimize/*
 
-		#HUOM. for d in find type d ... ajanee saman asian (TODO)
-		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
+		#HUOM. for d in find type d ... ajanee saman asian (VAIH)
+		#${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
+		for f in $(find ~/Desktop/minimize -type d) ; do ${scm} a-wx ${d}/* ; done 
 
 		#HUOM. kuinkahan taropeellinen mja tuo distro jatkossa?
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
