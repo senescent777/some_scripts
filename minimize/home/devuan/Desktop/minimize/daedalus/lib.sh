@@ -4,8 +4,8 @@
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
-${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? no ainakin loppuu nalkutukset mahd aikaisin
-#josko jokin toinen komento vielä sudoersiin liittyen?
+${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
+${odio} chmod 0440 /etc/sudoers.d/* 
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
