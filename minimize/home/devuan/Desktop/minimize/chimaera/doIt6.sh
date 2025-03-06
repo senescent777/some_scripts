@@ -97,10 +97,10 @@ function enforce_access() {
 	local f
 
 	#HUOM. ennen /home:n sorkkimista olevat rivit aiemmin pre_enoirce():ssam takaisin jos qsee
-	${sco} 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
-	${scm} 0750 /etc/sudoers.d #uskaltaakohan? jos vaikka
 	${sco} -R root:root /etc/sudoers.d
-
+	${scm} 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
+	${scm} 0750 /etc/sudoers.d #uskaltaakohan? jos vaikka
+	
 	#tässä vai enforce_access():issa parempi näiden?
 	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
 		mangle2 ${f}

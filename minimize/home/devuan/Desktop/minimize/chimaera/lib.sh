@@ -3,6 +3,8 @@
 
 odio=$(which sudo)
 [ -x ${odio} ] || exit 666
+${odio} chown -R 0:0 /etc/sudoers.d 
+${odio} chmod 0440 /etc/sudoers.d/* 
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -178,6 +180,7 @@ function pr4() {
 }
 
 function pre_part3() {
+	dqb "pre_part3( ${1})"
 	${sdi} ${1}/dns-root-data*.deb
 	${smr} -rf ${1}/dns-root-data*.deb
 
@@ -188,6 +191,7 @@ function pre_part3() {
 }
 
 function part3() {
+	dqb "part3( ${1})"
 	${sdi} ${1}/lib*.deb
 
 	if [ $? -eq  0 ] ; then
@@ -213,6 +217,7 @@ function part3() {
 	fi
 
 	csleep 2
+	dqb "pt3 d0m3"
 }
 
 #part1?
