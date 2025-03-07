@@ -236,7 +236,7 @@ ${odio} /etc/init.d/ntpsec stop
 
 #===================================================PART 2===================================
 if [ -s ~/Desktop/minimize/xfce.tar ] ; then
-	${rat} -C / -xvf  ~/Desktop/minimize/xfce.tar
+	${rat} -C / -xvf ~/Desktop/minimize/xfce070325.tar
 fi
 
 #TODO:se ffox-profiili-jutska kanssa
@@ -296,6 +296,7 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 pre_part3 ${d}
 pr4 ${d}
 part3 ${d}
+#HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI (daudaluksen kanssa ok mutta chimaera...)
 
 echo $?
 sleep 3
@@ -319,6 +320,7 @@ if [ ${mode} -eq 2 ] ; then
  	exit 
 fi
 
+#070235: heittääkö pihalle xfce:stä tuossa yllä vai ei?
 sudo ${d}/clouds.sh 1
 
 #VAIH:stubby-jutut toimimaan

@@ -84,7 +84,8 @@ if [ $# -gt 0 ] ; then
 			pr4 ~/Desktop/minimize/${distro}
 			part3 ~/Desktop/minimize/${distro}
 			csleep 3
-			
+			#HUOM. BARMISTA ETTÄ ÅPOSTUUKO PAKETIT $dtstro:n alta VAIKO ERI
+
 			csleep 3
 			cd ${olddir}
 			echo "NEXT: $0 2"

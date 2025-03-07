@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #HUOM.020225: sopisi olla slim:in login.ongelmat korjattu nyt
-#TODO:xfce-asetukset mukaan varm. vuoksi?
+#VAIH:xfce-asetukset mukaan varm. vuoksi?
 
 d=$(dirname $0)
 debug=1
@@ -38,6 +38,7 @@ function make_tar() {
 	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
 	dqb "${srat} -cf ${1}"  #HUOM.260125: -p wttuun varm. vuoksi  
+	#TODO:jatkossa tähän väliin xfce.tar luominen minimize alle, käyttöäen .config/xfce4/xfconf/xfce-perchannel-xml lähtreenä 	
 	${srat} -cf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 }
 
