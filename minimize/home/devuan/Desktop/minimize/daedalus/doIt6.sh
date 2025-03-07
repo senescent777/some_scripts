@@ -87,11 +87,15 @@ function pre_enforce() {
 
 	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	
+}
+
+function enforce_access() {
+	dqb "3nf0rc3_acc355()"
+#HUOM. 070325: oli ao. loitsut / asti ennen pre_enforce():n puolella
 	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
 
-	#TODO:ao. ch-loitsut enrofce_access():iin
 	echo "changing /sbin , /etc and /var 4 real"
 	${sco} -R root:root /sbin
 	${scm} -R 0755 /sbin
@@ -120,10 +124,6 @@ function pre_enforce() {
 
 	${scm} 0755 /
 	${sco} root:root /
-}
-
-function enforce_access() {
-	dqb "3nf0rc3_acc355()"
 
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
@@ -212,7 +212,6 @@ for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://d
 ${scm} a-w /etc/apt/sources.list
 ${sco} -R root:root /etc/apt 
 ${scm} -R a-w /etc/apt/
-#TODO:sco /etc/apt
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
@@ -287,7 +286,7 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
-#toimiiko?
+#toimiiko? jos vaikka
 pre_part3 ${d}
 pr4 ${d}
 part3 ${d}
