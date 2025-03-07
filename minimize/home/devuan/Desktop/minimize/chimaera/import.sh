@@ -13,7 +13,6 @@ else
 	dir=/mnt
 	odio=$(which sudo)
 	
-	
 	function dqb() {
 		[ ${debug} -eq 1 ] && echo ${1}
 	}
@@ -26,7 +25,7 @@ fi
 
 debug=1
 olddir=$(pwd)
-part=/dev/disk/by-uuid/${part0} #VAIH: em. laitetedton olemassaolo kantsisi varmaan testata
+part=/dev/disk/by-uuid/${part0}
 [ -b ${part} ] || dqb "no such thing as ${part}"
 dqb "b3f0r3 0ld.tar"
 csleep 5
@@ -51,9 +50,6 @@ if [ $# -gt 0 ] ; then
 		csleep 3
 
 		${scm} -R a-wx ~/Desktop/minimize/*
-
-		#HUOM. for d in find type d ... ajanee saman asian (VAIH)
-		#${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
 		for f in $(find ~/Desktop/minimize -type d) ; do ${scm} a-wx ${f}/* ; done 
 		csleep 4
 
