@@ -26,8 +26,9 @@ else
 	}	
 fi
 
-#debug=1
+debug=1
 
+#VAIH:varm. vuoksi .deb-paketit pois ennen tar ?
 function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
@@ -37,9 +38,17 @@ function make_tar() {
 	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
+	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
+
 	dqb "${srat} -cf ${1}"  #HUOM.260125: -p wttuun varm. vuoksi  
-	#TODO:jatkossa tähän väliin xfce.tar luominen minimize alle, käyttöäen .config/xfce4/xfconf/xfce-perchannel-xml lähtreenä 	
-	${srat} -cf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
+	#VAIH:jatkossa tähän väliin xfce.tar luominen minimize alle, käyttöäen  lähtreenä 	
+	${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
+	
+	if [ ${debug} -eq 1 ] ; then
+		ls -las ~/Desktop/minimize/; sleep 10
+	fi
+	
+	${srat} -cvf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 }
 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin...
@@ -104,9 +113,11 @@ function make_tar_15() {
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
 	${odio} shred -fu  ~/Desktop/minimize/${distro}/*.deb
-	csleep 4 
+	sleep 4 
+
+	#HUOM.070325: varm vuoksi speksataan että *.deb
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
-	${srat} -rf ${1} ~/Desktop/minimize/${distro}
+	${srat} -rf ${1} ~/Desktop/minimize/${distro}/*.deb
 	#HUOM.260125: -p wttuun varm. vuoksi  
 
 	dqb "sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
@@ -170,7 +181,7 @@ function make_tar2() {
 	echo "#dqb cd ${q}"
 	cd ${q}
 
-	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm} #HUOM. tartteeko yhtenään renkata?
 	csleep 1
 
 	#olisi kiva jos ei tarvitsisi koko projektia vetää, wget -r tjsp
