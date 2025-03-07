@@ -235,6 +235,12 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
+if [ -s ~/Desktop/minimize/xfce.tar ] ; then
+	${rat} -C / -xvf  ~/Desktop/minimize/xfce.tar
+fi
+
+#TODO:se ffox-profiili-jutska kanssa
+
 if [ ${mode} -eq 1 ] ; then
 	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd
