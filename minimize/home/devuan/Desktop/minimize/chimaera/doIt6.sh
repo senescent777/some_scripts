@@ -42,6 +42,7 @@ function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit 
 	[ -s ${1} ] || exit 
+	#-x $1 kanssa?
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit 
 
@@ -157,7 +158,10 @@ function part1() {
 	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
-	if [ $ic -gt 0 ] ; then
+	##if [ $ic -gt 0 ] ; then
+	#if [ y"${ipt}" == "y" ] ; then
+	#	echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+	#else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
 			${ip6t} -P ${t} DROP
@@ -171,7 +175,7 @@ function part1() {
 			${ip6t} -L #
 			sleep 5 
 		fi #
-	fi
+	#fi
 }
 
 if [ $# -gt 0 ] ; then
