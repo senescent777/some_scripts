@@ -25,7 +25,8 @@ else
 fi
 
 olddir=$(pwd)
-part=/dev/disk/by-uuid/${part0} #em. laitetedton olemassaolo kantsisi varmaan testata
+part=/dev/disk/by-uuid/${part0}
+[ -b ${part} ] || dqb "no such thing as ${part}"
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
@@ -49,7 +50,9 @@ if [ $# -gt 0 ] ; then
 		csleep 3
 
 		${scm} -R a-wx ~/Desktop/minimize/*
-		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
+		#${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
+		for f in $(find ~/Desktop/minimize -type d) ; do ${scm} a-wx ${f}/* ; done 
+		
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
@@ -77,12 +80,11 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
-			pre_part3  ~/Desktop/minimize/${distro}
-			pr4  ~/Desktop/minimize/${distro}
-			part3  ~/Desktop/minimize/${distro}
+			pre_part3 ~/Desktop/minimize/${distro}
+			pr4 ~/Desktop/minimize/${distro}
+			part3 ~/Desktop/minimize/${distro}
 			csleep 3
-			#HUOM.part3 viimeistään poistaa asennellut paketit
-
+			
 			csleep 3
 			cd ${olddir}
 			echo "NEXT: $0 2"
