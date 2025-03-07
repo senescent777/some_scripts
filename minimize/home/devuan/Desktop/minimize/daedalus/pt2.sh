@@ -133,7 +133,7 @@ csleep 6
 ${scm} a-wx $0 
 
 #whack xfce so that the ui is reset
-${whack} xfce*
-#sössön sössön
+${whack} xfce4-session
+#HUOM. omegankin toiminnan voisi testata
 
 

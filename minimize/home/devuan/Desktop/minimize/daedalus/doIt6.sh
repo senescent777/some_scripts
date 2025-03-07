@@ -223,6 +223,7 @@ done
 dqb "shutting down some services (4 real) in 3 secs"
 sleep 3 
 
+#pitäisiköhän näillekin tehdä jotain=
 ${whack} cups*
 ${whack} avahi*
 ${whack} dnsmasq*
@@ -231,12 +232,14 @@ ${whack} nm-applet
 
 #ntp ehkä takaisin myöhemmin
 ${whack} ntp*
+csleep 10
 ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
 if [ -s ~/Desktop/minimize/xfce.tar ] ; then
-	${rat} -C / -xvf ~/Desktop/minimize/xfce070325.tar
+	${rat} -C / -xvf ~/Desktop/minimize/xfce.tar
+	csleep 5	
 fi
 
 #TODO:se ffox-profiili-jutska kanssa
@@ -251,7 +254,8 @@ if [ ${mode} -eq 1 ] ; then
 	fi
 
 	if [ $? -eq 0 ] ; then
-		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
+		${whack} xfce4-session
+		#HUOM. tässä ei tartte jos myöhemmin joka tap
 		exit 	
 	fi
 fi
@@ -296,7 +300,7 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 pre_part3 ${d}
 pr4 ${d}
 part3 ${d}
-#HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI (daudaluksen kanssa ok mutta chimaera...)
+#(daudaluksen kanssa ok mutta chimaera...)
 
 echo $?
 sleep 3
@@ -316,11 +320,11 @@ ${scm} a-wx $0 #kerta tulisi riittää
 if [ ${mode} -eq 2 ] ; then
 	echo "time to ${sifu} ${iface} or whåtever"
 	csleep 5
-	${whack} xfce* 
+	${whack} xfce4-session
  	exit 
 fi
 
-#070235: heittääkö pihalle xfce:stä tuossa yllä vai ei?
+#070235: heittääkö pihalle xfce:stä tuossa yllä vai ei? vissiin pitää muuttaa parametreja
 sudo ${d}/clouds.sh 1
 
 #VAIH:stubby-jutut toimimaan
@@ -341,5 +345,5 @@ echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
 if [ ${debug} -eq 1 ] ; then 
 	sleep 5
 	#whack xfce so that the ui is reset
-	${whack} xfce* 
+	${whack} xfce4-session
 fi
