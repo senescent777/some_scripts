@@ -38,23 +38,20 @@ function check_params() {
 
 function mangle_s() {
 	local tgt
-	[ y"${1}" == "y" ] && exit 
+	[ y"${1}" == "y" ] && exit
+	[ -s ${1} ] || exit  
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit  
+
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
-	if [ -s ${1} ] ; then 
-		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
-		sudo chown root:root ${1} 
+	sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
+	sudo chown root:root ${1} 
 
-		local s
-
-		s=$(sha256sum ${1})
-		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
-	else
-		dqb "no sucg file as ${1} "
-	fi
+	local s
+	s=$(sha256sum ${1})
+	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
 }
 
 function pre_enforce() {
@@ -76,9 +73,8 @@ function pre_enforce() {
 	sudo chmod 0660 ${q}/meshuggah	
 		
 	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
-	
 	#TODO:clouds: a) nimeäminen fiksummin 
-	for f in /etc/init.d/stubby ${d}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
+	for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
 	
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
@@ -95,6 +91,7 @@ function pre_enforce() {
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
 
+	#TODO:ao. ch-loitsut enrofce_access():iin
 	echo "changing /sbin , /etc and /var 4 real"
 	${sco} -R root:root /sbin
 	${scm} -R 0755 /sbin
@@ -215,7 +212,7 @@ for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://d
 ${scm} a-w /etc/apt/sources.list
 ${sco} -R root:root /etc/apt 
 ${scm} -R a-w /etc/apt/
-
+#TODO:sco /etc/apt
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
@@ -290,6 +287,7 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
+#toimiiko?
 pre_part3 ${d}
 pr4 ${d}
 part3 ${d}
