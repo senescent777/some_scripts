@@ -41,22 +41,19 @@ n=$(whoami)
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit 
+	[ -s ${1} ] || exit 
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit 
+
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
-	if [ -s ${1} ] ; then 
-		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
-		sudo chown root:root ${1} 
+	sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
+	sudo chown root:root ${1} 
 
-		local s
-
-		s=$(sha256sum ${1})
-		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
-	else
-		dqb "no sucg file as ${1} "
-	fi
+	local s
+	s=$(sha256sum ${1})
+	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
 }
 
 function pre_enforce() {
@@ -74,10 +71,9 @@ function pre_enforce() {
 		sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
 		sudo chmod 0660 ${q}/meshuggah	
 		
-		#HUOM. clouds ja stubby mukaan toisella tavalla jatkossa?
-		for f in ${CB_LIST1} ; do mangle_s ${f}  ${q}/meshuggah ; done
-		#for f in ~/Desktop/minimize/${distro}/clouds.sh 
-		for f in ${d}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f}  ${q}/meshuggah ; done
+		#HUOM.  ja stubby mukaan toisella tavalla jatkossa?
+		for f in ${CB_LIST1} ; do mangle_s ${f}  ${q}/meshuggah ; done 
+		for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f}  ${q}/meshuggah ; done
 
 		if [ -s ${q}/meshuggah ] ; then
 			dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
