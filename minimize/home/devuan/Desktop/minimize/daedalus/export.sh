@@ -179,10 +179,6 @@ function make_tar2() {
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
 	${srat} -rf ${1} ./etc ./sbin 
 	cd ${p}
-	
-	#TODO:manifest-jutut aivan viimeisenä (main())
-	${srat} -tf ${1} > MANIFEST
-	${srat} -rf ${1} ${p}/MANIFEST
 }
 
 function make_upgrade() {
@@ -235,6 +231,10 @@ case ${mode} in
 		make_tar_1_75 ${tgtfile}
 		make_tar2 ${tgtfile}
 		make_tar_15 ${tgtfile}
+
+		#VAIH:manifest-jutut aivan viimeisenä (main())
+		${srat} -tf ${1} > ./MANIFEST
+		${srat} -rf ${1} ./MANIFEST
 	;;
 	1|u|upgrade)
 		make_upgrade ${tgtfile}

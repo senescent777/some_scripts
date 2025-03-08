@@ -238,6 +238,7 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
+#for .. do .. done saattaisi olla fiksumpi tässä
 if [ -s ~/Desktop/minimize/xfce.tar ] ; then
 	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
 else 
