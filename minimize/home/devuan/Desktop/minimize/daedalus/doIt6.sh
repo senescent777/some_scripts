@@ -54,6 +54,8 @@ function mangle_s() {
 	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
 }
 
+#HUOm.080325 sietäisi kai harkita chimaeralle ja daedalukselle yhteistä kirjasrtoa
+
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	local q
@@ -91,7 +93,7 @@ function pre_enforce() {
 
 function enforce_access() {
 	dqb "3nf0rc3_acc355()"
-#HUOM. 070325: oli ao. loitsut / asti ennen pre_enforce():n puolella
+	#HUOM. 070325: oli ao. loitsut / asti ennen pre_enforce():n puolella
 	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
@@ -101,7 +103,6 @@ function enforce_access() {
 	${scm} -R 0755 /sbin
 
 	${sco} -R root:root /etc
-	
 	for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
 	#"find: ‘/etc/sudoers.d/’: Permission denied" jotain tarttis tehrä
@@ -238,10 +239,14 @@ ${odio} /etc/init.d/ntpsec stop
 
 #===================================================PART 2===================================
 if [ -s ~/Desktop/minimize/xfce.tar ] ; then
-	${rat} -C / -xvf ~/Desktop/minimize/xfce.tar
-	csleep 5	
+	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
+else 
+	if  [ -s ~/Desktop/minimize/xfce070325.tar ] ; then
+		${srat} -C / -xvf ~/Desktop/minimize/xfce070325.tar
+	fi
 fi
 
+csleep 5
 #TODO:se ffox-profiili-jutska kanssa
 
 if [ ${mode} -eq 1 ] ; then
