@@ -158,9 +158,9 @@ function part1() {
 	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
 	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
 
-	#if [ y"${ipt}" == "y" ] ; then
-	#	echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-	#else
+	if [ y"${ipt}" == "y" ] ; then
+		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+	else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
 			${ip6t} -P ${t} DROP
@@ -174,7 +174,7 @@ function part1() {
 			${ip6t} -L #
 			sleep 5 
 		fi #
-	#fi
+	fi
 }
 
 if [ $# -gt 0 ] ; then
@@ -256,8 +256,14 @@ part3 ${d}
 #HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI
 
 if [ -s ~/Desktop/minimize/xfce.tar ] ; then
-	${rat} -C / -xvf  ~/Desktop/minimize/xfce070325.tar
+	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
+else 
+	if  [ -s ~/Desktop/minimize/xfce070325.tar ] ; then
+		${srat} -C / -xvf ~/Desktop/minimize/xfce070325.tar
+	fi
 fi
+
+csleep 5
 
 #TODO:se ffox-profiili-jutska kanssa
 
