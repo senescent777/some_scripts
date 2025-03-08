@@ -5,10 +5,9 @@ odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
 
-${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? no ainakin loppuu nalkutukset mahd aikaisin
+${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
+${odio} chmod 0440 /etc/sudoers.d/* 
 
-
-#Näillä main jotain unary operator-valitusta vaiko kutsuvasta skriptstä kuitenkin?
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -24,7 +23,6 @@ function pre_part3() {
 	[ -d ${1} ] || exit
 	echo "pp3.2"
 
-	#HUOM.060125: uutena tables-asennus ennen vbarsinaista asennusta
 	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	(esim find)
 	
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
@@ -43,28 +41,25 @@ function pre_part3() {
 	${odio} dpkg -i ${1}/iptables-*.deb
 	[ $? -eq 0 ] && ${odio} shred -fu ${1}/iptables-*.deb
 
-	echo "pp3.3"
-	##uutena(vielä menossa arpajaiset että tartteeko asentaa vaiko poistaa)
-	##${odio} dpkg -i ${1}/libdbus*.deb
-	##[ $? -eq 0 ] && 
-	#${odio} shred -fu ${1}/libdbus*.deb
-
 	dqb "pp3 d0n3"
 	csleep 5
 }
 
 pr4() {
-	#ao. versio aiheesta kopsattu tdstodts import.sh, pois jos pykii
-	#VAIH:josko koettaisi masennella nuo ao. paketit ennen varsinaista masxennusta	
+	dqb "pr4[ ${1})"
+	csleep 5
+
 	${odio} dpkg -i ${1}/libpam-modules-bin_*.deb
 	${odio} dpkg -i ${1}/libpam-modules_*.deb
 	sudo shred -fu ${1}/libpam-modules*
-	sleep 5
+	csleep 5
 	${odio} dpkg -i ${1}/libpam*.deb
 
-	${odio} dpkg -i ${1}/perl-modules-*.deb libperl*.deb
-	sudo shred -fu ${1}/perl-modules-*.deb libperl*.deb
-	sleep 5
+	${odio} dpkg -i ${1}/perl-modules-*.deb
+	${odio} dpkg -i ${1}/libperl*.deb #erikseen vai yhdessä? let's find out
+	sudo shred -fu ${1}/perl-modules-*.deb 
+	sudo shred -fu ${1}/libperl*.deb
+	csleep 5
 
 	${odio} dpkg -i ${1}/perl*.deb
 	#echo "sudo shred -fu ${1}/perl*.deb"
@@ -114,8 +109,11 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
-		pre_part3 ${pkgdir}
-		pr4 ${pkgdir}
+
+		#konftdston muo9kkaaminen olisi ehkä helpompi
+		pre_part3 ~/Desktop/minimize/${distro}
+		pr4 ~/Desktop/minimize/${distro}
+
 
 		ipt=$(sudo which iptables)
 		ip6t=$(sudo which ip6tables)
@@ -164,12 +162,9 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
-	#CB_list'iin mukaan vai ei? vai oliko jo?
 	dch=$(find /sbin -name dhclient-script)
 	[ x"${dch}" == "x" ] && exit 6
 	[ -x ${dch} ] || exit 6
-	#ocs dhclient-script
-	#enforce'en mukaan find -name dhclient-script* tjsp?
 
 	#HUOM:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 	dqb "b1nar135 0k" 
@@ -203,7 +198,7 @@ function check_binaries2() {
 	csleep 5
 	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
 	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
-	#[ $debug -eq 1 ] && ls -las ~/Desktop/minimize;sleep 6
+
 
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
@@ -228,10 +223,8 @@ function check_binaries2() {
 function mangle2() {
 	if [ -f ${1} ] ; then 
 		dqb "MANGLED ${1}"
-		#sleep 1
 		${scm} o-rwx ${1}
 		${sco} root:root ${1}
-		#csleep 1
 	fi
 }
 
@@ -265,12 +258,11 @@ function mangle2() {
 #=========================PART 0 ENDS HERE=================================================================
 
 
-
 function part3() {
 	[ y"${1}" == "y" ] && exit 1
 	dqb "11"
 	[ -d ${1} ] || exit 2
-	dqb "22"
+	dqb "22 ${1}"
 	${sdi} ${1}/lib*.deb
 
 	if [ $? -eq  0 ] ; then

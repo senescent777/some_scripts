@@ -9,11 +9,7 @@ else
 	exit 111	
 fi
 
-#HUOM. 260125: suattaapi olla niinnii jotta "80 megaa vs 180" ei liity suoraan paketteihin
-#DONE?:/v/c/man-nalkutus (sopisi olla ainakin)
-#180125:/tmp-jekku kai toimii jo
 n=$(whoami)
-
 
 function parse_opts_1() {
 	case "${1}" in
@@ -40,36 +36,26 @@ function check_params() {
 	esac
 }
 
-#HUOM. _s - kutsun oltava ennenq check_binaries2() kutsutaan tjsp.
-#HUOM.2. ei niitä {sco}-juttuja ao. fktioon, varm vuoksi
 
 function mangle_s() {
 	local tgt
+	[ y"${1}" == "y" ] && exit
+	[ -s ${1} ] || exit  
+	[ y"${2}" == "y" ] && exit 
+	[ -f ${2} ] || exit  
 
-	[ y"${1}" == "y" ] && exit 
 	tgt=${2}
 	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
-	if [ -s ${1} ] ; then 
-		#chattr -ui ${1} #chattr ei välttämättä toimi overlay'n tai squashfs'n kanssa
-		#csleep 1
+	sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
+	sudo chown root:root ${1} 
 
-		sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
-		sudo chown root:root ${1} 
-		#chattr +ui ${1}
-
-		#csleep 1
-		local s
-		#local n
-#
-		#n=$(whoami) #olisi myös %users...
-		s=$(sha256sum ${1})
-		sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
-		#sleep 1
-	else
-		dqb "no sucg file as ${1} "
-	fi
+	local s
+	s=$(sha256sum ${1})
+	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
 }
+
+#HUOm.080325 sietäisi kai harkita chimaeralle ja daedalukselle yhteistä kirjasrtoa
 
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
@@ -77,30 +63,22 @@ function pre_enforce() {
 	q=$(mktemp -d)	
 	local f 
 
-	#jotain tolkkua tähän if-blokkiin olisi hyvä saada(esim mv pois)
+	dqb "sudo touch ${q}/meshuggah in 5 secs"
+	csleep 5
+	sudo touch ${q}/meshuggah
 
-	#if [ -f /etc/sudoers.d/meshuggah ] ; then
-	#	#sudo mv /etc/sudoers.d/meshuggah /etc/sudoers.d/meshuggah.0LD
-	#	[ $? -eq 0 ] && dqb "a51a kun05a"
-	#else	
-		dqb "sudo touch ${q}/meshuggah in 5 secs"
-		csleep 5
-		sudo touch ${q}/meshuggah
+	[ ${debug} -eq 1 ] && ls -las ${q}
+	csleep 6
+	[ -f ${q}/meshuggah ] || exit
+	dqb "ANNOYING AMOUNT OF DEBUG"
 
-		[ ${debug} -eq 1 ] && ls -las ${q}
-		csleep 6
-		[ -f ${q}/meshuggah ] || exit
-		dqb "ANNOYING AMOUNT OF DEBUG"
-
-		sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
-		sudo chmod 0660 ${q}/meshuggah	
+	sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
+	sudo chmod 0660 ${q}/meshuggah	
 		
-		for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
-	
-		#TODO:clouds: a) nimeäminen fiksummin 
-		for f in /etc/init.d/stubby ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
-	#fi
-	
+	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
+	#TODO:clouds: a) nimeäminen fiksummin 
+	for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
+
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
 		csleep 5
@@ -112,6 +90,11 @@ function pre_enforce() {
 
 	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
 	
+}
+
+function enforce_access() {
+	dqb "3nf0rc3_acc355()"
+	#HUOM. 070325: oli ao. loitsut / asti ennen pre_enforce():n puolella
 	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
@@ -121,14 +104,8 @@ function pre_enforce() {
 	${sco} -R root:root /sbin
 	${scm} -R 0755 /sbin
 
-
-	#this part inspired by:https://raw.githubusercontent.com/senescent777/project/main/opt/bin/part0.sh
-	#HUOM! ei sitten sorkita /etc sisältöä tässä (?)
 	${sco} -R root:root /etc
 
-
-	#erillinen mangle2 /e/s.d tarpeellinen? vissiin juuri sudoers.d/* takia
-	#HUOM.080125:olikohan peräti tarpeellista että erikseen pre_e ja sitten tämä?		
 	for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
 	#"find: ‘/etc/sudoers.d/’: Permission denied" jotain tarttis tehrä
@@ -139,12 +116,6 @@ function pre_enforce() {
 
 	#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
 	${scm} 0755 /etc 
-
-	#HUOM. 080125:tästgä saattaa tulla jotain nalkutusta
-	#pitäisi kai jotenkin huomioida:
-	#0 drwxrwsr-x 2 root staff   3 May 10  2023 local
-	#0 drwxr-xr-x 1 root root  360 Jan  8 21:46 log
-	#0 drwxrwsr-x 2 root mail    3 Jul 20  2023 mail
 		
 	${sco} -R root:root /var
 	${scm} -R 0755 /var
@@ -152,28 +123,15 @@ function pre_enforce() {
 	${sco} root:staff /var/local
 	${sco} root:mail /var/mail
 		
-	#jokohan alkaisi nalkutus loppua?
 	${sco} -R man:man /var/cache/man 
 	${scm} -R 0755 /var/cache/man
 
 	${scm} 0755 /
 	${sco} root:root /
-}
-
-#HUOM.270125.1: pelkkä enforce=1 viimeisimmän mergen mukaisissa skripteissä -> login ok
-#HUOM.270125.2:entä alun chmod+chown? edelleen login ok
-#HUOM.270125.3: /etc sorkkiminen? vissiin ok
-#HUOM.270125.4 /var? ok edelleen
-function enforce_access() {
-	dqb "3nf0rc3_acc355()"
 
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
 	${scm} 0755 /home
-
-	#HUOM.260125: saattoipa loginin pykiminen aiheutua alustamatt0omasta mjasta n (tai sit ei)
-	#local n
-	#n=$(whoami)
 
 
 	if [ y"${n}" != "y" ] ; then
@@ -187,7 +145,7 @@ function enforce_access() {
 	${scm} 0755 ~/Desktop/minimize	
 	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
 	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
-	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
+	${scm} a+x ${d}/*.sh
 	
 	f=$(date +%F)
 	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
@@ -248,29 +206,17 @@ dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necess
 part1
 g=$(date +%F)
 
-#roiskisikohan nuo sources.list ja muut part1:seen?
+csleep 5
+[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
-if [ -s /etc/apt/sources.list.tmp ] ; then #tämän kanssa tarttisi tehd vielä jotain?
-	dqb "https://raw.githubusercontent.com/senescent777/project/main/home/devuan/Dpckcer/buildr/bin/mutilate_sql_2.sh"
-	csleep 5
-	
-	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+sudo touch /etc/apt/sources.list
+${scm} a+w /etc/apt/sources.list
 
-	sudo touch /etc/apt/sources.list
-	${scm} a+w /etc/apt/sources.list
+for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list ; done
 
-	${odio} sed -i 's/DISTRO/daedalus/g' /etc/apt/sources.list.tmp #>> /etc/apt/sources.list
-	sudo mv /etc/apt/sources.list.tmp /etc/apt/sources.list
-
-	${scm} a-w /etc/apt/sources.list
-	${sco} -R root:root /etc/apt #/sources.list
-	${scm} -R a-w /etc/apt/
-
-	[ ${debug} -eq 1 ] && ls -las /etc/apt
-	csleep 5
-fi
-
-#HUOM.310125: muista testata ainakin tässä kohtaa meneekö slim rikki
+${scm} a-w /etc/apt/sources.list
+${sco} -R root:root /etc/apt 
+${scm} -R a-w /etc/apt/
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
@@ -282,6 +228,7 @@ done
 dqb "shutting down some services (4 real) in 3 secs"
 sleep 3 
 
+#pitäisiköhän näillekin tehdä jotain=
 ${whack} cups*
 ${whack} avahi*
 ${whack} dnsmasq*
@@ -290,11 +237,24 @@ ${whack} nm-applet
 
 #ntp ehkä takaisin myöhemmin
 ${whack} ntp*
+csleep 10
 ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
-#HUOM.020225:vissiin toimii jo ao. blokki, sitten siirto aie3mmaksi ettei pakettien poistelu vain paskoisi slim:in toimintaa
+#for .. do .. done saattaisi olla fiksumpi tässä
+if [ -s ~/Desktop/minimize/xfce.tar ] ; then
+	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
+else 
+	if  [ -s ~/Desktop/minimize/xfce070325.tar ] ; then
+		${srat} -C / -xvf ~/Desktop/minimize/xfce070325.tar
+	fi
+fi
+
+csleep 5
+#TODO:se ffox-profiili-jutska kanssa
+
+
 if [ ${mode} -eq 1 ] ; then
 	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd
@@ -305,17 +265,11 @@ if [ ${mode} -eq 1 ] ; then
 	fi
 
 	if [ $? -eq 0 ] ; then
-		#HUOM. mitähän tekisi /e/i.d/slim restart? let's find out?
-		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
+		${whack} xfce4-session
+		#HUOM. tässä ei tartte jos myöhemmin joka tap
 		exit 	
 	fi
 fi
-
-#[ ${debug} -eq 1 ] && ${spd} > ${d}/pkgs-${g}.txt
-##debug-syistä tuo yo. rivi
-#csleep 6
-
-#${sharpy} color* #uutena 010225 (P.S. voisi selvittää miksi xorg yritetään poistaa)
 
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
 # libopts25 ei tömmöistä daedaluksessa
@@ -325,10 +279,7 @@ ${sharpy} rpc* nfs*
 ${sharpy} modem* wireless* wpa*
 ${sharpy} iw lm-sensors
 
-#paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 ${sharpy} ntp*
-
-#uutena 050125, alunp. pol-paketit pois koska slahdot tammikuun -22 lopussa 
 ${sharpy} po* pkexec
 ${lftr}
 csleep 3
@@ -350,57 +301,42 @@ if [ ${debug} -eq 1 ] ; then
 fi #
 
 #===================================================PART 3===========================================================
-dqb "INSTALLING NEW PACKAGES FROM ${pkgdir} IN 10 SECS"
+dqb "INSTALLING NEW PACKAGES IN 10 SECS"
 csleep 3
 
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
-#VAIH:p3, pp3 liittyviä muutox, josko nuo yhdet paketit kuitenkin saisi asennettua
-#TODO:kohtapuoliimn myytoksia ao. riveille
-pre_part3 ${pkgdir}
+#toimiiko? jos vaikka
+pre_part3 ${d}
+pr4 ${d}
+part3 ${d}
+#(daudaluksen kanssa ok mutta chimaera...)
 
-pr4 ${pkgdir}
-#${whack} xfce* 
-#exit 	#HUOM.0101225:tässä kohtaa vielä kirjautuminen takaisin sisään onnaa
-
-part3 ${pkgdir}
 
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
 
-
 ${asy}
 dqb "GR1DN BELIALAS KYE"
 
-#VAIH:clouds uusix kanssa (case 1 vuelä)
-#katsotaan kanssa miten tuo uusi versio pelittää
 sudo ${d}/clouds.sh 0
 csleep 5
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
 ${scm} a-wx $0 #kerta tulisi riittää
 
-#if [ ${debug} -eq 1 ] ; then 
-#	${scm} a-wx ${d}/pkgs*
-#	for f in $(find ~/Desktop/minimize/ -name '*.txt') ; do ${scm} a-wx ${f} ; done
-#	for f in $(find ~/Desktop/minimize/ -name '*.conf') ; do ${scm} a-wx ${f} ; done
-#	for f in $(find ~/Desktop/minimize/ -name 'conf') ; do ${scm} a-wx ${f} ; done
-#fi
-#
-#csleep 6
-
 #===================================================PART 4(final)==========================================================
-#tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
 
 if [ ${mode} -eq 2 ] ; then
 	echo "time to ${sifu} ${iface} or whåtever"
 	csleep 5
-	${whack} xfce* 
+	${whack} xfce4-session
  	exit 
 fi
 
+#070235: heittääkö pihalle xfce:stä tuossa yllä vai ei? vissiin pitää muuttaa parametreja
 sudo ${d}/clouds.sh 1
 
 #VAIH:stubby-jutut toimimaan
@@ -421,5 +357,5 @@ echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
 if [ ${debug} -eq 1 ] ; then 
 	sleep 5
 	#whack xfce so that the ui is reset
-	${whack} xfce* 
+	${whack} xfce4-session
 fi

@@ -25,12 +25,13 @@ else
 fi
 
 olddir=$(pwd)
-part=/dev/disk/by-uuid/${part0} #em. laitetedton olemassaolo kantsisi varmaan testata
+part=/dev/disk/by-uuid/${part0}
+[ -b ${part} ] || dqb "no such thing as ${part}"
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
 if [ ! -s /OLD.tar ] ; then #HUOM.260125: -p wttuun varm. vuoksi   
-	${srat} -cf /OLD.tar /etc /sbin /opt/bin /home/stubby /home/devuan/Desktop
+	${srat} -cf /OLD.tar /etc /sbin /home/stubby /home/devuan/Desktop
 fi
 
 dqb "b3f0r3 par51ng tha param5"
@@ -49,14 +50,17 @@ if [ $# -gt 0 ] ; then
 		csleep 3
 
 		${scm} -R a-wx ~/Desktop/minimize/*
-		${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
+		#${scm} a-wx ~/Desktop/minimize/{daedalus,chimaera}/*
+		for f in $(find ~/Desktop/minimize -type d) ; do ${scm} a-wx ${f}/* ; done 
+		
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
 
 		#HUOM.280125:uutena seur rivit, poista jos pykii
 		${scm} 0777 /tmp
-		${sco} root:root /tmp #oik. o=rwt mutta twx kai tarpeeksi hyvä useimpiin tarkoituksiin
+		${sco} root:root /tmp #oik. o=rwt mutta rwx kai tarpeeksi hyvä useimpiin tarkoituksiin
+
 	}
 
 	case "${1}" in
@@ -78,14 +82,12 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 			common_part ${2}
 			
+			pre_part3 ~/Desktop/minimize/${distro}
+			pr4 ~/Desktop/minimize/${distro}
+			part3 ~/Desktop/minimize/${distro}
 
-			pre_part3 ${pkgdir}
-			pr4 ${pkgdir}
-
-			part3 ${pkgdir}
 			csleep 3
-
-			[ ${debug} -eq 1 ] && ls -las  ${pkgdir}/*.deb			
+			#HUOM. BARMISTA ETTÄ ÅPOSTUUKO PAKETIT $dtstro:n alta VAIKO ERI
 
 			csleep 3
 			cd ${olddir}
@@ -94,7 +96,6 @@ if [ $# -gt 0 ] ; then
 		1)
 			[ x"${2}" == "x" ] && exit 
 			[ -s ${2} ] || exit
-
 
 			common_part ${2}
 			csleep 3

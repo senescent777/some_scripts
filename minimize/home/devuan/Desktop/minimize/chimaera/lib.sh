@@ -4,6 +4,10 @@
 odio=$(which sudo)
 [ -x ${odio} ] || exit 666
 
+${odio} chown -R 0:0 /etc/sudoers.d 
+${odio} chmod 0440 /etc/sudoers.d/* 
+
+
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
 }
@@ -112,6 +116,9 @@ function check_binaries2() {
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
 
+	smr="${odio} ${smr} "
+	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
+
 #	dqb "spc= ${spc}"
 	dqb "b1nar135.2 0k.2" 
 
@@ -169,41 +176,32 @@ function ns4() {
 }
 
 #=========================PART 0 ENDS HERE=================================================================
+function pr4() {
+	echo "pr4 (${1})"
+}
 
-function part1() {
-	#jos jokin näistä kolmesta hoitaisi homman...
-	${sifd} ${iface}
-	${sifd} -a
-	${sip} link set ${iface} down
+function pre_part3() {
+	dqb "pre_part3( ${1})"
+	${sdi} ${1}/dns-root-data*.deb
+	${smr} -rf ${1}/dns-root-data*.deb
 
-	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
-	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
-
-	if [ $ic -gt 0 ] ; then
-		for t in INPUT OUTPUT FORWARD ; do 
-			${ipt} -P ${t} DROP
-			${ip6t} -P ${t} DROP
-			${ip6t} -F ${t}
-		done
-
-		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
-
-		if [ ${debug} -eq 1 ] ; then
-			${ipt} -L #
-			${ip6t} -L #
-			sleep 5 
-		fi #
-	fi
+	#uutena, pois jos qsee	
+	${sdi} ${1}/perl-modules-*.deb
+	${smr} -rf ${1}/perl-modules-*.deb
+	
 }
 
 function part3() {
-	${sdi} /var/cache/apt/archives/lib*.deb
+	dqb "part3( ${1})"
+	${sdi} ${1}/lib*.deb
 
 	if [ $? -eq  0 ] ; then
 		#nköjään ei riittävästitehty dnsmasq kannalta
 		dqb "part3.1 ok"
 		sleep 5
-		${smr} -rf ${pkgdir}/lib*.deb
+
+		${smr} -rf ${1}/lib*.deb
+
 	else
 	 	exit 66
 	fi
@@ -211,17 +209,21 @@ function part3() {
 	#&&
 
 	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
-	${sdi} ${pkgdir}/*.deb
-	
+	${sdi} ${1}/*.deb
+
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-		${smr} -rf ${pkgdir}/lib*.deb
+		${smr} -rf ${1}/lib*.deb
+
 	else
 	 	exit 67
 	fi
 
 	csleep 2
+
+	dqb "pt3 d0m3"
+
 }
 
 #part1?

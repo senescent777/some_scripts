@@ -2,9 +2,7 @@
 d=$(dirname $0)
 debug=1
 
-
 #VAIH:tämä paska toimimaan (tai jokin git-viritys olisi kanssa idea)
-
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
@@ -26,9 +24,7 @@ else
 
 fi
 
-
 part=/dev/disk/by-uuid/${part0}
-
 debug=1
 [ x"${1}" == "x" ] && exit
 
@@ -36,9 +32,8 @@ dqb "BEFORE"
 ${som} ${part} ${dir}
 [ $? -eq 0 ] || exit
 
-
+csleep 3
 ${som} | grep ${dir} 
-
 csleep 3
 
 e=$(dirname ${1})
@@ -62,4 +57,3 @@ csleep 3
 ${uom} ${dir} 
 csleep 3
 ${som} | grep ${dir}
-
