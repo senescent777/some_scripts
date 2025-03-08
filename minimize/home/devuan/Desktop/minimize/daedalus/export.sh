@@ -82,7 +82,9 @@ function make_tar_15() {
 	${sifu} ${iface}
 	csleep 5
 
+
 	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
+
 	${shary} runit-helper
 
 	${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
@@ -90,6 +92,7 @@ function make_tar_15() {
 	${lftr} 
 
 	#josqs ntp-jututkin mukaan?
+
 	[ $? -eq 0 ] || exit 3
 
 	${shary} libev4
@@ -100,6 +103,7 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
+
 	${odio} shred -fu  ~/Desktop/minimize/${distro}/*.deb
 	sleep 4 
 
@@ -132,6 +136,7 @@ function make_tar_1_75() {
 }
 
 #2 jölkeen 1_75 -> saattaa paikata puutteet
+
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
@@ -156,10 +161,13 @@ function make_tar2() {
 	csleep 5
 	tig=$(sudo which git)
 
+
 	p=$(pwd)
 	dqb "p=${p}"
 
+
 	dqb "q=\$(mktemp -d)"
+
 	q=$(mktemp -d)
 
 	echo "#dqb cd ${q}"
@@ -182,6 +190,7 @@ function make_tar2() {
 	cd ${p}
 }
 
+#HUOM.020225:vissiin ao. fdktion tuotos toimii tällä hetkellä
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	csleep 1

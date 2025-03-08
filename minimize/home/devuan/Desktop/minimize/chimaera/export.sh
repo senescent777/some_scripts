@@ -28,6 +28,7 @@ debug=1
 function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 5
+
 	[ z"${1}" == "z" ] && exit
 
 	${scm} -R a-wx ~/Desktop/minimize/*
@@ -41,21 +42,25 @@ function make_tar() {
 }
 
 #HUOM. jokin vaihtoehtoinen systeemi oleellisempien pakettien hakuun olisi hyvä olla
+
 function make_tar_15() {
 	dqb "make_tar_15( ${1})"
 	csleep 4
 	
+
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
 	fi
 
 	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
+
 	[ z"${1}" == "z" ] && exit 1
 	[ -s ${1} ] || exit 2
 	dqb "paramz_ok"
 
 	${sag_u}
 	[ $? -eq 0 ] || exit	
+
 	csleep 5
 	dqb "sudo  ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 
@@ -64,6 +69,7 @@ function make_tar_15() {
 	${shary} iptables-persistent init-system-helpers netfilter-persistent
 
 	#040325:(tai siis nimenomaan pitäisi ajaa clouds iptables-pakettien uudelleenas jälkeen)
+
 	csleep 5
 	sudo ${d}/clouds.sh ${dnsm}
 	${sifu} ${iface}
@@ -76,6 +82,7 @@ function make_tar_15() {
 	${lftr} 
 
 	#TODO:ntp?
+
 	${shary} libev4
 	${shary} libgetdns10 libbsd0 libidn2-0 libssl3 libunbound8 libyaml-0-2 #sotkeekohan libc6 uudelleenas tässä?
 	${shary} stubby
@@ -91,9 +98,11 @@ function make_tar_15() {
 	dqb "sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}"
 }
 
+
 function make_tar_1_75() {
 	dqb "make_tar_1_75( ${1} )"	
 	csleep 5
+
 	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
@@ -101,6 +110,7 @@ function make_tar_1_75() {
 	csleep 1
 
 	#HUOM.060325: ensimmäisen tdston mukaan ottamisesta voi olla montaakin mieltä 
+
 	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
@@ -125,6 +135,7 @@ function make_tar2() {
 	local tig
 	tig=$(sudo which git)
 
+
 	if [ x"${tig}" == "x" ] ; then
 		${shary} git
 		[ $? -eq 0 ] || exit 7
@@ -143,14 +154,17 @@ function make_tar2() {
 	echo "#dqb cd ${q}"
 	cd ${q}
 
+
 	${tig} clone https://github.com/senescent777/project.git
 	cd project
+
 
 	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
 	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
 	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
 
 	#sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp
+
 	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
@@ -162,9 +176,11 @@ function make_tar2() {
 	${srat} -rf ${1} ${p}/MANIFEST
 }
 
+
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	csleep 5
+
 	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] && exit 2
@@ -174,6 +190,7 @@ function make_upgrade() {
 	dqb "${sagu}; ${sag} upgrade -u"
 
 	${odio} shred -fu ${pkgdir}/*.deb 
+
 	sleep 6
 
 	${asy} 
@@ -184,14 +201,17 @@ function make_upgrade() {
 
 	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
+
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
 	${srat} -jcf ${1} ~/Desktop/minimize/${distro}/*.deb
+
 
 	sleep 1
 }
 
 mode=0
 tgtfile=""
+
 
 if [ $# -gt 0 ] ; then
 	mode=${1}
@@ -209,6 +229,7 @@ case ${mode} in
 		make_tar_15 ${tgtfile} 
 	;;
 	1|u|upgrade)
+
 		make_upgrade ${tgtfile}
 	;;
 	-h)

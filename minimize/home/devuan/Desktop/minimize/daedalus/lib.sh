@@ -4,8 +4,10 @@
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
+
 ${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
 ${odio} chmod 0440 /etc/sudoers.d/* 
+
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -107,9 +109,11 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
+
 		#konftdston muo9kkaaminen olisi ehkä helpompi
 		pre_part3 ~/Desktop/minimize/${distro}
 		pr4 ~/Desktop/minimize/${distro}
+
 
 		ipt=$(sudo which iptables)
 		ip6t=$(sudo which ip6tables)
@@ -195,6 +199,7 @@ function check_binaries2() {
 	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
 	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
 
+
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
 	sifu="${odio} ${sifu} "
@@ -251,6 +256,7 @@ function mangle2() {
 #}
 #
 #=========================PART 0 ENDS HERE=================================================================
+
 
 function part3() {
 	[ y"${1}" == "y" ] && exit 1

@@ -3,6 +3,8 @@ enforce=0
 debug=0
 pkgdir=/var/cache/apt/archives
 tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
+
 mode=2
 distro=chimaera
 dnsm=0 #toiStaiseksi stubby pois pelistä kunnes saatu toimimaan
+

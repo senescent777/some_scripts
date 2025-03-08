@@ -9,9 +9,6 @@ else
 	exit 111	
 fi
 
-#VAIH:tuplavarmistus että validi /e/n/i tulee mukaan?
-#(josko ihan kirjoittaisi siihen tdstoon pari riviä?)
-
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -34,7 +31,6 @@ function check_params() {
 		;;
 	esac
 }
-
 
 n=$(whoami)
 

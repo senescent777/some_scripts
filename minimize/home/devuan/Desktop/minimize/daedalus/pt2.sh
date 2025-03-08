@@ -12,6 +12,7 @@ if [ $# -gt 0 ] ; then
 	fi
 fi
 
+
 dqb "a-e"
 csleep 5
 
@@ -133,7 +134,9 @@ csleep 6
 ${scm} a-wx $0 
 
 #whack xfce so that the ui is reset
+
 ${whack} xfce4-session
 #HUOM. omegankin toiminnan voisi testata
+
 
 

@@ -159,10 +159,12 @@ case ${1} in
 		
 		[ -f /run/stubby.pid ] || sudo touch /run/stubby.pid
 		${sco} devuan:devuan /run/stubby.pid #$n
+
 		${scm} 0644 /run/stubby.pid 
 		sleep 3
 
 		su devuan -c '/usr/bin/stubby -C /home/stubby/.stubby.yml -g'
+
 		pgrep stubby
 	;;
 esac

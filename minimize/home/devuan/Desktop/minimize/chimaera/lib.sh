@@ -3,8 +3,10 @@
 
 odio=$(which sudo)
 [ -x ${odio} ] || exit 666
+
 ${odio} chown -R 0:0 /etc/sudoers.d 
 ${odio} chmod 0440 /etc/sudoers.d/* 
+
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -114,7 +116,6 @@ function check_binaries2() {
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
 
-
 	smr="${odio} ${smr} "
 	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
 
@@ -198,7 +199,9 @@ function part3() {
 		#nköjään ei riittävästitehty dnsmasq kannalta
 		dqb "part3.1 ok"
 		sleep 5
+
 		${smr} -rf ${1}/lib*.deb
+
 	else
 	 	exit 66
 	fi
@@ -207,17 +210,20 @@ function part3() {
 
 	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
 	${sdi} ${1}/*.deb
-	
+
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
 		${smr} -rf ${1}/lib*.deb
+
 	else
 	 	exit 67
 	fi
 
 	csleep 2
+
 	dqb "pt3 d0m3"
+
 }
 
 #part1?

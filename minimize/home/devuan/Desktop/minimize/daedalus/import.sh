@@ -56,9 +56,11 @@ if [ $# -gt 0 ] ; then
 		${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
 		${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
+
 		#HUOM.280125:uutena seur rivit, poista jos pykii
 		${scm} 0777 /tmp
 		${sco} root:root /tmp #oik. o=rwt mutta rwx kai tarpeeksi hyvä useimpiin tarkoituksiin
+
 	}
 
 	case "${1}" in
@@ -83,6 +85,7 @@ if [ $# -gt 0 ] ; then
 			pre_part3 ~/Desktop/minimize/${distro}
 			pr4 ~/Desktop/minimize/${distro}
 			part3 ~/Desktop/minimize/${distro}
+
 			csleep 3
 			#HUOM. BARMISTA ETTÄ ÅPOSTUUKO PAKETIT $dtstro:n alta VAIKO ERI
 
