@@ -193,7 +193,7 @@ function make_upgrade() {
 	dqb "${sagu}; ${sag} upgrade -u"
 
 	${odio} shred -fu ${pkgdir}/*.deb 
-	#TODO:toisestakin hmistosta .deb näkeen
+	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
 
 	${odio} ${d}/clouds.sh ${dnsm} 
 	${sifu} ${iface}	
