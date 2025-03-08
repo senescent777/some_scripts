@@ -120,6 +120,7 @@ function make_tar_1_75() {
 	csleep 1
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
+	#m jatkossa pois
 	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
 	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
@@ -130,7 +131,7 @@ function make_tar_1_75() {
 	csleep 5
 }
 
-#VAIH:jos jatkossa ajaisi tämän ennen _1,5 tai _1,75 (tai niin että ajetaan m,ikäli joitain tiedostoja puuttuu)
+#2 jölkeen 1_75 -> saattaa paikata puutteet
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
