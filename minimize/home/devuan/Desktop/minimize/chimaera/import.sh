@@ -87,7 +87,7 @@ if [ $# -gt 0 ] ; then
 			pr4 ~/Desktop/minimize/${distro} #${d}
 			part3 ~/Desktop/minimize/${distro} # #${d} 
 			csleep 3
-			#HUOM. part3 siivonnee .deb-paketit asj älk jos kaikki ok
+			#HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI
 
 			csleep 3
 			cd ${olddir}
