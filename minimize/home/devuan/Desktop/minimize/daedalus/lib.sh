@@ -4,10 +4,8 @@
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
-
 ${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
 ${odio} chmod 0440 /etc/sudoers.d/* 
-
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -17,6 +15,8 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
+#HUOM. tähän asti ainakin joutaisi kopsata distrolle yhteiseen kirjastoon, samoin enforce-jutut
+
 function pre_part3() {
 	[ y"${1}" == "y" ] && exit
 	echo "pp3( ${1} )"
@@ -25,7 +25,6 @@ function pre_part3() {
 
 	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	(esim find)
 	
-	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${odio} dpkg -i ${1}/netfilter-persistent*.deb
 	[ $? -eq 0 ] && ${odio} shred -fu ${1}/netfilter-persistent*.deb
 	csleep 5
@@ -56,19 +55,14 @@ pr4() {
 	${odio} dpkg -i ${1}/libpam*.deb
 
 	${odio} dpkg -i ${1}/perl-modules-*.deb
-	${odio} dpkg -i ${1}/libperl*.deb #erikseen vai yhdessä? let's find out
+	${odio} dpkg -i ${1}/libperl*.deb 
 	sudo shred -fu ${1}/perl-modules-*.deb 
 	sudo shred -fu ${1}/libperl*.deb
 	csleep 5
 
 	${odio} dpkg -i ${1}/perl*.deb
-	#echo "sudo shred -fu ${1}/perl*.deb"
-
 	${odio} dpkg -i ${1}/libdbus*.deb
-	#echo "sudo shred -fu ${1}/libdbus*.deb"
-
 	${odio} dpkg -i ${1}/dbus*.deb
-	#echo "sudo shred -fu ${1}/dbus*.deb"
 
 	sudo shred -fu ${1}/libpam*
 	sudo shred -fu ${1}/libperl*
@@ -109,11 +103,9 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
-
 		#konftdston muo9kkaaminen olisi ehkä helpompi
 		pre_part3 ~/Desktop/minimize/${distro}
 		pr4 ~/Desktop/minimize/${distro}
-
 
 		ipt=$(sudo which iptables)
 		ip6t=$(sudo which ip6tables)
@@ -130,7 +122,7 @@ function check_binaries() {
 	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} "
 	local x
 	
-	#TODO:passwd mukaan listaan?
+	#passwd mukaan listaan?
 	for x in chown chmod pkill apt-get apt ip netstat dpkg ifup ifdown rm ln cp tar mount umount 
 		do ocs ${x} 
 	done
@@ -186,7 +178,7 @@ function check_binaries2() {
 	spd="${odio} ${sdi} -l "
 	sdi="${odio} ${sdi} -i "
 
-	#HUOM. ${sag} OLTAVA VIIMEISENÄ NÄISTÄ KOLMESDTA
+	#HUOM. ${sag} OLTAVA VIIMEISENÄ NÄISTÄ KOLMESTA
 	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
 	sag_u="${odio} ${sag} update "
 	sag="${odio} ${sag} "
@@ -198,7 +190,6 @@ function check_binaries2() {
 	csleep 5
 	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
 	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
-
 
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
@@ -256,7 +247,6 @@ function mangle2() {
 #}
 #
 #=========================PART 0 ENDS HERE=================================================================
-
 
 function part3() {
 	[ y"${1}" == "y" ] && exit 1
