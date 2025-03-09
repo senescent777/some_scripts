@@ -11,8 +11,7 @@ fi
 
 #260125: vaikuttaisi toimivan jnkn verran, ainakin sisään loggaus onnistuu
 
-${smr} /etc/sudoers.d/live
+${smr} /etc/sudoers.d/live #myös shred keksitty
 sudo usermod -G devuan,cdrom,floppy,audio,dip,video,plugdev,netdev devuan
 csleep 5
-${whack} xfce* 
-#sössön sössön stna
+${whack} xfce4-session
