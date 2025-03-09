@@ -125,6 +125,8 @@ csleep 5
 
 ${lftr}
 ${odio} shred -fu ${pkgdir}/*.deb 
+${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
+${odio} shred -fu /tmp/*.tar
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
