@@ -168,6 +168,9 @@ function make_tar2() {
 	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
 	${spc} /sbin/dhclient-script ./sbin/dhclient-script.OLD
 
+	dqb "#TODO:vielä se profs.sh.export ghubista toisesta hmistosta + eedelleennimeäminen"
+	csleep 6
+
 	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp #ehkä pois jatqssa
 	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
 
