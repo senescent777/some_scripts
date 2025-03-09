@@ -36,7 +36,6 @@ function check_params() {
 	esac
 }
 
-
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit
@@ -78,7 +77,7 @@ function pre_enforce() {
 	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
 	#TODO:clouds: a) nimeäminen fiksummin 
 	for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
-
+	
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
 		csleep 5
@@ -99,13 +98,11 @@ function enforce_access() {
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
 
-
 	echo "changing /sbin , /etc and /var 4 real"
 	${sco} -R root:root /sbin
 	${scm} -R 0755 /sbin
 
 	${sco} -R root:root /etc
-
 	for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
 	#"find: ‘/etc/sudoers.d/’: Permission denied" jotain tarttis tehrä
@@ -132,7 +129,6 @@ function enforce_access() {
 	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
 	${sco} root:root /home
 	${scm} 0755 /home
-
 
 	if [ y"${n}" != "y" ] ; then
 		#josko vielä testaisi että $n asetettu ylipäänsä
@@ -252,8 +248,6 @@ else
 fi
 
 csleep 5
-#TODO:se ffox-profiili-jutska kanssa
-
 
 if [ ${mode} -eq 1 ] ; then
 	dqb "R (in 6 secs)"; csleep 6
@@ -313,10 +307,14 @@ pr4 ${d}
 part3 ${d}
 #(daudaluksen kanssa ok mutta chimaera...)
 
-
 echo $?
 sleep 3
 ${ip6tr} /etc/iptables/rules.v6
+
+#VAIH:se ffox-profiili-asia (mallia sieltä ghubin toisesta hmistosta)
+if [ -x ~/Desktop/minimize/profs.sh ] ; then
+	 ~/Desktop/minimize/profs.sh 
+fi
 
 ${asy}
 dqb "GR1DN BELIALAS KYE"
