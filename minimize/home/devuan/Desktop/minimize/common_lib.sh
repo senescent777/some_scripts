@@ -5,7 +5,23 @@ odio=$(which sudo)
 fix_sudo() {
 	${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
 	${odio} chmod 0440 /etc/sudoers.d/* 
-	#TODO:kts loput suq.ash
+	#VAIH:kts loput suq.ash
+
+	sudo chown -R 0:0 ./etc/sudo*
+	sudo chmod -R a-w ./etc/sudo*
+	sudo chown -R 0:0 ./usr/lib/sudo/*
+	sudo chown -R 0:0 ./usr/bin/sudo*
+
+	sudo chmod 0750 ./etc/sudoers.d
+	sudo chmod 0440 /etc/sudoers.d/*
+
+	sudo chmod -R a-w ./usr/lib/sudo/*
+	sudo chmod -R a-w ./usr/bin/sudo*
+	sudo chmod 4555 ./usr/bin/sudo
+	sudo chmod 0444	./usr/lib/sudo/sudoers.so
+
+	sudo chattr +ui ./usr/bin/sudo
+	sudo chattr +ui ./usr/lib/sudo/sudoers.so	
 }
 
 function dqb() {
