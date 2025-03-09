@@ -172,7 +172,7 @@ function make_tar2() {
 	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp #ehkä pois jatqssa
 	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
 
-	dqb "TODO: ${tig} clone https://github.com/senescent777/some_scripts.git"
+	dqb "VAIH: ${tig} clone https://github.com/senescent777/some_scripts.git"
 '	csleep 5
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
@@ -240,6 +240,16 @@ case ${mode} in
 	;;
 	1|u|upgrade)
 		make_upgrade ${tgtfile}
+	;;
+	p)
+		echo "sudo apt-get update"
+		echo "sudo apt-get install git"
+		echo "q=$(mktemp -d)"
+		echo "cd $q"
+		echo "git clone https://github.com/senescent777/some_scripts.git"
+		echo "mv some_scripts/lib/export/profs.sh.export ~/Desktop/minimize/${distro}/profs.sh"
+		echo "sudo chmod 0755 ~/Desktop/minimize/${distro}/profs.sh"
+		echo "tar -rvf ${1}  ~/Desktop/minimize/${distro}/profs.sh"
 	;;
 	-h)
 		echo "$0 0 tgtfile | $0 1 tgtfile"
