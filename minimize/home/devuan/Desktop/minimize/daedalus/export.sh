@@ -1,8 +1,5 @@
 #!/bin/bash
 
-#HUOM.020225: sopisi olla slim:in login.ongelmat korjattu nyt
-#VAIH:xfce-asetukset mukaan varm. vuoksi?
-
 d=$(dirname $0)
 debug=1
 
@@ -28,7 +25,6 @@ fi
 
 debug=1
 
-#VAIH:varm. vuoksi .deb-paketit pois ennen tar ?
 function make_tar() {
 	dqb "make_tar ( ${1} )"
 	csleep 1
@@ -82,9 +78,7 @@ function make_tar_15() {
 	${sifu} ${iface}
 	csleep 5
 
-
 	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
-
 	${shary} runit-helper
 
 	${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
@@ -92,7 +86,6 @@ function make_tar_15() {
 	${lftr} 
 
 	#josqs ntp-jututkin mukaan?
-
 	[ $? -eq 0 ] || exit 3
 
 	${shary} libev4
@@ -103,7 +96,6 @@ function make_tar_15() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-
 	${odio} shred -fu  ~/Desktop/minimize/${distro}/*.deb
 	sleep 4 
 
@@ -124,8 +116,7 @@ function make_tar_1_75() {
 	csleep 1
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
-	#m jatkossa pois
-	${srat} -rf ${1} /etc/sudoers.d/meshuggah /etc/iptables /etc/network/interfaces*
+	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
 	
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
 	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rf ${1} ${f} ; done
@@ -135,8 +126,7 @@ function make_tar_1_75() {
 	csleep 5
 }
 
-#2 jölkeen 1_75 -> saattaa paikata puutteet
-
+#2 jälkeen 1_75 -> saattaa paikata puutteet (tai miten lienee)
 function make_tar2() {
 	dqb "make_tar2 ( ${1} )"
 	csleep 1
@@ -161,13 +151,10 @@ function make_tar2() {
 	csleep 5
 	tig=$(sudo which git)
 
-
 	p=$(pwd)
 	dqb "p=${p}"
 
-
 	dqb "q=\$(mktemp -d)"
-
 	q=$(mktemp -d)
 
 	echo "#dqb cd ${q}"
@@ -190,7 +177,6 @@ function make_tar2() {
 	cd ${p}
 }
 
-#HUOM.020225:vissiin ao. fdktion tuotos toimii tällä hetkellä
 function make_upgrade() {
 	dqb "make_upgrade(${1} )"
 	csleep 1
@@ -237,6 +223,7 @@ fi
 
 case ${mode} in
 	0)
+		#jos nimeäisi fktiot uusiksi josqs
 		make_tar ${tgtfile}
 		make_tar_1_75 ${tgtfile}
 		make_tar2 ${tgtfile}
