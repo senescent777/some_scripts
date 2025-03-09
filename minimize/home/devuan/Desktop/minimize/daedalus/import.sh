@@ -9,7 +9,7 @@ else
 	som="sudo /bin/mount"
 	uom="sudo /bin/umount"
 	scm="sudo /bin/chmod"
-	#HUOM.190125:part tarttisi myös, tai siis part0
+
 	dir=/mnt
 	odio=$(which sudo)
 	debug=1
@@ -26,6 +26,7 @@ fi
 
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0}
+#TODO:urputus toiseen paikkaan
 [ -b ${part} ] || dqb "no such thing as ${part}"
 dqb "b3f0r3 0ld.tar"
 csleep 5
