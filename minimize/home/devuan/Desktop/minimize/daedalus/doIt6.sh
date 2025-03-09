@@ -320,7 +320,8 @@ ${ip6tr} /etc/iptables/rules.v6
 
 #VAIH:se ffox-profiili-asia (mallia sieltä ghubin toisesta hmistosta)
 if [ -x ~/Desktop/minimize/profs.sh ] ; then
-	. ~/Desktop/minimize/profs.sh 
+	. ~/Desktop/minimize/profs.sh
+	copyprof ${n} someparam
 fi
 
 ${asy}
