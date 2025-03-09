@@ -127,6 +127,7 @@ ${lftr}
 ${odio} shred -fu ${pkgdir}/*.deb 
 ${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
 ${odio} shred -fu /tmp/*.tar
+#squ.ash voisi vilkaista kanssa liittyen
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 

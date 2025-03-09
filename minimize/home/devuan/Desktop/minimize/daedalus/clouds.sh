@@ -142,7 +142,7 @@ case ${1} in
 		pgrep dnsmasq
 
 		echo "stu";sleep 2
-		${whack} stubby*
+		${whack} stubby* #090325: pitäisiköhän tämä muuttaa?
 		sleep 3	
 		
 		#HUOM.280125: tietenkin pitäisi sen /r/stubby.pid oikeudet ja omistajat laitt5aa kuntoon, koklataannyt kuitenkin toisella tavalla ensin	
@@ -159,12 +159,10 @@ case ${1} in
 		
 		[ -f /run/stubby.pid ] || sudo touch /run/stubby.pid
 		${sco} devuan:devuan /run/stubby.pid #$n
-
 		${scm} 0644 /run/stubby.pid 
 		sleep 3
 
 		su devuan -c '/usr/bin/stubby -C /home/stubby/.stubby.yml -g'
-
 		pgrep stubby
 	;;
 esac
@@ -191,7 +189,7 @@ if [ ${debug} -eq 1 ] ; then
 	sleep 6
 	echo "666"
 	sleep 6
-	${ip6t} -L #
+	${ip6t} -L # ehdolla -x tämä?
 	sleep 6
 fi #
 
