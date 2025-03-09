@@ -39,7 +39,7 @@ function check_params() {
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit
-	[ -s ${1} ] || exit  
+	[ -s ${1} ] || exit  #-x sittenkin?
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit  
 
@@ -154,7 +154,6 @@ function enforce_access() {
 
 	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
 
-	#HUOM.280125:uutena seur rivit, poista jos pykii
 	${scm} 0777 /tmp
 	${sco} root:root /tmp
 }
@@ -202,13 +201,21 @@ dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necess
 part1
 g=$(date +%F)
 
-csleep 5
-[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+if [ z"${pkgsrc}" != "z" ] ; then
+	dqb "MUST MUTILATE sources.list"
+	csleep 5
+	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
-sudo touch /etc/apt/sources.list
-${scm} a+w /etc/apt/sources.list
+	sudo touch /etc/apt/sources.list
+	${scm} a+w /etc/apt/sources.list
 
-for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list ; done
+	for x in ${distro} ${distro}-updates ${distro}-security ; do
+		echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list 
+	done
+
+	[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
+	csleep 10
+fi
 
 ${scm} a-w /etc/apt/sources.list
 ${sco} -R root:root /etc/apt 
@@ -247,7 +254,7 @@ else
 	fi
 fi
 
-csleep 5
+csleep 10
 
 if [ ${mode} -eq 1 ] ; then
 	dqb "R (in 6 secs)"; csleep 6
@@ -313,8 +320,7 @@ ${ip6tr} /etc/iptables/rules.v6
 
 #VAIH:se ffox-profiili-asia (mallia sieltä ghubin toisesta hmistosta)
 if [ -x ~/Desktop/minimize/profs.sh ] ; then
-	. ~/Desktop/minimize/profs.sh
-	copyprof ${n} someparam
+	. ~/Desktop/minimize/profs.sh 
 fi
 
 ${asy}
@@ -324,7 +330,7 @@ sudo ${d}/clouds.sh 0
 csleep 5
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
-${scm} a-wx $0 #kerta tulisi riittää
+${scm} a-wx $0 #oikeastaan kerta-ajo tulisi riittää
 
 #===================================================PART 4(final)==========================================================
 
