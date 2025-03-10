@@ -202,7 +202,7 @@ part1
 g=$(date +%F)
 
 if [ z"${pkgsrc}" != "z" ] ; then
-	dqb "MUST MUTILATE sources.list"
+	dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
 	csleep 5
 	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
