@@ -13,22 +13,21 @@ fix_sudo() {
 	${odio} chmod -R a-w /etc/sudo*
 
 	echo "POT. DANGEROUS PT 1"
-	sudo chown -R 0:0 ./usr/lib/sudo/*
-	sudo chown -R 0:0 ./usr/bin/sudo*
+	sudo chown -R 0:0 /usr/lib/sudo/*
+	sudo chown -R 0:0 /usr/bin/sudo*
 
 	echo "fix_sud0.pt1"
-	${odio} chmod 0750 ./etc/sudoers.d
+	${odio} chmod 0750 /etc/sudoers.d
 	${odio} chmod 0440 /etc/sudoers.d/*
 	
 	echo "POT. DANGEROUS PT 2"
-	sudo chmod -R a-w ./usr/lib/sudo/*
-	sudo chmod -R a-w ./usr/bin/sudo*
-	sudo chmod 4555 ./usr/bin/sudo
-	sudo chmod 0444	./usr/lib/sudo/sudoers.so
+	sudo chmod -R a-w /usr/lib/sudo/*
+	sudo chmod -R a-w /usr/bin/sudo*
+	sudo chmod 4555 /usr/bin/sudo
+	sudo chmod 0444	/usr/lib/sudo/sudoers.so
 
 	#sudo chattr +ui ./usr/bin/sudo"
 	#sudo chattr +ui ./usr/lib/sudo/sudoers.so	"
-
 	echo "d0n3"
 }
 
