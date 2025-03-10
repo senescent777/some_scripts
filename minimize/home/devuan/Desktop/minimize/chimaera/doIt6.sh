@@ -144,7 +144,7 @@ function enforce_access() {
 }
 
 #==================================PART 1============================================================
-
+#TODO: -> vommon_lib
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}

@@ -190,7 +190,7 @@ function pre_part3() {
 	${smr} -rf ${1}/perl-modules-*.deb
 	
 }
-
+#common_lib jatkossa käyttöön
 function part3() {
 	dqb "part3( ${1})"
 	${sdi} ${1}/lib*.deb
@@ -214,7 +214,7 @@ function part3() {
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
-		${smr} -rf ${1}/lib*.deb
+		${smr} -rf ${1}/*.deb
 
 	else
 	 	exit 67
