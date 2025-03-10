@@ -35,10 +35,10 @@ function make_tar() {
 	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
 	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
-
 	dqb "${srat} -cf ${1}"  	
 	${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
-	
+	#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
+
 	if [ ${debug} -eq 1 ] ; then
 		ls -las ~/Desktop/minimize/; sleep 10
 	fi
@@ -46,7 +46,7 @@ function make_tar() {
 	${srat} -cvf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 }
 
-#HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin...
+#HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
 function make_tar_15() {
 	dqb "make_tar_15( ${1})"
 	csleep 4
@@ -117,7 +117,8 @@ function make_tar_1_75() {
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
-	
+	#TODO:jollain ehdolla se /e/s.d/meshuggah vetöminen kuitenkin?	
+
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
 	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rf ${1} ${f} ; done
 
@@ -171,6 +172,9 @@ function make_tar2() {
 	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp #ehkä pois jatqssa
 	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
 
+	dqb "VAIH: ${tig} clone https://github.com/senescent777/some_scripts.git"
+'	csleep 5
+
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
 	${srat} -rf ${1} ./etc ./sbin 
@@ -221,6 +225,7 @@ else
 	echo "-h"
 fi
 
+#oma case sille profs.sh-jutulle?
 case ${mode} in
 	0)
 		#jos nimeäisi fktiot uusiksi josqs
@@ -235,6 +240,16 @@ case ${mode} in
 	;;
 	1|u|upgrade)
 		make_upgrade ${tgtfile}
+	;;
+	p)
+		echo "sudo apt-get update"
+		echo "sudo apt-get install git"
+		echo "q=$(mktemp -d)"
+		echo "cd $q"
+		echo "git clone https://github.com/senescent777/some_scripts.git"
+		echo "mv some_scripts/lib/export/profs.sh.export ~/Desktop/minimize/${distro}/profs.sh"
+		echo "sudo chmod 0755 ~/Desktop/minimize/${distro}/profs.sh"
+		echo "tar -rvf ${1}  ~/Desktop/minimize/${distro}/profs.sh"
 	;;
 	-h)
 		echo "$0 0 tgtfile | $0 1 tgtfile"

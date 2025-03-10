@@ -40,11 +40,11 @@ fi
 
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
-	echo "SHOULD 1NSTALL TABL35"
-	. ./lib.sh #pitäisiköhän tässäkin olla se dirname-.jekku?
-	#2 ao. riville kanssa muutoksia?
-	pre_part3 ${pkgdir}
-	pr4 ${pkgdir}
+	echo "SHOULD 1NSTALL TABL35";exit
+#	. ./lib.sh #pitäisiköhän tässäkin olla se dirname-.jekku?
+#	#2 ao. riville kanssa muutoksia?
+#	pre_part3 ${pkgdir}
+#	pr4 ${pkgdir}
 else
 	#tässä kohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
 	${iptr} /etc/iptables/rules.v4
