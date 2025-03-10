@@ -1,5 +1,9 @@
 #!/bin/sh
 debug=1
+odio=$(which sudo)
+[ y"${odio}" == "y" ] && exit 665 
+[ -x ${odio} ] || exit 666
+#jatkossa common_lib.sh käyttöön
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -23,16 +27,20 @@ else
 	exit 67
 fi
 
-tig=$(sudo which git)	
+tig=$(${odio} which git)	
 csleep 1
 
 if [ x"${tig}" == "x" ] ; then
+	sag=$(${odio} which apt-get)
+	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
+	sag_u="${odio} ${sag} update "
+	sag="${odio} ${sag} "
 	${shary} git
 	[ $? -eq 0 ] || exit 7
 fi
 
 csleep 5
-tig=$(sudo which git)
+tig=$(${odio} which git)
 
 q=$(mktemp -d)
 cd $q
