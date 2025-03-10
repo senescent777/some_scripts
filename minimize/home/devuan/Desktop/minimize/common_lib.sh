@@ -1,11 +1,22 @@
 odio=$(which sudo)
-[ y"${odio}" == "y" ] && exit 99 
-[ -x ${odio} ] || exit 100
+
+#exit 10
+#
+#if [ y"${odio}" == "y" ] ; then
+#	exit 99 
+#fi
+
+if [ ! -x ${odio} ] ; then
+	exit 100
+fi
+
+echo "${odio}"
 
 fix_sudo() {
 	${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
 	${odio} chmod 0440 /etc/sudoers.d/* 
-	#VAIH:kts loput suq.ash
+	
+	echo "pt2 0f f1x_5ud0"
 
 	sudo chown -R 0:0 ./etc/sudo*
 	sudo chmod -R a-w ./etc/sudo*
@@ -23,15 +34,15 @@ fix_sudo() {
 	sudo chattr +ui ./usr/bin/sudo
 	sudo chattr +ui ./usr/lib/sudo/sudoers.so	
 }
-
-function dqb() {
-	[ ${debug} -eq 1 ] && echo ${1}
-}
-
-function csleep() {
-	[ ${debug} -eq 1 ] && sleep ${1}
-}
-
+#
+#function dqb() {
+#	[ ${debug} -eq 1 ] && echo ${1}
+#}
+#
+#function csleep() {
+#	[ ${debug} -eq 1 ] && sleep ${1}
+#}
+#
 fix_sudo
 
 #pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon

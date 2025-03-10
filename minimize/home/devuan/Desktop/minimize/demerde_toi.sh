@@ -22,6 +22,8 @@ else
 	#}
 fi
 
+exit 11
+
 if [ $# -gt 0 ] ; then
 	dqb "params_ok"
 else
@@ -36,14 +38,10 @@ else
 	exit 67
 fi
 
-tig=$(${odio} which git)	
+tig=$(sudo which git)	
 csleep 1
 
 if [ x"${tig}" == "x" ] ; then
-	#sag=$(${odio} which apt-get)
-	#shary="${odio} ${sag} --no-install-recommends reinstall --yes "
-	#sag_u="${odio} ${sag} update "
-	#sag="${odio} ${sag} "
 	${shary} git
 	[ $? -eq 0 ] || exit 7
 fi
