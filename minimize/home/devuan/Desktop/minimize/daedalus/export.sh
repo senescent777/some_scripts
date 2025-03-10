@@ -108,7 +108,12 @@ function make_tar_1_75() {
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
-	#TODO:jollain ehdolla se /e/s.d/meshuggah vetäminen kuitenkin?	enforce!=1 ?
+
+	if [ ${enforce} -eq 1 ] ; then
+		echo "das asdd"
+	else
+		${srat} -rf ${1} /etc/sudoers.d/meshuggah
+	fi
 
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
 	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rf ${1} ${f} ; done
@@ -202,6 +207,7 @@ function prof5() {
 	q=$(mktemp -d)
 	cd ${q}
 
+	#HUOM. prsofs kanssa olisi pikkuisen laittamista
 	git clone https://github.com/senescent777/some_scripts.git
 	mv some_scripts/lib/export/profs.sh.export ~/Desktop/minimize/${distro}/profs.sh
 	${scm} 0755 ~/Desktop/minimize/${distro}/profs.sh
