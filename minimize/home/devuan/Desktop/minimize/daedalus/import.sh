@@ -1,6 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
-#pitäisiköjhän tässä asettaa debug jhnkn arvoon?
+debug=0
 . ~/Desktop/minimize/common_lib.sh
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
