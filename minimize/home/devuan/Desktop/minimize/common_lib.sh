@@ -1,3 +1,4 @@
+#TODO: KOITA NYT SAATANAN TONTTU MUISTAA TUO BASH ALKUUN!!!!! SIIS KUTSUVASSA SKRTIPSSÄ
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
@@ -40,27 +41,27 @@ function csleep() {
 }
 
 fix_sudo
+
+#pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
 #
-##pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
-#
-##TODO:jatkossa chimaeRan doit6 käyttämään tätä jos mahd
-#function ocs() {
-#	local tmp
-#	tmp=$(sudo which ${1})
-#
-#	if [ y"${tmp}" == "y" ] ; then
-#		exit 66 #fiksummankin exit-koodin voisi keksiä
-#	else
-#	fi
-#
-#	if [ -x ${tmp} ] ; then	
-#	else
-#		exit 77
-#	fi
-#
-#	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
-#}
-#
+#TODO:jatkossa chimaeRan doit6 käyttämään tätä jos mahd
+function ocs() {
+	local tmp
+	tmp=$(sudo which ${1})
+
+	if [ y"${tmp}" == "y" ] ; then
+		exit 66 #fiksummankin exit-koodin voisi keksiä
+	else
+	fi
+
+	if [ -x ${tmp} ] ; then	
+	else
+		exit 77
+	fi
+
+	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
+}
+
 ##check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (TODO: let's find out)
 #
 ##HUOM. jos tätä käyttää ni scm ja sco pitää tietenkin esitellä alussa
