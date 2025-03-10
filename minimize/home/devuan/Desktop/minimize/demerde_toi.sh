@@ -16,6 +16,13 @@ else
 	exit 66
 fi
 
+if [ -d ~/Desktop/minimize/${1} ] ; then
+	dqb "tgt dir exists"
+else
+	echo "NO SUCH THING AS  ~/Desktop/minimize/${1} "
+	exit 67
+fi
+
 tig=$(sudo which git)	
 csleep 1
 
