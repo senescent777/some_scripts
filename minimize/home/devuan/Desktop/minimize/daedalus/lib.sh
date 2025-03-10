@@ -247,34 +247,34 @@ function check_binaries2() {
 #}
 #
 #=========================PART 0 ENDS HERE=================================================================
-#TODO: -> common_lib
-function part3() {
-	[ y"${1}" == "y" ] && exit 1
-	dqb "11"
-	[ -d ${1} ] || exit 2
-	dqb "22 ${1}"
-	${sdi} ${1}/lib*.deb
-
-	if [ $? -eq  0 ] ; then
-		dqb "part3.1 ok"
-		sleep 5
-		${odio} shred -fu ${1}/lib*.deb
-	else
-	 	dqb "exit 66"
-	fi
-
-	${sdi} ${1}/*.deb
-	
-	if [ $? -eq  0 ] ; then
-		dqb "part3.2 ok"
-		sleep 5
-		${odio} shred -fu ${1}/*.deb 
-	else
-	 	dqb "exit 67"
-	fi
-
-	csleep 2
-}
+#VAIH: -> common_lib
+#function part3() {
+#	[ y"${1}" == "y" ] && exit 1
+#	dqb "11"
+#	[ -d ${1} ] || exit 2
+#	dqb "22 ${1}"
+#	${sdi} ${1}/lib*.deb
+#
+#	if [ $? -eq  0 ] ; then
+#		dqb "part3.1 ok"
+#		sleep 5
+#		${odio} shred -fu ${1}/lib*.deb
+#	else
+#	 	dqb "exit 66"
+#	fi
+#
+#	${sdi} ${1}/*.deb
+#	
+#	if [ $? -eq  0 ] ; then
+#		dqb "part3.2 ok"
+#		sleep 5
+#		${odio} shred -fu ${1}/*.deb 
+#	else
+#	 	dqb "exit 67"
+#	fi
+#
+#	csleep 2
+#}
 
 check_binaries
 check_binaries2

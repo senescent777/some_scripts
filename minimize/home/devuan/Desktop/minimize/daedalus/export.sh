@@ -34,8 +34,11 @@ function make_tar() {
 	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 
 	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
-	${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
-	#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
+	if [ ${enforce} -eq 1 ] ; then
+		${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
+		#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
+		${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
+	fi
 
 	if [ ${debug} -eq 1 ] ; then
 		ls -las ~/Desktop/minimize/; sleep 10
@@ -105,7 +108,7 @@ function make_tar_1_75() {
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
-	#TODO:jollain ehdolla se /e/s.d/meshuggah vetöminen kuitenkin?	
+	#TODO:jollain ehdolla se /e/s.d/meshuggah vetäminen kuitenkin?	enforce!=1 ?
 
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
 	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rf ${1} ${f} ; done

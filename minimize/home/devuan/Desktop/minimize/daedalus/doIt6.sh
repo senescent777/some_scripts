@@ -161,35 +161,35 @@ function enforce_access() {
 }
 
 #==================================PART 1============================================================
-function part1() {
-	#jos jokin näistä kolmesta hoitaisi homman...
-	${sifd} ${iface}
-	${sifd} -a
-	${sip} link set ${iface} down
-
-	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
-	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
-
-	if [ y"${ipt}" == "y" ] ; then
-		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-	else
-		for t in INPUT OUTPUT FORWARD ; do 
-			${ipt} -P ${t} DROP
-			${ip6t} -P ${t} DROP
-			${ip6t} -F ${t}
-		done
-
-		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
-
-		if [ ${debug} -eq 1 ] ; then
-			${ipt} -L #
-			${ip6t} -L #
-			sleep 5 
-		fi #
-	
-		
-	fi
-}
+#function part1() {
+#	#jos jokin näistä kolmesta hoitaisi homman...
+#	${sifd} ${iface}
+#	${sifd} -a
+#	${sip} link set ${iface} down
+#
+#	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
+#	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
+#
+#	if [ y"${ipt}" == "y" ] ; then
+#		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+#	else
+#		for t in INPUT OUTPUT FORWARD ; do 
+#			${ipt} -P ${t} DROP
+#			${ip6t} -P ${t} DROP
+#			${ip6t} -F ${t}
+#		done
+#
+#		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
+#
+#		if [ ${debug} -eq 1 ] ; then
+#			${ipt} -L #
+#			${ip6t} -L #
+#			sleep 5 
+#		fi #
+#	
+#		
+#	fi
+#}
 
 if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
@@ -200,28 +200,29 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
+g=$(date +%F) #jatkossa -> part1
 part1
-g=$(date +%F)
 
-if [ z"${pkgsrc}" != "z" ] ; then
-	dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
-	csleep 5
-	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
-
-	sudo touch /etc/apt/sources.list
-	${scm} a+w /etc/apt/sources.list
-
-	for x in ${distro} ${distro}-updates ${distro}-security ; do
-		echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list 
-	done
-
-	[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
-	csleep 10
-fi
-
-${scm} a-w /etc/apt/sources.list
-${sco} -R root:root /etc/apt 
-${scm} -R a-w /etc/apt/
+#VAIH:voisi olla jatkossa osa part1:stä
+#if [ z"${pkgsrc}" != "z" ] ; then
+#	dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
+#	csleep 5
+#	[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+#
+#	sudo touch /etc/apt/sources.list
+#	${scm} a+w /etc/apt/sources.list
+#
+#	for x in ${distro} ${distro}-updates ${distro}-security ; do
+#		echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list 
+#	done
+#
+#	[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
+#	csleep 5
+#fi
+#
+#${scm} a-w /etc/apt/sources.list
+#${sco} -R root:root /etc/apt 
+#${scm} -R a-w /etc/apt/
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
@@ -256,8 +257,8 @@ else
 	fi
 fi
 
-csleep 10
-
+csleep 5
+#TODO:->vommon_lib
 if [ ${mode} -eq 1 ] ; then
 	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd
