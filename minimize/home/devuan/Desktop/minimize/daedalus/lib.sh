@@ -45,7 +45,7 @@ function pre_part3() {
 }
 
 pr4() {
-	dqb "pr4[ ${1})"
+	dqb "pr4( ${1})"
 	csleep 5
 
 	${odio} dpkg -i ${1}/libpam-modules-bin_*.deb
@@ -224,7 +224,7 @@ function mangle2() {
 #function ns4() {
 #	dqb "ns4( ${1} )"
 #	[ z"{$1}" == "z" ] && exit 33
-#jospa kirjoittaisi /e/i.d alaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
+# 	jospa kirjoittaisi /e/i.d alaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
 #	${scm} u+w /run
 #	${odio} touch /run/${1}.pid
 #	${scm} 0600 /run/${1}.pid
@@ -292,4 +292,4 @@ function gpo() {
 }
 
 #TODO:gpo jo käyttöön?
-#check_params ?
+
