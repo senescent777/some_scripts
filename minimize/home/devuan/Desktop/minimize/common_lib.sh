@@ -17,6 +17,7 @@ fix_sudo() {
 	${odio} chmod 0440 /etc/sudoers.d/* 
 	
 	echo "pt2 0f f1x_5ud0"
+	cd /
 
 	sudo chown -R 0:0 ./etc/sudo*
 	sudo chmod -R a-w ./etc/sudo*
