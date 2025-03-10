@@ -3,6 +3,14 @@ odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
 
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+
 #TODO:$sco ja $scm käyttöön jatq§
 fix_sudo() {
 	echo "fix_sud0.pt0"
@@ -13,48 +21,39 @@ fix_sudo() {
 	${odio} chmod -R a-w /etc/sudo*
 
 	echo "POT. DANGEROUS PT 1"
-	sudo chown -R 0:0 /usr/lib/sudo/*
-	sudo chown -R 0:0 /usr/bin/sudo*
+	#sudo chown 0:0 /usr/lib/sudo/* #onko moista daedaluksessa?
+	#sudo chown 0:0 /usr/bin/sudo* #HUOM. LUE VITUN RUNKKARI MAN-SIVUT AJATUKSELLA ENNENQ KOSKET TÄHÄN!!!
 
 	echo "fix_sud0.pt1"
 	${odio} chmod 0750 /etc/sudoers.d
 	${odio} chmod 0440 /etc/sudoers.d/*
 	
 	echo "POT. DANGEROUS PT 2"
-	sudo chmod -R a-w /usr/lib/sudo/*
-	sudo chmod -R a-w /usr/bin/sudo*
-	sudo chmod 4555 /usr/bin/sudo
-	sudo chmod 0444	/usr/lib/sudo/sudoers.so
+	#sudo chmod -R a-w /usr/lib/sudo/* #onko moista daedaluksessa?
+	#sudo chmod -R a-w /usr/bin/sudo* #HUOM. LUE VITUN RUNKKARI MAN-SIVUT AJATUKSELLA ENNENQ KOSKET TÄHÄN!!!
 
-	#sudo chattr +ui ./usr/bin/sudo"
-	#sudo chattr +ui ./usr/lib/sudo/sudoers.so	"
+	#sudo chmod 4555 ./usr/bin/sudo #HUOM. LUE VITUN RUNKKARI MAN-SIVUT AJATUKSELLA ENNENQ KOSKET TÄHÄN!!!
+
+	#sudo chmod 0444 /usr/lib/sudo/sudoers.so #onko moista daedaluksessa?
+	[ ${debug} -eq 1 ] && ls -las  /usr/bin/sudo*
+	csleep 5	
 	echo "d0n3"
-}
-
-function dqb() {
-	[ ${debug} -eq 1 ] && echo ${1}
-}
-
-function csleep() {
-	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
 fix_sudo
 
 #pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
 #
-#TODO:jatkossa chimaeRan doit6 käyttämään tätä jos mahd
+#VAIH:jatkossa chimaeRan doit6 käyttämään tätä jos mahd
 function ocs() {
 	local tmp
 	tmp=$(sudo which ${1})
 
 	if [ y"${tmp}" == "y" ] ; then
 		exit 66 #fiksummankin exit-koodin voisi keksiä
-	#else
 	fi
 
-	if [ ! -x ${tmp} ] ; then	
-	#else
+	if [ ! -x ${tmp} ] ; then
 		exit 77
 	fi
 
@@ -63,15 +62,15 @@ function ocs() {
 
 ##check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (TODO: let's find out)
 #
-##HUOM. jos tätä käyttää ni scm ja sco pitää tietenkin esitellä alussa
-#function mangle2() {
-#	if [ -f ${1} ] ; then 
-#		dqb "MANGLED ${1}"
-#		${scm} o-rwx ${1}
-#		${sco} root:root ${1}
-#	fi
-#}
-#
+#HUOM. jos tätä käyttää ni scm ja sco pitää tietenkin esitellä alussa
+function mangle2() {
+	if [ -f ${1} ] ; then 
+		dqb "MANGLED ${1}"
+		${scm} o-rwx ${1}
+		${sco} root:root ${1}
+	fi
+}
+
 #function gpo() {
 #	local prevopt
 #	local opt
@@ -86,23 +85,24 @@ function ocs() {
 #
 ##TODO:gpo jo käyttöön?
 ##TODO:part1 tähän vai ei?
-#
-#function mangle_s() {
-#local tgt
-#	[ y"${1}" == "y" ] && exit
-#	[ -s ${1} ] || exit  
-#	[ y"${2}" == "y" ] && exit 
-#	[ -f ${2} ] || exit  
-#
-#	tgt=${2}
-#
-#	sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
-#	sudo chown root:root ${1} 
-#
-#	local s
-#	s=$(sha256sum ${1})
-#	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
-#}
+
+function mangle_s() {
+	local tgt
+	[ y"${1}" == "y" ] && exit
+	[ -s ${1} ] || exit  #-x
+	[ y"${2}" == "y" ] && exit 
+	[ -f ${2} ] || exit  
+
+	tgt=${2}
+
+	sudo chmod 0555 ${1}
+	#HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
+	sudo chown root:root ${1} 
+
+	local s
+	s=$(sha256sum ${1})
+	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
+}
 #
 ##HUOm.080325 sietäisi kai harkita chimaeralle ja daedalukselle yhteistä kirjasrtoa
 #
