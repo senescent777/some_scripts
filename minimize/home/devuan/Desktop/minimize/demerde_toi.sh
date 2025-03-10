@@ -1,28 +1,35 @@
-#!/bin/sh
+#!/bin/bash
+#TODO: KOITA NYT SAATANAN TONTTU MUISTAA TUO BASH ALKUUN!!!!!
 debug=1
 
-#VAIH:jatkossa common_lib.sh käyttöön
-if [ -x ~/Desktop/minimize/common_lib.sh ] ; then
-	#TODO:jatkossa dirname, ehkä
-	. ~/Desktop/minimize/common_lib.sh
-else	
-	echo "ALT. LIB"
+if [ -x  ~/Desktop/minimize/common_lib.sh ] ; then
+	echo ". ~/Desktop/minimize/common_lib.sh"
+fi
+#tästä jnkn verran eteenpäin olisi tarkoitus olla else-blokissa jatkossa
+odio=$(which sudo)
+[ y"${odio}" == "y" ] && exit 65
+[ -x ${odio} ] || exit 66
 
-	#odio=$(which sudo)
-	#[ y"${odio}" == "y" ] && exit 665 
-	#[ -x ${odio} ] || exit 666
-	
-	#
-	#function dqb() {
-	#	[ ${debug} -eq 1 ] && echo ${1}
-	#}
-	#
-	#function csleep() {
-	#	[ ${debug} -eq 1 ] && sleep ${1}
-	#}
+tig=$(sudo which git)
+#if [ x"${tig}" == "x" ] ; then
+#	echo "sudo apt-get install git"
+#	exit 7
+#fi
+
+mkt=$(which mktemp)
+if [ x"${mkt}" == "x" ] ; then
+	echo "sudo apt-get install mktemp"
+	exit 7
 fi
 
-exit 11
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+#fi
 
 if [ $# -gt 0 ] ; then
 	dqb "params_ok"
@@ -38,35 +45,11 @@ else
 	exit 67
 fi
 
-#TODO:fodio-odiot käyttöön myöh. ehkä
-tig=$(sudo which git)	
-csleep 1
+echo "q=\$(${mkt} -d)"
+echo "cd \$q"
 
-if [ x"${tig}" == "x" ] ; then
-	${shary} git
-	[ $? -eq 0 ] || exit 7
-fi
-
-csleep 5
-tig=$(sudo which git)
-
-#VAIH:tarkistus että mktemp olemassa
-mtk=$(${odio} which mktemp)
-if [ z"${mtk}" == "z" ] ; then 
-	echo "sudo apt-get install mktemp"
-	exit 8
-fi
-
-if [ ! -x ${mtk} ] ; then
-	echo "sudo apt-get reinstall mktemp"
-	exit 9
-fi
-
-q=$(mktemp -d)
-cd $q
-
-${tig} clone https://github.com/senescent777/some_scripts
-cd some_scripts/minimize
+echo "${tig} clone https://github.com/senescent777/some_scripts"
+echo "cd some_scripts/minimize"
 
 if [ -d /home/devuan/Desktop/minimize ] ; then
 	#HUOM. pitänee jyrätä minimize-hak. ensin
@@ -75,5 +58,6 @@ fi
 
 sudo chmod 0755 ~/Desktop/minimize/${1}
 sudo chmod 0755 ~/Desktop/minimize/${1}/*.sh
-cd ~/Desktop/minimize
+
+echo "cd ~/Desktop/minimize"
 echo "./${1}/export.sh 0 /tmp/vomit.tar"
