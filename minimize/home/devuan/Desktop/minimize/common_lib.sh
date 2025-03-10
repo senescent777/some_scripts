@@ -20,15 +20,15 @@ fix_sudo() {
 	${odio} chown -R 0:0 /etc/sudo*
 	${odio} chmod -R a-w /etc/sudo*
 
-	echo "POT. DANGEROUS PT 1"
+	dqb "POT. DANGEROUS PT 1"
 	#sudo chown 0:0 /usr/lib/sudo/* #onko moista daedaluksessa?
 	#sudo chown 0:0 /usr/bin/sudo* #HUOM. LUE VITUN RUNKKARI MAN-SIVUT AJATUKSELLA ENNENQ KOSKET TÄHÄN!!!
 
-	echo "fix_sud0.pt1"
+	dqb "fix_sud0.pt1"
 	${odio} chmod 0750 /etc/sudoers.d
 	${odio} chmod 0440 /etc/sudoers.d/*
 	
-	echo "POT. DANGEROUS PT 2"
+	dqb "POT. DANGEROUS PT 2"
 	#sudo chmod -R a-w /usr/lib/sudo/* #onko moista daedaluksessa?
 	#sudo chmod -R a-w /usr/bin/sudo* #HUOM. LUE VITUN RUNKKARI MAN-SIVUT AJATUKSELLA ENNENQ KOSKET TÄHÄN!!!
 
@@ -84,7 +84,6 @@ function mangle2() {
 #}
 #
 ##TODO:gpo jo käyttöön?
-##TODO:part1 tähän vai ei?
 
 function mangle_s() {
 	local tgt
@@ -207,4 +206,80 @@ function mangle_s() {
 #	${scm} 0777 /tmp
 #	${sco} root:root /tmp
 #}
-#
+function part1() {
+	#jos jokin näistä kolmesta hoitaisi homman...
+	${sifd} ${iface}
+	${sifd} -a
+	${sip} link set ${iface} down
+
+	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
+	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
+
+	if [ y"${ipt}" == "y" ] ; then
+		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+	else
+		for t in INPUT OUTPUT FORWARD ; do 
+			${ipt} -P ${t} DROP
+			${ip6t} -P ${t} DROP
+			${ip6t} -F ${t}
+		done
+
+		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
+
+		if [ ${debug} -eq 1 ] ; then
+			${ipt} -L #
+			${ip6t} -L #
+			sleep 5 
+		fi #
+	
+		
+	fi
+
+	if [ z"${pkgsrc}" != "z" ] ; then
+		dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
+		csleep 5
+		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+
+		sudo touch /etc/apt/sources.list
+		${scm} a+w /etc/apt/sources.list
+
+		for x in ${distro} ${distro}-updates ${distro}-security ; do
+			echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list 
+		done
+
+		[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
+		csleep 5
+	fi
+
+	${scm} a-w /etc/apt/sources.list
+	${sco} -R root:root /etc/apt 
+	${scm} -R a-w /etc/apt/
+}
+
+function part3() {
+	[ y"${1}" == "y" ] && exit 1
+	dqb "11"
+	[ -d ${1} ] || exit 2
+	dqb "22 ${1}"
+	${sdi} ${1}/lib*.deb
+
+	if [ $? -eq  0 ] ; then
+		dqb "part3.1 ok"
+		sleep 5
+		${odio} shred -fu ${1}/lib*.deb
+	else
+	 	dqb "exit 66"
+	fi
+
+	${sdi} ${1}/*.deb
+	
+	if [ $? -eq  0 ] ; then
+		dqb "part3.2 ok"
+		sleep 5
+		${odio} shred -fu ${1}/*.deb 
+	else
+	 	dqb "exit 67"
+	fi
+
+	csleep 2
+}
