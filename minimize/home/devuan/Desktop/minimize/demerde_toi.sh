@@ -2,9 +2,12 @@
 debug=1
 
 #VAIH:jatkossa common_lib.sh käyttöön
-if [ -x  ~/Desktop/minimize/common_lib.sh ] ; then
-	. ~/Desktop/minimize/common_lib.sh #TODO:jatkossa dirname, ehkä
+if [ -x ~/Desktop/minimize/common_lib.sh ] ; then
+	#TODO:jatkossa dirname, ehkä
+	. ~/Desktop/minimize/common_lib.sh
 else	
+	echo "ALT. LIB"
+
 	#odio=$(which sudo)
 	#[ y"${odio}" == "y" ] && exit 665 
 	#[ -x ${odio} ] || exit 666
@@ -48,7 +51,18 @@ fi
 csleep 5
 tig=$(${odio} which git)
 
-#TODO:tarkistus että mktemp olemassa
+#VAIH:tarkistus että mktemp olemassa
+mtk=$(${odio} which mktemp)
+if [ z"${mtk}" == "z" ] ; then 
+	echo "sudo apt-get install mktemp"
+	exit 8
+fi
+
+if [ ! -x ${mtk} ] ; then
+	echo "sudo apt-get reinstall mktemp"
+	exit 9
+fi
+
 q=$(mktemp -d)
 cd $q
 
