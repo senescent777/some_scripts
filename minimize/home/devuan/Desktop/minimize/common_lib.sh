@@ -236,6 +236,8 @@ function part1() {
 	fi
 
 	if [ z"${pkgsrc}" != "z" ] ; then
+		local g
+		g=$(date +%F) 
 		dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
 		csleep 5
 		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
@@ -254,6 +256,8 @@ function part1() {
 	${scm} a-w /etc/apt/sources.list
 	${sco} -R root:root /etc/apt 
 	${scm} -R a-w /etc/apt/
+
+	dqb "FOUR-LEGGED WHORE"
 }
 
 function part3() {
