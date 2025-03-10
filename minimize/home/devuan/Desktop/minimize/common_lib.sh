@@ -51,11 +51,11 @@ function ocs() {
 
 	if [ y"${tmp}" == "y" ] ; then
 		exit 66 #fiksummankin exit-koodin voisi keksiä
-	else
+	#else
 	fi
 
-	if [ -x ${tmp} ] ; then	
-	else
+	if [ ! -x ${tmp} ] ; then	
+	#else
 		exit 77
 	fi
 
