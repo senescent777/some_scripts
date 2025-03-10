@@ -1,17 +1,21 @@
-#odio=$(which sudo)
-#[ y"${odio}" == "y" ] && exit 99 
-#[ -x ${odio} ] || exit 100
+odio=$(which sudo)
+[ y"${odio}" == "y" ] && exit 99 
+[ -x ${odio} ] || exit 100
 
 fix_sudo() {
-	echo "${odio} chown -R 0:0 /etc/sudoers.d" #pitääköhän juuri tässä tehdä tämä? jep
-	echo "${odio} chmod 0440 /etc/sudoers.d/*" 
+	${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
+	${odio} chmod 0440 /etc/sudoers.d/* 
+	
 	echo "#VAIH:kts loput suq.ash"
-	echo "sudo chown -R 0:0 ./etc/sudo*"
-	echo "sudo chmod -R a-w ./etc/sudo*"
+	sudo chown -R 0:0 /etc/sudo*
+	sudo chmod -R a-w /etc/sudo*
+
 	echo "sudo chown -R 0:0 ./usr/lib/sudo/*"
 	echo "sudo chown -R 0:0 ./usr/bin/sudo*"
-	echo "sudo chmod 0750 ./etc/sudoers.d"
-	echo "sudo chmod 0440 /etc/sudoers.d/*"
+	
+	sudo chmod 0750 ./etc/sudoers.d
+	sudo chmod 0440 /etc/sudoers.d/*
+
 	echo "sudo chmod -R a-w ./usr/lib/sudo/*"
 	echo "sudo chmod -R a-w ./usr/bin/sudo*"
 	echo "sudo chmod 4555 ./usr/bin/sudo"
@@ -20,11 +24,14 @@ fix_sudo() {
 	echo "sudo chattr +ui ./usr/lib/sudo/sudoers.so	"
 }
 
-#
-#function csleep() {
-#	[ ${debug} -eq 1 ] && sleep ${1}
-#}
-#
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+
 fix_sudo
 #
 ##pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon

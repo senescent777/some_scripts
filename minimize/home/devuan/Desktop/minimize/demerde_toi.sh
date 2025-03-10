@@ -6,9 +6,9 @@ if [ -x  ~/Desktop/minimize/common_lib.sh ] ; then
 	. ~/Desktop/minimize/common_lib.sh
 fi
 #tästä jnkn verran eteenpäin olisi tarkoitus olla else-blokissa jatkossa
-odio=$(which sudo)
-[ y"${odio}" == "y" ] && exit 65
-[ -x ${odio} ] || exit 66
+#odio=$(which sudo)
+#[ y"${odio}" == "y" ] && exit 65
+#[ -x ${odio} ] || exit 66
 
 tig=$(sudo which git)
 #if [ x"${tig}" == "x" ] ; then
@@ -22,13 +22,13 @@ if [ x"${mkt}" == "x" ] ; then
 	exit 7
 fi
 
-function dqb() {
-	[ ${debug} -eq 1 ] && echo ${1}
-}
-
-function csleep() {
-	[ ${debug} -eq 1 ] && sleep ${1}
-}
+#function dqb() {
+#	[ ${debug} -eq 1 ] && echo ${1}
+#}
+#
+#function csleep() {
+#	[ ${debug} -eq 1 ] && sleep ${1}
+#}
 #fi
 
 if [ $# -gt 0 ] ; then
