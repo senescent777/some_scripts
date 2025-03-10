@@ -28,8 +28,8 @@ fi
 
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0}
-#TODO:urputus toiseen paikkaan
-[ -b ${part} ] || dqb "no such thing as ${part}"
+#VAIH:urputus toiseen paikkaan
+
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
@@ -64,6 +64,8 @@ if [ $# -gt 0 ] ; then
 
 	case "${1}" in
 		-1)
+			[ -b ${part} ] || dqb "no such thing as ${part}"
+
 			${som} -o ro ${part} ${dir}
 			csleep 5
 			${som} | grep ${dir}
