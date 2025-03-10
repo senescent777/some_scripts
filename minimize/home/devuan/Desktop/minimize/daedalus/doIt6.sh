@@ -1,5 +1,7 @@
 #!/bin/bash
 d=$(dirname $0)
+#pitäisiköjhän tässä asettaa debug jhnkn arvoon?
+. ~/Desktop/minimize/common_lib.sh
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
@@ -36,23 +38,23 @@ function check_params() {
 	esac
 }
 
-function mangle_s() {
-	local tgt
-	[ y"${1}" == "y" ] && exit
-	[ -s ${1} ] || exit  #-x sittenkin?
-	[ y"${2}" == "y" ] && exit 
-	[ -f ${2} ] || exit  
-
-	tgt=${2}
-	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
-
-	sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
-	sudo chown root:root ${1} 
-
-	local s
-	s=$(sha256sum ${1})
-	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
-}
+#function mangle_s() {
+#	local tgt
+#	[ y"${1}" == "y" ] && exit
+#	[ -s ${1} ] || exit  #-x sittenkin?
+#	[ y"${2}" == "y" ] && exit 
+#	[ -f ${2} ] || exit  
+#
+#	tgt=${2}
+#	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
+#
+#	sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
+#	sudo chown root:root ${1} 
+#
+#	local s
+#	s=$(sha256sum ${1})
+#	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
+#}
 
 #HUOm.080325 sietäisi kai harkita chimaeralle ja daedalukselle yhteistä kirjasrtoa
 
@@ -88,7 +90,6 @@ function pre_enforce() {
 	fi
 
 	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
-	
 }
 
 function enforce_access() {
@@ -154,6 +155,7 @@ function enforce_access() {
 
 	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
 
+	#TODO: se man chmod ao. riveihin liittyen, rwt...
 	${scm} 0777 /tmp
 	${sco} root:root /tmp
 }

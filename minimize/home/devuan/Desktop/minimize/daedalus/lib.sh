@@ -1,21 +1,21 @@
 #=================================================PART 0=====================================
 #grep /e/n/i ?
-
-odio=$(which sudo)
-[ y"${odio}" == "y" ] && exit 99 
-[ -x ${odio} ] || exit 100
-${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
-${odio} chmod 0440 /etc/sudoers.d/* 
-
-function dqb() {
-	[ ${debug} -eq 1 ] && echo ${1}
-}
-
-function csleep() {
-	[ ${debug} -eq 1 ] && sleep ${1}
-}
-
-#HUOM. tähän asti ainakin joutaisi kopsata distrolle yhteiseen kirjastoon, samoin enforce-jutut
+#
+#odio=$(which sudo)
+#[ y"${odio}" == "y" ] && exit 99 
+#[ -x ${odio} ] || exit 100
+#${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
+#${odio} chmod 0440 /etc/sudoers.d/* 
+#
+#function dqb() {
+#	[ ${debug} -eq 1 ] && echo ${1}
+#}
+#
+#function csleep() {
+#	[ ${debug} -eq 1 ] && sleep ${1}
+#}
+#
+##HUOM. tähän asti ainakin joutaisi kopsata distrolle yhteiseen kirjastoon, samoin enforce-jutut
 
 function pre_part3() {
 	[ y"${1}" == "y" ] && exit
@@ -71,25 +71,25 @@ pr4() {
 	sudo shred -fu ${1}/perl*
 }
 
-function ocs() {
-	local tmp
-	tmp=$(sudo which ${1})
-
-	if [ y"${tmp}" == "y" ] ; then
-		exit 66 #fiksummankin exit-koodin voisi keksiä
-	else
-		dqb "fråm ocs(): ${tmp} exists"
-	fi
-
-	if [ -x ${tmp} ] ; then	
-		dqb "fråm ocs(): ${tmp} is executable"		
-	else
-		exit 77
-	fi
-
-	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
-	dqb "fråm ocs(): ${tmp} add3d t0 l1st"
-}
+#function ocs() {
+#	local tmp
+#	tmp=$(sudo which ${1})
+#
+#	if [ y"${tmp}" == "y" ] ; then
+#		exit 66 #fiksummankin exit-koodin voisi keksiä
+#	else
+#		dqb "fråm ocs(): ${tmp} exists"
+#	fi
+#
+#	if [ -x ${tmp} ] ; then	
+#		dqb "fråm ocs(): ${tmp} is executable"		
+#	else
+#		exit 77
+#	fi
+#
+#	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
+#	dqb "fråm ocs(): ${tmp} add3d t0 l1st"
+#}
 
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
@@ -211,14 +211,14 @@ function check_binaries2() {
 	csleep 3
 }
 
-function mangle2() {
-	if [ -f ${1} ] ; then 
-		dqb "MANGLED ${1}"
-		${scm} o-rwx ${1}
-		${sco} root:root ${1}
-	fi
-}
-
+#function mangle2() {
+#	if [ -f ${1} ] ; then 
+#		dqb "MANGLED ${1}"
+#		${scm} o-rwx ${1}
+#		${sco} root:root ${1}
+#	fi
+#}
+#
 ##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
 #HUOM.280125: ao. fktion kanssa piotäisi vissiin jotain tehdä vähitellen
 #function ns4() {
@@ -247,7 +247,7 @@ function mangle2() {
 #}
 #
 #=========================PART 0 ENDS HERE=================================================================
-
+#TODO: -> common_lib
 function part3() {
 	[ y"${1}" == "y" ] && exit 1
 	dqb "11"

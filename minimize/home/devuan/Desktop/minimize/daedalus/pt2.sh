@@ -1,6 +1,7 @@
 #!/bin/bash
 d=$(dirname $0)
 debug=0
+. ~/Desktop/minimize/common_lib.sh
 
 [ -s ${d}/lib.sh ] && . ${d}/lib.sh
 ${fib}
@@ -127,7 +128,7 @@ ${lftr}
 ${odio} shred -fu ${pkgdir}/*.deb 
 dqb "TODO: ${odio} shred -fu ${d}/*.deb or somethink like that" 
 ${odio} shred -fu /tmp/*.tar
-#squ.ash voisi vilkaista kanssa liittyen
+#squ.ash voisi vilkaista kanssa liittyen (vai oliko mitään hylyllistä siellä?)
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
