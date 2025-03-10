@@ -1,110 +1,35 @@
-odio=$(which sudo)
-
-#exit 10
-#
-#if [ y"${odio}" == "y" ] ; then
-#	exit 99 
-#fi
-
-if [ ! -x ${odio} ] ; then
-	exit 100
-fi
-
-echo "${odio}"
+#odio=$(which sudo)
+#[ y"${odio}" == "y" ] && exit 99 
+#[ -x ${odio} ] || exit 100
 
 fix_sudo() {
-	sudo chmod a-w /usr/bin/sudo*
-	sudo chmod a-w /usr/bin/sudo*
-	
-	sudo chmod a-w /usr/bin/sudo*
-	sudo chmod a-w /usr/bin/sudo*
-
-	sudo chmod a-w /usr/bin/sudo*
-	sudo chmod a-w /usr/bin/sudo*
-
-	sudo chmod a-w /usr/bin/sudo*
-	sudo chmod a-w /usr/bin/sudo*
-
-	sleep 6
-
-	
-	sudo chmod a-w /usr/bin/sudo*
-	sudo chmod a-w /usr/bin/sudo*
-	
-	sudo chmod a-w /usr/bin/sudo*
-	sudo chmod a-w /usr/bin/sudo*
-
-	sudo chmod a-w /usr/bin/sudo*
-	sudo chmod a-w /usr/bin/sudo*
-
-	sudo chmod a-w /usr/bin/sudo*
-	sudo chmod a-w /usr/bin/sudo*
-
-	sleep 6
-	sudo chown 0:0 /usr/bin/sudo*
-	sudo chown 0:0 /usr/bin/sudo*
-
-	sudo chown 0:0 /usr/bin/sudo*
-	sudo chown 0:0 /usr/bin/sudo*
-
-	sudo chown 0:0 /usr/bin/sudo*
-	sudo chown 0:0 /usr/bin/sudo*
-
-	sudo chown 0:0 /usr/bin/sudo*
-	sudo chown 0:0 /usr/bin/sudo*
-	sleep 6
-
-	sudo chown 0:0 /usr/bin/sudo*
-	sudo chown 0:0 /usr/bin/sudo*
-
-	sudo chown 0:0 /usr/bin/sudo*
-	sudo chown 0:0 /usr/bin/sudo*
-
-	sudo chown 0:0 /usr/bin/sudo*
-	sudo chown 0:0 /usr/bin/sudo*
-
-	sudo chown 0:0 /usr/bin/sudo*
-	sudo chown 0:0 /usr/bin/sudo*
-	sleep 6
-
-	${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
-	${odio} chmod 0440 /etc/sudoers.d/* 
-	
-	echo "pt2 0f f1x_5ud0"
-	sudo chown 0:0 /usr/bin/sudo*
-	sudo chmod a-w /usr/bin/sudo*
-	sudo chmod 4555 /usr/bin/sudo
-
-	echo "pt3 0f f1x_5ud0"
-	sudo chown -R 0:0 /etc/sudo*
-	sudo chmod -R a-w /etc/sudo*
-	sudo chown -R 0:0 /usr/lib/sudo/*
-	
-
-	sudo chmod 0750 /etc/sudoers.d
-	sudo chmod 0440 /etc/sudoers.d/*
-
-	sudo chmod -R a-w /usr/lib/sudo/*
-
-	sudo chmod 0444	/usr/lib/sudo/sudoers.so
-
-	sudo chattr +ui /usr/bin/sudo
-	sudo chattr +ui /usr/lib/sudo/sudoers.so	
+	echo "${odio} chown -R 0:0 /etc/sudoers.d" #pitääköhän juuri tässä tehdä tämä? jep
+	echo "${odio} chmod 0440 /etc/sudoers.d/*" 
+	echo "#VAIH:kts loput suq.ash"
+	echo "sudo chown -R 0:0 ./etc/sudo*"
+	echo "sudo chmod -R a-w ./etc/sudo*"
+	echo "sudo chown -R 0:0 ./usr/lib/sudo/*"
+	echo "sudo chown -R 0:0 ./usr/bin/sudo*"
+	echo "sudo chmod 0750 ./etc/sudoers.d"
+	echo "sudo chmod 0440 /etc/sudoers.d/*"
+	echo "sudo chmod -R a-w ./usr/lib/sudo/*"
+	echo "sudo chmod -R a-w ./usr/bin/sudo*"
+	echo "sudo chmod 4555 ./usr/bin/sudo"
+	echo "sudo chmod 0444	./usr/lib/sudo/sudoers.so"
+	echo "sudo chattr +ui ./usr/bin/sudo"
+	echo "sudo chattr +ui ./usr/lib/sudo/sudoers.so	"
 }
-#
-#function dqb() {
-#	[ ${debug} -eq 1 ] && echo ${1}
-#}
+
 #
 #function csleep() {
 #	[ ${debug} -eq 1 ] && sleep ${1}
 #}
 #
 fix_sudo
-
+#
 ##pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
 #
-##TODO:jatkossa chimaeran doit6 käyttämään tätä jos mahd
+##TODO:jatkossa chimaeRan doit6 käyttämään tätä jos mahd
 #function ocs() {
 #	local tmp
 #	tmp=$(sudo which ${1})
@@ -112,17 +37,14 @@ fix_sudo
 #	if [ y"${tmp}" == "y" ] ; then
 #		exit 66 #fiksummankin exit-koodin voisi keksiä
 #	else
-#		dqb "fråm ocs(): ${tmp} exists"
 #	fi
 #
 #	if [ -x ${tmp} ] ; then	
-#		dqb "fråm ocs(): ${tmp} is executable"		
 #	else
 #		exit 77
 #	fi
 #
 #	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
-#	dqb "fråm ocs(): ${tmp} add3d t0 l1st"
 #}
 #
 ##check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (TODO: let's find out)
@@ -152,14 +74,13 @@ fix_sudo
 ##TODO:part1 tähän vai ei?
 #
 #function mangle_s() {
-#	local tgt
+#local tgt
 #	[ y"${1}" == "y" ] && exit
 #	[ -s ${1} ] || exit  
 #	[ y"${2}" == "y" ] && exit 
 #	[ -f ${2} ] || exit  
 #
 #	tgt=${2}
-#	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 #
 #	sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
 #	sudo chown root:root ${1} 
@@ -207,7 +128,6 @@ fix_sudo
 #}
 #
 #function enforce_access() {
-#	dqb "3nf0rc3_acc355()"
 #	#HUOM. ao. sudo-kikkailut korvannee jatkossa fix_sudo tai siis näin olisi tarkoitus
 #	#HUOM. 070325: oli ao. loitsut / asti ennen pre_enforce():n puolella
 #	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
@@ -248,7 +168,6 @@ fix_sudo
 #
 #	if [ y"${n}" != "y" ] ; then
 #		#josko vielä testaisi että $n asetettu ylipäänsä
-#		dqb "${sco} -R ${n}:${n} ~"
 #		${sco} -R ${n}:${n} ~
 #		csleep 5
 #	fi

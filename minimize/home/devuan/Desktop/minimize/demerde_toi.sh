@@ -3,7 +3,7 @@
 debug=1
 
 if [ -x  ~/Desktop/minimize/common_lib.sh ] ; then
-	echo ". ~/Desktop/minimize/common_lib.sh"
+	. ~/Desktop/minimize/common_lib.sh
 fi
 #tästä jnkn verran eteenpäin olisi tarkoitus olla else-blokissa jatkossa
 odio=$(which sudo)
