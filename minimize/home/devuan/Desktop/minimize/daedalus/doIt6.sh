@@ -57,7 +57,7 @@ function check_params() {
 #}
 
 #HUOm.080325 sietäisi kai harkita chimaeralle ja daedalukselle yhteistä kirjasrtoa
-
+#TODO:vähitellen tämäkin kirjastoon
 function pre_enforce() {
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	local q
@@ -200,7 +200,7 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-g=$(date +%F) #jatkossa -> part1
+
 part1
 
 #VAIH:voisi olla jatkossa osa part1:stä
