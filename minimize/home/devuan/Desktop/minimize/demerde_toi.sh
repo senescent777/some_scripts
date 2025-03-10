@@ -38,6 +38,7 @@ else
 	exit 67
 fi
 
+#TODO:fodio-odiot käyttöön myöh. ehkä
 tig=$(sudo which git)	
 csleep 1
 
@@ -47,7 +48,7 @@ if [ x"${tig}" == "x" ] ; then
 fi
 
 csleep 5
-tig=$(${odio} which git)
+tig=$(sudo which git)
 
 #VAIH:tarkistus että mktemp olemassa
 mtk=$(${odio} which mktemp)
