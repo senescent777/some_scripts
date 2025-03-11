@@ -1,8 +1,11 @@
 #!/bin/bash
 d=$(dirname $0)
-#TODO:conf ja common_lib
-if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
-	. ${d}/conf
+[ -s ${d}/conf ] && . ${d}/conf
+[ -s ~/Desktop/minimize/common_lib.sh ] && . ~/Desktop/minimize/common_lib.sh 
+
+#HUOM.110325: tarvitseekohan tässä noita tiedostoja vetää mukaan, vähemmälläkin pärjäisi
+
+if [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
 	echo "TO CONTINUE FURTHER IS POINTLESS, ESSENTIAL FILES MISSING"
