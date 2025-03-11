@@ -71,19 +71,19 @@ function mangle2() {
 	fi
 }
 
-#function gpo() {
-#	local prevopt
-#	local opt
-#	prevopt=""
-#
-#	for opt in $@ ; do 
-#		parse_opts_1 ${opt}
-#		parse_opts_2 ${prevopt} ${opt}
-#		prevopt=opt
-#	done
-#}
-#
-##TODO:gpo jo käyttöön?
+function gpo() {
+	local prevopt
+	local opt
+	prevopt=""
+
+	for opt in $@ ; do 
+		parse_opts_1 ${opt}
+		parse_opts_2 ${prevopt} ${opt}
+		prevopt=opt
+	done
+}
+
+#TODO:gpo jo käyttöön?
 
 function mangle_s() {
 	local tgt
