@@ -140,7 +140,7 @@ function make_tar2() {
 	csleep 1
 
 	if [ x"${tig}" == "x" ] ; then
-		#voisi myös urputtaa kjälle että ajaa ao. komennot
+		#TODO:voisi myös urputtaa kjälle että ajaa ao. komennot
 		${sag_u}
 		${shary} git
 		[ $? -eq 0 ] || exit 7

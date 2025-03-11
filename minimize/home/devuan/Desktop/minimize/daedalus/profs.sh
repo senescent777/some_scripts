@@ -1,4 +1,4 @@
-#TODO:toiselle nimelle minimizen kanssa yhteenspoiva versio tästä tdstosta
+#TODO:toiselle nimelle minimizen kanssa yhteensOPiva versio tästä tdstosta ... tai sitten middleware.sh väliin
 cprof_1_1() {
 	
 
