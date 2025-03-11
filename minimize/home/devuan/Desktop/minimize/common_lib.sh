@@ -140,8 +140,6 @@ function pre_enforce() {
 }
 
 function enforce_access() {
-	#HUOM. ao. sudo-kikkailut korvannee jatkossa fix_sudo tai siis näin olisi tarkoitus
-	#HUOM. 070325: oli ao. loitsut / asti ennen pre_enforce():n puolella
 	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
