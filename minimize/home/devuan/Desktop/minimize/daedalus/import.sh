@@ -27,6 +27,7 @@ fi
 
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0}
+
 dqb "b3f0r3 0ld.tar"
 csleep 5
 

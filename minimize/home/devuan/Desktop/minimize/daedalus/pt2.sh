@@ -127,7 +127,9 @@ csleep 5
 
 ${lftr}
 ${odio} shred -fu ${pkgdir}/*.deb 
+
 ${odio} shred -fu ${d}/*.deb #or somethink like that
+
 ${odio} shred -fu /tmp/*.tar
 #squ.ash voisi vilkaista kanssa liittyen (vai oliko mitään hyödyllistä siellä?)
 df

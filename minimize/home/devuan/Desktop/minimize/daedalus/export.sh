@@ -59,6 +59,7 @@ function part1() {
 		#${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
 	fi
 
+
 	if [ ${debug} -eq 1 ] ; then
 		ls -las ~/Desktop/minimize/; sleep 10
 	fi
@@ -68,6 +69,7 @@ function part1() {
 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
 function part4() {
+
 	csleep 4
 	
 	if [ z"${pkgdir}" != "z" ] ; then 
@@ -169,6 +171,9 @@ function part3() {
 	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
 	csleep 5
 
+	dqb "VAIH: ${tig} clone https://github.com/senescent777/some_scripts.git"
+'	csleep 5
+
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
 	${srat} -rf ${1} ./etc ./sbin 
@@ -231,6 +236,7 @@ else
 	echo "-h"
 fi
 
+#oma case sille profs.sh-jutulle?
 case ${mode} in
 	0)
 		part1 ${tgtfile}
@@ -249,6 +255,7 @@ case ${mode} in
 	;;
 	e)
 		part4 ${tgtfile}
+
 	;;
 	-h)
 		echo "$0 0 tgtfile | $0 1 tgtfile"

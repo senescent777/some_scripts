@@ -18,6 +18,7 @@ if [ x"${mkt}" == "x" ] ; then
 	exit 7
 fi
 
+
 if [ $# -gt 0 ] ; then
 	dqb "params_ok"
 else

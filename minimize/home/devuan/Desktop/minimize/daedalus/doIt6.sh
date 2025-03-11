@@ -75,6 +75,7 @@ ${odio} /etc/init.d/ntpsec stop
 ecfx
 csleep 5
 
+
 #TODO:testaus
 if [ ${mode} -eq 1 ] ; then
 	vommon
