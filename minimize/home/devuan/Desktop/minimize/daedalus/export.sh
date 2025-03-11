@@ -22,7 +22,6 @@ else
 	}	
 fi
 
-#debug=1
 tig=$(sudo which git)
 
 if [ x"${tig}" == "x" ] ; then
@@ -42,7 +41,6 @@ if [ x"${mkt}" == "x" ] ; then
 fi
 
 function part1() {
-	csleep 1
 	[ z"${1}" == "z" ] && exit
 
 	${scm} -R a-wx ~/Desktop/minimize/*
@@ -59,7 +57,6 @@ function part1() {
 		#${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
 	fi
 
-
 	if [ ${debug} -eq 1 ] ; then
 		ls -las ~/Desktop/minimize/; sleep 10
 	fi
@@ -69,9 +66,6 @@ function part1() {
 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
 function part4() {
-
-	csleep 4
-	
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
 	fi
@@ -80,8 +74,7 @@ function part4() {
 	[ -s ${1} ] || exit 2
 
 	${sag_u}
-	[ $? -eq 0 ] || exit	
-	csleep 1
+	[ $? -eq 0 ] || exit
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 
@@ -89,10 +82,8 @@ function part4() {
 	${shary} iptables-persistent init-system-helpers netfilter-persistent
 
 	#actually necessary block
-	csleep 5
 	sudo ${d}/clouds.sh ${dnsm}
 	${sifu} ${iface}
-	csleep 5
 
 	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
 	${shary} runit-helper
@@ -111,7 +102,6 @@ function part4() {
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
 	${odio} shred -fu  ~/Desktop/minimize/${distro}/*.deb
-	sleep 4 
 
 	#HUOM.070325: varm vuoksi speksataan että *.deb
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
@@ -120,11 +110,8 @@ function part4() {
 }
 
 function part2() {
-	csleep 1
-	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
-	csleep 1
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
@@ -140,16 +127,12 @@ function part2() {
 
 	${srat} -rf ${1} /etc/init.d/net*
 	${srat} -rf ${1} /etc/rcS.d/S*net*
-	csleep 5
 }
 
 #jopsa jatkossa ajaisi part3 ennen part2?
 function part3() {
-	csleep 1
-
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
-	csleep 1
 
 	local p
 	local q	
@@ -160,7 +143,6 @@ function part3() {
 	cd ${q}
 
 	${tig} clone https://github.com/senescent777/project.git
-	csleep 1
 
 	cd project
 	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
@@ -169,10 +151,6 @@ function part3() {
 
 	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp #ehkä pois jatqssa
 	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
-	csleep 5
-
-	dqb "VAIH: ${tig} clone https://github.com/senescent777/some_scripts.git"
-'	csleep 5
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
@@ -181,32 +159,23 @@ function part3() {
 }
 
 function make_upgrade() {
-	csleep 1
-	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] && exit 2
-	csleep 1
 
 	${odio} shred -fu ${pkgdir}/*.deb 
 	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
 
 	${odio} ${d}/clouds.sh ${dnsm} 
-	${sifu} ${iface}	
-	sleep 6
+	${sifu} ${iface}
 
-	${asy} 
-	sleep 4
-
-	echo "${sag_u}"; sleep 4
+	${asy}
 	${sag_u}
 
-	echo "${sag} upgrade -u";sleep 5
 	${sag} upgrade -u
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
 	${srat} -jcf ${1} ~/Desktop/minimize/${distro}/*.deb
 
 	${sifd} ${iface}
-	sleep 1
 }
 
 function prof5() {
@@ -236,7 +205,6 @@ else
 	echo "-h"
 fi
 
-#oma case sille profs.sh-jutulle?
 case ${mode} in
 	0)
 		part1 ${tgtfile}
@@ -255,7 +223,6 @@ case ${mode} in
 	;;
 	e)
 		part4 ${tgtfile}
-
 	;;
 	-h)
 		echo "$0 0 tgtfile | $0 1 tgtfile"
