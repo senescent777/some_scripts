@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#HUOM.100325:jatqssa common_lib käyttöön vai ei?
+#HUOM.100325:jatqssa common_lib käyttöön vai ei? tai jopa distrolle yhteinen versio?
 smr=$(sudo which rm)
 ipt=$(sudo which iptables)
 ip6t=$(sudo which ip6tables)
