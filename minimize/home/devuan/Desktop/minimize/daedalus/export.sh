@@ -40,7 +40,7 @@ if [ x"${mkt}" == "x" ] ; then
 	exit 8
 fi
 
-function part1() {
+function tp1() {
 	[ z"${1}" == "z" ] && exit
 
 	${scm} -R a-wx ~/Desktop/minimize/*
@@ -65,7 +65,7 @@ function part1() {
 }
 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
-function part4() {
+function tp4() {
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
 	fi
@@ -109,7 +109,7 @@ function part4() {
 	#HUOM.260125: -p wttuun varm. vuoksi  
 }
 
-function part2() {
+function tp2() {
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
 
@@ -129,8 +129,8 @@ function part2() {
 	${srat} -rf ${1} /etc/rcS.d/S*net*
 }
 
-#jopsa jatkossa ajaisi part3 ennen part2?
-function part3() {
+#jopsa jatkossa ajaisi tp3 ennen tp2?
+function tp3() {
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
 
@@ -158,7 +158,7 @@ function part3() {
 	cd ${p}
 }
 
-function make_upgrade() {
+function tpu() {
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] && exit 2
 
@@ -178,7 +178,7 @@ function make_upgrade() {
 	${sifd} ${iface}
 }
 
-function prof5() {
+function tp5() {
 	dqb "5FF0RP"
 
 	local q
@@ -207,22 +207,22 @@ fi
 
 case ${mode} in
 	0)
-		part1 ${tgtfile}
-		part2 ${tgtfile}
-		part3 ${tgtfile}
-		part4 ${tgtfile}
+		tp1 ${tgtfile}
+		tp2 ${tgtfile}
+		tp3 ${tgtfile}
+		tp4 ${tgtfile}
 
 		#${srat} -tf ${tgtfile} > ./MANIFEST
 		#${srat} -rf ${tgtfile} ./MANIFEST
 	;;
 	1|u|upgrade)
-		make_upgrade ${tgtfile}
+		tpu ${tgtfile}
 	;;
 	p)
-		prof5 ${tgtfile}
+		tp5 ${tgtfile}
 	;;
 	e)
-		part4 ${tgtfile}
+		tp4 ${tgtfile}
 	;;
 	-h)
 		echo "$0 0 tgtfile | $0 1 tgtfile"
