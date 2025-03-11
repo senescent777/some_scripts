@@ -22,7 +22,7 @@ else
 	}	
 fi
 
-debug=1
+#debug=1
 
 function make_tar() {
 	csleep 1
@@ -30,9 +30,9 @@ function make_tar() {
 
 	${scm} -R a-wx ~/Desktop/minimize/*
 	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
-	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
-
+	${scm} 0755 ~/Desktop/minimize/${distro}/*.sh
 	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
+
 	if [ ${enforce} -eq 1 ] ; then
 		${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
 		
