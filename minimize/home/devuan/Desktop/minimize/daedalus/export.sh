@@ -239,9 +239,8 @@ case ${mode} in
 		make_tar2 ${tgtfile}
 		make_tar_15 ${tgtfile}
 
-		#VAIH:manifest-jutut aivan viimeisenä (main())
-		${srat} -tf ${1} > ./MANIFEST
-		${srat} -rf ${1} ./MANIFEST
+		${srat} -tf ${tgtfile} > ./MANIFEST
+		${srat} -rf ${tgtfile} ./MANIFEST
 	;;
 	1|u|upgrade)
 		make_upgrade ${tgtfile}
