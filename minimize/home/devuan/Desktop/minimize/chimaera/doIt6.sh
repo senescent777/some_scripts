@@ -1,5 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
+#TODO: . ~/Desktop/minimize/common_lib
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
