@@ -248,31 +248,34 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
+ecfx
+
 #for .. do .. done saattaisi olla fiksumpi tässä TODO:ecfx käyttöön
-if [ -s ~/Desktop/minimize/xfce.tar ] ; then
-	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
-else 
-	if  [ -s ~/Desktop/minimize/xfce070325.tar ] ; then
-		${srat} -C / -xvf ~/Desktop/minimize/xfce070325.tar
-	fi
-fi
+#if [ -s ~/Desktop/minimize/xfce.tar ] ; then
+#	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
+#else 
+#	if  [ -s ~/Desktop/minimize/xfce070325.tar ] ; then
+#		${srat} -C / -xvf ~/Desktop/minimize/xfce070325.tar
+#	fi
+#fi
 
 csleep 5
-#VAIH:->vommon_lib
+#TODO:testaus
 if [ ${mode} -eq 1 ] ; then
-	dqb "R (in 6 secs)"; csleep 6
-	${odio} passwd
-	
-	if [ $? -eq 0 ] ; then
-		dqb "L (in 6 secs)"; csleep 6
-		passwd
-	fi
-
-	if [ $? -eq 0 ] ; then
-		${whack} xfce4-session
-		#HUOM. tässä ei tartte jos myöhemmin joka tap
-		exit 	
-	fi
+	vommon
+#	dqb "R (in 6 secs)"; csleep 6
+#	${odio} passwd
+#	
+#	if [ $? -eq 0 ] ; then
+#		dqb "L (in 6 secs)"; csleep 6
+#		passwd
+#	fi
+#
+#	if [ $? -eq 0 ] ; then
+#		${whack} xfce4-session
+#		#HUOM. tässä ei tartte jos myöhemmin joka tap
+#		exit 	
+#	fi
 fi
 
 ${sharpy} libblu* network* libcupsfilters* libgphoto* 
