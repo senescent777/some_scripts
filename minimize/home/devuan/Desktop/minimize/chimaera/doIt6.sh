@@ -251,6 +251,7 @@ pre_part3 ${d}
 part3 ${d} 
 #HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI
 
+#TODO:ecfx()
 if [ -s ~/Desktop/minimize/xfce.tar ] ; then
 	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
 else 
@@ -262,7 +263,7 @@ fi
 csleep 5
 
 #TODO:se ffox-profiili-jutska kanssa
-
+#TODO:vommon()
 if [ ${mode} -eq 1 ] ; then
 	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd
