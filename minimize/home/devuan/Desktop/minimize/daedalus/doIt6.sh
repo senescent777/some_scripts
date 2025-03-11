@@ -1,10 +1,9 @@
 #!/bin/bash
 d=$(dirname $0)
-#TODO:konfdston include juuri tähän tähän
+[ -s ${d}/conf ] && . ${d}/conf
 . ~/Desktop/minimize/common_lib.sh
 
-if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
-	. ${d}/conf
+if [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
 	echo "TO CONTINUE FURTHER IS POINTLESS, ESSENTIAL FILES MISSING"
