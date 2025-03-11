@@ -23,6 +23,23 @@ else
 fi
 
 #debug=1
+tig=$(sudo which git)
+
+if [ x"${tig}" == "x" ] ; then
+	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot
+	echo "${sag_u}"
+	echo "${shary} git"
+	exit 7
+fi
+
+mkt=$(sudo which mktemp)
+
+if [ x"${mkt}" == "x" ] ; then
+	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot
+	echo "${sag_u}"
+	echo "${shary} mktemp"
+	exit 8
+fi
 
 function make_tar() {
 	csleep 1
@@ -134,19 +151,6 @@ function make_tar2() {
 
 	local p
 	local q	
-	local tig
-	tig=$(sudo which git)
-	
-	csleep 1
-
-	if [ x"${tig}" == "x" ] ; then
-		#TODO:voisi myös urputtaa kjälle että ajaa ao. komennot
-		${sag_u}
-		${shary} git
-		[ $? -eq 0 ] || exit 7
-	fi
-
-	csleep 5
 	tig=$(sudo which git)
 
 	p=$(pwd)
@@ -163,7 +167,6 @@ function make_tar2() {
 
 	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp #ehkä pois jatqssa
 	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
-
 	csleep 5
 
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
@@ -202,16 +205,14 @@ function make_upgrade() {
 }
 
 function prof5() {
-	echo "5FF0RP"
+	dqb "5FF0RP"
 
-	#TODO:git'in asnenusta varteb oma palikka tjsp
-	sudo apt-get update
-	sudo apt-get install git
+	local q
 	q=$(mktemp -d)
 	cd ${q}
 
 	#HUOM. prsofs kanssa olisi pikkuisen laittamista
-	git clone https://github.com/senescent777/some_scripts.git
+	${tig} clone https://github.com/senescent777/some_scripts.git
 
 	#VAIH:profs* lähteenä jatq0ssa
 	mv some_scripts/lib/export/profs* ~/Desktop/minimize/${distro}/
