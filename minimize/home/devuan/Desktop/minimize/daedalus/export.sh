@@ -55,6 +55,7 @@ function part1() {
 		
 		#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
 		#HUOM.110325: ei suoraan tar, miel find:in kautta
+		#*.js ja *.json kai oleellisimmat kalat
 		#${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
 	fi
 
@@ -116,7 +117,6 @@ function part4() {
 	#HUOM.260125: -p wttuun varm. vuoksi  
 }
 
-#tässäkin se -c -r:n sijaan voi sotkea 
 function part2() {
 	csleep 1
 	
@@ -128,7 +128,7 @@ function part2() {
 	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
 
 	if [ ${enforce} -eq 1 ] ; then
-		echo "das asdd"
+		dqb "das asdd"
 	else
 		${srat} -rf ${1} /etc/sudoers.d/meshuggah
 	fi
@@ -141,7 +141,7 @@ function part2() {
 	csleep 5
 }
 
-#2 jälkeen 1_75 -> saattaa paikata puutteet (tai miten lienee)
+#jopsa jatkossa ajaisi part3 ennen part2?
 function part3() {
 	csleep 1
 
@@ -238,14 +238,17 @@ case ${mode} in
 		part3 ${tgtfile}
 		part4 ${tgtfile}
 
-		${srat} -tf ${tgtfile} > ./MANIFEST
-		${srat} -rf ${tgtfile} ./MANIFEST
+		#${srat} -tf ${tgtfile} > ./MANIFEST
+		#${srat} -rf ${tgtfile} ./MANIFEST
 	;;
 	1|u|upgrade)
 		make_upgrade ${tgtfile}
 	;;
 	p)
 		prof5 ${tgtfile}
+	;;
+	e)
+		part4 ${tgtfile}
 	;;
 	-h)
 		echo "$0 0 tgtfile | $0 1 tgtfile"
