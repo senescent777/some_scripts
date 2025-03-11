@@ -35,8 +35,10 @@ function make_tar() {
 	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
 	if [ ${enforce} -eq 1 ] ; then
 		${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
+		
 		#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
-		${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
+		#HUOM.110325: ei suoraan tar, miel find:in kautta
+		#${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
 	fi
 
 	if [ ${debug} -eq 1 ] ; then
@@ -138,6 +140,8 @@ function make_tar2() {
 	csleep 1
 
 	if [ x"${tig}" == "x" ] ; then
+		#voisi myös urputtaa kjälle että ajaa ao. komennot
+		${sag_u}
 		${shary} git
 		[ $? -eq 0 ] || exit 7
 	fi
