@@ -41,7 +41,7 @@ if [ x"${mkt}" == "x" ] ; then
 	exit 8
 fi
 
-function make_tar() {
+function part1() {
 	csleep 1
 	[ z"${1}" == "z" ] && exit
 
@@ -66,7 +66,7 @@ function make_tar() {
 }
 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
-function make_tar_15() {
+function part4() {
 	csleep 4
 	
 	if [ z"${pkgdir}" != "z" ] ; then 
@@ -117,7 +117,7 @@ function make_tar_15() {
 }
 
 #tässäkin se -c -r:n sijaan voi sotkea 
-function make_tar_1_75() {
+function part2() {
 	csleep 1
 	
 	[ y"${1}" == "y" ] && exit 1
@@ -142,7 +142,7 @@ function make_tar_1_75() {
 }
 
 #2 jälkeen 1_75 -> saattaa paikata puutteet (tai miten lienee)
-function make_tar2() {
+function part3() {
 	csleep 1
 
 	[ y"${1}" == "y" ] && exit 1
@@ -231,14 +231,12 @@ else
 	echo "-h"
 fi
 
-#oma case sille profs.sh-jutulle?
 case ${mode} in
 	0)
-		#jos nimeäisi fktiot uusiksi josqs
-		make_tar ${tgtfile}
-		make_tar_1_75 ${tgtfile}
-		make_tar2 ${tgtfile}
-		make_tar_15 ${tgtfile}
+		part1 ${tgtfile}
+		part2 ${tgtfile}
+		part3 ${tgtfile}
+		part4 ${tgtfile}
 
 		${srat} -tf ${tgtfile} > ./MANIFEST
 		${srat} -rf ${tgtfile} ./MANIFEST
