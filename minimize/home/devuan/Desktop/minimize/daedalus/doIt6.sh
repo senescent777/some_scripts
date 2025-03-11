@@ -1,6 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
-#pitäisiköjhän tässä asettaa debug jhnkn arvoon?
+#TODO:konfdston include juuri tähän tähän
 . ~/Desktop/minimize/common_lib.sh
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
@@ -200,7 +200,6 @@ check_params
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-
 part1
 
 #VAIH:voisi olla jatkossa osa part1:stä
@@ -250,7 +249,7 @@ ${odio} /etc/init.d/ntpsec stop
 #===================================================PART 2===================================
 ecfx
 
-#for .. do .. done saattaisi olla fiksumpi tässä TODO:ecfx käyttöön
+#for .. do .. done saattaisi olla fiksumpi tässä VAIH:ecfx käyttöön
 #if [ -s ~/Desktop/minimize/xfce.tar ] ; then
 #	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
 #else 
@@ -260,7 +259,7 @@ ecfx
 #fi
 
 csleep 5
-#TODO:testaus
+#VAIH:testaus
 if [ ${mode} -eq 1 ] ; then
 	vommon
 #	dqb "R (in 6 secs)"; csleep 6
@@ -326,6 +325,7 @@ ${ip6tr} /etc/iptables/rules.v6
 
 #VAIH:se ffox-profiili-asia (mallia sieltä ghubin toisesta hmistosta)
 if [ -x ~/Desktop/minimize/profs.sh ] ; then
+	[ -x ~/Desktop/minimize/middleware.sh ] && . ~/Desktop/minimize/middleware.sh 
 	. ~/Desktop/minimize/profs.sh
 	copyprof ${n} someparam
 fi

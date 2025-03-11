@@ -1,11 +1,12 @@
 #!/bin/bash
 d=$(dirname $0)
-debug=0
-. ~/Desktop/minimize/common_lib.sh
 
+[ -s ${d}/conf ] && . ${d}/conf
+. ~/Desktop/minimize/common_lib.sh
 [ -s ${d}/lib.sh ] && . ${d}/lib.sh
+
 ${fib}
-g=$(date +%F)
+g=$(date +%F) #tarpeellinen nykyään?
 
 if [ $# -gt 0 ] ; then  
 	if [ "${1}" == "-v" ] ; then
