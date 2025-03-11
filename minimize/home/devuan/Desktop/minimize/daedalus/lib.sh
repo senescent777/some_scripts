@@ -278,18 +278,17 @@ function check_binaries2() {
 
 check_binaries
 check_binaries2
-
-function gpo() {
-	local prevopt
-	local opt
-	prevopt=""
-
-	for opt in $@ ; do 
-		parse_opts_1 ${opt}
-		parse_opts_2 ${prevopt} ${opt}
-		prevopt=opt
-	done
-}
-
-#TODO:gpo jo käyttöön?
+#
+#function gpo() {
+#	local prevopt
+#	local opt
+#	prevopt=""
+#
+#	for opt in $@ ; do 
+#		parse_opts_1 ${opt}
+#		parse_opts_2 ${prevopt} ${opt}
+#		prevopt=opt
+#	done
+#}
+#
 
