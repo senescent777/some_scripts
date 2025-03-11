@@ -1,4 +1,4 @@
-
+#TODO:toiselle nimelle minimizen kanssa yhteenspoiva versio tästä tdstosta
 cprof_1_1() {
 	
 

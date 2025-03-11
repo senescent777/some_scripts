@@ -28,8 +28,6 @@ fi
 
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0}
-#VAIH:urputus toiseen paikkaan
-
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
@@ -89,7 +87,7 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 
 			#HUOM. BARMISTA ETTÄ ÅPOSTUUKO PAKETIT $dtstro:n alta VAIKO ERI
-			#090325: stubbyn kanssa oli jotain...
+			#090325: stubbyn kanssa oli jotain... (onko vielä?)
 
 			csleep 3
 			cd ${olddir}

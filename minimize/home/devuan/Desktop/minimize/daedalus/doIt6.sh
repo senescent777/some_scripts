@@ -55,111 +55,111 @@ function check_params() {
 #	s=$(sha256sum ${1})
 #	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
 #}
-
-#HUOm.080325 sietäisi kai harkita chimaeralle ja daedalukselle yhteistä kirjasrtoa
-#TODO:vähitellen tämäkin kirjastoon
-function pre_enforce() {
-	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
-	local q
-	q=$(mktemp -d)	
-	local f 
-
-	dqb "sudo touch ${q}/meshuggah in 5 secs"
-	csleep 5
-	sudo touch ${q}/meshuggah
-
-	[ ${debug} -eq 1 ] && ls -las ${q}
-	csleep 6
-	[ -f ${q}/meshuggah ] || exit
-	dqb "ANNOYING AMOUNT OF DEBUG"
-
-	sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
-	sudo chmod 0660 ${q}/meshuggah	
-		
-	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
-	#TODO:clouds: a) nimeäminen fiksummin 
-	for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
-	
-	if [ -s ${q}/meshuggah ] ; then
-		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
-		csleep 5
-
-		sudo chmod a-wx ${q}/meshuggah
-		sudo chown root:root ${q}/meshuggah	
-		sudo mv ${q}/meshuggah /etc/sudoers.d
-	fi
-
-	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
-}
-
-function enforce_access() {
-	dqb "3nf0rc3_acc355()"
-	#HUOM. 070325: oli ao. loitsut / asti ennen pre_enforce():n puolella
-	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
-	sudo chmod 0750 /etc/sudoers.d 
-	sudo chown -R root:root /etc/sudoers.d
-
-	echo "changing /sbin , /etc and /var 4 real"
-	${sco} -R root:root /sbin
-	${scm} -R 0755 /sbin
-
-	${sco} -R root:root /etc
-	for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
-
-	#"find: ‘/etc/sudoers.d/’: Permission denied" jotain tarttis tehrä
-	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
-		mangle2 ${f}
-		#csleep 1
-	done
-
-	#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
-	${scm} 0755 /etc 
-		
-	${sco} -R root:root /var
-	${scm} -R 0755 /var
-
-	${sco} root:staff /var/local
-	${sco} root:mail /var/mail
-		
-	${sco} -R man:man /var/cache/man 
-	${scm} -R 0755 /var/cache/man
-
-	${scm} 0755 /
-	${sco} root:root /
-
-	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
-	${sco} root:root /home
-	${scm} 0755 /home
-
-	if [ y"${n}" != "y" ] ; then
-		#josko vielä testaisi että $n asetettu ylipäänsä
-		dqb "${sco} -R ${n}:${n} ~"
-		${sco} -R ${n}:${n} ~
-		csleep 5
-	fi
-	
-	local f
-	${scm} 0755 ~/Desktop/minimize	
-	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
-	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
-	${scm} a+x ${d}/*.sh
-	
-	f=$(date +%F)
-	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
-	[ -f /sbin/dhclient-script.${f} ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.${f}
-	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfaces /etc/network/interfaces.${f}
-
-	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
-		${smr} /etc/resolv.conf 
-	fi
-
-	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
-
-	#TODO: se man chmod ao. riveihin liittyen, rwt...
-	${scm} 0777 /tmp
-	${sco} root:root /tmp
-}
-
+#
+##HUOm.080325 sietäisi kai harkita chimaeralle ja daedalukselle yhteistä kirjasrtoa
+##VAIH:vähitellen tämäkin kirjastoon
+#function pre_enforce() {
+#	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
+#	local q
+#	q=$(mktemp -d)	
+#	local f 
+#
+#	dqb "sudo touch ${q}/meshuggah in 5 secs"
+#	csleep 5
+#	sudo touch ${q}/meshuggah
+#
+#	[ ${debug} -eq 1 ] && ls -las ${q}
+#	csleep 6
+#	[ -f ${q}/meshuggah ] || exit
+#	dqb "ANNOYING AMOUNT OF DEBUG"
+#
+#	sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
+#	sudo chmod 0660 ${q}/meshuggah	
+#		
+#	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
+#	#TODO:clouds: a) nimeäminen fiksummin 
+#	for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
+#	
+#	if [ -s ${q}/meshuggah ] ; then
+#		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
+#		csleep 5
+#
+#		sudo chmod a-wx ${q}/meshuggah
+#		sudo chown root:root ${q}/meshuggah	
+#		sudo mv ${q}/meshuggah /etc/sudoers.d
+#	fi
+#
+#	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
+#}
+#
+#function enforce_access() {
+#	dqb "3nf0rc3_acc355()"
+#	#HUOM. 070325: oli ao. loitsut / asti ennen pre_enforce():n puolella
+#	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
+#	sudo chmod 0750 /etc/sudoers.d 
+#	sudo chown -R root:root /etc/sudoers.d
+#
+#	echo "changing /sbin , /etc and /var 4 real"
+#	${sco} -R root:root /sbin
+#	${scm} -R 0755 /sbin
+#
+#	${sco} -R root:root /etc
+#	for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
+#
+#	#"find: ‘/etc/sudoers.d/’: Permission denied" jotain tarttis tehrä
+#	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
+#		mangle2 ${f}
+#		#csleep 1
+#	done
+#
+#	#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
+#	${scm} 0755 /etc 
+#		
+#	${sco} -R root:root /var
+#	${scm} -R 0755 /var
+#
+#	${sco} root:staff /var/local
+#	${sco} root:mail /var/mail
+#		
+#	${sco} -R man:man /var/cache/man 
+#	${scm} -R 0755 /var/cache/man
+#
+#	${scm} 0755 /
+#	${sco} root:root /
+#
+#	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
+#	${sco} root:root /home
+#	${scm} 0755 /home
+#
+#	if [ y"${n}" != "y" ] ; then
+#		#josko vielä testaisi että $n asetettu ylipäänsä
+#		dqb "${sco} -R ${n}:${n} ~"
+#		${sco} -R ${n}:${n} ~
+#		csleep 5
+#	fi
+#	
+#	local f
+#	${scm} 0755 ~/Desktop/minimize	
+#	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
+#	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
+#	${scm} a+x ${d}/*.sh
+#	
+#	f=$(date +%F)
+#	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
+#	[ -f /sbin/dhclient-script.${f} ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.${f}
+#	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfaces /etc/network/interfaces.${f}
+#
+#	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
+#		${smr} /etc/resolv.conf 
+#	fi
+#
+#	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
+#
+#	
+#	${scm} 0777 /tmp
+#	${sco} root:root /tmp
+#}
+#
 #==================================PART 1============================================================
 #function part1() {
 #	#jos jokin näistä kolmesta hoitaisi homman...
@@ -248,7 +248,7 @@ ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
-#for .. do .. done saattaisi olla fiksumpi tässä
+#for .. do .. done saattaisi olla fiksumpi tässä TODO:ecfx käyttöön
 if [ -s ~/Desktop/minimize/xfce.tar ] ; then
 	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
 else 
@@ -258,7 +258,7 @@ else
 fi
 
 csleep 5
-#TODO:->vommon_lib
+#VAIH:->vommon_lib
 if [ ${mode} -eq 1 ] ; then
 	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd

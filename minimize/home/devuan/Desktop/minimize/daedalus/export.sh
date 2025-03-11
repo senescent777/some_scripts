@@ -209,9 +209,11 @@ function prof5() {
 
 	#HUOM. prsofs kanssa olisi pikkuisen laittamista
 	git clone https://github.com/senescent777/some_scripts.git
-	mv some_scripts/lib/export/profs.sh.export ~/Desktop/minimize/${distro}/profs.sh
-	${scm} 0755 ~/Desktop/minimize/${distro}/profs.sh
-	${srat} -rvf ${1}  ~/Desktop/minimize/${distro}/profs.sh
+
+	#VAIH:profs* lähteenä jatq0ssa
+	mv some_scripts/lib/export/profs* ~/Desktop/minimize/${distro}/
+	${scm} 0755 ~/Desktop/minimize/${distro}/profs*
+	${srat} -rvf ${1}  ~/Desktop/minimize/${distro}/profs*
 }
 
 mode=0

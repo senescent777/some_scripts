@@ -126,9 +126,9 @@ csleep 5
 
 ${lftr}
 ${odio} shred -fu ${pkgdir}/*.deb 
-dqb "TODO: ${odio} shred -fu ${d}/*.deb or somethink like that" 
+${odio} shred -fu ${d}/*.deb #or somethink like that
 ${odio} shred -fu /tmp/*.tar
-#squ.ash voisi vilkaista kanssa liittyen (vai oliko mitään hylyllistä siellä?)
+#squ.ash voisi vilkaista kanssa liittyen (vai oliko mitään hyödyllistä siellä?)
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 
