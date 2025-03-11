@@ -1,28 +1,9 @@
+
+#bash kutsuvaan skriptiin tulkiksi saattaa aiheuttaa vähemmän nalkutusta kuin sh
+
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
-
-fix_sudo() {
-	${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
-	${odio} chmod 0440 /etc/sudoers.d/* 
-	#VAIH:kts loput suq.ash
-
-	sudo chown -R 0:0 ./etc/sudo*
-	sudo chmod -R a-w ./etc/sudo*
-	sudo chown -R 0:0 ./usr/lib/sudo/*
-	sudo chown -R 0:0 ./usr/bin/sudo*
-
-	sudo chmod 0750 ./etc/sudoers.d
-	sudo chmod 0440 /etc/sudoers.d/*
-
-	sudo chmod -R a-w ./usr/lib/sudo/*
-	sudo chmod -R a-w ./usr/bin/sudo*
-	sudo chmod 4555 ./usr/bin/sudo
-	sudo chmod 0444	./usr/lib/sudo/sudoers.so
-
-	sudo chattr +ui ./usr/bin/sudo
-	sudo chattr +ui ./usr/lib/sudo/sudoers.so	
-}
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -32,32 +13,60 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
+#TODO:$sco ja $scm käyttöön jatq§
+fix_sudo() {
+	echo "fix_sud0.pt0"
+	${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
+	${odio} chmod 0440 /etc/sudoers.d/* 
+	
+	${odio} chown -R 0:0 /etc/sudo*
+	${odio} chmod -R a-w /etc/sudo*
+
+	dqb "POT. DANGEROUS PT 1"
+	#sudo chown 0:0 /usr/lib/sudo/* #onko moista daedaluksessa?
+	#sudo chown 0:0 /usr/bin/sudo* #HUOM. LUE VITUN RUNKKARI MAN-SIVUT AJATUKSELLA ENNENQ KOSKET TÄHÄN!!!
+
+	dqb "fix_sud0.pt1"
+	${odio} chmod 0750 /etc/sudoers.d
+	${odio} chmod 0440 /etc/sudoers.d/*
+	
+	dqb "POT. DANGEROUS PT 2"
+	#sudo chmod -R a-w /usr/lib/sudo/* #onko moista daedaluksessa?
+	#sudo chmod -R a-w /usr/bin/sudo* #HUOM. LUE VITUN RUNKKARI MAN-SIVUT AJATUKSELLA ENNENQ KOSKET TÄHÄN!!!
+
+	#sudo chmod 4555 ./usr/bin/sudo #HUOM. LUE VITUN RUNKKARI MAN-SIVUT AJATUKSELLA ENNENQ KOSKET TÄHÄN!!!
+
+	#sudo chmod 0444 /usr/lib/sudo/sudoers.so #onko moista daedaluksessa?
+	[ ${debug} -eq 1 ] && ls -las  /usr/bin/sudo*
+	csleep 5	
+	echo "d0n3"
+
+}
+
 fix_sudo
 
 #pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
+#
+#VAIH:jatkossa chimaeRan doit6 käyttämään tätä jos mahd
 
-#TODO:jatkossa chimaedan doit6 käyttämään tätä jos mahd
 function ocs() {
 	local tmp
 	tmp=$(sudo which ${1})
 
 	if [ y"${tmp}" == "y" ] ; then
 		exit 66 #fiksummankin exit-koodin voisi keksiä
-	else
-		dqb "fråm ocs(): ${tmp} exists"
 	fi
 
-	if [ -x ${tmp} ] ; then	
-		dqb "fråm ocs(): ${tmp} is executable"		
-	else
+	if [ ! -x ${tmp} ] ; then
+
 		exit 77
 	fi
 
 	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
-	dqb "fråm ocs(): ${tmp} add3d t0 l1st"
 }
 
-#check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (TODO: let's find out)
+##check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (TODO: let's find out)
+#
 
 #HUOM. jos tätä käyttää ni scm ja sco pitää tietenkin esitellä alussa
 function mangle2() {
@@ -81,19 +90,19 @@ function gpo() {
 }
 
 #TODO:gpo jo käyttöön?
-#TODO:part1 tähän vai ei?
 
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit
-	[ -s ${1} ] || exit  
+	[ -x ${1} ] || exit  #oli -s
+
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit  
 
 	tgt=${2}
-	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
 
-	sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
+	sudo chmod 0555 ${1}
+	#HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
 	sudo chown root:root ${1} 
 
 	local s
@@ -134,14 +143,11 @@ function pre_enforce() {
 		sudo mv ${q}/meshuggah /etc/sudoers.d
 	fi
 
-	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
-	
+	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?	
 }
 
 function enforce_access() {
-	dqb "3nf0rc3_acc355()"
-	#HUOM. ao. sudo-kikkailut korvannee jatkossa fix_sudo tai siis näin olisi tarkoitus
-	#HUOM. 070325: oli ao. loitsut / asti ennen pre_enforce():n puolella
+
 	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
@@ -180,7 +186,7 @@ function enforce_access() {
 
 	if [ y"${n}" != "y" ] ; then
 		#josko vielä testaisi että $n asetettu ylipäänsä
-		dqb "${sco} -R ${n}:${n} ~"
+
 		${sco} -R ${n}:${n} ~
 		csleep 5
 	fi
@@ -202,7 +208,119 @@ function enforce_access() {
 
 	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
 
+	#TODO: se man chmod ao. riveihin liittyen, rwt...
+
 	#HUOM.280125:uutena seur rivit, poista jos pykii
 	${scm} 0777 /tmp
 	${sco} root:root /tmp
 }
+
+function part1() {
+	#jos jokin näistä kolmesta hoitaisi homman...
+	${sifd} ${iface}
+	${sifd} -a
+	${sip} link set ${iface} down
+
+	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
+	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
+
+	if [ y"${ipt}" == "y" ] ; then
+		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+	else
+		for t in INPUT OUTPUT FORWARD ; do 
+			${ipt} -P ${t} DROP
+			${ip6t} -P ${t} DROP
+			${ip6t} -F ${t}
+		done
+
+		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
+
+		if [ ${debug} -eq 1 ] ; then
+			${ipt} -L #
+			${ip6t} -L #
+			sleep 5 
+		fi #
+	
+		
+	fi
+
+	if [ z"${pkgsrc}" != "z" ] ; then
+		local g
+		g=$(date +%F) 
+		dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
+		csleep 5
+		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+
+		sudo touch /etc/apt/sources.list
+		${scm} a+w /etc/apt/sources.list
+
+		for x in ${distro} ${distro}-updates ${distro}-security ; do
+			echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list 
+		done
+
+		[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
+		csleep 5
+	fi
+
+	${scm} a-w /etc/apt/sources.list
+	${sco} -R root:root /etc/apt 
+	${scm} -R a-w /etc/apt/
+
+	dqb "FOUR-LEGGED WHORE (maybe i have tourettes)"
+}
+
+function part3() {
+	[ y"${1}" == "y" ] && exit 1
+	dqb "11"
+	[ -d ${1} ] || exit 2
+	dqb "22 ${1}"
+	${sdi} ${1}/lib*.deb
+
+	if [ $? -eq  0 ] ; then
+		dqb "part3.1 ok"
+		sleep 5
+		${odio} shred -fu ${1}/lib*.deb
+	else
+	 	dqb "exit 66"
+	fi
+
+	${sdi} ${1}/*.deb
+	
+	if [ $? -eq  0 ] ; then
+		dqb "part3.2 ok"
+		sleep 5
+		${odio} shred -fu ${1}/*.deb 
+	else
+	 	dqb "exit 67"
+	fi
+
+	csleep 2
+}
+
+function ecfx() {
+	#for .. do .. done saattaisi olla fiksumpi tässä
+	if [ -s ~/Desktop/minimize/xfce.tar ] ; then
+		${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
+	else 
+		if  [ -s ~/Desktop/minimize/xfce070325.tar ] ; then
+			${srat} -C / -xvf ~/Desktop/minimize/xfce070325.tar
+		fi
+	fi
+}
+
+function vommon() {
+	dqb "R (in 6 secs)"; csleep 6
+	${odio} passwd
+	
+	if [ $? -eq 0 ] ; then
+		dqb "L (in 6 secs)"; csleep 6
+		passwd
+	fi
+
+	if [ $? -eq 0 ] ; then
+		${whack} xfce4-session
+		#HUOM. tässä ei tartte jos myöhemmin joka tap
+		exit 	
+	fi
+} 
+

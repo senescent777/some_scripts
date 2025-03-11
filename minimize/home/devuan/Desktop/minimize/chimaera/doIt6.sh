@@ -1,5 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
+#TODO: . ~/Desktop/minimize/common_lib
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
@@ -144,7 +145,7 @@ function enforce_access() {
 }
 
 #==================================PART 1============================================================
-
+#TODO: -> vommon_lib
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}
@@ -251,6 +252,7 @@ pre_part3 ${d}
 part3 ${d} 
 #HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI
 
+#TODO:ecfx()
 if [ -s ~/Desktop/minimize/xfce.tar ] ; then
 	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
 else 
@@ -260,9 +262,13 @@ else
 fi
 
 csleep 5
+if [ -x ~/Desktop/minimize/profs.sh ] ; then
+	[ -x ~/Desktop/minimize/middleware.sh ] && . ~/Desktop/minimize/middleware.sh	
+	. ~/Desktop/minimize/profs.sh
+	copyprof ${n} someparam
+fi
 
-#TODO:se ffox-profiili-jutska kanssa
-
+#TODO:vommon()
 if [ ${mode} -eq 1 ] ; then
 	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd

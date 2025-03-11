@@ -1,21 +1,4 @@
 #=================================================PART 0=====================================
-#grep /e/n/i ?
-
-odio=$(which sudo)
-[ y"${odio}" == "y" ] && exit 99 
-[ -x ${odio} ] || exit 100
-${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
-${odio} chmod 0440 /etc/sudoers.d/* 
-
-function dqb() {
-	[ ${debug} -eq 1 ] && echo ${1}
-}
-
-function csleep() {
-	[ ${debug} -eq 1 ] && sleep ${1}
-}
-
-#HUOM. tähän asti ainakin joutaisi kopsata distrolle yhteiseen kirjastoon, samoin enforce-jutut
 
 function pre_part3() {
 	[ y"${1}" == "y" ] && exit
@@ -69,26 +52,6 @@ pr4() {
 	sudo shred -fu ${1}/libdbus*
 	sudo shred -fu ${1}/dbus*
 	sudo shred -fu ${1}/perl*
-}
-
-function ocs() {
-	local tmp
-	tmp=$(sudo which ${1})
-
-	if [ y"${tmp}" == "y" ] ; then
-		exit 66 #fiksummankin exit-koodin voisi keksiä
-	else
-		dqb "fråm ocs(): ${tmp} exists"
-	fi
-
-	if [ -x ${tmp} ] ; then	
-		dqb "fråm ocs(): ${tmp} is executable"		
-	else
-		exit 77
-	fi
-
-	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
-	dqb "fråm ocs(): ${tmp} add3d t0 l1st"
 }
 
 function check_binaries() {
@@ -211,85 +174,8 @@ function check_binaries2() {
 	csleep 3
 }
 
-function mangle2() {
-	if [ -f ${1} ] ; then 
-		dqb "MANGLED ${1}"
-		${scm} o-rwx ${1}
-		${sco} root:root ${1}
-	fi
-}
-
-##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-#HUOM.280125: ao. fktion kanssa piotäisi vissiin jotain tehdä vähitellen
-#function ns4() {
-#	dqb "ns4( ${1} )"
-#	[ z"{$1}" == "z" ] && exit 33
-# 	jospa kirjoittaisi /e/i.d alaisen skriptin uudellleen tai valmis käyttöön ni ehkei tarttisi .pid-filen kanssa kikkailla tässä
-#	${scm} u+w /run
-#	${odio} touch /run/${1}.pid
-#	${scm} 0600 /run/${1}.pid
-#	${sco} ${1}:65534 /run/${1}.pid
-#	${scm} u-w /run
-#
-#	sleep 5
-#	#VAIJ:pitäisi kai tarkistaa parametrin validius ennenq...
-#	${whack} ${1}*
-#	sleep 5
-#
-#	dqb "starting ${1} in 5 secs"
-#
-#	sleep 5
-#	${odio} -u ${1} ${1} -g
-#	echo $?
-#	sleep 1
-#	pgrep stubby*
-#	sleep 5
-#}
-#
-#=========================PART 0 ENDS HERE=================================================================
-
-function part3() {
-	[ y"${1}" == "y" ] && exit 1
-	dqb "11"
-	[ -d ${1} ] || exit 2
-	dqb "22 ${1}"
-	${sdi} ${1}/lib*.deb
-
-	if [ $? -eq  0 ] ; then
-		dqb "part3.1 ok"
-		sleep 5
-		${odio} shred -fu ${1}/lib*.deb
-	else
-	 	dqb "exit 66"
-	fi
-
-	${sdi} ${1}/*.deb
-	
-	if [ $? -eq  0 ] ; then
-		dqb "part3.2 ok"
-		sleep 5
-		${odio} shred -fu ${1}/*.deb 
-	else
-	 	dqb "exit 67"
-	fi
-
-	csleep 2
-}
-
 check_binaries
 check_binaries2
 
-function gpo() {
-	local prevopt
-	local opt
-	prevopt=""
 
-	for opt in $@ ; do 
-		parse_opts_1 ${opt}
-		parse_opts_2 ${prevopt} ${opt}
-		prevopt=opt
-	done
-}
-
-#TODO:gpo jo käyttöön?
 

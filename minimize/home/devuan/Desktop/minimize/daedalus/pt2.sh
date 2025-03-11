@@ -1,10 +1,12 @@
 #!/bin/bash
 d=$(dirname $0)
-debug=0
 
+[ -s ${d}/conf ] && . ${d}/conf
+. ~/Desktop/minimize/common_lib.sh
 [ -s ${d}/lib.sh ] && . ${d}/lib.sh
+
 ${fib}
-g=$(date +%F)
+g=$(date +%F) #tarpeellinen nykyään?
 
 if [ $# -gt 0 ] ; then  
 	if [ "${1}" == "-v" ] ; then
@@ -125,9 +127,11 @@ csleep 5
 
 ${lftr}
 ${odio} shred -fu ${pkgdir}/*.deb 
-dqb "TODO: ${odio} shred -fu ${d}/*.deb or somethink like that" 
+
+${odio} shred -fu ${d}/*.deb #or somethink like that
+
 ${odio} shred -fu /tmp/*.tar
-#squ.ash voisi vilkaista kanssa liittyen
+#squ.ash voisi vilkaista kanssa liittyen (vai oliko mitään hyödyllistä siellä?)
 df
 ${odio} which dhclient; ${odio} which ifup; sleep 6
 

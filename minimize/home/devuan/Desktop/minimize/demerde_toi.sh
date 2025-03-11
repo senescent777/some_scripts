@@ -1,13 +1,23 @@
-#!/bin/sh
+#!/bin/bash
+#HUOM. näiden skriptien kanssa bash tulkkina aiheuttaa vähemmän nalkutusta kuin sh
 debug=1
 
-function dqb() {
-	[ ${debug} -eq 1 ] && echo ${1}
-}
+if [ -x  ~/Desktop/minimize/common_lib.sh ] ; then
+	. ~/Desktop/minimize/common_lib.sh
+fi
 
-function csleep() {
-	[ ${debug} -eq 1 ] && sleep ${1}
-}
+tig=$(sudo which git)
+if [ x"${tig}" == "x" ] ; then
+	echo "sudo apt-get install git"
+	exit 7
+fi
+
+mkt=$(which mktemp)
+if [ x"${mkt}" == "x" ] ; then
+	echo "sudo apt-get install mktemp"
+	exit 7
+fi
+
 
 if [ $# -gt 0 ] ; then
 	dqb "params_ok"
@@ -23,28 +33,20 @@ else
 	exit 67
 fi
 
-tig=$(sudo which git)	
-csleep 1
+echo "q=\$(${mkt} -d)"
+echo "cd \$q"
 
-if [ x"${tig}" == "x" ] ; then
-	${shary} git
-	[ $? -eq 0 ] || exit 7
-fi
-
-csleep 5
-tig=$(sudo which git)
-
-q=$(mktemp -d)
-cd $q
-
-${tig} clone https://github.com/senescent777/some_scripts
-cd some_scripts/minimize
+echo "${tig} clone https://github.com/senescent777/some_scripts"
+echo "cd some_scripts/minimize"
 
 if [ -d /home/devuan/Desktop/minimize ] ; then
-	mv ./home/devuan/Desktop/minimize/* ~/Desktop/minimize
+	echo "shred -fu ~/Desktop/minimize/* "
+	echo "rm -rf ~/Desktop/minimize/*"
+	echo "mv ./home/devuan/Desktop/minimize/* ~/Desktop/minimize"
 fi
 
-sudo chmod 0755 ~/Desktop/minimize/${1}
-sudo chmod 0755 ~/Desktop/minimize/${1}/*.sh
-cd ~/Desktop/minimize
+echo "sudo chmod 0755 ~/Desktop/minimize/${1}"
+echo "sudo chmod 0755 ~/Desktop/minimize/${1}/*.sh"
+
+echo "cd ~/Desktop/minimize"
 echo "./${1}/export.sh 0 /tmp/vomit.tar"

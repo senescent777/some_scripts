@@ -3,6 +3,7 @@ d=$(dirname $0)
 debug=1
 
 #VAIH:tämä paska toimimaan (tai jokin git-viritys olisi kanssa idea)
+#HUOM.jos toimimaan ni common_lib mukaan ja conf mukaan eri tavalla
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf

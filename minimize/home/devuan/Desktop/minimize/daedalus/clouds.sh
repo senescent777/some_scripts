@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#HUOM.100325:jatqssa common_lib käyttöön vai ei? tai jopa distrolle yhteinen versio?
 smr=$(sudo which rm)
 ipt=$(sudo which iptables)
 ip6t=$(sudo which ip6tables)
@@ -41,10 +42,6 @@ fi
 #tässä oikea paikka tables-muutoksille vai ei?
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35";exit
-#	. ./lib.sh #pitäisiköhän tässäkin olla se dirname-.jekku?
-#	#2 ao. riville kanssa muutoksia?
-#	pre_part3 ${pkgdir}
-#	pr4 ${pkgdir}
 else
 	#tässä kohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
 	${iptr} /etc/iptables/rules.v4
@@ -144,19 +141,7 @@ case ${1} in
 		echo "stu";sleep 2
 		${whack} stubby* #090325: pitäisiköhän tämä muuttaa?
 		sleep 3	
-		
-		#HUOM.280125: tietenkin pitäisi sen /r/stubby.pid oikeudet ja omistajat laitt5aa kuntoon, koklataannyt kuitenkin toisella tavalla ensin	
-		##VAIH:vissiinkin jokin tarkistus ns2seen ettei yhtenään renkkaisi adduser/deluser 
-		#if [ ! -f /home/stubby/.ripuli ] ; then
-		#	ns2 stubby
-		#	sudo touch /home/stubby/.ripuli
-		#else
-		#	echo "N2S ALR3ADY D0N3"
-		#fi
-		#
-		#echo "#ns4 stubby"
-		#start-stop-daemon -S --pidfile /run/stubby.pid --make-pidfile --background --chuid stubby --startas /usr/bin/stubby #-- -g
-		
+			
 		[ -f /run/stubby.pid ] || sudo touch /run/stubby.pid
 		${sco} devuan:devuan /run/stubby.pid #$n
 		${scm} 0644 /run/stubby.pid 

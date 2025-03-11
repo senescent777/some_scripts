@@ -1,10 +1,9 @@
 #!/bin/bash
-
 d=$(dirname $0)
-debug=1
+[ -s ${d}/conf ] && . ${d}/conf
+. ~/Desktop/minimize/common_lib.sh
 
-if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
-	. ${d}/conf
+if [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
 	srat="sudo /bin/tar"
@@ -23,21 +22,43 @@ else
 	}	
 fi
 
-debug=1
+#debug=1
+tig=$(sudo which git)
 
-function make_tar() {
-	dqb "make_tar ( ${1} )"
+if [ x"${tig}" == "x" ] ; then
+	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot
+	echo "${sag_u}"
+	echo "${shary} git"
+	exit 7
+fi
+
+mkt=$(sudo which mktemp)
+
+if [ x"${mkt}" == "x" ] ; then
+	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot
+	echo "${sag_u}"
+	echo "${shary} mktemp"
+	exit 8
+fi
+
+function part1() {
 	csleep 1
 	[ z"${1}" == "z" ] && exit
 
 	${scm} -R a-wx ~/Desktop/minimize/*
 	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
-	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
-
+	${scm} 0755 ~/Desktop/minimize/${distro}/*.sh
 	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
-	dqb "${srat} -cf ${1}"  	
-	${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
-	#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
+
+	if [ ${enforce} -eq 1 ] ; then
+		${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
+		
+		#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
+		#HUOM.110325: ei suoraan tar, miel find:in kautta
+		#*.js ja *.json kai oleellisimmat kalat
+		#${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
+	fi
+
 
 	if [ ${debug} -eq 1 ] ; then
 		ls -las ~/Desktop/minimize/; sleep 10
@@ -47,13 +68,9 @@ function make_tar() {
 }
 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
-function make_tar_15() {
-	dqb "make_tar_15( ${1})"
+function part4() {
+
 	csleep 4
-	
-	#dqb "${fib}; ${asy}" #HUOM.010225: tilapåäisetsi pois tämä+seur 2 riviä kunnes sekoilu loppunut
-	#${fib} 
-	#${asy} 
 	
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
@@ -61,7 +78,6 @@ function make_tar_15() {
 	
 	[ z"${1}" == "z" ] && exit 1
 	[ -s ${1} ] || exit 2
-	dqb "paramz_ok"
 
 	${sag_u}
 	[ $? -eq 0 ] || exit	
@@ -82,7 +98,6 @@ function make_tar_15() {
 	${shary} runit-helper
 
 	${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
-	#[ $? -eq 0 ] || exit 2
 	${lftr} 
 
 	#josqs ntp-jututkin mukaan?
@@ -92,7 +107,6 @@ function make_tar_15() {
 	${shary} libgetdns10 libbsd0 libidn2-0 libssl3 libunbound8 libyaml-0-2 #sotkeekohan libc6 uudelleenas tässä?
 	${shary} stubby
 
-	#[ $? -eq 0 ] || exit 6
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
@@ -105,19 +119,21 @@ function make_tar_15() {
 	#HUOM.260125: -p wttuun varm. vuoksi  
 }
 
-#tässäkin se -c -r:n sijaan voi sotkea 
-function make_tar_1_75() {
-	dqb "make_tar_1_75( ${1} )"	
+function part2() {
 	csleep 1
 	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
-	dqb "paramz_0k"
 	csleep 1
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
-	#TODO:jollain ehdolla se /e/s.d/meshuggah vetöminen kuitenkin?	
+
+	if [ ${enforce} -eq 1 ] ; then
+		dqb "das asdd"
+	else
+		${srat} -rf ${1} /etc/sudoers.d/meshuggah
+	fi
 
 	local f;for f in $(find /etc -type f -name 'stubby*') ; do ${srat} -rf ${1} ${f} ; done
 	for f in $(find /etc -type f -name 'dns*') ; do ${srat} -rf ${1} ${f} ; done
@@ -127,38 +143,20 @@ function make_tar_1_75() {
 	csleep 5
 }
 
-#2 jälkeen 1_75 -> saattaa paikata puutteet (tai miten lienee)
-function make_tar2() {
-	dqb "make_tar2 ( ${1} )"
+#jopsa jatkossa ajaisi part3 ennen part2?
+function part3() {
 	csleep 1
 
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
-	dqb "paramz_0k"
 	csleep 1
 
 	local p
 	local q	
-	local tig
-	tig=$(sudo which git)
-	
-	csleep 1
-
-	if [ x"${tig}" == "x" ] ; then
-		${shary} git
-		[ $? -eq 0 ] || exit 7
-	fi
-
-	csleep 5
 	tig=$(sudo which git)
 
 	p=$(pwd)
-	dqb "p=${p}"
-
-	dqb "q=\$(mktemp -d)"
 	q=$(mktemp -d)
-
-	echo "#dqb cd ${q}"
 	cd ${q}
 
 	${tig} clone https://github.com/senescent777/project.git
@@ -171,6 +169,7 @@ function make_tar2() {
 
 	sudo mv ./etc/apt/sources.list ./etc/apt/sources.list.tmp #ehkä pois jatqssa
 	sudo mv ./etc/network/interfaces ./etc/network/interfaces.tmp
+	csleep 5
 
 	dqb "VAIH: ${tig} clone https://github.com/senescent777/some_scripts.git"
 '	csleep 5
@@ -182,15 +181,11 @@ function make_tar2() {
 }
 
 function make_upgrade() {
-	dqb "make_upgrade(${1} )"
 	csleep 1
 	
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] && exit 2
-	dqb "paramz_0k"
 	csleep 1
-
-	dqb "${sagu}; ${sag} upgrade -u"
 
 	${odio} shred -fu ${pkgdir}/*.deb 
 	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
@@ -214,6 +209,22 @@ function make_upgrade() {
 	sleep 1
 }
 
+function prof5() {
+	dqb "5FF0RP"
+
+	local q
+	q=$(mktemp -d)
+	cd ${q}
+
+	#HUOM. prsofs kanssa olisi pikkuisen laittamista
+	${tig} clone https://github.com/senescent777/some_scripts.git
+
+	#VAIH:profs* lähteenä jatq0ssa
+	mv some_scripts/lib/export/profs* ~/Desktop/minimize/${distro}/
+	${scm} 0755 ~/Desktop/minimize/${distro}/profs*
+	${srat} -rvf ${1}  ~/Desktop/minimize/${distro}/profs*
+}
+
 mode=0
 tgtfile=""
 
@@ -228,28 +239,23 @@ fi
 #oma case sille profs.sh-jutulle?
 case ${mode} in
 	0)
-		#jos nimeäisi fktiot uusiksi josqs
-		make_tar ${tgtfile}
-		make_tar_1_75 ${tgtfile}
-		make_tar2 ${tgtfile}
-		make_tar_15 ${tgtfile}
+		part1 ${tgtfile}
+		part2 ${tgtfile}
+		part3 ${tgtfile}
+		part4 ${tgtfile}
 
-		#VAIH:manifest-jutut aivan viimeisenä (main())
-		${srat} -tf ${1} > ./MANIFEST
-		${srat} -rf ${1} ./MANIFEST
+		#${srat} -tf ${tgtfile} > ./MANIFEST
+		#${srat} -rf ${tgtfile} ./MANIFEST
 	;;
 	1|u|upgrade)
 		make_upgrade ${tgtfile}
 	;;
 	p)
-		echo "sudo apt-get update"
-		echo "sudo apt-get install git"
-		echo "q=$(mktemp -d)"
-		echo "cd $q"
-		echo "git clone https://github.com/senescent777/some_scripts.git"
-		echo "mv some_scripts/lib/export/profs.sh.export ~/Desktop/minimize/${distro}/profs.sh"
-		echo "sudo chmod 0755 ~/Desktop/minimize/${distro}/profs.sh"
-		echo "tar -rvf ${1}  ~/Desktop/minimize/${distro}/profs.sh"
+		prof5 ${tgtfile}
+	;;
+	e)
+		part4 ${tgtfile}
+
 	;;
 	-h)
 		echo "$0 0 tgtfile | $0 1 tgtfile"

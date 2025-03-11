@@ -1,8 +1,9 @@
 #!/bin/bash
 d=$(dirname $0)
+[ -s ${d}/conf ] && . ${d}/conf
+. ~/Desktop/minimize/common_lib.sh
 
-if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
-	. ${d}/conf
+if  [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
 	srat="sudo /bin/tar"
@@ -26,8 +27,7 @@ fi
 
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0}
-#TODO:urputus toiseen paikkaan
-[ -b ${part} ] || dqb "no such thing as ${part}"
+
 dqb "b3f0r3 0ld.tar"
 csleep 5
 
@@ -62,6 +62,8 @@ if [ $# -gt 0 ] ; then
 
 	case "${1}" in
 		-1)
+			[ -b ${part} ] || dqb "no such thing as ${part}"
+
 			${som} -o ro ${part} ${dir}
 			csleep 5
 			${som} | grep ${dir}
@@ -85,7 +87,7 @@ if [ $# -gt 0 ] ; then
 			csleep 3
 
 			#HUOM. BARMISTA ETTÄ ÅPOSTUUKO PAKETIT $dtstro:n alta VAIKO ERI
-			#090325: stubbyn kanssa oli jotain...
+			#090325: stubbyn kanssa oli jotain... (onko vielä?)
 
 			csleep 3
 			cd ${olddir}
