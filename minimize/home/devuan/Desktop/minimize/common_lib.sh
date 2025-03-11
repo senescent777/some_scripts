@@ -88,7 +88,7 @@ function gpo() {
 function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit
-	[ -s ${1} ] || exit  #-x
+	[ -x ${1} ] || exit  #oli -s
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit  
 
@@ -255,7 +255,7 @@ function part1() {
 	${sco} -R root:root /etc/apt 
 	${scm} -R a-w /etc/apt/
 
-	dqb "FOUR-LEGGED WHORE"
+	dqb "FOUR-LEGGED WHORE (maybe i have tourettes)"
 }
 
 function part3() {
