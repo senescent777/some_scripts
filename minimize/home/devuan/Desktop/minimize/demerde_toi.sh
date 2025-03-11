@@ -39,8 +39,9 @@ echo "${tig} clone https://github.com/senescent777/some_scripts"
 echo "cd some_scripts/minimize"
 
 if [ -d /home/devuan/Desktop/minimize ] ; then
-	#TODO:pitänee jyrätä minimize-hak. ensin
-	dqb "mv ./home/devuan/Desktop/minimize/* ~/Desktop/minimize"
+	echo "shred -fu ~/Desktop/minimize/* "
+	echo "rm -rf ~/Desktop/minimize/*"
+	echo "mv ./home/devuan/Desktop/minimize/* ~/Desktop/minimize"
 fi
 
 echo "sudo chmod 0755 ~/Desktop/minimize/${1}"
