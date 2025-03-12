@@ -42,6 +42,7 @@ case ${1} in
 		${slinky} /etc/dhcp/dhclient.conf.OLD /etc/dhcp/dhclient.conf
 		${spc} /sbin/dhclient-script.OLD /sbin/dhclient-script
 
+		#samaan tapaan voisi menneä daelauksenkin kanssa? s.e. jos a-f - ketjut olemassa ni muutetaan vain dns-säännlt, muussa tapaux pakotetaan rules.v4
 		${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
 		${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
 		for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
