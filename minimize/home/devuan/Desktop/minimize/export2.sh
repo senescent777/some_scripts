@@ -219,10 +219,9 @@ function tp5() {
 	${tig} clone https://github.com/senescent777/some_scripts.git
 	[ $? -eq 0 ] || exit 99
 
-	#VAIH:profs* lähteenä jatq0ssa
-	mv some_scripts/lib/export/profs* ~/Desktop/minimize/${distro}/
-	${scm} 0755 ~/Desktop/minimize/${distro}/profs*
-	${srat} -rvf ${1} ~/Desktop/minimize/${distro}/profs*
+	mv some_scripts/lib/export/profs* ~/Desktop/minimize #/${distro}/
+	${scm} 0755 ~/Desktop/minimize/profs*
+	${srat} -rvf ${1} ~/Desktop/minimize/profs*
 }
 
 mode=0
