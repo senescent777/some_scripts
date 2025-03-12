@@ -1,20 +1,4 @@
 #=================================================PART 0=====================================
-#grep /e/n/i ?
-#
-#odio=$(which sudo)
-#[ -x ${odio} ] || exit 666
-#
-#${odio} chown -R 0:0 /etc/sudoers.d 
-#${odio} chmod 0440 /etc/sudoers.d/* 
-#
-#
-#function dqb() {
-#	[ ${debug} -eq 1 ] && echo ${1}
-#}
-#
-#function csleep() {
-#	[ ${debug} -eq 1 ] && sleep ${1}
-#}
 
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
@@ -181,7 +165,7 @@ function pr4() {
 	${odio} shred -fu ${1}/stubby*
 	${odio} shred -fu ${1}/libgetdns*
 }
-
+#TODO:jompaan kumpaan dnsmasq* poisto (pidemmällä tähtäimellä tietty parempi laittaa toimimaanq poistaa mutta nyt näin)
 function pre_part3() {
 	dqb "pre_part3( ${1})"
 	${sdi} ${1}/dns-root-data*.deb

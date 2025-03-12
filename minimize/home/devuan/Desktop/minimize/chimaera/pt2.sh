@@ -73,7 +73,6 @@ ${sa} autoremove --yes
 sudo which dhclient; sudo which ifup; sleep 3
 sudo apt --fix-broken install
 
-
 ${smr} -rf /run/live/medium/live/initrd.img*
 ${sharpy} vim* xorriso xfburn
 ${asy}
@@ -120,6 +119,7 @@ sleep 6
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb
+#HUOM. ne pari muutakin hmistoa voisi siivota, kts. daedaluksen versio
 df
 #mimimize-hmiston siivous kanssa?
 sudo which dhclient; sudo which ifup; sleep 3
