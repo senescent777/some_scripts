@@ -73,6 +73,7 @@ function check_binaries() {
 	csleep 3
 }
 
+#TODO:vertaiule daedaluksen versioon, puuttuuko jotain
 function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
 
@@ -107,25 +108,13 @@ function check_binaries2() {
 	uom="${odio} ${uom} "	
 
 	smr="${odio} ${smr} "
-	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
-
-#	dqb "spc= ${spc}"
+	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
 	dqb "b1nar135.2 0k.2" 
 
 	csleep 3
 }
-#
-#function mangle2() {
-#	if [ -f ${1} ] ; then 
-#		dqb "MANGLED ${1}"
-#		sleep 1
-#		${scm} o-rwx ${1}
-#		${sco} root:root ${1}
-#		csleep 1
-#	fi
-#}
-#
-##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
+
+#HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
 #function ns2() {
 #	dqb "ns2( ${1} )"
 #
