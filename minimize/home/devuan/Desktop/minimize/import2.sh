@@ -1,9 +1,8 @@
 #!/bin/bash
 d=$(dirname $0)
-#[ -s ${d}/conf ] && . ${d}/conf
 debug=0
 
-if [ $# -gt 2 ] ; then #täössä voisi olla case
+if [ $# -gt 2 ] ; then #TODO:tässä voisi olla case
 	if [ -d ~/Desktop/minimize/${3} ] ; then
 		distro=${3}
 		. ~/Desktop/minimize/${3}/conf
@@ -11,9 +10,6 @@ if [ $# -gt 2 ] ; then #täössä voisi olla case
 fi
 
 . ~/Desktop/minimize/common_lib.sh
-
-#if  [ -s ${d}/lib.sh ] ; then
-#	. ${d}/lib.sh
 
 #HUOM.120325.x:hmiston olemassaolokin olisi hyvä varmistaa
 #HUOM.120325.y:miel $distro kuin $3 jatkossa
@@ -52,9 +48,7 @@ fi
 dqb "b3f0r3 par51ng tha param5"
 csleep 5
 
-#VAIH:tätä kohtaa sietäisi miettiä, esim case $# jatkossa?
-#if [ $# -gt 0 ] ; then
-#HUOM. $sidtro voisi olla $2 jatkossa
+#TODO:$sidtro voisi olla $2 jatkossa
 function common_part() {
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
@@ -83,7 +77,6 @@ function common_part() {
 case "${1}" in
 	-1)
 		#HUOM.120325: saattaa toimia qhan tuo distro
-		#HUOM.120325.2: tässä tap $2 voisi olla $distro
 		distro=${2}
 		[ -s ~/Desktop/minimize/${distro}/conf ] && . ~/Desktop/minimize/${distro}/conf
 		part=/dev/disk/by-uuid/${part0}		
@@ -97,7 +90,6 @@ case "${1}" in
 	;;
 	2)
 		#HUOM.120325: saattaa toimia qhan tuo distro
-		#HUOM.120325.2: tässä tap $2 voisi olla $distro
 		distro=${2}
 		[ -s ~/Desktop/minimize/${distro}/conf ] && . ~/Desktop/minimize/${distro}/conf
 		part=/dev/disk/by-uuid/${part0}		
@@ -128,7 +120,7 @@ case "${1}" in
 		file=${2}
 		distro=${3}
 
-		[ x"${file}" == "x" ] && exit 55 #voisi kai toisin,in tehdä
+		[ x"${file}" == "x" ] && exit 55
 		dqb "KL"
 		csleep 2
 
@@ -146,10 +138,6 @@ case "${1}" in
 		part3 ~/Desktop/minimize/${distro}
 		csleep 2
 
-		#HUOM. BARMISTA ETTÄ ÅPOSTUUKO PAKETIT $dtstro:n alta VAIKO ERI
-		#090325: stubbyn kanssa oli jotain... (onko vielä?)
-		#csleep 3
-
 		cd ${olddir}
 		echo "NEXT: $0 2"
 	;;
@@ -157,9 +145,5 @@ case "${1}" in
 		echo "-h"
 	;;
 esac
-
-#else
-#	
-#fi
 
 #HUOM. tämän olisi kuvakkeen kanssa tarkoitus mennä jatkossa filesystem.squashfs sisälle
