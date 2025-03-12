@@ -82,7 +82,7 @@ function tp1() {
 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
 #TODO:jatkossa nuo paketit erilliseen arkistoon varsinaiaseta oksennyksesta?
-#TODO:jatkossa distro-kohtaiset sources-list-tdstot
+#VAIH:jatkossa distro-kohtaiset sources-list-tdstot
 function tp4() {
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
@@ -90,6 +90,11 @@ function tp4() {
 	
 	[ z"${1}" == "z" ] && exit 1
 	[ -s ${1} ] || exit 2
+
+	if [ -s /etc/apt/sources.list.${distro} ] ; then
+		${odio} rm /etc/apt/sources.list
+		${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
+	fi
 
 	${sag_u}
 	[ $? -eq 0 ] || exit
@@ -189,6 +194,11 @@ function tpu() {
 	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
 	${odio} ${d}/clouds.sh ${dnsm} 
 	${sifu} ${iface}
+
+	if [ -s /etc/apt/sources.list.${distro} ] ; then
+		${odio} rm /etc/apt/sources.list
+		${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
+	fi
 
 	${sag} upgrade -u
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
