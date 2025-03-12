@@ -244,7 +244,7 @@ function part1() {
 		${scm} a+w /etc/apt/sources.list.${distro}
 
 		for x in ${distro} ${distro}-updates ${distro}-security ; do
-			echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list.${distro} 
+			echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${distro} 
 		done
 		
 		#slinky
