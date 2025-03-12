@@ -11,7 +11,7 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
-#TODO:$sco ja $scm käyttöön jatq§
+#TODO:$sco ja $scm käyttöön jatq?
 fix_sudo() {
 	echo "fix_sud0.pt0"
 	${odio} chown -R 0:0 /etc/sudoers.d #pitääköhän juuri tässä tehdä tämä? jep
@@ -58,8 +58,8 @@ function ocs() {
 	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
 }
 
-##check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (TODO: let's find out)
-#
+#check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (TODO: let's find out?)
+
 #HUOM. jos tätä käyttää ni scm ja sco pitää tietenkin esitellä alussa
 function mangle2() {
 	if [ -f ${1} ] ; then 
@@ -213,7 +213,7 @@ function part1() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-		#TODO:ne ppre_part3-jutut sopivaan kohtaan
+		#TODO:ne ppre_part3-jutut sopivaan kohtaan (etsipä jostain)
 	else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
