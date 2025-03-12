@@ -1,6 +1,4 @@
-
 #bash kutsuvaan skriptiin tulkiksi saattaa aiheuttaa vähemmän nalkutusta kuin sh
-
 odio=$(which sudo)
 [ y"${odio}" == "y" ] && exit 99 
 [ -x ${odio} ] || exit 100
@@ -40,15 +38,11 @@ fix_sudo() {
 	[ ${debug} -eq 1 ] && ls -las  /usr/bin/sudo*
 	csleep 5	
 	echo "d0n3"
-
 }
 
 fix_sudo
 
 #pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
-#
-#VAIH:jatkossa chimaeRan doit6 käyttämään tätä jos mahd
-
 function ocs() {
 	local tmp
 	tmp=$(sudo which ${1})
@@ -58,7 +52,6 @@ function ocs() {
 	fi
 
 	if [ ! -x ${tmp} ] ; then
-
 		exit 77
 	fi
 
@@ -67,7 +60,6 @@ function ocs() {
 
 ##check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (TODO: let's find out)
 #
-
 #HUOM. jos tätä käyttää ni scm ja sco pitää tietenkin esitellä alussa
 function mangle2() {
 	if [ -f ${1} ] ; then 
@@ -95,7 +87,6 @@ function mangle_s() {
 	local tgt
 	[ y"${1}" == "y" ] && exit
 	[ -x ${1} ] || exit  #oli -s
-
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit  
 
@@ -147,7 +138,6 @@ function pre_enforce() {
 }
 
 function enforce_access() {
-
 	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
@@ -186,7 +176,6 @@ function enforce_access() {
 
 	if [ y"${n}" != "y" ] ; then
 		#josko vielä testaisi että $n asetettu ylipäänsä
-
 		${sco} -R ${n}:${n} ~
 		csleep 5
 	fi
@@ -207,9 +196,7 @@ function enforce_access() {
 	fi
 
 	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
-
 	#TODO: se man chmod ao. riveihin liittyen, rwt...
-
 	#HUOM.280125:uutena seur rivit, poista jos pykii
 	${scm} 0777 /tmp
 	${sco} root:root /tmp
@@ -239,11 +226,10 @@ function part1() {
 			${ipt} -L #
 			${ip6t} -L #
 			sleep 5 
-		fi #
-	
-		
+		fi #	
 	fi
 
+	#TODO:testaa tuo linkkaus-kikkailu
 	if [ z"${pkgsrc}" != "z" ] ; then
 		local g
 		g=$(date +%F) 
@@ -251,13 +237,14 @@ function part1() {
 		csleep 5
 		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 
-		sudo touch /etc/apt/sources.list
-		${scm} a+w /etc/apt/sources.list
+		sudo touch /etc/apt/sources.list.${distro}
+		${scm} a+w /etc/apt/sources.list.${distro}
 
 		for x in ${distro} ${distro}-updates ${distro}-security ; do
-			echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list 
+			echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list.${distro} 
 		done
 
+		$[odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
 		[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
 		csleep 5
 	fi
@@ -323,4 +310,3 @@ function vommon() {
 		exit 	
 	fi
 } 
-
