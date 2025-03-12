@@ -164,8 +164,13 @@ function pr4() {
 	echo "pr4 (${1})"
 	${odio} shred -fu ${1}/stubby*
 	${odio} shred -fu ${1}/libgetdns*
+
+	#uutena
+	${odio} shred -fu ${1}/dnsmasq*
 }
-#TODO:jompaan kumpaan dnsmasq* poisto (pidemmällä tähtäimellä tietty parempi laittaa toimimaanq poistaa mutta nyt näin)
+
+#VAIH:jompaan kumpaan(pp3/pr4) dnsmasq* poisto (pidemmällä tähtäimellä tietty parempi laittaa toimimaanq poistaa mutta nyt näin)
+
 function pre_part3() {
 	dqb "pre_part3( ${1})"
 	${sdi} ${1}/dns-root-data*.deb
