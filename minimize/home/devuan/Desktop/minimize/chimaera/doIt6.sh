@@ -184,20 +184,6 @@ enforce_access
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
 part1 
-#g=$(date +%F)
-#csleep 5
-#[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
-#
-#sudo touch /etc/apt/sources.list
-#${scm} a+w /etc/apt/sources.list
-#
-##030325:tässä kusi hommat vähän(jos nyt 050325 kunnossa)
-##(jatkossa conf:iin se pakettipalvelin?)
-#for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://devuan.keff.org/merged ${x} main" >> /etc/apt/sources.list ; done
-#
-#${scm} a-w /etc/apt/sources.list
-#${sco} -R root:root /etc/apt 
-#${scm} -R a-w /etc/apt/
 [ ${mode} -eq 0 ] && exit
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
@@ -251,7 +237,7 @@ pre_part3 ${d}
 pr4 ${d}
 #VAIH:ennen part3 pitäisi saada stubby pois koska nalkutus
 part3 ${d} 
-#HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI (vissiin nyt 120325 poistuu)
+#HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI (vissiin nyt 120325 poistuu?)
 
 ecfx
 #if [ -s ~/Desktop/minimize/xfce.tar ] ; then
