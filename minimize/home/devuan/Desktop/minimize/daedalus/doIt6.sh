@@ -10,8 +10,6 @@ else
 	exit 111	
 fi
 
-n=$(whoami)
-
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -23,8 +21,6 @@ function parse_opts_1() {
 	esac
 }
 
-#HUOM. mode otetaan jo parametriksi p_o_1:sessä, josko enforce kanssa?
- 
 function check_params() {
 	case ${debug} in
 		0|1)
@@ -37,73 +33,206 @@ function check_params() {
 	esac
 }
 
+n=$(whoami)
+#
+#function mangle_s() {
+#	local tgt
+#	[ y"${1}" == "y" ] && exit 
+#	[ -s ${1} ] || exit 
+#	#-x $1 kanssa?
+#	[ y"${2}" == "y" ] && exit 
+#	[ -f ${2} ] || exit 
+#
+#	tgt=${2}
+#	dqb "fr0m mangle_s(${1}, ${2}) : params_OK"; sleep 3
+#
+#	sudo chmod 0555 ${1} #HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
+#	sudo chown root:root ${1} 
+#
+#	local s
+#	s=$(sha256sum ${1})
+#	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
+#}
+#
+#function pre_enforce() {
+#	local q
+#	local f 
+#
+#	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
+#	if [ -f /etc/sudoers.d/meshuggah ] ; then
+#		dqb "a51a kun05a"
+#	else		
+#		q=$(mktemp -d)	
+#		sudo touch ${q}/meshuggah
+#		[ -f ${q}/meshuggah ] || exit
+#
+#		sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
+#		sudo chmod 0660 ${q}/meshuggah	
+#		
+#		#HUOM.  ja stubby mukaan toisella tavalla jatkossa?
+#		for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done 
+#		for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
+#
+#		if [ -s ${q}/meshuggah ] ; then
+#			dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
+#			csleep 5
+#
+#			sudo chmod a-wx ${q}/meshuggah
+#			sudo chown root:root ${q}/meshuggah	
+#			sudo mv ${q}/meshuggah /etc/sudoers.d
+#		fi
+#	
+#		#HUOM.250624:pitäisi kai pakottaa ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?
+#	fi
+#}
+#
+#function enforce_access() {
+#	dqb "3nf0rc3_acc355()"
+#	local f
+#
+#	#HUOM. ennen /home:n sorkkimista olevat rivit aiemmin pre_enoirce():ssam takaisin jos qsee
+#	${sco} -R root:root /etc/sudoers.d
+#	${scm} 0440 /etc/sudoers.d/* #ei missään nimessä tähän:-R
+#	${scm} 0750 /etc/sudoers.d #uskaltaakohan? jos vaikka
+#	
+#	#tässä vai enforce_access():issa parempi näiden?
+#	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
+#		mangle2 ${f}
+#		csleep 1
+#	done	
+#
+#	${scm} 0755 /etc 
+#	${sco} -R root:root /etc
+#
+#	#HUOM. mangle2 olisi keksitty... ja ne find-jutut alempana
+#	${sco} -R root:root /sbin
+#	${scm} -R 0755 /sbin
+#	
+#	${sco} -R root:root /var
+#	${scm} -R 0755 /var
+#
+#	${sco} root:staff /var/local
+#	${sco} root:mail /var/mail
+#		
+#	${sco} -R man:man /var/cache/man 
+#	${scm} -R 0755 /var/cache/man
+#
+#	${scm} 0755 /
+#	${sco} root:root /
+#
+#	#ch-jutut siltä varalta että tar sössii oikeudet tai omistajat
+#	${sco} root:root /home
+#	${scm} 0755 /home
+#	${scm} -R 0755 ~/Desktop/minimize
+#	
+#	if [ y"${n}" != "y" ] ; then
+#		dqb "${sco} -R ${n}:${n} ~"
+#		${sco} -R ${n}:${n} ~
+#	fi
+#
+#	#${sco} -R 101:65534 /home/stubby/	
+#	f=$(date +%F)
+#
+#	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
+#	[ -f /sbin/dhclient-script.${f} ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.${f}
+#	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfaces /etc/network/interfaces.${f}
+#
+#	if [ -s /etc/resolv.conf.new ] && [ -s /etc/resolv.conf.OLD ] ; then
+#		sudo rm /etc/resolv.conf
+#	fi
+#
+#	[ -s /sbin/dclient-script.OLD ] || sudo cp /sbin/dhclient-script /sbin/dhclient-script.OLD
+#}
+#
+##==================================PART 1============================================================
+#function part1() {
+#	#jos jokin näistä kolmesta hoitaisi homman...
+#	${sifd} ${iface}
+#	${sifd} -a
+#	${sip} link set ${iface} down
+#
+#	[ $? -eq 0 ] || echo "PROBLEMS WITH NETWORK CONNECTION"
+#	[ ${debug} -eq 1 ] && /sbin/ifconfig;sleep 5 
+#
+#	if [ y"${ipt}" == "y" ] ; then
+#		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+#	else
+#		for t in INPUT OUTPUT FORWARD ; do 
+#			${ipt} -P ${t} DROP
+#			${ip6t} -P ${t} DROP
+#			${ip6t} -F ${t}
+#		done
+#
+#		for t in INPUT OUTPUT FORWARD b c e f ; do ${ipt} -F ${t} ; done
+#
+#		if [ ${debug} -eq 1 ] ; then
+#			${ipt} -L #
+#			${ip6t} -L #
+#			sleep 5 
+#		fi #
+#	fi
+#}
+#
 if [ $# -gt 0 ] ; then
 	for opt in $@ ; do parse_opts_1 $opt ; done
 fi
 
 check_params 
+#VAIH:pre_enforce'n testaus että toimiiko, aluksi m mäkeen ennenn tst
 [ ${enforce} -eq 1 ] && pre_enforce
 enforce_access 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-part1
+part1 
+#g=$(date +%F)
+#csleep 5
+#[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+#
+#sudo touch /etc/apt/sources.list
+#${scm} a+w /etc/apt/sources.list
+#
+##030325:tässä kusi hommat vähän(jos nyt 050325 kunnossa)
+##(jatkossa conf:iin se pakettipalvelin?)
+#for x in ${distro} ${distro}-updates ${distro}-security ; do echo "deb https://devuan.keff.org/merged ${x} main" >> /etc/apt/sources.list ; done
+#
+#${scm} a-w /etc/apt/sources.list
+#${sco} -R root:root /etc/apt 
+#${scm} -R a-w /etc/apt/
 [ ${mode} -eq 0 ] && exit
 
-#HUOM.261224: ntpsec uutena
-for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ntpsec ; do
+for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do
 	${odio} /etc/init.d/${s} stop
 	sleep 1
 done
 
 dqb "shutting down some services (4 real) in 3 secs"
 sleep 3 
-
-#pitäisiköhän näillekin tehdä jotain=
 ${whack} cups*
 ${whack} avahi*
 ${whack} dnsmasq*
 ${whack} stubby*
 ${whack} nm-applet
+sleep 3
+#exit
 
-#ntp ehkä takaisin myöhemmin
-${whack} ntp*
-csleep 10
-${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
-ecfx
-csleep 5
-
-
-#TODO:testaus
-if [ ${mode} -eq 1 ] ; then
-	vommon
-fi
-
-${sharpy} libblu* network* libcupsfilters* libgphoto* 
-# libopts25 ei tömmöistä daedaluksessa
-
+${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* 
-${sharpy} modem* wireless* wpa*
-${sharpy} iw lm-sensors
+${sharpy} modem* wireless* wpa* iw lm-sensors
+#paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
-${sharpy} ntp*
-${sharpy} po* pkexec
-${lftr}
-csleep 3
+${smr} -rf /run/live/medium/live/initrd.img*
+sleep 3
 
-if [ y"${ipt}" != "y" ] ; then 
-	${ip6tr} /etc/iptables/rules.v6
-	${iptr} /etc/iptables/${tblz4}
-fi
-
-#HUOM.270624:oli aikaisemmin tässä clouds.sh 0
+${ip6tr} /etc/iptables/rules.v6
+${iptr} /etc/iptables/${tblz4}
 
 csleep 5
-${lftr} 
-csleep 3
+${smr} -rf /run/live/medium/live/initrd.img*
+sleep 3
 
 if [ ${debug} -eq 1 ] ; then
 	${snt} -tulpan
@@ -117,61 +246,62 @@ csleep 3
 echo "DO NOT ANSWER \"Yes\" TO A QUESTION ABOUT IPTABLES";sleep 2
 echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
-#toimiiko? jos vaikka
-pre_part3 ${d}
+#HUOM.0505325:libgetdns10 kanssa oli jokin ongelma
+pre_part3 ${d} 
 pr4 ${d}
-part3 ${d}
-#(daudaluksen kanssa ok mutta chimaera...)
+#VAIH:ennen part3 pitäisi saada stubby pois koska nalkutus
+part3 ${d} 
+#HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI (vissiin nyt 120325 poistuu)
 
-echo $?
-sleep 3
-${ip6tr} /etc/iptables/rules.v6
+ecfx
+#if [ -s ~/Desktop/minimize/xfce.tar ] ; then
+#	${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
+#else 
+#	if  [ -s ~/Desktop/minimize/xfce070325.tar ] ; then
+#		${srat} -C / -xvf ~/Desktop/minimize/xfce070325.tar
+#	fi
+#fi
 
-#VAIH:se ffox-profiili-asia (mallia sieltä ghubin toisesta hmistosta)
+csleep 5
 if [ -x ~/Desktop/minimize/profs.sh ] ; then
-	[ -x ~/Desktop/minimize/middleware.sh ] && . ~/Desktop/minimize/middleware.sh 
+	[ -x ~/Desktop/minimize/middleware.sh ] && . ~/Desktop/minimize/middleware.sh	
 	. ~/Desktop/minimize/profs.sh
 	copyprof ${n} someparam
 fi
 
+if [ ${mode} -eq 1 ] ; then
+	vommon
+#	dqb "R (in 6 secs)"; csleep 6
+#	${odio} passwd
+#	
+#	if [ $? -eq 0 ] ; then
+#		dqb "L (in 6 secs)"; csleep 6
+#		passwd
+#	fi
+#
+#	if [ $? -eq 0 ] ; then
+#		${whack} xfce* #HUOM. tässä ei tartte jos myöhemmin joka tap
+#		exit 	
+#	fi
+fi
+
 ${asy}
-dqb "GR1DN BELIALAS KYE"
-
 sudo ${d}/clouds.sh 0
-csleep 5
+sleep 5
 
-${scm} a-wx ~/Desktop/minimize/*.sh
-${scm} a-wx $0 #oikeastaan kerta-ajo tulisi riittää
-
-#===================================================PART 4(final)==========================================================
-
-if [ ${mode} -eq 2 ] ; then
-	echo "time to ${sifu} ${iface} or whåtever"
-	csleep 5
-	${whack} xfce4-session
- 	exit 
-fi
-
-#070235: heittääkö pihalle xfce:stä tuossa yllä vai ei? vissiin pitää muuttaa parametreja
-sudo ${d}/clouds.sh 1
-
-#VAIH:stubby-jutut toimimaan
-#ongelmana error: Could not bind on given addresses: Permission denied
-dqb "MESSIAH OF IMPURITY AND DARKNESS"
-csleep 4
-
-if [ ${debug} -eq 1 ] ; then 
-	${snt} -tulpan
-	sleep 5
-	pgrep stubby*
-	sleep 5
-fi
-
-echo "time to ${sifu} ${iface} or whåtever"
-echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
-
-if [ ${debug} -eq 1 ] ; then 
-	sleep 5
-	#whack xfce so that the ui is reset
-	${whack} xfce4-session
-fi
+##===================================================PART 4(final)==========================================================
+##tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
+#${odio} /etc/init.d/dnsmasq restart
+#sudo ${d}/clouds.sh 1
+#ns2 stubby
+#ns4 stubby
+#
+#if [ ${debug} -eq 1 ] ; then 
+#	${snt} -tulpan
+#	sleep 5
+#	pgrep stubby*
+#	sleep 5
+#fi
+#
+#echo "time to ${sifu} ${iface} or whåtever"
+#echo "P.S. if stubby dies, resurrect it with \"restart_stubby.desktop\" "
