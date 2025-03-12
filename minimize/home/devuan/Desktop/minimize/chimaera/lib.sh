@@ -86,6 +86,7 @@ function check_binaries2() {
 	snt="${odio} ${snt} "
 	sharpy="${odio} ${sag} remove --purge --yes "
 	sdi="${odio} ${sdi} -i "
+	#TODO:spd
 
 	#HUOM. ${sag} VIIMEISENÄ
 	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
