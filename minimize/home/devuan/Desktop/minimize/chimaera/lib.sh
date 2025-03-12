@@ -1,20 +1,20 @@
 #=================================================PART 0=====================================
 #grep /e/n/i ?
-
-odio=$(which sudo)
-[ -x ${odio} ] || exit 666
-
-${odio} chown -R 0:0 /etc/sudoers.d 
-${odio} chmod 0440 /etc/sudoers.d/* 
-
-
-function dqb() {
-	[ ${debug} -eq 1 ] && echo ${1}
-}
-
-function csleep() {
-	[ ${debug} -eq 1 ] && sleep ${1}
-}
+#
+#odio=$(which sudo)
+#[ -x ${odio} ] || exit 666
+#
+#${odio} chown -R 0:0 /etc/sudoers.d 
+#${odio} chmod 0440 /etc/sudoers.d/* 
+#
+#
+#function dqb() {
+#	[ ${debug} -eq 1 ] && echo ${1}
+#}
+#
+#function csleep() {
+#	[ ${debug} -eq 1 ] && sleep ${1}
+#}
 
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
@@ -124,57 +124,57 @@ function check_binaries2() {
 
 	csleep 3
 }
-
-function mangle2() {
-	if [ -f ${1} ] ; then 
-		dqb "MANGLED ${1}"
-		sleep 1
-		${scm} o-rwx ${1}
-		${sco} root:root ${1}
-		csleep 1
-	fi
-}
-
-#HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-function ns2() {
-	dqb "ns2( ${1} )"
-
-	${scm} u+w /home
-
-	${odio} /usr/sbin/userdel ${1}
-	sleep 3
-
-	${odio} adduser --system ${1}
-	sleep 1
-	${scm} go-w /home
-
-	[ ${debug} -eq 1 ]  && ls -las /home
-	sleep 7
-}
-
-function ns4() {
-	dqb "ns4( ${1} )"
-
-	${scm} u+w /run
-	${odio} touch /run/${1}.pid
-	${scm} 0600 /run/${1}.pid
-	${sco} ${1}:65534 /run/${1}.pid
-	${scm} u-w /run
-
-	sleep 5
-	${whack} ${1}*
-	sleep 5
-
-	dqb "starting ${1} in 5 secs"
-
-	sleep 5
-	${odio} -u ${1} ${1} -g
-	echo $?
-	sleep 1
-	pgrep stubby*
-	sleep 5
-}
-
+#
+#function mangle2() {
+#	if [ -f ${1} ] ; then 
+#		dqb "MANGLED ${1}"
+#		sleep 1
+#		${scm} o-rwx ${1}
+#		${sco} root:root ${1}
+#		csleep 1
+#	fi
+#}
+#
+##HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
+#function ns2() {
+#	dqb "ns2( ${1} )"
+#
+#	${scm} u+w /home
+#
+#	${odio} /usr/sbin/userdel ${1}
+#	sleep 3
+#
+#	${odio} adduser --system ${1}
+#	sleep 1
+#	${scm} go-w /home
+#
+#	[ ${debug} -eq 1 ]  && ls -las /home
+#	sleep 7
+#}
+#
+#function ns4() {
+#	dqb "ns4( ${1} )"
+#
+#	${scm} u+w /run
+#	${odio} touch /run/${1}.pid
+#	${scm} 0600 /run/${1}.pid
+#	${sco} ${1}:65534 /run/${1}.pid
+#	${scm} u-w /run
+#
+#	sleep 5
+#	${whack} ${1}*
+#	sleep 5
+#
+#	dqb "starting ${1} in 5 secs"
+#
+#	sleep 5
+#	${odio} -u ${1} ${1} -g
+#	echo $?
+#	sleep 1
+#	pgrep stubby*
+#	sleep 5
+#}
+#
 #=========================PART 0 ENDS HERE=================================================================
 function pr4() {
 	echo "pr4 (${1})"
@@ -190,59 +190,59 @@ function pre_part3() {
 	${smr} -rf ${1}/perl-modules-*.deb
 	
 }
-#common_lib jatkossa käyttöön
-function part3() {
-	dqb "part3( ${1})"
-	${sdi} ${1}/lib*.deb
-
-	if [ $? -eq  0 ] ; then
-		#nköjään ei riittävästitehty dnsmasq kannalta
-		dqb "part3.1 ok"
-		sleep 5
-
-		${smr} -rf ${1}/lib*.deb
-
-	else
-	 	exit 66
-	fi
-	
-	#&&
-
-	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
-	${sdi} ${1}/*.deb
-
-	if [ $? -eq  0 ] ; then
-		dqb "part3.2 ok"
-		sleep 5
-		${smr} -rf ${1}/*.deb
-
-	else
-	 	exit 67
-	fi
-
-	csleep 2
-
-	dqb "pt3 d0m3"
-
-}
-
+##common_lib jatkossa käyttöön
+#function part3() {
+#	dqb "part3( ${1})"
+#	${sdi} ${1}/lib*.deb
+#
+#	if [ $? -eq  0 ] ; then
+#		#nköjään ei riittävästitehty dnsmasq kannalta
+#		dqb "part3.1 ok"
+#		sleep 5
+#
+#		${smr} -rf ${1}/lib*.deb
+#
+#	else
+#	 	exit 66
+#	fi
+#	
+#	#&&
+#
+#	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
+#	${sdi} ${1}/*.deb
+#
+#	if [ $? -eq  0 ] ; then
+#		dqb "part3.2 ok"
+#		sleep 5
+#		${smr} -rf ${1}/*.deb
+#
+#	else
+#	 	exit 67
+#	fi
+#
+#	csleep 2
+#
+#	dqb "pt3 d0m3"
+#
+#}
+#
 #part1?
 echo "BIL-UR-SAG"
 check_binaries
 check_binaries2
 echo "UMULAMAHRI"
-
-function gpo() {
-	local prevopt
-	local opt
-	prevopt=""
-
-	for opt in $@ ; do 
-		parse_opts_1 ${opt}
-		parse_opts_2 ${prevopt} ${opt}
-		prevopt=opt
-	done
-}
-
+#
+#function gpo() {
+#	local prevopt
+#	local opt
+#	prevopt=""
+#
+#	for opt in $@ ; do 
+#		parse_opts_1 ${opt}
+#		parse_opts_2 ${prevopt} ${opt}
+#		prevopt=opt
+#	done
+#}
+#
 #TODO:gpo jo käyttöön?
 #check_params ?
