@@ -178,6 +178,8 @@ function check_binaries2() {
 #=========================PART 0 ENDS HERE=================================================================
 function pr4() {
 	echo "pr4 (${1})"
+	${odio} shred -fu ${1}/stubby*
+	${odio} shred -fu ${1}/libgetdns*
 }
 
 function pre_part3() {
