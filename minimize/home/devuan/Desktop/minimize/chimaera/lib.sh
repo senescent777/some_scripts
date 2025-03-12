@@ -181,59 +181,8 @@ function pre_part3() {
 	${smr} -rf ${1}/perl-modules-*.deb
 	
 }
-##common_lib jatkossa käyttöön
-#function part3() {
-#	dqb "part3( ${1})"
-#	${sdi} ${1}/lib*.deb
-#
-#	if [ $? -eq  0 ] ; then
-#		#nköjään ei riittävästitehty dnsmasq kannalta
-#		dqb "part3.1 ok"
-#		sleep 5
-#
-#		${smr} -rf ${1}/lib*.deb
-#
-#	else
-#	 	exit 66
-#	fi
-#	
-#	#&&
-#
-#	#ei kannattane vastata myöntävästi tallennus-kysymykseen?
-#	${sdi} ${1}/*.deb
-#
-#	if [ $? -eq  0 ] ; then
-#		dqb "part3.2 ok"
-#		sleep 5
-#		${smr} -rf ${1}/*.deb
-#
-#	else
-#	 	exit 67
-#	fi
-#
-#	csleep 2
-#
-#	dqb "pt3 d0m3"
-#
-#}
-#
-#part1?
+
 echo "BIL-UR-SAG"
 check_binaries
 check_binaries2
 echo "UMULAMAHRI"
-#
-#function gpo() {
-#	local prevopt
-#	local opt
-#	prevopt=""
-#
-#	for opt in $@ ; do 
-#		parse_opts_1 ${opt}
-#		parse_opts_2 ${prevopt} ${opt}
-#		prevopt=opt
-#	done
-#}
-#
-#TODO:gpo jo käyttöön?
-#check_params ?
