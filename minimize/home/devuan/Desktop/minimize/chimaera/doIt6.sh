@@ -1,7 +1,7 @@
 #!/bin/bash
 d=$(dirname $0)
 [ -s ${d}/conf ] && . ${d}/conf
-. ~/Desktop/minimize/common_lib
+. ~/Desktop/minimize/common_lib.sh
 
 if [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
@@ -178,6 +178,7 @@ if [ $# -gt 0 ] ; then
 fi
 
 check_params 
+#VAIH:pre_enforce'n testaus että toimiiko, aluksi m mäkeen ennenn tst
 [ ${enforce} -eq 1 ] && pre_enforce
 enforce_access 
 
@@ -247,9 +248,10 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 
 #HUOM.0505325:libgetdns10 kanssa oli jokin ongelma
 pre_part3 ${d} 
-#pr4 ${d}
+pr4 ${d}
+#VAIH:ennen part3 pitäisi saada stubby pois koska nalkutus
 part3 ${d} 
-#HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI
+#HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI (vissiin nyt 120325 poistuu)
 
 ecfx
 #if [ -s ~/Desktop/minimize/xfce.tar ] ; then
