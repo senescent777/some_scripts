@@ -1,8 +1,10 @@
 #!/bin/bash
 d=$(dirname $0)
+[ -s ${d}/conf ] && . ${d}/conf
 
-if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
-	. ${d}/conf
+. ~/Desktop/minimize/common_lib.sh
+
+if [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
 	srat="sudo /bin/tar"
@@ -23,7 +25,9 @@ else
 	
 fi
 
-debug=1
+#debug=1
+echo "TODO: ~/Desktop/minimize/import2.sh"
+
 olddir=$(pwd)
 #HUOM.120325: onkohan tässä kohdassa jotain ongelmaa vai ei?
 part=/dev/disk/by-uuid/${part0}

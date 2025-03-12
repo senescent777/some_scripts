@@ -1,12 +1,14 @@
 #!/bin/bash
-
 d=$(dirname $0)
-debug=1
+#debug=1
+[ -s ${d}/conf ] && . ${d}/conf
 
-if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
-	. ${d}/conf
+. ~/Desktop/minimize/common_lib.sh
+
+if [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
+	#tässä skriptissä niin oleellinen osuus? import:in/demerde'n kanssa tärkeämpi 
 	srat="sudo /bin/tar"
 	som="sudo /bin/mount"
 	uom="sudo /bin/umount"
@@ -23,7 +25,8 @@ else
 	}	
 fi
 
-debug=1
+#debug=1
+echo "~/Desktop/minimize/export2.sh a b chimaera"
 
 function make_tar() {
 	dqb "make_tar ( ${1} )"

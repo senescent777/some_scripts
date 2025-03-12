@@ -1,8 +1,8 @@
 #!/bin/bash
 #. ./lib
 d=$(dirname $0)
-debug=0
-
+[ -s ${d}/conf ] && . ${d}/conf
+. ~/Desktop/minimize/common_lib.sh
 [ -s ${d}/lib.sh ] && . ${d}/lib.sh
 ${fib}
 g=$(date +%F)
@@ -13,6 +13,7 @@ if [ $# -gt 0 ] ; then
 	fi
 fi
 
+#HUOM.120325:mitäköhän tämän kanssa tekee? ehkä oltava distro-kohtainen
 
 #==============================================================
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!

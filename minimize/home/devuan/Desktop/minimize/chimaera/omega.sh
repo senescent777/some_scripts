@@ -1,5 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
+echo "TODO: ~/Desktop/minimize/omega.sh"
 
 if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 	. ${d}/conf
