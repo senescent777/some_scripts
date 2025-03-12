@@ -29,13 +29,19 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
-	#olisi kai toinenkin tapa tehdä tämä ipt-asdia...
-	ic=$(echo $ipt | wc -w)
-
-	if [ $ic -le 0 ] ; then
+	#TODO:ajamaan nuo komennot jatkossa
+	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
+		echo "pre_part3 ~/Desktop/minimize/${distro}"
+		echo "pr4 ~/Desktop/minimize/${distro}"
+
+		echo "ipt=\$(sudo which iptables)"
+		echo "ip6t=\$(sudo which ip6tables)"
+		echo "iptr=\$(sudo which iptables-restore)"
+		echo "ip6tr=\$(sudo which ip6tables-restore)"
 	fi
 
+	#HUOM. ocs()?
 	[ -x ${ipt} ] || exit 5
 	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
 	[ -x ${ip6t} ] || exit 5
