@@ -1,5 +1,5 @@
 #=================================================PART 0=====================================
-
+#TODO:$distro parametriksi (kts daedalus-versio)
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
 	dqb "sudo= ${odio} "
@@ -188,7 +188,7 @@ function pre_part3() {
 	
 }
 
-echo "BIL-UR-SAG"
+dqb "BIL-UR-SAG"
 check_binaries
 check_binaries2
-echo "UMULAMAHRI"
+dqb "UMULAMAHRI"
