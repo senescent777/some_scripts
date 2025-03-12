@@ -213,9 +213,11 @@ function part1() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
+		#TODO:ne ppre_part3-jutut sopivaan kohtaan
 	else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
+			dqb "V6"; csleep 5
 			${ip6t} -P ${t} DROP
 			${ip6t} -F ${t}
 		done
@@ -224,12 +226,13 @@ function part1() {
 
 		if [ ${debug} -eq 1 ] ; then
 			${ipt} -L #
+			dqb "V6.b"; csleep 5
 			${ip6t} -L #
 			sleep 5 
 		fi #	
 	fi
 
-	#TODO:testaa tuo linkkaus-kikkailu
+	#VAIH:testaa tuo linkkaus-kikkailu
 	if [ z"${pkgsrc}" != "z" ] ; then
 		local g
 		g=$(date +%F) 
@@ -243,8 +246,9 @@ function part1() {
 		for x in ${distro} ${distro}-updates ${distro}-security ; do
 			echo "deb https://${pkgsrc}/merged ${x} main non-free-firmware" >> /etc/apt/sources.list.${distro} 
 		done
-
-		$[odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
+		
+		#slinky
+		${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
 		[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
 		csleep 5
 	fi
@@ -260,15 +264,18 @@ function part3() {
 	[ y"${1}" == "y" ] && exit 1
 	dqb "11"
 	[ -d ${1} ] || exit 2
-	dqb "22 ${1}"
+
+	dqb "22 ${sdi} ${1}/lib*.deb"
 	${sdi} ${1}/lib*.deb
+
+	#TODO:varmistus jotta sdi eityhjä+ajokelpoinen ennenq... (oikeastaan check_binaries* pitäisi hoitaa)
 
 	if [ $? -eq  0 ] ; then
 		dqb "part3.1 ok"
 		sleep 5
 		${odio} shred -fu ${1}/lib*.deb
 	else
-	 	dqb "exit 66"
+	 	dqb "exit 66" #TODO:jatkossa oikeasti exit?
 	fi
 
 	${sdi} ${1}/*.deb
@@ -278,7 +285,7 @@ function part3() {
 		sleep 5
 		${odio} shred -fu ${1}/*.deb 
 	else
-	 	dqb "exit 67"
+	 	dqb "exit 67" #TODO:jatkossa oikeasti exit?
 	fi
 
 	csleep 2
