@@ -25,6 +25,7 @@ fi
 
 debug=1
 olddir=$(pwd)
+#HUOM.120325: onkohan tässä kohdassa jotain ongelmaa vai ei?
 part=/dev/disk/by-uuid/${part0}
 [ -b ${part} ] || dqb "no such thing as ${part}"
 dqb "b3f0r3 0ld.tar"
