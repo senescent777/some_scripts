@@ -54,10 +54,15 @@ pr4() {
 	sudo shred -fu ${1}/perl*
 }
 
-#TODO: $diustro patrametriksi?
+#VAIH: $diustro patrametriksi?
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
 	dqb "sudo= ${odio} "
+	csleep 1
+
+	[ z"${1}" == "z" ] && exit 99
+	[ -d ~/Desktop/minimize/${1} ] & exit 100
+	dqb "params_ok"
 	csleep 1
 
 	ipt=$(sudo which iptables)
@@ -67,9 +72,9 @@ function check_binaries() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
-		#konftdston muo9kkaaminen olisi ehkä helpompi
-		pre_part3 ~/Desktop/minimize/${distro}
-		pr4 ~/Desktop/minimize/${distro}
+	
+		pre_part3 ~/Desktop/minimize/${1} #${distro}
+		pr4 ~/Desktop/minimize/${1} #${distro}
 
 		ipt=$(sudo which iptables)
 		ip6t=$(sudo which ip6tables)
@@ -153,8 +158,8 @@ function check_binaries2() {
 	#HUOM.130325:tar0peellinen blokki nykyään?
 	dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"
 	csleep 5
-	${scm} a-wx /home/devuan/Desktop/minimize/*.sh
-	${scm} a-wx /home/devuan/Desktop/minimize/*.conf
+	${scm} 0755 /home/devuan/Desktop/minimize/*.sh
+	${scm} 0444 /home/devuan/Desktop/minimize/*.conf
 
 	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
@@ -176,7 +181,7 @@ function check_binaries2() {
 	csleep 3
 }
 
-check_binaries
+check_binaries ${distro}
 check_binaries2
 
 
