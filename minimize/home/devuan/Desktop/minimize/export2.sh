@@ -166,7 +166,7 @@ function tp2() {
 	${srat} -rf ${1} /etc/rcS.d/S*net*
 }
 
-#TODO:jopsa jatkossa ajaisi tp3 ennen tp2?
+#VAIH:jopsa jatkossa ajaisi tp3 ennen tp2?
 function tp3() {
 	dqb "tp3 ${1}"
 	[ y"${1}" == "y" ] && exit 1
@@ -245,7 +245,7 @@ function tp5() {
 mode=0
 tgtfile=""
 
-#parsetus josqs käyttöön, ehkä
+#parsetus josqs käyttöön, ehkä (pärjäisiköhän ilman else-haaraa jo?)
 if [ $# -gt 0 ] ; then
 	mode=${1}
 	tgtfile=${2}
@@ -257,8 +257,8 @@ fi
 case ${mode} in
 	0)
 		tp1 ${tgtfile} ${distro}
-		tp2 ${tgtfile} ${distro}
 		tp3 ${tgtfile} ${distro}
+		tp2 ${tgtfile} ${distro}
 		tp4 ${tgtfile} ${distro}
 
 #		#${srat} -tf ${tgtfile} > ./MANIFEST
@@ -271,7 +271,7 @@ case ${mode} in
 		tp5 ${tgtfile}
 	;;
 	e)
-		tp4 ${tgtfile}
+		tp4 ${tgtfile} ${distro}
 	;;
 	-h)
 		echo "$0 0 tgtfile distro | $0 1 tgtfile distro"
