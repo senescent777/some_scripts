@@ -278,7 +278,7 @@ function part3() {
 		sleep 5
 		${odio} shred -fu ${1}/lib*.deb
 	else
-	 	dqb "exit 66" #TODO:jatkossa oikeasti exit?
+	 	exit 66
 	fi
 
 	${sdi} ${1}/*.deb
@@ -288,7 +288,7 @@ function part3() {
 		sleep 5
 		${odio} shred -fu ${1}/*.deb 
 	else
-	 	dqb "exit 67" #TODO:jatkossa oikeasti exit?
+	 	exit 67
 	fi
 
 	csleep 2
