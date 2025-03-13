@@ -23,6 +23,7 @@ mkt=$(sudo which mktemp)
 debug=1 #TODO: jos parametriksi
 
 if [ x"${tig}" == "x" ] ; then
+	#HUOM. kts alempaa mitä git tarvitsee
 	echo "sudo apt-get update;sudo apt-get install git"
 	exit 7
 fi
@@ -39,6 +40,7 @@ function pre() {
 	if [ -d ~/Desktop/minimize/${1} ] ; then
 		echo "5TNA"
 		sudo chmod 0755 ~/Desktop/minimize/${1}
+		#HUOM. pitäisköhän olla myös minimize/*.sh ?
 		sudo chmod 0755 ~/Desktop/minimize/${1}/*.sh
 		
 		#tai jos pre1:seen tämä jatkossa...
@@ -70,7 +72,6 @@ function pre2() {
 	fi
 } 
 
-#VAIH:$distro pars,metriksi
 function tp1() {
 	echo "tp1( ${1} , ${2} )"
 	[ z"${1}" == "z" ] && exit
@@ -82,8 +83,6 @@ function tp1() {
 
 	if [ -d ~/Desktop/minimize/${2} ] ; then
 		dqb "cleaning up ~/Desktop/minimize/${2} "
-		#${scm} 0755 ~/Desktop/minimize/${2} #pre tekee nö,mä jo
-		#${scm} 0755 ~/Desktop/minimize/${2}/*.sh
 		${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
 	fi
 
@@ -92,6 +91,8 @@ function tp1() {
 		
 		#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
 		#HUOM.110325: ei suoraan tar, miel find:in kautta
+		#TODO:jopsa vähitellen kasaisi tuon tar'in find:illa
+
 		#*.js ja *.json kai oleellisimmat kalat
 		#${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
 	fi
@@ -105,10 +106,8 @@ function tp1() {
 	sleep 3
 }
 
-#VAIH:$distro parametriksi
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
 #HUOM. erilllliseen oksennukseen liittyen kts main() , case e
-#VAIH:git tähän mukaan koska shred
 function tp4() {
 	echo "tp4( ${1} , ${2} )"
 	
@@ -126,17 +125,12 @@ function tp4() {
 		dqb "SHREDDED HUMANS"
 	fi
 
+	#HUOM.140325: ao. blokki liene ejo turha koska pre
 	if [ -s /etc/apt/sources.list.${2} ] ; then
 		${odio} rm /etc/apt/sources.list
 		${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
 	fi
 
-	#sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-	#${sifu} ${iface}
-	#${sag_u}
-
-	#pre2 ${2} #ajetaan main() puolella ennen tätä kpyen...
-	#[ $? -eq 0 ] || exit
 	dqb "EDIBLE AUTOPSY"
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
@@ -144,10 +138,7 @@ function tp4() {
 	${shary} iptables 	
 	${shary} iptables-persistent init-system-helpers netfilter-persistent
 
-	#actually necessary block
-	#TODO:glob muutt pois jatqssa jos mahd
-	#sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-	#${sifu} ${iface}
+	#actually necessary
 	pre2 ${2}
 
 	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
@@ -167,7 +158,7 @@ function tp4() {
 	sleep 5
 	#${lftr} 
 
-	#pkginfo:a katseltu git'n osalta 140325
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=git=1:2.39.2-1~bpo11+1
 	#${shary} mktemp
 	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
 	${shary} git-man git
@@ -215,7 +206,6 @@ function tp2() {
 	sleep 4
 }
 
-#VAIH:jopsa jatkossa ajaisi tp3 ennen tp2?
 function tp3() {
 	echo "tp3 ${1} ${2}"
 	[ y"${1}" == "y" ] && exit 1
@@ -230,14 +220,6 @@ function tp3() {
 	p=$(pwd)
 	q=$(mktemp -d)
 	cd ${q}
-	#[ $? -eq 0 ] || exit 55
-
-	#TODO:glob muutt pois jatqssa jos mahd
-	#HUOM. kohde.hmiston sisällön oikeudet syytä huiomioida (pre nyk sitä vrten)
-	#${odio} ~/Desktop/minimize/${2}/clouds.sh ${dnsm}
-	#${sifu} ${iface}
-	
-	#pre2 ${2}
 
 	${tig} clone https://github.com/senescent777/project.git
 	[ $? -eq 0 ] || exit 66
@@ -260,7 +242,6 @@ function tp3() {
 	sleep 4
 }
 
-#VAIH:$distro parametriksi
 function tpu() {
 	dqb "tpu( ${1}, ${2})"
 	[ y"${1}" == "y" ] && exit 1
@@ -270,12 +251,8 @@ function tpu() {
 	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 	dqb "params_ok"
 
-#	${odio} shred -fu ${pkgdir}/*.deb 
-#	${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
-#	${odio} ${d}/clouds.sh ${dnsm} 
-#	${sifu} ${iface}
-#pre2 ${2}
-
+#	${odio} shred -fu ${pkgdir}/*.deb #HUOM.pois kommenteista?
+	#TODO:ao. blokki mäkeen
 	if [ -s /etc/apt/sources.list.${2} ] ; then
 		${odio} rm /etc/apt/sources.list
 		${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
@@ -285,6 +262,7 @@ function tpu() {
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
 	${srat} -cf ${1} ~/Desktop/minimize/${2}/*.deb
 	${sifd} ${iface}
+
 	echo "SIELUNV1H0LL1N3N"
 }
 
@@ -303,15 +281,13 @@ function tp5() {
 	cd ${q}
 	[ $? -eq 0 ] || exit 77
 
-#pre2 ${2}
-#	#HUOM. prsofs kanssa olisi pikkuisen laittamista
-
 	${tig} clone https://github.com/senescent777/some_scripts.git
 	[ $? -eq 0 ] || exit 99
 
-	mv some_scripts/lib/export/profs* ~/Desktop/minimize #/${distro}/
+	mv some_scripts/lib/export/profs* ~/Desktop/minimize 
 	${scm} 0755 ~/Desktop/minimize/profs*
 	${srat} -rvf ${1} ~/Desktop/minimize/profs*
+
 	echo "AAMUNK01"
 }
 
