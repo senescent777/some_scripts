@@ -21,7 +21,7 @@ esac
 
 if [ -d ~/Desktop/minimize/${distro} ] && [ -s ~/Desktop/minimize/${distro}/conf ]; then
 	#HUOM. mielellään hanskat naulaan jos ei konf löydy
-	#TODO:konftdstosta pois oletus-mode koska x
+	
 	. ~/Desktop/minimize/${distro}/conf
 else
 	echo "CONFIG MISSING"; exit 55
@@ -110,12 +110,17 @@ function tp1() {
 	if [ ${enforce} -eq 1 ] ; then
 		${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
 		
-		#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
-		#HUOM.110325: ei suoraan tar, miel find:in kautta
-		#TODO:jopsa vähitellen kasaisi tuon tar'in find:illa
+		local tget
+		local p
+		local f
 
+		tget=$(ls ~/.mozilla/firefox/ | grep default-esr | tail -n 1)
+		p=$(pwd)
+		cd ~/.mozilla/firefox/${tget}
+		
+		for f in $(find . -name '*.js') ; do ${rat} -rf ~/Desktop/minimize/someparam.tar ${f} ; done
 		#*.js ja *.json kai oleellisimmat kalat
-		#${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
+		cd ${p}
 	fi
 
 	if [ ${debug} -eq 1 ] ; then
