@@ -94,10 +94,10 @@ function pre2() {
 } 
 
 function tp1() {
-	echo "tp1( ${1} , ${2} )"
+	dqb "tp1( ${1} , ${2} )"
 	[ z"${1}" == "z" ] && exit
-	echo "params_ok"
-	sleep 4
+	dqb "params_ok"
+	csleep 4
 
 	${scm} -R a-wx ~/Desktop/minimize/*
 	${scm} 0755 ~/Desktop/minimize
@@ -119,18 +119,18 @@ function tp1() {
 	fi
 
 	if [ ${debug} -eq 1 ] ; then
-		ls -las ~/Desktop/minimize/; sleep 10
+		ls -las ~/Desktop/minimize/; sleep 5
 	fi
 	
 	${srat} -cvf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
-	echo "tp1 d0n3"
-	sleep 3
+	dqb "tp1 d0n3"
+	csleep 3
 }
 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
 #HUOM. erilllliseen oksennukseen liittyen kts main() , case e
 function tp4() {
-	echo "tp4( ${1} , ${2} )"
+	dqb "tp4( ${1} , ${2} )"
 	
 	[ z"${1}" == "z" ] && exit 1
 	[ -s ${1} ] || exit 2
@@ -139,18 +139,12 @@ function tp4() {
 	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 
 	dqb "paramz_ok"
-	sleep 4
+	csleep 4
 
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
 		dqb "SHREDDED HUMANS"
 	fi
-
-	#HUOM.140325: ao. blokki liene ejo turha koska pre
-	#if [ -s /etc/apt/sources.list.${2} ] ; then
-	#	${odio} rm /etc/apt/sources.list
-	#	${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
-	#fi
 
 	dqb "EDIBLE AUTOPSY"
 
@@ -184,7 +178,7 @@ function tp4() {
 	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
 	${shary} git-man git
 
-	[ $? -eq 0 ] && echo "TOMB OF THE MUTILATED"	
+	[ $? -eq 0 ] && dqb "TOMB OF THE MUTILATED"	
 	sleep 6
 	${lftr}
 
@@ -198,16 +192,16 @@ function tp4() {
 	fi
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
-	echo "tp4 donew"
-	sleep 3
+	dqb "tp4 donew"
+	csleep 3
 }
 
 function tp2() {
-	echo "tp2 ${1} ${2}"
+	dqb "tp2 ${1} ${2}"
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
-	echo "params_ok"
-	sleep 5
+	dqb "params_ok"
+	csleep 5
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
@@ -223,16 +217,17 @@ function tp2() {
 
 	${srat} -rf ${1} /etc/init.d/net*
 	${srat} -rf ${1} /etc/rcS.d/S*net*
-	echo "tp2 done"
-	sleep 4
+
+	dqb "tp2 done"
+	csleep 4
 }
 
 function tp3() {
-	echo "tp3 ${1} ${2}"
+	dqb "tp3 ${1} ${2}"
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
-	echo "paramz_0k"
-	sleep 4
+	dqb "paramz_0k"
+	csleep 4
 
 	local p
 	local q	
@@ -259,8 +254,9 @@ function tp3() {
 	
 	cd ${p}
 	${sifd} ${iface}
-	echo "tp3 done"
-	sleep 4
+
+	dqb "tp3 done"
+	csleep 4
 }
 
 function tpu() {
@@ -272,30 +268,25 @@ function tpu() {
 	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 	dqb "params_ok"
 
-	${odio} shred -fu ${pkgdir}/*.deb #HUOM.pois kommenteista?
-	
-#	if [ -s /etc/apt/sources.list.${2} ] ; then
-#		${odio} rm /etc/apt/sources.list
-#		${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
-#	fi
+	${odio} shred -fu ${pkgdir}/*.deb
 
 	${sag} upgrade -u
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
 	${srat} -cf ${1} ~/Desktop/minimize/${2}/*.deb
 	${sifd} ${iface}
 
-	echo "SIELUNV1H0LL1N3N"
+	dqb "SIELUNV1H0LL1N3N"
 }
 
 #TODO:ao- if-blkkiin liittyen jos poistaisi ghubista minimize-hamistosta välistä sen /h/d-osuuden
 
 function tp5() {
-	echo "tp5 ${1} ${2}"
+	dqb "tp5 ${1} ${2}"
 	[ z"${1}" == "z" ] && exit 99
 	[ -s  ${1} ] || exit 98
 
-	echo "params ok"
-	sleep 5
+	dqb "params ok"
+	csleep 5
 
 	local q
 	q=$(mktemp -d)
@@ -309,16 +300,14 @@ function tp5() {
 	${scm} 0755 ~/Desktop/minimize/profs*
 	${srat} -rvf ${1} ~/Desktop/minimize/profs*
 
-	echo "AAMUNK01"
+	dqb "AAMUNK01"
 }
 
 dqb "mode= ${mode}"
 pre ${distro}
-#exit
 
 case ${mode} in
 	0)
-		#echo "uliuliuli"
 		tp1 ${tgtfile} ${distro}
 
 		pre ${distro}
