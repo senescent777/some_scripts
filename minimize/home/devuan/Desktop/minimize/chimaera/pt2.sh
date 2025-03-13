@@ -43,7 +43,6 @@ ${sharpy} gsasl* gsfonts* gstreamer*
 ${asy}
 sudo which dhclient; sudo which ifup; sleep 3
 
-
 ${smr} -rf /run/live/medium/live/initrd.img*
 sudo apt --fix-broken install
 ${sharpy} htop intel-microcode
@@ -55,7 +54,6 @@ ${sharpy} lvm2 mdadm
 ${asy}
 sleep 6
 sudo which dhclient; sudo which ifup; sleep 3
-
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 ${sharpy} mailcap mariadb-common
@@ -119,7 +117,9 @@ sleep 6
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb
-#HUOM. ne pari muutakin hmistoa voisi siivota, kts. daedaluksen versio
+#${odio} shred -fu ${d}/*.deb #or somethink like that
+#${odio} shred -fu /tmp/*.tar
+
 df
 #mimimize-hmiston siivous kanssa?
 sudo which dhclient; sudo which ifup; sleep 3

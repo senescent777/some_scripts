@@ -157,12 +157,13 @@ function check_binaries2() {
 #
 #=========================PART 0 ENDS HERE=================================================================
 function pr4() {
-	echo "pr4 (${1})"
+	dqb "pr4 (${1})"
 	${odio} shred -fu ${1}/stubby*
 	${odio} shred -fu ${1}/libgetdns*
 
 	#uutena
 	${odio} shred -fu ${1}/dnsmasq*
+	dqb "d0n3"
 }
 
 #VAIH:jompaan kumpaan(pp3/pr4) dnsmasq* poisto (pidemmällä tähtäimellä tietty parempi laittaa toimimaanq poistaa mutta nyt näin)
