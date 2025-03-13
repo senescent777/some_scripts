@@ -40,7 +40,7 @@ function pre() {
 	if [ -d ~/Desktop/minimize/${1} ] ; then
 		echo "5TNA"
 		sudo chmod 0755 ~/Desktop/minimize/${1}
-		#HUOM. pitäisköhän olla myös minimize/*.sh ?
+		sudo chmod 0755 ~/Desktop/minimize/*.sh
 		sudo chmod 0755 ~/Desktop/minimize/${1}/*.sh
 		
 		#tai jos pre1:seen tämä jatkossa...
