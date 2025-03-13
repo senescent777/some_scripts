@@ -56,14 +56,17 @@ if [ x"${mkt}" == "x" ] ; then
 	exit 8
 fi
 
-#TODO:$distro paatmetrt4iksi
+#VAIH:$distro paatmetrt4iksi
 function tp1() {
 	[ z"${1}" == "z" ] && exit
-
 	${scm} -R a-wx ~/Desktop/minimize/*
-	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
-	${scm} 0755 ~/Desktop/minimize/${distro}/*.sh
-	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
+	${scm} 0755 ~/Desktop/minimize
+
+	if [ -d ~/Desktop/minimize/${2} ]
+		${scm} 0755 ~/Desktop/minimize/${2} #${distro}
+		${scm} 0755 ~/Desktop/minimize/${2} #${distro}/*.sh
+		${odio} shred -fu ~/Desktop/minimize/${2} #${distro}/*.deb
+	fi
 
 	if [ ${enforce} -eq 1 ] ; then
 		${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
@@ -81,20 +84,26 @@ function tp1() {
 	${srat} -cvf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 }
 
-#TODO:$distro parametriksi
+#VAIH:$distro parametriksi
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
 #TODO:jatkossa nuo paketit erilliseen arkistoon varsinaiaseta oksennyksesta?
 function tp4() {
+	dqb "tp4( ${1} , ${2} )"
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
 	fi
 	
 	[ z"${1}" == "z" ] && exit 1
 	[ -s ${1} ] || exit 2
+	
+	[ z"${2}" == "z" ] && exit 11
+	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 
-	if [ -s /etc/apt/sources.list.${distro} ] ; then
+	dqb "paramz_ok"
+
+	if [ -s /etc/apt/sources.list.${2} ] ; then
 		${odio} rm /etc/apt/sources.list
-		${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
+		${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
 	fi
 
 	${sag_u}
@@ -126,11 +135,14 @@ function tp4() {
 	${lftr} 
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	${odio} shred -fu  ~/Desktop/minimize/${distro}/*.deb
+	if [ -d ~/Desktop/minimize/${2} ] ; then 
+		${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
+	
+		#HUOM.070325: varm vuoksi speksataan että *.deb
+		${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
+		${srat} -rf ${1} ~/Desktop/minimize/${2}/*.deb
+	fi
 
-	#HUOM.070325: varm vuoksi speksataan että *.deb
-	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
-	${srat} -rf ${1} ~/Desktop/minimize/${distro}/*.deb
 	#HUOM.260125: -p wttuun varm. vuoksi  
 }
 
@@ -187,24 +199,29 @@ function tp3() {
 	cd ${p}
 }
 
-#TODO:$distro parametriksi
+#VAIH:$distro parametriksi
 function tpu() {
+	dqb "tpu( ${1}, ${2})"
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] && exit 2
+	
+	[ z"${2}" == "z" ] && exit 11
+	[ -d  ~/Desktop/minimize/${2} ] || exit 22
+	dqb "params_ok"
 
 	${odio} shred -fu ${pkgdir}/*.deb 
-	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
+	${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
 	${odio} ${d}/clouds.sh ${dnsm} 
 	${sifu} ${iface}
 
-	if [ -s /etc/apt/sources.list.${distro} ] ; then
+	if [ -s /etc/apt/sources.list.${2} ] ; then
 		${odio} rm /etc/apt/sources.list
-		${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
+		${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
 	fi
 
 	${sag} upgrade -u
-	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
-	${srat} -cf ${1} ~/Desktop/minimize/${distro}/*.deb
+	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
+	${srat} -cf ${1} ~/Desktop/minimize/${2}/*.deb
 	${sifd} ${iface}
 }
 
@@ -239,10 +256,10 @@ fi
 
 case ${mode} in
 	0)
-		tp1 ${tgtfile}
-		tp2 ${tgtfile}
-		tp3 ${tgtfile}
-		tp4 ${tgtfile}
+		tp1 ${tgtfile} ${distro}
+		tp2 ${tgtfile} ${distro}
+		tp3 ${tgtfile} ${distro}
+		tp4 ${tgtfile} ${distro}
 
 #		#${srat} -tf ${tgtfile} > ./MANIFEST
 #		#${srat} -rf ${tgtfile} ./MANIFEST
