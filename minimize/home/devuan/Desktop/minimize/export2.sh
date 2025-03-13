@@ -251,12 +251,12 @@ function tpu() {
 	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 	dqb "params_ok"
 
-#	${odio} shred -fu ${pkgdir}/*.deb #HUOM.pois kommenteista?
-	#TODO:ao. blokki mäkeen
-	if [ -s /etc/apt/sources.list.${2} ] ; then
-		${odio} rm /etc/apt/sources.list
-		${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
-	fi
+	${odio} shred -fu ${pkgdir}/*.deb #HUOM.pois kommenteista?
+	
+#	if [ -s /etc/apt/sources.list.${2} ] ; then
+#		${odio} rm /etc/apt/sources.list
+#		${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
+#	fi
 
 	${sag} upgrade -u
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
