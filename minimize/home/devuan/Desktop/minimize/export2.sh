@@ -17,25 +17,6 @@ if [ $# -gt 2 ] ; then
 	fi
 fi
 
-#if [ -s ${d}/lib.sh ] ; then
-#	. ${d}/lib.sh
-#else
-#	srat="sudo /bin/tar"
-#	som="sudo /bin/mount"
-#	uom="sudo /bin/umount"
-#	dir=/mnt
-#	odio=$(which sudo)
-#	debug=1
-#	
-#	function dqb() {
-#		[ ${debug} -eq 1 ] && echo ${1}
-#	}
-#
-#	function csleep() {
-#		[ ${debug} -eq 1 ] && sleep ${1}
-#	}	
-#fi
-
 tig=$(sudo which git)
 
 if [ x"${tig}" == "x" ] ; then
@@ -86,7 +67,7 @@ function tp1() {
 
 #VAIH:$distro parametriksi
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
-#TODO:jatkossa nuo paketit erilliseen arkistoon varsinaiaseta oksennyksesta?
+#HUOM. erilllliseen oksennukseen liittyen kts main() , case e
 function tp4() {
 	dqb "tp4( ${1} , ${2} )"
 	if [ z"${pkgdir}" != "z" ] ; then 
@@ -260,9 +241,6 @@ case ${mode} in
 		tp3 ${tgtfile} ${distro}
 		tp2 ${tgtfile} ${distro}
 		tp4 ${tgtfile} ${distro}
-
-#		#${srat} -tf ${tgtfile} > ./MANIFEST
-#		#${srat} -rf ${tgtfile} ./MANIFEST
 	;;
 	1|u|upgrade)
 		tpu ${tgtfile}
