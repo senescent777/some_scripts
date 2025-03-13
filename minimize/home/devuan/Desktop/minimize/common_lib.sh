@@ -118,6 +118,7 @@ function pre_enforce() {
 	[ -f ${q}/meshuggah ] || exit
 	dqb "ANNOYING AMOUNT OF DEBUG"
 
+	#$n parametriksi jatkossa?
 	sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
 	sudo chmod 0660 ${q}/meshuggah	
 		
@@ -174,6 +175,7 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
+	#$n patametriksi?
 	if [ y"${n}" != "y" ] ; then
 		#josko vielä testaisi että $n asetettu ylipäänsä
 		${sco} -R ${n}:${n} ~
@@ -213,7 +215,7 @@ function part1() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-		#TODO:ne ppre_part3-jutut sopivaan kohtaan (etsipä jostain)
+		#TODO:ne ppre_part3-jutut sopivaan kohtaan? (daedalus->lib->check_bin)
 	else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
@@ -232,7 +234,7 @@ function part1() {
 		fi #	
 	fi
 
-	#VAIH:testaa tuo linkkaus-kikkailu
+	#HUOM.1303225:joskohan tänä blokki toimisi
 	if [ z"${pkgsrc}" != "z" ] ; then
 		local g
 		g=$(date +%F) 
@@ -256,7 +258,6 @@ function part1() {
 	${scm} a-w /etc/apt/sources.list
 	${sco} -R root:root /etc/apt 
 	${scm} -R a-w /etc/apt/
-
 	dqb "FOUR-LEGGED WHORE (maybe i have tourettes)"
 }
 
@@ -302,6 +303,7 @@ function ecfx() {
 	fi
 }
 
+#TODO:jos vähitellen teatsisi toiminnan
 function vommon() {
 	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd
