@@ -303,9 +303,10 @@ else
 	exit
 fi
 
+pre ${distro}
+
 case ${mode} in
 	0)
-		pre ${distro} #TODO:jatkossa ennen vase'a tämä
 		tp1 ${tgtfile} ${distro}
 
 		pre ${distro}
@@ -320,17 +321,14 @@ case ${mode} in
 		tp4 ${tgtfile} ${distro}
 	;;
 	1|u|upgrade)
-		pre ${distro}
 		pre2 ${distro}
 		tpu ${tgtfile} ${distro}
 	;;
 	p)
-		pre ${distro}
 		pre2 ${distro}
 		tp5 ${tgtfile}
 	;;
 	e)
-		pre ${distro}
 		pre2 ${distro}
 		tp4 ${tgtfile} ${distro}
 	;;
