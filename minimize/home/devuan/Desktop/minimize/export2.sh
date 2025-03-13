@@ -1,26 +1,48 @@
 #!/bin/bash
-d=$(dirname $0)
+d=$(dirname $0) #tarpeellinen?
 debug=1
+tgtfile=""
+distro=""
 
-if [ $# -gt 2 ] ; then
-	if [ -d ~/Desktop/minimize/${3} ] ; then
-		#HUOM. mielellään hanskat naulaan jos ei konf löydy
+case $# in
+#	2)
+#		distro=${2}
+#	;;
+	3)
+		tgtfile=${2}
 		distro=${3}
-		. ~/Desktop/minimize/${3}/conf
-	fi
+	;;
+	*)
+		echo "$0 <mode> <other_params>"
+	;;
+esac
+
+[ z"${distro}" == "z" ] && exit 6
+
+if [ -d ~/Desktop/minimize/${distro} ] && [ -s ~/Desktop/minimize/${distro}/conf ]; then
+	#HUOM. mielellään hanskat naulaan jos ei konf löydy
+	#TODO:konftdstosta pois oletus-mode koska x
+	. ~/Desktop/minimize/${distro}/conf
+else
+	echo "CONFIG MISSING"; exit 55
 fi
 
+debug=1
 . ~/Desktop/minimize/common_lib.sh
 
-if [ $# -gt 2 ] ; then
-	if [ -d ~/Desktop/minimize/${3} ] ; then
-		. ~/Desktop/minimize/${3}/lib.sh
-	fi
+if [ -d ~/Desktop/minimize/${distro} ] && [ -x ~/Desktop/minimize/${distro}/lib.sh ] ; then	
+	. ~/Desktop/minimize/${distro}/lib.sh
+else
+	echo "L1B M1SSING";exit 66
 fi
+
+#HUOM.140325:syystä tässä kohtaa mode'n asxetus näin (ennen common_lib rodnäk myös ok)
+mode=${1}
+dqb "mode= ${mode}"
 
 tig=$(sudo which git)
 mkt=$(sudo which mktemp)
-debug=1 #TODO: jos parametriksi
+#debug=1 #TODO: jos parametriksi
 
 if [ x"${tig}" == "x" ] ; then
 	#HUOM. kts alempaa mitä git tarvitsee
@@ -126,10 +148,10 @@ function tp4() {
 	fi
 
 	#HUOM.140325: ao. blokki liene ejo turha koska pre
-	if [ -s /etc/apt/sources.list.${2} ] ; then
-		${odio} rm /etc/apt/sources.list
-		${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
-	fi
+	#if [ -s /etc/apt/sources.list.${2} ] ; then
+	#	${odio} rm /etc/apt/sources.list
+	#	${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
+	#fi
 
 	dqb "EDIBLE AUTOPSY"
 
@@ -291,22 +313,13 @@ function tp5() {
 	echo "AAMUNK01"
 }
 
-mode=0
-tgtfile=""
-
-#parsetus josqs käyttöön, ehkä (pärjäisiköhän ilman else-haaraa jo?)
-if [ $# -gt 0 ] ; then
-	mode=${1}
-	tgtfile=${2}
-else
-	echo "-h"
-	exit
-fi
-
+dqb "mode= ${mode}"
 pre ${distro}
+#exit
 
 case ${mode} in
 	0)
+		#echo "uliuliuli"
 		tp1 ${tgtfile} ${distro}
 
 		pre ${distro}
@@ -331,12 +344,6 @@ case ${mode} in
 	e)
 		pre2 ${distro}
 		tp4 ${tgtfile} ${distro}
-	;;
-	-h)
-		echo "$0 0 tgtfile distro | $0 1 tgtfile distro"
-	;;
-	*)
-		echo "-h"
 	;;
 esac
 
