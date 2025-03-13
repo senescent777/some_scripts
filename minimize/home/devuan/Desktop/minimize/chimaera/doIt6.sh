@@ -45,7 +45,7 @@ check_params
 enforce_access ${n} 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-part1 ${n} 
+part1 ${distro} 
 [ ${mode} -eq 0 ] && exit
 
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ; do

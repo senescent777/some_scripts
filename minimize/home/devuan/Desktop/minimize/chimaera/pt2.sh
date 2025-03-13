@@ -117,8 +117,8 @@ sleep 6
 
 ${smr} -rf /run/live/medium/live/initrd.img*
 sudo shred -fu /var/cache/apt/archives/*.deb
-#${odio} shred -fu ${d}/*.deb #or somethink like that
-#${odio} shred -fu /tmp/*.tar
+#${odio} shred -fu ${d}/*.deb #or somethink like that (TODO)
+#${odio} shred -fu /tmp/*.tar (TODO)
 
 df
 #mimimize-hmiston siivous kanssa?
