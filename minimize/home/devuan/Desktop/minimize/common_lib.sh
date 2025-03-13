@@ -267,9 +267,11 @@ function part3() {
 	[ -d ${1} ] || exit 2
 
 	dqb "22 ${sdi} ${1}/lib*.deb"
+	[ z"${sdi}" == "z" ] && exit 33
+	[ -x ${sdi} ] || exit 44
 	${sdi} ${1}/lib*.deb
 
-	#TODO:varmistus jotta sdi eityhjä+ajokelpoinen ennenq... (oikeastaan check_binaries* pitäisi hoitaa)
+	#VAIH:varmistus jotta sdi eityhjä+ajokelpoinen ennenq... (oikeastaan check_binaries* pitäisi hoitaa)
 
 	if [ $? -eq  0 ] ; then
 		dqb "part3.1 ok"
