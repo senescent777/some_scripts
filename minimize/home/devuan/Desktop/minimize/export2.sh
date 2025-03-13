@@ -167,9 +167,10 @@ function tp4() {
 	sleep 5
 	#${lftr} 
 
-	#pkginfo:a voisi taas konsukltoida...
+	#pkginfo:a katseltu git'n osalta 140325
 	#${shary} mktemp
-	${shary} libcurl3-gnutls liberror-perl git-man git
+	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
+	${shary} git-man git
 
 	[ $? -eq 0 ] && echo "TOMB OF THE MUTILATED"	
 	sleep 6
