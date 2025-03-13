@@ -132,6 +132,7 @@ function check_binaries() {
 	csleep 3
 }
 
+#voisikohan jatkkossa yhdenmuakistaa chimaeran version kanssa?
 function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
 

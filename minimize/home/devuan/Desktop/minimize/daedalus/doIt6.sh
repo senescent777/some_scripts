@@ -42,11 +42,11 @@ if [ $# -gt 0 ] ; then
 fi
 
 check_params 
-[ ${enforce} -eq 1 ] && pre_enforce
-enforce_access 
+[ ${enforce} -eq 1 ] && pre_enforce ${n}
+enforce_access ${n}
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-part1
+part1 ${distro}
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
