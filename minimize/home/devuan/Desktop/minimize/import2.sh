@@ -54,8 +54,8 @@ function common_part() {
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
 
-	[ y"${2}" == "y" ] && exit 11
-	[ -d ~/Desktop/minimize/${2} ] || exit 222
+	#[ y"${2}" == "y" ] && exit 11
+	
 
 	dqb "paramz_0k"
 
@@ -67,14 +67,19 @@ function common_part() {
 	dqb "tar DONE"
 
 	${scm} -R a-wx ~/Desktop/minimize/*
-	${scm} 0755  ~/Desktop/minimize/*.sh
+	${scm} 0755 ~/Desktop/minimize/*.sh
+
+	#tämä pois jatkossa?
 	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} a-wx ${f}/* ; done 
 	
 	#jos nyt olisi hyvä...	
 	${scm} 0755 ~/Desktop/minimize
-	${scm} 0755 ~/Desktop/minimize/${2}
-	${scm} a+x ~/Desktop/minimize/${2}/*.sh
-	${scm} 0444 ~/Desktop/minimize/${2}/conf*
+	
+	if [ -d ~/Desktop/minimize/${2}] ; then 
+		${scm} 0755 ~/Desktop/minimize/${2}
+		${scm} a+x ~/Desktop/minimize/${2}/*.sh
+		${scm} 0444 ~/Desktop/minimize/${2}/conf*
+	fi
 
 	${scm} 0777 /tmp
 	${sco} root:root /tmp #oik. o=rwt mutta rwx kai tarpeeksi hyvä useimpiin tarkoituksiin
@@ -140,7 +145,7 @@ case "${1}" in
 		dqb " ${3} ${distro} MN"
 		csleep 2
 
-		common_part ${file}		
+		common_part ${file} ${distro}		
 		pre_part3 ~/Desktop/minimize/${distro}
 		pr4 ~/Desktop/minimize/${distro}
 		part3 ~/Desktop/minimize/${distro}

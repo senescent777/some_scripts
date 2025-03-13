@@ -1,6 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
-#[ -s ${d}/conf ] && . ${d}/conf
+debug=0
 
 if [ $# -gt 2 ] ; then
 	if [ -d ~/Desktop/minimize/${3} ] ; then
@@ -56,6 +56,7 @@ if [ x"${mkt}" == "x" ] ; then
 	exit 8
 fi
 
+#TODO:$distro paatmetrt4iksi
 function tp1() {
 	[ z"${1}" == "z" ] && exit
 
@@ -80,9 +81,9 @@ function tp1() {
 	${srat} -cvf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 }
 
+#TODO:$distro parametriksi
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
 #TODO:jatkossa nuo paketit erilliseen arkistoon varsinaiaseta oksennyksesta?
-#VAIH:jatkossa distro-kohtaiset sources-list-tdstot
 function tp4() {
 	if [ z"${pkgdir}" != "z" ] ; then 
 		${odio} shred -fu ${pkgdir}/*.deb
@@ -153,7 +154,7 @@ function tp2() {
 	${srat} -rf ${1} /etc/rcS.d/S*net*
 }
 
-#jopsa jatkossa ajaisi tp3 ennen tp2?
+#TODO:jopsa jatkossa ajaisi tp3 ennen tp2?
 function tp3() {
 	dqb "tp3 ${1}"
 	[ y"${1}" == "y" ] && exit 1
@@ -186,6 +187,7 @@ function tp3() {
 	cd ${p}
 }
 
+#TODO:$distro parametriksi
 function tpu() {
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] && exit 2
@@ -203,7 +205,6 @@ function tpu() {
 	${sag} upgrade -u
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
 	${srat} -cf ${1} ~/Desktop/minimize/${distro}/*.deb
-
 	${sifd} ${iface}
 }
 

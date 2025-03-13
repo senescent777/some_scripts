@@ -118,12 +118,17 @@ function pre_enforce() {
 	[ -f ${q}/meshuggah ] || exit
 	dqb "ANNOYING AMOUNT OF DEBUG"
 
-	#$n parametriksi jatkossa?
-	sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
-	sudo chmod 0660 ${q}/meshuggah	
-		
+	#VAIH:$n parametriksi jatkossa?
+	#sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
+	#sudo chmod 0660 ${q}/meshuggah	
+
+	if [ z"${2}" != "z" ] ; then
+		dqb "333"
+		${odio} chown ${2}:${2} ${q}/meshuggah 
+ 		${odio} chmod 0660 ${q}/meshuggah	
+	fi	
+	
 	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
-	#TODO:clouds: a) nimeäminen fiksummin 
 	for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
 	
 	if [ -s ${q}/meshuggah ] ; then
@@ -175,10 +180,9 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
-	#$n patametriksi?
-	if [ y"${n}" != "y" ] ; then
-		#josko vielä testaisi että $n asetettu ylipäänsä
-		${sco} -R ${n}:${n} ~
+	#VAIH:$n paRametriksi?
+	if [ y"${2}" != "y" ] ; then
+		${sco} -R ${2}:${2} ~
 		csleep 5
 	fi
 	
@@ -204,6 +208,7 @@ function enforce_access() {
 	${sco} root:root /tmp
 }
 
+#TODO:$distro parametriksi
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}
@@ -236,23 +241,25 @@ function part1() {
 
 	#HUOM.1303225:joskohan tänä blokki toimisi
 	if [ z"${pkgsrc}" != "z" ] ; then
-		local g
-		g=$(date +%F) 
-		dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
-		csleep 5
-		[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+		if [ ! -s /etc/apt/sources.list.${distro} ] ; then
+			local g
+			g=$(date +%F) 
+			dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
+			csleep 5
 
-		sudo touch /etc/apt/sources.list.${distro}
-		${scm} a+w /etc/apt/sources.list.${distro}
+			[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+			sudo touch /etc/apt/sources.list.${distro}
+			${scm} a+w /etc/apt/sources.list.${distro}
 
-		for x in ${distro} ${distro}-updates ${distro}-security ; do
-			echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${distro} 
-		done
+			for x in ${distro} ${distro}-updates ${distro}-security ; do
+				echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${distro} 
+			done
 		
-		#slinky
-		${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
-		[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
-		csleep 5
+			#slinky
+			${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
+			[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
+			csleep 5
+		fi
 	fi
 
 	${scm} a-w /etc/apt/sources.list
@@ -262,13 +269,14 @@ function part1() {
 }
 
 function part3() {
+	dqb "part3()"
 	[ y"${1}" == "y" ] && exit 1
 	dqb "11"
 	[ -d ${1} ] || exit 2
 
-	dqb "22 ${sdi} ${1}/lib*.deb"
+	dqb "22 ${sdi} ${1} \/ lib\*.deb"
 	[ z"${sdi}" == "z" ] && exit 33
-	[ -x ${sdi} ] || exit 44
+	#[ -x ${sdi} ] || exit 44 #1. kokeilulla pyki, jemmaan
 	${sdi} ${1}/lib*.deb
 
 	#VAIH:varmistus jotta sdi eityhjä+ajokelpoinen ennenq... (oikeastaan check_binaries* pitäisi hoitaa)
