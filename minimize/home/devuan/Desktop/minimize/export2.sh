@@ -55,23 +55,22 @@ if [ x"${mkt}" == "x" ] ; then
 	exit 8
 fi
 
-#TODO:jatkjossa yleisemmän kaavan mukaan nuo sudotukset
 function pre() {
 	[ x"${1}" == "z" ] && exit 666
 
 	if [ -d ~/Desktop/minimize/${1} ] ; then
-		echo "5TNA"
-		sudo chmod 0755 ~/Desktop/minimize/${1}
-		sudo chmod 0755 ~/Desktop/minimize/*.sh
-		sudo chmod 0755 ~/Desktop/minimize/${1}/*.sh
+		dqb "5TNA"
+		${scm} 0755 ~/Desktop/minimize/${1}
+		${scm} 0755 ~/Desktop/minimize/*.sh
+		${scm} 0755 ~/Desktop/minimize/${1}/*.sh
 		
 		#tai jos pre1:seen tämä jatkossa...
 		if [ -s /etc/apt/sources.list.${1} ] ; then
-			${odio} rm /etc/apt/sources.list
-			${odio} ln -s /etc/apt/sources.list.${1} /etc/apt/sources.list
+			${smr} /etc/apt/sources.list
+			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list
 		fi
 
-		sleep 3
+		csleep 3
 	else
 		echo "P.V.HH"
 		exit 111
@@ -83,11 +82,11 @@ function pre2() {
 	[ x"${1}" == "z" ] && exit 666
 
 	if [ -d ~/Desktop/minimize/${1} ] ; then
-		echo "PRKL"
-		sudo ~/Desktop/minimize/${1}/clouds.sh ${dnsm}
-		sudo /sbin/ifup ${iface}
+		dqb "PRKL"
+		${odio} ~/Desktop/minimize/${1}/clouds.sh ${dnsm}
+		${sifu} ${iface}
 
-		sudo apt-get update
+		${sag_u}
 	else
 		echo "P.V.HH"
 		exit 111
