@@ -18,7 +18,6 @@ if [ x"${mkt}" == "x" ] ; then
 	exit 7
 fi
 
-
 if [ $# -gt 0 ] ; then
 	dqb "params_ok"
 else
@@ -39,6 +38,7 @@ echo "cd \$q"
 echo "${tig} clone https://github.com/senescent777/some_scripts"
 echo "cd some_scripts/minimize"
 
+#TODO:ao- if-blkkiin liittyen jos poistaisi ghubista minimize-hamistosta välistä sen /h/d-osuuden
 if [ -d /home/devuan/Desktop/minimize ] ; then
 	echo "shred -fu ~/Desktop/minimize/* "
 	echo "rm -rf ~/Desktop/minimize/*"

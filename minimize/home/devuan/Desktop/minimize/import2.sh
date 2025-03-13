@@ -55,8 +55,6 @@ function common_part() {
 	[ -s ${1} ] || exit 2
 
 	#[ y"${2}" == "y" ] && exit 11
-	
-
 	dqb "paramz_0k"
 
 	cd /
@@ -75,7 +73,7 @@ function common_part() {
 	#jos nyt olisi hyvä...	
 	${scm} 0755 ~/Desktop/minimize
 	
-	if [ -d ~/Desktop/minimize/${2}] ; then 
+	if [ -d ~/Desktop/minimize/${2} ] ; then 
 		${scm} 0755 ~/Desktop/minimize/${2}
 		${scm} a+x ~/Desktop/minimize/${2}/*.sh
 		${scm} 0444 ~/Desktop/minimize/${2}/conf*
@@ -85,6 +83,8 @@ function common_part() {
 	${sco} root:root /tmp #oik. o=rwt mutta rwx kai tarpeeksi hyvä useimpiin tarkoituksiin
 	dqb "ALL DONE"
 }
+
+#TODO:ao- if-blkkiin liittyen jos poistaisi ghubista minimize-hamistosta välistä sen /h/d-osuuden
 
 case "${1}" in
 	-1)
@@ -104,8 +104,8 @@ case "${1}" in
 		#HUOM.120325: saattaa toimia qhan tuo distro
 		distro=${2}
 		[ -s ~/Desktop/minimize/${distro}/conf ] && . ~/Desktop/minimize/${distro}/conf
-		part=/dev/disk/by-uuid/${part0}		
-		[ -b ${part} ] || dqb "no such thing as ${part}"
+		#part=/dev/disk/by-uuid/${part0}		
+		#[ -b ${part} ] || dqb "no such thing as ${part}"
 
 		${uom} ${dir}
 		csleep 3

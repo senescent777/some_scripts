@@ -1,9 +1,10 @@
 #!/bin/bash
 d=$(dirname $0)
-debug=0
+debug=1
 
 if [ $# -gt 2 ] ; then
 	if [ -d ~/Desktop/minimize/${3} ] ; then
+		#HUOM. mielellään hanskat naulaan jos ei konf löydy
 		distro=${3}
 		. ~/Desktop/minimize/${3}/conf
 	fi
@@ -18,35 +19,72 @@ if [ $# -gt 2 ] ; then
 fi
 
 tig=$(sudo which git)
+mkt=$(sudo which mktemp)
+debug=1 #TODO: jos parametriksi
 
 if [ x"${tig}" == "x" ] ; then
-	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot (kts chimaera/lib että löytyykö nuo)
-	#echo "${sag_u}"
-	#echo "${shary} git"
 	echo "sudo apt-get update;sudo apt-get install git"
 	exit 7
 fi
 
-mkt=$(sudo which mktemp)
-
 if [ x"${mkt}" == "x" ] ; then
-	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot
-	#echo "${sag_u}"
-	#echo "${shary} mktemp"
 	echo "sudo apt-get update;sudo apt-get install mktemp"
 	exit 8
 fi
 
-#VAIH:$distro paatmetrt4iksi
+#TODO:jatkjossa yleisemmän kaavan mukaan nuo sudotukset
+function pre() {
+	[ x"${1}" == "z" ] && exit 666
+
+	if [ -d ~/Desktop/minimize/${1} ] ; then
+		echo "5TNA"
+		sudo chmod 0755 ~/Desktop/minimize/${1}
+		sudo chmod 0755 ~/Desktop/minimize/${1}/*.sh
+		
+		#tai jos pre1:seen tämä jatkossa...
+		if [ -s /etc/apt/sources.list.${1} ] ; then
+			${odio} rm /etc/apt/sources.list
+			${odio} ln -s /etc/apt/sources.list.${1} /etc/apt/sources.list
+		fi
+
+		sleep 3
+	else
+		echo "P.V.HH"
+		exit 111
+	fi
+}
+
+#TODO:glob muutt pois jatqssa jos mahd
+function pre2() {
+	[ x"${1}" == "z" ] && exit 666
+
+	if [ -d ~/Desktop/minimize/${1} ] ; then
+		echo "PRKL"
+		sudo ~/Desktop/minimize/${1}/clouds.sh ${dnsm}
+		sudo /sbin/ifup ${iface}
+
+		sudo apt-get update
+	else
+		echo "P.V.HH"
+		exit 111
+	fi
+} 
+
+#VAIH:$distro pars,metriksi
 function tp1() {
+	echo "tp1( ${1} , ${2} )"
 	[ z"${1}" == "z" ] && exit
+	echo "params_ok"
+	sleep 4
+
 	${scm} -R a-wx ~/Desktop/minimize/*
 	${scm} 0755 ~/Desktop/minimize
 
-	if [ -d ~/Desktop/minimize/${2} ]
-		${scm} 0755 ~/Desktop/minimize/${2} #${distro}
-		${scm} 0755 ~/Desktop/minimize/${2} #${distro}/*.sh
-		${odio} shred -fu ~/Desktop/minimize/${2} #${distro}/*.deb
+	if [ -d ~/Desktop/minimize/${2} ] ; then
+		dqb "cleaning up ~/Desktop/minimize/${2} "
+		#${scm} 0755 ~/Desktop/minimize/${2} #pre tekee nö,mä jo
+		#${scm} 0755 ~/Desktop/minimize/${2}/*.sh
+		${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
 	fi
 
 	if [ ${enforce} -eq 1 ] ; then
@@ -63,16 +101,16 @@ function tp1() {
 	fi
 	
 	${srat} -cvf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
+	echo "tp1 d0n3"
+	sleep 3
 }
 
 #VAIH:$distro parametriksi
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
 #HUOM. erilllliseen oksennukseen liittyen kts main() , case e
+#VAIH:git tähän mukaan koska shred
 function tp4() {
-	dqb "tp4( ${1} , ${2} )"
-	if [ z"${pkgdir}" != "z" ] ; then 
-		${odio} shred -fu ${pkgdir}/*.deb
-	fi
+	echo "tp4( ${1} , ${2} )"
 	
 	[ z"${1}" == "z" ] && exit 1
 	[ -s ${1} ] || exit 2
@@ -81,14 +119,25 @@ function tp4() {
 	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 
 	dqb "paramz_ok"
+	sleep 4
+
+	if [ z"${pkgdir}" != "z" ] ; then 
+		${odio} shred -fu ${pkgdir}/*.deb
+		dqb "SHREDDED HUMANS"
+	fi
 
 	if [ -s /etc/apt/sources.list.${2} ] ; then
 		${odio} rm /etc/apt/sources.list
 		${odio} ln -s /etc/apt/sources.list.${2} /etc/apt/sources.list
 	fi
 
-	${sag_u}
-	[ $? -eq 0 ] || exit
+	#sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	#${sifu} ${iface}
+	#${sag_u}
+
+	#pre2 ${2} #ajetaan main() puolella ennen tätä kpyen...
+	#[ $? -eq 0 ] || exit
+	dqb "EDIBLE AUTOPSY"
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 
@@ -96,9 +145,10 @@ function tp4() {
 	${shary} iptables-persistent init-system-helpers netfilter-persistent
 
 	#actually necessary block
-	#TODO:glob muutt pois jatqssa
-	sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-	${sifu} ${iface}
+	#TODO:glob muutt pois jatqssa jos mahd
+	#sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
+	#${sifu} ${iface}
+	pre2 ${2}
 
 	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
 	${shary} runit-helper
@@ -113,7 +163,17 @@ function tp4() {
 	${shary} libgetdns10 libbsd0 libidn2-0 libssl3 libunbound8 libyaml-0-2 #sotkeekohan libc6 uudelleenas tässä?
 	${shary} stubby
 
-	${lftr} 
+	echo "${shary} git mktemp in 4 secs"
+	sleep 5
+	#${lftr} 
+
+	#pkginfo:a voisi taas konsukltoida...
+	#${shary} mktemp
+	${shary} liberror-perl git-man git
+
+	[ $? -eq 0 ] && echo "TOMB OF THE MUTILATED"	
+	sleep 6
+	${lftr}
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
 	if [ -d ~/Desktop/minimize/${2} ] ; then 
@@ -125,11 +185,16 @@ function tp4() {
 	fi
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
+	echo "tp4 donew"
+	sleep 3
 }
 
 function tp2() {
+	echo "tp2 ${1} ${2}"
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
+	echo "params_ok"
+	sleep 5
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
@@ -145,14 +210,17 @@ function tp2() {
 
 	${srat} -rf ${1} /etc/init.d/net*
 	${srat} -rf ${1} /etc/rcS.d/S*net*
+	echo "tp2 done"
+	sleep 4
 }
 
 #VAIH:jopsa jatkossa ajaisi tp3 ennen tp2?
 function tp3() {
-	dqb "tp3 ${1}"
+	echo "tp3 ${1} ${2}"
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
-	dqb "paramz_0k"
+	echo "paramz_0k"
+	sleep 4
 
 	local p
 	local q	
@@ -161,7 +229,14 @@ function tp3() {
 	p=$(pwd)
 	q=$(mktemp -d)
 	cd ${q}
-	[ $? -eq 0 ] || exit 55
+	#[ $? -eq 0 ] || exit 55
+
+	#TODO:glob muutt pois jatqssa jos mahd
+	#HUOM. kohde.hmiston sisällön oikeudet syytä huiomioida (pre nyk sitä vrten)
+	#${odio} ~/Desktop/minimize/${2}/clouds.sh ${dnsm}
+	#${sifu} ${iface}
+	
+	#pre2 ${2}
 
 	${tig} clone https://github.com/senescent777/project.git
 	[ $? -eq 0 ] || exit 66
@@ -177,7 +252,11 @@ function tp3() {
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
 	${srat} -rf ${1} ./etc ./sbin 
+	
 	cd ${p}
+	${sifd} ${iface}
+	echo "tp3 done"
+	sleep 4
 }
 
 #VAIH:$distro parametriksi
@@ -190,10 +269,11 @@ function tpu() {
 	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 	dqb "params_ok"
 
-	${odio} shred -fu ${pkgdir}/*.deb 
-	${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
-	${odio} ${d}/clouds.sh ${dnsm} 
-	${sifu} ${iface}
+#	${odio} shred -fu ${pkgdir}/*.deb 
+#	${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
+#	${odio} ${d}/clouds.sh ${dnsm} 
+#	${sifu} ${iface}
+#pre2 ${2}
 
 	if [ -s /etc/apt/sources.list.${2} ] ; then
 		${odio} rm /etc/apt/sources.list
@@ -204,23 +284,34 @@ function tpu() {
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
 	${srat} -cf ${1} ~/Desktop/minimize/${2}/*.deb
 	${sifd} ${iface}
+	echo "SIELUNV1H0LL1N3N"
 }
 
+#TODO:ao- if-blkkiin liittyen jos poistaisi ghubista minimize-hamistosta välistä sen /h/d-osuuden
+
 function tp5() {
-	dqb "5FF0RP"
+	echo "tp5 ${1} ${2}"
+	[ z"${1}" == "z" ] && exit 99
+	[ -s  ${1} ] || exit 98
+
+	echo "params ok"
+	sleep 5
 
 	local q
 	q=$(mktemp -d)
 	cd ${q}
 	[ $? -eq 0 ] || exit 77
 
-	#HUOM. prsofs kanssa olisi pikkuisen laittamista
+#pre2 ${2}
+#	#HUOM. prsofs kanssa olisi pikkuisen laittamista
+
 	${tig} clone https://github.com/senescent777/some_scripts.git
 	[ $? -eq 0 ] || exit 99
 
 	mv some_scripts/lib/export/profs* ~/Desktop/minimize #/${distro}/
 	${scm} 0755 ~/Desktop/minimize/profs*
 	${srat} -rvf ${1} ~/Desktop/minimize/profs*
+	echo "AAMUNK01"
 }
 
 mode=0
@@ -237,18 +328,33 @@ fi
 
 case ${mode} in
 	0)
+		pre ${distro} #TODO:jatkossa ennen vase'a tämä
 		tp1 ${tgtfile} ${distro}
+
+		pre ${distro}
+		pre2 ${distro}		
 		tp3 ${tgtfile} ${distro}
+
+		pre ${distro}
 		tp2 ${tgtfile} ${distro}
+
+		pre ${distro}
+		pre2 ${distro}
 		tp4 ${tgtfile} ${distro}
 	;;
 	1|u|upgrade)
-		tpu ${tgtfile}
+		pre ${distro}
+		pre2 ${distro}
+		tpu ${tgtfile} ${distro}
 	;;
 	p)
+		pre ${distro}
+		pre2 ${distro}
 		tp5 ${tgtfile}
 	;;
 	e)
+		pre ${distro}
+		pre2 ${distro}
 		tp4 ${tgtfile} ${distro}
 	;;
 	-h)

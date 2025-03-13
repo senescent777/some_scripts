@@ -84,13 +84,13 @@ function gpo() {
 #TODO:gpo jo käyttöön?
 
 function mangle_s() {
-	local tgt
+	local tgt #turha
 	[ y"${1}" == "y" ] && exit
 	[ -x ${1} ] || exit  #oli -s
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit  
 
-	tgt=${2}
+	tgt=${2} #turha
 
 	sudo chmod 0555 ${1}
 	#HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
@@ -122,9 +122,9 @@ function pre_enforce() {
 	#sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
 	#sudo chmod 0660 ${q}/meshuggah	
 
-	if [ z"${2}" != "z" ] ; then
+	if [ z"${1}" != "z" ] ; then
 		dqb "333"
-		${odio} chown ${2}:${2} ${q}/meshuggah 
+		${odio} chown ${1}:${1} ${q}/meshuggah 
  		${odio} chmod 0660 ${q}/meshuggah	
 	fi	
 	
@@ -181,8 +181,9 @@ function enforce_access() {
 	${scm} 0755 /home
 
 	#VAIH:$n paRametriksi?
-	if [ y"${2}" != "y" ] ; then
-		${sco} -R ${2}:${2} ~
+	if [ y"${1}" != "y" ] ; then
+		dqb "444"
+		${sco} -R ${1}:${1} ~
 		csleep 5
 	fi
 	
@@ -208,7 +209,7 @@ function enforce_access() {
 	${sco} root:root /tmp
 }
 
-#TODO:$distro parametriksi
+#VAIH:$distro parametriksi
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}
@@ -241,28 +242,33 @@ function part1() {
 
 	#HUOM.1303225:joskohan tänä blokki toimisi
 	if [ z"${pkgsrc}" != "z" ] ; then
-		if [ ! -s /etc/apt/sources.list.${distro} ] ; then
+		#if [ ! -s /etc/apt/sources.list.${distro 
+		#HUOM.130325:tulisi kai tarkistaa se minimizen alihmiston olemassaolo kanssa
+		if [ ! -s /etc/apt/sources.list.${1} ] ; then
 			local g
 			g=$(date +%F) 
 			dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
 			csleep 5
 
 			[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
-			sudo touch /etc/apt/sources.list.${distro}
-			${scm} a+w /etc/apt/sources.list.${distro}
+			sudo touch /etc/apt/sources.list.${1} #${distro}
+			${scm} a+w /etc/apt/sources.list.${1} #${distro}
 
-			for x in ${distro} ${distro}-updates ${distro}-security ; do
-				echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${distro} 
+			#for x in ${distro} ${distro}-updates ${distro}-security ; do
+			for x in ${1} ${1}-updates ${1}-security ; do
+				echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${1} #${distro} 
 			done
 		
 			#slinky
-			${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
+			#${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
+			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list			
+
 			[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
 			csleep 5
 		fi
 	fi
 
-	${scm} a-w /etc/apt/sources.list
+	#${scm} a-w /etc/apt/sources.list
 	${sco} -R root:root /etc/apt 
 	${scm} -R a-w /etc/apt/
 	dqb "FOUR-LEGGED WHORE (maybe i have tourettes)"
@@ -274,11 +280,12 @@ function part3() {
 	dqb "11"
 	[ -d ${1} ] || exit 2
 
-	dqb "22 ${sdi} ${1} \/ lib\*.deb"
+	dqb "22 ${sdi} ${1} / lib\*.deb"
 	[ z"${sdi}" == "z" ] && exit 33
-	#[ -x ${sdi} ] || exit 44 #1. kokeilulla pyki, jemmaan
+	#[ -x ${sdi} ] || exit 44 #1. kokeilulla pyki, jemmaan toistaiseksi
+	
 	${sdi} ${1}/lib*.deb
-
+	#TODO:pitäisi kai mennä findin kautta jottei kosahda sopivanlaistan .deb-tdstojen puutteeseen
 	#VAIH:varmistus jotta sdi eityhjä+ajokelpoinen ennenq... (oikeastaan check_binaries* pitäisi hoitaa)
 
 	if [ $? -eq  0 ] ; then
@@ -286,7 +293,7 @@ function part3() {
 		sleep 5
 		${odio} shred -fu ${1}/lib*.deb
 	else
-	 	exit 66
+	 	dqb "exit 66"
 	fi
 
 	${sdi} ${1}/*.deb
@@ -296,7 +303,7 @@ function part3() {
 		sleep 5
 		${odio} shred -fu ${1}/*.deb 
 	else
-	 	exit 67
+	 	dqb "exit 67"
 	fi
 
 	csleep 2
