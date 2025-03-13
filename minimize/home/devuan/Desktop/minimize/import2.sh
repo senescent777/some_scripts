@@ -48,10 +48,15 @@ fi
 dqb "b3f0r3 par51ng tha param5"
 csleep 5
 
-#TODO:$sidtro voisi olla $2 jatkossa
+#VAIH:$sidtro voisi olla $2 jatkossa
 function common_part() {
+	dqb "common_part()"
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
+
+	[ y"${2}" == "y" ] && exit 11
+	[ -d ~/Desktop/minimize/${2} ] || exit 222
+
 	dqb "paramz_0k"
 
 	cd /
@@ -59,6 +64,7 @@ function common_part() {
 	csleep 3
 	${srat} -xf ${1} #HUOM.260125: -p wttuun varm. vuoksi  
 	csleep 3
+	dqb "tar DONE"
 
 	${scm} -R a-wx ~/Desktop/minimize/*
 	${scm} 0755  ~/Desktop/minimize/*.sh
@@ -66,12 +72,13 @@ function common_part() {
 	
 	#jos nyt olisi hyvä...	
 	${scm} 0755 ~/Desktop/minimize
-	${scm} 0755 ~/Desktop/minimize/${distro}
-	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
-	${scm} 0444 ~/Desktop/minimize/${distro}/conf*
+	${scm} 0755 ~/Desktop/minimize/${2}
+	${scm} a+x ~/Desktop/minimize/${2}/*.sh
+	${scm} 0444 ~/Desktop/minimize/${2}/conf*
 
 	${scm} 0777 /tmp
 	${sco} root:root /tmp #oik. o=rwt mutta rwx kai tarpeeksi hyvä useimpiin tarkoituksiin
+	dqb "ALL DONE"
 }
 
 case "${1}" in
@@ -103,12 +110,13 @@ case "${1}" in
 	;;
 	1)
 		file=${2}
+		distro=${3}
 
 		#HUOM.120325: näköjään toimii jo
 		[ x"${file}" == "x" ] && exit 44
 		[ -s ${file} ] || exit 55
 
-		common_part ${file}
+		common_part ${file} ${distro}
 		csleep 3
 		cd ${olddir}
 		echo "NEXT: $0 2"
