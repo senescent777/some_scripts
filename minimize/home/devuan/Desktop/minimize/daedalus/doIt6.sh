@@ -67,7 +67,7 @@ ${whack} nm-applet
 
 #ntp ehkä takaisin myöhemmin
 ${whack} ntp*
-csleep 10
+csleep 5
 ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 

@@ -73,8 +73,8 @@ function check_binaries() {
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
 	
-		pre_part3 ~/Desktop/minimize/${1} #${distro}
-		pr4 ~/Desktop/minimize/${1} #${distro}
+		pre_part3 ~/Desktop/minimize/${1}
+		pr4 ~/Desktop/minimize/${1}
 
 		ipt=$(sudo which iptables)
 		ip6t=$(sudo which ip6tables)
@@ -106,7 +106,7 @@ function check_binaries() {
 	sdi=$(sudo which dpkg)
 	sifu=$(sudo which ifup)
 	sifd=$(sudo which ifdown)
-	smr=$(sudo which rm)
+	smr=$(sudo which rm) #TODO:shred mukaan kanssa
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 	srat=$(sudo which tar)
