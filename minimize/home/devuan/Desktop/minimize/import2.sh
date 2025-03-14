@@ -1,20 +1,28 @@
 #!/bin/bash
 d=$(dirname $0)
 debug=0
+file=""
+distro=""
 
-if [ $# -gt 2 ] ; then #TODO:tässä voisi olla case
-	if [ -d ~/Desktop/minimize/${3} ] ; then
+case $# in
+	2)
+		distro=${2}
+	;;
+	3)
+		file=${2}
 		distro=${3}
-		. ~/Desktop/minimize/${3}/conf
-	fi
-fi
+	;;
+	*)
+		echo "$0 <mode> <other_params>"
+	;;
+esac
 
-. ~/Desktop/minimize/common_lib.sh
+[ z"${distro}" == "z" ] && exit 6
 
-#HUOM.120325.x:hmiston olemassaolokin olisi hyvä varmistaa
-#HUOM.120325.y:miel $distro kuin $3 jatkossa
-if [ -x ~/Desktop/minimize/${3}/lib.sh ] ; then
-	.  ~/Desktop/minimize/${3}/lib.sh 
+if [ -d ~/Desktop/minimize/${distro} ] && [ -s ~/Desktop/minimize/${distro}/conf ] && [ -x ~/Desktop/minimize/${distro}/lib.sh ] ; then	
+	. ~/Desktop/minimize/${distro}/conf
+	. ~/Desktop/minimize/common_lib.sh
+	. ~/Desktop/minimize/${distro}/lib.sh
 else
 	srat="sudo /bin/tar"
 	som="sudo /bin/mount"
@@ -36,10 +44,17 @@ else
 	dqb "FALLBACK"
 fi
 
+debug=1
+mode=${1}
+echo "mode=${mode}"
+echo "distro=${distro}"
+echo "file=${file}"
+
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0}
-dqb "b3f0r3 0ld.tar"
-csleep 5
+#dqb "b3f0r3 0ld.tar"
+#csleep 5
+#exit
 
 if [ ! -s /OLD.tar ] ; then #HUOM.260125: -p wttuun varm. vuoksi   
 	${srat} -cf /OLD.tar /etc /sbin /home/stubby /home/devuan/Desktop
@@ -89,8 +104,8 @@ function common_part() {
 case "${1}" in
 	-1)
 		#HUOM.120325: saattaa toimia qhan tuo distro
-		distro=${2}
-		[ -s ~/Desktop/minimize/${distro}/conf ] && . ~/Desktop/minimize/${distro}/conf
+		#distro=${2}
+		#[ -s ~/Desktop/minimize/${distro}/conf ] && . ~/Desktop/minimize/${distro}/conf
 		part=/dev/disk/by-uuid/${part0}		
 		[ -b ${part} ] || dqb "no such thing as ${part}"
 
@@ -102,8 +117,8 @@ case "${1}" in
 	;;
 	2)
 		#HUOM.120325: saattaa toimia qhan tuo distro
-		distro=${2}
-		[ -s ~/Desktop/minimize/${distro}/conf ] && . ~/Desktop/minimize/${distro}/conf
+		#distro=${2}
+		#[ -s ~/Desktop/minimize/${distro}/conf ] && . ~/Desktop/minimize/${distro}/conf
 		#part=/dev/disk/by-uuid/${part0}		
 		#[ -b ${part} ] || dqb "no such thing as ${part}"
 
@@ -114,8 +129,8 @@ case "${1}" in
 		echo "NEXT: ${d}/doIt6.sh (maybe)"
 	;;
 	1)
-		file=${2}
-		distro=${3}
+		#file=${2}
+		#distro=${3}
 
 		#HUOM.120325: näköjään toimii jo
 		[ x"${file}" == "x" ] && exit 44
@@ -126,12 +141,12 @@ case "${1}" in
 		cd ${olddir}
 		echo "NEXT: $0 2"
 	;;
-	-h)
-		echo "$0 <mode> [file] [distro]"
-	;;
+#	-h)
+#		echo "$0 <mode> [file] [distro]"
+#	;;
 	0)
-		file=${2}
-		distro=${3}
+		#file=${2}
+		#distro=${3}
 
 		[ x"${file}" == "x" ] && exit 55
 		dqb "KL"
