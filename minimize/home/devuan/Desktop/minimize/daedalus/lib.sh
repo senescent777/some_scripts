@@ -56,7 +56,6 @@ pr4() {
 	sudo shred -fu ${1}/perl*
 }
 
-#VAIH: $diustro patrametriksi?
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
 	dqb "sudo= ${odio} "
@@ -134,7 +133,7 @@ function check_binaries() {
 	csleep 3
 }
 
-#voisikohan jatkkossa yhdenmuakistaa chimaeran version kanssa?
+#voisikohan jatkkossa yhdenmuakistaa chimaeran version kanssa? -> common_lib jatkossa käytt
 function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
 
@@ -146,7 +145,6 @@ function check_binaries2() {
 	whack="${odio} ${whack} --signal 9 "
 	snt="${odio} ${snt} "
 	sharpy="${odio} ${sag} remove --purge --yes "
-
 	spd="${odio} ${sdi} -l "
 	sdi="${odio} ${sdi} -i "
 
@@ -157,6 +155,7 @@ function check_binaries2() {
 
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
+	sip="${odio} ${sip} "
 
 	#HUOM.130325:tar0peellinen blokki nykyään?
 	dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"
@@ -164,21 +163,22 @@ function check_binaries2() {
 	${scm} 0755 /home/devuan/Desktop/minimize/*.sh
 	${scm} 0444 /home/devuan/Desktop/minimize/*.conf
 
-	sip="${odio} ${sip} "
 	sa="${odio} ${sa} "
 	sifu="${odio} ${sifu} "
 	sifd="${odio} ${sifd} "
 
 	smr="${odio} ${smr} "
 	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
-
 	slinky="${odio} ${slinky} -s "
+
 	spc="${odio} ${spc} "
 	srat="${odio} ${srat} "
 	asy="${odio} ${sa} autoremove --yes"
+
 	fib="${odio} ${sa} --fix-broken install"
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
+
 	dch="${odio} ${dch}"
 	dqb "b1nar135.2 0k.2" 
 	csleep 3
