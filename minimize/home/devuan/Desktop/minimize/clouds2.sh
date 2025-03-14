@@ -2,7 +2,7 @@
 #d=$(dirname $0)
 #debug=0
 #
-#if [ $# -gt 2 ] ; then #TODO:tässä voisi olla case
+#if [ $# -gt 2 ] ; then #TODO:kehittelyä, kts export2 ja import2 
 #	if [ -d ~/Desktop/minimize/${3} ] ; then
 #		distro=${3}
 #		. ~/Desktop/minimize/${3}/conf
