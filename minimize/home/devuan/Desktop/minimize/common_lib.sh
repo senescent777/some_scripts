@@ -84,13 +84,10 @@ function gpo() {
 #TODO:gpo jo käyttöön?
 
 function mangle_s() {
-	local tgt #turha
 	[ y"${1}" == "y" ] && exit
 	[ -x ${1} ] || exit  #oli -s
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit  
-
-	tgt=${2} #turha
 
 	sudo chmod 0555 ${1}
 	#HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
@@ -98,7 +95,7 @@ function mangle_s() {
 
 	local s
 	s=$(sha256sum ${1})
-	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${tgt}
+	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${2}
 }
 
 #HUOm.080325 sietäisi kai harkita chimaeralle ja daedalukselle yhteistä kirjasrtoa
