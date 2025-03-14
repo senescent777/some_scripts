@@ -1,5 +1,5 @@
 #!/bin/bash
-#. ./lib
+
 d=$(dirname $0)
 [ -s ${d}/conf ] && . ${d}/conf
 . ~/Desktop/minimize/common_lib.sh
@@ -116,9 +116,10 @@ ${asy}
 sleep 6
 
 ${smr} -rf /run/live/medium/live/initrd.img*
-sudo shred -fu /var/cache/apt/archives/*.deb
-#${odio} shred -fu ${d}/*.deb #or somethink like that (TODO)
-#${odio} shred -fu /tmp/*.tar (TODO)
+${odio} shred -fu /var/cache/apt/archives/*.deb
+${odio} shred -fu ${d}/*.deb 
+${odio} shred -fu /tmp/*.tar 
+${odio} rm -rf /tmp/tmp.*
 
 df
 #mimimize-hmiston siivous kanssa?
