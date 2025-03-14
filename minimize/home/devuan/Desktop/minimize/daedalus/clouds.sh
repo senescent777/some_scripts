@@ -91,6 +91,7 @@ fi
 #	csleep 3
 #}
 
+#TODO:casen sisältöä ja pre -> lib.sh
 case ${1} in 
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf

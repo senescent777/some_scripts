@@ -186,5 +186,6 @@ function check_binaries2() {
 
 check_binaries ${distro}
 check_binaries2
+#TODO:clouds.sh, distro-spesifinen sisältö -> lib
 
 
