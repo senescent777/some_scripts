@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#HUOM.100325:jatqssa common_lib käyttöön vai ei? tai jopa distrolle yhteinen versio?
+#HUOM.100325:jatqssa common_lib käyttöön vai ei? tai jopa distroille yhteinen versio?
 smr=$(sudo which rm)
 ipt=$(sudo which iptables)
 ip6t=$(sudo which ip6tables)
@@ -22,6 +22,7 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
+#pre()
 if [ -s /etc/resolv.conf.new ] || [ -s /etc/resolv.conf.OLD ] ; then 
 	${smr} /etc/resolv.conf
 	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
@@ -56,6 +57,7 @@ else
 	${ipt} -D OUTPUT 6
 fi
 
+#TODO:ao 2 fktiota korvaten common_lib:in vastaavilla
 function tod_dda() { 
 	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
         ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
@@ -67,6 +69,7 @@ function dda_snd() {
 }
 
 #VAIH:stubbyn asennus toimimaan taas (261224)
+#TODO:common_lib hatqs
 function ns2() {
 	[ y"${1}" == "y" ] && exit
 	dqb "ns2( ${1} )"
@@ -152,6 +155,7 @@ case ${1} in
 	;;
 esac
 
+#post()
 ${scm} 0444 /etc/resolv.conf*
 ${sco} root:root /etc/resolv.conf*
 

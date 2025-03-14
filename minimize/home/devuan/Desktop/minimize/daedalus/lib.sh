@@ -27,6 +27,8 @@ function pre_part3() {
 	csleep 5
 }
 
+#TODO:näille main sitä git:in asentelua
+
 pr4() {
 	dqb "pr4( ${1})"
 	csleep 5
