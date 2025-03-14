@@ -155,3 +155,4 @@ dqb "BIL-UR-SAG"
 check_binaries ${distro}
 check_binaries2
 dqb "UMULAMAHRI"
+#TODO:clouds.sh, distro-spesifinen sisältö -> lib

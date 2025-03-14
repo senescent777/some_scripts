@@ -38,6 +38,7 @@ function dda_snd() {
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
 }
 
+#TODO:casen sisältöä ja pre -> lib
 case ${1} in 
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
