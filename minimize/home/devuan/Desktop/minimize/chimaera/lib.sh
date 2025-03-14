@@ -1,26 +1,35 @@
 #=================================================PART 0=====================================
-#TODO:$distro parametriksi (kts daedalus-versio)
+#VAIH:$distro parametriksi (kts daedalus-versio)
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
 	dqb "sudo= ${odio} "
+	csleep 1
+
+	[ z"${1}" == "z" ] && exit 99
+	[ -d ~/Desktop/minimize/${1} ] & exit 100
+	dqb "params_ok"
 	csleep 1
 
 	ipt=$(sudo which iptables)
 	ip6t=$(sudo which ip6tables)
 	iptr=$(sudo which iptables-restore)
 	ip6tr=$(sudo which ip6tables-restore)
+
 	sco=$(sudo which chown)
 	scm=$(sudo which chmod)
 	whack=$(sudo which pkill)
 	sag=$(sudo which apt-get)
+
 	sa=$(sudo which apt)
 	sip=$(sudo which ip)
 	snt=$(sudo which netstat)
 	sdi=$(sudo which dpkg)
+
 	sifu=$(sudo which ifup)
 	sifd=$(sudo which ifdown)
 	smr=$(sudo which rm) #TODO:shred mukaan kanssa
 	slinky=$(sudo which ln)
+
 	spc=$(sudo which cp)
 	srat=$(sudo which tar)
 	som=$(sudo which mount)
@@ -32,8 +41,8 @@ function check_binaries() {
 	#TODO:ajamaan nuo komennot jatkossa
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
-		echo "pre_part3 ~/Desktop/minimize/${distro}"
-		echo "pr4 ~/Desktop/minimize/${distro}"
+		echo "pre_part3 ~/Desktop/minimize/${1}"
+		echo "pr4 ~/Desktop/minimize/${1}"
 
 		echo "ipt=\$(sudo which iptables)"
 		echo "ip6t=\$(sudo which ip6tables)"
@@ -115,7 +124,6 @@ function check_binaries2() {
 	csleep 3
 }
 
-
 #=========================PART 0 ENDS HERE=================================================================
 function pr4() {
 	dqb "pr4 (${1})"
@@ -138,10 +146,9 @@ function pre_part3() {
 	#uutena, pois jos qsee	
 	${sdi} ${1}/perl-modules-*.deb
 	${smr} -rf ${1}/perl-modules-*.deb
-	
 }
 
 dqb "BIL-UR-SAG"
-check_binaries
+check_binaries ${distro}
 check_binaries2
 dqb "UMULAMAHRI"
