@@ -285,7 +285,7 @@ function part3() {
 	#[ -x ${sdi} ] || exit 44 #1. kokeilulla pyki, jemmaan toistaiseksi
 	
 	${sdi} ${1}/lib*.deb
-	#TODO:pitäisi kai mennä findin kautta jottei kosahda sopivanlaistan .deb-tdstojen puutteeseen
+	#TODO:pitäisi kai mennä findin kautta jottei kosahda sopivanlaistEn .deb-tdstojen puutteeseen
 	#VAIH:varmistus jotta sdi eityhjä+ajokelpoinen ennenq... (oikeastaan check_binaries* pitäisi hoitaa)
 
 	if [ $? -eq  0 ] ; then
@@ -336,3 +336,84 @@ function vommon() {
 		exit 	
 	fi
 } 
+
+#TODO:näitä josqs käyttööön
+#function tod_dda() { 
+#	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
+#       ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
+#}
+#
+#function dda_snd() {
+#	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
+#	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
+#}
+#HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
+#function ns2() {
+#	[ y"${1}" == "y" ] && exit
+#	dqb "ns2( ${1} )"
+#	${scm} u+w /home
+#	csleep 3
+#
+#	${odio} /usr/sbin/userdel ${1}
+#	sleep 3
+#
+#	${odio} adduser --system ${1}
+#	sleep 3
+#
+#	${scm} go-w /home
+#	${sco} -R ${1}:65534 /home/${1}/ #HUOM.280125: tässä saattaa mennä metsään ... tai sitten se /r/s.pid
+#	dqb "d0n3"
+#	csleep 4	
+#
+#	[ ${debug} -eq 1 ]  && ls -las /home
+#	csleep 3
+#}
+#function ns4() {
+#	dqb "ns4( ${1} )"
+#
+#	${scm} u+w /run
+#	${odio} touch /run/${1}.pid
+#	${scm} 0600 /run/${1}.pid
+#	${sco} ${1}:65534 /run/${1}.pid
+#	${scm} u-w /run
+#
+#	sleep 5
+#	${whack} ${1}*
+#	sleep 5
+#
+#	dqb "starting ${1} in 5 secs"
+#
+#	sleep 5
+#	${odio} -u ${1} ${1} -g
+#	echo $?
+#	sleep 1
+#	pgrep stubby*
+#	sleep 5
+#}
+#function clouds_pre() {}
+#function clouds_post() {
+#
+#${scm} 0444 /etc/resolv.conf*
+#${sco} root:root /etc/resolv.conf*
+#
+#${scm} 0444 /etc/dhcp/dhclient*
+#${sco} root:root /etc/dhcp/dhclient*
+#${scm} 0755 /etc/dhcp
+#
+#${scm} 0555 /sbin/dhclient*
+#${sco} root:root /sbin/dhclient*
+#${scm} 0755 /sbin
+#
+#${sco} -R root:root /etc/iptables
+#${scm} 0400 /etc/iptables/*
+#${scm} 0750 /etc/iptables
+# 
+#sleep 2
+#
+##if [ ${debug} -eq 1 ] ; then
+#	${ipt} -L  #
+#	${ip6t} -L #
+#	sleep 5
+##fi #
+#
+#}

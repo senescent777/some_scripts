@@ -45,7 +45,7 @@
 #}
 #
 ##konftdstojen ja tablesin käsiuttelyn kanssa pieniä eroavaisuuksia
-#pre
+#clouds_pre
 #
 #case ${1} in 
 #	0)
@@ -60,6 +60,6 @@
 #esac
 #
 ##case'n jälkeinen osuus kummankin distron versiossa käytännössä sama	
-#post
+#clouds_post
 #
 #
