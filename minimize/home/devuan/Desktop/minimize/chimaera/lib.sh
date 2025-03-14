@@ -1,5 +1,4 @@
 #=================================================PART 0=====================================
-#VAIH:$distro parametriksi (kts daedalus-versio)
 function check_binaries() {
 	dqb "ch3ck_b1nar135()"
 	dqb "sudo= ${odio} "
@@ -82,7 +81,7 @@ function check_binaries() {
 	csleep 3
 }
 
-#TODO:vertaiule daedaluksen versioon, puuttuuko jotain
+#HUOM.140325:käytännössä samat chim ja daed -> common_lib jatkossa käytt
 function check_binaries2() {
 	dqb "ch3ck_b1nar135.2()"
 
@@ -94,9 +93,9 @@ function check_binaries2() {
 	whack="${odio} ${whack} --signal 9 "
 	snt="${odio} ${snt} "
 	sharpy="${odio} ${sag} remove --purge --yes "
+	spd="${odio} ${sdi} -l "
 	sdi="${odio} ${sdi} -i "
-	#TODO:spd
-
+	
 	#HUOM. ${sag} VIIMEISENÄ
 	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
 	sag_u="${odio} ${sag} update "
@@ -105,22 +104,26 @@ function check_binaries2() {
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "
 	sip="${odio} ${sip} "
+
 	sa="${odio} ${sa} "
 	sifu="${odio} ${sifu} "
 	sifd="${odio} ${sifd} "
+
 	smr="${odio} ${smr} "
+	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
 	slinky="${odio} ${slinky} -s "
+
 	spc="${odio} ${spc} "
 	srat="${odio} ${srat} "
 	asy="${odio} ${sa} autoremove --yes"
 
+	fib="${odio} ${sa} --fix-broken install"
 	som="${odio} ${som} "
 	uom="${odio} ${uom} "	
 
-	smr="${odio} ${smr} "
-	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
+	#smr="${odio} ${smr} "
+	dch="${odio} ${dch}"
 	dqb "b1nar135.2 0k.2" 
-
 	csleep 3
 }
 
