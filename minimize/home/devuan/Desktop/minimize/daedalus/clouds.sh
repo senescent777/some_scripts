@@ -14,13 +14,13 @@ scm=$(sudo which chmod)
 whack=$(sudo which pkill)
 debug=0
 
-function dqb() {
-	[ ${debug} -eq 1 ] && echo ${1}
-}
-
-function csleep() {
-	[ ${debug} -eq 1 ] && sleep ${1}
-}
+#function dqb() {
+#	[ ${debug} -eq 1 ] && echo ${1}
+#}
+#
+#function csleep() {
+#	[ ${debug} -eq 1 ] && sleep ${1}
+#}
 
 #pre()
 if [ -s /etc/resolv.conf.new ] || [ -s /etc/resolv.conf.OLD ] ; then 
@@ -57,39 +57,39 @@ else
 	${ipt} -D OUTPUT 6
 fi
 
-#TODO:ao 2 fktiota korvaten common_lib:in vastaavilla
-function tod_dda() { 
-	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
-        ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
-}
-
-function dda_snd() {
-	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
-	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
-}
-
-#VAIH:stubbyn asennus toimimaan taas (261224)
-#TODO:common_lib hatqs
-function ns2() {
-	[ y"${1}" == "y" ] && exit
-	dqb "ns2( ${1} )"
-	${scm} u+w /home
-	csleep 3
-
-	${odio} /usr/sbin/userdel ${1}
-	sleep 3
-
-	${odio} adduser --system ${1}
-	sleep 3
-
-	${scm} go-w /home
-	${sco} -R ${1}:65534 /home/${1}/ #HUOM.280125: tässä saattaa mennä metsään ... tai sitten se /r/s.pid
-	dqb "d0n3"
-	csleep 4	
-
-	[ ${debug} -eq 1 ]  && ls -las /home
-	csleep 3
-}
+##VAIH:ao 2 fktiota korvaten common_lib:in vastaavilla
+#function tod_dda() { 
+#	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
+#        ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
+#}
+#
+#function dda_snd() {
+#	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
+#	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
+#}
+#
+##VAIH:stubbyn asennus toimimaan taas (261224)
+##VAIH:common_lib hatqs
+#function ns2() {
+#	[ y"${1}" == "y" ] && exit
+#	dqb "ns2( ${1} )"
+#	${scm} u+w /home
+#	csleep 3
+#
+#	${odio} /usr/sbin/userdel ${1}
+#	sleep 3
+#
+#	${odio} adduser --system ${1}
+#	sleep 3
+#
+#	${scm} go-w /home
+#	${sco} -R ${1}:65534 /home/${1}/ #HUOM.280125: tässä saattaa mennä metsään ... tai sitten se /r/s.pid
+#	dqb "d0n3"
+#	csleep 4	
+#
+#	[ ${debug} -eq 1 ]  && ls -las /home
+#	csleep 3
+#}
 
 case ${1} in 
 	0)
@@ -155,7 +155,7 @@ case ${1} in
 	;;
 esac
 
-#post()
+#TODO:clouds_post()
 ${scm} 0444 /etc/resolv.conf*
 ${sco} root:root /etc/resolv.conf*
 
