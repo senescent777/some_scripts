@@ -115,46 +115,7 @@ function check_binaries2() {
 	csleep 3
 }
 
-#HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-#function ns2() {
-#	dqb "ns2( ${1} )"
-#
-#	${scm} u+w /home
-#
-#	${odio} /usr/sbin/userdel ${1}
-#	sleep 3
-#
-#	${odio} adduser --system ${1}
-#	sleep 1
-#	${scm} go-w /home
-#
-#	[ ${debug} -eq 1 ]  && ls -las /home
-#	sleep 7
-#}
-#
-#function ns4() {
-#	dqb "ns4( ${1} )"
-#
-#	${scm} u+w /run
-#	${odio} touch /run/${1}.pid
-#	${scm} 0600 /run/${1}.pid
-#	${sco} ${1}:65534 /run/${1}.pid
-#	${scm} u-w /run
-#
-#	sleep 5
-#	${whack} ${1}*
-#	sleep 5
-#
-#	dqb "starting ${1} in 5 secs"
-#
-#	sleep 5
-#	${odio} -u ${1} ${1} -g
-#	echo $?
-#	sleep 1
-#	pgrep stubby*
-#	sleep 5
-#}
-#
+
 #=========================PART 0 ENDS HERE=================================================================
 function pr4() {
 	dqb "pr4 (${1})"
@@ -167,6 +128,7 @@ function pr4() {
 }
 
 #VAIH:jompaan kumpaan(pp3/pr4) dnsmasq* poisto (pidemmällä tähtäimellä tietty parempi laittaa toimimaanq poistaa mutta nyt näin)
+#TODO:näille main sitä git:in asentelua
 
 function pre_part3() {
 	dqb "pre_part3( ${1})"

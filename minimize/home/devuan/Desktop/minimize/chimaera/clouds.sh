@@ -16,6 +16,7 @@ scm=$(sudo which chmod)
 #sco="sudo ${sco}"
 #scm="sudo ${scm}"
 
+#pre()
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
 ${smr} /sbin/dhclient-script
@@ -26,6 +27,7 @@ ${ipt} -F e
 ${ipt} -D INPUT 5
 ${ipt} -D OUTPUT 6
 
+#TODO:ao 2 fktiota korvaten common_lib:in vastaavilla
 function tod_dda() { 
 	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
         ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
@@ -61,6 +63,7 @@ case ${1} in
 	;;
 esac
 
+#post()
 ${scm} 0444 /etc/resolv.conf*
 ${sco} root:root /etc/resolv.conf*
 
