@@ -118,10 +118,6 @@ function pre_enforce() {
 	[ -f ${q}/meshuggah ] || exit
 	dqb "ANNOYING AMOUNT OF DEBUG"
 
-	#VAIH:$n parametriksi jatkossa?
-	#sudo chown ${n}:${n} ${q}/meshuggah #oli: 1k:1k
-	#sudo chmod 0660 ${q}/meshuggah	
-
 	if [ z"${1}" != "z" ] ; then
 		dqb "333"
 		${odio} chown ${1}:${1} ${q}/meshuggah 
@@ -129,6 +125,7 @@ function pre_enforce() {
 	fi	
 	
 	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
+	#TODO:globaali mja wttuun
 	for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
 	
 	if [ -s ${q}/meshuggah ] ; then
@@ -180,7 +177,7 @@ function enforce_access() {
 	${sco} root:root /home
 	${scm} 0755 /home
 
-	#VAIH:$n paRametriksi?
+	#HUOM.140325:riittääköhän ao. tarkistus?
 	if [ y"${1}" != "y" ] ; then
 		dqb "444"
 		${sco} -R ${1}:${1} ~
@@ -209,7 +206,6 @@ function enforce_access() {
 	${sco} root:root /tmp
 }
 
-#VAIH:$distro parametriksi
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}
@@ -243,7 +239,7 @@ function part1() {
 	#HUOM.1303225:joskohan tänä blokki toimisi
 	if [ z"${pkgsrc}" != "z" ] ; then
 		#if [ ! -s /etc/apt/sources.list.${distro 
-		#HUOM.130325:tulisi kai tarkistaa se minimizen alihmiston olemassaolo kanssa
+		#TODO:tulisi kai tarkistaa se minimizen alihmiston olemassaolo kanssa
 		if [ ! -s /etc/apt/sources.list.${1} ] ; then
 			local g
 			g=$(date +%F) 
@@ -416,4 +412,50 @@ function vommon() {
 #	sleep 5
 ##fi #
 #
+#}
+#HUOM.140325:käytännössä samat chim ja daed
+#TODO:jatkossa käyttöön
+#function check_binaries2() {
+#	dqb "ch3ck_b1nar135.2()"
+#
+#	ipt="${odio} ${ipt} "
+#	ip6t="${odio} ${ip6t} "
+#	iptr="${odio} ${iptr} "
+#	ip6tr="${odio} ${ip6tr} "
+#
+#	whack="${odio} ${whack} --signal 9 "
+#	snt="${odio} ${snt} "
+#	sharpy="${odio} ${sag} remove --purge --yes "
+#	spd="${odio} ${sdi} -l "
+#	sdi="${odio} ${sdi} -i "
+#	
+#	#HUOM. ${sag} VIIMEISENÄ
+#	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
+#	sag_u="${odio} ${sag} update "
+#	sag="${odio} ${sag} "
+#
+#	sco="${odio} ${sco} "
+#	scm="${odio} ${scm} "
+#	sip="${odio} ${sip} "
+#
+#	sa="${odio} ${sa} "
+#	sifu="${odio} ${sifu} "
+#	sifd="${odio} ${sifd} "
+#
+#	smr="${odio} ${smr} "
+#	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
+#	slinky="${odio} ${slinky} -s "
+#
+#	spc="${odio} ${spc} "
+#	srat="${odio} ${srat} "
+#	asy="${odio} ${sa} autoremove --yes"
+#
+#	fib="${odio} ${sa} --fix-broken install"
+#	som="${odio} ${som} "
+#	uom="${odio} ${uom} "	
+#
+#	#smr="${odio} ${smr} "
+#	dch="${odio} ${dch}"
+#	dqb "b1nar135.2 0k.2" 
+#	csleep 3
 #}
