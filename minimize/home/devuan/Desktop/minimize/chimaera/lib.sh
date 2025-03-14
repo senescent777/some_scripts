@@ -19,7 +19,7 @@ function check_binaries() {
 	sdi=$(sudo which dpkg)
 	sifu=$(sudo which ifup)
 	sifd=$(sudo which ifdown)
-	smr=$(sudo which rm)
+	smr=$(sudo which rm) #TODO:shred mukaan kanssa
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 	srat=$(sudo which tar)
