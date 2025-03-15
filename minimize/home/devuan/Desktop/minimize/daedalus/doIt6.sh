@@ -58,7 +58,6 @@ done
 dqb "shutting down some services (4 real) in 3 secs"
 sleep 3 
 
-#pitäisiköhän näillekin tehdä jotain=
 ${whack} cups*
 ${whack} avahi*
 ${whack} dnsmasq*
@@ -140,7 +139,7 @@ sudo ${d}/clouds.sh 0
 csleep 5
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
-${scm} a-wx $0 #oikeastaan kerta-ajo tulisi riittää
+${scm} a-wx $0 #oikeastaan kerta-ajo tulisi riittää tai toisaalta daedaluksen versiossa ominaisuuksia
 
 #===================================================PART 4(final)==========================================================
 

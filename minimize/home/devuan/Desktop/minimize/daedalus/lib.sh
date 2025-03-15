@@ -57,12 +57,12 @@ pr4() {
 }
 
 function check_binaries() {
-	dqb "ch3ck_b1nar135()"
+	dqb "ch3ck_b1nar135(${1} )"
 	dqb "sudo= ${odio} "
 	csleep 1
 
 	[ z"${1}" == "z" ] && exit 99
-	[ -d ~/Desktop/minimize/${1} ] & exit 100
+	[ -d ~/Desktop/minimize/${1} ] || exit 100
 	dqb "params_ok"
 	csleep 1
 
@@ -133,59 +133,57 @@ function check_binaries() {
 	csleep 3
 }
 
-#voisikohan jatkkossa yhdenmuakistaa chimaeran version kanssa? -> common_lib jatkossa käytt
-function check_binaries2() {
-	dqb "ch3ck_b1nar135.2()"
-
-	ipt="${odio} ${ipt} "
-	ip6t="${odio} ${ip6t} "
-	iptr="${odio} ${iptr} "
-	ip6tr="${odio} ${ip6tr} "
-
-	whack="${odio} ${whack} --signal 9 "
-	snt="${odio} ${snt} "
-	sharpy="${odio} ${sag} remove --purge --yes "
-	spd="${odio} ${sdi} -l "
-	sdi="${odio} ${sdi} -i "
-
-	#HUOM. ${sag} OLTAVA VIIMEISENÄ NÄISTÄ KOLMESTA
-	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
-	sag_u="${odio} ${sag} update "
-	sag="${odio} ${sag} "
-
-	sco="${odio} ${sco} "
-	scm="${odio} ${scm} "
-	sip="${odio} ${sip} "
-
-	#HUOM.130325:tar0peellinen blokki nykyään?
-	dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"
-	csleep 5
-	${scm} 0755 /home/devuan/Desktop/minimize/*.sh
-	${scm} 0444 /home/devuan/Desktop/minimize/*.conf
-
-	sa="${odio} ${sa} "
-	sifu="${odio} ${sifu} "
-	sifd="${odio} ${sifd} "
-
-	smr="${odio} ${smr} "
-	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
-	slinky="${odio} ${slinky} -s "
-
-	spc="${odio} ${spc} "
-	srat="${odio} ${srat} "
-	asy="${odio} ${sa} autoremove --yes"
-
-	fib="${odio} ${sa} --fix-broken install"
-	som="${odio} ${som} "
-	uom="${odio} ${uom} "	
-
-	dch="${odio} ${dch}"
-	dqb "b1nar135.2 0k.2" 
-	csleep 3
-}
+#function check_binaries2() {
+#	dqb "ch3ck_b1nar135.2()"
+#
+#	ipt="${odio} ${ipt} "
+#	ip6t="${odio} ${ip6t} "
+#	iptr="${odio} ${iptr} "
+#	ip6tr="${odio} ${ip6tr} "
+#
+#	whack="${odio} ${whack} --signal 9 "
+#	snt="${odio} ${snt} "
+#	sharpy="${odio} ${sag} remove --purge --yes "
+#	spd="${odio} ${sdi} -l "
+#	sdi="${odio} ${sdi} -i "
+#
+#	#HUOM. ${sag} OLTAVA VIIMEISENÄ NÄISTÄ KOLMESTA
+#	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
+#	sag_u="${odio} ${sag} update "
+#	sag="${odio} ${sag} "
+#
+#	sco="${odio} ${sco} "
+#	scm="${odio} ${scm} "
+#	sip="${odio} ${sip} "
+#
+#	#HUOM.130325:tar0peellinen blokki nykyään?
+#	dqb "${scm} a-wx ~/Desktop/minimize/*.sh in 5 secs"
+#	csleep 5
+#	${scm} 0755 /home/devuan/Desktop/minimize/*.sh
+#	${scm} 0444 /home/devuan/Desktop/minimize/*.conf
+#
+#	sa="${odio} ${sa} "
+#	sifu="${odio} ${sifu} "
+#	sifd="${odio} ${sifd} "
+#
+#	smr="${odio} ${smr} "
+#	lftr="${smr} -rf /run/live/medium/live/initrd.img* "
+#	slinky="${odio} ${slinky} -s "
+#
+#	spc="${odio} ${spc} "
+#	srat="${odio} ${srat} "
+#	asy="${odio} ${sa} autoremove --yes"
+#
+#	fib="${odio} ${sa} --fix-broken install"
+#	som="${odio} ${som} "
+#	uom="${odio} ${uom} "	
+#
+#	dch="${odio} ${dch}"
+#	dqb "b1nar135.2 0k.2" 
+#	csleep 3
+#}
 
 check_binaries ${distro}
 check_binaries2
-#TODO:clouds.sh, distro-spesifinen sisältö -> lib
 
 
