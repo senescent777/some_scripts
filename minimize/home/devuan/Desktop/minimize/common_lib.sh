@@ -388,7 +388,19 @@ function vommon() {
 #	pgrep stubby*
 #	sleep 5
 #}
-#function clouds_pre() {}
+#TODO:nämä käyttöön vähitellen (tai siis common_lib:in vastaava)
+#pitäisiköhän se ipt-testi olla tässä?
+#function clouds_pre() {
+#${smr} /etc/resolv.conf
+#${smr} /etc/dhcp/dhclient.conf
+#${smr} /sbin/dhclient-script
+#
+##tässä oikea paikka tables-muutoksille vai ei?
+#${ipt} -F b
+#${ipt} -F e
+#${ipt} -D INPUT 5
+#${ipt} -D OUTPUT 6
+#}
 #function clouds_post() {
 #
 #${scm} 0444 /etc/resolv.conf*
