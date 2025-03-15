@@ -43,6 +43,7 @@ fix_sudo() {
 fix_sudo
 
 #pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
+#TODO:jospa tämänkin toiminnan testausu
 function ocs() {
 	local tmp
 	tmp=$(sudo which ${1})
@@ -58,7 +59,7 @@ function ocs() {
 	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
 }
 
-#check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (TODO: let's find out?)
+#check_binaries(), check_binaries2() , distro-spesifisiä vai ei? (VAIH: let's find out?)
 
 #HUOM. jos tätä käyttää ni scm ja sco pitää tietenkin esitellä alussa
 function mangle2() {
@@ -83,6 +84,7 @@ function gpo() {
 
 #TODO:gpo jo käyttöön?
 
+#TODO:tähän dqb käyttöön tilapäisesti?
 function mangle_s() {
 	[ y"${1}" == "y" ] && exit
 	[ -x ${1} ] || exit  #oli -s
@@ -98,21 +100,22 @@ function mangle_s() {
 	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${2}
 }
 
-#HUOm.080325 sietäisi kai harkita chimaeralle ja daedalukselle yhteistä kirjasrtoa
-
+#VAIH:globaali mja wttuun
 function pre_enforce() {
+	dqb "common_lib.pre_enforce( ${1} )"	
+
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	local q
+	local f
 	q=$(mktemp -d)	
-	local f 
-
+	 
 	dqb "sudo touch ${q}/meshuggah in 5 secs"
 	csleep 5
 	sudo touch ${q}/meshuggah
 
 	[ ${debug} -eq 1 ] && ls -las ${q}
 	csleep 6
-	[ -f ${q}/meshuggah ] || exit
+	[ -f ${q}/meshuggah ] || exit 33
 	dqb "ANNOYING AMOUNT OF DEBUG"
 
 	if [ z"${1}" != "z" ] ; then
@@ -122,34 +125,35 @@ function pre_enforce() {
 	fi	
 	
 	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
-	#TODO:globaali mja wttuun
-	for f in ~/Desktop/minimize/${distro}/clouds.sh /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
+	[ -d ~/Desktop/minimize/{1} ] &&  mangle_s ~/Desktop/minimize/${1}/clouds.sh ${q}/meshuggah
+	for f in /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
 	
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
 		csleep 5
 
-		sudo chmod a-wx ${q}/meshuggah
-		sudo chown root:root ${q}/meshuggah	
-		sudo mv ${q}/meshuggah /etc/sudoers.d
+		${odio} chmod a-wx ${q}/meshuggah
+		${odio} chown root:root ${q}/meshuggah	
+		${odio} mv ${q}/meshuggah /etc/sudoers.d
 	fi
 
 	#HUOM.190125 nykyään tapahtuu ulosheitto xfce:stä jotta sudo-muutokset tulisivat voimaan?	
 }
 
 function enforce_access() {
-	sudo chmod 0440 /etc/sudoers.d/* #hmiston kuiteskin parempi olla 0750
+	dqb " enforce_access( ${1})"	
+
+	sudo chmod 0440 /etc/sudoers.d/* 
 	sudo chmod 0750 /etc/sudoers.d 
 	sudo chown -R root:root /etc/sudoers.d
 
-	echo "changing /sbin , /etc and /var 4 real"
+	dqb "changing /sbin , /etc and /var 4 real"
 	${sco} -R root:root /sbin
 	${scm} -R 0755 /sbin
 
 	${sco} -R root:root /etc
 	for f in $(find /etc/sudoers.d/ -type f) ; do mangle2 ${f} ; done
 
-	#"find: ‘/etc/sudoers.d/’: Permission denied" jotain tarttis tehrä?
 	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
 		mangle2 ${f}
 		#csleep 1
@@ -185,9 +189,10 @@ function enforce_access() {
 	${scm} 0755 ~/Desktop/minimize	
 	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
 	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
-	${scm} a+x ${d}/*.sh
+	${scm} a+x ${d}/*.sh #TODO:globaalit wttuun
 	
 	f=$(date +%F)
+
 	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
 	[ -f /sbin/dhclient-script.${f} ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.${f}
 	[ -f /etc/network/interfaces.${f} ] || ${spc} /etc/network/interfaces /etc/network/interfaces.${f}
@@ -197,6 +202,7 @@ function enforce_access() {
 	fi
 
 	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
+	
 	#TODO: se man chmod ao. riveihin liittyen, rwt...
 	#HUOM.280125:uutena seur rivit, poista jos pykii
 	${scm} 0777 /tmp
@@ -214,7 +220,7 @@ function part1() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-		#TODO:ne ppre_part3-jutut sopivaan kohtaan? (daedalus->lib->check_bin)
+		#TODO:ne ppre_part3-jutut sopivaan kohtaan? (kts. daedalus->lib->check_bin)
 	else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
@@ -235,29 +241,28 @@ function part1() {
 
 	#HUOM.1303225:joskohan tänä blokki toimisi
 	if [ z"${pkgsrc}" != "z" ] ; then
-		#if [ ! -s /etc/apt/sources.list.${distro 
-		#TODO:tulisi kai tarkistaa se minimizen alihmiston olemassaolo kanssa
-		if [ ! -s /etc/apt/sources.list.${1} ] ; then
-			local g
-			g=$(date +%F) 
-			dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
-			csleep 5
+		#VAIH:tulisi kai tarkistaa se minimizen alihmiston olemassaolo kanssa
+		if [ -d ~/Desktop/minimize/${1} ] ; then
+			if [ ! -s /etc/apt/sources.list.${1} ] ; then
+				local g
+			
+				g=$(date +%F) 
+				dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
+				csleep 5
 
-			[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
-			sudo touch /etc/apt/sources.list.${1} #${distro}
-			${scm} a+w /etc/apt/sources.list.${1} #${distro}
+				[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+				sudo touch /etc/apt/sources.list.${1} #${distro}
+				${scm} a+w /etc/apt/sources.list.${1} #${distro}
 
-			#for x in ${distro} ${distro}-updates ${distro}-security ; do
-			for x in ${1} ${1}-updates ${1}-security ; do
-				echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${1} #${distro} 
-			done
+				for x in ${1} ${1}-updates ${1}-security ; do
+					echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${1} #${distro} 
+				done
 		
-			#slinky
-			#${odio} ln -s /etc/apt/sources.list.${distro} /etc/apt/sources.list
-			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list			
+				${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list			
 
-			[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
-			csleep 5
+				[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
+				csleep 5
+			fi
 		fi
 	fi
 
@@ -405,54 +410,56 @@ function vommon() {
 #
 ##if [ ${debug} -eq 1 ] ; then
 #	${ipt} -L  #
-#	${ip6t} -L #
+#	${ip6t} -L #parempi ajaa vain jos löytyy
 #	sleep 5
 ##fi #
 #
 #}
-#HUOM.140325:käytännössä samat chim ja daed
-#TODO:jatkossa käyttöön
-#function check_binaries2() {
-#	dqb "ch3ck_b1nar135.2()"
-#
-#	ipt="${odio} ${ipt} "
-#	ip6t="${odio} ${ip6t} "
-#	iptr="${odio} ${iptr} "
-#	ip6tr="${odio} ${ip6tr} "
-#
-#	whack="${odio} ${whack} --signal 9 "
-#	snt="${odio} ${snt} "
-#	sharpy="${odio} ${sag} remove --purge --yes "
-#	spd="${odio} ${sdi} -l "
-#	sdi="${odio} ${sdi} -i "
-#	
-#	#HUOM. ${sag} VIIMEISENÄ
-#	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
-#	sag_u="${odio} ${sag} update "
-#	sag="${odio} ${sag} "
-#
-#	sco="${odio} ${sco} "
-#	scm="${odio} ${scm} "
-#	sip="${odio} ${sip} "
-#
-#	sa="${odio} ${sa} "
-#	sifu="${odio} ${sifu} "
-#	sifd="${odio} ${sifd} "
-#
-#	smr="${odio} ${smr} "
-#	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
-#	slinky="${odio} ${slinky} -s "
-#
-#	spc="${odio} ${spc} "
-#	srat="${odio} ${srat} "
-#	asy="${odio} ${sa} autoremove --yes"
-#
-#	fib="${odio} ${sa} --fix-broken install"
-#	som="${odio} ${som} "
-#	uom="${odio} ${uom} "	
-#
-#	#smr="${odio} ${smr} "
-#	dch="${odio} ${dch}"
-#	dqb "b1nar135.2 0k.2" 
-#	csleep 3
-#}
+
+#HUOM.140325:käytännössä samat chim ja daed versiot asiasta
+#VAIH:jatkossa käyttöön
+#TODO:voisi tarksitaa että mitkä komennot pitää jatkossa sudottaa kun omega ajettu (eli clouds käyttämät lähinnä)
+function check_binaries2() {
+	dqb "c0mm0n_lib.ch3ck_b1nar135.2()"
+
+	ipt="${odio} ${ipt} "
+	ip6t="${odio} ${ip6t} "
+	iptr="${odio} ${iptr} "
+	ip6tr="${odio} ${ip6tr} "
+
+	whack="${odio} ${whack} --signal 9 "
+	snt="${odio} ${snt} "
+	sharpy="${odio} ${sag} remove --purge --yes "
+	spd="${odio} ${sdi} -l "
+	sdi="${odio} ${sdi} -i "
+	
+	#HUOM. ${sag} VIIMEISENÄ
+	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
+	sag_u="${odio} ${sag} update "
+	sag="${odio} ${sag} "
+
+	sco="${odio} ${sco} "
+	scm="${odio} ${scm} "
+	sip="${odio} ${sip} "
+
+	sa="${odio} ${sa} "
+	sifu="${odio} ${sifu} "
+	sifd="${odio} ${sifd} "
+
+	smr="${odio} ${smr} "
+	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
+	slinky="${odio} ${slinky} -s "
+
+	spc="${odio} ${spc} "
+	srat="${odio} ${srat} "
+	asy="${odio} ${sa} autoremove --yes"
+
+	fib="${odio} ${sa} --fix-broken install"
+	som="${odio} ${som} "
+	uom="${odio} ${uom} "	
+
+	#smr="${odio} ${smr} "
+	dch="${odio} ${dch}"
+	dqb "b1nar135.2 0k.2" 
+	csleep 3
+}

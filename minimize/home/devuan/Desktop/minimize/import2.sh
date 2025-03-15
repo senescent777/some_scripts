@@ -46,15 +46,13 @@ fi
 
 debug=1
 mode=${1}
+
 echo "mode=${mode}"
 echo "distro=${distro}"
 echo "file=${file}"
 
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0}
-#dqb "b3f0r3 0ld.tar"
-#csleep 5
-#exit
 
 if [ ! -s /OLD.tar ] ; then #HUOM.260125: -p wttuun varm. vuoksi   
 	${srat} -cf /OLD.tar /etc /sbin /home/stubby /home/devuan/Desktop
@@ -63,7 +61,6 @@ fi
 dqb "b3f0r3 par51ng tha param5"
 csleep 5
 
-#VAIH:$sidtro voisi olla $2 jatkossa
 function common_part() {
 	dqb "common_part()"
 	[ y"${1}" == "y" ] && exit 1
@@ -103,9 +100,6 @@ function common_part() {
 
 case "${1}" in
 	-1)
-		#HUOM.120325: saattaa toimia qhan tuo distro
-		#distro=${2}
-		#[ -s ~/Desktop/minimize/${distro}/conf ] && . ~/Desktop/minimize/${distro}/conf
 		part=/dev/disk/by-uuid/${part0}		
 		[ -b ${part} ] || dqb "no such thing as ${part}"
 
@@ -116,12 +110,7 @@ case "${1}" in
 		echo "NEXT: $0 0 <source> <distro> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 	;;
 	2)
-		#HUOM.120325: saattaa toimia qhan tuo distro
-		#distro=${2}
-		#[ -s ~/Desktop/minimize/${distro}/conf ] && . ~/Desktop/minimize/${distro}/conf
-		#part=/dev/disk/by-uuid/${part0}		
-		#[ -b ${part} ] || dqb "no such thing as ${part}"
-
+		#TODO:chmod-juttujen läpikäynti
 		${uom} ${dir}
 		csleep 3
 		${som} | grep ${dir}
@@ -129,10 +118,6 @@ case "${1}" in
 		echo "NEXT: ${d}/doIt6.sh (maybe)"
 	;;
 	1)
-		#file=${2}
-		#distro=${3}
-
-		#HUOM.120325: näköjään toimii jo
 		[ x"${file}" == "x" ] && exit 44
 		[ -s ${file} ] || exit 55
 
@@ -141,13 +126,7 @@ case "${1}" in
 		cd ${olddir}
 		echo "NEXT: $0 2"
 	;;
-#	-h)
-#		echo "$0 <mode> [file] [distro]"
-#	;;
 	0)
-		#file=${2}
-		#distro=${3}
-
 		[ x"${file}" == "x" ] && exit 55
 		dqb "KL"
 		csleep 2

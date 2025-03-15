@@ -43,23 +43,21 @@
 #	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
 #	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
 #}
-#
-##konftdstojen ja tablesin käsiuttelyn kanssa pieniä eroavaisuuksia
-#clouds_pre
-#
-#case ${1} in 
-#	0)
-#		echo "PLAIN OLD DNS (TODO)"
-#	;;
-#	1)
-#		echo "STUBBY (TODO)"
-#	;;
-#	*)
-#		echo "MEE HIMAAS LEIKKIMÄÄN"
-#	;;
-#esac
-#
-##case'n jälkeinen osuus kummankin distron versiossa käytännössä sama	
-#clouds_post
-#
-#
+
+#konftdstojen ja tablesin käsiuttelyn kanssa pieniä eroavaisuuksia
+echo "lib.clouds_pre() (TODO)"
+
+case ${1} in 
+	0)
+		echo "lib.case0 (TODO)"
+	;;
+	1)
+		echo "lib.case1 (TODO)"
+	;;
+	*)
+		echo "MEE HIMAAS LEIKKIMÄHÄN"
+	;;
+esac
+
+#case'n jälkeinen osuus kummankin distron versiossa käytännössä sama	
+echo "common_lib.clouds_post() (TODO)"
