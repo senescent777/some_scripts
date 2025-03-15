@@ -1,11 +1,11 @@
 #=================================================PART 0=====================================
 function check_binaries() {
-	dqb "ch3ck_b1nar135()"
+	dqb "lib.ch3ck_b1nar135( ${1} )"
 	dqb "sudo= ${odio} "
 	csleep 1
 
 	[ z"${1}" == "z" ] && exit 99
-	[ -d ~/Desktop/minimize/${1} ] & exit 100
+	[ -d ~/Desktop/minimize/${1} ] || exit 100
 	dqb "params_ok"
 	csleep 1
 
@@ -73,7 +73,8 @@ function check_binaries() {
 	[ -x ${som} ] || exit 5
 	[ -x ${uom} ] || exit 5
 
-	#TODO:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
+	#HUOM.:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
+	#TODO:ocs() käyttöön, testaa 	
 	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
 
 	dqb "spc= ${spc}"
@@ -82,50 +83,50 @@ function check_binaries() {
 }
 
 #HUOM.140325:käytännössä samat chim ja daed -> common_lib jatkossa käytt
-function check_binaries2() {
-	dqb "ch3ck_b1nar135.2()"
-
-	ipt="${odio} ${ipt} "
-	ip6t="${odio} ${ip6t} "
-	iptr="${odio} ${iptr} "
-	ip6tr="${odio} ${ip6tr} "
-
-	whack="${odio} ${whack} --signal 9 "
-	snt="${odio} ${snt} "
-	sharpy="${odio} ${sag} remove --purge --yes "
-	spd="${odio} ${sdi} -l "
-	sdi="${odio} ${sdi} -i "
-	
-	#HUOM. ${sag} VIIMEISENÄ
-	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
-	sag_u="${odio} ${sag} update "
-	sag="${odio} ${sag} "
-
-	sco="${odio} ${sco} "
-	scm="${odio} ${scm} "
-	sip="${odio} ${sip} "
-
-	sa="${odio} ${sa} "
-	sifu="${odio} ${sifu} "
-	sifd="${odio} ${sifd} "
-
-	smr="${odio} ${smr} "
-	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
-	slinky="${odio} ${slinky} -s "
-
-	spc="${odio} ${spc} "
-	srat="${odio} ${srat} "
-	asy="${odio} ${sa} autoremove --yes"
-
-	fib="${odio} ${sa} --fix-broken install"
-	som="${odio} ${som} "
-	uom="${odio} ${uom} "	
-
-	#smr="${odio} ${smr} "
-	dch="${odio} ${dch}"
-	dqb "b1nar135.2 0k.2" 
-	csleep 3
-}
+#function check_binaries2() {
+#	dqb "lib.ch3ck_b1nar135.2()"
+#
+#	ipt="${odio} ${ipt} "
+#	ip6t="${odio} ${ip6t} "
+#	iptr="${odio} ${iptr} "
+#	ip6tr="${odio} ${ip6tr} "
+#
+#	whack="${odio} ${whack} --signal 9 "
+#	snt="${odio} ${snt} "
+#	sharpy="${odio} ${sag} remove --purge --yes "
+#	spd="${odio} ${sdi} -l "
+#	sdi="${odio} ${sdi} -i "
+#	
+#	#HUOM. ${sag} VIIMEISENÄ
+#	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
+#	sag_u="${odio} ${sag} update "
+#	sag="${odio} ${sag} "
+#
+#	sco="${odio} ${sco} "
+#	scm="${odio} ${scm} "
+#	sip="${odio} ${sip} "
+#
+#	sa="${odio} ${sa} "
+#	sifu="${odio} ${sifu} "
+#	sifd="${odio} ${sifd} "
+#
+#	smr="${odio} ${smr} "
+#	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
+#	slinky="${odio} ${slinky} -s "
+#
+#	spc="${odio} ${spc} "
+#	srat="${odio} ${srat} "
+#	asy="${odio} ${sa} autoremove --yes"
+#
+#	fib="${odio} ${sa} --fix-broken install"
+#	som="${odio} ${som} "
+#	uom="${odio} ${uom} "	
+#
+#	#smr="${odio} ${smr} "
+#	dch="${odio} ${dch}"
+#	dqb "b1nar135.2 0k.2" 
+#	csleep 3
+#}
 
 #=========================PART 0 ENDS HERE=================================================================
 function pr4() {
@@ -151,8 +152,12 @@ function pre_part3() {
 	${smr} -rf ${1}/perl-modules-*.deb
 }
 
+#TODO:nämä käyttöön vähitellen
+#function clouds_pre() {}
+#function clouds_case0() {}
+#function clouds_case1() {}
+
 dqb "BIL-UR-SAG"
 check_binaries ${distro}
-check_binaries2
+check_binaries2 #${distro}
 dqb "UMULAMAHRI"
-#TODO:clouds.sh, distro-spesifinen sisältö -> lib

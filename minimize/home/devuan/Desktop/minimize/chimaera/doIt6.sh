@@ -55,13 +55,16 @@ done
 
 dqb "shutting down some services (4 real) in 3 secs"
 sleep 3 
+
 ${whack} cups*
 ${whack} avahi*
 ${whack} dnsmasq*
 ${whack} stubby*
 ${whack} nm-applet
-sleep 3
+csleep 3
 #exit
+
+#ntp-jutut tähän?
 
 #K01avahi-jutut sopivaan kohtaan?
 
@@ -70,8 +73,13 @@ ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* 
 ${sharpy} modem* wireless* wpa* iw lm-sensors
+
+#HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
+${sharpy} ntp*
+${sharpy} po* pkexec
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
+#TODO:lftr
 ${smr} -rf /run/live/medium/live/initrd.img*
 sleep 3
 
