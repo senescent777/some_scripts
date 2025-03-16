@@ -125,13 +125,19 @@ function pre_enforce() {
 		${sco} ${1}:${1} ${q}/meshuggah 
  		${scm} 0660 ${q}/meshuggah
 	fi	
-	
-	if [ -d ~/Desktop/minimize/{2} ] && [ -x ~/Desktop/minimize/${2}/clouds.sh ] ; then
-		dqb "1NF3RN0 0F SACR3D D35TRUCT10N"
-		mangle_s ~/Desktop/minimize/${2}/clouds.sh ${q}/meshuggah
-		csleep 3
+
+	if [ z"${2}" != "z" ] ; then
+		dqb "FUCKED WITH A KNIFE"
+		#[ ${debug} -eq 1 ] && ls -las ~/Desktop/minimize/${2}
+
+		if [ -d ~/Desktop/minimize/${2} ] ; then
+			dqb "1NF3RN0 0F SACR3D D35TRUCT10N"
+			mangle_s ~/Desktop/minimize/${2}/clouds.sh ${q}/meshuggah
+			csleep 2
+		fi
 	fi
 
+	#exit 111
 	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
 	for f in /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
 	
@@ -195,8 +201,7 @@ function enforce_access() {
 	${scm} 0755 ~/Desktop/minimize	
 	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
 	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
-	#${scm} a+x ${d}/*.sh globaalit wttuun
-	
+	for f in $(find ~/Desktop/minimize -name '*.sh') ; do ${scm} 0755 ${f} ; done
 	f=$(date +%F)
 
 	[ -f /etc/resolv.conf.${f} ] || ${spc} /etc/resolv.conf /etc/resolv.conf.${f}
@@ -325,7 +330,6 @@ function ecfx() {
 	fi
 }
 
-#TODO:jos vähitellen teSTAISi toiminnan
 function vommon() {
 	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd
