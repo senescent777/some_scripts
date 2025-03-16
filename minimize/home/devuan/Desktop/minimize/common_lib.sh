@@ -43,8 +43,9 @@ fix_sudo() {
 fix_sudo
 
 #pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
-#TODO:jospa tämänkin toiminnan testausu
+#VAIH:jospa tämänkin toiminnan testausu (daedaluksen kanssa sitten)
 function ocs() {
+	dqb "ocs"
 	local tmp
 	tmp=$(sudo which ${1})
 
@@ -55,7 +56,8 @@ function ocs() {
 	if [ ! -x ${tmp} ] ; then
 		exit 77
 	fi
-
+	
+	dqb "paramz_0k"
 	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
 }
 
@@ -93,6 +95,7 @@ function mangle_s() {
 	[ -x ${1} ] || exit 55 #oli -s
 	[ y"${2}" == "y" ] && exit 
 	[ -f ${2} ] || exit 54
+	#dqb "params_oik"
 
 	${scm} 0555 ${1}
 	#HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
@@ -216,8 +219,10 @@ function enforce_access() {
 
 	[ -s /sbin/dclient-script.OLD ] || ${spc} /sbin/dhclient-script /sbin/dhclient-script.OLD
 	
-	#TODO: se man chmod ao. riveihin liittyen, rwt...
+	#TODO: se man chmod ao. riveihin liittyen, rwt... (kts nyt vielä miten oikeudet menivät ennen sorkintaa)
 	#HUOM.280125:uutena seur rivit, poista jos pykii
+	#0 drwxrwxrwt 7 root   root   220 Mar 16 22:41 .
+	
 	${scm} 0777 /tmp
 	${sco} root:root /tmp
 }
@@ -294,11 +299,9 @@ function part3() {
 	[ z"${sdi}" == "z" ] && exit 33
 	#[ -x ${sdi} ] || exit 44 #1. kokeilulla pyki, jemmaan toistaiseksi
 	
-	#${sdi} ${1}/lib*.deb
 	local f
 	for f in $(find ${1} -name 'lib*.deb') ; do ${sdi} ${f} ; done
 
-	#VAIH:pitäisi kai mennä findin kautta jottei kosahda sopivanlaistEn .deb-tdstojen puutteeseen
 	#VAIH:varmistus jotta sdi eityhjä+ajokelpoinen ennenq... (oikeastaan check_binaries* pitäisi hoitaa)
 
 	if [ $? -eq  0 ] ; then
@@ -310,13 +313,11 @@ function part3() {
 	 	exit 66
 	fi
 
-	#${sdi} ${1}/*.deb
 	for f in $(find ${1} -name '*.deb') ; do ${sdi} ${f} ; done	
 
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		csleep 5
-		#${odio} shred -fu ${1}/*.deb 
 		${NKVD} ${1}/*.deb 
 	else
 	 	exit 67
@@ -418,15 +419,21 @@ function ns4() {
 function clouds_pre() {
 	dqb "common_lib.clouds_pre()"
 
+	#HUOM. rm-kikkailuja sietää vähän miettiä, jos vaikka prujaisi daedaluksen clouds:ista ne kikkrilut
 	${smr} /etc/resolv.conf
 	${smr} /etc/dhcp/dhclient.conf
 	${smr} /sbin/dhclient-script
 
 	csleep 1
-	
+	#HUOM.160325:lisätty uutena varm. vuoksi
+	${iptr} /etc/iptables/rules.v4
+	${ip6tr} /etc/iptables/rules.v6
+	csleep 2
+
 	#tässä oikea paikka tables-muutoksille vai ei?
 	${ipt} -F b
 	${ipt} -F e
+
 	${ipt} -D INPUT 5
 	${ipt} -D OUTPUT 6
 

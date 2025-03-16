@@ -1,5 +1,5 @@
 #!/bin/bash
-debug=0
+debug=1
 distro=""
 mode=-1
 
@@ -12,14 +12,14 @@ function csleep() {
 }
 
 if [ $# -gt 1 ] ; then
-	mode=${1}
- 
 	if [ -d ~/Desktop/minimize/${2} ] ; then
 		distro=${2}
 		dqb "asdasdasd.666"
 		. ~/Desktop/minimize/${distro}/conf
 		csleep 5
 	fi
+
+	mode=${1} #TODO:mode VÄHITELLEn WTTUUN conf:ista
 else
 	echo "${0} <mode> <other_param>";exit
 fi

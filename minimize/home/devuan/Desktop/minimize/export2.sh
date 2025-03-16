@@ -102,7 +102,8 @@ function tp1() {
 
 	if [ -d ~/Desktop/minimize/${2} ] ; then
 		dqb "cleaning up ~/Desktop/minimize/${2} "
-		${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
+		#${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
+		${NKVD}  ~/Desktop/minimize/${2}/*.deb
 	fi
 
 	if [ ${enforce} -eq 1 ] ; then
@@ -146,7 +147,8 @@ function tp4() {
 	csleep 4
 
 	if [ z"${pkgdir}" != "z" ] ; then 
-		${odio} shred -fu ${pkgdir}/*.deb
+		#${odio} shred -fu ${pkgdir}/*.deb
+		${NKVD} ${pkgdir}/*.deb
 		dqb "SHREDDED HUMANS"
 	fi
 
@@ -188,7 +190,8 @@ function tp4() {
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
 	if [ -d ~/Desktop/minimize/${2} ] ; then 
-		${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
+		#${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
+		${NKVD} ~/Desktop/minimize/${2}/*.deb
 	
 		#HUOM.070325: varm vuoksi speksataan että *.deb
 		${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
@@ -272,7 +275,8 @@ function tpu() {
 	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 	dqb "params_ok"
 
-	${odio} shred -fu ${pkgdir}/*.deb
+	#${odio} shred -fu ${pkgdir}/*.deb
+	${NKVD} ${pkgdir}/*.deb
 
 	${sag} upgrade -u
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
