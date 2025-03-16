@@ -71,19 +71,19 @@ csleep 3
 #===================================================PART 2===================================
 #HUOM.160325:poistelut tilapäisetsi pois pelistä, kohta takaisin
 #(ehkä jos jonkin mjan taakse nämöä poistelut)
-#${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
-#${sharpy} avahi* blu* cups* exim*
-#${sharpy} rpc* nfs* 
-#${sharpy} modem* wireless* wpa* iw lm-sensors
-#
-##HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
-##${sharpy} ntp* #tämäkin liikaa?
-##${sharpy} po* #uskaltaakohan tätäkään ajaa? tai siis jos vähän tarkempi...
-##${sharpy} pkexec #HUOM.160325:tästä tuli nalkutusta
-##lisäksi apt yritti poistaa oleellisia paketteja
-##option --allow-remove-essential puutos esti oleellisten poistumisen
-#
-##paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
+${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
+${sharpy} avahi* blu* cups* exim*
+${sharpy} rpc* nfs* 
+${sharpy} modem* wireless* wpa* iw lm-sensors
+
+#HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
+#${sharpy} ntp* #tämäkin liikaa?
+#${sharpy} po* #uskaltaakohan tätäkään ajaa? tai siis jos vähän tarkempi...
+#${sharpy} pkexec #HUOM.160325:tästä tuli nalkutusta
+#lisäksi apt yritti poistaa oleellisia paketteja
+#option --allow-remove-essential puutos esti oleellisten poistumisen
+
+#paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
 ${lftr}
 csleep 3
