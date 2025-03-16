@@ -82,52 +82,6 @@ function check_binaries() {
 	csleep 3
 }
 
-#HUOM.140325:käytännössä samat chim ja daed -> common_lib jatkossa käytt
-#function check_binaries2() {
-#	dqb "lib.ch3ck_b1nar135.2()"
-#
-#	ipt="${odio} ${ipt} "
-#	ip6t="${odio} ${ip6t} "
-#	iptr="${odio} ${iptr} "
-#	ip6tr="${odio} ${ip6tr} "
-#
-#	whack="${odio} ${whack} --signal 9 "
-#	snt="${odio} ${snt} "
-#	sharpy="${odio} ${sag} remove --purge --yes "
-#	spd="${odio} ${sdi} -l "
-#	sdi="${odio} ${sdi} -i "
-#	
-#	#HUOM. ${sag} VIIMEISENÄ
-#	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
-#	sag_u="${odio} ${sag} update "
-#	sag="${odio} ${sag} "
-#
-#	sco="${odio} ${sco} "
-#	scm="${odio} ${scm} "
-#	sip="${odio} ${sip} "
-#
-#	sa="${odio} ${sa} "
-#	sifu="${odio} ${sifu} "
-#	sifd="${odio} ${sifd} "
-#
-#	smr="${odio} ${smr} "
-#	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
-#	slinky="${odio} ${slinky} -s "
-#
-#	spc="${odio} ${spc} "
-#	srat="${odio} ${srat} "
-#	asy="${odio} ${sa} autoremove --yes"
-#
-#	fib="${odio} ${sa} --fix-broken install"
-#	som="${odio} ${som} "
-#	uom="${odio} ${uom} "	
-#
-#	#smr="${odio} ${smr} "
-#	dch="${odio} ${dch}"
-#	dqb "b1nar135.2 0k.2" 
-#	csleep 3
-#}
-
 #=========================PART 0 ENDS HERE=================================================================
 function pr4() {
 	dqb "pr4 (${1})"
@@ -140,7 +94,7 @@ function pr4() {
 }
 
 #VAIH:jompaan kumpaan(pp3/pr4) dnsmasq* poisto (pidemmällä tähtäimellä tietty parempi laittaa toimimaanq poistaa mutta nyt näin)
-#TODO:näille main sitä git:in asentelua
+#TODO:näille main sitä git:in asentelua (jos ei siis jo pelaa)
 
 function pre_part3() {
 	dqb "pre_part3( ${1})"
@@ -152,29 +106,35 @@ function pre_part3() {
 	${smr} -rf ${1}/perl-modules-*.deb
 }
 
+function clouds_case0() {
+	dqb  "lib.case0 "
 
-#
-#function clouds_case0() {
-#	${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
-#	${slinky} /etc/dhcp/dhclient.conf.OLD /etc/dhcp/dhclient.conf
-#	${spc} /sbin/dhclient-script.OLD /sbin/dhclient-script
-#
-#	#samaan tapaan voisi menneä daelauksenkin kanssa? s.e. jos a-f - ketjut olemassa ni muutetaan vain dns-säännlt, muussa tapaux pakotetaan rules.v4
-#	${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
-#	${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
-#	for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
-#}
-#
-#function clouds_case1() {
-##		${slinky} /etc/resolv.conf.new /etc/resolv.conf
-##		${slinky} /etc/dhcp/dhclient.conf.new /etc/dhcp/dhclient.conf
-##		${spc} /sbin/dhclient-script.new /sbin/dhclient-script
-##		
-##		${ipt} -A INPUT -p tcp -m tcp --sport 853 -j b
-##		${ipt} -A OUTPUT -p tcp -m tcp --dport 853 -j e
-##		for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do tod_dda ${s} ; done
-#
-#}
+	${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
+	${slinky} /etc/dhcp/dhclient.conf.OLD /etc/dhcp/dhclient.conf
+	${spc} /sbin/dhclient-script.OLD /sbin/dhclient-script
+
+	#samaan tapaan voisi menneä daeDALuksenkin kanssa? s.e. jos a-f - ketjut olemassa ni muutetaan vain dns-säännlt, muussa tapaux pakotetaan rules.v4
+	${ipt} -A INPUT -p udp -m udp --sport 53 -j b 
+	${ipt} -A OUTPUT -p udp -m udp --dport 53 -j e
+	for s in $(grep -v '#' /etc/resolv.conf.OLD | grep names | grep -v 127. | awk '{print $2}') ; do dda_snd ${s} ; done	
+
+	csleep 1
+	dqb "... d0n3"	
+}
+
+function clouds_case1() {
+	echo "lib.case1 (TODO)"
+#		${slinky} /etc/resolv.conf.new /etc/resolv.conf
+#		${slinky} /etc/dhcp/dhclient.conf.new /etc/dhcp/dhclient.conf
+#		${spc} /sbin/dhclient-script.new /sbin/dhclient-script
+#		
+#		${ipt} -A INPUT -p tcp -m tcp --sport 853 -j b
+#		${ipt} -A OUTPUT -p tcp -m tcp --dport 853 -j e
+#		for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do tod_dda ${s} ; done
+
+	csleep 1
+	dqb "... d0n3"	
+}
 
 dqb "BIL-UR-SAG"
 check_binaries ${distro}

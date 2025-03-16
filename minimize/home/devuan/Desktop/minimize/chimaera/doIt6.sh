@@ -41,7 +41,7 @@ if [ $# -gt 0 ] ; then
 fi
 
 check_params 
-[ ${enforce} -eq 1 ] && pre_enforce ${n}
+[ ${enforce} -eq 1 ] && pre_enforce ${n} ${distro}
 enforce_access ${n} 
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
@@ -76,19 +76,25 @@ ${sharpy} modem* wireless* wpa* iw lm-sensors
 
 #HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
 ${sharpy} ntp*
-${sharpy} po* pkexec
+${sharpy} po* 
+
+#${sharpy} pkexec #HUOM.160325:tästä tuli nalkutusta
+#lisäksi apt yritti poistaa oleellisia paketteja
+#option --allow-remove-essential puutos esti oleellisten poistumisen
+
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
-#TODO:lftr
-${smr} -rf /run/live/medium/live/initrd.img*
-sleep 3
+#VAIH:lftr
+${lftr} #-rf /run/live/medium/live/initrd.img*
+csleep 3
 
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
 
 csleep 5
-${smr} -rf /run/live/medium/live/initrd.img*
-sleep 3
+#${smr} -rf /run/live/medium/live/initrd.img*
+${lftr} 
+csleep 3
 
 if [ ${debug} -eq 1 ] ; then
 	${snt} -tulpan
