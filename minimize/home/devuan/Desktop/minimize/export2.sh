@@ -163,6 +163,8 @@ function tp4() {
 	#actually necessary
 	pre2 ${2}
 
+	#TODO:dnsm-mjan taakse pakettien dnsmasq ja stubby haku?
+
 	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
 	${shary} runit-helper
 
