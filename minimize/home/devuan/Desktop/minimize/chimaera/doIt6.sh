@@ -10,7 +10,7 @@ else
 	exit 111	
 fi
 
-#TODO:parsetista uusiksi, vaikkapa gpo()
+#TODO:testaa tämän toiminta pitkästä aikaa
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -75,9 +75,8 @@ ${sharpy} rpc* nfs*
 ${sharpy} modem* wireless* wpa* iw lm-sensors
 
 #HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
-${sharpy} ntp*
+#${sharpy} ntp* #tämäkin liikaa?
 #${sharpy} po* #uskaltaakohan tätäkään ajaa? tai siis jos vähän tarkempi...
-
 #${sharpy} pkexec #HUOM.160325:tästä tuli nalkutusta
 #lisäksi apt yritti poistaa oleellisia paketteja
 #option --allow-remove-essential puutos esti oleellisten poistumisen
@@ -125,9 +124,13 @@ fi
 
 ${asy}
 dqb "ASTRAL 5L33P"
+csleep 3
+dqb "fråm doit6: distro=${distro}"
 csleep 5
-#TODO:selvitä missä kohtaa x-oikeudet oistuvat
-sudo ~/Desktop/minimize/${distro}/clouds.sh 0 
+
+##TODO:selvitä missä kohtaa x-oikeudet p.oistuvat
+#sudo ~/Desktop/minimize/${distro}/clouds.sh 0 
+~/Desktop/minimize/clouds2.sh 0 ${distro}
 csleep 5
 
 ##===================================================PART 4(final)==========================================================
