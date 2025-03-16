@@ -98,6 +98,7 @@ function common_part() {
 }
 
 #TODO:ao- if-blkkiin liittyen jos poistaisi ghubista minimize-hamistosta välistä sen /h/d-osuuden
+#TODO:chmod-juttuja joutaisi miettiä
 
 case "${1}" in
 	-1)
