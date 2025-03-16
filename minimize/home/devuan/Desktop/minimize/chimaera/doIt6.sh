@@ -69,19 +69,21 @@ csleep 3
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
-${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
-${sharpy} avahi* blu* cups* exim*
-${sharpy} rpc* nfs* 
-${sharpy} modem* wireless* wpa* iw lm-sensors
-
-#HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
-#${sharpy} ntp* #tämäkin liikaa?
-#${sharpy} po* #uskaltaakohan tätäkään ajaa? tai siis jos vähän tarkempi...
-#${sharpy} pkexec #HUOM.160325:tästä tuli nalkutusta
-#lisäksi apt yritti poistaa oleellisia paketteja
-#option --allow-remove-essential puutos esti oleellisten poistumisen
-
-#paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
+#HUOM.160325:poistelut tilapäisetsi pois pelistä, kohta takaisin
+#(ehkä jos jonkin mjan taakse nämöä poistelut)
+#${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
+#${sharpy} avahi* blu* cups* exim*
+#${sharpy} rpc* nfs* 
+#${sharpy} modem* wireless* wpa* iw lm-sensors
+#
+##HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
+##${sharpy} ntp* #tämäkin liikaa?
+##${sharpy} po* #uskaltaakohan tätäkään ajaa? tai siis jos vähän tarkempi...
+##${sharpy} pkexec #HUOM.160325:tästä tuli nalkutusta
+##lisäksi apt yritti poistaa oleellisia paketteja
+##option --allow-remove-essential puutos esti oleellisten poistumisen
+#
+##paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
 ${lftr}
 csleep 3
@@ -89,7 +91,7 @@ csleep 3
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
 
-csleep 5
+csleep 3
 ${lftr} 
 csleep 3
 
@@ -123,10 +125,10 @@ if [ ${mode} -eq 1 ] ; then
 fi
 
 ${asy}
-dqb "ASTRAL 5L33P"
+#dqb "ASTRAL 5L33P"
+#csleep 3
+#dqb "fråm doit6: distro=${distro}"
 csleep 3
-dqb "fråm doit6: distro=${distro}"
-csleep 5
 
 ##TODO:selvitä missä kohtaa x-oikeudet p.oistuvat
 #sudo ~/Desktop/minimize/${distro}/clouds.sh 0 

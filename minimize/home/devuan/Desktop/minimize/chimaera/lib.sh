@@ -75,7 +75,7 @@ function check_binaries() {
 
 	#HUOM.:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
 	#VAIH:ocs() käyttöön, testaa 	
-	CB_LIST1="${ipt} /sibn/ip5tbl5 ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
+	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
 
 	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
