@@ -1,7 +1,7 @@
-#!/bin/bash
+##!/bin/bash
 #d=$(dirname $0)
 #[ -s ${d}/conf ] && . ${d}/conf
-#
+#HUOM. distro-kohtaiset e ja i voinee poistaa qhan testannut että d kanssa pelaa
 #. ~/Desktop/minimize/common_lib.sh
 #
 #if [ -s ${d}/lib.sh ] ; then
@@ -87,13 +87,9 @@
 #			csleep 3
 #			common_part ${2}
 #			
-#			#VAIH:$d (tai sit ei)
-#			pre_part3 ~/Desktop/minimize/${distro} #$d
-#			pr4 ~/Desktop/minimize/${distro} #${d}
-#			part3 ~/Desktop/minimize/${distro} # #${d} 
-#			csleep 3
-#			#HUOM. BARMISTA ETTÄ ÅPOSTUUKO .deb-PAKETIT $distro:n alta VAIKO ERI
-#
+#			pre_part3 ~/Desktop/minimize/${distro} 
+#			pr4 ~/Desktop/minimize/${distro} 
+#			part3 ~/Desktop/minimize/${distro} 
 #			csleep 3
 #			cd ${olddir}
 #			echo "NEXT: $0 2"

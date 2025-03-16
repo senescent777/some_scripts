@@ -1,4 +1,4 @@
-#!/bin/bash
+##!/bin/bash
 #d=$(dirname $0)
 ##debug=1
 #[ -s ${d}/conf ] && . ${d}/conf
@@ -39,7 +39,6 @@
 #	${scm} a+x ~/Desktop/minimize/${distro}/*.sh
 #
 #	dqb "${srat} -cf ${1}"  #HUOM.260125: -p wttuun varm. vuoksi  
-#	#TODO:jatkossa tähän väliin xfce.tar luominen minimize alle, käyttöäen .config/xfce4/xfconf/xfce-perchannel-xml lähtreenä 	
 #		
 #	${srat} -cf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 #}
@@ -106,7 +105,6 @@
 #	dqb "make_tar_1_75( ${1} )"	
 #	csleep 5
 #
-#	
 #	[ y"${1}" == "y" ] && exit 1
 #	[ -s ${1} ] || exit 2
 #	dqb "paramz_0k"
@@ -138,7 +136,6 @@
 #	local tig
 #	tig=$(sudo which git)
 #
-#
 #	if [ x"${tig}" == "x" ] ; then
 #		${shary} git
 #		[ $? -eq 0 ] || exit 7
@@ -157,10 +154,8 @@
 #	echo "#dqb cd ${q}"
 #	cd ${q}
 #
-#
 #	${tig} clone https://github.com/senescent777/project.git
 #	cd project
-#
 #
 #	${spc} /etc/dhcp/dhclient.conf ./etc/dhcp/dhclient.conf.OLD
 #	${spc} /etc/resolv.conf ./etc/resolv.conf.OLD
@@ -184,16 +179,13 @@
 #	dqb "make_upgrade(${1} )"
 #	csleep 5
 #
-#	
 #	[ y"${1}" == "y" ] && exit 1
 #	[ -s ${1} ] && exit 2
 #	dqb "paramz_0k"
 #	csleep 1
 #
 #	dqb "${sagu}; ${sag} upgrade -u"
-#
 #	${odio} shred -fu ${pkgdir}/*.deb 
-#
 #	sleep 6
 #
 #	${asy} 
@@ -208,13 +200,11 @@
 #	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
 #	${srat} -jcf ${1} ~/Desktop/minimize/${distro}/*.deb
 #
-#
 #	sleep 1
 #}
 #
 #mode=0
 #tgtfile=""
-#
 #
 #if [ $# -gt 0 ] ; then
 #	mode=${1}
@@ -228,11 +218,9 @@
 #		make_tar ${tgtfile}
 #		make_tar_1_75 ${tgtfile}
 #		make_tar2 ${tgtfile}
-#
 #		make_tar_15 ${tgtfile} 
 #	;;
 #	1|u|upgrade)
-#
 #		make_upgrade ${tgtfile}
 #	;;
 #	-h)
@@ -242,5 +230,3 @@
 #		echo "-h"
 #	;;
 #esac
-#
-#

@@ -37,7 +37,7 @@ function check_binaries() {
 	dqb "half_fdone"
 	csleep 1
 
-	#TODO:ajamaan nuo komennot jatkossa
+	#TODO:ajamaan nuo komennot jatkossa (tai vaikka common_lib:iin c_b_1)
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
 		echo "pre_part3 ~/Desktop/minimize/${1}"

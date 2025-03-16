@@ -84,15 +84,13 @@ ${sharpy} po*
 
 #paketin mdadm poisto siirretty tdstoon pt2.sh päiväyksellä 220624
 
-#VAIH:lftr
-${lftr} #-rf /run/live/medium/live/initrd.img*
+${lftr}
 csleep 3
 
 ${ip6tr} /etc/iptables/rules.v6
 ${iptr} /etc/iptables/${tblz4}
 
 csleep 5
-#${smr} -rf /run/live/medium/live/initrd.img*
 ${lftr} 
 csleep 3
 

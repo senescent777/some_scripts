@@ -8,14 +8,6 @@ slinky="${slinky} -s "
 sco=$(sudo which chown)
 scm=$(sudo which chmod)
 
-##4 backwards compability
-#smr="sudo ${smr}"
-#ipt="sudo ${ipt}"
-#slinky="sudo ${slinky}"
-#spc="sudo ${spc}"
-#sco="sudo ${sco}"
-#scm="sudo ${scm}"
-
 #pre()
 ${smr} /etc/resolv.conf
 ${smr} /etc/dhcp/dhclient.conf
@@ -38,7 +30,6 @@ function dda_snd() {
 	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
 }
 
-#TODO:casen sisältöä ja pre -> lib
 case ${1} in 
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
