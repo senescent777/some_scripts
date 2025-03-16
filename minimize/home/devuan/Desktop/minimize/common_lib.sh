@@ -233,7 +233,7 @@ function part1() {
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "5H0ULD-1N\$TALL-1PTABL35!!!"
-		#TODO:ne ppre_part3-jutut sopivaan kohtaan? (kts. daedalus->lib->check_bin)
+		#ne ppre_part3-jutut sopivaan kohtaan? (kts. daedalus->lib->check_bin)
 	else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
@@ -294,8 +294,11 @@ function part3() {
 	[ z"${sdi}" == "z" ] && exit 33
 	#[ -x ${sdi} ] || exit 44 #1. kokeilulla pyki, jemmaan toistaiseksi
 	
-	${sdi} ${1}/lib*.deb
-	#TODO:pitäisi kai mennä findin kautta jottei kosahda sopivanlaistEn .deb-tdstojen puutteeseen
+	#${sdi} ${1}/lib*.deb
+	local f
+	for f in $(find ${1} -name 'lib*.deb') ; do ${sdi} ${f} ; done
+
+	#VAIH:pitäisi kai mennä findin kautta jottei kosahda sopivanlaistEn .deb-tdstojen puutteeseen
 	#VAIH:varmistus jotta sdi eityhjä+ajokelpoinen ennenq... (oikeastaan check_binaries* pitäisi hoitaa)
 
 	if [ $? -eq  0 ] ; then
@@ -303,17 +306,18 @@ function part3() {
 		sleep 5
 		${odio} shred -fu ${1}/lib*.deb
 	else
-	 	dqb "exit 66"
+	 	exit 66
 	fi
 
-	${sdi} ${1}/*.deb
-	
+	#${sdi} ${1}/*.deb
+	for f in $(find ${1} -name '*.deb') ; do ${sdi} ${f} ; done	
+
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
 		sleep 5
 		${odio} shred -fu ${1}/*.deb 
 	else
-	 	dqb "exit 67"
+	 	exit 67
 	fi
 
 	csleep 2
