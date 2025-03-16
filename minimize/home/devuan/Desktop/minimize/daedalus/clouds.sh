@@ -14,14 +14,6 @@ scm=$(sudo which chmod)
 whack=$(sudo which pkill)
 debug=0
 
-#function dqb() {
-#	[ ${debug} -eq 1 ] && echo ${1}
-#}
-#
-#function csleep() {
-#	[ ${debug} -eq 1 ] && sleep ${1}
-#}
-
 #testit ehkä jatkossa common_lib_in pre-osuuteen
 if [ -s /etc/resolv.conf.new ] || [ -s /etc/resolv.conf.OLD ] ; then 
 	${smr} /etc/resolv.conf
@@ -58,40 +50,6 @@ else
 	${ipt} -D OUTPUT 6
 fi
 
-##VAIH:ao 2 fktiota korvaten common_lib:in vastaavilla
-#function tod_dda() { 
-#	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
-#        ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
-#}
-#
-#function dda_snd() {
-#	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
-#	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
-#}
-#
-##VAIH:stubbyn asennus toimimaan taas (261224)
-##VAIH:common_lib hatqs
-#function ns2() {
-#	[ y"${1}" == "y" ] && exit
-#	dqb "ns2( ${1} )"
-#	${scm} u+w /home
-#	csleep 3
-#
-#	${odio} /usr/sbin/userdel ${1}
-#	sleep 3
-#
-#	${odio} adduser --system ${1}
-#	sleep 3
-#
-#	${scm} go-w /home
-#	${sco} -R ${1}:65534 /home/${1}/ #HUOM.280125: tässä saattaa mennä metsään ... tai sitten se /r/s.pid
-#	dqb "d0n3"
-#	csleep 4	
-#
-#	[ ${debug} -eq 1 ]  && ls -las /home
-#	csleep 3
-#}
-
 case ${1} in 
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
@@ -109,7 +67,7 @@ case ${1} in
 
 		${odio} /etc/init.d/dnsmasq stop
 		${odio} /etc/init.d/ntpsec stop
-		csleep 5
+		csleep 3
 		${whack} dnsmasq*
 		${whack} ntp*
 	;;
@@ -119,11 +77,11 @@ case ${1} in
 		if [ -s /etc/resolv.conf.new ] ; then
 			echo "r30lv.c0nf alr3ady 3x15t5"
 		else
-			sudo touch /etc/resolv.conf.new
-			sudo chmod a+w /etc/resolv.conf.new
-			sudo echo "nameserver 127.0.0.1" > /etc/resolv.conf.new
-			sudo chmod 0444 /etc/resolv.conf.new
-			sudo chown root:root /etc/resolv.conf.new
+			${odio} touch /etc/resolv.conf.new
+			${scm} a+w /etc/resolv.conf.new
+			${odio} echo "nameserver 127.0.0.1" > /etc/resolv.conf.new
+			${scm} 0444 /etc/resolv.conf.new
+			${sco} root:root /etc/resolv.conf.new
 		fi
 
 		${slinky} /etc/resolv.conf.new /etc/resolv.conf
@@ -138,18 +96,18 @@ case ${1} in
 			for s in $(grep -v '#' /home/stubby/.stubby.yml | grep address_data | cut -d ':' -f 2) ; do tod_dda ${s} ; done
 		fi
 
-		echo "dns";sleep 2
+		dqb "dns";csleep 2
 		${odio} /etc/init.d/dnsmasq restart
 		pgrep dnsmasq
 
-		echo "stu";sleep 2
+		dqb "stu";csleep 2
 		${whack} stubby* #090325: pitäisiköhän tämä muuttaa?
-		sleep 3	
+		csleep 3	
 			
 		[ -f /run/stubby.pid ] || sudo touch /run/stubby.pid
 		${sco} devuan:devuan /run/stubby.pid #$n
 		${scm} 0644 /run/stubby.pid 
-		sleep 3
+		csleep 3
 
 		su devuan -c '/usr/bin/stubby -C /home/stubby/.stubby.yml -g'
 		pgrep stubby

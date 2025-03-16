@@ -2,7 +2,7 @@
 d=$(dirname $0)
 [ -s ${d}/conf ] && . ${d}/conf
 . ~/Desktop/minimize/common_lib.sh
-
+#TODO:roskikseen jatkossa
 if  [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
@@ -27,7 +27,6 @@ fi
 
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0}
-
 dqb "b3f0r3 0ld.tar"
 csleep 5
 

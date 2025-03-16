@@ -6,7 +6,7 @@ d=$(dirname $0)
 [ -s ${d}/lib.sh ] && . ${d}/lib.sh
 
 ${fib}
-g=$(date +%F) #tarpeellinen nykyään?
+#g=$(date +%F) #tarpeellinen nykyään?
 
 if [ $# -gt 0 ] ; then  
 	if [ "${1}" == "-v" ] ; then
@@ -132,7 +132,7 @@ ${odio} shred -fu /tmp/*.tar
 ${odio} rm -rf /tmp/tmp.*
 #squ.ash voisi vilkaista kanssa liittyen (vai oliko mitään hyödyllistä siellä?)
 df
-${odio} which dhclient; ${odio} which ifup; sleep 6
+${odio} which dhclient; ${odio} which ifup; csleep 6
 
 dqb "${scm} a-wx $0 in 6 secs "
 csleep 6

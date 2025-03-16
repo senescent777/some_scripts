@@ -42,7 +42,7 @@ if [ $# -gt 0 ] ; then
 fi
 
 check_params 
-[ ${enforce} -eq 1 ] && pre_enforce ${n}
+[ ${enforce} -eq 1 ] && pre_enforce ${n} ${distro}
 enforce_access ${n}
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
@@ -52,7 +52,7 @@ part1 ${distro}
 #HUOM.261224: ntpsec uutena
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ntpsec ; do
 	${odio} /etc/init.d/${s} stop
-	sleep 1
+	csleep 1
 done
 
 dqb "shutting down some services (4 real) in 3 secs"
@@ -74,7 +74,7 @@ ${odio} /etc/init.d/ntpsec stop
 ecfx
 csleep 5
 
-#TODO:testaus
+#VAIH:testaus
 if [ ${mode} -eq 1 ] ; then
 	vommon
 fi
@@ -94,7 +94,7 @@ csleep 3
 
 if [ y"${ipt}" != "y" ] ; then 
 	${ip6tr} /etc/iptables/rules.v6
-	${iptr} /etc/iptables/${tblz4}
+	${iptr} /etc/iptables/${tblz4} #voisi olla rules.v4 jatkossa, ei kikkaulua
 fi
 
 #HUOM.270624:oli aikaisemmin tässä clouds.sh 0
@@ -122,7 +122,7 @@ part3 ${d}
 #(daudaluksen kanssa ok mutta chimaera...)
 
 echo $?
-sleep 3
+csleep 3
 ${ip6tr} /etc/iptables/rules.v6
 
 #VAIH:se ffox-profiili-asia (mallia sieltä ghubin toisesta hmistosta)
@@ -135,7 +135,7 @@ fi
 ${asy}
 dqb "GR1DN BELIALAS KYE"
 
-sudo ${d}/clouds.sh 0
+sudo ${d}/clouds.sh 0 #jatqs se yleismepi
 csleep 5
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
