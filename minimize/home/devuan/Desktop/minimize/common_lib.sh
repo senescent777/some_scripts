@@ -126,16 +126,18 @@ function pre_enforce() {
  		${scm} 0660 ${q}/meshuggah
 	fi	
 
-	if [ z"${2}" != "z" ] ; then
-		dqb "FUCKED WITH A KNIFE"
-		#[ ${debug} -eq 1 ] && ls -las ~/Desktop/minimize/${2}
-
-		if [ -d ~/Desktop/minimize/${2} ] ; then
-			dqb "1NF3RN0 0F SACR3D D35TRUCT10N"
-			mangle_s ~/Desktop/minimize/${2}/clouds.sh ${q}/meshuggah
-			csleep 2
-		fi
-	fi
+	##HUOM.lib- ja conf- kikkailujen takia ei ehkä kantsikaan ajaa vlouds2:sta sudon kautta kokonaisuudessaan
+	##if [ z"${2}" != "z" ] ; then
+	##	dqb "FUCKED WITH A KNIFE"
+	##	#[ ${debug} -eq 1 ] && ls -las ~/Desktop/minimize/${2}
+	##
+	##	if [ -d ~/Desktop/minimize/${2} ] ; then
+	#		dqb "1NF3RN0 0F SACR3D D35TRUCT10N"
+	#		#mangle_s ~/Desktop/minimize/${2}/clouds.sh ${q}/meshuggah
+	#		mangle_s ~/Desktop/minimize/clouds2.sh ${q}/meshuggah 			
+	#		csleep 2
+	##	fi
+	##fi
 
 	#exit 111
 	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
@@ -406,6 +408,7 @@ function ns4() {
 #VAIH:nämä käyttöön vähitellen (tai siis common_lib:in vastaava)
 #HUOM.toisessa clouds:issa taisi olla pre-osuudessa muutakin
 #pitäisiköhän se ipt-testi olla tässä?
+#HUOM. jos mahd ni pitäisi kai sudoersissa speksata millä parametreilla mitäkin komerntoja ajetaan (man sudo, man sudoers)
 function clouds_pre() {
 	dqb "common_lib.clouds_pre()"
 
@@ -452,6 +455,84 @@ function clouds_post() {
 
 	dqb "d0n3"
 }
+
+#TODO:tämäkin josqs käyttöön
+#function check_binaries() {
+#	dqb "ch3ck_b1nar135(${1} )"
+#	dqb "sudo= ${odio} "
+#	csleep 1
+#
+#	[ z"${1}" == "z" ] && exit 99
+#	[ -d ~/Desktop/minimize/${1} ] || exit 100
+#	dqb "params_ok"
+#	csleep 1
+#
+#	ipt=$(sudo which iptables)
+#	ip6t=$(sudo which ip6tables)
+#	iptr=$(sudo which iptables-restore)
+#	ip6tr=$(sudo which ip6tables-restore)
+#
+#	if [ y"${ipt}" == "y" ] ; then
+#		echo "SHOULD INSTALL IPTABLES"
+#	
+#		pre_part3 ~/Desktop/minimize/${1}
+#		pr4 ~/Desktop/minimize/${1}
+#
+#		ipt=$(sudo which iptables)
+#		ip6t=$(sudo which ip6tables)
+#		iptr=$(sudo which iptables-restore)
+#		ip6tr=$(sudo which ip6tables-restore)
+#	fi
+#
+#	[ -x ${ipt} ] || exit 5
+#	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
+#	[ -x ${ip6t} ] || exit 5
+#	[ -x ${iptr} ] || exit 5
+#	[ -x ${ip6tr} ] || exit 5
+#
+#	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} "
+#	local x
+#	
+#	#passwd mukaan listaan?
+#	for x in chown chmod pkill apt-get apt ip netstat dpkg ifup ifdown rm ln cp tar mount umount 
+#		do ocs ${x} 
+#	done
+#
+#	sco=$(sudo which chown)
+#	scm=$(sudo which chmod)
+#	whack=$(sudo which pkill)
+#	sag=$(sudo which apt-get)
+#	sa=$(sudo which apt)
+#	sip=$(sudo which ip)
+#	snt=$(sudo which netstat)
+#	sdi=$(sudo which dpkg)
+#	sifu=$(sudo which ifup)
+#	sifd=$(sudo which ifdown)
+#	smr=$(sudo which rm) #TODO:shred mukaan kanssa
+#	slinky=$(sudo which ln)
+#	spc=$(sudo which cp)
+#	srat=$(sudo which tar)
+#
+#	if [ ${debug} -eq 1 ] ; then
+#		srat="${srat} -v "
+#	fi
+#
+#	#HUOM. gpgtar olisi vähän parempi kuin pelkkä tar, silleen niinqu tavallaan
+#
+#	som=$(sudo which mount)
+#	uom=$(sudo which umount)
+#
+#	dqb "half_fdone"
+#	csleep 1
+#
+#	dch=$(find /sbin -name dhclient-script)
+#	[ x"${dch}" == "x" ] && exit 6
+#	[ -x ${dch} ] || exit 6
+#
+#	#HUOM:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
+#	dqb "b1nar135 0k" 
+#	csleep 3
+#}
 
 #TODO:voisi tarkIStaa että mitkä komennot pitää jatkossa sudottaa kun omega ajettu (eli clouds käyttämät lähinnä)
 function check_binaries2() {

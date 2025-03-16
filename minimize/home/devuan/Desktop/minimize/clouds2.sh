@@ -1,17 +1,25 @@
 #!/bin/bash
 debug=0
 distro=""
+mode=1
 
-if [ $# -gt 1 ] ; then 
+if [ $# -gt 1 ] ; then
+	mode=${1}
+ 
 	if [ -d ~/Desktop/minimize/${2} ] ; then
 		distro=${2}
+		echo "asdasdasd.666"
 		. ~/Desktop/minimize/${distro}/conf
+		sleep 5
 	fi
 else
 	echo "${0} <mode> <other_param>";exit
 fi
 
 . ~/Desktop/minimize/common_lib.sh
+echo "mode=${mode}"
+echo "distro=${distro}"
+sleep 6
 
 if [ -d ~/Desktop/minimize/${distro} ] && [ -x ~/Desktop/minimize/${distro}/lib.sh ] ; then
 	.  ~/Desktop/minimize/${distro}/lib.sh 
