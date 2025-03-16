@@ -3,6 +3,14 @@ debug=0
 distro=""
 mode=-1
 
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+
 if [ $# -gt 1 ] ; then
 	mode=${1}
  
@@ -33,14 +41,6 @@ else
 	slinky="${slinky} -s "
 	sco=$(sudo which chown)
 	scm=$(sudo which chmod)	
-
-	function dqb() {
-		[ ${debug} -eq 1 ] && echo ${1}
-	}
-
-	function csleep() {
-		[ ${debug} -eq 1 ] && sleep ${1}
-	}
 
 fi
 
