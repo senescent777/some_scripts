@@ -10,6 +10,7 @@ else
 	exit 111	
 fi
 
+#TODO:parsetista uusiksi, vaikkapa gpo()
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -62,10 +63,9 @@ ${whack} dnsmasq*
 ${whack} stubby*
 ${whack} nm-applet
 csleep 3
+
 #exit
-
 #ntp-jutut tähän?
-
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
@@ -76,7 +76,7 @@ ${sharpy} modem* wireless* wpa* iw lm-sensors
 
 #HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
 ${sharpy} ntp*
-${sharpy} po* 
+#${sharpy} po* #uskaltaakohan tätäkään ajaa? tai siis jos vähän tarkempi...
 
 #${sharpy} pkexec #HUOM.160325:tästä tuli nalkutusta
 #lisäksi apt yritti poistaa oleellisia paketteja
@@ -109,7 +109,6 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 pre_part3 ${d} 
 pr4 ${d}
 part3 ${d} 
-
 ecfx
 
 csleep 5
@@ -119,13 +118,17 @@ if [ -x ~/Desktop/minimize/profs.sh ] ; then
 	copyprof ${n} someparam
 fi
 
+#toimii
 if [ ${mode} -eq 1 ] ; then
 	vommon
 fi
 
 ${asy}
-sudo ${d}/clouds.sh 0
-sleep 5
+dqb "ASTRAL 5L33P"
+csleep 5
+#TODO:selvitä missä kohtaa x-oikeudet oistuvat
+sudo ~/Desktop/minimize/${distro}/clouds.sh 0 
+csleep 5
 
 ##===================================================PART 4(final)==========================================================
 ##tulisi olla taas tables toiminnassa tässä kohtaa skriptiä
