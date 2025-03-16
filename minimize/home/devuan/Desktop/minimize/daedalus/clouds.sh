@@ -22,7 +22,7 @@ debug=0
 #	[ ${debug} -eq 1 ] && sleep ${1}
 #}
 
-#pre()
+#testit ehkä jatkossa common_lib_in pre-osuuteen
 if [ -s /etc/resolv.conf.new ] || [ -s /etc/resolv.conf.OLD ] ; then 
 	${smr} /etc/resolv.conf
 	[ $? -gt 0 ] && echo "SHOULD USE SUDO WITH THIS SCRIPT OR OTHER TROUBLE WITH REMOVING FILES"
@@ -44,6 +44,7 @@ fi
 if [ y"${ipt}" == "y" ] ; then
 	echo "SHOULD 1NSTALL TABL35";exit
 else
+	#pre()
 	#tässä kohtaa kai vähän parempi tuo sääntöjen pakottaminen kuin part1
 	${iptr} /etc/iptables/rules.v4
 	${ip6tr} /etc/iptables/rules.v6
@@ -91,7 +92,6 @@ fi
 #	csleep 3
 #}
 
-#TODO:casen sisältöä ja pre -> lib.sh
 case ${1} in 
 	0)
 		${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
