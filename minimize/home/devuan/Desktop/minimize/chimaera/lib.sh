@@ -26,7 +26,7 @@ function check_binaries() {
 
 	sifu=$(sudo which ifup)
 	sifd=$(sudo which ifdown)
-	smr=$(sudo which rm) #TODO:shred mukaan kanssa
+	smr=$(sudo which rm) #kts. NKVD
 	slinky=$(sudo which ln)
 
 	spc=$(sudo which cp)
@@ -74,8 +74,8 @@ function check_binaries() {
 	[ -x ${uom} ] || exit 5
 
 	#HUOM.:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-	#TODO:ocs() käyttöön, testaa 	
-	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
+	#VAIH:ocs() käyttöön, testaa 	
+	CB_LIST1="${ipt} /sibn/ip5tbl5 ${ip6t} ${iptr} ${ip6tr} ${sco} ${scm} ${whack} ${sag} ${sa} ${sip} ${snt} ${sdi} ${sifu} ${sifd} ${smr} ${slinky} ${srat} ${spc} ${som} ${uom}"
 
 	dqb "spc= ${spc}"
 	dqb "b1nar135 0k" 
