@@ -81,7 +81,8 @@ function pre2() {
 
 	if [ -d ~/Desktop/minimize/${1} ] ; then
 		dqb "PRKL"
-		${odio} ~/Desktop/minimize/${1}/clouds.sh ${dnsm}
+		#${odio} ~/Desktop/minimize/${1}/clouds.sh ${dnsm}
+		~/Desktop/minimize/clouds2.sh ${dnsm} ${1}		
 		${sifu} ${iface}
 
 		${sag_u}
