@@ -303,8 +303,9 @@ function part3() {
 
 	if [ $? -eq  0 ] ; then
 		dqb "part3.1 ok"
-		sleep 5
-		${odio} shred -fu ${1}/lib*.deb
+		csleep 5
+		#${odio} shred -fu ${1}/lib*.deb
+		${NKVD} ${1}/lib*.deb 
 	else
 	 	exit 66
 	fi
@@ -314,8 +315,9 @@ function part3() {
 
 	if [ $? -eq  0 ] ; then
 		dqb "part3.2 ok"
-		sleep 5
-		${odio} shred -fu ${1}/*.deb 
+		csleep 5
+		#${odio} shred -fu ${1}/*.deb 
+		${NKVD} ${1}/*.deb 
 	else
 	 	exit 67
 	fi
@@ -512,7 +514,8 @@ function clouds_post() {
 #	sdi=$(sudo which dpkg)
 #	sifu=$(sudo which ifup)
 #	sifd=$(sudo which ifdown)
-#	smr=$(sudo which rm) #TODO:shred mukaan kanssa
+#	smr=$(sudo which rm) #VAIH:shred mukaan kanssa
+#	NKVD=$(sudo which shred)
 #	slinky=$(sudo which ln)
 #	spc=$(sudo which cp)
 #	srat=$(sudo which tar)
@@ -567,7 +570,10 @@ function check_binaries2() {
 	sifd="${odio} ${sifd} "
 
 	smr="${odio} ${smr} "
-	lftr="${smr} -rf /run/live/medium/live/initrd.img* " #shred myös keksitty
+	lftr="${smr} -rf /run/live/medium/live/initrd.img* " 
+	NKVD=$(${odio} which shred)
+	NKVD="${NKVD} -fu "
+	NKVD="${odio} ${NKVD}"
 	slinky="${odio} ${slinky} -s "
 
 	spc="${odio} ${spc} "
