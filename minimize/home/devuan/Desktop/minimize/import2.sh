@@ -3,6 +3,7 @@ d=$(dirname $0)
 debug=0
 file=""
 distro=""
+#TODO:jospa jatkossa alustaisi dir ja part0 tässä?
 
 case $# in
 	2)

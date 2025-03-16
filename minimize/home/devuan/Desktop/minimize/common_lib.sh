@@ -84,8 +84,11 @@ function gpo() {
 
 #TODO:gpo jo käyttöön?
 
-#TODO:tähän dqb käyttöön tilapäisesti?
+#VAIH:tähän dqb käyttöön tilapäisesti?
 function mangle_s() {
+	dqb "mangle_s( ${1} ${2})"
+	csleep 1
+
 	[ y"${1}" == "y" ] && exit
 	[ -x ${1} ] || exit  #oli -s
 	[ y"${2}" == "y" ] && exit 
@@ -100,9 +103,8 @@ function mangle_s() {
 	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${2}
 }
 
-#VAIH:globaali mja wttuun
 function pre_enforce() {
-	dqb "common_lib.pre_enforce( ${1} )"	
+	dqb "common_lib.pre_enforce( ${1} , ${2} )"	
 
 	#HUOM.230624 /sbin/dhclient* joutuisi hoitamaan toisella tavalla q mangle_s	
 	local q
@@ -121,11 +123,16 @@ function pre_enforce() {
 	if [ z"${1}" != "z" ] ; then
 		dqb "333"
 		${odio} chown ${1}:${1} ${q}/meshuggah 
- 		${odio} chmod 0660 ${q}/meshuggah	
+ 		${odio} chmod 0660 ${q}/meshuggah
 	fi	
 	
+	if [ -d ~/Desktop/minimize/{2} ] ; then
+		dqb "1NF3RN0 0F SACR3D D35TRUCT10N"
+		mangle_s ~/Desktop/minimize/${2}/clouds.sh ${q}/meshuggah
+		csleep 3
+	fi
+
 	for f in ${CB_LIST1} ; do mangle_s ${f} ${q}/meshuggah ; done
-	[ -d ~/Desktop/minimize/{1} ] &&  mangle_s ~/Desktop/minimize/${1}/clouds.sh ${q}/meshuggah
 	for f in /sbin/halt /sbin/reboot ; do mangle_s ${f} ${q}/meshuggah ; done
 	
 	if [ -s ${q}/meshuggah ] ; then
@@ -189,7 +196,7 @@ function enforce_access() {
 	${scm} 0755 ~/Desktop/minimize	
 	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done	
 	for f in $(find ~/Desktop/minimize -type f) ; do ${scm} 0444 ${f} ; done	
-	${scm} a+x ${d}/*.sh #TODO:globaalit wttuun
+	#${scm} a+x ${d}/*.sh globaalit wttuun
 	
 	f=$(date +%F)
 
@@ -335,16 +342,17 @@ function vommon() {
 	fi
 } 
 
-#TODO:näitä josqs käyttööön
-#function tod_dda() { 
-#	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
-#       ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
-#}
-#
-#function dda_snd() {
-#	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
-#	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
-#}
+#VAIH:näitä josqs käyttööön
+function tod_dda() { 
+	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
+       ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
+}
+
+function dda_snd() {
+	${ipt} -A b -p udp -m udp -s ${1} --sport 53 -j ACCEPT 
+	${ipt} -A e -p udp -m udp -d ${1} --dport 53 -j ACCEPT
+}
+
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
 #function ns2() {
 #	[ y"${1}" == "y" ] && exit
@@ -388,49 +396,60 @@ function vommon() {
 #	pgrep stubby*
 #	sleep 5
 #}
-#TODO:nämä käyttöön vähitellen (tai siis common_lib:in vastaava)
+
+#VAIH:nämä käyttöön vähitellen (tai siis common_lib:in vastaava)
+#HUOM.toisessa clouds:issa taisi olla pre-osuudessa muutakin
 #pitäisiköhän se ipt-testi olla tässä?
-#function clouds_pre() {
-#${smr} /etc/resolv.conf
-#${smr} /etc/dhcp/dhclient.conf
-#${smr} /sbin/dhclient-script
-#
-##tässä oikea paikka tables-muutoksille vai ei?
-#${ipt} -F b
-#${ipt} -F e
-#${ipt} -D INPUT 5
-#${ipt} -D OUTPUT 6
-#}
-#function clouds_post() {
-#
-#${scm} 0444 /etc/resolv.conf*
-#${sco} root:root /etc/resolv.conf*
-#
-#${scm} 0444 /etc/dhcp/dhclient*
-#${sco} root:root /etc/dhcp/dhclient*
-#${scm} 0755 /etc/dhcp
-#
-#${scm} 0555 /sbin/dhclient*
-#${sco} root:root /sbin/dhclient*
-#${scm} 0755 /sbin
-#
-#${sco} -R root:root /etc/iptables
-#${scm} 0400 /etc/iptables/*
-#${scm} 0750 /etc/iptables
-# 
-#sleep 2
-#
-##if [ ${debug} -eq 1 ] ; then
-#	${ipt} -L  #
-#	${ip6t} -L #parempi ajaa vain jos löytyy
-#	sleep 5
-##fi #
-#
-#}
+function clouds_pre() {
+	dqb "common_lib.clouds_pre()"
+
+	${smr} /etc/resolv.conf
+	${smr} /etc/dhcp/dhclient.conf
+	${smr} /sbin/dhclient-script
+
+	csleep 1
+	
+	#tässä oikea paikka tables-muutoksille vai ei?
+	${ipt} -F b
+	${ipt} -F e
+	${ipt} -D INPUT 5
+	${ipt} -D OUTPUT 6
+
+	dqb "... done"
+}
+
+function clouds_post() {
+	dqb "common_lib.clouds_post() "
+
+	${scm} 0444 /etc/resolv.conf*
+	${sco} root:root /etc/resolv.conf*
+
+	${scm} 0444 /etc/dhcp/dhclient*
+	${sco} root:root /etc/dhcp/dhclient*
+	${scm} 0755 /etc/dhcp
+
+	${scm} 0555 /sbin/dhclient*
+	${sco} root:root /sbin/dhclient*
+	${scm} 0755 /sbin
+
+	${sco} -R root:root /etc/iptables
+	${scm} 0400 /etc/iptables/*
+	${scm} 0750 /etc/iptables
+ 
+	csleep 2
+
+	if [ ${debug} -eq 1 ] ; then
+		${ipt} -L  #
+		${ip6t} -L #parempi ajaa vain jos löytyy
+		csleep 5
+	fi #
+
+	dqb "d0n3"
+}
 
 #HUOM.140325:käytännössä samat chim ja daed versiot asiasta
 #VAIH:jatkossa käyttöön
-#TODO:voisi tarksitaa että mitkä komennot pitää jatkossa sudottaa kun omega ajettu (eli clouds käyttämät lähinnä)
+#TODO:voisi tarkIStaa että mitkä komennot pitää jatkossa sudottaa kun omega ajettu (eli clouds käyttämät lähinnä)
 function check_binaries2() {
 	dqb "c0mm0n_lib.ch3ck_b1nar135.2()"
 
