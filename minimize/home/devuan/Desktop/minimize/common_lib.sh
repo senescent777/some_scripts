@@ -163,7 +163,6 @@ function enforce_access() {
 
 	for f in $(find /etc -name 'sudo*' -type f | grep -v log) ; do 
 		mangle2 ${f}
-		#csleep 1
 	done
 
 	#sudoersin sisältöä voisi kai tiukentaa kanssa(?)
