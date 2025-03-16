@@ -1,9 +1,8 @@
 #!/bin/bash
-#d=$(dirname $0)
 debug=0
 distro=""
 
-if [ $# -gt 1 ] ; then #TODO:kehittelyä, kts export2 ja import2 
+if [ $# -gt 1 ] ; then 
 	if [ -d ~/Desktop/minimize/${2} ] ; then
 		distro=${2}
 		. ~/Desktop/minimize/${distro}/conf

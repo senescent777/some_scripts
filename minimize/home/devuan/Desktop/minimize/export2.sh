@@ -5,15 +5,12 @@ tgtfile=""
 distro=""
 
 case $# in
-#	2)
-#		distro=${2}
-#	;;
 	3)
 		tgtfile=${2}
 		distro=${3}
 	;;
 	*)
-		echo "$0 <mode> <other_params>"
+		echo "$0 <mode> <tgtfile> <distro>"
 	;;
 esac
 
@@ -60,6 +57,7 @@ function pre() {
 
 	if [ -d ~/Desktop/minimize/${1} ] ; then
 		dqb "5TNA"
+
 		${scm} 0755 ~/Desktop/minimize/${1}
 		${scm} 0755 ~/Desktop/minimize/*.sh
 		${scm} 0755 ~/Desktop/minimize/${1}/*.sh
@@ -70,7 +68,7 @@ function pre() {
 			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list
 		fi
 
-		csleep 3
+		csleep 2
 	else
 		echo "P.V.HH"
 		exit 111
@@ -108,6 +106,7 @@ function tp1() {
 	fi
 
 	if [ ${enforce} -eq 1 ] ; then
+		dqb "FORCEFED BROKEN GLASS"
 		${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
 		
 		local tget

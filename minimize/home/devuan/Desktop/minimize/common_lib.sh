@@ -90,17 +90,17 @@ function mangle_s() {
 	csleep 1
 
 	[ y"${1}" == "y" ] && exit
-	[ -x ${1} ] || exit  #oli -s
+	[ -x ${1} ] || exit 55 #oli -s
 	[ y"${2}" == "y" ] && exit 
-	[ -f ${2} ] || exit  
+	[ -f ${2} ] || exit 54
 
-	sudo chmod 0555 ${1}
+	${scm} 0555 ${1}
 	#HUOM. miksi juuri 5? no six six six että suoritettavaan tdstoon ei tartte kirjoittaa
-	sudo chown root:root ${1} 
+	${sco} root:root ${1} 
 
 	local s
 	s=$(sha256sum ${1})
-	sudo echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${2}
+	${odio} echo "${n} localhost=NOPASSWD: sha256: ${s} " >> ${2}
 }
 
 function pre_enforce() {
@@ -112,21 +112,21 @@ function pre_enforce() {
 	q=$(mktemp -d)	
 	 
 	dqb "sudo touch ${q}/meshuggah in 5 secs"
-	csleep 5
-	sudo touch ${q}/meshuggah
+	csleep 3
+	${odio} touch ${q}/meshuggah
 
 	[ ${debug} -eq 1 ] && ls -las ${q}
-	csleep 6
+	csleep 3
 	[ -f ${q}/meshuggah ] || exit 33
 	dqb "ANNOYING AMOUNT OF DEBUG"
 
 	if [ z"${1}" != "z" ] ; then
 		dqb "333"
-		${odio} chown ${1}:${1} ${q}/meshuggah 
- 		${odio} chmod 0660 ${q}/meshuggah
+		${sco} ${1}:${1} ${q}/meshuggah 
+ 		${scm} 0660 ${q}/meshuggah
 	fi	
 	
-	if [ -d ~/Desktop/minimize/{2} ] ; then
+	if [ -d ~/Desktop/minimize/{2} ] && [ -x ~/Desktop/minimize/${2}/clouds.sh ] ; then
 		dqb "1NF3RN0 0F SACR3D D35TRUCT10N"
 		mangle_s ~/Desktop/minimize/${2}/clouds.sh ${q}/meshuggah
 		csleep 3
@@ -137,10 +137,10 @@ function pre_enforce() {
 	
 	if [ -s ${q}/meshuggah ] ; then
 		dqb "sudo mv ${q}/meshuggah /etc/sudoers.d in 5 secs"
-		csleep 5
+		csleep 2
 
-		${odio} chmod a-wx ${q}/meshuggah
-		${odio} chown root:root ${q}/meshuggah	
+		${scm} a-wx ${q}/meshuggah
+		${sco} root:root ${q}/meshuggah	
 		${odio} mv ${q}/meshuggah /etc/sudoers.d
 	fi
 
@@ -150,9 +150,9 @@ function pre_enforce() {
 function enforce_access() {
 	dqb " enforce_access( ${1})"	
 
-	sudo chmod 0440 /etc/sudoers.d/* 
-	sudo chmod 0750 /etc/sudoers.d 
-	sudo chown -R root:root /etc/sudoers.d
+	${scm} 0440 /etc/sudoers.d/* 
+	${scm} 0750 /etc/sudoers.d 
+	${sco} -R root:root /etc/sudoers.d
 
 	dqb "changing /sbin , /etc and /var 4 real"
 	${sco} -R root:root /sbin
@@ -231,7 +231,7 @@ function part1() {
 	else
 		for t in INPUT OUTPUT FORWARD ; do 
 			${ipt} -P ${t} DROP
-			dqb "V6"; csleep 5
+			dqb "V6"; csleep 3
 			${ip6t} -P ${t} DROP
 			${ip6t} -F ${t}
 		done
@@ -240,35 +240,34 @@ function part1() {
 
 		if [ ${debug} -eq 1 ] ; then
 			${ipt} -L #
-			dqb "V6.b"; csleep 5
-			${ip6t} -L #
+			dqb "V6.b"; csleep 3
+			${ip6t} -L # -x mukaan?
 			sleep 5 
 		fi #	
 	fi
 
 	#HUOM.1303225:joskohan tänä blokki toimisi
 	if [ z"${pkgsrc}" != "z" ] ; then
-		#VAIH:tulisi kai tarkistaa se minimizen alihmiston olemassaolo kanssa
 		if [ -d ~/Desktop/minimize/${1} ] ; then
 			if [ ! -s /etc/apt/sources.list.${1} ] ; then
 				local g
 			
 				g=$(date +%F) 
 				dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
-				csleep 5
+				csleep 3
 
 				[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
-				sudo touch /etc/apt/sources.list.${1} #${distro}
-				${scm} a+w /etc/apt/sources.list.${1} #${distro}
+				${odio} touch /etc/apt/sources.list.${1} 
+				${scm} a+w /etc/apt/sources.list.${1} 
 
 				for x in ${1} ${1}-updates ${1}-security ; do
-					echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${1} #${distro} 
+					echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${1}  
 				done
 		
 				${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list			
 
 				[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
-				csleep 5
+				csleep 2
 			fi
 		fi
 	fi
@@ -315,7 +314,9 @@ function part3() {
 }
 
 function ecfx() {
-	#for .. do .. done saattaisi olla fiksumpi tässä
+	dqb "echx"
+
+	#for .. do .. done saattaisi olla fiksumpi tässä (tai jokin find-loitsu)
 	if [ -s ~/Desktop/minimize/xfce.tar ] ; then
 		${srat} -C / -xvf ~/Desktop/minimize/xfce.tar
 	else 
@@ -325,7 +326,7 @@ function ecfx() {
 	fi
 }
 
-#TODO:jos vähitellen teatsisi toiminnan
+#TODO:jos vähitellen teSTAISi toiminnan
 function vommon() {
 	dqb "R (in 6 secs)"; csleep 6
 	${odio} passwd
@@ -345,7 +346,7 @@ function vommon() {
 #VAIH:näitä josqs käyttööön
 function tod_dda() { 
 	${ipt} -A b -p tcp --sport 853 -s ${1} -j c
-       ${ipt} -A e -p tcp --dport 853 -d ${1} -j f
+	${ipt} -A e -p tcp --dport 853 -d ${1} -j f
 }
 
 function dda_snd() {
@@ -354,48 +355,50 @@ function dda_snd() {
 }
 
 #HUOM.220624:stubbyn asentumisen ja käynnistymisen kannalta sleep saattaa olla tarpeen
-#function ns2() {
-#	[ y"${1}" == "y" ] && exit
-#	dqb "ns2( ${1} )"
-#	${scm} u+w /home
-#	csleep 3
-#
-#	${odio} /usr/sbin/userdel ${1}
-#	sleep 3
-#
-#	${odio} adduser --system ${1}
-#	sleep 3
-#
-#	${scm} go-w /home
-#	${sco} -R ${1}:65534 /home/${1}/ #HUOM.280125: tässä saattaa mennä metsään ... tai sitten se /r/s.pid
-#	dqb "d0n3"
-#	csleep 4	
-#
-#	[ ${debug} -eq 1 ]  && ls -las /home
-#	csleep 3
-#}
-#function ns4() {
-#	dqb "ns4( ${1} )"
-#
-#	${scm} u+w /run
-#	${odio} touch /run/${1}.pid
-#	${scm} 0600 /run/${1}.pid
-#	${sco} ${1}:65534 /run/${1}.pid
-#	${scm} u-w /run
-#
-#	sleep 5
-#	${whack} ${1}*
-#	sleep 5
-#
-#	dqb "starting ${1} in 5 secs"
-#
-#	sleep 5
-#	${odio} -u ${1} ${1} -g
-#	echo $?
-#	sleep 1
-#	pgrep stubby*
-#	sleep 5
-#}
+function ns2() {
+	[ y"${1}" == "y" ] && exit
+	dqb "ns2( ${1} )"
+	${scm} u+w /home
+	csleep 3
+
+	${odio} /usr/sbin/userdel ${1}
+	sleep 3
+
+	${odio} adduser --system ${1}
+	sleep 3
+
+	${scm} go-w /home
+	${sco} -R ${1}:65534 /home/${1}/ #HUOM.280125: tässä saattaa mennä metsään ... tai sitten se /r/s.pid
+	dqb "d0n3"
+	csleep 4	
+
+	[ ${debug} -eq 1 ]  && ls -las /home
+	csleep 3
+}
+
+function ns4() {
+	dqb "ns4( ${1} )"
+
+	${scm} u+w /run
+	${odio} touch /run/${1}.pid
+	${scm} 0600 /run/${1}.pid
+	${sco} ${1}:65534 /run/${1}.pid
+	${scm} u-w /run
+
+	sleep 5
+	${whack} ${1}* #saattaa joutua muuttamaan vielä
+	sleep 5
+
+	dqb "starting ${1} in 5 secs"
+
+	sleep 5
+	${odio} -u ${1} ${1} -g
+	echo $?
+
+	sleep 1
+	pgrep stubby*
+	sleep 5
+}
 
 #VAIH:nämä käyttöön vähitellen (tai siis common_lib:in vastaava)
 #HUOM.toisessa clouds:issa taisi olla pre-osuudessa muutakin
@@ -447,8 +450,6 @@ function clouds_post() {
 	dqb "d0n3"
 }
 
-#HUOM.140325:käytännössä samat chim ja daed versiot asiasta
-#VAIH:jatkossa käyttöön
 #TODO:voisi tarkIStaa että mitkä komennot pitää jatkossa sudottaa kun omega ajettu (eli clouds käyttämät lähinnä)
 function check_binaries2() {
 	dqb "c0mm0n_lib.ch3ck_b1nar135.2()"

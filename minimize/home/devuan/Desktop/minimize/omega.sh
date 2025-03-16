@@ -1,6 +1,7 @@
 #!/bin/bash
 #d=$(dirname $0)
 echo "VERY MUCH UNDER CONSTRUCTION"
+echo "TODO: se sudotus-selvitys"
 #
 #if [ -s ${d}/conf ] && [ -s ${d}/lib.sh ] ; then
 #	. ${d}/conf

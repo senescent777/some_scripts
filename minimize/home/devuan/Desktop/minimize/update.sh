@@ -1,4 +1,4 @@
-#!/bin/bash
+##!/bin/bash
 #d=$(dirname $0)
 #debug=1
 #
@@ -44,10 +44,10 @@
 #csleep 3
 #
 #if [ -s ${1} ] ; then
-#	dqb "${srat} -f ${1} -rp ~/Desktop/*.desktop ~/Desktop/minimize in 3 s3cs"
+#	dqb "${srat} -f ${1} -r ~/Desktop/*.desktop ~/Desktop/minimize in 3 s3cs"
 #	csleep 3
 #
-#	${srat} -f ${1} -rp ~/Desktop/*.desktop ~/Desktop/minimize	
+#	${srat} -f ${1} -r ~/Desktop/*.desktop ~/Desktop/minimize	
 #	[ $? -eq 0 ] || echo "${sco} <smthng> ${1} or ${scm} <smthng> ${1} would be a good idea now"
 #else
 #	echo "NO SUCH THING AS ${1} "
