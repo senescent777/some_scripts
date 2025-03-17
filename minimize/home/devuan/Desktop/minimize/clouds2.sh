@@ -19,7 +19,7 @@ if [ $# -gt 1 ] ; then
 		csleep 5
 	fi
 
-	mode=${1} #TODO:mode VÄHITELLEn WTTUUN conf:ista
+	mode=${1} #VAIH:mode VÄHITELLEn WTTUUN conf:ista
 else
 	echo "${0} <mode> <other_param>";exit
 fi

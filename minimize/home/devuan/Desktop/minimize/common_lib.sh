@@ -86,9 +86,8 @@ function gpo() {
 
 #TODO:gpo jo käyttöön?
 
-#VAIH:tähän dqb käyttöön tilapäisesti?
 function mangle_s() {
-	dqb "mangle_s( ${1} ${2})"
+	#dqb "mangle_s( ${1} ${2})"
 	csleep 1
 
 	[ y"${1}" == "y" ] && exit

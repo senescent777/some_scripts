@@ -3,7 +3,9 @@ d=$(dirname $0)
 debug=0
 file=""
 distro=""
-#TODO:jospa jatkossa alustaisi dir ja part0 tässä?
+#joitrain oletusarvoja
+dir=/mnt
+part0=ABCD-1234
 
 case $# in
 	2)
@@ -48,9 +50,9 @@ fi
 debug=1
 mode=${1}
 
-echo "mode=${mode}"
-echo "distro=${distro}"
-echo "file=${file}"
+dqb "mode=${mode}"
+dqb "distro=${distro}"
+dqb "file=${file}"
 
 olddir=$(pwd)
 part=/dev/disk/by-uuid/${part0}
@@ -79,18 +81,25 @@ function common_part() {
 
 	${scm} -R a-wx ~/Desktop/minimize/*
 	${scm} 0755 ~/Desktop/minimize/*.sh
+	ls -las ~/Desktop/minimize
+	sleep 5
 
-	#tämä pois jatkossa?
-	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} a-wx ${f}/* ; done 
-	
+	#tämä pois jatkossa? tai pikemminkin 0755 ${f} (VAIH)
+	# a-wx ${f}/*
+	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done 
+
 	#jos nyt olisi hyvä...	
 	${scm} 0755 ~/Desktop/minimize
 	
 	if [ -d ~/Desktop/minimize/${2} ] ; then 
+		echo "HAIL CAESAR"
 		${scm} 0755 ~/Desktop/minimize/${2}
 		${scm} a+x ~/Desktop/minimize/${2}/*.sh
 		${scm} 0444 ~/Desktop/minimize/${2}/conf*
 	fi
+
+	ls -las ~/Desktop/minimize
+	sleep 5
 
 	${scm} 0777 /tmp
 	${sco} root:root /tmp #oik. o=rwt mutta rwx kai tarpeeksi hyvä useimpiin tarkoituksiin
@@ -98,7 +107,7 @@ function common_part() {
 }
 
 #TODO:ao- if-blkkiin liittyen jos poistaisi ghubista minimize-hamistosta välistä sen /h/d-osuuden
-#TODO:chmod-juttuja joutaisi miettiä
+#VAIH:chmod-juttuja joutaisi miettiä (vissiin jossain se x-oikeus poistui tästä, todnäök commoin_part/lib/common_lib)
 
 case "${1}" in
 	-1)
@@ -112,7 +121,7 @@ case "${1}" in
 		echo "NEXT: $0 0 <source> <distro> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 	;;
 	2)
-		#TODO:chmod-juttujen läpikäynti
+		#VAIH:chmod-juttujen läpikäynti (vissiin tämän tdston x-oikeus kyseessä)
 		${uom} ${dir}
 		csleep 3
 		${som} | grep ${dir}
@@ -129,6 +138,34 @@ case "${1}" in
 		echo "NEXT: $0 2"
 	;;
 	0)
+#HUOM. 170325: seuraavanlaista nalkutusta tuli:
+#firefox-esr depends on libx11-xcb1 (>= 2:1.7.2); however:
+#  Package libx11-xcb1:amd64 is not configured yet.
+#python3.9 depends on libpython3.9-stdlib (= 3.9.2-1+deb11u2); however:
+#  Package libpython3.9-stdlib:amd64 is not configured yet.
+# xserver-xorg-core depends on xserver-common (>= 2:1.20.11-1+deb11u15); however:
+#  Version of xserver-common on system is 2:1.20.11-1+deb11u6.
+# xserver-xorg-legacy depends on xserver-common (>= 2:1.20.11-1+deb11u15); however:
+#  Version of xserver-common on system is 2:1.20.11-1+deb11u6.
+# libgail-common:amd64 depends on libgail18 (= 2.24.33-2+deb11u1); however:
+#  Version of libgail18:amd64 on system is 2.24.33-2.
+# libgtk2.0-bin depends on libgtk2.0-0 (= 2.24.33-2+deb11u1); however:
+#  Version of libgtk2.0-0:amd64 on system is 2.24.33-2.
+# libgtk-3-bin depends on libgtk-3-0 (>= 3.24.24-4+deb11u4); however:
+# Version of libgtk-3-0:amd64 on system is 3.24.24-4+deb11u3.
+#dpkg: dependency problems prevent configuration of libpython3.9-stdlib:amd64:
+# libpython3.9-stdlib:amd64 depends on libpython3.9-minimal (= 3.9.2-1+deb11u2); however:
+#  Version of libpython3.9-minimal:amd64 on system is 3.9.2-1.
+#dpkg: dependency problems prevent configuration of librsvg2-common:amd64:
+# librsvg2-common:amd64 depends on librsvg2-2 (= 2.50.3+dfsg-1+deb11u1); however:
+#  Version of librsvg2-2:amd64 on system is 2.50.3+dfsg-1.
+#dpkg: dependency problems prevent configuration of libsoup-gnome2.4-1:amd64:
+# libsoup-gnome2.4-1:amd64 depends on libsoup2.4-1 (= 2.72.0-2+deb11u1); however:
+#  Version of libsoup2.4-1:amd64 on system is 2.72.0-2.
+#dpkg: dependency problems prevent configuration of libx11-xcb1:amd64:
+# libx11-xcb1:amd64 depends on libx11-6 (= 2:1.7.2-1+deb11u2); however:
+#  Version of libx11-6:amd64 on system is 2:1.7.2-1.
+#... joskohan sorkkisi export:ia vaihteeksi?
 		[ x"${file}" == "x" ] && exit 55
 		dqb "KL"
 		csleep 2
@@ -155,4 +192,5 @@ case "${1}" in
 	;;
 esac
 
+sudo chmod 0755 $0 #barm vuoksi
 #HUOM. tämän olisi kuvakkeen kanssa tarkoitus mennä jatkossa filesystem.squashfs sisälle

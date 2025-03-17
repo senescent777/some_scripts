@@ -81,7 +81,6 @@ function pre2() {
 
 	if [ -d ~/Desktop/minimize/${1} ] ; then
 		dqb "PRKL"
-		#${odio} ~/Desktop/minimize/${1}/clouds.sh ${dnsm}
 		~/Desktop/minimize/clouds2.sh ${dnsm} ${1}		
 		${sifu} ${iface}
 
@@ -103,8 +102,7 @@ function tp1() {
 
 	if [ -d ~/Desktop/minimize/${2} ] ; then
 		dqb "cleaning up ~/Desktop/minimize/${2} "
-		#${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
-		${NKVD}  ~/Desktop/minimize/${2}/*.deb
+		${NKVD} ~/Desktop/minimize/${2}/*.deb
 	fi
 
 	if [ ${enforce} -eq 1 ] ; then
@@ -118,7 +116,10 @@ function tp1() {
 		tget=$(ls ~/.mozilla/firefox/ | grep default-esr | tail -n 1)
 		p=$(pwd)
 		cd ~/.mozilla/firefox/${tget}
-		
+		dqb "TG3T=tget"		
+		csleep 1
+
+		#TODO:pitäsi ensin luoda se tar ennenq alkaa lisäämään
 		for f in $(find . -name '*.js') ; do ${rat} -rf ~/Desktop/minimize/someparam.tar ${f} ; done
 		#*.js ja *.json kai oleellisimmat kalat
 		cd ${p}
@@ -147,8 +148,7 @@ function tp4() {
 	dqb "paramz_ok"
 	csleep 4
 
-	if [ z"${pkgdir}" != "z" ] ; then 
-		#${odio} shred -fu ${pkgdir}/*.deb
+	if [ z"${pkgdir}" != "z" ] ; then
 		${NKVD} ${pkgdir}/*.deb
 		dqb "SHREDDED HUMANS"
 	fi
@@ -163,24 +163,25 @@ function tp4() {
 	#actually necessary
 	pre2 ${2}
 
-	#TODO:dnsm-mjan taakse pakettien dnsmasq ja stubby haku?
+	#VAIH:dnsm-mjan taakse pakettien dnsmasq ja stubby haku?
+	if [ ${dnsm} -eq 1 ] ; then
+		${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
+		${shary} runit-helper
 
-	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
-	${shary} runit-helper
+		${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
+		${lftr} 
 
-	${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
-	${lftr} 
+		#josqs ntp-jututkin mukaan?
+		[ $? -eq 0 ] || exit 3
 
-	#josqs ntp-jututkin mukaan?
-	[ $? -eq 0 ] || exit 3
-
-	${shary} libev4
-	${shary} libgetdns10 libbsd0 libidn2-0 libssl3 libunbound8 libyaml-0-2 #sotkeekohan libc6 uudelleenas tässä?
-	${shary} stubby
+		${shary} libev4
+		${shary} libgetdns10 libbsd0 libidn2-0 libssl3 libunbound8 libyaml-0-2 #sotkeekohan libc6 uudelleenas tässä?
+		${shary} stubby
+	fi
 
 	echo "${shary} git mktemp in 4 secs"
 	sleep 5
-	#${lftr} 
+	${lftr} 
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=git=1:2.39.2-1~bpo11+1
 	#${shary} mktemp
@@ -193,7 +194,6 @@ function tp4() {
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
 	if [ -d ~/Desktop/minimize/${2} ] ; then 
-		#${odio} shred -fu ~/Desktop/minimize/${2}/*.deb
 		${NKVD} ~/Desktop/minimize/${2}/*.deb
 	
 		#HUOM.070325: varm vuoksi speksataan että *.deb
@@ -278,7 +278,7 @@ function tpu() {
 	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 	dqb "params_ok"
 
-	#${odio} shred -fu ${pkgdir}/*.deb
+	#pitäisiköhän kohdehmistostakin poistaa paketit?
 	${NKVD} ${pkgdir}/*.deb
 
 	${sag} upgrade -u
