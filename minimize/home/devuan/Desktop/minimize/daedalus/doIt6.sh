@@ -78,19 +78,20 @@ if [ ${mode} -eq 1 ] ; then
 	vommon
 fi
 
-#TODO:tässäkin poistelut jatkossa mjan taakse
-#${sharpy} libblu* network* libcupsfilters* libgphoto* 
-## libopts25 ei tömmöistä daedaluksessa
-#
-#${sharpy} avahi* blu* cups* exim*
-#${sharpy} rpc* nfs* 
-#${sharpy} modem* wireless* wpa*
-#${sharpy} iw lm-sensors
-#
-#${sharpy} ntp*
-#${sharpy} po* pkexec
-#${lftr}
-#csleep 3
+if [ ${removepkgs} -eq 1 ] ; then
+	${sharpy} libblu* network* libcupsfilters* libgphoto* 
+	# libopts25 ei tömmöistä daedaluksessa
+	
+	${sharpy} avahi* blu* cups* exim*
+	${sharpy} rpc* nfs* 
+	${sharpy} modem* wireless* wpa*
+	${sharpy} iw lm-sensors
+
+	${sharpy} ntp*
+	${sharpy} po* pkexec
+	${lftr}
+	csleep 3
+fi
 
 if [ y"${ipt}" != "y" ] ; then 
 	${ip6tr} /etc/iptables/rules.v6
