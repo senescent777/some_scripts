@@ -46,15 +46,31 @@ ${odio} which dhclient; ${odio} which ifup; csleep 3 #tulostuksetkin dbg taakse?
 
 ${lftr}
 ${fib}
-${sharpy} htop intel-microcode
+${sharpy} htop 
 ${asy}
 ${odio} which dhclient; ${odio} which ifup; csleep 3
+csleep 5
 
 ${lftr}
-${sharpy} lvm2 mdadm
+${fib}
+${sharpy} intel-microcode
+${asy}
+${odio} which dhclient; ${odio} which ifup; csleep 3
+csleep 5
+
+${lftr}
+${sharpy} mdadm 
 ${asy}
 csleep 6
 ${odio} which dhclient; ${odio} which ifup; csleep 3
+csleep 5
+
+${lftr}
+${sharpy} lvm2
+${asy}
+csleep 6
+${odio} which dhclient; ${odio} which ifup; csleep 3
+csleep 5
 
 ${lftr}
 ${sharpy} mailcap mariadb-common
