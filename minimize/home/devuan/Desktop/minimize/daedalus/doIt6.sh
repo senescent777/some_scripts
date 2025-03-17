@@ -74,23 +74,23 @@ ${odio} /etc/init.d/ntpsec stop
 ecfx
 csleep 5
 
-#VAIH:testaus
 if [ ${mode} -eq 1 ] ; then
 	vommon
 fi
 
-${sharpy} libblu* network* libcupsfilters* libgphoto* 
-# libopts25 ei tömmöistä daedaluksessa
-
-${sharpy} avahi* blu* cups* exim*
-${sharpy} rpc* nfs* 
-${sharpy} modem* wireless* wpa*
-${sharpy} iw lm-sensors
-
-${sharpy} ntp*
-${sharpy} po* pkexec
-${lftr}
-csleep 3
+#TODO:tässäkin poistelut jatkossa mjan taakse
+#${sharpy} libblu* network* libcupsfilters* libgphoto* 
+## libopts25 ei tömmöistä daedaluksessa
+#
+#${sharpy} avahi* blu* cups* exim*
+#${sharpy} rpc* nfs* 
+#${sharpy} modem* wireless* wpa*
+#${sharpy} iw lm-sensors
+#
+#${sharpy} ntp*
+#${sharpy} po* pkexec
+#${lftr}
+#csleep 3
 
 if [ y"${ipt}" != "y" ] ; then 
 	${ip6tr} /etc/iptables/rules.v6
