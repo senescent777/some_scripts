@@ -1,0 +1,12 @@
+iface=eth0 
+enforce=1 #testataan taas toimiiko
+debug=0
+pkgdir=/var/cache/apt/archives
+tblz4=rules.v4 #linkki osoittanee oikeaan tdstoon
+mode=1 #TODO:jatkossa pois
+dir=/mnt
+distro=daedalus  #TODO:jos jatkossa tämäkin pois
+dnsm=0
+pkgsrc=devuan.keff.org
+part0=E7D7-68B3
+removepkgs=1
