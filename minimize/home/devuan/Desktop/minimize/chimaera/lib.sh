@@ -85,25 +85,24 @@ function check_binaries() {
 #=========================PART 0 ENDS HERE=================================================================
 function pr4() {
 	dqb "pr4 (${1})"
-	${odio} shred -fu ${1}/stubby*
-	${odio} shred -fu ${1}/libgetdns*
+	${NKVD} ${1}/stubby*
+	${NKVD} ${1}/libgetdns*
 
 	#uutena
-	${odio} shred -fu ${1}/dnsmasq*
+	${NKVD} ${1}/dnsmasq*
 	dqb "d0n3"
 }
 
-#VAIH:jompaan kumpaan(pp3/pr4) dnsmasq* poisto (pidemmällä tähtäimellä tietty parempi laittaa toimimaanq poistaa mutta nyt näin)
-#TODO:näille main sitä git:in asentelua (jos ei siis jo pelaa)
+#HUOM.170325:git näköjään asentuu pr4((), pre3() - vaiheiden aikana vaikka vähän nalkutusta tuleekin(josko nalkutuksen poistaisi)
 
 function pre_part3() {
 	dqb "pre_part3( ${1})"
 	${sdi} ${1}/dns-root-data*.deb
-	${smr} -rf ${1}/dns-root-data*.deb
+	${NKVD} ${1}/dns-root-data*.deb
 
 	#uutena, pois jos qsee	
 	${sdi} ${1}/perl-modules-*.deb
-	${smr} -rf ${1}/perl-modules-*.deb
+	${NKVD} ${1}/perl-modules-*.deb
 }
 
 function clouds_case0() {

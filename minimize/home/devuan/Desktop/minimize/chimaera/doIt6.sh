@@ -1,5 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
+mode=2
 [ -s ${d}/conf ] && . ${d}/conf
 . ~/Desktop/minimize/common_lib.sh
 
@@ -71,10 +72,12 @@ csleep 3
 #===================================================PART 2===================================
 #HUOM.160325:poistelut tilapäisetsi pois pelistä, kohta takaisin
 #(ehkä jos jonkin mjan taakse nämöä poistelut)
+#if [ ${removepkgs} -eq 1 ] ; then
 ${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 ${sharpy} avahi* blu* cups* exim*
 ${sharpy} rpc* nfs* 
 ${sharpy} modem* wireless* wpa* iw lm-sensors
+#f1
 
 #HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
 #${sharpy} ntp* #tämäkin liikaa?
@@ -130,8 +133,7 @@ ${asy}
 #dqb "fråm doit6: distro=${distro}"
 csleep 3
 
-##TODO:selvitä missä kohtaa x-oikeudet p.oistuvat
-#sudo ~/Desktop/minimize/${distro}/clouds.sh 0 
+#VAIH:selvitä missä kohtaa x-oikeudet p.oistuvat
 ~/Desktop/minimize/clouds2.sh 0 ${distro}
 csleep 5
 
