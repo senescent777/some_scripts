@@ -70,14 +70,12 @@ csleep 3
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
-#HUOM.160325:poistelut tilapäisetsi pois pelistä, kohta takaisin
-#(ehkä jos jonkin mjan taakse nämöä poistelut)
-#if [ ${removepkgs} -eq 1 ] ; then
-${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
-${sharpy} avahi* blu* cups* exim*
-${sharpy} rpc* nfs* 
-${sharpy} modem* wireless* wpa* iw lm-sensors
-#f1
+if [ ${removepkgs} -eq 1 ] ; then
+	${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
+	${sharpy} avahi* blu* cups* exim*
+	${sharpy} rpc* nfs* 
+	${sharpy} modem* wireless* wpa* iw lm-sensors
+fi
 
 #HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
 #${sharpy} ntp* #tämäkin liikaa?
