@@ -62,7 +62,7 @@ function pre() {
 		${scm} 0755 ~/Desktop/minimize/*.sh
 		${scm} 0755 ~/Desktop/minimize/${1}/*.sh
 		
-		#tai jos pre1:seen tämä jatkossa...
+		#TODO:part_1_5 jatjissa tähän
 		if [ -s /etc/apt/sources.list.${1} ] ; then
 			${NKVD} /etc/apt/sources.list
 			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list
@@ -105,13 +105,16 @@ function tp1() {
 
 	if [ -d ~/Desktop/minimize/${2} ] ; then
 		dqb "cleaning up ~/Desktop/minimize/${2} "
+		csleep 4
 		${NKVD} ~/Desktop/minimize/${2}/*.deb
+		dqb "d0nm3"
 	fi
 
 	if [ ${enforce} -eq 1 ] ; then
 		dqb "FORCEFED BROKEN GLASS"
 		${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
-		
+		csleep 3
+
 		local tget
 		local p
 		local f
@@ -120,7 +123,7 @@ function tp1() {
 		p=$(pwd)
 		cd ~/.mozilla/firefox/${tget}
 		dqb "TG3T=tget"		
-		csleep 1
+		csleep 3
 
 		#TODO:pitäsi ensin luoda se tar ennenq alkaa lisäämään
 		for f in $(find . -name '*.js') ; do ${rat} -rf ~/Desktop/minimize/someparam.tar ${f} ; done
@@ -132,7 +135,7 @@ function tp1() {
 		ls -las ~/Desktop/minimize/; sleep 5
 	fi
 	
-	${srat} -cvf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
+	${srat} -cvf ${1} ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
 	dqb "tp1 d0n3"
 	csleep 3
 }

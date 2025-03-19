@@ -81,8 +81,8 @@ function common_part() {
 
 	${scm} -R a-wx ~/Desktop/minimize/*
 	${scm} 0755 ~/Desktop/minimize/*.sh
-	ls -las ~/Desktop/minimize
-	sleep 5
+	[ ${debug} -eq 1 ] && ls -las ~/Desktop/minimize
+	csleep 5
 
 	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done 
 	#jos nyt olisi hyvä...	
@@ -95,8 +95,8 @@ function common_part() {
 		${scm} 0444 ~/Desktop/minimize/${2}/conf*
 	fi
 
-	ls -las ~/Desktop/minimize
-	sleep 5
+	[ ${debug} -eq 1 ] && ls -las ~/Desktop/minimize
+	csleep 5
 
 	${scm} 0777 /tmp
 	${sco} root:root /tmp #oik. o=rwt mutta rwx kai tarpeeksi hyvä useimpiin tarkoituksiin
@@ -179,6 +179,9 @@ case "${1}" in
 		csleep 2
 
 		common_part ${file} ${distro}		
+		#HUOM.290325: näillä main saattaa olla jotain härdelliä daedaluksen tapauksessa
+		... tai pikemminkin väärät parametrit skjriptille
+		
 		pre_part3 ~/Desktop/minimize/${distro}
 		pr4 ~/Desktop/minimize/${distro}
 		part3 ~/Desktop/minimize/${distro}
