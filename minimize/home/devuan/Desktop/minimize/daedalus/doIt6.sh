@@ -47,7 +47,7 @@ check_params
 enforce_access ${n}
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-part1 ${distro}
+part1 ${distro} #HUOM.190325:qseekohan näillä main, daed-versiossa, jotain?
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
