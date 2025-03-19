@@ -226,6 +226,7 @@ function enforce_access() {
 	${sco} root:root /tmp
 }
 
+#TODO:export2 käyttämään tätä?
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}
@@ -479,6 +480,9 @@ function check_binaries() {
 	dqb "params_ok"
 	csleep 1
 
+	smr=$(sudo which rm) #VAIH:shred mukaan kanssa
+	NKVD=$(sudo which shred)
+
 	ipt=$(sudo which iptables)
 	ip6t=$(sudo which ip6tables)
 	iptr=$(sudo which iptables-restore)
@@ -520,8 +524,7 @@ function check_binaries() {
 	sdi=$(sudo which dpkg)
 	sifu=$(sudo which ifup)
 	sifd=$(sudo which ifdown)
-	smr=$(sudo which rm) #VAIH:shred mukaan kanssa
-	NKVD=$(sudo which shred)
+
 	slinky=$(sudo which ln)
 	spc=$(sudo which cp)
 	srat=$(sudo which tar)

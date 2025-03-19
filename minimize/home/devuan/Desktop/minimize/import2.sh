@@ -118,6 +118,7 @@ case "${1}" in
 		csleep 5
 		${som} | grep ${dir}
 
+		#TODO:näyttämään NEXT-jutut vain jos ei tullut virheitä ed. komennoissa
 		echo "NEXT: $0 0 <source> <distro> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 	;;
 	2)

@@ -64,7 +64,7 @@ function pre() {
 		
 		#tai jos pre1:seen tämä jatkossa...
 		if [ -s /etc/apt/sources.list.${1} ] ; then
-			${smr} /etc/apt/sources.list
+			${NKVD} /etc/apt/sources.list
 			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list
 		fi
 
