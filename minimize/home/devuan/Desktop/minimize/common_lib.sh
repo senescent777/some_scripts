@@ -239,7 +239,7 @@ function part1_5() {
 
 				[ -f /etc/apt/sources.list ] && ${odio} mv /etc/apt/sources.list /etc/apt/sources.list.${g}
 				${odio} touch /etc/apt/sources.list.${1} 
-				${scm} u+w /etc/apt/sources.list.${1} #joskohan u+w kuitenbkin riittäisi tässä?
+				${scm} a+w /etc/apt/sources.list.${1} #joskohan u+w kuitenbkin riittäisi tässä? No Ei
 
 				for x in ${1} ${1}-updates ${1}-security ; do
 					echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${1}  
