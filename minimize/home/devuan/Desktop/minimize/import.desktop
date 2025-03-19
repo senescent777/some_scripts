@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=import2
+Comment=
+Exec=/home/devuan/Desktop/import2.sh
+Icon=
+Path=
+Terminal=true
+StartupNotify=false
