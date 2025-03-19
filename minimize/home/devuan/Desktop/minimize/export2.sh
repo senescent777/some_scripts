@@ -352,6 +352,9 @@ case ${mode} in
 		tpu ${tgtfile} ${distro}
 	;;
 	p)
+		#TODO:tämän casen (jamahd seur) toiminnan testaus qhan apt:in nalkutus hoidettu
+		#W: Download is performed unsandboxed as root as file '/var/lib/apt/lists/partial/devuan.keff.org_merged_dists_daedalus_InRelease' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
+
 		pre2 ${distro}
 		tp5 ${tgtfile}
 	;;
