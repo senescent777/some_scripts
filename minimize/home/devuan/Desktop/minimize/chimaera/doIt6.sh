@@ -8,7 +8,7 @@ if [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
 	echo "TO CONTINUE FURTHER IS POINTLESS, ESSENTIAL FILES MISSING"
-	exit 111	
+	exit 111
 fi
 
 #TODO:testaa tämän toiminta pitkästä aikaa
@@ -70,6 +70,7 @@ csleep 3
 #K01avahi-jutut sopivaan kohtaan?
 
 #===================================================PART 2===================================
+#TODO:removepkgs riippumaan $distro:n alla olevista -deb-paketeista
 if [ ${removepkgs} -eq 1 ] ; then
 	${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
 	${sharpy} avahi* blu* cups* exim*
@@ -80,6 +81,7 @@ fi
 #HUOM. seur 2 riviä lisätty uutena 150325, pois jos qsee
 #${sharpy} ntp* #tämäkin liikaa?
 #${sharpy} po* #uskaltaakohan tätäkään ajaa? tai siis jos vähän tarkempi...
+
 #${sharpy} pkexec #HUOM.160325:tästä tuli nalkutusta
 #lisäksi apt yritti poistaa oleellisia paketteja
 #option --allow-remove-essential puutos esti oleellisten poistumisen
