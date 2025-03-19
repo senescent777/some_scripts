@@ -180,7 +180,7 @@ case "${1}" in
 
 		common_part ${file} ${distro}		
 		#HUOM.290325: näillä main saattaa olla jotain härdelliä daedaluksen tapauksessa
-		... tai pikemminkin väärät parametrit skjriptille
+		#... tai pikemminkin väärät parametrit skjriptille
 		
 		pre_part3 ~/Desktop/minimize/${distro}
 		pr4 ~/Desktop/minimize/${distro}
