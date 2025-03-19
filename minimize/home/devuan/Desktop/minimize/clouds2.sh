@@ -42,7 +42,7 @@ else
 	sco=$(sudo which chown)
 	scm=$(sudo which chmod)	
 
-	echo "when in trouble, sudo chmod 0755 ${distro}; sudo chmod  0755 ${distro}/*.sh; sudo chmod 0644 ${distro}/ may help "
+	echo "when in trouble, sudo chmod 0755 ${distro}; sudo chmod  0755 ${distro}/*.sh; sudo chmod 0644 ${distro}/conf may help "
 fi
 
 #konftdstojen ja tablesin käsittelyn kanssa pieniä eroavaisuuksia
