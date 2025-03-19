@@ -226,7 +226,39 @@ function enforce_access() {
 	${sco} root:root /tmp
 }
 
-#TODO:export2 käyttämään tätä?
+function part1_5() {
+	#HUOM.1303225:joskohan tänä blokki toimisi
+	if [ z"${pkgsrc}" != "z" ] ; then
+		if [ -d ~/Desktop/minimize/${1} ] ; then
+			if [ ! -s /etc/apt/sources.list.${1} ] ; then
+				local g
+			
+				g=$(date +%F) 
+				dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
+				csleep 3
+
+				[ -f /etc/apt/sources.list ] && ${odio} mv /etc/apt/sources.list /etc/apt/sources.list.${g}
+				${odio} touch /etc/apt/sources.list.${1} 
+				${scm} u+w /etc/apt/sources.list.${1} #joskohan u+w kuitenbkin riittäisi tässä?
+
+				for x in ${1} ${1}-updates ${1}-security ; do
+					echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${1}  
+				done
+		
+				${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list			
+
+				[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
+				csleep 2
+			fi
+		fi
+	fi
+
+	#${scm} a-w /etc/apt/sources.list
+	${sco} -R root:root /etc/apt 
+	${scm} -R a-w /etc/apt/
+}
+
+#VAIH:export2 käyttämään tätä, tai siis tuota /a/a/s.list-osaa
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}
@@ -257,31 +289,7 @@ function part1() {
 		fi #	
 	fi
 
-	#HUOM.1303225:joskohan tänä blokki toimisi
-	if [ z"${pkgsrc}" != "z" ] ; then
-		if [ -d ~/Desktop/minimize/${1} ] ; then
-			if [ ! -s /etc/apt/sources.list.${1} ] ; then
-				local g
-			
-				g=$(date +%F) 
-				dqb "MUST MUTILATE sources.list FOR SEXUAL PURPOSES"
-				csleep 3
-
-				[ -f /etc/apt/sources.list ] && sudo mv /etc/apt/sources.list /etc/apt/sources.list.${g}
-				${odio} touch /etc/apt/sources.list.${1} 
-				${scm} a+w /etc/apt/sources.list.${1} 
-
-				for x in ${1} ${1}-updates ${1}-security ; do
-					echo "deb https://${pkgsrc}/merged ${x} main" >> /etc/apt/sources.list.${1}  
-				done
-		
-				${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list			
-
-				[ ${debug} -eq 1 ] && cat /etc/apt/sources.list
-				csleep 2
-			fi
-		fi
-	fi
+	part1_5 ${1}
 
 	#${scm} a-w /etc/apt/sources.list
 	${sco} -R root:root /etc/apt 

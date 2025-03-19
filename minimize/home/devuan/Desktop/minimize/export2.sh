@@ -81,9 +81,12 @@ function pre2() {
 
 	if [ -d ~/Desktop/minimize/${1} ] ; then
 		dqb "PRKL"
+		part1_5 ${1}
 		~/Desktop/minimize/clouds2.sh ${dnsm} ${1}		
+		csleep 4
+		
 		${sifu} ${iface}
-
+		/sbin/ifconfig;sleep 4
 		${sag_u}
 	else
 		echo "P.V.HH"
@@ -272,16 +275,25 @@ function tp3() {
 function tpu() {
 	dqb "tpu( ${1}, ${2})"
 	[ y"${1}" == "y" ] && exit 1
-	[ -s ${1} ] && exit 2
+	[ -s ${1} ] && mv ${1} ${1}.OLD #oli exit aiemmin
 	
 	[ z"${2}" == "z" ] && exit 11
 	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 	dqb "params_ok"
 
 	#pitäisiköhän kohdehmistostakin poistaa paketit?
-	${NKVD} ${pkgdir}/*.deb
+	#${NKVD} ${pkgdir}/*.deb
+	${smr}  ${pkgdir}/*.deb
+#	${smr}  ${pkgdir}/*.bin
 
-	${sag} upgrade -u
+	dqb "TUP PART 2"
+
+	#${sag} upgrade -u
+	sudo apt-get upgrade -u
+	echo $?
+	csleep 5	
+
+	dqb "UTP PT 3"
 	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
 	${srat} -cf ${1} ~/Desktop/minimize/${2}/*.deb
 	${sifd} ${iface}
