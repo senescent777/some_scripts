@@ -27,7 +27,8 @@ function pre_part3() {
 	csleep 5
 }
 
-#TODO:näille main sitä git:in asentelua
+#HUOM.190325: git näyttäisi asentuvan
+#(olikohan näiden pp3 ja pre4 kanssa jotain säätämistä vielä?)
 
 pr4() {
 	dqb "pr4( ${1})"
@@ -55,84 +56,7 @@ pr4() {
 	${NKVD} ${1}/dbus*
 	${NKVD} ${1}/perl*
 }
-#
-#function check_binaries() {
-#	dqb "ch3ck_b1nar135(${1} )"
-#	dqb "sudo= ${odio} "
-#	csleep 1
-#
-#	[ z"${1}" == "z" ] && exit 99
-#	[ -d ~/Desktop/minimize/${1} ] || exit 100
-#	dqb "params_ok"
-#	csleep 1
-#
-#	ipt=$(sudo which iptables)
-#	ip6t=$(sudo which ip6tables)
-#	iptr=$(sudo which iptables-restore)
-#	ip6tr=$(sudo which ip6tables-restore)
-#
-#	if [ y"${ipt}" == "y" ] ; then
-#		echo "SHOULD INSTALL IPTABLES"
-#	
-#		pre_part3 ~/Desktop/minimize/${1}
-#		pr4 ~/Desktop/minimize/${1}
-#
-#		ipt=$(sudo which iptables)
-#		ip6t=$(sudo which ip6tables)
-#		iptr=$(sudo which iptables-restore)
-#		ip6tr=$(sudo which ip6tables-restore)
-#	fi
-#
-#	[ -x ${ipt} ] || exit 5
-#	#jospa sanoisi ipv6.disable=1 isolinuxille ni ei tarttisi tässä säätää
-#	[ -x ${ip6t} ] || exit 5
-#	[ -x ${iptr} ] || exit 5
-#	[ -x ${ip6tr} ] || exit 5
-#
-#	CB_LIST1="${ipt} ${ip6t} ${iptr} ${ip6tr} "
-#	local x
-#	
-#	#passwd mukaan listaan?
-#	for x in chown chmod pkill apt-get apt ip netstat dpkg ifup ifdown rm ln cp tar mount umount 
-#		do ocs ${x} 
-#	done
-#
-#	sco=$(sudo which chown)
-#	scm=$(sudo which chmod)
-#	whack=$(sudo which pkill)
-#	sag=$(sudo which apt-get)
-#	sa=$(sudo which apt)
-#	sip=$(sudo which ip)
-#	snt=$(sudo which netstat)
-#	sdi=$(sudo which dpkg)
-#	sifu=$(sudo which ifup)
-#	sifd=$(sudo which ifdown)
-#	smr=$(sudo which rm) #TODO:shred mukaan kanssa
-#	slinky=$(sudo which ln)
-#	spc=$(sudo which cp)
-#	srat=$(sudo which tar)
-#
-#	if [ ${debug} -eq 1 ] ; then
-#		srat="${srat} -v "
-#	fi
-#
-#	#HUOM. gpgtar olisi vähän parempi kuin pelkkä tar, silleen niinqu tavallaan
-#
-#	som=$(sudo which mount)
-#	uom=$(sudo which umount)
-#
-#	dqb "half_fdone"
-#	csleep 1
-#
-#	dch=$(find /sbin -name dhclient-script)
-#	[ x"${dch}" == "x" ] && exit 6
-#	[ -x ${dch} ] || exit 6
-#
-#	#HUOM:tulisi speksata sudolle tarkemmin millä param on ok noita komentoja ajaa
-#	dqb "b1nar135 0k" 
-#	csleep 3
-#}
-#
+
 function clouds_case0() {
 	${slinky} /etc/resolv.conf.OLD /etc/resolv.conf
 	${slinky} /etc/dhcp/dhclient.conf.OLD /etc/dhcp/dhclient.conf

@@ -60,15 +60,15 @@ if [ $# -gt 0 ] ; then
 	}
 
 	case "${1}" in
-		-1)
-			[ -b ${part} ] || dqb "no such thing as ${part}"
-
-			${som} -o ro ${part} ${dir}
-			csleep 5
-			${som} | grep ${dir}
-
-			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
-		;;
+#		-1)
+#			[ -b ${part} ] || dqb "no such thing as ${part}"
+#
+#			${som} -o ro ${part} ${dir}
+#			csleep 5
+#			${som} | grep ${dir}
+#
+#			echo "NEXT: $0 0 <source> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
+#		;;
 		0)
 			[ x"${2}" == "x" ] && exit #voisi kai toisin,in tehdä
 			dqb "KL"
@@ -101,13 +101,13 @@ if [ $# -gt 0 ] ; then
 			cd ${olddir}
 			echo "NEXT: $0 2"
 		;;
-		2)
-			${uom} ${dir}
-			csleep 3
-			${som} | grep ${dir}
-
-			echo "NEXT: ${d}/doIt6.sh (maybe)"
-		;;
+#		2)
+#			${uom} ${dir}
+#			csleep 3
+#			${som} | grep ${dir}
+#
+#			echo "NEXT: ${d}/doIt6.sh (maybe)"
+#		;;
 		*)
 			dqb "-h"
 		;;

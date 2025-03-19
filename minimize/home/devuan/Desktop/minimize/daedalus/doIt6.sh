@@ -1,5 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
+mode=2
 [ -s ${d}/conf ] && . ${d}/conf
 . ~/Desktop/minimize/common_lib.sh
 
@@ -81,8 +82,15 @@ fi
 if [ ${removepkgs} -eq 1 ] ; then
 	${sharpy} libblu* network* libcupsfilters* libgphoto* 
 	# libopts25 ei tömmöistä daedaluksessa
+
+	#TODO:katso mitä .deb se exportin viimeisin tuotos on syönyt
+	#(oli jotain nalkutusta taas ja exim-base:kin näytti asentuneen)	
+
+	${sharpy} avahi* blu* cups* 
+	${sharpy} exim*
+	${lftr}
+	csleep 3
 	
-	${sharpy} avahi* blu* cups* exim*
 	${sharpy} rpc* nfs* 
 	${sharpy} modem* wireless* wpa*
 	${sharpy} iw lm-sensors
@@ -120,7 +128,7 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 pre_part3 ${d}
 pr4 ${d}
 part3 ${d}
-#(daudaluksen kanssa ok mutta chimaera...)
+#HUOM.190325: joskohan nyt chimerankin kanssa loppuisi nalkutukset paketeista
 
 echo $?
 csleep 3
@@ -136,7 +144,8 @@ fi
 ${asy}
 dqb "GR1DN BELIALAS KYE"
 
-sudo ${d}/clouds.sh 0 #jatqs se yleismepi
+#sudo ${d}/clouds.sh 0 #jatqs se yleismepi
+~/Desktop/minimize/clouds2 ${dnsm} ${distro}
 csleep 5
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
@@ -152,7 +161,8 @@ if [ ${mode} -eq 2 ] ; then
 fi
 
 #070235: heittääkö pihalle xfce:stä tuossa yllä vai ei? vissiin pitää muuttaa parametreja
-sudo ${d}/clouds.sh 1
+#sudo ${d}/clouds.sh 1
+~/Desktop/minimize/clouds2 ${dnsm} ${distro}
 
 #VAIH:stubby-jutut toimimaan
 #ongelmana error: Could not bind on given addresses: Permission denied

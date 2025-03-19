@@ -28,6 +28,12 @@ ${asy}
 ${lftr}
 csleep 5
 
+#190325 uutena, poista jos pykii
+${sharpy} exim* 
+${asy} 
+${lftr}
+csleep 5
+
 dqb "f1"
 csleep 5
 ${sharpy} fdisk ftp*
@@ -79,6 +85,12 @@ ${asy}
 ${lftr}
 csleep 5
 
+#190325 uutena, poista jos pykii
+${sharpy} nfs* 
+${asy} 
+${lftr}
+csleep 5
+
 dqb "p"
 csleep 5
 ${sharpy} ppp procmail ristretto 
@@ -126,10 +138,11 @@ ${asy}
 csleep 5
 
 ${lftr}
-${odio} shred -fu ${pkgdir}/*.deb 
-${odio} shred -fu ${d}/*.deb #or somethink like that
-${odio} shred -fu /tmp/*.tar
-${odio} rm -rf /tmp/tmp.*
+${NKVD} ${pkgdir}/*.deb
+${NKVD} ${pkgdir}/*. 
+${NKVD} ${d}/*.deb 
+${NKVD} /tmp/*.tar
+${smr} /tmp/tmp.*
 #squ.ash voisi vilkaista kanssa liittyen (vai oliko mitään hyödyllistä siellä?)
 df
 ${odio} which dhclient; ${odio} which ifup; csleep 6
