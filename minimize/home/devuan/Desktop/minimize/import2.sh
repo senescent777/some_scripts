@@ -84,10 +84,7 @@ function common_part() {
 	ls -las ~/Desktop/minimize
 	sleep 5
 
-	#tämä pois jatkossa? tai pikemminkin 0755 ${f} (VAIH)
-	# a-wx ${f}/*
 	for f in $(find ~/Desktop/minimize -type d) ; do ${scm} 0755 ${f} ; done 
-
 	#jos nyt olisi hyvä...	
 	${scm} 0755 ~/Desktop/minimize
 	
@@ -118,8 +115,8 @@ case "${1}" in
 		csleep 5
 		${som} | grep ${dir}
 
-		#TODO:näyttämään NEXT-jutut vain jos ei tullut virheitä ed. komennoissa
-		echo "NEXT: $0 0 <source> <distro> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
+		#VAIH:näyttämään NEXT-jutut vain jos ei tullut virheitä ed. komennoissa
+		[ $? -eq 0 ] && echo "NEXT: $0 0 <source> <distro> (unpack AND install) | $0 1 <source> (just unpacks the archive)"
 	;;
 	2)
 		#VAIH:chmod-juttujen läpikäynti (vissiin tämän tdston x-oikeus kyseessä)
@@ -127,7 +124,7 @@ case "${1}" in
 		csleep 3
 		${som} | grep ${dir}
 
-		echo "NEXT: ${d}/doIt6.sh (maybe)"
+		[ $? -eq 0 ] && echo "NEXT: ${d}/doIt6.sh (maybe)"
 	;;
 	1)
 		[ x"${file}" == "x" ] && exit 44
@@ -136,10 +133,11 @@ case "${1}" in
 		common_part ${file} ${distro}
 		csleep 3
 		cd ${olddir}
-		echo "NEXT: $0 2"
+		[ $? -eq 0 ] && echo "NEXT: $0 2"
 	;;
 	0)
-#HUOM. 170325: seuraavanlaista nalkutusta tuli:
+
+#HUOM. 170325: seuraavanlaista nalkutusta tuli: (vissiinkin chimaeran kanssa)
 #firefox-esr depends on libx11-xcb1 (>= 2:1.7.2); however:
 #  Package libx11-xcb1:amd64 is not configured yet.
 #python3.9 depends on libpython3.9-stdlib (= 3.9.2-1+deb11u2); however:
@@ -167,6 +165,7 @@ case "${1}" in
 # libx11-xcb1:amd64 depends on libx11-6 (= 2:1.7.2-1+deb11u2); however:
 #  Version of libx11-6:amd64 on system is 2:1.7.2-1.
 #... joskohan sorkkisi export:ia vaihteeksi?
+
 		[ x"${file}" == "x" ] && exit 55
 		dqb "KL"
 		csleep 2
@@ -186,7 +185,7 @@ case "${1}" in
 		csleep 2
 
 		cd ${olddir}
-		echo "NEXT: $0 2"
+		[ $? -eq 0 ] && echo "NEXT: $0 2"
 	;;
 	*)
 		echo "-h"
