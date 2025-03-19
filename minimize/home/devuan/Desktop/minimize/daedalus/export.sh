@@ -2,7 +2,8 @@
 d=$(dirname $0)
 [ -s ${d}/conf ] && . ${d}/conf
 . ~/Desktop/minimize/common_lib.sh
-#TODO:roskikseen jatkossa
+
+#TODO:roskikseen jatkossa (qhan varmistettu että e2 toimii kuten pitää)
 if [ -s ${d}/lib.sh ] ; then
 	. ${d}/lib.sh
 else
@@ -25,7 +26,6 @@ fi
 tig=$(sudo which git)
 
 if [ x"${tig}" == "x" ] ; then
-	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot
 	echo "${sag_u}"
 	echo "${shary} git"
 	exit 7
@@ -34,7 +34,6 @@ fi
 mkt=$(sudo which mktemp)
 
 if [ x"${mkt}" == "x" ] ; then
-	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot
 	echo "${sag_u}"
 	echo "${shary} mktemp"
 	exit 8
@@ -157,26 +156,26 @@ function tp3() {
 	${srat} -rf ${1} ./etc ./sbin 
 	cd ${p}
 }
-
-function tpu() {
-	[ y"${1}" == "y" ] && exit 1
-	[ -s ${1} ] && exit 2
-
-	${odio} shred -fu ${pkgdir}/*.deb 
-	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
-
-	${odio} ${d}/clouds.sh ${dnsm} 
-	${sifu} ${iface}
-
-	${asy}
-	${sag_u}
-
-	${sag} upgrade -u
-	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
-	${srat} -jcf ${1} ~/Desktop/minimize/${distro}/*.deb
-
-	${sifd} ${iface}
-}
+#
+#function tpu() {
+#	[ y"${1}" == "y" ] && exit 1
+#	[ -s ${1} ] && exit 2
+#
+#	${odio} shred -fu ${pkgdir}/*.deb 
+#	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
+#
+#	${odio} ${d}/clouds.sh ${dnsm} 
+#	${sifu} ${iface}
+#
+#	${asy}
+#	${sag_u}
+#
+#	${sag} upgrade -u
+#	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
+#	${srat} -jcf ${1} ~/Desktop/minimize/${distro}/*.deb
+#
+#	${sifd} ${iface}
+#}
 
 function tp5() {
 	dqb "5FF0RP"

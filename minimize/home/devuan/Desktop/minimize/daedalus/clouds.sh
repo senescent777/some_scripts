@@ -13,7 +13,7 @@
 #scm=$(sudo which chmod)
 #whack=$(sudo which pkill)
 #debug=0
-#
+#TODO:tarpellisten juttujen siirto -> lib, sitten roskikseen 
 ##testit ehkä jatkossa common_lib_in pre-osuuteen
 #if [ -s /etc/resolv.conf.new ] || [ -s /etc/resolv.conf.OLD ] ; then 
 #	${smr} /etc/resolv.conf
@@ -101,7 +101,7 @@
 #		pgrep dnsmasq
 #
 #		dqb "stu";csleep 2
-#		${whack} stubby* #090325: pitäisiköhän tämä muuttaa?3
+#		${whack} stubby* #090325: pitäisiköhän tämä muuttaa?
 #		csleep 3	
 #			
 #		[ -f /run/stubby.pid ] || sudo touch /run/stubby.pid

@@ -47,7 +47,8 @@ check_params
 enforce_access ${n}
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-part1 ${distro} #HUOM.190325:qseekohan näillä main, daed-versiossa, jotain?
+part1 ${distro} #HUOM.190325:part_1_5sessa oli bugi, u+w ei vaan riitä
+less /etc/apt/sources.list
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
