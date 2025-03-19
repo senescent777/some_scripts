@@ -139,7 +139,7 @@ csleep 5
 
 ${lftr}
 ${NKVD} ${pkgdir}/*.deb
-${NKVD} ${pkgdir}/*. 
+${NKVD} ${pkgdir}/*.bin 
 ${NKVD} ${d}/*.deb 
 ${NKVD} /tmp/*.tar
 ${smr} /tmp/tmp.*
