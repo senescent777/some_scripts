@@ -11,6 +11,8 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
+#TODO:uudelleennimeäminenm changedns.sh voisiolla sopiva jatkossa
+
 if [ $# -gt 1 ] ; then
 	if [ -d ~/Desktop/minimize/${2} ] ; then
 		distro=${2}
