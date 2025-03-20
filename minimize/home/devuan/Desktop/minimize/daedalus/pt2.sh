@@ -6,7 +6,7 @@ d=$(dirname $0)
 [ -s ${d}/lib.sh ] && . ${d}/lib.sh
 
 ${fib}
-g=$(date +%F) #tarpeellinen nykyään?
+#g=$(date +%F) #tarpeellinen nykyään?
 
 if [ $# -gt 0 ] ; then  
 	if [ "${1}" == "-v" ] ; then
@@ -16,6 +16,30 @@ fi
 
 dqb "a-e"
 csleep 5
+
+#onkohan hyvä näin?
+if [ ${removepkgs} -eq 1 ] ; then
+	dqb "kö"
+else
+	${sharpy} libblu* network* libcupsfilters* libgphoto* 
+	# libopts25 ei tömmöistä daedaluksessa
+	
+	${sharpy} avahi* blu* cups* 
+	${sharpy} exim*
+	${lftr}
+	csleep 3
+
+	${sharpy} modem* wireless* wpa*
+	${sharpy} iw lm-sensors
+
+	${sharpy} ntp*
+	${lftr}
+	csleep 3
+	
+	${sharpy} po* pkexec
+	${lftr}
+	csleep 3
+fi
 
 #HUOM. ao. rivillä 2. viimeisessä syystä vain core
 ${sharpy} amd64-microcode iucode-tool arch-test at-spi2-core bubblewrap
@@ -27,6 +51,12 @@ ${sharpy} efibootmgr exfalso
 ${asy} 
 ${lftr}
 csleep 5
+
+##190325 uutena, poista jos pykii
+#${sharpy} exim* 
+#${asy} 
+#${lftr}
+#csleep 5
 
 dqb "f1"
 csleep 5
@@ -79,6 +109,12 @@ ${asy}
 ${lftr}
 csleep 5
 
+##190325 uutena, poista jos pykii
+#${sharpy} nfs* 
+#${asy} 
+#${lftr}
+#csleep 5
+
 dqb "p"
 csleep 5
 ${sharpy} ppp procmail ristretto 
@@ -126,14 +162,15 @@ ${asy}
 csleep 5
 
 ${lftr}
-${odio} shred -fu ${pkgdir}/*.deb 
-
-${odio} shred -fu ${d}/*.deb #or somethink like that
-
-${odio} shred -fu /tmp/*.tar
+${NKVD} ${pkgdir}/*.deb
+${NKVD} ${pkgdir}/*.bin 
+${NKVD} ${d}/*.deb 
+${NKVD} /tmp/*.tar
+${smr} /tmp/tmp.*
+${smr} /usr/share/doc #rikkookohan jotain nykyään?
 #squ.ash voisi vilkaista kanssa liittyen (vai oliko mitään hyödyllistä siellä?)
 df
-${odio} which dhclient; ${odio} which ifup; sleep 6
+${odio} which dhclient; ${odio} which ifup; csleep 6
 
 dqb "${scm} a-wx $0 in 6 secs "
 csleep 6
@@ -142,5 +179,3 @@ ${scm} a-wx $0
 #whack xfce so that the ui is reset
 ${whack} xfce4-session
 #HUOM. omegankin toiminnan voisi testata
-
-

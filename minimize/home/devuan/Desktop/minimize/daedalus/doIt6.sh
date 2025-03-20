@@ -1,5 +1,6 @@
 #!/bin/bash
 d=$(dirname $0)
+mode=2
 [ -s ${d}/conf ] && . ${d}/conf
 . ~/Desktop/minimize/common_lib.sh
 
@@ -11,7 +12,7 @@ else
 fi
 
 n=$(whoami)
-
+#TODO:->common_lib
 function parse_opts_1() {
 	case "${1}" in
 		-v|--v)
@@ -42,23 +43,24 @@ if [ $# -gt 0 ] ; then
 fi
 
 check_params 
-[ ${enforce} -eq 1 ] && pre_enforce
-enforce_access 
+[ ${enforce} -eq 1 ] && pre_enforce ${n} ${distro}
+enforce_access ${n}
 
 dqb "man date;man hwclock; sudo date --set | sudo hwclock --set --date if necessary" 
-part1
+part1 ${distro} 
+#HUOM.190325:part_1_5sessa oli bugi, u+w ei vaan riitä
+[ ${debug} -eq 1 ] && less /etc/apt/sources.list
 [ ${mode} -eq 0 ] && exit
 
 #HUOM.261224: ntpsec uutena
 for s in avahi-daemon bluetooth cups cups-browsed exim4 nfs-common network-manager ntp mdadm saned rpcbind lm-sensors dnsmasq stubby ntpsec ; do
 	${odio} /etc/init.d/${s} stop
-	sleep 1
+	csleep 1
 done
 
 dqb "shutting down some services (4 real) in 3 secs"
 sleep 3 
 
-#pitäisiköhän näillekin tehdä jotain=
 ${whack} cups*
 ${whack} avahi*
 ${whack} dnsmasq*
@@ -67,7 +69,7 @@ ${whack} nm-applet
 
 #ntp ehkä takaisin myöhemmin
 ${whack} ntp*
-csleep 10
+csleep 5
 ${odio} /etc/init.d/ntpsec stop
 #K01avahi-jutut sopivaan kohtaan?
 
@@ -75,28 +77,46 @@ ${odio} /etc/init.d/ntpsec stop
 ecfx
 csleep 5
 
-
-#TODO:testaus
 if [ ${mode} -eq 1 ] ; then
 	vommon
 fi
 
-${sharpy} libblu* network* libcupsfilters* libgphoto* 
-# libopts25 ei tömmöistä daedaluksessa
+if [ ${removepkgs} -eq 1 ] ; then
+	${sharpy} libblu* network* libcupsfilters* libgphoto* 
+	# libopts25 ei tömmöistä daedaluksessa
 
-${sharpy} avahi* blu* cups* exim*
-${sharpy} rpc* nfs* 
-${sharpy} modem* wireless* wpa*
-${sharpy} iw lm-sensors
+	#HUOM.200325:eximin läsnäolo aiheuyiu removepkgs-mjan arvosrta
+	${sharpy} avahi* blu* cups* 
+	${sharpy} exim*
+	${lftr}
+	csleep 3
 
-${sharpy} ntp*
-${sharpy} po* pkexec
-${lftr}
-csleep 3
+#	${sharpy} exim*
+#	${lftr}
+#	csleep 3
+#	
+#	${sharpy} rpc* nfs* 
+#	csleep 3
+#	${sharpy} rpc* 
+#	csleep 4
+#	${sharpy} nfs* 
+#	csleep 4
+
+	${sharpy} modem* wireless* wpa*
+	${sharpy} iw lm-sensors
+
+	${sharpy} ntp*
+	${lftr}
+	csleep 3
+	
+	${sharpy} po* pkexec
+	${lftr}
+	csleep 3
+fi
 
 if [ y"${ipt}" != "y" ] ; then 
 	${ip6tr} /etc/iptables/rules.v6
-	${iptr} /etc/iptables/${tblz4}
+	${iptr} /etc/iptables/${tblz4} #voisi olla rules.v4 jatkossa, ei kikkaulua
 fi
 
 #HUOM.270624:oli aikaisemmin tässä clouds.sh 0
@@ -121,10 +141,10 @@ echo "... FOR POSITIVE ANSWER MAY BREAK THINGS";sleep 5
 pre_part3 ${d}
 pr4 ${d}
 part3 ${d}
-#(daudaluksen kanssa ok mutta chimaera...)
+#HUOM.190325: joskohan nyt chimerankin kanssa loppuisi nalkutukset paketeista
 
 echo $?
-sleep 3
+csleep 3
 ${ip6tr} /etc/iptables/rules.v6
 
 #VAIH:se ffox-profiili-asia (mallia sieltä ghubin toisesta hmistosta)
@@ -137,11 +157,14 @@ fi
 ${asy}
 dqb "GR1DN BELIALAS KYE"
 
-sudo ${d}/clouds.sh 0
-csleep 5
+#sudo ${d}/clouds.sh 0 #jatqs se yleismepi
+#HUOM. TOIMIIKO TUO KOMENTO TUOSSA ALLA VAI EI ??? (olikohan resolv.conf:ista kiinni)
+~/Desktop/minimize/clouds2 ${dnsm} ${distro}
+${sipt} -L
+csleep 6
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
-${scm} a-wx $0 #oikeastaan kerta-ajo tulisi riittää
+${scm} a-wx $0 #oikeastaan kerta-ajo tulisi riittää tai toisaalta daedaluksen versiossa ominaisuuksia
 
 #===================================================PART 4(final)==========================================================
 
@@ -153,7 +176,8 @@ if [ ${mode} -eq 2 ] ; then
 fi
 
 #070235: heittääkö pihalle xfce:stä tuossa yllä vai ei? vissiin pitää muuttaa parametreja
-sudo ${d}/clouds.sh 1
+#sudo ${d}/clouds.sh 1
+~/Desktop/minimize/clouds2 ${dnsm} ${distro}
 
 #VAIH:stubby-jutut toimimaan
 #ongelmana error: Could not bind on given addresses: Permission denied
