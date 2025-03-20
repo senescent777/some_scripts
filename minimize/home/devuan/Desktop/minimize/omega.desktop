@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=remove ubuntu-style sudo
+Comment=
+Exec=sudo rm /etc/sudoers.d/live
+Icon=
+Path=
+Terminal=true
+StartupNotify=false

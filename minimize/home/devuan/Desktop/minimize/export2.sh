@@ -1,136 +1,236 @@
 #!/bin/bash
-d=$(dirname $0)
-#[ -s ${d}/conf ] && . ${d}/conf
+d=$(dirname $0) #tarpeellinen?
+debug=1
+tgtfile=""
+distro=""
 
-if [ $# -gt 2 ] ; then
-	if [ -d ~/Desktop/minimize/${3} ] ; then
+case $# in
+	3)
+		tgtfile=${2}
 		distro=${3}
-		. ~/Desktop/minimize/${3}/conf
-	fi
+	;;
+	*)
+		echo "$0 <mode> <tgtfile> <distro>"
+	;;
+esac
+
+[ z"${distro}" == "z" ] && exit 6
+
+if [ -d ~/Desktop/minimize/${distro} ] && [ -s ~/Desktop/minimize/${distro}/conf ]; then
+	#HUOM. mielellään hanskat naulaan jos ei konf löydy
+	
+	. ~/Desktop/minimize/${distro}/conf
+else
+	echo "CONFIG MISSING"; exit 55
 fi
 
+debug=1
 . ~/Desktop/minimize/common_lib.sh
 
-if [ $# -gt 2 ] ; then
-	if [ -d ~/Desktop/minimize/${3} ] ; then
-		. ~/Desktop/minimize/${3}/lib.sh
-	fi
+if [ -d ~/Desktop/minimize/${distro} ] && [ -x ~/Desktop/minimize/${distro}/lib.sh ] ; then	
+	. ~/Desktop/minimize/${distro}/lib.sh
+else
+	echo "L1B M1SSING";exit 66
 fi
 
-#if [ -s ${d}/lib.sh ] ; then
-#	. ${d}/lib.sh
-#else
-#	srat="sudo /bin/tar"
-#	som="sudo /bin/mount"
-#	uom="sudo /bin/umount"
-#	dir=/mnt
-#	odio=$(which sudo)
-#	debug=1
-#	
-#	function dqb() {
-#		[ ${debug} -eq 1 ] && echo ${1}
-#	}
-#
-#	function csleep() {
-#		[ ${debug} -eq 1 ] && sleep ${1}
-#	}	
-#fi
+#HUOM.140325:syystä tässä kohtaa mode'n asxetus näin (ennen common_lib rodnäk myös ok)
+mode=${1}
+dqb "mode= ${mode}"
 
 tig=$(sudo which git)
+mkt=$(sudo which mktemp)
+#debug=1 #TODO: jos parametriksi
 
 if [ x"${tig}" == "x" ] ; then
-	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot (kts chimaera/lib että löytyykö nuo)
-	#echo "${sag_u}"
-	#echo "${shary} git"
+	#HUOM. kts alempaa mitä git tarvitsee
 	echo "sudo apt-get update;sudo apt-get install git"
 	exit 7
 fi
 
-mkt=$(sudo which mktemp)
-
 if [ x"${mkt}" == "x" ] ; then
-	#VAIH:voisi myös urputtaa kjälle että ajaa ao. komennot
-	#echo "${sag_u}"
-	#echo "${shary} mktemp"
 	echo "sudo apt-get update;sudo apt-get install mktemp"
 	exit 8
 fi
 
+sudo chown -Rv _apt:root /var/cache/apt/archives/partial/
+sudo chmod -Rv 700 /var/cache/apt/archives/partial/
+csleep 4
+
+function pre() {
+	[ x"${1}" == "z" ] && exit 666
+
+	sudo chown -Rv _apt:root /var/cache/apt/archives/partial/
+	sudo chmod -Rv 700 /var/cache/apt/archives/partial/
+	csleep 4
+
+	if [ -d ~/Desktop/minimize/${1} ] ; then
+		dqb "5TNA"
+
+		${scm} 0755 ~/Desktop/minimize/${1}
+		${scm} 0755 ~/Desktop/minimize/*.sh
+		${scm} 0755 ~/Desktop/minimize/${1}/*.sh
+		
+		if [ -s /etc/apt/sources.list.${1} ] ; then
+			${smr} /etc/apt/sources.list
+			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list
+		else
+			part1_5 ${1}		
+		fi
+
+		csleep 2
+	else
+		echo "P.V.HH"
+		exit 111
+	fi
+}
+
+#TODO:glob muutt pois jatqssa jos mahd
+function pre2() {
+	[ x"${1}" == "z" ] && exit 666
+
+	if [ -d ~/Desktop/minimize/${1} ] ; then
+		dqb "PRKL"
+		~/Desktop/minimize/clouds2.sh ${dnsm} ${1}		
+		csleep 4
+		
+		${sifu} ${iface}
+		[ ${debug} -eq 1 ] && /sbin/ifconfig
+		csleep 4
+
+		sudo chown -Rv _apt:root /var/cache/apt/archives/partial/
+		sudo chmod -Rv 700 /var/cache/apt/archives/partial/
+		
+		${sag_u}
+		csleep 4
+	else
+		echo "P.V.HH"
+		exit 111
+	fi
+} 
+
 function tp1() {
+	dqb "tp1( ${1} , ${2} )"
 	[ z"${1}" == "z" ] && exit
+	dqb "params_ok"
+	csleep 4
 
 	${scm} -R a-wx ~/Desktop/minimize/*
-	${scm} 0755 ~/Desktop/minimize;${scm} 0755 ~/Desktop/minimize/${distro}
-	${scm} 0755 ~/Desktop/minimize/${distro}/*.sh
-	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
+	${scm} 0755 ~/Desktop/minimize
+
+	if [ -d ~/Desktop/minimize/${2} ] ; then
+		dqb "cleaning up ~/Desktop/minimize/${2} "
+		csleep 4
+		${NKVD} ~/Desktop/minimize/${2}/*.deb
+		dqb "d0nm3"
+	fi
 
 	if [ ${enforce} -eq 1 ] ; then
+		dqb "FORCEFED BROKEN GLASS"
 		${srat} -cvf ~/Desktop/minimize/xfce.tar ~/.config/xfce4/xfconf/xfce-perchannel-xml 
-		
-		#HUOM.100325: pitäisiköhän se .mozilla:n vetäminen mukaan jollain ehdolla?	
-		#HUOM.110325: ei suoraan tar, miel find:in kautta
+		csleep 3
+
+		local tget
+		local p
+		local f
+
+		tget=$(ls ~/.mozilla/firefox/ | grep default-esr | tail -n 1)
+		p=$(pwd)
+		cd ~/.mozilla/firefox/${tget}
+		dqb "TG3T=tget"		
+		csleep 3
+
+		#TODO:pitäsi ensin luoda se tar ennenq alkaa lisäämään
+		for f in $(find . -name '*.js') ; do ${rat} -rf ~/Desktop/minimize/someparam.tar ${f} ; done
 		#*.js ja *.json kai oleellisimmat kalat
-		#${srat} -cvf ~/Desktop/minimize/someparam.tar ~/.mozilla #arpoo arpooo
+		cd ${p}
 	fi
 
 	if [ ${debug} -eq 1 ] ; then
-		ls -las ~/Desktop/minimize/; sleep 10
+		ls -las ~/Desktop/minimize/; sleep 5
 	fi
 	
-	${srat} -cvf ${1} ~/Desktop/*.desktop ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
+	${srat} -cvf ${1} ~/Desktop/minimize /home/stubby #HUOM.260125: -p wttuun varm. vuoksi  
+	dqb "tp1 d0n3"
+	csleep 3
 }
 
 #HUOM. pitäisiköhän tässä karsia joitain paketteja ettei tartte myöhemmin... no ehkö chimeran tapauksessa
-#TODO:jatkossa nuo paketit erilliseen arkistoon varsinaiaseta oksennyksesta?
-#TODO:jatkossa distro-kohtaiset sources-list-tdstot
+#HUOM. erilllliseen oksennukseen liittyen kts main() , case e
 function tp4() {
-	if [ z"${pkgdir}" != "z" ] ; then 
-		${odio} shred -fu ${pkgdir}/*.deb
-	fi
+	dqb "tp4( ${1} , ${2} )"
 	
 	[ z"${1}" == "z" ] && exit 1
 	[ -s ${1} ] || exit 2
+	
+	[ z"${2}" == "z" ] && exit 11
+	[ -d  ~/Desktop/minimize/${2} ] || exit 22
 
-	${sag_u}
-	[ $? -eq 0 ] || exit
+	dqb "paramz_ok"
+	csleep 4
+
+	if [ z"${pkgdir}" != "z" ] ; then
+		${NKVD} ${pkgdir}/*.deb
+		dqb "SHREDDED HUMANS"
+	fi
+
+	dqb "EDIBLE AUTOPSY"
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=netfilter-persistent=1.0.20
 	${shary} libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 
 	${shary} iptables 	
 	${shary} iptables-persistent init-system-helpers netfilter-persistent
 
-	#actually necessary block
-	#TODO:glob muutt pois jatqssa
-	sudo ~/Desktop/minimize/${distro}/clouds.sh ${dnsm}
-	${sifu} ${iface}
+	#actually necessary
+	pre2 ${2}
 
-	${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
-	${shary} runit-helper
+	if [ ${dnsm} -eq 1 ] ; then
+		${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
+		${shary} runit-helper
 
-	${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
+		${shary} dnsmasq-base dnsmasq dns-root-data #dnsutils
+		${lftr} 
+
+		#josqs ntp-jututkin mukaan?
+		[ $? -eq 0 ] || exit 3
+
+		${shary} libev4
+		${shary} libgetdns10 libbsd0 libidn2-0 libssl3 libunbound8 libyaml-0-2 #sotkeekohan libc6 uudelleenas tässä?
+		${shary} stubby
+	fi
+
+	echo "${shary} git mktemp in 4 secs"
+	sleep 5
 	${lftr} 
 
-	#josqs ntp-jututkin mukaan?
-	[ $? -eq 0 ] || exit 3
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=git=1:2.39.2-1~bpo11+1
+	#${shary} mktemp
+	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
+	${shary} git-man git
 
-	${shary} libev4
-	${shary} libgetdns10 libbsd0 libidn2-0 libssl3 libunbound8 libyaml-0-2 #sotkeekohan libc6 uudelleenas tässä?
-	${shary} stubby
-
-	${lftr} 
+	[ $? -eq 0 ] && dqb "TOMB OF THE MUTILATED"	
+	sleep 6
+	${lftr}
 
 	#HUOM. jos aikoo gpg'n tuoda takaisin ni jotenkin fiksummin kuin aiempi häsläys kesällä
-	${odio} shred -fu  ~/Desktop/minimize/${distro}/*.deb
+	if [ -d ~/Desktop/minimize/${2} ] ; then 
+		${NKVD} ~/Desktop/minimize/${2}/*.deb
+	
+		#HUOM.070325: varm vuoksi speksataan että *.deb
+		${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
+		${srat} -rf ${1} ~/Desktop/minimize/${2}/*.deb
+	fi
 
-	#HUOM.070325: varm vuoksi speksataan että *.deb
-	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
-	${srat} -rf ${1} ~/Desktop/minimize/${distro}/*.deb
 	#HUOM.260125: -p wttuun varm. vuoksi  
+	dqb "tp4 donew"
+	csleep 3
 }
 
 function tp2() {
+	dqb "tp2 ${1} ${2}"
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
+	dqb "params_ok"
+	csleep 5
 
 	#HUOM.260125: -p wttuun varm. vuoksi  
 	${srat} -rf ${1} /etc/iptables /etc/network/interfaces*
@@ -146,14 +246,17 @@ function tp2() {
 
 	${srat} -rf ${1} /etc/init.d/net*
 	${srat} -rf ${1} /etc/rcS.d/S*net*
+
+	dqb "tp2 done"
+	csleep 4
 }
 
-#jopsa jatkossa ajaisi tp3 ennen tp2?
 function tp3() {
-	dqb "tp3 ${1}"
+	dqb "tp3 ${1} ${2}"
 	[ y"${1}" == "y" ] && exit 1
 	[ -s ${1} ] || exit 2
 	dqb "paramz_0k"
+	csleep 4
 
 	local p
 	local q	
@@ -162,7 +265,6 @@ function tp3() {
 	p=$(pwd)
 	q=$(mktemp -d)
 	cd ${q}
-	[ $? -eq 0 ] || exit 55
 
 	${tig} clone https://github.com/senescent777/project.git
 	[ $? -eq 0 ] || exit 66
@@ -178,79 +280,99 @@ function tp3() {
 	${sco} -R root:root ./etc; ${scm} -R a-w ./etc
 	${sco} -R root:root ./sbin; ${scm} -R a-w ./sbin
 	${srat} -rf ${1} ./etc ./sbin 
+	
 	cd ${p}
+	${sifd} ${iface}
+
+	dqb "tp3 done"
+	csleep 4
 }
 
 function tpu() {
+	dqb "tpu( ${1}, ${2})"
 	[ y"${1}" == "y" ] && exit 1
-	[ -s ${1} ] && exit 2
+	[ -s ${1} ] && mv ${1} ${1}.OLD #oli exit aiemmin
+	
+	[ z"${2}" == "z" ] && exit 11
+	[ -d  ~/Desktop/minimize/${2} ] || exit 22
+	dqb "params_ok"
 
-	${odio} shred -fu ${pkgdir}/*.deb 
-	${odio} shred -fu ~/Desktop/minimize/${distro}/*.deb
-	${odio} ${d}/clouds.sh ${dnsm} 
-	${sifu} ${iface}
+	#pitäisiköhän kohdehmistostakin poistaa paketit?
+	${NKVD} ${pkgdir}/*.deb
+	#${smr}  ${pkgdir}/*.deb
+#	${smr}  ${pkgdir}/*.bin
 
-	${sag} upgrade -u
-	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${distro}
-	${srat} -cf ${1} ~/Desktop/minimize/${distro}/*.deb
+	dqb "TUP PART 2"
 
+	#${sag} upgrade -u
+	sudo apt-get upgrade -u
+	echo $?
+	csleep 5	
+
+	dqb "UTP PT 3"
+	${odio} mv ${pkgdir}/*.deb ~/Desktop/minimize/${2}
+	${srat} -cf ${1} ~/Desktop/minimize/${2}/*.deb
 	${sifd} ${iface}
+
+	dqb "SIELUNV1H0LL1N3N"
 }
 
+#TODO:ao- if-blkkiin liittyen jos poistaisi ghubista minimize-hamistosta välistä sen /h/d-osuuden
+
 function tp5() {
-	dqb "5FF0RP"
+	dqb "tp5 ${1} ${2}"
+	[ z"${1}" == "z" ] && exit 99
+	#[ -s  ${1} ] || exit 98
+
+	dqb "params ok"
+	csleep 5
 
 	local q
 	q=$(mktemp -d)
 	cd ${q}
 	[ $? -eq 0 ] || exit 77
 
-	#HUOM. prsofs kanssa olisi pikkuisen laittamista
 	${tig} clone https://github.com/senescent777/some_scripts.git
 	[ $? -eq 0 ] || exit 99
 
-	#VAIH:profs* lähteenä jatq0ssa
-	mv some_scripts/lib/export/profs* ~/Desktop/minimize/${distro}/
-	${scm} 0755 ~/Desktop/minimize/${distro}/profs*
-	${srat} -rvf ${1} ~/Desktop/minimize/${distro}/profs*
+	mv some_scripts/lib/export/profs* ~/Desktop/minimize 
+	${scm} 0755 ~/Desktop/minimize/profs*
+	${srat} -rvf ${1} ~/Desktop/minimize/profs*
+
+	dqb "AAMUNK01"
 }
 
-mode=0
-tgtfile=""
-
-#parsetus josqs käyttöön, ehkä
-if [ $# -gt 0 ] ; then
-	mode=${1}
-	tgtfile=${2}
-else
-	echo "-h"
-	exit
-fi
+dqb "mode= ${mode}"
+pre ${distro}
 
 case ${mode} in
 	0)
-		tp1 ${tgtfile}
-		tp2 ${tgtfile}
-		tp3 ${tgtfile}
-		tp4 ${tgtfile}
+		tp1 ${tgtfile} ${distro}
 
-#		#${srat} -tf ${tgtfile} > ./MANIFEST
-#		#${srat} -rf ${tgtfile} ./MANIFEST
+		pre ${distro}
+		pre2 ${distro}		
+		tp3 ${tgtfile} ${distro}
+
+		pre ${distro}
+		tp2 ${tgtfile} ${distro}
+
+		pre ${distro}
+		pre2 ${distro}
+		tp4 ${tgtfile} ${distro}
 	;;
 	1|u|upgrade)
-		tpu ${tgtfile}
+		#HUOM.20325:toimisokohan tämä jo?
+		pre2 ${distro}
+		tpu ${tgtfile} ${distro}
 	;;
 	p)
+		#HUOM.20325:toimisokohan tämä jo?
+		pre2 ${distro}
 		tp5 ${tgtfile}
 	;;
 	e)
-		tp4 ${tgtfile}
-	;;
-	-h)
-		echo "$0 0 tgtfile distro | $0 1 tgtfile distro"
-	;;
-	*)
-		echo "-h"
+		pre2 ${distro}
+		tp4 ${tgtfile} ${distro}
 	;;
 esac
 

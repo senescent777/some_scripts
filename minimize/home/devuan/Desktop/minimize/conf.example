@@ -1,0 +1,12 @@
+iface=
+enforce=
+debug=0
+pkgdir=/var/cache/apt/archives
+tblz4=rules.v4 #TODO:josko pois turhana tääkin
+mode=2 #TODO:tämä mja pois konftdstosta
+dir=/some_dir
+distro= #TODO:tämäkin mja pois konftdstosta
+dnsm=0
+pkgsrc=
+part0=ABCD-1234-XXXX
+removepkgs=1
