@@ -43,8 +43,9 @@ fix_sudo() {
 fix_sudo
 
 #pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
+#HUOM.20325:ocs() toiminee kuten tarkoitus, testattu on
 function ocs() {
-	dqb "ocs(${1})) "
+	#dqb "ocs(${1})) "
 	local tmp
 	tmp=$(sudo which ${1})
 
@@ -56,7 +57,7 @@ function ocs() {
 		exit 77
 	fi
 	
-	dqb "paramz_0k"
+	#dqb "paramz_0k"
 	CB_LIST1="${CB_LIST1} ${tmp} " #ja nimeäminenkin...
 }
 
