@@ -62,10 +62,12 @@ function pre() {
 		${scm} 0755 ~/Desktop/minimize/*.sh
 		${scm} 0755 ~/Desktop/minimize/${1}/*.sh
 		
-		#TODO:part_1_5 jatjissa tähän
+		#VAIH:part_1_5 jatjissa tähän
 		if [ -s /etc/apt/sources.list.${1} ] ; then
 			${smr} /etc/apt/sources.list
 			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list
+		else
+			part1_5 ${1}		
 		fi
 
 		csleep 2
@@ -76,13 +78,16 @@ function pre() {
 }
 
 #TODO:glob muutt pois jatqssa jos mahd
-#TODO:tähän se /v/c/a/a oikeuksien muuttaminen jatkossa
+#VAIH:tähän se /v/c/a/a oikeuksien muuttaminen jatkossa
 function pre2() {
 	[ x"${1}" == "z" ] && exit 666
 
 	if [ -d ~/Desktop/minimize/${1} ] ; then
 		dqb "PRKL"
-		part1_5 ${1}
+
+		sudo chown -Rv _apt:root /var/cache/apt/archives/partial/
+		sudo chmod -Rv 700 /var/cache/apt/archives/partial/
+
 		~/Desktop/minimize/clouds2.sh ${dnsm} ${1}		
 		csleep 4
 		
@@ -349,6 +354,7 @@ case ${mode} in
 		tp4 ${tgtfile} ${distro}
 	;;
 	1|u|upgrade)
+		#testaapa tämäkin vielä
 		pre2 ${distro}
 		tpu ${tgtfile} ${distro}
 	;;
