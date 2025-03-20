@@ -43,9 +43,8 @@ fix_sudo() {
 fix_sudo
 
 #pr4(), pp3(), p3() distro-spesifisiä, ei tähän tdstoon
-#VAIH:jospa tämänkin toiminnan testausu (daedaluksen kanssa sitten)
 function ocs() {
-	dqb "ocs"
+	dqb "ocs(${1})) "
 	local tmp
 	tmp=$(sudo which ${1})
 
@@ -258,7 +257,6 @@ function part1_5() {
 	${scm} -R a-w /etc/apt/
 }
 
-#VAIH:export2 käyttämään tätä, tai siis tuota /a/a/s.list-osaa
 function part1() {
 	#jos jokin näistä kolmesta hoitaisi homman...
 	${sifd} ${iface}
