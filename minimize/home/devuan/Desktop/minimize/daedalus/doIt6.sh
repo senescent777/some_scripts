@@ -85,24 +85,22 @@ if [ ${removepkgs} -eq 1 ] ; then
 	${sharpy} libblu* network* libcupsfilters* libgphoto* 
 	# libopts25 ei tömmöistä daedaluksessa
 
-	#TODO:katso mitä .deb se exportin viimeisin tuotos on syönyt
-	#(oli jotain nalkutusta taas ja exim-base:kin näytti asentuneen)	
-
+	#HUOM.200325:eximin läsnäolo aiheuyiu removepkgs-mjan arvosrta
 	${sharpy} avahi* blu* cups* 
 	${sharpy} exim*
 	${lftr}
 	csleep 3
 
-	${sharpy} exim*
-	${lftr}
-	csleep 3
-	
-	${sharpy} rpc* nfs* 
-	csleep 3
-	${sharpy} rpc* 
-	csleep 4
-	${sharpy} nfs* 
-	csleep 4
+#	${sharpy} exim*
+#	${lftr}
+#	csleep 3
+#	
+#	${sharpy} rpc* nfs* 
+#	csleep 3
+#	${sharpy} rpc* 
+#	csleep 4
+#	${sharpy} nfs* 
+#	csleep 4
 
 	${sharpy} modem* wireless* wpa*
 	${sharpy} iw lm-sensors
