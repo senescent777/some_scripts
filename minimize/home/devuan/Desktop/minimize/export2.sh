@@ -70,7 +70,6 @@ function pre() {
 		${scm} 0755 ~/Desktop/minimize/*.sh
 		${scm} 0755 ~/Desktop/minimize/${1}/*.sh
 		
-		#VAIH:part_1_5 jatjissa tähän
 		if [ -s /etc/apt/sources.list.${1} ] ; then
 			${smr} /etc/apt/sources.list
 			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list
@@ -95,12 +94,14 @@ function pre2() {
 		csleep 4
 		
 		${sifu} ${iface}
-		/sbin/ifconfig;csleep 4
+		[ ${debug} -eq 1 ] && /sbin/ifconfig
+		csleep 4
 
 		sudo chown -Rv _apt:root /var/cache/apt/archives/partial/
 		sudo chmod -Rv 700 /var/cache/apt/archives/partial/
-		csleep 4
+		
 		${sag_u}
+		csleep 4
 	else
 		echo "P.V.HH"
 		exit 111
@@ -297,8 +298,8 @@ function tpu() {
 	dqb "params_ok"
 
 	#pitäisiköhän kohdehmistostakin poistaa paketit?
-	#${NKVD} ${pkgdir}/*.deb
-	${smr}  ${pkgdir}/*.deb
+	${NKVD} ${pkgdir}/*.deb
+	#${smr}  ${pkgdir}/*.deb
 #	${smr}  ${pkgdir}/*.bin
 
 	dqb "TUP PART 2"
