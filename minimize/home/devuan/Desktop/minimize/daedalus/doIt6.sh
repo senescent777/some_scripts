@@ -147,7 +147,7 @@ ${asy}
 dqb "GR1DN BELIALAS KYE"
 
 #sudo ${d}/clouds.sh 0 #jatqs se yleismepi
-#HUOM. TOIMIIKO TUO KOMENTO TUOSSA ALLA VAI EI ???
+#HUOM. TOIMIIKO TUO KOMENTO TUOSSA ALLA VAI EI ??? (olikohan resolv.conf:ista kiinni)
 ~/Desktop/minimize/clouds2 ${dnsm} ${distro}
 ${sipt} -L
 csleep 6

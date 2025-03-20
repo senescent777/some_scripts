@@ -8,23 +8,23 @@ function pre_part3() {
 
 	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	(esim find)
 	
-	${odio} dpkg -i ${1}/netfilter-persistent*.deb
+	${sdi} ${1}/netfilter-persistent*.deb
 	[ $? -eq 0 ] && ${NKVD} ${1}/netfilter-persistent*.deb
-	csleep 5
+	csleep 3
 
-	${odio} dpkg -i ${1}/libip*.deb
+	${sdi} ${1}/libip*.deb
 	[ $? -eq 0 ] && ${NKVD} ${1}/libip*.deb
-	csleep 5
+	csleep 3
 
-	${odio} dpkg -i ${1}/iptables_*.deb
+	${sdi} ${1}/iptables_*.deb
 	[ $? -eq 0 ] && ${NKVD} ${1}/iptables_*.deb
-	csleep 5
+	csleep 3
 
-	${odio} dpkg -i ${1}/iptables-*.deb
+	${sdi} ${1}/iptables-*.deb
 	[ $? -eq 0 ] && ${NKVD} ${1}/iptables-*.deb
 
 	dqb "pp3 d0n3"
-	csleep 5
+	csleep 3
 }
 
 #HUOM.190325: git näyttäisi asentuvan
@@ -34,21 +34,21 @@ pr4() {
 	dqb "pr4( ${1})"
 	csleep 5
 
-	${odio} dpkg -i ${1}/libpam-modules-bin_*.deb
-	${odio} dpkg -i ${1}/libpam-modules_*.deb
+	${sdi} ${1}/libpam-modules-bin_*.deb
+	${sdi} ${1}/libpam-modules_*.deb
 	${NKVD} ${1}/libpam-modules*
 	csleep 5
-	${odio} dpkg -i ${1}/libpam*.deb
+	${sdi} ${1}/libpam*.deb
 
-	${odio} dpkg -i ${1}/perl-modules-*.deb
-	${odio} dpkg -i ${1}/libperl*.deb 
+	${sdi} ${1}/perl-modules-*.deb
+	${sdi} ${1}/libperl*.deb 
 	${NKVD} ${1}/perl-modules-*.deb 
 	${NKVD} ${1}/libperl*.deb
 	csleep 5
 
-	${odio} dpkg -i ${1}/perl*.deb
-	${odio} dpkg -i ${1}/libdbus*.deb
-	${odio} dpkg -i ${1}/dbus*.deb
+	${sdi} ${1}/perl*.deb
+	${sdi} ${1}/libdbus*.deb
+	${sdi} ${1}/dbus*.deb
 
 	${NKVD} ${1}/libpam*
 	${NKVD} ${1}/libperl*
