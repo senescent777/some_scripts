@@ -147,8 +147,10 @@ ${asy}
 dqb "GR1DN BELIALAS KYE"
 
 #sudo ${d}/clouds.sh 0 #jatqs se yleismepi
+#HUOM. TOIMIIKO TUO KOMENTO TUOSSA ALLA VAI EI ???
 ~/Desktop/minimize/clouds2 ${dnsm} ${distro}
-csleep 5
+${sipt} -L
+csleep 6
 
 ${scm} a-wx ~/Desktop/minimize/*.sh
 ${scm} a-wx $0 #oikeastaan kerta-ajo tulisi riittää tai toisaalta daedaluksen versiossa ominaisuuksia
