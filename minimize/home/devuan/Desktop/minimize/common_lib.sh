@@ -495,6 +495,7 @@ function check_binaries() {
 	ip6t=$(sudo which ip6tables)
 	iptr=$(sudo which iptables-restore)
 	ip6tr=$(sudo which ip6tables-restore)
+	sdi=$(sudo which dpkg)
 
 	if [ y"${ipt}" == "y" ] ; then
 		echo "SHOULD INSTALL IPTABLES"
@@ -529,7 +530,7 @@ function check_binaries() {
 	sa=$(sudo which apt)
 	sip=$(sudo which ip)
 	snt=$(sudo which netstat)
-	sdi=$(sudo which dpkg)
+	
 	sifu=$(sudo which ifup)
 	sifd=$(sudo which ifdown)
 
