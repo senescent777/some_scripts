@@ -1,9 +1,10 @@
 #!/bin/bash
-#. ./lib
-d=$(dirname $0)
-debug=0
 
+d=$(dirname $0)
+[ -s ${d}/conf ] && . ${d}/conf
+. ~/Desktop/minimize/common_lib.sh
 [ -s ${d}/lib.sh ] && . ${d}/lib.sh
+
 ${fib}
 g=$(date +%F)
 
@@ -13,112 +14,140 @@ if [ $# -gt 0 ] ; then
 	fi
 fi
 
+#HUOM.120325:mitäköhän tämän kanssa tekee? ehkä oltava distro-kohtainen
+
+#onkohan hyvä näin?
+if [ ${removepkgs} -eq 1 ] ; then
+	dqb "kö"
+else
+	${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
+	${sharpy} avahi* blu* cups* exim*
+	${sharpy} rpc* nfs* 
+	${sharpy} modem* wireless* wpa* iw lm-sensors
+fi
 
 #==============================================================
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
 #==============================================================
 
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
+${lftr}
+${fib}
 ${sharpy} amd64-microcode atril* at-spi2-core coinor*
 ${asy} 
 
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
+${lftr}
+${fib}
 ${sharpy} dirmngr discover* distro-info-data efibootmgr exfalso ftp gcr
 ${asy}
 
-sudo which dhclient; sudo which ifup; sleep 3
+${odio} which dhclient; ${odio} which ifup; csleep 3
 
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
+${lftr}
+${fib}
 ${sharpy} ghostscript gir* gdisk gpg-* gpgconf gpgsm gparted
 ${asy}
-sudo which dhclient; sudo which ifup; sleep 3
+${odio} which dhclient; ${odio} which ifup; csleep 3
 
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
+${lftr}
+${fib}
 ${sharpy} gsasl* gsfonts* gstreamer*
 ${asy}
-sudo which dhclient; sudo which ifup; sleep 3
+${odio} which dhclient; ${odio} which ifup; csleep 3 #tulostuksetkin dbg taakse?
 
-
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo apt --fix-broken install
-${sharpy} htop intel-microcode
+${lftr}
+${fib}
+${sharpy} htop 
 ${asy}
-sudo which dhclient; sudo which ifup; sleep 3
+${odio} which dhclient; ${odio} which ifup; csleep 3
+csleep 5
 
-${smr} -rf /run/live/medium/live/initrd.img*
-${sharpy} lvm2 mdadm
+${lftr}
+${fib}
+${sharpy} intel-microcode
 ${asy}
-sleep 6
-sudo which dhclient; sudo which ifup; sleep 3
+${odio} which dhclient; ${odio} which ifup; csleep 3
+csleep 5
 
+${lftr}
+${sharpy} mdadm 
+${asy}
+csleep 6
+${odio} which dhclient; ${odio} which ifup; csleep 3
+csleep 5
 
-${smr} -rf /run/live/medium/live/initrd.img*
+${lftr}
+${sharpy} lvm2
+${asy}
+csleep 6
+${odio} which dhclient; ${odio} which ifup; csleep 3
+csleep 5
+
+${lftr}
 ${sharpy} mailcap mariadb-common
 ${asy}
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo which dhclient; sudo which ifup; sleep 3
-sudo apt --fix-broken install
+${lftr}
+${odio} which dhclient; ${odio} which ifup; csleep 3
+${fib}
 
 ${sharpy} mokutil mysql-common orca openssh*
 ${asy}
-${smr} -rf /run/live/medium/live/initrd.img*
+${lftr}
 
 ${sharpy} speech* system-config* telnet tex* udisks2 uno* ure* upower
 ${sa} autoremove --yes
-sudo which dhclient; sudo which ifup; sleep 3
-sudo apt --fix-broken install
+${odio} which dhclient; ${odio} which ifup; csleep 3
+${fib}
 
-
-${smr} -rf /run/live/medium/live/initrd.img*
+${lftr}
 ${sharpy} vim* xorriso xfburn
 ${asy}
 
 ${sharpy} iucode-tool libgstreamer* os-prober po*
 ${asy}
 
-sudo which dhclient; sudo which ifup; sleep 3
-sudo apt --fix-broken install
+${odio} which dhclient; ${odio} which ifup; csleep 3
+${fib}
 
-${smr} -rf /run/live/medium/live/initrd.img*
+${lftr}
 ${sharpy} ppp 
 ${asy}
-sleep 1
+csleep 1
 
-${smr} -rf /run/live/medium/live/initrd.img*
+${lftr}
 ${sharpy} ristretto
 ${asy}
-sleep 1
+csleep 1
 
 ${sharpy} screen shim* samba* 
 ${asy}
-sleep 1
+csleep 1
 
-${smr} -rf /run/live/medium/live/initrd.img*
+${lftr}
 ${sharpy} procmail
 ${asy}
-sleep 1
+csleep 1
 
-${smr} -rf /run/live/medium/live/initrd.img*
+${lftr}
 ${sharpy} squashfs-tools
 ${asy}
-sleep 6
+csleep 6
 
-${smr} -rf /run/live/medium/live/initrd.img*
+${lftr}
 ${sharpy} grub*
 ${asy}
-sleep 6
+csleep 6
 
-${smr} -rf /run/live/medium/live/initrd.img*
+${lftr}
 ${sharpy} libgsm*
 ${asy} 
-sleep 6
+csleep 6
 
-${smr} -rf /run/live/medium/live/initrd.img*
-sudo shred -fu /var/cache/apt/archives/*.deb
+${lftr}
+${NKVD} /var/cache/apt/archives/*.deb
+${NKVD} ${d}/*.deb 
+${NKVD} /tmp/*.tar 
+${smr} -rf /tmp/tmp.*
+${smr} /usr/share/doc #rikkookohan jotain nykyään?
 df
 #mimimize-hmiston siivous kanssa?
-sudo which dhclient; sudo which ifup; sleep 3
+${odio} which dhclient; ${odio} which ifup; csleep 3
