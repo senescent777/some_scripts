@@ -16,6 +16,16 @@ fi
 
 #HUOM.120325:mitäköhän tämän kanssa tekee? ehkä oltava distro-kohtainen
 
+#onkohan hyvä näin?
+if [ ${removepkgs} -eq 1 ] ; then
+	dqb "kö"
+else
+	${sharpy} libblu* network* libcupsfilters* libgphoto* libopts25
+	${sharpy} avahi* blu* cups* exim*
+	${sharpy} rpc* nfs* 
+	${sharpy} modem* wireless* wpa* iw lm-sensors
+fi
+
 #==============================================================
 #HUOM! PAKETIT procps, mtools JA mawk JÄTETTÄVÄ RAUHAAN!!!
 #==============================================================
@@ -137,7 +147,7 @@ ${NKVD} /var/cache/apt/archives/*.deb
 ${NKVD} ${d}/*.deb 
 ${NKVD} /tmp/*.tar 
 ${smr} -rf /tmp/tmp.*
-
+${smr} /usr/share/doc #rikkookohan jotain nykyään?
 df
 #mimimize-hmiston siivous kanssa?
 ${odio} which dhclient; ${odio} which ifup; csleep 3
