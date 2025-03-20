@@ -45,6 +45,7 @@ else
 	}
 
 	dqb "FALLBACK"
+	dqb "chmod may be a good idea now"
 fi
 
 debug=1
@@ -181,7 +182,8 @@ case "${1}" in
 		common_part ${file} ${distro}		
 		#HUOM.290325: näillä main saattaa olla jotain härdelliä daedaluksen tapauksessa
 		#... tai pikemminkin väärät parametrit skjriptille
-		
+		#P.S. käyttöoikeudetkin tulisi huomioida stna
+
 		pre_part3 ~/Desktop/minimize/${distro}
 		pr4 ~/Desktop/minimize/${distro}
 		part3 ~/Desktop/minimize/${distro}

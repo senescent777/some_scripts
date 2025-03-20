@@ -64,7 +64,7 @@ function pre() {
 		
 		#TODO:part_1_5 jatjissa tähän
 		if [ -s /etc/apt/sources.list.${1} ] ; then
-			${NKVD} /etc/apt/sources.list
+			${smr} /etc/apt/sources.list
 			${slinky} /etc/apt/sources.list.${1} /etc/apt/sources.list
 		fi
 
@@ -76,6 +76,7 @@ function pre() {
 }
 
 #TODO:glob muutt pois jatqssa jos mahd
+#TODO:tähän se /v/c/a/a oikeuksien muuttaminen jatkossa
 function pre2() {
 	[ x"${1}" == "z" ] && exit 666
 
@@ -354,7 +355,8 @@ case ${mode} in
 	p)
 		#TODO:tämän casen (jamahd seur) toiminnan testaus qhan apt:in nalkutus hoidettu
 		#W: Download is performed unsandboxed as root as file '/var/lib/apt/lists/partial/devuan.keff.org_merged_dists_daedalus_InRelease' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
-
+		#kokeile: https://askubuntu.com/questions/908800/what-does-this-apt-error-message-download-is-performed-unsandboxed-as-root
+		
 		pre2 ${distro}
 		tp5 ${tgtfile}
 	;;
