@@ -86,7 +86,6 @@ function pre() {
 }
 
 #TODO:glob muutt pois jatqssa jos mahd
-#VAIH:tähän se /v/c/a/a oikeuksien muuttaminen jatkossa
 function pre2() {
 	[ x"${1}" == "z" ] && exit 666
 
@@ -183,7 +182,6 @@ function tp4() {
 	#actually necessary
 	pre2 ${2}
 
-	#VAIH:dnsm-mjan taakse pakettien dnsmasq ja stubby haku?
 	if [ ${dnsm} -eq 1 ] ; then
 		${shary} libgmp10 libhogweed6 libidn2-0 libnettle8
 		${shary} runit-helper
@@ -323,7 +321,7 @@ function tpu() {
 function tp5() {
 	dqb "tp5 ${1} ${2}"
 	[ z"${1}" == "z" ] && exit 99
-	[ -s  ${1} ] || exit 98
+	#[ -s  ${1} ] || exit 98
 
 	dqb "params ok"
 	csleep 5
@@ -367,10 +365,7 @@ case ${mode} in
 		tpu ${tgtfile} ${distro}
 	;;
 	p)
-		#VAIH:tämän casen (jamahd seur) toiminnan testaus qhan apt:in nalkutus hoidettu
-		#W: Download is performed unsandboxed as root as file '/var/lib/apt/lists/partial/devuan.keff.org_merged_dists_daedalus_InRelease' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
-		#kokeile: https://askubuntu.com/questions/908800/what-does-this-apt-error-message-download-is-performed-unsandboxed-as-root
-		
+		#HUOM.20325:toimisokohan tämä jo?
 		pre2 ${distro}
 		tp5 ${tgtfile}
 	;;
