@@ -92,12 +92,25 @@ if [ ${removepkgs} -eq 1 ] ; then
 	${sharpy} exim*
 	${lftr}
 	csleep 3
+
+	${sharpy} exim*
+	${lftr}
+	csleep 3
 	
 	${sharpy} rpc* nfs* 
+	csleep 3
+	${sharpy} rpc* 
+	csleep 4
+	${sharpy} nfs* 
+	csleep 4
+
 	${sharpy} modem* wireless* wpa*
 	${sharpy} iw lm-sensors
 
 	${sharpy} ntp*
+	${lftr}
+	csleep 3
+	
 	${sharpy} po* pkexec
 	${lftr}
 	csleep 3

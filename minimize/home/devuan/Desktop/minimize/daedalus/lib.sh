@@ -7,20 +7,21 @@ function pre_part3() {
 	echo "pp3.2"
 
 	#josko vielä testaisi löytyykö asennettavia ennenq dpkg	(esim find)
-	
-	${sdi} ${1}/netfilter-persistent*.deb
+	#HUOM.20325:sittenkin varmempi etteoi käytä sdi:tä tässä koska check_binaries() kutsuu pp3 ja pr4
+
+	${odio} dpkg -i ${1}/netfilter-persistent*.deb
 	[ $? -eq 0 ] && ${NKVD} ${1}/netfilter-persistent*.deb
 	csleep 3
 
-	${sdi} ${1}/libip*.deb
+	${odio} dpkg -i ${1}/libip*.deb
 	[ $? -eq 0 ] && ${NKVD} ${1}/libip*.deb
 	csleep 3
 
-	${sdi} ${1}/iptables_*.deb
+	${odio} dpkg -i ${1}/iptables_*.deb
 	[ $? -eq 0 ] && ${NKVD} ${1}/iptables_*.deb
 	csleep 3
 
-	${sdi} ${1}/iptables-*.deb
+	${odio} dpkg -i ${1}/iptables-*.deb
 	[ $? -eq 0 ] && ${NKVD} ${1}/iptables-*.deb
 
 	dqb "pp3 d0n3"
@@ -34,21 +35,21 @@ pr4() {
 	dqb "pr4( ${1})"
 	csleep 5
 
-	${sdi} ${1}/libpam-modules-bin_*.deb
-	${sdi} ${1}/libpam-modules_*.deb
+	${odio} dpkg -i ${1}/libpam-modules-bin_*.deb
+	${odio} dpkg -i ${1}/libpam-modules_*.deb
 	${NKVD} ${1}/libpam-modules*
 	csleep 5
-	${sdi} ${1}/libpam*.deb
+	${odio} dpkg -i ${1}/libpam*.deb
 
-	${sdi} ${1}/perl-modules-*.deb
-	${sdi} ${1}/libperl*.deb 
+	${odio} dpkg -i ${1}/perl-modules-*.deb
+	${odio} dpkg -i ${1}/libperl*.deb 
 	${NKVD} ${1}/perl-modules-*.deb 
 	${NKVD} ${1}/libperl*.deb
 	csleep 5
 
-	${sdi} ${1}/perl*.deb
-	${sdi} ${1}/libdbus*.deb
-	${sdi} ${1}/dbus*.deb
+	${odio} dpkg -i ${1}/perl*.deb
+	${odio} dpkg -i ${1}/libdbus*.deb
+	${odio} dpkg -i ${1}/dbus*.deb
 
 	${NKVD} ${1}/libpam*
 	${NKVD} ${1}/libperl*
