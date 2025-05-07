@@ -1,7 +1,4 @@
-##!/bin/bash
-debug=1
-#. ~/Desktop/minimize/middleware.sh
-#VAIH:jatkossa vähän toisin nämä asiat
+#netscape/mozilla/firefox profiles can be a Pain In the Ass
 
 cprof_1_1() {
 	
@@ -12,8 +9,6 @@ cprof_1_1() {
 			if [ -d /home/$1/.mozilla ] ; then
 				sudo shred /home/$1/.mozilla/*
 				sudo rm -rf /home/$1/.mozilla 
-	
-			#else
 			fi
 	
 	
@@ -46,7 +41,6 @@ cprof_1_2() {
 			else
 				echo "https://www.youtube.com/watch?v=PjotFePip2M" 
 			fi
-		#else
 		fi
 
 }
@@ -68,7 +62,6 @@ cprof_1_3() {
 		
 		if [ x"${tget}" != "x" ] ; then 
 			cd ${tget}
-		#else
 		fi
 
 	if [ x"${tmpdir}" != "x" ] ; then
@@ -130,6 +123,27 @@ copyprof() {
 
 }
 
-#vähän toisella tyylillä jatkossa
-#prepare $3
-#copyprof $1 $2
+function exp_prof() {
+	dqb "exp_pros ${1} ${2}"
+	local tget
+	local p
+	local f
+	
+	#VAIH:grepattava parametriksi
+	tget=$(ls ~/.mozilla/firefox/ | grep ${2} | tail -n 1)
+	p=$(pwd)
+
+	cd ~/.mozilla/firefox/${tget}
+	dqb "TG3T=${tget}"
+	csleep 2
+
+	${odio} touch ./rnd
+	${sco} ${n}:${n} ./rnd
+	${scm} 0644 ./rnd
+	dd if=/dev/random bs=6 count=1 > ./rnd
+
+	${srat} -cvf ${1} ./rnd
+	for f in $(find . -name '*.js') ; do ${srat} -rf ${1} ${f} ; done
+	#*.js ja *.json kai oleellisimmat kalat
+	cd ${p}
+}
