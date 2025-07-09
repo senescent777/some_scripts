@@ -79,22 +79,29 @@ check_params
 #[ x"${gi}" != "x" ] || inst_dep 1
 
 function mk_pad_bak() {
+	dqb "mk_pad_bak (${1} , ${2})"
 	[ -s ./${1} ] && ${svm} ${1} ${1}.OLD
 	
-	if [ ! -d ../out ] ; then 
-		${smd} ../out
-	fi
-
-	local tpop=""
-	tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ../out/${1} ./${2}			
+	#näistä tässä alla puuttuu jotain parametreja
+#	if [ ! -d ../out ] ; then 
+#		${smd} ../out
+#	fi
+#
+#	local tpop=""
+#	tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ../out/${1} ./${2}			
 
 }
 
 #n=$(whoami)
-[ x"${CONF_TARGET}" != "x" ] || exit 666
+#[ x"${CONF_TARGET}" != "x" ] || exit 666
 
+dqb "${sco} -R ${n}:${n} ${CONF_TARGET}/out"
 ${sco} -R ${n}:${n} ${CONF_TARGET}/out
+csleep 1
+
+dqb "${scm} -R 0755 ${CONF_TARGET}/out"
 ${scm} -R 0755 ${CONF_TARGET}/out
+csleep 1
 
 cd ${lsrcdir}
 
@@ -108,6 +115,9 @@ case ${bloader} in
 		
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
+
+		dqb "bfeore gi"
+		csleep 1
 
 		${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} .
 
@@ -127,7 +137,7 @@ case ${bloader} in
 	;;
 esac
 
-${sco} -R 0:0 ${CONF_TARGET}
+#${sco} -R 0:0 ${CONF_TARGET}
 
 sleep 1
 echo "stick.sh ?"
