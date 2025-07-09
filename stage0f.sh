@@ -16,40 +16,40 @@ function part0() {
 
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
-			sudo cp ${2}/live/${f} ${CONF_target}/live
+			${spc} ${2}/live/${f} ${CONF_target}/live
 		else
-			sudo cp ${1}/live/${f} ${CONF_target}/live
+			${spc} ${1}/live/${f} ${CONF_target}/live
 		fi
 	done
 
 	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
 
-	sudo chmod o+w ${CONF_target}/${TARGET_pad_dir}
-	sudo touch ${CONF_target}/${TARGET_pad_dir}/${n}.conf
-	sudo chmod 0644 ${CONF_target}/${TARGET_pad_dir}/${n}.conf
-	sudo chown ${n}:${n} ${CONF_target}/${TARGET_pad_dir}/${n}.conf
-	sudo chmod o-w ${CONF_target}/${TARGET_pad_dir}
+	${scm} o+w ${CONF_target}/${TARGET_pad_dir}
+	${odio} touch ${CONF_target}/${TARGET_pad_dir}/${n}.conf
+	${scm} 0644 ${CONF_target}/${TARGET_pad_dir}/${n}.conf
+	${sco} ${n}:${n} ${CONF_target}/${TARGET_pad_dir}/${n}.conf
+	${scm} o-w ${CONF_target}/${TARGET_pad_dir}
 
 	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir}
 	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
 	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
 	
-	sudo touch ${CONF_target}/${TARGET_pad_dir}/*
-	sudo chmod 0444 ${CONF_tmpdir}/*.conf
-	sudo chmod 0755 ${CONF_tmpdir}/*.sh
+	${odio} touch ${CONF_target}/${TARGET_pad_dir}/*
+	${scm} 0444 ${CONF_tmpdir}/*.conf
+	${scm} 0755 ${CONF_tmpdir}/*.sh
 	
-	sudo cp ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
+	${spc} ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
 
 	default_process ${CONF_target}/${TARGET_pad_dir}
-	sudo chmod 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
-	sudo chown -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
+	${scm} 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
+	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
 
 	bootloader ${CONF_bloader} ${src2}/.. ${CONF_source}
-	sudo touch ${CONF_target}/${CONF_bloader}/*
+	${odio} touch ${CONF_target}/${CONF_bloader}/*
 	
-	sudo chmod 0555 ${CONF_target}/live
-	sudo chmod 0755 ${CONF_target}/${TARGET_DIGESTS_dir}
+	${scm} 0555 ${CONF_target}/live
+	${scm} 0755 ${CONF_target}/${TARGET_DIGESTS_dir}
 
 	dqb "part0 d0ne"
 }
