@@ -99,6 +99,8 @@ function parse_opts() {
 }
 
 function mk_bkup() { 
+	dqb "mk_bkup(${1})"
+	
 	if [ -s ${1} ] ; then
 		${svm} ${1} ${1}.OLD
 	fi

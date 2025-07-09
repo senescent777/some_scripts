@@ -87,11 +87,12 @@ function check_params() {
 }
 
 function make_tar() {
+	dqb "make_tar(${1})"
 	[ -s ${1}/${TARGET_pad_bak_file} ] && mk_bkup ${1}/${TARGET_pad_bak_file}
 	
 	local tpop=""
 	#To State The Obvious:välistä puuttuu jotain
-	tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ${1}/${TARGET_pad_bak_file} ./${TARGET_pad_dir}
+	#tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ${1}/${TARGET_pad_bak_file} ./${TARGET_pad_dir}
 }
 
 check_params ${lsrcdir} ${ltarget} ${bloader}
@@ -103,27 +104,38 @@ enforce_deps
 #n=$(whoami)
 lsrcdir=./${lsrcdir}
 
+dqb "${sco} -R ${n}:${n} ${CONF_target}/../out"
 ${sco} -R ${n}:${n} ${CONF_target}/../out
+csleep 1
+
+dqb "${scm} 0755 ${CONF_target}/../out"
 ${scm} 0755 ${CONF_target}/../out
+csleep 1
 
 olddir=$(pwd)
+dqb "cd ${lsrcdir}"
 cd ${lsrcdir}
 
 if [ -d ${TARGET_pad_dir} ] ; then 
 	make_tar ${CONF_target}/../out
-
 else
 	echo "${TARGET_pad_dir} missing"
 fi
 
+dqb "${sco} -R ${n}:${n} ."
 ${sco} -R ${n}:${n} .
+csleep 1
+
+dqb "${scm} 0755 ./${CONF_bloader}"
 ${scm} 0755 ./${CONF_bloader}
+csleep 1
 
 case ${bloader} in
 	isolinux)
 		${sco} ${n}:${n} ./isolinux/isolinux*
 		${scm} 0644 ./isolinux/isolinux*
 		
+		dqb "next: ${gi} PARAMS"
 		${gi} -o ${CONF_target}/../out/${ltarget} ${CONF_gi_opts} .
 		[ $? -eq 0 ] || echo "${sco} -R ${n}:${n} ./isolinux && ${scm} 0755 ./isolinux"
 
@@ -134,8 +146,14 @@ case ${bloader} in
 	;;
 esac
 
+dqb "${scm} 0555 ./${CONF_bloader}"
 ${scm} 0555 ./${CONF_bloader}
+csleep 1
+
+dqb "${scm} 0444 ./${CONF_bloader}/*"
 ${scm} 0444 ./${CONF_bloader}/*
+csleep 1
+
 ${sco} -R 0:0 .
 cd ${olddir}
 
