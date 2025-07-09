@@ -55,14 +55,14 @@ function part0() {
 }
 
 if [ -s ${1} ] ; then
-	sudo mount -o loop,ro ${1} ${CONF_source} 
+	${som} -o loop,ro ${1} ${CONF_source} 
 	[ $? -eq 0 ] || exit 666
 	sleep 6
 
 	part0 ${CONF_source} ${2} ${3}	
-	sudo umount ${CONF_source} 
+	${uom} ${CONF_source} 
 else
-	if [ -d  ${1} ] ; then
+	if [ -d ${1} ] ; then
 		part0 ${1} ${2} ${3}
 	else
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o";exit 666
