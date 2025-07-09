@@ -97,14 +97,14 @@ function make_tar() {
 check_params ${lsrcdir} ${ltarget} ${bloader}
 enforce_deps
 
-[ y"${gv}" != "y" ] || inst_dep 0
-[ x"${gi}" != "x" ] || inst_dep 1
+#[ y"${gv}" != "y" ] || inst_dep 0
+#[ x"${gi}" != "x" ] || inst_dep 1
 
-n=$(whoami)
+#n=$(whoami)
 lsrcdir=./${lsrcdir}
 
-sudo chown -R ${n}:${n} ${CONF_target}/../out
-chmod 0755 ${CONF_target}/../out
+${sco} -R ${n}:${n} ${CONF_target}/../out
+${scm} 0755 ${CONF_target}/../out
 
 olddir=$(pwd)
 cd ${lsrcdir}
@@ -116,16 +116,16 @@ else
 	echo "${TARGET_pad_dir} missing"
 fi
 
-sudo chown -R ${n}:${n} .
-chmod 0755 ./${CONF_bloader}
+${sco} -R ${n}:${n} .
+${scm} 0755 ./${CONF_bloader}
 
 case ${bloader} in
 	isolinux)
-		sudo chown ${n}:${n} ./isolinux/isolinux*
-		chmod 0644 ./isolinux/isolinux*
+		${sco} ${n}:${n} ./isolinux/isolinux*
+		${scm} 0644 ./isolinux/isolinux*
 		
 		${gi} -o ${CONF_target}/../out/${ltarget} ${CONF_gi_opts} .
-		[ $? -eq 0 ] || echo "sudo chown -R ${n}:${n} ./isolinux && sudo chmod 0755  ./isolinux"
+		[ $? -eq 0 ] || echo "${sco} -R ${n}:${n} ./isolinux && ${scm} 0755 ./isolinux"
 
 	;;
 	*)
@@ -134,9 +134,9 @@ case ${bloader} in
 	;;
 esac
 
-chmod 0555 ./${CONF_bloader}
-chmod 0444 ./${CONF_bloader}/*
-sudo chown -R 0:0 .
+${scm} 0555 ./${CONF_bloader}
+${scm} 0444 ./${CONF_bloader}/*
+${sco} -R 0:0 .
 cd ${olddir}
 
 sleep 1
