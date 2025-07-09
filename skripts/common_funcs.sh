@@ -209,31 +209,31 @@ function enforce_deps() {
 
 	[ ${doIt} -gt 0 ] && exit 666
 }
-#
-#function inst_dep() {
-#	echo "inst.dep ${1}"
-#	
-#	case ${1} in
-#		0)
-#			echo "sudo apt-get install genisoimage wodim gpg*"
-#		;;
-#		1)
-#			for f in $(ls ${CONF_pkgsdir2}/*.deb) ; do
-#				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${f}.sig ${f}
-#			done
-#
-#			if [ $? -eq 0 ] ; then 
-#				sudo dpkg -i ${CONF_pkgsdir2}/*.deb
-#			fi
-#		;;
-#		*)
-#			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
-#		;;
-#	esac
-#
-#	exit 666
-#}
-#
+
+function inst_dep() {
+	dqb "inst.dep ${1}"
+	
+	case ${1} in
+		0)
+			echo "sudo apt-get install genisoimage wodim gpg*"
+		;;
+		1)
+			for f in $(ls ${CONF_pkgsdir2}/*.deb) ; do
+				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${f}.sig ${f}
+			done
+
+			if [ $? -eq 0 ] ; then 
+				sudo dpkg -i ${CONF_pkgsdir2}/*.deb
+			fi
+		;;
+		*)
+			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+		;;
+	esac
+
+	exit 666
+}
+
 function protect_system() {
 	dqb "protect_system()"
 	csleep 1

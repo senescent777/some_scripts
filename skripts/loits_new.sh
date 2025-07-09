@@ -73,11 +73,10 @@ function check_params() {
 }
 
 check_params
-enforce_deps
-
-[ y"${gv}" != "y" ] || inst_dep 0
-[ x"${gi}" != "x" ] || inst_dep 1
-
+#enforce_deps #josqs myöhemmin takaisin ed ja id kommenteista
+#
+#[ y"${gv}" != "y" ] || inst_dep 0
+#[ x"${gi}" != "x" ] || inst_dep 1
 
 function mk_pad_bak() {
 	[ -s ./${1} ] && sudo mv ${1} ${1}.OLD
