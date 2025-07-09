@@ -1,9 +1,11 @@
-protect_system
-protect_system
+#protect_system
+#protect_system
 
-mangle_conf() {
+function mangle_conf() {
+	dqb "mangle_conf()"
 }
-get_devuan() {
+
+function get_devuan() {
 	[ -d ${CONF_distros_dir} ] || sudo mkdir ${CONF_distros_dir}
 	cd ${CONF_distros_dir}
 
@@ -13,7 +15,7 @@ get_devuan() {
 	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 }
 
-make_src_dirs() {
+function make_src_dirs() {
 	echo "mkdir ${CONF_keys_dir}"
 	echo "mkdir ${CONF_distros_dir}"
 	echo "mkdir ${CONF_bloader}"
@@ -22,11 +24,11 @@ make_src_dirs() {
 	echo "mkdir ./v"
 }
 
-cleanup() {
+function cleanup() {
 	sudo umount ${CONF_source}
 }
 
-copy_main() {
+function copy_main() {
 	[ x"${1}" != "x" ] || exit 2
 	[ -d ${2} ] || exit 2 
 
@@ -45,7 +47,7 @@ copy_main() {
 
 }
 
-copy_conf() {
+function copy_conf() {
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
 
@@ -91,13 +93,13 @@ copy_conf() {
 	sleep 1
 }
 
-copy_sums() {
+function copy_sums() {
 
 	[ x"${1}" != "x" ] || exit 2
 	[ -d ${2} ] || exit 2 
 }
 
-bootloader() {
+function bootloader() {
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
 	[ x"${CONF_target}" != "x" ] || exit 3
@@ -134,7 +136,7 @@ bootloader() {
 
 }
 
-make_tgt_dirs() {
+function make_tgt_dirs() {
 	echo "MAKE_DIRS"
 
 	[ x"${CONF_target}" != "x" ] || exit 99
@@ -178,7 +180,7 @@ make_tgt_dirs() {
 	echo "...done"
 }
 
-default_process() {
+function default_process() {
 	echo "nt default_process(${1})"
 
 	[ -d ${1} ] || exit 666
