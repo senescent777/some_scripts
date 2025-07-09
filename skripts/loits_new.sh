@@ -13,7 +13,7 @@ function usage() {
 }
 
 function parse_opts_real() {
-	dqb "parse_opts_real( ${1} )"
+	dqb "parse_opts_real( ${1} , ${2})"
 
 	case ${1} in
 		--in)
