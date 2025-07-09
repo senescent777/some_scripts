@@ -35,7 +35,10 @@ function single_param() {
 	case ${1} in
 		--make-dirs)
 			#HUOM.9725:init.sh voisi hyödyntää tätä
-			make_dirs #ei ihan samaq make_target_dirs?
+			#make_dirs #ei ihan samaq make_target_dirs?
+
+			make_src_dirs
+			make_tgt_dirs
 		;;
 		--h)
 			usage
