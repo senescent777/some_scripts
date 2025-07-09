@@ -59,5 +59,10 @@ else
 fi
 
 #stage0f==glorified cp
+#HUOM.9725:saattanee jo onnistua "--add"-vivulla lisäillä asioita
+#tosin muistettava sitten viskoa isolinux.cfg ~ alle ja muuta kikkailua kunnes x
+
+#HUOM.9725.2:.iso-tiedoston mounttaus vielä testattava
+
 echo "./stage0f.sh ${base} ${source2} <verbosity_level>"
 
