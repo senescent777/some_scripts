@@ -7,12 +7,12 @@
 #	echo "https://www.youtube.com/watch?v=KnH2dxemO5o";exit 666
 #fi
 
-echo "PARAMS OK"
+dqb "PARAMS OK?"
 n=devuan 
 make_tgt_dirs
 
 function part0() {
-	echo "PART0 ${1} ${2} ${3}"
+	dqb "PART0 ${1} ${2} ${3}"
 
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
@@ -50,6 +50,8 @@ function part0() {
 	
 	sudo chmod 0555 ${CONF_target}/live
 	sudo chmod 0755 ${CONF_target}/${TARGET_DIGESTS_dir}
+
+	dqb "part0 d0ne"
 }
 
 if [ -s ${1} ] ; then
@@ -67,4 +69,4 @@ else
 	fi
 fi 
 
-echo "MKSUMS.SH"
+dqb "MKSUMS.SH"
