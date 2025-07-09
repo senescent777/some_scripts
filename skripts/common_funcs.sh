@@ -104,7 +104,7 @@ function parse_opts() {
 #
 #	local doIt=0
 #	local doIt2=0
-#	local pkgsdir={CONF_pkgsdir2}
+#	local pkgsdir=${CONF_pkgsdir2}
 #
 #
 #	if [ -d ./${pkgsdir} ] ; then 
