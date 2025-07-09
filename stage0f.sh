@@ -11,6 +11,7 @@ dqb "PARAMS OK?"
 n=devuan 
 make_tgt_dirs
 
+#HUOM.9725:kolmatta param ei käytetä mihinkään, pitäisikö?
 function part0() {
 	debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
@@ -60,6 +61,9 @@ function part0() {
 
 	dqb "part0 d0ne"
 }
+
+#TODO:.iso'n kanssa kokeilu
+#TODO:3. param, mikä idea? debug?
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3}
