@@ -79,10 +79,10 @@ check_params
 #[ x"${gi}" != "x" ] || inst_dep 1
 
 function mk_pad_bak() {
-	[ -s ./${1} ] && sudo mv ${1} ${1}.OLD
+	[ -s ./${1} ] && ${svm} ${1} ${1}.OLD
 	
 	if [ ! -d ../out ] ; then 
-		sudo mkdir ../out
+		${smd} ../out
 	fi
 
 	local tpop=""
@@ -90,11 +90,11 @@ function mk_pad_bak() {
 
 }
 
-n=$(whoami)
+#n=$(whoami)
 [ x"${CONF_TARGET}" != "x" ] || exit 666
 
-sudo chown -R ${n}:${n} ${CONF_TARGET}/out
-sudo chmod -R 0755 ${CONF_TARGET}/out
+${sco} -R ${n}:${n} ${CONF_TARGET}/out
+${scm} -R 0755 ${CONF_TARGET}/out
 
 cd ${lsrcdir}
 
@@ -106,18 +106,18 @@ sleep 1
 case ${bloader} in
 	isolinux)
 		
-		sudo chown -R ${n}:${n} .
-		sudo chmod -R 0755 .
+		${sco} -R ${n}:${n} .
+		${scm} -R 0755 .
 
 		${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} .
 
 	;;
 	grub)
-		xi=$(sudo which xorriso)
-		[ y"${xi}" != "y" ] || echo "apt-get install xorriso";exit 666
+		#xi=$(sudo which xorriso)
+		#[ y"${xi}" != "y" ] || echo "apt-get install xorriso";exit 666
 
-		gmk=$(sudo which grub-mkrescue)
-		[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666
+		#gmk=$(sudo which grub-mkrescue)
+		#[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666
 		
 		echo "sudo ${gmk} -o ../out/${ltarget} <OTHER_OPTS> . "
 	;;
@@ -127,7 +127,7 @@ case ${bloader} in
 	;;
 esac
 
-sudo chown -R 0:0 ${CONF_TARGET}
+${sco} -R 0:0 ${CONF_TARGET}
 
 sleep 1
 echo "stick.sh ?"

@@ -7,11 +7,24 @@ gv=$(sudo which gpgv)
 gi=$(sudo which genisoimage)
 gmk=$(sudo which grub-mkrescue)
 xi=$(sudo which xorriso)
-
+#========================tilapäisesti tässä, common_lib myöh==
 #tarttisko tälle tehdä jotain?
 sca=$(sudo which chattr)
 sca="sudo ${sca}"
-#========================tilapäisesti tässä==
+
+svm=$(sudo mv)
+svm="sudo ${svm}"
+
+smd=$(sudo mkdir)
+smd="sudo ${smd}"
+odio=$(which sudo)
+sco=$(sudo which chown)
+scm=$(sudo which chmod)
+sco="${odio} ${sco} "
+scm="${odio} ${scm} "
+
+n=$(whoami)
+
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
 }
