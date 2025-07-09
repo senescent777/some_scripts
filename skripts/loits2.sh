@@ -1,4 +1,5 @@
 #!/bin/bash
+
 debug=1
 if [ -s ./common.conf ] ; then
 	. ./common.conf
@@ -14,11 +15,13 @@ fi
 
 protect_system
 
+
 ltarget="" 
 bloader=""
 #exit
 
 function usage() {
+
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666
 }
@@ -26,6 +29,7 @@ function usage() {
 
 function parse_opts_real() {
 	dqb "parse_opts_real( ${1}, ${2})"
+
 
 	case ${1} in
 		--in)
@@ -71,6 +75,7 @@ function check_params() {
 
 		if [ -s out/${2} ] ; then
 			echo "out/${2} already exists"
+
 			exit 103
 		fi
 	else
@@ -79,6 +84,7 @@ function check_params() {
 
 	if [ x"${3}" != "x" ] ; then
 		echo "BLADDER OK" #jatkossa dqb
+
 	else
 		bloader=${CONF_bloader}
 	fi
@@ -94,6 +100,7 @@ function make_tar() {
 	#To State The Obvious:välistä puuttuu jotain
 	[ ${debug} -eq 1 ] && tpop="-v "
 	dqb "tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ${1}/${TARGET_pad_bak_file} ./${TARGET_pad_dir}"
+
 	tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ${1}/${TARGET_pad_bak_file} ./${TARGET_pad_dir}
 }
 
@@ -116,6 +123,7 @@ csleep 1
 
 olddir=$(pwd)
 dqb "cd ${lsrcdir}"
+
 cd ${lsrcdir}
 
 if [ -d ${TARGET_pad_dir} ] ; then 
@@ -141,9 +149,11 @@ case ${bloader} in
 		${gi} -o ${CONF_target}/../out/${ltarget} ${CONF_gi_opts} .
 		[ $? -eq 0 ] || echo "${sco} -R ${n}:${n} ./isolinux && ${scm} 0755 ./isolinux"
 
+
 	;;
 	*)
 		echo "bl= ${bloader}"
+
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac
@@ -157,6 +167,7 @@ ${scm} 0444 ./${CONF_bloader}/*
 csleep 1
 
 ${sco} -R 0:0 .
+
 cd ${olddir}
 
 sleep 1
