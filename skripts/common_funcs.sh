@@ -99,109 +99,116 @@ function parse_opts() {
 #	echo ${ts2} | awk '{print $1,$2}' >> ${2}
 #}
 #
-#function enforce_deps() {
-#	pwd
-#
-#	local doIt=0
-#	local doIt2=0
-#	local pkgsdir=${CONF_pkgsdir2}
-#
-#
-#	if [ -d ./${pkgsdir} ] ; then 
-#		doIt2=1
-#	else
-#		pkgsdir=${CONF_BASEDIR}/${CONF_pkgsdir2}
-#
-#		if [ -d ${pkgsdir} ] ; then 
-#			doIt2=1
-#		else
-#			doIt2=2
-#		fi
-#	fi
-#
-#	if [ x"${gg}" != "x" ] && [ -x ${gg} ] && [ -s ${gg} ] ; then
-#		echo "ko"
-#	else
-#		echo "sudo apt-get install gpg*"
-#		doIt=${doIt2}
-#	fi
-#
-#
-#	if [ y"${gv}" != "y" ] && [ -x ${gv} ] && [ -s ${gv} ] ; then 
-#	else
-#		echo "sudo apt-get install gpgv*"
-#		doIt=${doIt2}
-#	fi
-#
-#	if [ z"{sh5}" != "z" ] && [ -x ${sh5} ] && [ -s ${sh5} ] ; then 
-#	else
-#		doIt=${doIt2}
-#	fi
-#	
-#	if [ w"${gi}" != "w" ] && [ -x ${gi} ] && [ -s ${gi} ] ; then 
-#	else
-#		echo "no genisoimage"
-#		doIt=${doIt2}
-#	fi	
-#
-#	if [ v"${gmk}" != "v" ] && [ -x ${gmk} ] && [ -s ${gmk} ] ; then 
-#	else
-#		echo "no grub-mkrescue"
-#	fi
-#	
-#	if [ u"${xi}" != "u" ] &&  [ -x ${xi} ] && [ -s ${xi} ] ; then 
-#	else
-#		echo "no xorriso"
-#	fi
-#
-#	case ${doIt} in 
-#		0)
-#			echo
-#		;;
-#		1)
-#			echo "doIt(1)"
-#
-#			echo "cd ${CONF_keys_dir}"
-#
-#			echo -n "for f in "
-#			echo -n ${TARGET_Dkeylist}
-#			echo -n " ; do ${gg} --import "
-#			echo -n "$"	
-#			echo "{f}; done "
-#		
-#			echo "cd ${pkgsdir}"
-#			echo "ls *.deb || ls *.bz2"
-#
-#			echo -n "for f in "
-#			echo -n "$"
-#			echo -n "(ls ./{*.deb,*.bz2}) ; do "
-#			echo -n "${gv} --keyring ${CONF_keys_dir}/${TARGET_Dkname2} "
-#			echo -n "$"
-#			echo -n "f.sig "
-#			echo -n "$"
-#			echo "f; done"
-#
-#			echo -n "[ "
-#			echo -n "$"
-#			echo "?==0 ] || exit"
-#			echo "sudo dpkg -i ./*.deb"
-#
-#			echo "sudo tar -jxvf ./*.bz2"
-#			echo "sudo dpkg -i .${TARGET_pkgdir}/lib*.deb"
-#			echo "rm .${TARGET_pkgdir}/lib*.deb"
-#			echo "sudo dpkg -i .${TARGET_pkgdir}/*.deb"
-#			echo "sudo rm .${TARGET_pkgdir}/*.deb"	
-#		;;
-#		2)
-#			echo "sudo apt-get update;sudo apt-get install gpg* wodim genisoimage squashfs-utils xorriso grub*"
-#		;;
-#		*)
-#			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
-#		;;
-#	esac
-#
-#	[ ${doIt} -gt 0 ] && exit 666
-#}
+function enforce_deps() {
+	dqb "enf_deps"
+	csleep 1
+	pwd
+
+	local doIt=0
+	local doIt2=0
+	local pkgsdir=${CONF_pkgsdir2}
+
+
+	if [ -d ./${pkgsdir} ] ; then 
+		doIt2=1
+	else
+		pkgsdir=${CONF_BASEDIR}/${CONF_pkgsdir2}
+
+		if [ -d ${pkgsdir} ] ; then 
+			doIt2=1
+		else
+			doIt2=2
+		fi
+	fi
+
+	if [ x"${gg}" != "x" ] && [ -x ${gg} ] && [ -s ${gg} ] ; then
+		dqb "gg ko"
+	else
+		echo "sudo apt-get install gpg*"
+		doIt=${doIt2}
+	fi
+
+	if [ y"${gv}" != "y" ] && [ -x ${gv} ] && [ -s ${gv} ] ; then
+		dqb "gvv qo"
+	else
+		echo "sudo apt-get install gpgv*"
+		doIt=${doIt2}
+	fi
+
+	if [ z"{sh5}" != "z" ] && [ -x ${sh5} ] && [ -s ${sh5} ] ; then
+		dqb "s5 k0"
+	else
+		doIt=${doIt2}
+	fi
+	
+	if [ w"${gi}" != "w" ] && [ -x ${gi} ] && [ -s ${gi} ] ; then 
+		dqb "gi k0"
+	else
+		echo "no genisoimage"
+		doIt=${doIt2}
+	fi	
+
+	#TODO:selvitä onko tuo minkä grub-paketin alla
+	if [ v"${gmk}" != "v" ] && [ -x ${gmk} ] && [ -s ${gmk} ] ; then
+		dqb "gmk+0"
+	else
+		echo "no grub-mkrescue"
+	fi
+	
+	if [ u"${xi}" != "u" ] &&  [ -x ${xi} ] && [ -s ${xi} ] ; then
+		dqb "KINGPIN"
+	else
+		echo "no xorriso"
+	fi
+
+	case ${doIt} in 
+		0)
+			echo
+		;;
+		1)
+			echo "doIt(1)"
+
+			echo "cd ${CONF_keys_dir}"
+
+			echo -n "for f in "
+			echo -n ${TARGET_Dkeylist}
+			echo -n " ; do ${gg} --import "
+			echo -n "$"	
+			echo "{f}; done "
+		
+			echo "cd ${pkgsdir}"
+			echo "ls *.deb || ls *.bz2"
+
+			echo -n "for f in "
+			echo -n "$"
+			echo -n "(ls ./{*.deb,*.bz2}) ; do "
+			echo -n "${gv} --keyring ${CONF_keys_dir}/${TARGET_Dkname2} "
+			echo -n "$"
+			echo -n "f.sig "
+			echo -n "$"
+			echo "f; done"
+
+			echo -n "[ "
+			echo -n "$"
+			echo "?==0 ] || exit"
+			echo "sudo dpkg -i ./*.deb"
+
+			echo "sudo tar -jxvf ./*.bz2"
+			echo "sudo dpkg -i .${TARGET_pkgdir}/lib*.deb"
+			echo "rm .${TARGET_pkgdir}/lib*.deb"
+			echo "sudo dpkg -i .${TARGET_pkgdir}/*.deb"
+			echo "sudo rm .${TARGET_pkgdir}/*.deb"	
+		;;
+		2)
+			echo "sudo apt-get update;sudo apt-get install gpg* wodim genisoimage squashfs-utils xorriso grub*"
+		;;
+		*)
+			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+		;;
+	esac
+
+	[ ${doIt} -gt 0 ] && exit 666
+}
 #
 #function inst_dep() {
 #	echo "inst.dep ${1}"
