@@ -38,12 +38,12 @@ function copy_main() {
 	[ z"${CONF_scripts_dir}" != "z" ] || echo "n.s.t.as ${CONF_scripts_dir}"
 
 	if [ -d ${CONF_scripts_dir} ]; then 
-		sudo cp -a ${CONF_scripts_dir}/*.sh ${CONF_tmpdir}
+		${spc} -a ${CONF_scripts_dir}/*.sh ${CONF_tmpdir}
 
 	fi
 
-	sudo cp -a ${1}/*.sh ${2} 
-	sudo cp -a ${1}/*.bz2 ${2}
+	${spc} -a ${1}/*.sh ${2} 
+	${spc} -a ${1}/*.bz2 ${2}
 
 }
 
@@ -52,7 +52,7 @@ function copy_conf() {
 	[ x"${2}" != "x" ] || exit 2
 
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
-		sudo cp -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
+		${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
 	fi
 
 
@@ -110,20 +110,20 @@ function bootloader() {
 
 	case ${1} in
 		isolinux)
-			sudo cp -a ${3}/isolinux/ ${CONF_target} || exit 8
+			${spc} -a ${3}/isolinux/ ${CONF_target} || exit 8
 			ks2=${2}/isolinux
 
 				for t in cfg png ; do
 					sudo rm ${CONF_target}/isolinux/*.${t}
 
-					sudo cp -a ${ks2}/*.${t} ${CONF_target}/isolinux
+					${spc} -a ${ks2}/*.${t} ${CONF_target}/isolinux
 				done						
 		;;
 		grub)
 			ks2=${2}/boot
 
 			if [ -d  ${ks2} ] ; then
-				sudo cp -a ${3}/boot/ ${CONF_target} || exit 8
+				${spc} -a ${3}/boot/ ${CONF_target} || exit 8
 				echo "cp -a ${ks2}/grub/{*.cfg,*.png} ./boot/grub"
 				echo "cp -a ${ks2}/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
 			fi

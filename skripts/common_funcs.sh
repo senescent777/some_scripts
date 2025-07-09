@@ -25,6 +25,8 @@ scm=$(${odio} which chmod)
 sco="${odio} ${sco} "
 scm="${odio} ${scm} "
 
+spc=$(${odio} which cp)
+spc="${odio} ${spc} "
 n=$(whoami)
 
 function dqb() {
