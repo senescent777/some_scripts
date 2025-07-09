@@ -1,6 +1,17 @@
 #!/bin/bash
-. ./common.conf
-. ./common_funcs.sh
+debug=1
+if [ -s ./common.conf ] ; then
+	. ./common.conf
+else
+	echo "NO CONF"
+fi
+
+if [ -x ./common_funcs.sh ] ; then
+	. ./common_funcs.sh
+else
+	echo "N0 FUNCS"
+fi
+
 protect_system
 
 ltarget="" 
@@ -14,6 +25,8 @@ function usage() {
 
 
 function parse_opts_real() {
+	dqb "parse_opts_real( ${1}, ${2})"
+
 	case ${1} in
 		--in)
 			lsrcdir=${2}
@@ -30,10 +43,14 @@ function parse_opts_real() {
 	esac
 }
 
-parse_opts ${1} ${2}
-parse_opts ${3} ${4}
-parse_opts ${5} ${6}
-parse_opts ${7} ${8}
+if [ $# -gt 0 ] ; then
+	parse_opts ${1} ${2}
+	parse_opts ${3} ${4}
+	parse_opts ${5} ${6}
+	parse_opts ${7} ${8}
+else
+	usage
+fi
 
 function check_params() {
 	[ x"${CONF_target}" != "x" ] || exit 666
