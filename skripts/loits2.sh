@@ -53,32 +53,37 @@ else
 fi
 
 function check_params() {
-	[ x"${CONF_target}" != "x" ] || exit 666
-	[ x"${CONF_bloader}" != "x" ] || exit 666
+	dqb "check_pars( ${1}, ${2}, ${3})"
+
+	#[ x"${CONF_target}" != "x" ] || exit 100
+	dqb "TGT OK"
+	#[ x"${CONF_bloader}" != "x" ] || exit 101
+	dqb "BLDR 0K"
 
 	if [ -d ./${1} ] ; then
 		echo "DIR OK" #jatkossa dqb
 	else
 		echo "no such thing as ${1}"
-		exit 666
+		exit 102
 	fi
 	
 	if [ x"${2}" != "x" ] ; then 
 
 		if [ -s out/${2} ] ; then
 			echo "out/${2} already exists"
-			exit 666
+			exit 103
 		fi
 	else
-		exit 666
+		exit 104
 	fi
 
 	if [ x"${3}" != "x" ] ; then
-		echo "BLOADER OK" #jatkossa dqb
+		echo "BLADDER OK" #jatkossa dqb
 	else
 		bloader=${CONF_bloader}
 	fi
 
+	dqb "check_pars_done"
 }
 
 function make_tar() {
