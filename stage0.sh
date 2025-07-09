@@ -35,7 +35,7 @@ function single_param() {
 	case ${1} in
 		--make-dirs)
 			#HUOM.9725:init.sh voisi hyödyntää tätä
-			make_dirs
+			make_dirs #ei ihan samaq make_target_dirs?
 		;;
 		--h)
 			usage
@@ -51,5 +51,6 @@ parse_opts ${5} ${6}
 parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
+#stage0f==glorified cp
 echo "./stage0f.sh ${base} ${source2} <verbosity_level>"
 
