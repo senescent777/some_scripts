@@ -16,12 +16,12 @@ function get_devuan() {
 }
 
 function make_src_dirs() {
-	echo "mkdir ${CONF_keys_dir}"
-	echo "mkdir ${CONF_distros_dir}"
-	echo "mkdir ${CONF_bloader}"
-	echo "mkdir ./grub"
-	echo "mkdir ${CONF_pkgsdir2}"
-	echo "mkdir ./v"
+	${smd} ${CONF_keys_dir}
+	${smd} ${CONF_distros_dir}
+	${smd} ${CONF_bloader}
+	${smd} ./grub
+	${smd} ${CONF_pkgsdir2}
+	${smd} ./v
 }
 
 function cleanup() {
