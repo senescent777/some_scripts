@@ -1,4 +1,5 @@
 #!/bin/bash
+debug=1
 . ./common.conf
 . ./common_funcs.sh
 protect_system
@@ -11,8 +12,9 @@ function usage() {
 	exit 666
 }
 
-
 function parse_opts_real() {
+	dqb "parse_opts_real( ${1} )"
+
 	case ${1} in
 		--in)
 			lsrcdir=${2}
@@ -29,27 +31,38 @@ function parse_opts_real() {
 	esac
 }
 
-parse_opts ${1} ${2}
-parse_opts ${3} ${4}
-parse_opts ${5} ${6}
-parse_opts ${7} ${8}
+if [ $# -gt 0 ] ; then
+	parse_opts ${1} ${2}
+	parse_opts ${3} ${4}
+	parse_opts ${5} ${6}
+	parse_opts ${7} ${8}
+else
+	usage
+fi
 
 function check_params() {
-	if [ -d ./${lsrcdir} ] ; then
-		echo "k0"
+	dqb "check_params()"
+
+	if [ x"${lsrcdir}" != "x" ] ; then
+		if [ -d ./${lsrcdir} ] ; then
+			dqb "k0"
+		else
+			echo "no such thing as ${lsrcdir}"
+			exit 141
+		fi
 	else
-		echo "no such thing as ${lsrcdir}"
-		exit 666
+		dqb "lsrcdir missing"
+		exit 140
 	fi
-	
+
 	if [ x"${ltarget}" != "x" ] ; then 
 
 		if [ -s out/${ltarget} ] ; then
 			echo "out/${ltarget} already exists"
-			exit 666
+			exit 142
 		fi
 	else
-		exit 666
+		exit 143
 	fi
 
 	if [ x"${bloader}" != "x" ] ; then

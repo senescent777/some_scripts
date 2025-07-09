@@ -1,13 +1,25 @@
 sh5=$(sudo which sha512sum)
 sh5=$(sudo which sha512sum)
-[ -x ${sh5} ] || echo "install sha512sum !!!"
+[ -x ${sh5} ] || echo "install sha512sum !!!" #TODO:selvitä missä paketissa olikaan tuo komento
 
 gg=$(sudo which gpg)
 gv=$(sudo which gpgv)
 gi=$(sudo which genisoimage)
 gmk=$(sudo which grub-mkrescue)
 xi=$(sudo which xorriso)
-#
+
+#tarttisko tälle tehdä jotain?
+sca=$(sudo which chattr)
+sca="sudo ${sca}"
+#========================tilapäisesti tässä==
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+#============================================
 #function griffindor() {
 #	pwd
 #	local of2
@@ -30,6 +42,7 @@ xi=$(sudo which xorriso)
 #}
 #se uusi gpo() tilalle?
 function parse_opts() {
+	dqb "parse_opts(${1}, ${2})"
 	local common_pars
 	common_pars=0
 
@@ -214,7 +227,10 @@ function parse_opts() {
 #	exit 666
 #}
 #
-#function protect_system() {
+function protect_system() {
+	dqb "protect_system()"
+	csleep 1
+
 #	sudo chattr +ui /sys
 #	
 #		sudo chattr +ui /run
@@ -225,7 +241,14 @@ function parse_opts() {
 #		sudo chattr +ui /dev
 #		sudo chattr +ui /proc
 #		sudo chattr +ui /root
-#		sudo chattr +ui /home
+##		sudo chattr +ui /home
 #		sudo chattr +ui /usr
-#		sudo chattr +ui /var
-#}
+#		sudo chattr +ui /var	
+
+	for d in /sys /run /etc /usr /bin /sbin /dev /proc /root /home /usr /var ; do
+		dqb "${sca} ${d}"
+	done
+
+	csleep 1
+	dqb "pro.sys.d0n3"
+}
