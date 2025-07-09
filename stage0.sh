@@ -1,22 +1,22 @@
-#!/bin/sh
+#!/bin/bash
+debug=1
 
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
 . ./skripts/stage0_backend.bsh
 
-
 base=""
 source2=""
 n=devuan 
 
-usage() {
+function usage() {
 	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--v <verbosity_level>]"
 	echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})"
 	echo "${0} --get-devuan <download_dir>"
 	echo "${0} --make-dirs"
 }
 
-parse_opts_real() {
+function parse_opts_real() {
 	case ${1} in
 		--base)
 			base=${2}
@@ -31,10 +31,14 @@ parse_opts_real() {
 	esac	
 }
 
-single_param() {
+function single_param() {
 	case ${1} in
 		--make-dirs)
-			make_dirs
+			#HUOM.9725:init.sh voisi hyödyntää tätä
+			#make_dirs #ei ihan samaq make_target_dirs?
+
+			make_src_dirs
+			make_tgt_dirs
 		;;
 		--h)
 			usage
@@ -50,6 +54,6 @@ parse_opts ${5} ${6}
 parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
-
-echo "./stage0f ${base} ${source2} <verbosity_level>"
+#stage0f==glorified cp
+echo "./stage0f.sh ${base} ${source2} <verbosity_level>"
 
