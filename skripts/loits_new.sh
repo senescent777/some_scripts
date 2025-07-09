@@ -1,5 +1,7 @@
 #!/bin/bash
+
 debug=1
+
 . ./common.conf
 . ./common_funcs.sh
 protect_system
@@ -31,6 +33,7 @@ function parse_opts_real() {
 	esac
 }
 
+
 if [ $# -gt 0 ] ; then
 	parse_opts ${1} ${2}
 	parse_opts ${3} ${4}
@@ -55,14 +58,17 @@ function check_params() {
 		exit 140
 	fi
 
+
 	if [ x"${ltarget}" != "x" ] ; then 
 
 		if [ -s out/${ltarget} ] ; then
 			echo "out/${ltarget} already exists"
+
 			exit 142
 		fi
 	else
 		exit 143
+
 	fi
 
 	if [ x"${bloader}" != "x" ] ; then
@@ -107,6 +113,7 @@ dqb "${scm} -R 0755 ${CONF_TARGET}/out"
 ${scm} -R 0755 ${CONF_TARGET}/out
 csleep 1
 
+
 cd ${lsrcdir}
 
 mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir}
@@ -123,6 +130,7 @@ case ${bloader} in
 		dqb "${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} ."
 		csleep 1
 
+
 		${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} .
 
 	;;
@@ -132,16 +140,19 @@ case ${bloader} in
 
 		#gmk=$(sudo which grub-mkrescue)
 		#[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666
+
 		
 		echo "sudo ${gmk} -o ../out/${ltarget} <OTHER_OPTS> . "
 	;;
 	*)
 		echo "bl= ${bloader}"
+
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac
 
 #${sco} -R 0:0 ${CONF_TARGET}
+
 
 sleep 1
 echo "stick.sh ?"
