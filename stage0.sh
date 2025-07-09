@@ -1,9 +1,9 @@
 #!/bin/bash
+debug=1
 
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
 . ./skripts/stage0_backend.bsh
-
 
 base=""
 source2=""
@@ -34,6 +34,7 @@ function parse_opts_real() {
 function single_param() {
 	case ${1} in
 		--make-dirs)
+			#HUOM.9725:init.sh voisi hyödyntää tätä
 			make_dirs
 		;;
 		--h)
@@ -50,6 +51,5 @@ parse_opts ${5} ${6}
 parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
-
-echo "./stage0f ${base} ${source2} <verbosity_level>"
+echo "./stage0f.sh ${base} ${source2} <verbosity_level>"
 
