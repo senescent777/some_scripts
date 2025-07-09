@@ -30,6 +30,10 @@ spc="${odio} ${spc} "
 n=$(whoami)
 smr=$(${odio} which rm)
 smr="${odio} ${smr} "
+som=$(${odio} which mount)
+uom=$(${odio} which umount)
+som="${odio} ${som} "
+uom="${odio} ${uom} "
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
@@ -39,7 +43,6 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 #============================================
-
 #function griffindor() {
 #	pwd
 #	local of2
@@ -62,9 +65,7 @@ function csleep() {
 #}
 #se uusi gpo() tilalle?
 function parse_opts() {
-
 	dqb "parse_opts(${1}, ${2})"
-
 	local common_pars
 	common_pars=0
 
@@ -112,7 +113,6 @@ function mk_bkup() {
 		${svm} ${1} ${1}.OLD
 	fi
 }
-
 
 #function slaughter0() {
 #	local fn2
@@ -269,4 +269,3 @@ function protect_system() {
 	csleep 1
 	dqb "pro.sys.d0n3"
 }
-
