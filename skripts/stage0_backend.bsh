@@ -114,7 +114,7 @@ function bootloader() {
 			ks2=${2}/isolinux
 
 				for t in cfg png ; do
-					sudo rm ${CONF_target}/isolinux/*.${t}
+					${smr} ${CONF_target}/isolinux/*.${t}
 
 					${spc} -a ${ks2}/*.${t} ${CONF_target}/isolinux
 				done						
@@ -157,7 +157,7 @@ function make_tgt_dirs() {
 		${smd} -p ${CONF_target}
 	else
 		echo "rm  ${CONF_target}";sleep 6
-		sudo rm -rf ${CONF_target};sleep 1
+		${smr} -rf ${CONF_target};sleep 1
 	fi
 
 

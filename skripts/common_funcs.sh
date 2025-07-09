@@ -28,6 +28,8 @@ scm="${odio} ${scm} "
 spc=$(${odio} which cp)
 spc="${odio} ${spc} "
 n=$(whoami)
+smr=$(${odio} which rm)
+smr="${odio} ${smr} "
 
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
