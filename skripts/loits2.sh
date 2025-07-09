@@ -92,7 +92,9 @@ function make_tar() {
 	
 	local tpop=""
 	#To State The Obvious:välistä puuttuu jotain
-	#tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ${1}/${TARGET_pad_bak_file} ./${TARGET_pad_dir}
+	[ ${debug} -eq 1 ] && tpop="-v "
+	dqb "tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ${1}/${TARGET_pad_bak_file} ./${TARGET_pad_dir}"
+	tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ${1}/${TARGET_pad_bak_file} ./${TARGET_pad_dir}
 }
 
 check_params ${lsrcdir} ${ltarget} ${bloader}
