@@ -13,7 +13,7 @@ make_tgt_dirs
 
 function part0() {
 	debug=1
-	dqb "PART0 ${1} ${2} ${3}"
+	dqb "PART0 ${1}, ${2} , ${3}"
 
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
@@ -32,10 +32,16 @@ function part0() {
 	${sco} ${n}:${n} ${CONF_target}/${TARGET_pad_dir}/${n}.conf
 	${scm} o-w ${CONF_target}/${TARGET_pad_dir}
 
+	dqb "BEFORE COPY_x"
+	csleep 1
+
 	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir}
 	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
 	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
 	
+	dqb "4FT3R COPY_X"
+	csleep 1
+
 	${odio} touch ${CONF_target}/${TARGET_pad_dir}/*
 	${scm} 0444 ${CONF_tmpdir}/*.conf
 	${scm} 0755 ${CONF_tmpdir}/*.sh
@@ -55,21 +61,21 @@ function part0() {
 	dqb "part0 d0ne"
 }
 
-if [ -s ${1} ] ; then
-	dqb "${som} -o loop,ro ${1} ${CONF_source}"
-	csleep 3
-	${som} -o loop,ro ${1} ${CONF_source} 
-	[ $? -eq 0 ] || exit 666
-	sleep 6
-
-	part0 ${CONF_source} ${2} ${3}	
-	${uom} ${CONF_source} 
+if [ -d ${1} ] ; then
+	part0 ${1} ${2} ${3}
 else
-	if [ -d ${1} ] ; then
-		part0 ${1} ${2} ${3}
+	if [ -s ${1} ] ; then
+		dqb "${som} -o loop,ro ${1} ${CONF_source}"
+		csleep 3
+		${som} -o loop,ro ${1} ${CONF_source} 
+		[ $? -eq 0 ] || exit 666
+		sleep 6
+
+		part0 ${CONF_source} ${2} ${3}	
+		${uom} ${CONF_source} 
 	else
-		echo "https://www.youtube.com/watch?v=KnH2dxemO5o";exit 666
-	fi
-fi 
+		echo "https://www.youtube.com/watch?v=KnH2dxemO5o";exit 666	
+	fi 
+fi
 
 dqb "MKSUMS.SH"
