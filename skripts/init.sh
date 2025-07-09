@@ -11,5 +11,6 @@ sudo tar -cvf ${1} /var/cache/apt/archives/*.deb
 
 chmod a+x ./*.sh
 
+
 #TODO:konftsdton mukaisia hmistoja tulisi luoda jos ei jo olemassa
 

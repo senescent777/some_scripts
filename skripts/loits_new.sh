@@ -105,6 +105,7 @@ function mk_pad_bak() {
 #n=$(whoami)
 #[ x"${CONF_TARGET}" != "x" ] || exit 666
 
+
 dqb "${sco} -R ${n}:${n} ${CONF_TARGET}/out"
 ${sco} -R ${n}:${n} ${CONF_TARGET}/out
 csleep 1
@@ -137,6 +138,7 @@ case ${bloader} in
 	grub)
 		#xi=$(sudo which xorriso)
 		#[ y"${xi}" != "y" ] || echo "apt-get install xorriso";exit 666
+
 
 		#gmk=$(sudo which grub-mkrescue)
 		#[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666

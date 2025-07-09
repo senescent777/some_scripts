@@ -2,7 +2,10 @@
 #protect_system
 
 function mangle_conf() {
-	dqb "mangle_conf()"
+
+	dqb "mangle_conf( ${1}, ${2}, ${3})"
+	#TODO:jotain muutakin tähän, ehkä
+
 }
 
 function get_devuan() {
@@ -16,6 +19,10 @@ function get_devuan() {
 }
 
 function make_src_dirs() {
+
+	dqb "make_s_DIrs"
+
+
 	${smd} ${CONF_keys_dir}
 	${smd} ${CONF_distros_dir}
 	${smd} ${CONF_bloader}
@@ -29,6 +36,9 @@ function cleanup() {
 }
 
 function copy_main() {
+
+	dqb "copy_main(${1}, ${2})"
+
 	[ x"${1}" != "x" ] || exit 2
 	[ -d ${2} ] || exit 2 
 
@@ -37,19 +47,26 @@ function copy_main() {
 
 	[ z"${CONF_scripts_dir}" != "z" ] || echo "n.s.t.as ${CONF_scripts_dir}"
 
+	dqb "CHECKS PASSED"
+
+
 	if [ -d ${CONF_scripts_dir} ]; then 
 		${spc} -a ${CONF_scripts_dir}/*.sh ${CONF_tmpdir}
 
 	fi
 
+	#TODO:find'in kautta kuitenkin?
 	${spc} -a ${1}/*.sh ${2} 
 	${spc} -a ${1}/*.bz2 ${2}
-
+	dqb "copy_main() donw"
 }
 
 function copy_conf() {
+	dqb "copy_conf(${1}, ${2}. ${3})"
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
+	dqb "PARAMS OK"
+
 
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
 		${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
@@ -90,26 +107,39 @@ function copy_conf() {
 	sudo cat ${1}/${2}.conf >> ${utfile}
 
 
+	dqb "copy_conf() donw"
+
 	sleep 1
 }
 
 function copy_sums() {
 
+	dqb "copy_syms(${1}, ${2})"
 	[ x"${1}" != "x" ] || exit 2
 	[ -d ${2} ] || exit 2 
+	#TODO:jotain tähänkin?
+	dqb "copy_syms(${1}, ${2}) dn0w"
 }
 
 function bootloader() {
+	dqb "bootloader(${1}, ${2}, ${3})"
+
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
 	[ x"${CONF_target}" != "x" ] || exit 3
 	[ -d ${CONF_target} ] || exit 3
+
+
+	dqb "pars_ok"
 
 	local ks2
 	ks2=""
 
 	case ${1} in
 		isolinux)
+
+			dqb "${spc} -a ${3}/isolinux/ ${CONF_target} || exit 8"
+
 			${spc} -a ${3}/isolinux/ ${CONF_target} || exit 8
 			ks2=${2}/isolinux
 
@@ -134,17 +164,23 @@ function bootloader() {
 		;;
 	esac
 
+
+	dqb "bootloader(${1}, ${2}) EN0D"
 }
 
 function make_tgt_dirs() {
-	dqb "MAKE_DIRS"
+	dqb "MAKE_t_DIRS()"
 
 	[ x"${CONF_target}" != "x" ] || exit 99
-	[ x"${CONF_target}" != "/" ] || exit 100
+	[ x"${CONF_target}" != "/x" ] || exit 100
+
 	dqb "${CONF_target} ok"
 
 	[ y"${CONF_source}" != "y" ] || exit 101
 	[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
+
+	dqb "${CONF_source} ok?"
+
 	${sco} 0:0 ${CONF_source}
 	${scm} 0755 ${CONF_source}
 
@@ -153,13 +189,14 @@ function make_tgt_dirs() {
 	${scm} 0755 ${CONF_target}	
 
 	if [ ! -d ${CONF_target} ] ; then
-		echo "mkdir ${CONF_target}";sleep 6
+
+		dqb "mkdir ${CONF_target}";sleep 6
 		${smd} -p ${CONF_target}
 	else
-		echo "rm  ${CONF_target}";sleep 6
+		dqb "rm ${CONF_target}";sleep 6
 		${smr} -rf ${CONF_target};sleep 1
 	fi
-
+	
 
 	[ -d ${CONF_target}/live ] || ${smd} -p ${CONF_target}/live
 	${sco} -R ${n}:${n} ${CONF_target}/live

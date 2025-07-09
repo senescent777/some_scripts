@@ -48,12 +48,21 @@ function single_param() {
 
 [ -d ${CONF_tmpdir0} ] || exit 7
 
-parse_opts ${1} ${2}
-parse_opts ${3} ${4}
-parse_opts ${5} ${6}
-parse_opts ${7} ${8}
-parse_opts ${9} ${10}
+if [ $# -gt 0 ] ; then
+	parse_opts ${1} ${2}
+	parse_opts ${3} ${4}
+	parse_opts ${5} ${6}
+	parse_opts ${7} ${8}
+	parse_opts ${9} ${10}
+else
+	usage
+fi
 
 #stage0f==glorified cp
+#HUOM.9725:saattanee jo onnistua "--add"-vivulla lisäillä asioita
+#tosin muistettava sitten viskoa isolinux.cfg ~ alle ja muuta kikkailua kunnes x
+
+#HUOM.9725.2:.iso-tiedoston mounttaus vielä testattava
+
 echo "./stage0f.sh ${base} ${source2} <verbosity_level>"
 

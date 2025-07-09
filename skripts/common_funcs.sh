@@ -31,6 +31,12 @@ n=$(whoami)
 smr=$(${odio} which rm)
 smr="${odio} ${smr} "
 
+som=$(${odio} which mount)
+uom=$(${odio} which umount)
+som="${odio} ${som} "
+uom="${odio} ${uom} "
+
+
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
 }

@@ -128,7 +128,6 @@ cd ${lsrcdir}
 
 if [ -d ${TARGET_pad_dir} ] ; then 
 	make_tar ${CONF_target}/../out
-
 else
 	echo "${TARGET_pad_dir} missing"
 fi
@@ -149,6 +148,8 @@ case ${bloader} in
 		dqb "next: ${gi} -o ${CONF_target}/../out/${ltarget} ${CONF_gi_opts} ."
 		${gi} -o ${CONF_target}/../out/${ltarget} ${CONF_gi_opts} .
 		[ $? -eq 0 ] || echo "${sco} -R ${n}:${n} ./isolinux && ${scm} 0755 ./isolinux"
+
+
 	;;
 	*)
 		echo "bl= ${bloader}"
