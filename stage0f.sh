@@ -1,5 +1,5 @@
 #!/bin/bash
-
+debug=1 #jatkossa nollaan
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
 . ./skripts/stage0_backend.bsh
@@ -12,6 +12,7 @@ n=devuan
 make_tgt_dirs
 
 function part0() {
+	debug=1
 	dqb "PART0 ${1} ${2} ${3}"
 
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
@@ -55,6 +56,8 @@ function part0() {
 }
 
 if [ -s ${1} ] ; then
+	dqb "${som} -o loop,ro ${1} ${CONF_source}"
+	csleep 3
 	${som} -o loop,ro ${1} ${CONF_source} 
 	[ $? -eq 0 ] || exit 666
 	sleep 6
