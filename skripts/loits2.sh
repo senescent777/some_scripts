@@ -137,7 +137,7 @@ case ${bloader} in
 		${sco} ${n}:${n} ./isolinux/isolinux*
 		${scm} 0644 ./isolinux/isolinux*
 		
-		dqb "next: ${gi} PARAMS"
+		dqb "next: ${gi} -o ${CONF_target}/../out/${ltarget} ${CONF_gi_opts} ."
 		${gi} -o ${CONF_target}/../out/${ltarget} ${CONF_gi_opts} .
 		[ $? -eq 0 ] || echo "${sco} -R ${n}:${n} ./isolinux && ${scm} 0755 ./isolinux"
 

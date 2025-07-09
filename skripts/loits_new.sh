@@ -120,7 +120,7 @@ case ${bloader} in
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
-		dqb "bfeore gi"
+		dqb "${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} ."
 		csleep 1
 
 		${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} .
