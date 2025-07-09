@@ -1,19 +1,19 @@
 #!/bin/bash
 . ./common.conf
 . ./common_funcs.sh
-#protect_system
+protect_system
 
 ltarget="" 
 bloader=""
 #exit
 
-usage() {
+function usage() {
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666
 }
 
 
-parse_opts_real() {
+function parse_opts_real() {
 	case ${1} in
 		--in)
 			lsrcdir=${2}
@@ -35,7 +35,7 @@ parse_opts ${3} ${4}
 parse_opts ${5} ${6}
 parse_opts ${7} ${8}
 
-check_params() {
+function check_params() {
 	[ x"${CONF_target}" != "x" ] || exit 666
 	[ x"${CONF_bloader}" != "x" ] || exit 666
 
@@ -64,11 +64,11 @@ check_params() {
 
 }
 
-make_tar() {
+function make_tar() {
 	[ -s ${1}/${TARGET_pad_bak_file} ] && mk_bkup ${1}/${TARGET_pad_bak_file}
 	
 	local tpop=""
-	
+	#To State The Obvious:välistä puuttuu jotain
 	tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ${1}/${TARGET_pad_bak_file} ./${TARGET_pad_dir}
 }
 

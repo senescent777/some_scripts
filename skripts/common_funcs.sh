@@ -113,7 +113,7 @@ function mk_bkup() {
 #
 #	echo ${ts2} | awk '{print $1,$2}' >> ${2}
 #}
-#
+
 function enforce_deps() {
 	dqb "enf_deps"
 	csleep 1
@@ -163,7 +163,6 @@ function enforce_deps() {
 		doIt=${doIt2}
 	fi	
 
-	#TODO:selvitä onko tuo minkä grub-paketin alla
 	if [ v"${gmk}" != "v" ] && [ -x ${gmk} ] && [ -s ${gmk} ] ; then
 		dqb "gmk+0"
 	else
@@ -252,20 +251,6 @@ function inst_dep() {
 function protect_system() {
 	dqb "protect_system()"
 	csleep 1
-
-#	sudo chattr +ui /sys
-#	
-#		sudo chattr +ui /run
-#		sudo chattr +ui /etc
-#		sudo chattr +ui /usr
-#		sudo chattr +ui /bin
-#		sudo chattr +ui /sbin
-#		sudo chattr +ui /dev
-#		sudo chattr +ui /proc
-#		sudo chattr +ui /root
-##		sudo chattr +ui /home
-#		sudo chattr +ui /usr
-#		sudo chattr +ui /var	
 
 	for d in /sys /run /etc /usr /bin /sbin /dev /proc /root /home /usr /var ; do
 		dqb "${sca} ${d}"
