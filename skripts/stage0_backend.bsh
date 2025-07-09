@@ -16,6 +16,8 @@ function get_devuan() {
 }
 
 function make_src_dirs() {
+	dqb "make_s_DIrs"
+
 	${smd} ${CONF_keys_dir}
 	${smd} ${CONF_distros_dir}
 	${smd} ${CONF_bloader}
@@ -137,30 +139,30 @@ function bootloader() {
 }
 
 function make_tgt_dirs() {
-	dqb "MAKE_DIRS"
+	dqb "MAKE_t_DIRS"
 
 	[ x"${CONF_target}" != "x" ] || exit 99
-	[ x"${CONF_target}" != "/" ] || exit 100
+	[ x"${CONF_target}" != "/x" ] || exit 100
 	dqb "${CONF_target} ok"
 
 	[ y"${CONF_source}" != "y" ] || exit 101
 	[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
+	dqb "${CONF_source} ok?"
+
 	${sco} 0:0 ${CONF_source}
 	${scm} 0755 ${CONF_source}
-
 	
 	${sco} -R ${n}:${n} ${CONF_target}
 	${scm} 0755 ${CONF_target}	
 
 	if [ ! -d ${CONF_target} ] ; then
-		echo "mkdir ${CONF_target}";sleep 6
+		dqb "mkdir ${CONF_target}";sleep 6
 		${smd} -p ${CONF_target}
 	else
-		echo "rm  ${CONF_target}";sleep 6
+		dqb "rm ${CONF_target}";sleep 6
 		${smr} -rf ${CONF_target};sleep 1
 	fi
-
-
+	
 	[ -d ${CONF_target}/live ] || ${smd} -p ${CONF_target}/live
 	${sco} -R ${n}:${n} ${CONF_target}/live
 
