@@ -8,5 +8,6 @@ sudo apt-get reinstall genisoimage wodim
 sudo apt-get reinstall grub-common xorriso #jälkimminen toistaiseksi mukana
 sudo tar -cvf ${1} /var/cache/apt/archives/*.deb
 
+chmod a+x ./*.sh
 
 #TODO:konftsdton mukaisia hmistoja tulisi luoda jos ei jo olemassa
