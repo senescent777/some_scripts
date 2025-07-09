@@ -80,8 +80,12 @@ check_params
 
 function mk_pad_bak() {
 	dqb "mk_pad_bak (${1} , ${2})"
-	[ -s ./${1} ] && ${svm} ${1} ${1}.OLD
-	
+
+	if [ -s ./${1} ] ; then
+		dqb "${svm} ${1} ${1}.OLD"
+		${svm} ${1} ${1}.OLD
+	fi
+
 	#näistä tässä alla puuttuu jotain parametreja
 #	if [ ! -d ../out ] ; then 
 #		${smd} ../out
@@ -133,7 +137,7 @@ case ${bloader} in
 	;;
 	*)
 		echo "bl= ${bloader}"
-		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac
 

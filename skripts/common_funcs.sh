@@ -1,25 +1,27 @@
-sh5=$(sudo which sha512sum)
-sh5=$(sudo which sha512sum)
+odio=$(which sudo) #========================tilapäisesti tässä, common_lib myöh==
+
+sh5=$(${odio} which sha512sum)
+sh5=$(${odio} which sha512sum)
 [ -x ${sh5} ] || echo "install sha512sum !!!" #TODO:selvitä missä paketissa olikaan tuo komento
 
-gg=$(sudo which gpg)
-gv=$(sudo which gpgv)
-gi=$(sudo which genisoimage)
-gmk=$(sudo which grub-mkrescue)
-xi=$(sudo which xorriso)
+gg=$(${odio} which gpg)
+gv=$(${odio} which gpgv)
+gi=$(${odio} which genisoimage)
+gmk=$(${odio} which grub-mkrescue)
+xi=$(${odio} which xorriso)
 #========================tilapäisesti tässä, common_lib myöh==
 #tarttisko tälle tehdä jotain?
-sca=$(sudo which chattr)
-sca="sudo ${sca}"
+sca=$(${odio} which chattr)
+sca="${odio} ${sca}"
 
-svm=$(sudo mv)
-svm="sudo ${svm}"
+svm=$(${odio} which mv)
+svm="${odio} ${svm}"
 
-smd=$(sudo mkdir)
-smd="sudo ${smd}"
-odio=$(which sudo)
-sco=$(sudo which chown)
-scm=$(sudo which chmod)
+smd=$(${odio} which mkdir)
+smd="${odio} ${smd}"
+
+sco=$(${odio} which chown)
+scm=$(${odio} which chmod)
 sco="${odio} ${sco} "
 scm="${odio} ${scm} "
 
@@ -95,13 +97,13 @@ function parse_opts() {
 		fi
 	fi
 }
-#
-#function mk_bkup() { 
-#	if [ -s ${1} ] ; then
-#		sudo mv ${1} ${1}.OLD
-#	fi
-#}
-#
+
+function mk_bkup() { 
+	if [ -s ${1} ] ; then
+		${svm} ${1} ${1}.OLD
+	fi
+}
+
 #function slaughter0() {
 #	local fn2
 #	local ts2
@@ -216,7 +218,7 @@ function enforce_deps() {
 			echo "sudo apt-get update;sudo apt-get install gpg* wodim genisoimage squashfs-utils xorriso grub*"
 		;;
 		*)
-			echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+			echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 		;;
 	esac
 

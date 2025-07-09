@@ -108,7 +108,7 @@ case ${bloader} in
 	;;
 	*)
 		echo "bl= ${bloader}"
-		echo "https://www.youtube.com/watch?v=PjotFePip2M" 
+		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac
 
