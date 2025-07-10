@@ -1,4 +1,4 @@
-odio=$(which sudo) #========================tilapäisesti tässä, common_lib myöh==
+odio=$(which sudo) #==========================
 
 sh5=$(${odio} which sha512sum)
 sh5=$(${odio} which sha512sum)
@@ -45,6 +45,7 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 #============================================
+#TODO:tähän asti juttujen korvaaminen toisen projektin common_lib
 
 #function griffindor() {
 #	pwd
@@ -119,7 +120,7 @@ function mk_bkup() {
 	fi
 }
 
-
+#TODO:->common_lib.sh
 #function slaughter0() {
 #	local fn2
 #	local ts2
