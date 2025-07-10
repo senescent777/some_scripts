@@ -46,7 +46,12 @@ function single_param() {
 	esac
 }
 
-[ -d ${CONF_tmpdir0} ] || exit 7
+if [ -d ${CONF_tmpdir0} ] ; then
+	dqb "CONF_TMPDIR0 EXISTS"
+else
+	echo "CONF_TMPDIR0"
+	exit 7
+fi
 
 if [ $# -gt 0 ] ; then
 	parse_opts ${1} ${2}
@@ -62,6 +67,7 @@ fi
 #HUOM.9725:saattanee jo onnistua "--add"-vivulla lisäillä asioita
 #tosin muistettava sitten viskoa isolinux.cfg ~ alle ja muuta kikkailua kunnes x
 
+dqb "mkdir -p ./v/smthing;mkdir -p ./v/smthing/{isolinux,grub};ln -s ~/Desktop/minimize ./v/something/pad ?"
 #HUOM.9725.2:.iso-tiedoston mounttaus vielä testattava
 
 echo "./stage0f.sh ${base} ${source2} <verbosity_level>"
