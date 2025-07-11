@@ -1,13 +1,15 @@
 #!/bin/bash
 
 debug=1
+d=$(dirname $0)
 
-. ./common.conf
-. ./common_funcs.sh
-protect_system
+. ${d}/common.conf
+. ${d}/common_funcs.sh
+#protect_system
 
 ltarget="" 
 bloader=""
+lsrcdir=""
 
 function usage() {
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
@@ -114,8 +116,10 @@ dqb "${scm} -R 0755 ${CONF_TARGET}/out"
 ${scm} -R 0755 ${CONF_TARGET}/out
 csleep 1
 
-
+#HUOM.12725:taroeellinen cd?
+dqb "cd ${lsrcdir}"
 cd ${lsrcdir}
+csleep 1
 
 mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir}
 sleep 1
@@ -128,11 +132,12 @@ case ${bloader} in
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
-		dqb "${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} ."
+		pwd
+		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir}"
 		csleep 1
 
 
-		${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} .
+		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} .
 
 	;;
 	grub)
