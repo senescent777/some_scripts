@@ -36,7 +36,7 @@ function cleanup() {
 }
 
 function copy_main() {
-
+	debug=1
 	dqb "copy_main(${1}, ${2})"
 
 	[ x"${1}" != "x" ] || exit 2
@@ -69,7 +69,7 @@ function copy_main() {
 		${spc} ${f} ${2}
 	done
 	
-	#TODO:export2.sh oksennus pakaten jotta voi testata
+	#VAIH:export2.sh oksennus pakaten jotta voi testata
 	for f in $(find ${1} -type f -name '*.bz2') ; do
 		${spc} ${f} ${2}
 	done
@@ -147,36 +147,62 @@ function bootloader() {
 
 
 	dqb "pars_ok"
+	csleep 3
 
 	local ks2
 	ks2=""
 	local f
 	f=""
+	local t
+	t=""
 
 	case ${1} in
 		isolinux)
 
 			dqb "${spc} -a ${3}/isolinux/ ${CONF_target} || exit 8"
+			csleep 1
 
 			${spc} -a ${3}/isolinux/ ${CONF_target} || exit 8
 			ks2=${2}/isolinux
+			csleep 1
 
-				for t in cfg png ; do
-					dqb "${smr} ${CONF_target}/isolinux/*.${t}"
-					${smr} ${CONF_target}/isolinux/*.${t}
+#tilapäisesti jemmaan 11725
+#				for t in cfg png ; do
+#					dqb "${smr} ${CONF_target}/isolinux/*.${t}"
+#					${smr} ${CONF_target}/isolinux/*.${t}
+#
+#					#${spc} -a ${ks2}/*.${t} ${CONF_target}/isolinux
+#					dqb "find ${ks2} -name '*.${t}' -type f"
+#
+#					for f in $(find ${ks2} -name '*.${t}' -type f) ; do
+#						dqb "${spc} ${f} ${CONF_target}/isolinux"
+#						${spc} ${f} ${CONF_target}/isolinux				
+#					done
+#				done	
+			
+			#JOKO JO ALKAISI TOIMIA PRKL
 
-					#${spc} -a ${ks2}/*.${t} ${CONF_target}/isolinux
-					dqb "find ${ks2} -name '*.${t}' -type f"
+			${smr} ${CONF_target}/isolinux/*.cfg
+			${smr} ${CONF_target}/isolinux/*.png
+			csleep 2
 
-					for f in $(find ${ks2} -name '*.${t}' -type f) ; do
-						dqb "${spc} ${f} ${CONF_target}/isolinux"
-						${spc} ${f} ${CONF_target}/isolinux				
-					done
-				done						
+			for f in $(find ${ks2} -name '*.cfg') ; do
+				dqb "spc ${f} ${CONF_target}/isolinux/"
+				${spc} ${f} ${CONF_target}/isolinux/
+			done
+			
+			csleep 2
+
+			for f in $(find ${ks2} -name '*.png') ; do
+				dqb "spc ${f} ${CONF_target}/isolinux/"
+				${spc} ${f} ${CONF_target}/isolinux/
+			done
+				
+			csleep 2	
 		;;
 		grub)
 			ks2=${2}/boot
-
+			#TODO:tämäklin tietysti toimimaan
 			if [ -d  ${ks2} ] ; then
 				${spc} -a ${3}/boot/ ${CONF_target} || exit 8
 				echo "cp -a ${ks2}/grub/{*.cfg,*.png} ./boot/grub"
