@@ -17,13 +17,13 @@ function part0() {
 	dqb "PART0 ${1}, ${2} , ${3}"
 
 #ei aina tartte näiyä renkata
-	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
-		if [ -s ${2}/live/${f} ] ; then
-			${spc} ${2}/live/${f} ${CONF_target}/live
-		else
-			${spc} ${1}/live/${f} ${CONF_target}/live
-		fi
-	done
+#	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
+#		if [ -s ${2}/live/${f} ] ; then
+#			${spc} ${2}/live/${f} ${CONF_target}/live
+#		else
+#			${spc} ${1}/live/${f} ${CONF_target}/live
+#		fi
+#	done
 
 	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
@@ -55,7 +55,12 @@ function part0() {
 	${scm} 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
 	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
 
-	bootloader ${CONF_bloader} ${src2}/.. ${CONF_source}
+	#HUOM.11725:ei toimi, purkkaviritys tilalle
+	#bootloader ${CONF_bloader} ${src2}/.. ${CONF_source}
+	local src3
+	src3=$(echo ${src2} | cut -d '/' -f 1-5)
+	bootloader ${CONF_bloader} ${src3} ${CONF_source}
+
 	${odio} touch ${CONF_target}/${CONF_bloader}/*
 	
 	${scm} 0555 ${CONF_target}/live
