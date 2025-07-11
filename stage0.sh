@@ -11,7 +11,7 @@ n=devuan
 
 function usage() {
 	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--v <verbosity_level>]"
-	echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})"
+	echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})" #pitäisi varmaan huomoida tuo suhteellisuus?
 	echo "${0} --get-devuan <download_dir>"
 	echo "${0} --make-dirs"
 }
@@ -22,7 +22,7 @@ function parse_opts_real() {
 			base=${2}
 		;;
 		--add)
-			source2=${2}/${TARGET_pad_dir}
+			source2=${2} #/${TARGET_pad_dir} josko wttuun tuo t_p_d
 		;;
 		--get-devuan)
 			get_devuan ${2}
@@ -46,7 +46,12 @@ function single_param() {
 	esac
 }
 
-[ -d ${CONF_tmpdir0} ] || exit 7
+if [ -d ${CONF_tmpdir0} ] ; then
+	dqb "CONF_TMPDIR0 EXISTS"
+else
+	echo "CONF_TMPDIR0"
+	exit 7
+fi
 
 if [ $# -gt 0 ] ; then
 	parse_opts ${1} ${2}
@@ -62,6 +67,7 @@ fi
 #HUOM.9725:saattanee jo onnistua "--add"-vivulla lisäillä asioita
 #tosin muistettava sitten viskoa isolinux.cfg ~ alle ja muuta kikkailua kunnes x
 
+dqb "mkdir -p ./v/smthing;mkdir -p ./v/smthing/{isolinux,grub};ln -s ~/Desktop/minimize ./v/something/pad ?"
 #HUOM.9725.2:.iso-tiedoston mounttaus vielä testattava
 
 echo "./stage0f.sh ${base} ${source2} <verbosity_level>"
