@@ -11,7 +11,7 @@ n=devuan
 
 function usage() {
 	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--v <verbosity_level>]"
-	echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})"
+	echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})" #pitäisi varmaan huomoida tuo suhteellisuus?
 	echo "${0} --get-devuan <download_dir>"
 	echo "${0} --make-dirs"
 }
@@ -22,7 +22,7 @@ function parse_opts_real() {
 			base=${2}
 		;;
 		--add)
-			source2=${2}/${TARGET_pad_dir}
+			source2=${2} #/${TARGET_pad_dir} josko wttuun tuo t_p_d
 		;;
 		--get-devuan)
 			get_devuan ${2}

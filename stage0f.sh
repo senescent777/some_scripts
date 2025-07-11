@@ -17,13 +17,16 @@ function part0() {
 	dqb "PART0 ${1}, ${2} , ${3}"
 
 #ei aina tartte näiyä renkata
-#	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
-#		if [ -s ${2}/live/${f} ] ; then
-#			${spc} ${2}/live/${f} ${CONF_target}/live
-#		else
-#			${spc} ${1}/live/${f} ${CONF_target}/live
-#		fi
-#	done
+	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
+		if [ -s ${2}/live/${f} ] ; then
+			${spc} ${2}/live/${f} ${CONF_target}/live
+		else
+			${spc} ${1}/live/${f} ${CONF_target}/live
+		fi
+	done
+
+	bootloader ${CONF_bloader} ${2} ${CONF_source}
+	${odio} touch ${CONF_target}/${CONF_bloader}/*
 
 	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
@@ -37,10 +40,10 @@ function part0() {
 	dqb "BEFORE COPY_x"
 	csleep 1
 
-	#HUOM.11725:linkitys-syistä "/" 1. param lopussa, ehkä pois jatkossa
-	copy_main ${src2}/ ${CONF_target}/${TARGET_pad_dir}
-	copy_conf ${src2}/ ${n} ${CONF_target}/${TARGET_pad_dir}
-	copy_sums ${src2}/ ${CONF_target}/${TARGET_digests_dir}
+	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa
+	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir}
+	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
+	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
 	
 	dqb "4FT3R COPY_X"
 	csleep 1
@@ -55,13 +58,8 @@ function part0() {
 	${scm} 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
 	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
 
-	#HUOM.11725:ei toimi, purkkaviritys tilalle
-	#bootloader ${CONF_bloader} ${src2}/.. ${CONF_source}
-	local src3
-	src3=$(echo ${src2} | cut -d '/' -f 1-5)
-	bootloader ${CONF_bloader} ${src3} ${CONF_source}
 
-	${odio} touch ${CONF_target}/${CONF_bloader}/*
+	
 	
 	${scm} 0555 ${CONF_target}/live
 	${scm} 0755 ${CONF_target}/${TARGET_DIGESTS_dir}
