@@ -12,13 +12,12 @@ n=devuan
 make_tgt_dirs
 
 #HUOM.9725:kolmatta param ei käytetä mihinkään, pitäisikö?
+#HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
 function part0() {
 	debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
 
-
 #ei aina tartte näiyä renkata
-
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
 			${spc} ${2}/live/${f} ${CONF_target}/live
@@ -27,10 +26,8 @@ function part0() {
 		fi
 	done
 
-
 	bootloader ${CONF_bloader} ${2} ${CONF_source}
 	${odio} touch ${CONF_target}/${CONF_bloader}/*
-
 
 	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
@@ -44,9 +41,7 @@ function part0() {
 	dqb "BEFORE COPY_x"
 	csleep 1
 
-
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa
-
 	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir}
 	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
 	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
@@ -66,12 +61,12 @@ function part0() {
 
 
 	
+	
 	${scm} 0555 ${CONF_target}/live
 	${scm} 0755 ${CONF_target}/${TARGET_DIGESTS_dir}
 
 	dqb "part0 d0ne"
 }
-
 
 #DONE:.iso'n kanssa kokeilu
 #TODO:3. param, mikä idea? debug?
