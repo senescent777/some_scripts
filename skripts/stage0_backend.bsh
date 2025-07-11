@@ -150,6 +150,8 @@ function bootloader() {
 
 	local ks2
 	ks2=""
+	local f
+	f=""
 
 	case ${1} in
 		isolinux)
@@ -160,9 +162,16 @@ function bootloader() {
 			ks2=${2}/isolinux
 
 				for t in cfg png ; do
+					dqb "${smr} ${CONF_target}/isolinux/*.${t}"
 					${smr} ${CONF_target}/isolinux/*.${t}
 
-					${spc} -a ${ks2}/*.${t} ${CONF_target}/isolinux
+					#${spc} -a ${ks2}/*.${t} ${CONF_target}/isolinux
+					dqb "find ${ks2} -name '*.${t}' -type f"
+
+					for f in $(find ${ks2} -name '*.${t}' -type f) ; do
+						dqb "${spc} ${f} ${CONF_target}/isolinux"
+						${spc} ${f} ${CONF_target}/isolinux				
+					done
 				done						
 		;;
 		grub)
