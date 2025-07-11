@@ -37,6 +37,7 @@ function cleanup() {
 
 function copy_main() {
 	debug=1
+
 	dqb "copy_main(${1}, ${2})"
 
 	[ x"${1}" != "x" ] || exit 2
@@ -51,6 +52,7 @@ function copy_main() {
 	local f
 	
 	#TODO:ao. kohtaa mietittäbä, minne ovat kalat menossa, mikä oli koko blokin fktio
+
 	if [ -d ${CONF_scripts_dir} ]; then 
 		#${spc} -a ${CONF_scripts_dir}/*.sh ${CONF_tmpdir}
 
@@ -73,6 +75,7 @@ function copy_main() {
 	for f in $(find ${1} -type f -name '*.bz2') ; do
 		${spc} ${f} ${2}
 	done
+
 
 	dqb "copy_main() donw"
 }
@@ -147,7 +150,9 @@ function bootloader() {
 
 
 	dqb "pars_ok"
+
 	csleep 3
+
 
 	local ks2
 	ks2=""
@@ -224,6 +229,7 @@ function make_tgt_dirs() {
 
 	[ x"${CONF_target}" != "x" ] || exit 99
 	[ x"${CONF_target}" != "x/" ] || exit 100
+
 
 	dqb "${CONF_target} ok"
 
