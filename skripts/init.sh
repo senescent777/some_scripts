@@ -24,7 +24,7 @@ sudo apt-get reinstall grub-common xorriso #jälkimminen toistaiseksi mukana
 if [ ! -d ${1} ] ; then
 	sudo tar -cvf ${1} /var/cache/apt/archives/*.deb
 else
-	sudo cp  /var/cache/apt/archives/*.deb ${1}
+	sudo cp /var/cache/apt/archives/*.deb ${1}
 fi
 
 chmod a+x ./*.sh
@@ -34,4 +34,4 @@ c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 [ ${c} -lt 1 ] && echo $0.conf >> ${basedir}/.gitignore
 
 #TODO:konftsdton mukaisia hmistoja tulisi luoda jos ei jo olemassa?
-
+#... ota selvää mitä taas tarvittiin oikeasti

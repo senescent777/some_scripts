@@ -11,7 +11,10 @@ ltarget=""
 bloader=""
 lsrcdir=""
 
+#HUOM.12725:oliko single_param() kanssa jokin juttu?
+
 function usage() {
+	echo "a glorified wrapper for genisoimage"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666
 }
@@ -84,7 +87,7 @@ check_params
 #enforce_deps #josqs myöhemmin takaisin ed ja id kommenteista
 #
 #[ y"${gv}" != "y" ] || inst_dep 0
-#[ x"${gi}" != "x" ] || inst_dep 1
+[ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
 
 function mk_pad_bak() {
 	dqb "mk_pad_bak (${1} , ${2})"
@@ -117,28 +120,35 @@ ${scm} -R 0755 ${CONF_TARGET}/out
 csleep 1
 
 #HUOM.12725:taroeellinen cd?
-dqb "cd ${lsrcdir}"
-cd ${lsrcdir}
-csleep 1
+#koklataan nyt ensin ilman cd:tä
+#jos qsee ed ni cd takas+muista muuttaa gi:n vika paramn
+#dqb "cd ${lsrcdir}"
+#cd ${lsrcdir}
+#csleep 1
+#HUOM.12725.23.34:joskohan toimisi jo gi:n uloste? ... siis mod Jutut
 
-mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir}
+#mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir} tilapäisesti tämkin jemmaan
 sleep 1
 
-
-
 case ${bloader} in
+	iuefi)
+		${sco} -R ${n}:${n} .
+		${scm} -R 0755 .
+		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
+	;;
 	isolinux)
-		
+		#TODO:UEFI-lisäsäädöt
+
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
-		pwd
+		pwd #debug taakse?
 		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir}"
 		csleep 1
 
 
-		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} .
-
+		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} #. älä ramppaa
+		sudo chmod a-x ${ltarget}
 	;;
 	grub)
 		#xi=$(sudo which xorriso)
