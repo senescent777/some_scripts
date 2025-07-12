@@ -37,6 +37,9 @@ sudo apt-get  libcap2
 
 sudo apt-get reinstall genisoimage wodim 
 
+git config --global user.email asdfasdf@zxcvzxcv
+git config --global user.name asdfasdf@zxcvzxcv
+
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=grub-common=2.06-13+deb12u1
 sudo apt-get reinstall libdevmapper1.02.1 libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=xorriso=1.5.4-4
