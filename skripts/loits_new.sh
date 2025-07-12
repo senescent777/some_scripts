@@ -1,15 +1,20 @@
 #!/bin/bash
 
 debug=1
+d=$(dirname $0)
 
-. ./common.conf
-. ./common_funcs.sh
-protect_system
+. ${d}/common.conf
+. ${d}/common_funcs.sh
+#protect_system
 
 ltarget="" 
 bloader=""
+lsrcdir=""
+
+
 
 function usage() {
+	echo "a glorified wrapper for genisoimage"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666
 }
@@ -33,6 +38,10 @@ function parse_opts_real() {
 	esac
 }
 
+#HUOM.12725:oliko single_param() kanssa jokin juttu? non yt aikakin fktio löytyy
+function single_param() {
+	dqb "signle_param ( ${1} , ${2} )"
+}
 
 if [ $# -gt 0 ] ; then
 	parse_opts ${1} ${2}
@@ -82,7 +91,7 @@ check_params
 #enforce_deps #josqs myöhemmin takaisin ed ja id kommenteista
 #
 #[ y"${gv}" != "y" ] || inst_dep 0
-#[ x"${gi}" != "x" ] || inst_dep 1
+[ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
 
 function mk_pad_bak() {
 	dqb "mk_pad_bak (${1} , ${2})"
@@ -114,26 +123,38 @@ dqb "${scm} -R 0755 ${CONF_TARGET}/out"
 ${scm} -R 0755 ${CONF_TARGET}/out
 csleep 1
 
+#HUOM.12725:taroeellinen cd?
+#koklataan nyt ensin ilman cd:tä
+#jos qsee ed ni cd takas+muista muuttaa gi:n vika paramn
+#dqb "cd ${lsrcdir}"
+#cd ${lsrcdir}
+#csleep 1
+#HUOM.12725.23.34:joskohan toimisi jo gi:n uloste? ... siis mod Jutut
 
-cd ${lsrcdir}
-
-mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir}
+#mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir} tilapäisesti tämkin jemmaan
 sleep 1
-
-
+#VAIH:minimaalinen toimiva lisolunuxin konftdsto selviutettävä (js ei muuten ni orig iso:n konf+minimimuutoz...tai EOS)
+#VAIH:loits2 pelittämään kanssa
 
 case ${bloader} in
+	iuefi)
+		${sco} -R ${n}:${n} .
+		${scm} -R 0755 .
+		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
+	;;
 	isolinux)
-		
+		#TODO:UEFI-lisäsäädöt
+
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
-		dqb "${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} ."
+		pwd #debug taakse?
+		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir}"
 		csleep 1
 
 
-		${gi} -o ${CONF_TARGET}/out/${ltarget} ${CONF_gi_opts} .
-
+		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} #. älä ramppaa
+		sudo chmod a-x ${ltarget}
 	;;
 	grub)
 		#xi=$(sudo which xorriso)

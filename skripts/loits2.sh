@@ -1,14 +1,16 @@
 #!/bin/bash
 
 debug=1
-if [ -s ./common.conf ] ; then
-	. ./common.conf
+d=$(dirname $0)
+
+if [ -s ${d}/common.conf ] ; then
+	. ${d}/common.conf
 else
 	echo "NO CONF"
 fi
 
-if [ -x ./common_funcs.sh ] ; then
-	. ./common_funcs.sh
+if [ -x ${d}/common_funcs.sh ] ; then
+	. ${d}/common_funcs.sh
 else
 	echo "N0 FUNCS"
 fi
@@ -45,6 +47,10 @@ function parse_opts_real() {
 			usage
 		;;
 	esac
+}
+
+function single_param() {
+	dqb "signle_param ( ${1} , ${2} )"
 }
 
 if [ $# -gt 0 ] ; then
@@ -111,42 +117,43 @@ enforce_deps
 #[ x"${gi}" != "x" ] || inst_dep 1
 
 #n=$(whoami)
-lsrcdir=./${lsrcdir}
+#lsrcdir=./${lsrcdir}
+#
+#dqb "${sco} -R ${n}:${n} ${CONF_target}/../out"
+#${sco} -R ${n}:${n} ${CONF_target}/../out
+#csleep 1
+#
+#dqb "${scm} 0755 ${CONF_target}/../out"
+#${scm} 0755 ${CONF_target}/../out
+#csleep 1
+#
+#olddir=$(pwd)
+#dqb "cd ${lsrcdir}"
+#
+#cd ${lsrcdir}
 
-dqb "${sco} -R ${n}:${n} ${CONF_target}/../out"
-${sco} -R ${n}:${n} ${CONF_target}/../out
-csleep 1
-
-dqb "${scm} 0755 ${CONF_target}/../out"
-${scm} 0755 ${CONF_target}/../out
-csleep 1
-
-olddir=$(pwd)
-dqb "cd ${lsrcdir}"
-
-cd ${lsrcdir}
-
-if [ -d ${TARGET_pad_dir} ] ; then 
-	make_tar ${CONF_target}/../out
-else
-	echo "${TARGET_pad_dir} missing"
-fi
-
-dqb "${sco} -R ${n}:${n} ."
-${sco} -R ${n}:${n} .
-csleep 1
-
-dqb "${scm} 0755 ./${CONF_bloader}"
-${scm} 0755 ./${CONF_bloader}
-csleep 1
+#oli josqs tarpeen, nyt taas ei
+#if [ -d ${TARGET_pad_dir} ] ; then 
+#	make_tar ${CONF_target}/../out
+#else
+#	echo "${TARGET_pad_dir} missing"
+#fi
+#
+#dqb "${sco} -R ${n}:${n} ."
+#${sco} -R ${n}:${n} .
+#csleep 1
+#
+#dqb "${scm} 0755 ./${CONF_bloader}"
+#${scm} 0755 ./${CONF_bloader}
+#csleep 1
 
 case ${bloader} in
 	isolinux)
 		${sco} ${n}:${n} ./isolinux/isolinux*
 		${scm} 0644 ./isolinux/isolinux*
 		
-		dqb "next: ${gi} -o ${CONF_target}/../out/${ltarget} ${CONF_gi_opts} ."
-		${gi} -o ${CONF_target}/../out/${ltarget} ${CONF_gi_opts} .
+		dqb "next: ${gi} -o ${ltarget} ${CONF_gi_opts} ."
+		${gi} -o ${ltarget} ${CONF_gi_opts} .
 		[ $? -eq 0 ] || echo "${sco} -R ${n}:${n} ./isolinux && ${scm} 0755 ./isolinux"
 
 
@@ -157,18 +164,18 @@ case ${bloader} in
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac
-
-dqb "${scm} 0555 ./${CONF_bloader}"
-${scm} 0555 ./${CONF_bloader}
-csleep 1
-
-dqb "${scm} 0444 ./${CONF_bloader}/*"
-${scm} 0444 ./${CONF_bloader}/*
-csleep 1
-
-${sco} -R 0:0 .
-
-cd ${olddir}
+#
+#dqb "${scm} 0555 ./${CONF_bloader}"
+#${scm} 0555 ./${CONF_bloader}
+#csleep 1
+#
+#dqb "${scm} 0444 ./${CONF_bloader}/*"
+#${scm} 0444 ./${CONF_bloader}/*
+#csleep 1
+#
+#${sco} -R 0:0 .
+#
+#cd ${olddir}
 
 sleep 1
 echo "stick.sh ?"
