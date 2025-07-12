@@ -13,6 +13,7 @@ else
 	fi
 fi
 
+#TODO:min imize-juttuen johdosta pitäisi selvittää riippuvuudet ao. paketteihin ja vetää nekin
 sudo apt-get update
 
 sudo apt-get reinstall git squashfs-tools gpg gpgv #vaiko gpg*

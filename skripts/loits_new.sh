@@ -11,7 +11,7 @@ ltarget=""
 bloader=""
 lsrcdir=""
 
-#HUOM.12725:oliko single_param() kanssa jokin juttu?
+
 
 function usage() {
 	echo "a glorified wrapper for genisoimage"
@@ -38,6 +38,10 @@ function parse_opts_real() {
 	esac
 }
 
+#HUOM.12725:oliko single_param() kanssa jokin juttu? non yt aikakin fktio löytyy
+function single_param() {
+	dqb "signle_param ( ${1} , ${2} )"
+}
 
 if [ $# -gt 0 ] ; then
 	parse_opts ${1} ${2}
@@ -129,6 +133,8 @@ csleep 1
 
 #mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir} tilapäisesti tämkin jemmaan
 sleep 1
+#VAIH:minimaalinen toimiva lisolunuxin konftdsto selviutettävä (js ei muuten ni orig iso:n konf+minimimuutoz...tai EOS)
+#VAIH:loits2 pelittämään kanssa
 
 case ${bloader} in
 	iuefi)
