@@ -23,8 +23,6 @@ if [ -s ${basedir}/interfaces ] ; then
 fi
 
 c=$(ls ${pkgsrc}/ip*.deb | wc -l)
-#common_lib.part3() ... joutuu ehkä jo järjestyksen kanssa säätämään, iptables-jutut...
-#DONE:netfilt-pers,git-man,grub niiden kanssa vielä säätöä
 
 if [ ${c} -gt 0 ] ; then
 	q=$(mktemp -d)
