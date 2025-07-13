@@ -13,8 +13,8 @@ else
 	fi
 fi
 
-#TODO:conf.example tätä ja init2 varteb
-#VAIH:min imize-juttuen johdosta pitäisi selvittää riippuvuudet ao. paketteihin ja vetää nekin
+#TEHTY:conf.example tätä ja init2 varteb
+#VAIH:min imize-juttuen johdosta pitäisi selvittää riippuvuudet ao. paketteihin ja vetää nekin (testaa vielä)
 sudo apt-get update
 
 sudo apt-get reinstall libc6 coreutils
@@ -57,5 +57,5 @@ chmod a+x ./*.sh
 c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 [ ${c} -lt 1 ] && echo $0.conf >> ${basedir}/.gitignore
 
-#TODO:konftsdton mukaisia hmistoja tulisi luoda jos ei jo olemassa?
-#... ota selvää mitä taas tarvittiin oikeasti
+#konftsdton mukaisia hmistoja tulisi luoda jos ei jo olemassa?
+#... ota selvää mitä taas tarvittiin oikeasti?
