@@ -15,6 +15,7 @@ fi
 
 #TEHTY:conf.example tätä ja init2 varteb
 #VAIH:min imize-juttuen johdosta pitäisi selvittää riippuvuudet ao. paketteihin ja vetää nekin (testaa vielä)
+#130725 ei ihan ekalla yrityksellä vielä onnannut, pientä ulinaa
 sudo apt-get update
 
 sudo apt-get reinstall libc6 coreutils
@@ -38,10 +39,24 @@ sudo apt-get  libcap2
 
 sudo apt-get reinstall genisoimage wodim 
 
+#dpkg: dependency problems prevent configuration of libdevmapper1.02.1:amd64:
+# libdevmapper1.02.1:amd64 depends on dmsetup (>= 2:1.02.185-2~); however:
+#  Package dmsetup is not installed.
+sudo apt-get reinstall dmsetup
+
+#dpkg: dependency problems prevent configuration of libisoburn1:amd64:
+# libisoburn1:amd64 depends on libjte2; however:
+#  Package libjte2 is not installed.
+sudo apt-get reinstall libjte2
+
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=grub-common=2.06-13+deb12u1
 sudo apt-get reinstall libdevmapper1.02.1 libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=xorriso=1.5.4-4
 sudo apt-get reinstall libisoburn1 libburn4 libisofs6 
+
+# grub-common depends on libfuse2 (>= 2.8.4-1.4); however:
+#  Package libfuse2 is not installed.
+sudo apt-get reinstall libfuse2
 
 sudo apt-get reinstall grub-common xorriso #jälkimminen toistaiseksi mukana
 

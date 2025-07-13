@@ -33,6 +33,9 @@ if [ ${c} -gt 0 ] ; then
 	q=$(mktemp -d)
 	sudo cp ${pkgsrc}/*.deb ${q}
 	
+	efk ${q}/dmsetup*.deb
+	#efk ${q}/libjte2*.deb
+
 	sudo dpkg -i ${q}/lib*.deb
 	sudo rm ${q}/lib*.deb
 
