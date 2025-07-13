@@ -134,7 +134,7 @@ csleep 1
 #mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir} tilapäisesti tämkin jemmaan
 sleep 1
 #VAIH:minimaalinen toimiva lisolunuxin konftdsto selviutettävä (js ei muuten ni orig iso:n konf+minimimuutoz...tai EOS)
-#VAIH:loits2 pelittämään kanssa
+#VAIH:loits2 pelittämään kanssa?
 
 case ${bloader} in
 	iuefi)
@@ -175,7 +175,7 @@ case ${bloader} in
 esac
 
 #${sco} -R 0:0 ${CONF_TARGET}
-
+#TODO:chmod a-wx $target_dir/*.iso a-k.a joukukuuset wttuun
 
 sleep 1
 echo "stick.sh ?"

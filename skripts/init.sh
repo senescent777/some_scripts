@@ -13,6 +13,7 @@ else
 	fi
 fi
 
+#TODO:conf.example tätä ja init2 varteb
 #VAIH:min imize-juttuen johdosta pitäisi selvittää riippuvuudet ao. paketteihin ja vetää nekin
 sudo apt-get update
 
@@ -36,9 +37,6 @@ sudo apt-get reinstall libbz2-1.0 libmagic1
 sudo apt-get  libcap2
 
 sudo apt-get reinstall genisoimage wodim 
-
-git config --global user.email asdfasdf@zxcvzxcv
-git config --global user.name asdfasdf@zxcvzxcv
 
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=grub-common=2.06-13+deb12u1
 sudo apt-get reinstall libdevmapper1.02.1 libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
