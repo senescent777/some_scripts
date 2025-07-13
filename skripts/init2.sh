@@ -24,6 +24,11 @@ fi
 
 c=$(ls ${pkgsrc}/ip*.deb | wc -l)
 
+function efk() {
+	sudo dpkg -i $@
+	sudo rm $@
+}
+
 if [ ${c} -gt 0 ] ; then
 	q=$(mktemp -d)
 	sudo cp ${pkgsrc}/*.deb ${q}
@@ -34,9 +39,8 @@ if [ ${c} -gt 0 ] ; then
 	sudo dpkg -i ${q}/iptables_*.deb
 	sudo rm ${q}/iptables_*.deb
 
-	#net*.deb yhtä hyvin?
-	sudo dpkg -i ${q}/netfilter-persistent*.deb
-	sudo rm ${q}/netfilter-persistent*.deb
+	sudo dpkg -i ${q}/net*.deb #netfilter-persistent
+	sudo rm ${q}/net*.deb
 
 	#ympoäristlömja-jekku tähän?
 	sudo dpkg -i ${q}/iptables-*.deb
