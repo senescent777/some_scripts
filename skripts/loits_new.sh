@@ -11,8 +11,6 @@ ltarget=""
 bloader=""
 lsrcdir=""
 
-
-
 function usage() {
 	echo "a glorified wrapper for genisoimage"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
@@ -85,6 +83,8 @@ function check_params() {
 	else
 		bloader=${CONF_bloader}
 	fi
+
+	dqb "check_params() done"
 }
 
 check_params
@@ -115,13 +115,14 @@ function mk_pad_bak() {
 #[ x"${CONF_TARGET}" != "x" ] || exit 666
 
 
-dqb "${sco} -R ${n}:${n} ${CONF_TARGET}/out"
-${sco} -R ${n}:${n} ${CONF_TARGET}/out
-csleep 1
-
-dqb "${scm} -R 0755 ${CONF_TARGET}/out"
-${scm} -R 0755 ${CONF_TARGET}/out
-csleep 1
+#dqb "${sco} -R ${n}:${n} ${CONF_TARGET}/out"
+#${sco} -R ${n}:${n} ${CONF_TARGET}/out
+#csleep 1
+#
+#dqb "${scm} -R 0755 ${CONF_TARGET}/out"
+#${scm} -R 0755 ${CONF_TARGET}/out
+#csleep 1
+#
 
 #HUOM.12725:taroeellinen cd?
 #koklataan nyt ensin ilman cd:tä
@@ -134,16 +135,18 @@ csleep 1
 #mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir} tilapäisesti tämkin jemmaan
 sleep 1
 #VAIH:minimaalinen toimiva lisolunuxin konftdsto selviutettävä (js ei muuten ni orig iso:n konf+minimimuutoz...tai EOS)
-#VAIH:loits2 pelittämään kanssa
+
+#VAIH:loits2 pelittämään kanssa?
 
 case ${bloader} in
 	iuefi)
+		#KVG "how to make isolinux work with uefi"
+
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
 	;;
 	isolinux)
-		#TODO:UEFI-lisäsäädöt
 
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
@@ -152,30 +155,28 @@ case ${bloader} in
 		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir}"
 		csleep 1
 
-
 		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} #. älä ramppaa
 		sudo chmod a-x ${ltarget}
 	;;
 	grub)
-		#xi=$(sudo which xorriso)
+		#VAIH:/usr/bin/grub-mkrescue: error: `mformat` invocation failed
+		#https://bbs.archlinux.org/viewtopic.php?id=219955
+
+		xi=$(sudo which xorriso)
 		#[ y"${xi}" != "y" ] || echo "apt-get install xorriso";exit 666
 
-
-		#gmk=$(sudo which grub-mkrescue)
+		gmk=$(sudo which grub-mkrescue)
 		#[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666
-
-		
-		echo "sudo ${gmk} -o ../out/${ltarget} <OTHER_OPTS> . "
+		${gmk} -o ${ltarget} ${lsrcdir}
 	;;
 	*)
 		echo "bl= ${bloader}"
-
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac
 
 #${sco} -R 0:0 ${CONF_TARGET}
-
+#TODO:chmod a-wx $target_dir/*.iso a-k.a joukukuuset wttuun
 
 sleep 1
 echo "stick.sh ?"

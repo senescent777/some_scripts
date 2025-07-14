@@ -7,10 +7,11 @@ debug=1
 
 base=""
 source2=""
-n=devuan 
+#n=devuan 
+bl=${CONF_bloader}
 
 function usage() {
-	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--v <verbosity_level>]"
+	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--bl BLOADER] [--v <verbosity_level>]"
 	echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})" #pitäisi varmaan huomoida tuo suhteellisuus?
 	echo "${0} --get-devuan <download_dir>"
 	echo "${0} --make-dirs"
@@ -27,6 +28,9 @@ function parse_opts_real() {
 		--get-devuan)
 			get_devuan ${2}
 			exit
+		;;
+		--bl)
+			bl=${2}
 		;;
 	esac	
 }
@@ -70,5 +74,5 @@ fi
 dqb "mkdir -p ./v/smthing;mkdir -p ./v/smthing/{isolinux,grub};ln -s ~/Desktop/minimize ./v/something/pad ?"
 #HUOM.9725.2:.iso-tiedoston mounttaus vielä testattava
 
-echo "./stage0f.sh ${base} ${source2} <verbosity_level>"
+echo "./stage0f.sh ${base} ${source2} ${bl} <verbosity_level>"
 

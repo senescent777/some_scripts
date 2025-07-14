@@ -4,31 +4,35 @@ debug=1 #jatkossa nollaan
 . ./skripts/common_funcs.sh
 . ./skripts/stage0_backend.bsh
 
-#	echo "https://www.youtube.com/watch?v=KnH2dxemO5o";exit 666
-#fi
-
 dqb "PARAMS OK?"
 n=devuan 
 make_tgt_dirs
 
-#HUOM.9725:kolmatta param ei käytetä mihinkään, pitäisikö?
+
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
 function part0() {
 	debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
 
-#ei aina tartte näiyä renkata
+	#ei aina tarttisi näiTä renkata
 
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
+			
 			${spc} ${2}/live/${f} ${CONF_target}/live
 		else
+			dqb "${1}/live/${f}"
 			${spc} ${1}/live/${f} ${CONF_target}/live
 		fi
 	done
 
+	#efi uutena 13725
+	dqb "${spc} -a ${1}/efi ${CONF_target}"
+	${spc} -a ${1}/efi ${CONF_target}
+	csleep 1
 
-	bootloader ${CONF_bloader} ${2} ${CONF_source}
+	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää 	CONF_SOURCE
+	bootloader ${3} ${2} ${1} 
 	${odio} touch ${CONF_target}/${CONF_bloader}/*
 
 	default_process ${CONF_target}/live
@@ -44,7 +48,6 @@ function part0() {
 	csleep 1
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa
-
 	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir}
 	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
 	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
@@ -61,7 +64,6 @@ function part0() {
 	default_process ${CONF_target}/${TARGET_pad_dir}
 	${scm} 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
 	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
-
 	
 	${scm} 0555 ${CONF_target}/live
 	${scm} 0755 ${CONF_target}/${TARGET_DIGESTS_dir}
@@ -70,7 +72,7 @@ function part0() {
 }
 
 #DONE:.iso'n kanssa kokeilu
-#TODO:3. param, mikä idea? debug?
+#3. param, mikä idea? debug?
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3}
