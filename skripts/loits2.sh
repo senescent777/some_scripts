@@ -15,12 +15,8 @@ else
 	echo "N0 FUNCS"
 fi
 
-protect_system
-
-
 ltarget="" 
 bloader=""
-#exit
 
 function usage() {
 
@@ -28,10 +24,8 @@ function usage() {
 	exit 666
 }
 
-
 function parse_opts_real() {
 	dqb "parse_opts_real( ${1}, ${2})"
-
 
 	case ${1} in
 		--in)
@@ -64,10 +58,7 @@ fi
 
 function check_params() {
 	dqb "check_pars( ${1}, ${2}, ${3})"
-
-	#[ x"${CONF_target}" != "x" ] || exit 100
 	dqb "TGT OK"
-	#[ x"${CONF_bloader}" != "x" ] || exit 101
 	dqb "BLDR 0K"
 
 	if [ -d ./${1} ] ; then
@@ -113,40 +104,6 @@ function make_tar() {
 check_params ${lsrcdir} ${ltarget} ${bloader}
 enforce_deps
 
-#[ y"${gv}" != "y" ] || inst_dep 0
-#[ x"${gi}" != "x" ] || inst_dep 1
-
-#n=$(whoami)
-#lsrcdir=./${lsrcdir}
-#
-#dqb "${sco} -R ${n}:${n} ${CONF_target}/../out"
-#${sco} -R ${n}:${n} ${CONF_target}/../out
-#csleep 1
-#
-#dqb "${scm} 0755 ${CONF_target}/../out"
-#${scm} 0755 ${CONF_target}/../out
-#csleep 1
-#
-#olddir=$(pwd)
-#dqb "cd ${lsrcdir}"
-#
-#cd ${lsrcdir}
-
-#oli josqs tarpeen, nyt taas ei
-#if [ -d ${TARGET_pad_dir} ] ; then 
-#	make_tar ${CONF_target}/../out
-#else
-#	echo "${TARGET_pad_dir} missing"
-#fi
-#
-#dqb "${sco} -R ${n}:${n} ."
-#${sco} -R ${n}:${n} .
-#csleep 1
-#
-#dqb "${scm} 0755 ./${CONF_bloader}"
-#${scm} 0755 ./${CONF_bloader}
-#csleep 1
-
 case ${bloader} in
 	isolinux)
 		${sco} ${n}:${n} ./isolinux/isolinux*
@@ -155,8 +112,6 @@ case ${bloader} in
 		dqb "next: ${gi} -o ${ltarget} ${CONF_gi_opts} ."
 		${gi} -o ${ltarget} ${CONF_gi_opts} .
 		[ $? -eq 0 ] || echo "${sco} -R ${n}:${n} ./isolinux && ${scm} 0755 ./isolinux"
-
-
 	;;
 	*)
 		echo "bl= ${bloader}"
@@ -164,18 +119,6 @@ case ${bloader} in
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac
-#
-#dqb "${scm} 0555 ./${CONF_bloader}"
-#${scm} 0555 ./${CONF_bloader}
-#csleep 1
-#
-#dqb "${scm} 0444 ./${CONF_bloader}/*"
-#${scm} 0444 ./${CONF_bloader}/*
-#csleep 1
-#
-#${sco} -R 0:0 .
-#
-#cd ${olddir}
 
 sleep 1
 echo "stick.sh ?"

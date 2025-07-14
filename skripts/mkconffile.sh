@@ -46,7 +46,6 @@ echo "the line $CONF_squash0 ext2 noauto,user,exec,suid,dev 0 0 should be found 
 echo "CONF_tmpdir=\$CONF_tmpdir0/ < temp dir 4 additional stuff > "
 echo -n "CONF_source=\$CONF_tmpdir/< temporary mount point 4 base > "
 
-
 echo "CONF_target=\$CONF_tmpdir/< target where base and additional stuff are copied , different from \$CONF_squash  and \$CONF_source -dirs>"
 echo "CONF_bloader=<preferred bootloader>"
 echo "CONF_distros_dir=<Directory Supposed To Contain Distro .isos To Modify, inspired by Karl Sanders >"

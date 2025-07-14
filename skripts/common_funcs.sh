@@ -1,15 +1,19 @@
-odio=$(which sudo) #==========================
+odio=$(which sudo) 
+
+#========================tilapäisesti tässä, common_lib myöh==
 
 sh5=$(${odio} which sha512sum)
 sh5=$(${odio} which sha512sum)
-[ -x ${sh5} ] || echo "install sha512sum !!!" #TODO:selvitä missä paketissa olikaan tuo komento
+[ -x ${sh5} ] || echo "install sha512sum !!!" #vissiin coreutils sisälsi tuon
 
 gg=$(${odio} which gpg)
 gv=$(${odio} which gpgv)
 gi=$(${odio} which genisoimage)
 gmk=$(${odio} which grub-mkrescue)
 xi=$(${odio} which xorriso)
+
 #========================tilapäisesti tässä, common_lib myöh==
+
 #tarttisko tälle tehdä jotain?
 sca=$(${odio} which chattr)
 sca="${odio} ${sca}"
@@ -36,7 +40,6 @@ uom=$(${odio} which umount)
 som="${odio} ${som} "
 uom="${odio} ${uom} "
 
-
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
 }
@@ -45,7 +48,6 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 #============================================
-#TODO:tähän asti juttujen korvaaminen toisen projektin common_lib
 
 #function griffindor() {
 #	pwd
@@ -85,8 +87,6 @@ function parse_opts() {
 					parse_opts_real ${1} ${2}
 				;;
 			esac
-
-			#[ ${common_pars} -eq 0 ] && 
 		else
 			case ${1} in
 				-h|--h)
@@ -97,8 +97,6 @@ function parse_opts() {
 					single_param ${1}
 				;;		
 			esac
-
-			#[ ${common_pars} -eq 0 ] && 
 		fi
 
 		if [ x"${cmd}" != "x" ] ; then
@@ -120,7 +118,7 @@ function mk_bkup() {
 	fi
 }
 
-#TODO:->common_lib.sh
+
 #function slaughter0() {
 #	local fn2
 #	local ts2
@@ -139,7 +137,6 @@ function enforce_deps() {
 	local doIt=0
 	local doIt2=0
 	local pkgsdir=${CONF_pkgsdir2}
-
 
 	if [ -d ./${pkgsdir} ] ; then 
 		doIt2=1
