@@ -16,6 +16,7 @@ fi
 #TEHTY:conf.example tätä ja init2 varteb
 #VAIH:min imize-juttuen johdosta pitäisi selvittää riippuvuudet ao. paketteihin ja vetää nekin (testaa vielä)
 #130725 ei ihan ekalla yrityksellä vielä onnannut, pientä ulinaa
+
 sudo apt-get update
 sudo apt --fix-broken install
 
@@ -53,6 +54,7 @@ sudo apt-get reinstall --no-install-recommends libjte2
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=grub-common=2.06-13+deb12u1
 sudo apt-get reinstall libdevmapper1.02.1 libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=xorriso=1.5.4-4
+
 sudo apt-get reinstall --no-install-recommends libisoburn1 libburn4 libisofs6 
 
 # grub-common depends on libfuse2 (>= 2.8.4-1.4); however:
@@ -79,3 +81,4 @@ c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 
 #konftsdton mukaisia hmistoja tulisi luoda jos ei jo olemassa?
 #... ota selvää mitä taas tarvittiin oikeasti?
+

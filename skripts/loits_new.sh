@@ -123,6 +123,7 @@ function mk_pad_bak() {
 #${scm} -R 0755 ${CONF_TARGET}/out
 #csleep 1
 #
+
 #HUOM.12725:taroeellinen cd?
 #koklataan nyt ensin ilman cd:tä
 #jos qsee ed ni cd takas+muista muuttaa gi:n vika paramn
@@ -134,16 +135,19 @@ function mk_pad_bak() {
 #mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir} tilapäisesti tämkin jemmaan
 sleep 1
 #VAIH:minimaalinen toimiva lisolunuxin konftdsto selviutettävä (js ei muuten ni orig iso:n konf+minimimuutoz...tai EOS)
+
 #VAIH:loits2 pelittämään kanssa?
 
 case ${bloader} in
 	iuefi)
 		#KVG "how to make isolinux work with uefi"
+
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
 	;;
 	isolinux)
+
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 

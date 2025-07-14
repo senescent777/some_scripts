@@ -15,6 +15,7 @@ fi
 
 [ -s ${basedir}/resolv.conf.0 ] && sudo cp ${basedir}/resolv.conf.0 /etc
 
+
 if [ -s ${basedir}/interfaces ] ; then
 	[ -f /etc/network/interfaces ] && sudo mv /etc/network/interfaces /etc/network/interfaces.$(date +%F)
 	sudo cp ${basedir}/interfaces /etc/network/interfaces.${distro}
@@ -62,6 +63,7 @@ if [ ${c} -gt 0 ] ; then
 	#ao. rivejä ei kannata unmohtaa
 	sudo dpkg -i $q/*.deb
 	sudo rm ${q}/*.deb
+
 else
 	sudo dpkg -i ${pkgsrc}/*.deb
 fi
@@ -91,3 +93,4 @@ c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 #ei joulukuusia turhanbäite
 for f in $(find ${basedir} -type f ) ; do sudo chmod a-x ${f} ; done
 for f in $(find ${basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done
+

@@ -8,12 +8,14 @@ dqb "PARAMS OK?"
 n=devuan 
 make_tgt_dirs
 
+
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
 function part0() {
 	debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
 
 	#ei aina tarttisi näiTä renkata
+
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
 			
