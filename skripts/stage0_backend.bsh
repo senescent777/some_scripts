@@ -1,6 +1,3 @@
-#protect_system
-#protect_system
-
 function mangle_conf() {
 
 	dqb "mangle_conf( ${1}, ${2}, ${3})"
@@ -19,9 +16,7 @@ function get_devuan() {
 }
 
 function make_src_dirs() {
-
 	dqb "make_s_DIrs"
-
 
 	${smd} ${CONF_keys_dir}
 	${smd} ${CONF_distros_dir}
@@ -37,7 +32,6 @@ function cleanup() {
 
 function copy_main() {
 	debug=1
-
 	dqb "copy_main(${1}, ${2})"
 
 	[ x"${1}" != "x" ] || exit 2
@@ -52,7 +46,6 @@ function copy_main() {
 	local f
 	
 	#TODO:ao. kohtaa mietittäbä, minne ovat kalat menossa, mikä oli koko blokin fktio
-
 	if [ -d ${CONF_scripts_dir} ]; then 
 		#${spc} -a ${CONF_scripts_dir}/*.sh ${CONF_tmpdir}
 
@@ -61,10 +54,6 @@ function copy_main() {
 			${spc} ${f} ${CONF_tmpdir}
 		done
 	fi
-
-	#VAIH:find'in kautta kuitenkin?
-	#${spc} -a ${1}/*.sh ${2} 
-	#${spc} -a ${1}/*.bz2 ${2}
 
 	for f in $(find ${1} -type f -name '*.sh') ; do
 		dqb "${spc} ${f} ${2}"
@@ -75,7 +64,6 @@ function copy_main() {
 	for f in $(find ${1} -type f -name '*.bz2') ; do
 		${spc} ${f} ${2}
 	done
-
 
 	dqb "copy_main() donw"
 }
@@ -150,9 +138,7 @@ function bootloader() {
 
 
 	dqb "pars_ok"
-
 	csleep 3
-
 
 	local ks2
 	ks2=""
@@ -171,22 +157,7 @@ function bootloader() {
 			ks2=${2}/isolinux
 			csleep 1
 
-#tilapäisesti jemmaan 11725
-#				for t in cfg png ; do
-#					dqb "${smr} ${CONF_target}/isolinux/*.${t}"
-#					${smr} ${CONF_target}/isolinux/*.${t}
-#
-#					#${spc} -a ${ks2}/*.${t} ${CONF_target}/isolinux
-#					dqb "find ${ks2} -name '*.${t}' -type f"
-#
-#					for f in $(find ${ks2} -name '*.${t}' -type f) ; do
-#						dqb "${spc} ${f} ${CONF_target}/isolinux"
-#						${spc} ${f} ${CONF_target}/isolinux				
-#					done
-#				done	
-			
-			#JOKO JO ALKAISI TOIMIA PRKL
-
+			#jos siirtäisi ennen case;a nää, penin muutoksin
 			${smr} ${CONF_target}/isolinux/*.cfg
 			${smr} ${CONF_target}/isolinux/*.png
 			csleep 2
@@ -206,12 +177,24 @@ function bootloader() {
 			csleep 2	
 		;;
 		grub)
-			ks2=${2}/boot
-			#TODO:tämäklin tietysti toimimaan
-			if [ -d  ${ks2} ] ; then
+			ks2=${2}/boot #jos siirtäisi ennen case;a nää
+			
+			if [ -d ${ks2} ] ; then
 				${spc} -a ${3}/boot/ ${CONF_target} || exit 8
-				echo "cp -a ${ks2}/grub/{*.cfg,*.png} ./boot/grub"
-				echo "cp -a ${ks2}/grub/x86_64-efi/{*.cfg,*.png} ./boot/grub/x86_64-efi"	
+	
+				#jos ei automaagisesti jatkossa
+				${smr} ${CONF_target}/boot/grub/*.cfg
+				${smr} ${CONF_target}/boot/grub/*.png
+				
+				for f in $(find ${ks2} -name '*.cfg') ; do
+					dqb "spc ${f} ${CONF_target}/boot/grub"
+					${spc} ${f} ${CONF_target}/boot/grub
+				done
+
+				for f in $(find ${ks2} -name '*.png') ; do
+					dqb "spc ${f} ${CONF_target}/boot/grub"
+					${spc} ${f} ${CONF_target}/boot/grub
+				done	
 			fi
 		;;
 		*)
@@ -230,7 +213,6 @@ function make_tgt_dirs() {
 	[ x"${CONF_target}" != "x" ] || exit 99
 	[ x"${CONF_target}" != "x/" ] || exit 100
 
-
 	dqb "${CONF_target} ok"
 
 	#HUOm. cource_jutut kai toisessa fktiossa kuiotenkin?
@@ -241,7 +223,6 @@ function make_tgt_dirs() {
 
 	${sco} 0:0 ${CONF_source}
 	${scm} 0755 ${CONF_source}
-
 	
 	${sco} -R ${n}:${n} ${CONF_target}
 	${scm} 0755 ${CONF_target}	
@@ -255,7 +236,6 @@ function make_tgt_dirs() {
 		${smr} -rf ${CONF_target};sleep 1
 	fi
 	
-
 	[ -d ${CONF_target}/live ] || ${smd} -p ${CONF_target}/live
 	${sco} -R ${n}:${n} ${CONF_target}/live
 
@@ -274,7 +254,7 @@ function make_tgt_dirs() {
 	${sco} -R ${n}:${n} ${CONF_target}/../out
 	${scm} 0755 ${CONF_target}/../out
 
-	ls -la  ${CONF_target};sleep 6
+	#ls -la  ${CONF_target};sleep 6 dbq taakse
 	echo "...done"
 }
 

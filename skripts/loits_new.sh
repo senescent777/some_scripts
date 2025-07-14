@@ -11,8 +11,6 @@ ltarget=""
 bloader=""
 lsrcdir=""
 
-
-
 function usage() {
 	echo "a glorified wrapper for genisoimage"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
@@ -85,6 +83,8 @@ function check_params() {
 	else
 		bloader=${CONF_bloader}
 	fi
+
+	dqb "check_params() done"
 }
 
 check_params
@@ -115,14 +115,14 @@ function mk_pad_bak() {
 #[ x"${CONF_TARGET}" != "x" ] || exit 666
 
 
-dqb "${sco} -R ${n}:${n} ${CONF_TARGET}/out"
-${sco} -R ${n}:${n} ${CONF_TARGET}/out
-csleep 1
-
-dqb "${scm} -R 0755 ${CONF_TARGET}/out"
-${scm} -R 0755 ${CONF_TARGET}/out
-csleep 1
-
+#dqb "${sco} -R ${n}:${n} ${CONF_TARGET}/out"
+#${sco} -R ${n}:${n} ${CONF_TARGET}/out
+#csleep 1
+#
+#dqb "${scm} -R 0755 ${CONF_TARGET}/out"
+#${scm} -R 0755 ${CONF_TARGET}/out
+#csleep 1
+#
 #HUOM.12725:taroeellinen cd?
 #koklataan nyt ensin ilman cd:tä
 #jos qsee ed ni cd takas+muista muuttaa gi:n vika paramn
@@ -138,13 +138,12 @@ sleep 1
 
 case ${bloader} in
 	iuefi)
+		#KVG "how to make isolinux work with uefi"
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
 	;;
 	isolinux)
-		#TODO:UEFI-lisäsäädöt
-
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
@@ -152,24 +151,23 @@ case ${bloader} in
 		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir}"
 		csleep 1
 
-
 		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} #. älä ramppaa
 		sudo chmod a-x ${ltarget}
 	;;
 	grub)
-		#xi=$(sudo which xorriso)
+		#TODO:/usr/bin/grub-mkrescue: error: `mformat` invocation failed
+
+		xi=$(sudo which xorriso)
 		#[ y"${xi}" != "y" ] || echo "apt-get install xorriso";exit 666
 
-
-		#gmk=$(sudo which grub-mkrescue)
+		gmk=$(sudo which grub-mkrescue)
 		#[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666
-
+		${gmk} -o ${ltarget} ${lsrcdir}
 		
-		echo "sudo ${gmk} -o ../out/${ltarget} <OTHER_OPTS> . "
+		
 	;;
 	*)
 		echo "bl= ${bloader}"
-
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac

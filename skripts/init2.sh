@@ -33,20 +33,21 @@ if [ ${c} -gt 0 ] ; then
 	q=$(mktemp -d)
 	sudo cp ${pkgsrc}/*.deb ${q}
 	
-	efk ${q}/dmsetup*.deb
+	#parempi samaan aikaan dms ja libdev 
+	efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
 	#efk ${q}/libjte2*.deb
 
 	sudo dpkg -i ${q}/lib*.deb
 	sudo rm ${q}/lib*.deb
 
-	sudo dpkg -i ${q}/iptables_*.deb
+	sudo dpkg  DEBIAN_FRONTEND=noninteractive -i ${q}/iptables_*.deb
 	sudo rm ${q}/iptables_*.deb
 
-	sudo dpkg -i ${q}/net*.deb #netfilter-persistent
+	sudo dpkg  DEBIAN_FRONTEND=noninteractive -i ${q}/net*.deb #netfilter-persistent
 	sudo rm ${q}/net*.deb
 
-	#ympoäristlömja-jekku tähän?
-	sudo dpkg -i ${q}/iptables-*.deb
+	#VAIH:ympäristömja-jekku 
+	sudo dpkg  DEBIAN_FRONTEND=noninteractive -i ${q}/iptables-*.deb
 	sudo rm ${q}/iptables-*.deb
 
 	sudo dpkg -i $q/git-man*.deb
@@ -69,9 +70,10 @@ echo "GENISOIMAGE?"
 which genisoimage
 sleep 6
 
-echo "sudo apt-get remove --purge python3-cups ntp* ?"
-echo "sudo apt autoremove ?"
-echo "sudo iptables-restore /etc/iptables/rules.v4.0 ?"
+#pois kommenteista 14725, takaisin jos qsee
+sudo apt-get remove --purge python3-cups ntp*
+sudo apt autoremove
+sudo iptables-restore /etc/iptables/rules.v4.0
 
 #uutena tää git-tark
 tig=$(sudo which git)
