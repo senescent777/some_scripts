@@ -59,6 +59,10 @@ sudo apt-get reinstall --no-install-recommends libisoburn1 libburn4 libisofs6
 #  Package libfuse2 is not installed.
 sudo apt-get reinstall --no-install-recommends libfuse2
 
+#https://pkginfo.devuan.org/cgi-bin/policy-query.html?c=package&q=mtools&x=submit
+#libc saattaa riittää
+sudo apt-get reinstall --no-install-recommends mtools
+
 sudo apt-get reinstall --no-install-recommends grub-common xorriso #jälkimminen toistaiseksi mukana
 
 if [ ! -d ${1} ] ; then

@@ -155,7 +155,8 @@ case ${bloader} in
 		sudo chmod a-x ${ltarget}
 	;;
 	grub)
-		#TODO:/usr/bin/grub-mkrescue: error: `mformat` invocation failed
+		#VAIH:/usr/bin/grub-mkrescue: error: `mformat` invocation failed
+		#https://bbs.archlinux.org/viewtopic.php?id=219955
 
 		xi=$(sudo which xorriso)
 		#[ y"${xi}" != "y" ] || echo "apt-get install xorriso";exit 666
@@ -163,8 +164,6 @@ case ${bloader} in
 		gmk=$(sudo which grub-mkrescue)
 		#[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666
 		${gmk} -o ${ltarget} ${lsrcdir}
-		
-		
 	;;
 	*)
 		echo "bl= ${bloader}"

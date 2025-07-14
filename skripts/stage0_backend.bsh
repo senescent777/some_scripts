@@ -79,8 +79,6 @@ function copy_conf() {
 		${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
 	fi
 
-
-
 	if [ -s ${3}/upload.sh ] || [ -s ${3}/extras.tar.bz2 ] ; then 
 		for f in ${CONF_g2} ; do mangle_conf ${f} ${3}/${2}.conf ; done
 	fi
@@ -110,12 +108,9 @@ function copy_conf() {
 
 	mangle_conf TARGET_to_ram ${utfile}
 	mangle_conf TARGET_nosu_do ${utfile}
-
 	sudo cat ${1}/${2}.conf >> ${utfile}
 
-
 	dqb "copy_conf() donw"
-
 	sleep 1
 }
 
