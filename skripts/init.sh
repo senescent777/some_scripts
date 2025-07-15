@@ -13,10 +13,6 @@ else
 	fi
 fi
 
-#TEHTY:conf.example tätä ja init2 varteb
-#VAIH:min imize-juttuen johdosta pitäisi selvittää riippuvuudet ao. paketteihin ja vetää nekin (testaa vielä)
-#130725 ei ihan ekalla yrityksellä vielä onnannut, pientä ulinaa
-
 sudo apt-get update
 sudo apt --fix-broken install
 
@@ -27,12 +23,6 @@ sudo apt-get reinstall --no-install-recommends git-man git
 #https://pkginfo.devuan.org/cgi-bin/policy-query.html?c=package&q=squashfs-tools&x=submit
 sudo apt-get reinstall --no-install-recommends liblz4-1 liblzma5 liblzo2-2 libzstd1
 sudo apt-get reinstall --no-install-recommends squashfs-tools
-
-##HUOM.13725:kuinkahan tarpeellisia gpg-jutut näin alkuvaiheessa? myös konflkitit
-##https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=gpg=2.2.40-1.1
-#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=gpgv=2.2.40-1.1
-#sudo apt-get reinstall --no-install-recommends gpgconf libassuan0 libbz2-1.0 libgcrypt20 libgpg-error0 libreadline8 libsqlite3-0 
-#sudo apt-get reinstall --no-install-recommends gpg gpgv #vaiko gpg*
 
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=genisoimage=9:1.1.11-3.4
 sudo apt-get reinstall libbz2-1.0 libmagic1
@@ -78,7 +68,3 @@ chmod a+x ./*.sh
 [ -s ${basedir}/.gitignore ] || touch ${basedir}/.gitignore
 c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 [ ${c} -lt 1 ] && echo $0.conf >> ${basedir}/.gitignore
-
-#konftsdton mukaisia hmistoja tulisi luoda jos ei jo olemassa?
-#... ota selvää mitä taas tarvittiin oikeasti?
-

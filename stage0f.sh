@@ -5,7 +5,6 @@ debug=1 #jatkossa nollaan
 . ./skripts/stage0_backend.bsh
 
 dqb "PARAMS OK?"
-n=devuan 
 make_tgt_dirs
 
 
@@ -70,9 +69,6 @@ function part0() {
 
 	dqb "part0 d0ne"
 }
-
-#DONE:.iso'n kanssa kokeilu
-#3. param, mikä idea? debug?
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3}

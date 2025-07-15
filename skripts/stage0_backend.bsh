@@ -5,6 +5,7 @@ function mangle_conf() {
 
 }
 
+#tällekin voisi tehdä josqs jotain
 function get_devuan() {
 	[ -d ${CONF_distros_dir} ] || ${smd} ${CONF_distros_dir}
 	cd ${CONF_distros_dir}
@@ -60,7 +61,6 @@ function copy_main() {
 		${spc} ${f} ${2}
 	done
 	
-	#VAIH:export2.sh oksennus pakaten jotta voi testata
 	for f in $(find ${1} -type f -name '*.bz2') ; do
 		${spc} ${f} ${2}
 	done
@@ -73,7 +73,6 @@ function copy_conf() {
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
 	dqb "PARAMS OK"
-
 
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
 		${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}

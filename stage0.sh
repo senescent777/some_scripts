@@ -7,7 +7,6 @@ debug=1
 
 base=""
 source2=""
-#n=devuan 
 bl=${CONF_bloader}
 
 function usage() {
@@ -23,7 +22,7 @@ function parse_opts_real() {
 			base=${2}
 		;;
 		--add)
-			source2=${2} #/${TARGET_pad_dir} josko wttuun tuo t_p_d
+			source2=${2}
 		;;
 		--get-devuan)
 			get_devuan ${2}
@@ -38,9 +37,6 @@ function parse_opts_real() {
 function single_param() {
 	case ${1} in
 		--make-dirs)
-			#HUOM.9725:init.sh voisi hyödyntää tätä
-			#make_dirs #ei ihan samaq make_target_dirs?
-
 			make_src_dirs
 			make_tgt_dirs
 		;;
@@ -68,11 +64,5 @@ else
 fi
 
 #stage0f==glorified cp
-#HUOM.9725:saattanee jo onnistua "--add"-vivulla lisäillä asioita
-#tosin muistettava sitten viskoa isolinux.cfg ~ alle ja muuta kikkailua kunnes x
-
 dqb "mkdir -p ./v/smthing;mkdir -p ./v/smthing/{isolinux,grub};ln -s ~/Desktop/minimize ./v/something/pad ?"
-#HUOM.9725.2:.iso-tiedoston mounttaus vielä testattava
-
 echo "./stage0f.sh ${base} ${source2} ${bl} <verbosity_level>"
-

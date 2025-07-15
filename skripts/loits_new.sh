@@ -5,7 +5,6 @@ d=$(dirname $0)
 
 . ${d}/common.conf
 . ${d}/common_funcs.sh
-#protect_system
 
 ltarget="" 
 bloader=""
@@ -65,7 +64,6 @@ function check_params() {
 		exit 140
 	fi
 
-
 	if [ x"${ltarget}" != "x" ] ; then 
 
 		if [ -s out/${ltarget} ] ; then
@@ -88,9 +86,6 @@ function check_params() {
 }
 
 check_params
-#enforce_deps #josqs myöhemmin takaisin ed ja id kommenteista
-#
-#[ y"${gv}" != "y" ] || inst_dep 0
 [ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
 
 function mk_pad_bak() {
@@ -100,43 +95,10 @@ function mk_pad_bak() {
 		dqb "${svm} ${1} ${1}.OLD"
 		${svm} ${1} ${1}.OLD
 	fi
-
-	#näistä tässä alla puuttuu jotain parametreja
-#	if [ ! -d ../out ] ; then 
-#		${smd} ../out
-#	fi
-#
-#	local tpop=""
-#	tar ${tpop} ${TARGET_DTAR_OPTS} ${TARGET_DTAR_OPTS_LOITS} -cf ../out/${1} ./${2}			
-
 }
 
-#n=$(whoami)
-#[ x"${CONF_TARGET}" != "x" ] || exit 666
-
-
-#dqb "${sco} -R ${n}:${n} ${CONF_TARGET}/out"
-#${sco} -R ${n}:${n} ${CONF_TARGET}/out
-#csleep 1
-#
-#dqb "${scm} -R 0755 ${CONF_TARGET}/out"
-#${scm} -R 0755 ${CONF_TARGET}/out
-#csleep 1
-#
-
-#HUOM.12725:taroeellinen cd?
-#koklataan nyt ensin ilman cd:tä
-#jos qsee ed ni cd takas+muista muuttaa gi:n vika paramn
-#dqb "cd ${lsrcdir}"
-#cd ${lsrcdir}
-#csleep 1
-#HUOM.12725.23.34:joskohan toimisi jo gi:n uloste? ... siis mod Jutut
-
-#mk_pad_bak ${TARGET_pad_bak_file} ${TARGET_pad_dir} tilapäisesti tämkin jemmaan
 sleep 1
-#VAIH:minimaalinen toimiva lisolunuxin konftdsto selviutettävä (js ei muuten ni orig iso:n konf+minimimuutoz...tai EOS)
 
-#VAIH:loits2 pelittämään kanssa?
 
 case ${bloader} in
 	iuefi)
@@ -159,15 +121,14 @@ case ${bloader} in
 		sudo chmod a-x ${ltarget}
 	;;
 	grub)
-		#VAIH:/usr/bin/grub-mkrescue: error: `mformat` invocation failed
 		#https://bbs.archlinux.org/viewtopic.php?id=219955
 
 		xi=$(sudo which xorriso)
-		#[ y"${xi}" != "y" ] || echo "apt-get install xorriso";exit 666
-
 		gmk=$(sudo which grub-mkrescue)
-		#[ z"${gmk}" != "z" ] || echo "apt-get install grub-mkrescue";exit 666
-		${gmk} -o ${ltarget} ${lsrcdir}
+
+		dqb "${gmk} -o ${ltarget} ${lsrcdir}"
+		${gmk} ${CONF_GRUB_OPTS} -o ${ltarget} ${lsrcdir}
+
 	;;
 	*)
 		echo "bl= ${bloader}"
@@ -175,8 +136,6 @@ case ${bloader} in
 	;;
 esac
 
-#${sco} -R 0:0 ${CONF_TARGET}
 #TODO:chmod a-wx $target_dir/*.iso a-k.a joukukuuset wttuun
-
 sleep 1
 echo "stick.sh ?"

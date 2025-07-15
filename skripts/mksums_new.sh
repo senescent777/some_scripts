@@ -1,28 +1,38 @@
-#!/bin/sh
+#!/bin/bash
 b=1
+debug=1
+source=""
 
-. ./common.conf
-. ./common_funcs.sh
-protect_system
+d=$(dirname $0)
 
-usage() {
-	echo
+. ${d}/common.conf
+. ${d}/common_funcs.sh
+
+#protect_system
+#exit
+
+function usage() {
+	echo "TODO"
 }
-parse_opts_real() {
+
+function parse_opts_real() {
 
 	case ${1} in
 		-b)
 			b=${2}
 		;;
+		--in)
+			source=${2}
+		;;
 	esac
 }
 
-[ x$"{TARGET_DIGESTS_dir}" != "x" ] || exit 666
-[ x$"{CONF_BASEDIR}" != "x" ] || exit 666
-[ x"${CONF_target}" != "x" ] || exit 666
+#[ x$"{TARGET_DIGESTS_dir}" != "x" ] || exit 666
+#[ x$"{CONF_BASEDIR}" != "x" ] || exit 666
+#[ x"${CONF_target}" != "x" ] || exit 666
 
 
-single_param() {
+function single_param() {
 	case ${1} in
 		--iso)
 	
@@ -48,25 +58,26 @@ single_param() {
 }
 
 MKS_parts="1 2 3"
-n=$(whoami)
+#n=$(whoami)
 
-part0() {
-	[ -d ${TARGET_DIGESTS_dir} ] || exit 666
-	[ z"${TARGET_DIGESTS_file}" != "z" ] || exit 666
+function part0() {
+	dqb "part0( ${1})"
+	[ -d ${1} ] || exit 666
 
-	if [ x"{TARGET_DIGESTS_file}" != "x" ] ; then
-		cd ${CONF_target}
-		rm ${TARGET_DIGESTS_file}*
-	else
-		exit 666
-	fi
+	local f
+	for f in $(find ${1} -type f -name '${TARGET_DIGESTS_file}*') ; do
+		rm ${f}
+	done
 
 	local i
-	for i in ${MKS_parts} 4 ;  do touch ${TARGET_DIGESTS_file}.${i} ; done
+	for i in ${MKS_parts} 4 ;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
+	
+	dqb "part0 d0n3"
+	csleep 1
 }
 
 
-part1234() {
+function part1234() {
 	local olddir=$(pwd)	
 
 
@@ -79,21 +90,36 @@ part1234() {
 	cd ${olddir}
 }
 
-part123() {
-	
+#HUOM.15725:jurpoilu vahvana tämän fkrtion kanssa juuri nyt
+function part123() {
+	debug=1
+	dqb "part123(${1}, ${2} , ${3} )"
+
 	[ z"${1}" != "z" ] || exit 666
 	[ -d ${2} ] || exit 666
+	[ -d ${3} ] || exit 666
 
-	cd ${CONF_target} 
+	local old
+	local f
+	old=$(pwd)
+	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 
-	if [ ! -s ./${TARGET_DIGESTS_file}.${1} ] ; then
-		
-		${sh5} ./${2}/* | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0}  | grep -v boot.cat | grep -v isolinux.bin > ./${TARGET_DIGESTS_file}.${1}
+	if [ ! -s ${3}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
+		cd ${3}
+		pwd
+
+		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin) ; do
+			dqb "${sh5} ${f}"
+			${sh5} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
+		done
+
+		cd ${old}
+	else
+		dqb "ERROR TERROR"
 	fi
-
 }
 
-part456() {
+function part456() {
 	[ z"${1}" != "z" ] || exit 666
 
 	if [ -s ./${TARGET_DIGESTS_file}.${1} ] ; then
@@ -103,7 +129,7 @@ part456() {
 	fi
 }
 
-part6_5() {
+function part6_5() {
 	local i
 
 	for i in ${MKS_parts} ; do
@@ -112,11 +138,12 @@ part6_5() {
 	done
 
 	if [ $? -gt 0 ] ; then
+		dqb "uliuli"
 	fi
 
 }
 
-part7() {
+function part7() {
 	
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
 	
@@ -130,7 +157,7 @@ part7() {
 	echo $?
 }
 
-part8() {
+function part8() {
 	[ x"${TARGET_patch_name}" != "x" ] || exit 665
 	[ x"${1}" != "x" ] || exit 665
 
@@ -148,37 +175,41 @@ part8() {
 			echo $?
 
 				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}	
-			fi
+			#fi
 		;;
 		2)
+			dqb "2"
 		;;
 		*)
+			dqb "default"
 		;;
 	esac 
 
 	cd ${olddir}
 }
 
-enforce_deps
+#enforce_deps
 parse_opts ${1} ${2}
 parse_opts ${3} ${4}
 
 pwd
 
-[ x"${TARGET_DIGESTS_dir}" != "x" ] || exit 1
+#[ x"${TARGET_DIGESTS_dir}" != "x" ] || exit 1
+#
+#if [ ! -d ${TARGET_DIGESTS_dir} ] ; then 
+#	mkdir -p ${TARGET_DIGESTS_dir}
+#fi
 
-if [ ! -d ${TARGET_DIGESTS_dir} ] ; then 
-	mkdir -p ${TARGET_DIGESTS_dir}
-fi
+part0 ${source}/${TARGET_DIGESTS_dir}
+#exit
 
-part0 
+#cd ${CONF_target} 
+#pwd
 
-cd ${CONF_target} 
-pwd
-part123 1 ${CONF_bloader}
-part123 2 ${TARGET_pad_dir}
-part123 3 live
-
+part123 1 ${CONF_bloader} ${source}
+part123 2 ${TARGET_pad_dir} ${source}
+part123 3 live ${source}
+exit
 cd ${CONF_target}
 for p in ${MKS_parts} ; do part456 ${p} ; done
 
