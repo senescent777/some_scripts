@@ -44,6 +44,7 @@ sudo apt-get reinstall --no-install-recommends libjte2
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=grub-common=2.06-13+deb12u1
 sudo apt-get reinstall libdevmapper1.02.1 libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=xorriso=1.5.4-4
+
 sudo apt-get reinstall --no-install-recommends libisoburn1 libburn4 libisofs6 
 
 # grub-common depends on libfuse2 (>= 2.8.4-1.4); however:
@@ -67,4 +68,3 @@ chmod a+x ./*.sh
 [ -s ${basedir}/.gitignore ] || touch ${basedir}/.gitignore
 c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 [ ${c} -lt 1 ] && echo $0.conf >> ${basedir}/.gitignore
-

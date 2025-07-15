@@ -60,6 +60,7 @@ if [ ${c} -gt 0 ] ; then
 	sleep 2
 
 	#qseeko tässä kohtaa jokin?
+
 	sudo dpkg -i $q/git-man*.deb
 	sudo rm ${q}/git-man*.deb
 
@@ -83,6 +84,7 @@ sleep 6
 #pois kommenteista 14725, takaisin jos qsee
 sudo apt-get remove --purge python3-cups ntp*
 sudo apt autoremove
+
 sudo which iptables-restore
 sudo iptables-restore /etc/iptables/rules.v4.0
 sleep 2

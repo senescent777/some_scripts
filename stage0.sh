@@ -66,4 +66,3 @@ fi
 #stage0f==glorified cp
 dqb "mkdir -p ./v/smthing;mkdir -p ./v/smthing/{isolinux,grub};ln -s ~/Desktop/minimize ./v/something/pad ?"
 echo "./stage0f.sh ${base} ${source2} ${bl} <verbosity_level>"
-

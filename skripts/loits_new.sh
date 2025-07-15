@@ -99,14 +99,17 @@ function mk_pad_bak() {
 
 sleep 1
 
+
 case ${bloader} in
 	iuefi)
 		#KVG "how to make isolinux work with uefi"
+
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
 	;;
 	isolinux)
+
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
@@ -125,6 +128,7 @@ case ${bloader} in
 
 		dqb "${gmk} -o ${ltarget} ${lsrcdir}"
 		${gmk} ${CONF_GRUB_OPTS} -o ${ltarget} ${lsrcdir}
+
 	;;
 	*)
 		echo "bl= ${bloader}"
@@ -133,6 +137,5 @@ case ${bloader} in
 esac
 
 #TODO:chmod a-wx $target_dir/*.iso a-k.a joukukuuset wttuun
-
 sleep 1
 echo "stick.sh ?"
