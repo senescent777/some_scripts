@@ -1,5 +1,5 @@
 #!/bin/bash
-b=1
+b=2
 debug=1
 source=""
 
@@ -91,13 +91,14 @@ function part1234() {
 }
 
 #HUOM.15725:jurpoilu vahvana tämän fkrtion kanssa juuri nyt
+#HUOM.17725:hutpolu liittyy nykyään dgsts.1:seen
 function part123() {
 	debug=1
 	dqb "part123(${1}, ${2} , ${3} )"
 
-	[ z"${1}" != "z" ] || exit 666
-	[ -d ${2} ] || exit 666
-	[ -d ${3} ] || exit 666
+	[ z"${1}" != "z" ] || exit 111
+	#[ -d ${2} ] || exit 112
+	[ -d ${3} ] || exit 113
 
 	local old
 	local f
@@ -107,6 +108,8 @@ function part123() {
 	if [ ! -s ${3}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
 		cd ${3}
 		pwd
+		dqb "find ./${2} -type f"
+		csleep 1
 
 		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin) ; do
 			dqb "${sh5} ${f}"
@@ -120,17 +123,25 @@ function part123() {
 }
 
 function part456() {
+	debug=1
+	dqb "part456 $1 ; $2 ; $3"
 	[ z"${1}" != "z" ] || exit 666
+	
+	pwd
+	csleep 1
 
-	if [ -s ./${TARGET_DIGESTS_file}.${1} ] ; then
-				${sh5} -c ./${TARGET_DIGESTS_file}.${1} --ignore-missing
+	if [ -s ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
+				${sh5} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} --ignore-missing
 	else
-		echo "no such thing as ./${TARGET_DIGESTS_file}.${1}"		 
+		echo "no such thing as ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}"		 
 	fi
 }
 
 function part6_5() {
+	dqb "part65( ${1}, ${2}, ${3})"
 	local i
+	pwd
+	csleep §
 
 	for i in ${MKS_parts} ; do
 		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_file}.${i}
@@ -141,10 +152,12 @@ function part6_5() {
 		dqb "uliuli"
 	fi
 
+	dqb "dibw"
 }
 
 function part7() {
-	
+	dqb "part7"	
+
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
 	
 		${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
@@ -155,18 +168,23 @@ function part7() {
 		done
 
 	echo $?
+	csleep 1
+	dqb "p7 done"
 }
 
 function part8() {
+	dqb "p8 ${1}"
 	[ x"${TARGET_patch_name}" != "x" ] || exit 665
 	[ x"${1}" != "x" ] || exit 665
 
+	dqb "params ok"
+
 	local tfile=${TARGET_patch_name}.tar.bz2
-	[ -s ./${TARGET_pad_dir}/${tfile} ] || exit 666		
+	#[ -s ./${TARGET_pad_dir}/${tfile} ] || exit 666		
 
 
 	local olddir=$(pwd)	
-	cp ./${TARGET_pad_dir}/${tfile} ../out
+	[ -s ./${TARGET_pad_dir}/${tfile} ] && cp ./${TARGET_pad_dir}/${tfile} ../out
 	cd ../out
 
 	case ${1} in
@@ -209,10 +227,11 @@ part0 ${source}/${TARGET_DIGESTS_dir}
 part123 1 ${CONF_bloader} ${source}
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
-exit
-cd ${CONF_target}
-for p in ${MKS_parts} ; do part456 ${p} ; done
 
+cd  ${source}  #${CONF_target}
+for p in ${MKS_parts} ; do part456 ${p}; done
+
+#6_5 mielekästä ajaa vatsa wittenq avaimet olemassa
 if [ x"${gg}" != "x" ] ; then 
 	part6_5
 fi
@@ -222,12 +241,21 @@ part7
 pwd
 part8 ${b}
 
-${sh5} ${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ${TARGET_DIGESTS_file}.4
+pwd
+${sco} ${n}:${n} ./${TARGET_DIGESTS_dir}/* 
+${scm} 0644 ./${TARGET_DIGESTS_dir}/* 
+ls -las ./${TARGET_DIGESTS_dir}
+csleep 1
 
+#HUOM.18726: dgata.4 kassa myös jotain jurpoilua
+dqb "${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10"
+${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4
-sudo chown -R 0:0 ${CONF_target}/${TARGET_DIGESTS_dir}
-sudo chmod 0555 ${CONF_target}/${TARGET_DIGESTS_dir}
-sudo chmod 0444 ${CONF_target}/${TARGET_DIGESTS_dir}/*
+#exit
+
+sudo chown -R 0:0 ./${TARGET_DIGESTS_dir}
+sudo chmod 0555 ./${TARGET_DIGESTS_dir}
+sudo chmod 0444 ./${TARGET_DIGESTS_dir}/*
 
 	ls -laRs ${TARGET_DIGESTS_dir}
 

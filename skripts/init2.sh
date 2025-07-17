@@ -40,6 +40,7 @@ if [ ${c} -gt 0 ] ; then
 	sudo dpkg -i ${q}/lib*.deb
 	sudo rm ${q}/lib*.deb
 
+	#HUOM.17725:josqo lib-juttujen jälkeen pak as vain tarvittaessa, which...
 	echo "BEFORE TBLZ"
 	sleep 2
 
@@ -51,7 +52,7 @@ if [ ${c} -gt 0 ] ; then
 	sudo rm ${q}/net*.deb
 
 	#tähän kai uskaltaa laittaa frontend takaisinb
-	sudo dpkg -i ${q}/iptables-*.deb
+	sudo DEBIAN_FRONTEND=noninteractive dpkg -i ${q}/iptables-*.deb
 	sudo rm ${q}/iptables-*.deb
 
 	#deb uig taakse jatqssa
@@ -60,17 +61,20 @@ if [ ${c} -gt 0 ] ; then
 	sleep 2
 
 	#qseeko tässä kohtaa jokin?
-
+	#which git,,,
 	sudo dpkg -i $q/git-man*.deb
 	sudo rm ${q}/git-man*.deb
 
 	sudo dpkg -i $q/git*.deb
 	sudo rm ${q}/git*.deb
 
+	#which grub-mkimage
 	sudo dpkg -i $q/grub*.deb
 	sudo rm ${q}/grub*.deb
 
 	#ao. rivejä ei kannata unmohtaa
+	#which grub geniso
+	#which grub xorrisao...
 	sudo dpkg -i $q/*.deb
 	sudo rm ${q}/*.deb
 else
@@ -82,9 +86,8 @@ which genisoimage
 sleep 6
 
 #pois kommenteista 14725, takaisin jos qsee
-sudo apt-get remove --purge python3-cups ntp*
+sudo apt-get remove --purge --yes python3-cups ntp* #sharyp from common_lib
 sudo apt autoremove
-
 sudo which iptables-restore
 sudo iptables-restore /etc/iptables/rules.v4.0
 sleep 2
