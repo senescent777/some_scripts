@@ -1,18 +1,17 @@
 #!/bin/bash
-b=2
+b=0
 debug=1
 source=""
 
 d=$(dirname $0)
-
 . ${d}/common.conf
 . ${d}/common_funcs.sh
 
-#protect_system
-#exit
-
 function usage() {
-	echo "TODO"
+	echo "$0 --in <source> [-b <mode>]"
+	echo "$0 --iso"
+	echo "$0 --pkgs"
+	echo "$0 -h" #voisi olla vakiovaruste tuo optio ja liityvä fktio
 }
 
 function parse_opts_real() {
@@ -27,44 +26,45 @@ function parse_opts_real() {
 	esac
 }
 
-#[ x$"{TARGET_DIGESTS_dir}" != "x" ] || exit 666
-#[ x$"{CONF_BASEDIR}" != "x" ] || exit 666
-#[ x"${CONF_target}" != "x" ] || exit 666
-
-
+#TODO:näiden opioitden testaus
 function single_param() {
 	case ${1} in
 		--iso)
 	
 			${gg} -u ${CONF_kay2name} -sb ./*.iso
-		
-			exit 666
+			exit 66
 		;;
 		--pkgs)
-			[ x"${CONF_BASEDIR}" != "x" ] || exit 664
-			[ x"${CONF_pkgsdir2}" != "x" ] || exit 665
+			[ x"${CONF_BASEDIR}" != "x" ] || exit 64
+			[ x"${CONF_pkgsdir2}" != "x" ] || exit 65
 
 			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
 
 			${gg} -u ${CONF_kay2name} -sb ./*.deb
-			[ $? -eq 0 ]  && ${gg} -u ${CONF_kay2name} -sb ./*.bz2
+			[ $? -eq 0 ] && ${gg} -u ${CONF_kay2name} -sb ./*.bz2
 			
-			exit 666
+			exit 63
 		;;
-		--h)
+		--h|-h)
 			usage
 		;;
 	esac
 }
 
 MKS_parts="1 2 3"
-#n=$(whoami)
 
 function part0() {
 	dqb "part0( ${1})"
 	[ -d ${1} ] || exit 666
 
 	local f
+
+	#pot. vaarallinen koska -R
+	${sco} -R ${n}:${n} ${1} 
+	${scm} 0755 ${1} 
+	${scm} u+w ${1}/* 
+	#oik/omist - asioita vosi miettiä jossain vaih että miten pitää mennä
+
 	for f in $(find ${1} -type f -name '${TARGET_DIGESTS_file}*') ; do
 		rm ${f}
 	done
@@ -77,21 +77,21 @@ function part0() {
 }
 
 
-function part1234() {
-	local olddir=$(pwd)	
-
-
-	local f
-
-	for f in $(find . -name SAM.${1}.*) ; do
-		echo	
-	done
-
-	cd ${olddir}
-}
+#function part1234() {
+#	local olddir=$(pwd)	
+#
+#
+#	local f
+#
+#	for f in $(find . -name SAM.${1}.*) ; do
+#		echo	
+#	done
+#
+#	cd ${olddir}
+#}
 
 #HUOM.15725:jurpoilu vahvana tämän fkrtion kanssa juuri nyt
-#HUOM.17725:hutpolu liittyy nykyään dgsts.1:seen
+#HUOM.17725:hutpoilu liittyy nykyään dgsts.1:seen tai olisikohan syy skriptissä stage0f tai vähän muuallakin
 function part123() {
 	debug=1
 	dqb "part123(${1}, ${2} , ${3} )"
@@ -103,7 +103,6 @@ function part123() {
 	local old
 	local f
 	old=$(pwd)
-	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 
 	if [ ! -s ${3}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
 		cd ${3}
@@ -111,15 +110,20 @@ function part123() {
 		dqb "find ./${2} -type f"
 		csleep 1
 
-		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin) ; do
+		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
 			dqb "${sh5} ${f}"
 			${sh5} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
 		done
 
+		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
+		#${sco} 0:0 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
 		cd ${old}
 	else
 		dqb "ERROR TERROR"
 	fi
+
+
+	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 }
 
 function part456() {
@@ -137,11 +141,12 @@ function part456() {
 	fi
 }
 
+#HUOM.kandee ajaa vain jos binäärit ja avaimet olemassa
 function part6_5() {
 	dqb "part65( ${1}, ${2}, ${3})"
 	local i
 	pwd
-	csleep §
+	csleep 1
 
 	for i in ${MKS_parts} ; do
 		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_file}.${i}
@@ -210,28 +215,27 @@ function part8() {
 parse_opts ${1} ${2}
 parse_opts ${3} ${4}
 
+#TODO:paraetrien tarkistus ennen ajoa, ts että $source olemassa
 pwd
-
-#[ x"${TARGET_DIGESTS_dir}" != "x" ] || exit 1
-#
-#if [ ! -d ${TARGET_DIGESTS_dir} ] ; then 
-#	mkdir -p ${TARGET_DIGESTS_dir}
-#fi
-
 part0 ${source}/${TARGET_DIGESTS_dir}
-#exit
 
-#cd ${CONF_target} 
-#pwd
+#HUOM.18725:toisinkin voisi tehdä, nyt näin
+case ${CONF_bloader} in
+	grub)
+		part123 1 boot/grub ${source}
+	;;
+	*)
+		part123 1 ${CONF_bloader} ${source}
+	;;
+esac
 
-part123 1 ${CONF_bloader} ${source}
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 
 cd  ${source}  #${CONF_target}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
-#6_5 mielekästä ajaa vatsa wittenq avaimet olemassa
+#6_5-8 mielekästä ajaa vatsa wittenq avaimet olemassa
 if [ x"${gg}" != "x" ] ; then 
 	part6_5
 fi
@@ -247,7 +251,7 @@ ${scm} 0644 ./${TARGET_DIGESTS_dir}/*
 ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
-#HUOM.18726: dgata.4 kassa myös jotain jurpoilua
+#HUOM.18726: dgsts.4 kassa myös jotain jurpoilua?
 dqb "${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10"
 ${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4

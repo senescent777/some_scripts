@@ -51,17 +51,18 @@ function copy_main() {
 		#${spc} -a ${CONF_scripts_dir}/*.sh ${CONF_tmpdir}
 
 		for f in $(find ${CONF_scripts_dir} -type f -name '*.sh') ; do
-			dqb "${spc} ${f} ${CONF_tmpdir}"
-			${spc} ${f} ${CONF_tmpdir}
+			dqb "${spc} ${f} ${CONF_tmpdir} (TODO,maybe)"
+			#${spc} ${f} ${CONF_tmpdir}
 		done
 	fi
 
 	for f in $(find ${1} -type f -name '*.sh') ; do
-		dqb "${spc} ${f} ${2}"
-		${spc} ${f} ${2}
+		dqb "${spc} ${f} ${2} (TODO,maybe)"
+		#${spc} ${f} ${2}
 	done
 	
 	for f in $(find ${1} -type f -name '*.bz2') ; do
+		dqb "${spc} ${f} ${2}"
 		${spc} ${f} ${2}
 	done
 
@@ -123,13 +124,13 @@ function copy_sums() {
 }
 
 function bootloader() {
+	debug=1
 	dqb "bootloader(${1}, ${2}, ${3})"
 
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
 	[ x"${CONF_target}" != "x" ] || exit 3
 	[ -d ${CONF_target} ] || exit 3
-
 
 	dqb "pars_ok"
 	csleep 3
@@ -141,6 +142,9 @@ function bootloader() {
 	local t
 	t=""
 
+	[ ${debug} -eq 1 ] && ls -las ${CONF_target};sleep 6
+
+	#HUOM.jos touch-koentoia tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa
 	case ${1} in
 		isolinux)
 
@@ -236,8 +240,9 @@ function make_tgt_dirs() {
 	[ -d ${CONF_target}/${TARGET_DIGESTS_dir} ] || ${smd} -p ${CONF_target}/${TARGET_DIGESTS_dir}
 	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}/..
 
-	[ -d ${CONF_target}/${CONF_bloader} ] || ${smd} -p ${CONF_target}/${CONF_bloader}
-	${sco} -R ${n}:${n} ${CONF_target}/${CONF_bloader}
+	#HUOM.18725:tätä kohtaa joutaisi miettiä vielä
+	#[ -d ${CONF_target}/${CONF_bloader} ] || ${smd} -p ${CONF_target}/${CONF_bloader}
+	[ -d ${CONF_target}/${CONF_bloader} ] && ${sco} -R ${n}:${n} ${CONF_target}/${CONF_bloader}
 
 	${sco} 0:0 ${CONF_target}
 
