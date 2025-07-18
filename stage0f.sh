@@ -1,5 +1,5 @@
 #!/bin/bash
-debug=1 #jatkossa nollaan
+debug=0 
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
 . ./skripts/stage0_backend.bsh
@@ -9,7 +9,7 @@ make_tgt_dirs
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
 function part0() {
-	debug=1
+	#debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
 
 	#ei aina tarttisi näiTä renkata
@@ -45,7 +45,7 @@ function part0() {
 	csleep 1
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa
-	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir}
+	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir} ${CONF_tmpdir}
 	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
 	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
 	
