@@ -47,6 +47,7 @@ function efk() {
 	sleep 2
 
 	#DEBIAN_FRONTEND=noninteractive tämän kanssa jokin juttu?
+
 	#if_not_iptables
 	x=$(sudo which iptables)
 
@@ -106,6 +107,7 @@ sleep 6
 #pois kommenteista 14725, takaisin jos qsee
 sudo apt-get remove --purge --yes python3-cups ntp* #sharyp from common_lib
 sudo apt autoremove
+
 sudo which iptables-restore
 sudo iptables-restore /etc/iptables/rules.v4.0
 sleep 2

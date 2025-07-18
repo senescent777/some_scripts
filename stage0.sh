@@ -38,6 +38,7 @@ function single_param() {
 	case ${1} in
 		--make-dirs)
 			#TODO:init.sh käskyttämään tätä case:a tarvittaessa?
+
 			make_src_dirs
 			make_tgt_dirs
 		;;
@@ -67,4 +68,3 @@ fi
 #stage0f==glorified cp
 dqb "mkdir -p ./v/smthing;mkdir -p ./v/smthing/{isolinux,grub};ln -s ~/Desktop/minimize ./v/something/pad ?"
 echo "./stage0f.sh ${base} ${source2} ${bl} <verbosity_level>"
-

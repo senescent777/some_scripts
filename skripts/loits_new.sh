@@ -133,6 +133,5 @@ case ${bloader} in
 esac
 
 #TODO:chmod a-wx $target_dir/*.iso a-k.a joukukuuset wttuun
-
 sleep 1
 echo "stick.sh ?"
