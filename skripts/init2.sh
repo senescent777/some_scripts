@@ -22,14 +22,16 @@ if [ -s ${basedir}/interfaces ] ; then
 	sudo ln -s /etc/network/interfaces.${distro} /etc/network/interfaces
 fi
 
-c=$(ls ${pkgsrc}/ip*.deb | wc -l)
+#tarpeellinen kikkailu?
+#c=$(ls ${pkgsrc}/ip*.deb | wc -l)
 
 function efk() {
 	sudo dpkg -i $@
 	sudo rm $@
 }
 
-if [ ${c} -gt 0 ] ; then
+#völillä jos kokeilusi ajaa init2 ennen generic_x- juttui
+#if [ ${c} -gt 0 ] ; then
 	q=$(mktemp -d)
 	sudo cp ${pkgsrc}/*.deb ${q}
 	
@@ -40,49 +42,70 @@ if [ ${c} -gt 0 ] ; then
 	sudo dpkg -i ${q}/lib*.deb
 	sudo rm ${q}/lib*.deb
 
+	#HUOM.17725:josqo lib-juttujen jälkeen pak as vain tarvittaessa, which...
 	echo "BEFORE TBLZ"
 	sleep 2
 
 	#DEBIAN_FRONTEND=noninteractive tämän kanssa jokin juttu?
-	sudo dpkg -i ${q}/iptables_*.deb
-	sudo rm ${q}/iptables_*.deb
 
-	sudo dpkg -i ${q}/net*.deb
-	sudo rm ${q}/net*.deb
+	#if_not_iptables
+	x=$(sudo which iptables)
 
-	#tähän kai uskaltaa laittaa frontend takaisinb
-	sudo dpkg -i ${q}/iptables-*.deb
-	sudo rm ${q}/iptables-*.deb
+	if [ ! -x ${x} ] ; then
+		sudoDEBIAN_FRONTEND=noninteractive dpkg -i ${q}/iptables_*.deb
+		sudo rm ${q}/iptables_*.deb
 
-	#deb uig taakse jatqssa
-	echo "after tables"
-	dpkg -l iptables*
-	sleep 2
+		sudo dpkg -i ${q}/net*.deb
+		sudo rm ${q}/net*.deb
+
+		#tähän kai uskaltaa laittaa frontend takaisinb
+		sudo DEBIAN_FRONTEND=noninteractive dpkg -i ${q}/iptables-*.deb
+		sudo rm ${q}/iptables-*.deb
+
+		#deb uig taakse jatqssa
+		echo "after tables"
+		dpkg -l iptables*
+		sleep 2
+	fi
+	#/if_not_iptables
 
 	#qseeko tässä kohtaa jokin?
+	#if_not_git
+	x=$(sudo which git)
 
-	sudo dpkg -i $q/git-man*.deb
-	sudo rm ${q}/git-man*.deb
+	if [ ! -x ${x} ] ; then
+		sudo dpkg -i $q/git-man*.deb
+		sudo rm ${q}/git-man*.deb
 
-	sudo dpkg -i $q/git*.deb
-	sudo rm ${q}/git*.deb
+		sudo dpkg -i $q/git*.deb
+		sudo rm ${q}/git*.deb
+	fi
+	#/if_not_git
 
-	sudo dpkg -i $q/grub*.deb
-	sudo rm ${q}/grub*.deb
+	#if_not_grub
+	x=$(sudo which grub-mkrescue)
+
+	if [ ! -x ${x} ] ; then
+		sudo dpkg -i $q/grub*.deb
+		sudo rm ${q}/grub*.deb
+	fi
+	#/if_not_grub
 
 	#ao. rivejä ei kannata unmohtaa
+	#which grub geniso
+	#which grub xorrisao...
 	sudo dpkg -i $q/*.deb
 	sudo rm ${q}/*.deb
-else
-	sudo dpkg -i ${pkgsrc}/*.deb
-fi
+#else
+#	sudo dpkg -i ${pkgsrc}/*.deb
+#fi
 
 echo "GENISOIMAGE?"
 which genisoimage
 sleep 6
 
 #pois kommenteista 14725, takaisin jos qsee
-sudo apt-get remove --purge python3-cups ntp*
+sudo apt-get remove --purge --yes python3-cups ntp* #sharyp from common_lib
 sudo apt autoremove
 
 sudo which iptables-restore

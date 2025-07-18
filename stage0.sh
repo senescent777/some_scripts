@@ -11,7 +11,7 @@ bl=${CONF_bloader}
 
 function usage() {
 	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--bl BLOADER] [--v <verbosity_level>]"
-	echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})" #pitäisi varmaan huomoida tuo suhteellisuus?
+	#echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})" #pitäisi varmaan huomoida tuo suhteellisuus?
 	echo "${0} --get-devuan <download_dir>"
 	echo "${0} --make-dirs"
 }
@@ -28,7 +28,7 @@ function parse_opts_real() {
 			get_devuan ${2}
 			exit
 		;;
-		--bl)
+		--bl|-bl)
 			bl=${2}
 		;;
 	esac	
@@ -37,6 +37,8 @@ function parse_opts_real() {
 function single_param() {
 	case ${1} in
 		--make-dirs)
+			#TODO:init.sh käskyttämään tätä case:a tarvittaessa?
+
 			make_src_dirs
 			make_tgt_dirs
 		;;

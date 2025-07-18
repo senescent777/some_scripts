@@ -47,6 +47,8 @@ function dqb() {
 function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
+
+#TODO:tähän asti juttujen korvaaminen toisen projektin common_lib
 #============================================
 
 #function griffindor() {
@@ -118,7 +120,6 @@ function mk_bkup() {
 	fi
 }
 
-
 #function slaughter0() {
 #	local fn2
 #	local ts2
@@ -129,6 +130,7 @@ function mk_bkup() {
 #	echo ${ts2} | awk '{print $1,$2}' >> ${2}
 #}
 
+#tarpeellinen?
 function enforce_deps() {
 	dqb "enf_deps"
 	csleep 1

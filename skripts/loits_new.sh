@@ -1,6 +1,6 @@
 #!/bin/bash
 
-debug=1
+debug=0 #1
 d=$(dirname $0)
 
 . ${d}/common.conf
@@ -99,21 +99,18 @@ function mk_pad_bak() {
 
 sleep 1
 
-
 case ${bloader} in
 	iuefi)
 		#KVG "how to make isolinux work with uefi"
-
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
 	;;
 	isolinux)
-
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
-		pwd #debug taakse?
+		[ ${debug} -eq 1] && pwd 
 		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir}"
 		csleep 1
 
@@ -128,7 +125,6 @@ case ${bloader} in
 
 		dqb "${gmk} -o ${ltarget} ${lsrcdir}"
 		${gmk} ${CONF_GRUB_OPTS} -o ${ltarget} ${lsrcdir}
-
 	;;
 	*)
 		echo "bl= ${bloader}"

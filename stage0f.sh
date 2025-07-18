@@ -1,5 +1,5 @@
 #!/bin/bash
-debug=1 #jatkossa nollaan
+debug=0 
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
 . ./skripts/stage0_backend.bsh
@@ -7,14 +7,12 @@ debug=1 #jatkossa nollaan
 dqb "PARAMS OK?"
 make_tgt_dirs
 
-
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
 function part0() {
-	debug=1
+	#debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
 
 	#ei aina tarttisi näiTä renkata
-
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
 			
@@ -32,7 +30,7 @@ function part0() {
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää 	CONF_SOURCE
 	bootloader ${3} ${2} ${1} 
-	${odio} touch ${CONF_target}/${CONF_bloader}/*
+	#${odio} touch ${CONF_target}/${CONF_bloader}/* #saattaa vähän paskoa asioita
 
 	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
@@ -47,7 +45,7 @@ function part0() {
 	csleep 1
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa
-	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir}
+	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir} ${CONF_tmpdir}
 	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
 	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
 	
@@ -79,6 +77,9 @@ else
 		${som} -o loop,ro ${1} ${CONF_source} 
 		[ $? -eq 0 ] || exit 666
 		sleep 6
+
+		#[ ${debug} -eq 1 ] && ls -las ${CONF_target}
+		#csleep 4
 
 		part0 ${CONF_source} ${2} ${3}	
 		${uom} ${CONF_source} 
