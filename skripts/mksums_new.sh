@@ -1,11 +1,17 @@
 #!/bin/bash
 b=0
-debug=1
+debug=0 #1
 source=""
 
 d=$(dirname $0)
 . ${d}/common.conf
 . ${d}/common_funcs.sh
+
+#jos jatkossa common_funcs tai common_lib
+if [ $# -eq 0 ] ; then
+	echo "-h"
+	exit
+fi
 
 function usage() {
 	echo "$0 --in <source> [-b <mode>]"
@@ -26,7 +32,7 @@ function parse_opts_real() {
 	esac
 }
 
-#TODO:näiden opioitden testaus
+#VAIH:näiden opioitden testaus (gg-jutut mielekkäitä sittenq)
 function single_param() {
 	case ${1} in
 		--iso)
@@ -35,8 +41,8 @@ function single_param() {
 			exit 66
 		;;
 		--pkgs)
-			[ x"${CONF_BASEDIR}" != "x" ] || exit 64
-			[ x"${CONF_pkgsdir2}" != "x" ] || exit 65
+			[ x"${CONF_BASEDIR}" != "x" ] || exit 65
+			[ x"${CONF_pkgsdir2}" != "x" ] || exit 64
 
 			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
 
@@ -55,7 +61,7 @@ MKS_parts="1 2 3"
 
 function part0() {
 	dqb "part0( ${1})"
-	[ -d ${1} ] || exit 666
+	[ -d ${1} ] || exit 67
 
 	local f
 
@@ -76,7 +82,6 @@ function part0() {
 	csleep 1
 }
 
-
 #function part1234() {
 #	local olddir=$(pwd)	
 #
@@ -90,10 +95,8 @@ function part0() {
 #	cd ${olddir}
 #}
 
-#HUOM.15725:jurpoilu vahvana tämän fkrtion kanssa juuri nyt
-#HUOM.17725:hutpoilu liittyy nykyään dgsts.1:seen tai olisikohan syy skriptissä stage0f tai vähän muuallakin
 function part123() {
-	debug=1
+	#debug=1
 	dqb "part123(${1}, ${2} , ${3} )"
 
 	[ z"${1}" != "z" ] || exit 111
@@ -106,7 +109,7 @@ function part123() {
 
 	if [ ! -s ${3}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
 		cd ${3}
-		pwd
+		[ ${debug} -eq 1 ] && pwd
 		dqb "find ./${2} -type f"
 		csleep 1
 
@@ -122,16 +125,15 @@ function part123() {
 		dqb "ERROR TERROR"
 	fi
 
-
 	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 }
 
 function part456() {
-	debug=1
+	#debug=1
 	dqb "part456 $1 ; $2 ; $3"
 	[ z"${1}" != "z" ] || exit 666
 	
-	pwd
+	[ ${debug} -eq 1 ] && pwd
 	csleep 1
 
 	if [ -s ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
@@ -187,7 +189,6 @@ function part8() {
 	local tfile=${TARGET_patch_name}.tar.bz2
 	#[ -s ./${TARGET_pad_dir}/${tfile} ] || exit 666		
 
-
 	local olddir=$(pwd)	
 	[ -s ./${TARGET_pad_dir}/${tfile} ] && cp ./${TARGET_pad_dir}/${tfile} ../out
 	cd ../out
@@ -197,8 +198,7 @@ function part8() {
 			${gg} -u ${CONF_kay2name} -sb ${tfile}
 			echo $?
 
-				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}	
-			#fi
+				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}
 		;;
 		2)
 			dqb "2"
@@ -215,8 +215,10 @@ function part8() {
 parse_opts ${1} ${2}
 parse_opts ${3} ${4}
 
-#TODO:paraetrien tarkistus ennen ajoa, ts että $source olemassa
-pwd
+[ -d ${source} ] || exit 99
+dqb "${source} exists"
+csleep 1
+[ ${debug} -eq 1 ] && pwd
 part0 ${source}/${TARGET_DIGESTS_dir}
 
 #HUOM.18725:toisinkin voisi tehdä, nyt näin
@@ -232,7 +234,7 @@ esac
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 
-cd  ${source}  #${CONF_target}
+cd ${source}  #${CONF_target}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
 #6_5-8 mielekästä ajaa vatsa wittenq avaimet olemassa
@@ -241,25 +243,24 @@ if [ x"${gg}" != "x" ] ; then
 fi
 
 part7 
+[ ${debug} -eq 1 ] && pwd
 
-pwd
 part8 ${b}
+[ ${debug} -eq 1 ] && pwd
 
-pwd
 ${sco} ${n}:${n} ./${TARGET_DIGESTS_dir}/* 
 ${scm} 0644 ./${TARGET_DIGESTS_dir}/* 
-ls -las ./${TARGET_DIGESTS_dir}
+[ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
 #HUOM.18726: dgsts.4 kassa myös jotain jurpoilua?
 dqb "${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10"
 ${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4
-#exit
 
-sudo chown -R 0:0 ./${TARGET_DIGESTS_dir}
-sudo chmod 0555 ./${TARGET_DIGESTS_dir}
-sudo chmod 0444 ./${TARGET_DIGESTS_dir}/*
+${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
+${scm} 0555 ./${TARGET_DIGESTS_dir}
+${scm} 0444 ./${TARGET_DIGESTS_dir}/*
 
-	ls -laRs ${TARGET_DIGESTS_dir}
+	[ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
 

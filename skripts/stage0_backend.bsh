@@ -18,11 +18,19 @@ function get_devuan() {
 
 function make_src_dirs() {
 	dqb "make_s_DIrs"
-
 	${smd} ${CONF_keys_dir}
 	${smd} ${CONF_distros_dir}
-	${smd} ${CONF_bloader}
-	${smd} ./grub
+
+	case ${CONF_bloader} in
+		grub)
+			${smd} -p ./boot/grub
+		;;
+		*)
+			${smd} ${CONF_bloader}	
+		;;
+	esac
+
+
 	${smd} ${CONF_pkgsdir2}
 	${smd} ./v
 }
@@ -32,15 +40,18 @@ function cleanup() {
 }
 
 function copy_main() {
-	debug=1
-	dqb "copy_main(${1}, ${2})"
+	#debug=1
+	dqb "copy_main(${1}, ${2}, ${3} )"
 
 	[ x"${1}" != "x" ] || exit 2
 	[ -d ${2} ] || exit 2 
 
-	[ y"${CONF_tmpdir}" != "y" ] || exit 33
-	[ -d ${CONF_tmpdir} ] || exit 34
+	#CONF_tmpdir
+	[ y"${3}" != "y" ] || exit 33
+	#CONF_tmpdir} ] || exit 34
+	[ -d ${3} ] || exit 34
 
+	[ -v CONF_scripts_dir ] || echo "CONF_SCRIPTS_DIR NOT DEFINED"
 	[ z"${CONF_scripts_dir}" != "z" ] || echo "n.s.t.as ${CONF_scripts_dir}"
 
 	dqb "CHECKS PASSED"
@@ -48,11 +59,11 @@ function copy_main() {
 	
 	#TODO:ao. kohtaa mietittäbä, minne ovat kalat menossa, mikä oli koko blokin fktio
 	if [ -d ${CONF_scripts_dir} ]; then 
-		#${spc} -a ${CONF_scripts_dir}/*.sh ${CONF_tmpdir}
+		#${spc} -a ${CONF_scripts_dir}/*.sh ${3} #CONF_tmpdir}
 
 		for f in $(find ${CONF_scripts_dir} -type f -name '*.sh') ; do
 			dqb "${spc} ${f} ${CONF_tmpdir} (TODO,maybe)"
-			#${spc} ${f} ${CONF_tmpdir}
+			#${spc} ${f} ${3} #CONF_tmpdir}
 		done
 	fi
 
@@ -124,7 +135,7 @@ function copy_sums() {
 }
 
 function bootloader() {
-	debug=1
+	#debug=1
 	dqb "bootloader(${1}, ${2}, ${3})"
 
 	[ x"${1}" != "x" ] || exit 2

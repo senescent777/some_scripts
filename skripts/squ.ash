@@ -50,7 +50,6 @@ parse_opts ${5} ${6}
 parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
-
 function xxx() {
 	if [ x"${CONF_squash0}" != "x" ]; then
 		[ -d ${CONF_squash0} ] || ${smd}${CONF_squash0}
