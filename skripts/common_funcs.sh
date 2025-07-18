@@ -47,7 +47,6 @@ function dqb() {
 function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
-
 #TODO:tähän asti juttujen korvaaminen toisen projektin common_lib
 #============================================
 
@@ -240,6 +239,7 @@ function enforce_deps() {
 	[ ${doIt} -gt 0 ] && exit 666
 }
 
+#pois jatkossa?
 function inst_dep() {
 	dqb "inst.dep ${1}"
 	

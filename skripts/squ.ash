@@ -10,9 +10,10 @@ cmd=""
 md=0
 mp=0
 ms=0
+par=""
 
 function parse_opts_real() {
-	echo "squash.parse_opts_real()"
+	echo "squash.parse_opts_real()" #dqb
 
 	case ${1} in
 		--dir2)
@@ -51,8 +52,12 @@ parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
 function xxx() {
+	dqb "xxx( ${1})"
+	#tulisi stopata tässä jos ei kalaa
+	[ -s ${1} ] || exit 99
+
 	if [ x"${CONF_squash0}" != "x" ]; then
-		[ -d ${CONF_squash0} ] || ${smd}${CONF_squash0}
+		[ -d ${CONF_squash0} ] || ${smd} ${CONF_squash0}
 		cd ${CONF_squash0}
 		unsq=$(${odio} which unsquashfs)
 
@@ -63,6 +68,8 @@ function xxx() {
 		fi
 
 	fi
+
+	dqb "xxx d0mw"
 }
 
 function fix_sudo() {
@@ -90,11 +97,14 @@ function fix_sudo() {
 	fi
 }
 
+#TODO:sittenq chroot?
 function bbb() {
+	dqb "bbb()"
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 
 		if [ -d ${CONF_squash_dir} ] ; then 
+			exit 55
 			cd ${CONF_squash_dir}
 
 			${smr} -rf ./run/live
@@ -116,13 +126,14 @@ function bbb() {
 		fi
 	fi
 
+	dqb "bbb().done()"
 }
 
 function jlk_main() {
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -x ?"
-		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd}-p ${CONF_squash_dir}/${TARGET_pad2}
+		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 
 		cd ${CONF_squash_dir}/${TARGET_pad2}
 		[ x"${1}" != "x" ] || exit 666
@@ -172,7 +183,7 @@ function jlk_sums() {
 
 	cd ${CONF_squash_dir}/${TARGET_pad2}
 
-	[ -d ./0 ] || ${smd}-p ./0 ;sleep 6
+	[ -d ./0 ] || ${smd} -p ./0 ;sleep 6
 
 
 	${spc} -a ${1}/${TARGET_DIGESTS_dir}/* ./0
@@ -221,12 +232,18 @@ function rst() {
 }
 
 function cfd() {
+	dqb "cfd(${1})"
+	[ x"${1}" != "x" ] || exit 6
+	[ -s ${1} ] && exit 66
+	dqb "PARS IJ"
+
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -b ?"
 
 		cd ${CONF_squash_dir}
 
 		[ -s ${1} ] && rm ${1}
+		local msq
 		msq=$(${odio} which mksquashfs)
 
 		if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
@@ -235,53 +252,55 @@ function cfd() {
 			echo "${odio} apt-get install squashfs-utils"
 		fi
 	fi
+
+	dqb "cfd(${1}) DONE"
 }
 
 function usage() {
-	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0}"
-	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0}"
-	echo "-b is supposed to be run just Before -c but after -r"
+	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0} source_file NEEDS TO HAVE ABSOLUTE PATH"
+	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0} NEEDS TO HAVE ABSOLUTE PATH"
+	echo "-b is supposed to be run just Before -c but after -r (TODO)"
 	echo "-d Destroys contents of ${CONF_squash0}/ and ${CONF_tmpdir} "
 	echo "\t if possible, use -b instead\n"
 
-	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n"
-	echo "-r :runs chRoot in ${CONF_squash_dir}"
+	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n NEEDS TO HAVE ABSOLUTE PATH"
+	echo "-r :runs chRoot in ${CONF_squash_dir} (TODO)"
 	
-	echo "-i <src> : Installs scripts 2 chroot_dir "
-	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir"
+	#echo "-i <src> : Installs scripts 2 chroot_dir  (TODO?)"
+	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir (TODO)"
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
 	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
 
-	echo "-f attempts to Fix some problems w/ sudo"
+	echo "-f attempts to Fix some problems w/ sudo (TODO)"
 	echo "--v 1 adds Verbosity\n"
 
-	echo "--mp,--md, --ms:self-explanatory opts 4 -r" 
+	echo "--mp,--md, --ms:self-explanatory opts 4 -r (TODO)" 
 	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
-function ijk() {
-	if [ x"${CONF_squash_dir}" != "x" ]; then
-		echo "${0} -x ?"
-		
-		previous=$(pwd)
-		${smd}-p ${CONF_squash_dir}/${TARGET_pad2}
-		cd ${CONF_squash_dir}/${TARGET_pad2}
-	
-		[ x"${1}" != "x" ] || exit 666
-		[ -d ${1} ] || exit 666
-
-		local d
-		for d in ${TARGET_patch_list_2} ; do ${spc} ${1}/${TARGET_pad_dir}/${d} . ; done
-
-		grep -v TARGET_to_ram devuan.conf > root.conf 
-	
-		${smr} devuan.conf
-		echo "TARGET_to_ram=1" >> root.conf
-		${scm} 0444 root.conf
-		cd ${previous}
-	fi
-}
+#function ijk() {
+#	if [ x"${CONF_squash_dir}" != "x" ]; then
+#		echo "${0} -x ?"
+#		
+#		previous=$(pwd)
+#		${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
+#		cd ${CONF_squash_dir}/${TARGET_pad2}
+#	
+#		[ x"${1}" != "x" ] || exit 666
+#		[ -d ${1} ] || exit 666
+#
+#		local d
+#		for d in ${TARGET_patch_list_2} ; do ${spc} ${1}/${TARGET_pad_dir}/${d} . ; done
+#
+#		grep -v TARGET_to_ram devuan.conf > root.conf 
+#	
+#		${smr} devuan.conf
+#		echo "TARGET_to_ram=1" >> root.conf
+#		${scm} 0444 root.conf
+#		cd ${previous}
+#	fi
+#}
 
 case ${cmd} in
 	-x)
@@ -289,9 +308,19 @@ case ${cmd} in
 	;;
 	-y)
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
-		${som} -o loop,ro ${par} ${CONF_source}
-		xxx ${CONF_source}/live/filesystem.squashfs
-		${uom} ${CONF_source}
+		dqb "${som} -o loop,ro ${par} ${CONF_source}"
+
+		#TODO:pwd otettava talreen rässä koht
+		${som} -o loop,ro ${par} $(pwd)/${CONF_source}
+		[ ${debug} -eq 1 ] && ls -las ${CONF_source}/live/
+		csleep 3
+
+		#[ ${debug} -eq 1 ] && dirname $0
+		[ ${debug} -eq 1 ] && pwd
+		csleep 3
+
+		xxx $(pwd)/${CONF_source}/live/filesystem.squashfs
+		${uom} $(pwd)/${CONF_source}
 	;;
 	-b) 
 		bbb		
