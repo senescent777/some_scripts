@@ -5,7 +5,6 @@ debug=1 #jatkossa nollaan
 . ./skripts/stage0_backend.bsh
 
 dqb "PARAMS OK?"
-#n=devuan 
 make_tgt_dirs
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
@@ -31,7 +30,7 @@ function part0() {
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää 	CONF_SOURCE
 	bootloader ${3} ${2} ${1} 
-	${odio} touch ${CONF_target}/${CONF_bloader}/*
+	#${odio} touch ${CONF_target}/${CONF_bloader}/* #saattaa vähän paskoa asioita
 
 	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
@@ -78,6 +77,9 @@ else
 		${som} -o loop,ro ${1} ${CONF_source} 
 		[ $? -eq 0 ] || exit 666
 		sleep 6
+
+		#[ ${debug} -eq 1 ] && ls -las ${CONF_target}
+		#csleep 4
 
 		part0 ${CONF_source} ${2} ${3}	
 		${uom} ${CONF_source} 
