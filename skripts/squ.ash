@@ -130,14 +130,16 @@ function bbb() {
 }
 
 function jlk_main() {
+	dqb "jkl1 $1 "
+	[ x"${1}" != "x" ] || exit 66
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -x ?"
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 
 		cd ${CONF_squash_dir}/${TARGET_pad2}
-		[ x"${1}" != "x" ] || exit 666
-
+		[ ${debug} -eq 1 ] && pwd
+		csleep 1
 
 		local d
 		for d in sh bz2 bz3 ; do ${spc} ${1}/${TARGET_pad_dir}/*.${d} . ; done
@@ -149,6 +151,7 @@ function jlk_main() {
 }
 
 function jlk_conf() {
+	dqb "jlk_conf( ${1} , ${2})"
 
 	if [ x"${CONF_squash_dir}" != "x" ] && [ y"${1}" != "y" ] ; then
 		if [ -d ${1}/${TARGET_pad_dir} ] ; then 
@@ -177,7 +180,7 @@ function jlk_conf() {
 }
 
 function jlk_sums() {
-
+	dqb "jlk_sums( ${1} , ${2})"
 	[ x"${1}" != "x" ] || exit 666
 	[ -d ${1} ] || echo "no such thing as ${1}"
 
@@ -195,6 +198,7 @@ function jlk_sums() {
 }
 
 function rst() {
+	dqb "rst( ${1} , ${2} )"
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		cd ${CONF_squash_dir}
@@ -264,10 +268,10 @@ function usage() {
 	echo "\t if possible, use -b instead\n"
 
 	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n NEEDS TO HAVE ABSOLUTE PATH"
-	echo "-r :runs chRoot in ${CONF_squash_dir} (TODO)"
+	echo "-r :runs chRoot in ${CONF_squash_dir} "
 	
 	#echo "-i <src> : Installs scripts 2 chroot_dir  (TODO?)"
-	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir (TODO)"
+	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
 	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
@@ -310,17 +314,17 @@ case ${cmd} in
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
 
-		#TODO:pwd otettava talreen rässä koht
-		${som} -o loop,ro ${par} $(pwd)/${CONF_source}
-		[ ${debug} -eq 1 ] && ls -las ${CONF_source}/live/
+		oldd=$(pwd)
+		${som} -o loop,ro ${par} ${oldd}/${CONF_source}
+		[ ${debug} -eq 1 ] && ls -las ${oldd}/${CONF_source}/live/
 		csleep 3
 
 		#[ ${debug} -eq 1 ] && dirname $0
 		[ ${debug} -eq 1 ] && pwd
 		csleep 3
 
-		xxx $(pwd)/${CONF_source}/live/filesystem.squashfs
-		${uom} $(pwd)/${CONF_source}
+		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs
+		${uom} ${oldd}/${CONF_source}
 	;;
 	-b) 
 		bbb		
