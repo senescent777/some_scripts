@@ -75,6 +75,8 @@ function xxx() {
 function fix_sudo() {
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		cd ${CONF_squash_dir}
+		[ ${debug} -eq 1 ] && pwd
+		csleep 1 
 
 		${sco} -R 0:0 ./etc/sudo*
 		${scm} -R a-w ./etc/sudo*
@@ -97,15 +99,15 @@ function fix_sudo() {
 	fi
 }
 
-#TODO:sittenq chroot?
 function bbb() {
 	dqb "bbb()"
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 
 		if [ -d ${CONF_squash_dir} ] ; then 
-			exit 55
+			#exit 55
 			cd ${CONF_squash_dir}
+			[ ${debug} -eq 1 ] && pwd
 
 			${smr} -rf ./run/live
 			${smr} -rf ./boot/grub/*
@@ -115,7 +117,7 @@ function bbb() {
 			${smr} -rf ./var/cache/apt/*.bin
 			${smr} -rf ./tmp/*
 
-			fix_sudo
+			fix_sudo #tälle tarttis tehdä jotain ettei ala pykumään kun cd ajettu
 
 			${scm} -R 0755 ./var/cache/man
 			${sco} -R man:man ./var/cache/man
@@ -276,7 +278,7 @@ function usage() {
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
 	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
 
-	echo "-f attempts to Fix some problems w/ sudo (TODO)"
+	echo "-f attempts to Fix some problems w/ sudo "
 	echo "--v 1 adds Verbosity\n"
 
 	echo "--mp,--md, --ms:self-explanatory opts 4 -r (TODO)" 
