@@ -70,4 +70,4 @@ chmod a+x ./*.sh
 c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 [ ${c} -lt 1 ] && echo $0.conf >> ${basedir}/.gitignore
 
-#TODO:stage0.sg --make-dirs
+echo "stage0.sg --make-dirs?"

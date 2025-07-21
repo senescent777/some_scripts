@@ -218,6 +218,9 @@ function rst() {
 			${odio} ln -s ./proc/mounts ./etc/mtab
 		fi		 
 
+		pwd
+		csleep 5
+
 		${svm} ${CONF_squash_dir}/etc/hosts ${CONF_squash_dir}/etc/hosts.bak	
 		${spc} /etc/hosts ${CONF_squash_dir}/etc
 		

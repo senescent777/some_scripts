@@ -27,7 +27,7 @@ function efk() {
 	sudo rm $@
 }
 
-#HUOM.18725:völillä jos kokeiltu ajaa init2 ennen generic_x- juttui, niinkin taitaa toimia
+#HUOM.18725:välillä jos kokeiltu ajaa init2 ennen generic_x- juttui, niinkin taitaa toimia
 q=$(mktemp -d)
 sudo cp ${pkgsrc}/*.deb ${q}
 	
@@ -35,8 +35,9 @@ sudo cp ${pkgsrc}/*.deb ${q}
 efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
 #efk ${q}/libjte2*.deb
 
-sudo dpkg -i ${q}/lib*.deb
-sudo rm ${q}/lib*.deb
+#sudo dpkg -i ${q}/lib*.deb
+#sudo rm ${q}/lib*.deb
+efk ${q}/lib*.deb
 
 #HUOM.17725:josqo lib-juttujen jälkeen pak as vain tarvittaessa, which...
 echo "BEFORE TBLZ"
@@ -47,14 +48,16 @@ sleep 2
 x=$(sudo which iptables)
 
 if [ ! -x ${x} ] ; then
-	sudo DEBIAN_FRONTEND=noninteractive dpkg -i ${q}/iptables_*.deb
+	#DEBIAN_FRONTEND=noninteractive kanssa lottoaminen jatqyy
+	sudo dpkg -i ${q}/iptables_*.deb
 	sudo rm ${q}/iptables_*.deb
 
-	sudo dpkg -i ${q}/net*.deb
-	sudo rm ${q}/net*.deb
+	#sudo dpkg -i ${q}/net*.deb
+	#sudo rm ${q}/net*.deb
+	efk ${q}/net*.deb
 
-	#tähän kai uskaltaa laittaa frontend takaisinb
-	sudo DEBIAN_FRONTEND=noninteractive dpkg -i ${q}/iptables-*.deb
+	#DEBIAN_FRONTEND=noninteractive
+	sudo dpkg -i ${q}/iptables-*.deb
 	sudo rm ${q}/iptables-*.deb
 
 	#deb uig taakse jatqssa
@@ -69,11 +72,13 @@ fi
 x=$(sudo which git)
 
 if [ ! -x ${x} ] ; then
-	sudo dpkg -i $q/git-man*.deb
-	sudo rm ${q}/git-man*.deb
+	#sudo dpkg -i $q/git-man*.deb
+	#sudo rm ${q}/git-man*.deb
+	efk ${q}/git-man*.deb
 
-	sudo dpkg -i $q/git*.deb
-	sudo rm ${q}/git*.deb
+	#sudo dpkg -i $q/git*.deb
+	#sudo rm ${q}/git*.deb
+	efk ${q}/git*.deb
 fi
 #/if_not_git
 
@@ -81,14 +86,27 @@ fi
 x=$(sudo which grub-mkrescue)
 
 if [ ! -x ${x} ] ; then
-	sudo dpkg -i $q/grub*.deb
-	sudo rm ${q}/grub*.deb
+	#sudo dpkg -i $q/grub*.deb
+	#sudo rm ${q}/grub*.deb
+	efk ${q}/grub*.deb 
 fi
 #/if_not_grub
 
 #ao. rivejä ei kannata unmohtaa
 #which grub geniso
+x=$(sudo which genisoimage)
+
+if [ ! -x ${x} ] ; then
+	efk ${q}/geniso*.deb
+fi
+
 #which grub xorrisao...
+x=$(sudo which xorriso)
+
+if [ ! -x ${x} ] ; then
+	efk ${q}/xorriso*.deb
+fi
+
 sudo dpkg -i $q/*.deb
 sudo rm ${q}/*.deb
 
@@ -118,7 +136,7 @@ echo "tg1,1,dibe"
 c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 [ ${c} -lt 1 ] && echo $0.conf >> ${basedir}/.gitignore
 
-sleep 1
-echo "#ei joulukuusia turhanbäite"
-for f in $(find ${basedir} -type f ) ; do sudo chmod a-x ${f} ; done
-for f in $(find ${basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done
+#sleep 1
+#echo "#ei joulukuusia turhanbäite"
+#for f in $(find ${basedir} -type f ) ; do sudo chmod a-x ${f} ; done
+#for f in $(find ${basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done

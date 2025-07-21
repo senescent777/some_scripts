@@ -267,6 +267,8 @@ function make_tgt_dirs() {
 	#miten oikeydet?
 	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
 
+	#TODO:avainhakemisto
+
 	#ls -la  ${CONF_target};sleep 6 dbq taakse
 	echo "...done"
 }
