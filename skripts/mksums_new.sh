@@ -38,6 +38,7 @@ function single_param() {
 		--iso)
 	
 			${gg} -u ${CONF_kay2name} -sb ./*.iso
+
 			exit 66
 		;;
 		--pkgs)
@@ -45,13 +46,13 @@ function single_param() {
 			[ x"${CONF_pkgsdir2}" != "x" ] || exit 64
 
 			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
-
 			${gg} -u ${CONF_kay2name} -sb ./*.deb
 			[ $? -eq 0 ] && ${gg} -u ${CONF_kay2name} -sb ./*.bz2
 			
 			exit 63
 		;;
 		--h|-h)
+
 			usage
 		;;
 	esac
@@ -114,6 +115,7 @@ function part123() {
 		csleep 1
 
 		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
+
 			dqb "${sh5} ${f}"
 			${sh5} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
 		done
@@ -197,8 +199,8 @@ function part8() {
 		1)
 			${gg} -u ${CONF_kay2name} -sb ${tfile}
 			echo $?
-
 				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}
+
 		;;
 		2)
 			dqb "2"
@@ -262,5 +264,4 @@ ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*
 
-	[ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
-
+[ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}

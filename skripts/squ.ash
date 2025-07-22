@@ -15,6 +15,7 @@ par=""
 function parse_opts_real() {
 	echo "squash.parse_opts_real()" #dqb
 
+
 	case ${1} in
 		--dir2)
 			dir2=${2}
@@ -52,12 +53,14 @@ parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
 function xxx() {
+
 	dqb "xxx( ${1})"
 	#tulisi stopata tässä jos ei kalaa
 	[ -s ${1} ] || exit 99
 
 	if [ x"${CONF_squash0}" != "x" ]; then
 		[ -d ${CONF_squash0} ] || ${smd} ${CONF_squash0}
+
 		cd ${CONF_squash0}
 		unsq=$(${odio} which unsquashfs)
 
@@ -68,6 +71,7 @@ function xxx() {
 		fi
 
 	fi
+
 
 	dqb "xxx d0mw"
 }
@@ -146,9 +150,6 @@ function jlk_main() {
 
 		local d
 		for d in sh bz2 bz3 ; do ${spc} ${1}/${TARGET_pad_dir}/*.${d} . ; done
-
-
-
 	
 	fi
 }
@@ -183,13 +184,15 @@ function jlk_conf() {
 }
 
 function jlk_sums() {
+
 	dqb "jlk_sums( ${1} , ${2})"
+
 	[ x"${1}" != "x" ] || exit 666
 	[ -d ${1} ] || echo "no such thing as ${1}"
 
 	cd ${CONF_squash_dir}/${TARGET_pad2}
-
 	[ -d ./0 ] || ${smd} -p ./0 ;sleep 6
+
 
 
 	${spc} -a ${1}/${TARGET_DIGESTS_dir}/* ./0
@@ -201,23 +204,29 @@ function jlk_sums() {
 }
 
 function rst() {
+
 	dqb "rst( ${1} , ${2} )"
 
-	if [ x"${CONF_squash_dir}" != "x" ]; then
-		cd ${CONF_squash_dir}
 
-		if [ ${md} -gt 0 ] ; then
-			dqb "MOUNTING PTOC"
-			${som} -o bind /dev ./dev 
+	if [ x"${CONF_squash_dir}" != "x" ]; then
+		    cd ${CONF_squash_dir}
+
+
+			  dqb "MOUNTING PTOC"
+
+			  ${som} -o bind /dev ./dev 
 		fi
 
 		if [ ${ms} -gt 0 ] ; then
+
 			dqb "MOUNTING ssy"
+
 			${som} -o bind /sys ./sys
 		fi
 
 		if [ ${mp} -gt 0 ] ; then
 			dqb "MOUNTING PC9EOR"
+
 			${som} -o bind /proc ./proc 
 			${odio} ln -s ./proc/mounts ./etc/mtab
 		fi		 
@@ -240,6 +249,7 @@ function rst() {
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
 
+
 		sleep 3
 	
 		${uom} ./dev 
@@ -256,6 +266,7 @@ function cfd() {
 	[ -s ${1} ] && exit 66
 	dqb "PARS IJ"
 
+
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -b ?"
 
@@ -263,6 +274,7 @@ function cfd() {
 
 		[ -s ${1} ] && rm ${1}
 		local msq
+
 		msq=$(${odio} which mksquashfs)
 
 		if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
@@ -287,6 +299,7 @@ function usage() {
 	
 	#echo "-i <src> : Installs scripts 2 chroot_dir  (TODO?)"
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
+
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
 	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
@@ -344,6 +357,7 @@ case ${cmd} in
 #	-b) 
 #		bbb		
 #	;;
+
 	-d)
 
 		if [ x"${CONF_squash0}" != "x" ] ; then
@@ -363,7 +377,9 @@ case ${cmd} in
 		rst
 	;;
 	-j)
+
 		#sudo: unable to allocate pty: No such device
+
 		jlk_main ${par}
 
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
@@ -371,11 +387,13 @@ case ${cmd} in
 		jlk_conf ${dir2} devuan
 
 		jlk_sums ${dir2}
+
 		#fix_sudo
 	;;
 #	-f)
 #		fix_sudo
 #	;;
+
 	*)
 		usage
 	;;
