@@ -24,6 +24,8 @@ sudo apt-get reinstall --no-install-recommends git-man git
 sudo apt-get reinstall --no-install-recommends liblz4-1 liblzma5 liblzo2-2 libzstd1
 sudo apt-get reinstall --no-install-recommends squashfs-tools
 
+#TODO:gpg,gpgv jatkossa?
+
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=genisoimage=9:1.1.11-3.4
 sudo apt-get reinstall libbz2-1.0 libmagic1
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=wodim=9:1.1.11-3.4
@@ -44,7 +46,6 @@ sudo apt-get reinstall --no-install-recommends libjte2
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=grub-common=2.06-13+deb12u1
 sudo apt-get reinstall libdevmapper1.02.1 libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
 #https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=xorriso=1.5.4-4
-
 sudo apt-get reinstall --no-install-recommends libisoburn1 libburn4 libisofs6 
 
 # grub-common depends on libfuse2 (>= 2.8.4-1.4); however:
@@ -68,3 +69,5 @@ chmod a+x ./*.sh
 [ -s ${basedir}/.gitignore ] || touch ${basedir}/.gitignore
 c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 [ ${c} -lt 1 ] && echo $0.conf >> ${basedir}/.gitignore
+
+echo "stage0.sg --make-dirs?"

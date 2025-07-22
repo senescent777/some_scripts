@@ -240,7 +240,6 @@ cd ${source}  #${CONF_target}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
 #6_5-8 mielekästä ajaa vatsa wittenq avaimet olemassa
-
 if [ x"${gg}" != "x" ] ; then 
 	part6_5
 fi
@@ -265,4 +264,4 @@ ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*
 
-	[ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
+[ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}

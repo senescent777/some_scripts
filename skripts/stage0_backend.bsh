@@ -17,7 +17,8 @@ function get_devuan() {
 }
 
 function make_src_dirs() {
-	dqb "make_s_DIrs"
+	dqb "s0b.make_s_DIrs"
+
 	${smd} ${CONF_keys_dir}
 	${smd} ${CONF_distros_dir}
 
@@ -217,7 +218,7 @@ function bootloader() {
 }
 
 function make_tgt_dirs() {
-	dqb "MAKE_t_DIRS()"
+	dqb "s0b.MAKE_t_DIRS()"
 
 	[ x"${CONF_target}" != "x" ] || exit 99
 	[ x"${CONF_target}" != "x/" ] || exit 100
@@ -263,6 +264,11 @@ function make_tgt_dirs() {
 	[ -d ${CONF_target}/../out ] || ${smd} -p ${CONF_target}/../out
 	${sco} -R ${n}:${n} ${CONF_target}/../out
 	${scm} 0755 ${CONF_target}/../out
+
+	#miten oikeydet?
+	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
+
+	#TODO:avainhakemisto
 
 	#ls -la  ${CONF_target};sleep 6 dbq taakse
 	echo "...done"

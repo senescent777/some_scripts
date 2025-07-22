@@ -46,6 +46,8 @@ function single_param() {
 			usage
 		;;
 	esac
+
+	exit 13
 }
 
 if [ -d ${CONF_tmpdir0} ] ; then

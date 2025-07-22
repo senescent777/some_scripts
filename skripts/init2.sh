@@ -22,83 +22,87 @@ if [ -s ${basedir}/interfaces ] ; then
 	sudo ln -s /etc/network/interfaces.${distro} /etc/network/interfaces
 fi
 
-#tarpeellinen kikkailu?
-#c=$(ls ${pkgsrc}/ip*.deb | wc -l)
-
 function efk() {
 	sudo dpkg -i $@
 	sudo rm $@
 }
 
-#völillä jos kokeilusi ajaa init2 ennen generic_x- juttui
-#if [ ${c} -gt 0 ] ; then
-	q=$(mktemp -d)
-	sudo cp ${pkgsrc}/*.deb ${q}
+#HUOM.18725:välillä jos kokeiltu ajaa init2 ennen generic_x- juttui, niinkin taitaa toimia
+q=$(mktemp -d)
+sudo cp ${pkgsrc}/*.deb ${q}
+
 	
-	#parempi samaan aikaan dms ja libdev 
-	efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
-	#efk ${q}/libjte2*.deb
+#parempi samaan aikaan dms ja libdev 
+efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
+#efk ${q}/libjte2*.deb
 
-	sudo dpkg -i ${q}/lib*.deb
-	sudo rm ${q}/lib*.deb
+#sudo dpkg -i ${q}/lib*.deb
+#sudo rm ${q}/lib*.deb
+efk ${q}/lib*.deb
 
-	#HUOM.17725:josqo lib-juttujen jälkeen pak as vain tarvittaessa, which...
-	echo "BEFORE TBLZ"
+#HUOM.17725:josqo lib-juttujen jälkeen pak as vain tarvittaessa, which...
+echo "BEFORE TBLZ"
+sleep 2
+
+#DEBIAN_FRONTEND=noninteractive tämän kanssa jokin juttu?
+#if_not_iptables
+x=$(sudo which iptables)
+
+if [ ! -x ${x} ] ; then
+	#DEBIAN_FRONTEND=noninteractive kanssa lottoaminen jatqyy
+	sudo dpkg -i ${q}/iptables_*.deb
+	sudo rm ${q}/iptables_*.deb
+
+	efk ${q}/net*.deb
+
+	#DEBIAN_FRONTEND=noninteractive
+	sudo dpkg -i ${q}/iptables-*.deb
+	sudo rm ${q}/iptables-*.deb
+
+	#deb uig taakse jatqssa
+	echo "after tables"
+	dpkg -l iptables*
 	sleep 2
+fi
+#/if_not_iptables
 
-	#DEBIAN_FRONTEND=noninteractive tämän kanssa jokin juttu?
+#qseeko tässä kohtaa jokin?
+#if_not_git
+x=$(sudo which git)
 
-	#if_not_iptables
-	x=$(sudo which iptables)
+if [ ! -x ${x} ] ; then
+	efk ${q}/git-man*.deb
+	efk ${q}/git*.deb
+fi
+#/if_not_git
 
-	if [ ! -x ${x} ] ; then
-		sudoDEBIAN_FRONTEND=noninteractive dpkg -i ${q}/iptables_*.deb
-		sudo rm ${q}/iptables_*.deb
+#if_not_grub
+x=$(sudo which grub-mkrescue)
 
-		sudo dpkg -i ${q}/net*.deb
-		sudo rm ${q}/net*.deb
+if [ ! -x ${x} ] ; then
+	#sudo dpkg -i $q/grub*.deb
+	#sudo rm ${q}/grub*.deb
+	efk ${q}/grub*.deb 
+fi
+#/if_not_grub
 
-		#tähän kai uskaltaa laittaa frontend takaisinb
-		sudo DEBIAN_FRONTEND=noninteractive dpkg -i ${q}/iptables-*.deb
-		sudo rm ${q}/iptables-*.deb
+#ao. rivejä ei kannata unmohtaa
+#which grub geniso
+x=$(sudo which genisoimage)
 
-		#deb uig taakse jatqssa
-		echo "after tables"
-		dpkg -l iptables*
-		sleep 2
-	fi
-	#/if_not_iptables
+if [ ! -x ${x} ] ; then
+	efk ${q}/geniso*.deb
+fi
 
-	#qseeko tässä kohtaa jokin?
-	#if_not_git
-	x=$(sudo which git)
+#which grub xorrisao...
+x=$(sudo which xorriso)
 
-	if [ ! -x ${x} ] ; then
-		sudo dpkg -i $q/git-man*.deb
-		sudo rm ${q}/git-man*.deb
+if [ ! -x ${x} ] ; then
+	efk ${q}/xorriso*.deb
+fi
 
-		sudo dpkg -i $q/git*.deb
-		sudo rm ${q}/git*.deb
-	fi
-	#/if_not_git
-
-	#if_not_grub
-	x=$(sudo which grub-mkrescue)
-
-	if [ ! -x ${x} ] ; then
-		sudo dpkg -i $q/grub*.deb
-		sudo rm ${q}/grub*.deb
-	fi
-	#/if_not_grub
-
-	#ao. rivejä ei kannata unmohtaa
-	#which grub geniso
-	#which grub xorrisao...
-	sudo dpkg -i $q/*.deb
-	sudo rm ${q}/*.deb
-#else
-#	sudo dpkg -i ${pkgsrc}/*.deb
-#fi
+sudo dpkg -i $q/*.deb
+sudo rm ${q}/*.deb
 
 echo "GENISOIMAGE?"
 which genisoimage
@@ -107,7 +111,6 @@ sleep 6
 #pois kommenteista 14725, takaisin jos qsee
 sudo apt-get remove --purge --yes python3-cups ntp* #sharyp from common_lib
 sudo apt autoremove
-
 sudo which iptables-restore
 sudo iptables-restore /etc/iptables/rules.v4.0
 sleep 2
@@ -127,7 +130,7 @@ echo "tg1,1,dibe"
 c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 [ ${c} -lt 1 ] && echo $0.conf >> ${basedir}/.gitignore
 
-sleep 1
-echo "#ei joulukuusia turhanbäite"
-for f in $(find ${basedir} -type f ) ; do sudo chmod a-x ${f} ; done
-for f in $(find ${basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done
+#sleep 1
+#echo "#ei joulukuusia turhanbäite"
+#for f in $(find ${basedir} -type f ) ; do sudo chmod a-x ${f} ; done
+#for f in $(find ${basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done

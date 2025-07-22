@@ -8,9 +8,15 @@ dqb "PARAMS OK?"
 make_tgt_dirs
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
+#VAIH:tuo uf-blokki toimimaan (olikohsn suunä ei-absoluuttinen polq?)
 function part0() {
 	#debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
+	pwd
+	csleep 2
+
+	dqb "COPY1NG FILES IN 1 SEC"
+	csleep 1
 
 	#ei aina tarttisi näiTä renkata
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
@@ -21,6 +27,9 @@ function part0() {
 			dqb "${1}/live/${f}"
 			${spc} ${1}/live/${f} ${CONF_target}/live
 		fi
+		
+		dqb "NECKST"
+		csleep 1
 	done
 
 	#efi uutena 13725
