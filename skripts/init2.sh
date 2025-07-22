@@ -52,8 +52,6 @@ if [ ! -x ${x} ] ; then
 	sudo dpkg -i ${q}/iptables_*.deb
 	sudo rm ${q}/iptables_*.deb
 
-	#sudo dpkg -i ${q}/net*.deb
-	#sudo rm ${q}/net*.deb
 	efk ${q}/net*.deb
 
 	#DEBIAN_FRONTEND=noninteractive
@@ -72,12 +70,7 @@ fi
 x=$(sudo which git)
 
 if [ ! -x ${x} ] ; then
-	#sudo dpkg -i $q/git-man*.deb
-	#sudo rm ${q}/git-man*.deb
 	efk ${q}/git-man*.deb
-
-	#sudo dpkg -i $q/git*.deb
-	#sudo rm ${q}/git*.deb
 	efk ${q}/git*.deb
 fi
 #/if_not_git

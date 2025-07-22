@@ -72,6 +72,7 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
+#jatkossa common_lib?
 function fix_sudo() {
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		cd ${CONF_squash_dir}
@@ -206,14 +207,17 @@ function rst() {
 		cd ${CONF_squash_dir}
 
 		if [ ${md} -gt 0 ] ; then
+			dqb "MOUNTING PTOC"
 			${som} -o bind /dev ./dev 
 		fi
 
 		if [ ${ms} -gt 0 ] ; then
+			dqb "MOUNTING ssy"
 			${som} -o bind /sys ./sys
 		fi
 
 		if [ ${mp} -gt 0 ] ; then
+			dqb "MOUNTING PC9EOR"
 			${som} -o bind /proc ./proc 
 			${odio} ln -s ./proc/mounts ./etc/mtab
 		fi		 
@@ -221,13 +225,20 @@ function rst() {
 		pwd
 		csleep 5
 
-		${svm} ${CONF_squash_dir}/etc/hosts ${CONF_squash_dir}/etc/hosts.bak	
+		#jotain säätöä tämän ympäiorstln kanssa ok buelä
+
+		[ -f ${CONF_squash_dir}/etc/hosts ]  && ${svm} ${CONF_squash_dir}/etc/hosts ${CONF_squash_dir}/etc/hosts.bak	
 		${spc} /etc/hosts ${CONF_squash_dir}/etc
-		
+		${odio} touch ./.chroot
+		#date > ./.chroot
+
 		${odio} chroot ./ ./bin/bash 
-				
+
+		${smr} ./.chroot			
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
+
+		#pitäisiköhän olla ylempänä ao. testi?
 		[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
 		sleep 3
 	
@@ -353,6 +364,7 @@ case ${cmd} in
 		rst
 	;;
 	-j)
+		#sudo: unable to allocate pty: No such device
 		jlk_main ${par}
 
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
