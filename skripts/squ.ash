@@ -73,64 +73,64 @@ function xxx() {
 }
 
 #jatkossa common_lib?
-function fix_sudo() {
-	if [ x"${CONF_squash_dir}" != "x" ]; then
-		cd ${CONF_squash_dir}
-		[ ${debug} -eq 1 ] && pwd
-		csleep 1 
-
-		${sco} -R 0:0 ./etc/sudo*
-		${scm} -R a-w ./etc/sudo*
-		${sco} -R 0:0 ./usr/lib/sudo/*
-
-		#${sco} -R 0:0 ./usr/bin/sudo*
-		#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
-		#AND CHATTR MAY OT WORK WITH SOME FILESYSTEMS	
-
-		${scm} 0750 ./etc/sudoers.d
-		${scm} 0440 /etc/sudoers.d/*
-
-		${scm} -R a-w ./usr/lib/sudo/*
-		#${scm} -R a-w ./usr/bin/sudo*
-		#${scm} 4555 ./usr/bin/sudo
-		${scm} 0444 ./usr/lib/sudo/sudoers.so
-
-		#${sca} +ui ./usr/bin/sudo
-		#${sca} +ui ./usr/lib/sudo/sudoers.so	
-	fi
-}
-
-function bbb() {
-	dqb "bbb()"
-
-	if [ x"${CONF_squash_dir}" != "x" ]; then
-
-		if [ -d ${CONF_squash_dir} ] ; then 
-			#exit 55
-			cd ${CONF_squash_dir}
-			[ ${debug} -eq 1 ] && pwd
-
-			${smr} -rf ./run/live
-			${smr} -rf ./boot/grub/*
-			${smr} -rf ./boot/*
-			${smr} -rf ./usr/share/doc/*	
-			${smr} -rf ./var/cache/apt/archives/*.deb
-			${smr} -rf ./var/cache/apt/*.bin
-			${smr} -rf ./tmp/*
-
-			fix_sudo #tälle tarttis tehdä jotain ettei ala pykumään kun cd ajettu
-
-			${scm} -R 0755 ./var/cache/man
-			${sco} -R man:man ./var/cache/man
-
-			${smr} ./root/.bash_history
-			${smr} ./home/devuan/.bash_history
-			
-		fi
-	fi
-
-	dqb "bbb().done()"
-}
+#tilapäisesti jemmmaan koska pykimistä slim:in kanssa TAAS
+#function fix_sudo() {
+#	if [ x"${CONF_squash_dir}" != "x" ]; then
+#		cd ${CONF_squash_dir}
+#		[ ${debug} -eq 1 ] && pwd
+#		csleep 1 
+#
+#		${sco} -R 0:0 ./etc/sudo*
+#		${scm} -R a-w ./etc/sudo*
+#		${sco} -R 0:0 ./usr/lib/sudo/*
+#
+#		#${sco} -R 0:0 ./usr/bin/sudo*
+#		#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
+#		#AND CHATTR MAY OT WORK WITH SOME FILESYSTEMS	
+#
+#		${scm} 0750 ./etc/sudoers.d
+#		${scm} 0440 /etc/sudoers.d/*
+#
+#		${scm} -R a-w ./usr/lib/sudo/*
+#		#${scm} -R a-w ./usr/bin/sudo*
+#		#${scm} 4555 ./usr/bin/sudo
+#		${scm} 0444 ./usr/lib/sudo/sudoers.so
+#
+#		#${sca} +ui ./usr/bin/sudo
+#		#${sca} +ui ./usr/lib/sudo/sudoers.so	
+#	fi
+#}
+#
+#function bbb() {
+#	dqb "bbb()"
+#
+#	if [ x"${CONF_squash_dir}" != "x" ]; then
+#
+#		if [ -d ${CONF_squash_dir} ] ; then 
+#			#exit 55
+#			cd ${CONF_squash_dir}
+#			[ ${debug} -eq 1 ] && pwd
+#
+#			${smr} -rf ./run/live
+#			${smr} -rf ./boot/grub/*
+#			${smr} -rf ./boot/*
+#			${smr} -rf ./usr/share/doc/*	
+#			${smr} -rf ./var/cache/apt/archives/*.deb
+#			${smr} -rf ./var/cache/apt/*.bin
+#			${smr} -rf ./tmp/*
+#
+#			#fix_sudo #tälle tarttis tehdä jotain ettei ala pykumään kun luotu kiekko bootattu
+#
+#			${scm} -R 0755 ./var/cache/man
+#			${sco} -R man:man ./var/cache/man
+#
+#			${smr} ./root/.bash_history
+#			${smr} ./home/devuan/.bash_history	
+#		fi
+#	fi
+#
+#	dqb "bbb().done()"
+#}
 
 function jlk_main() {
 	dqb "jkl1 $1 "
@@ -225,7 +225,8 @@ function rst() {
 		pwd
 		csleep 5
 
-		#jotain säätöä tämän ympäiorstln kanssa ok buelä
+		#TODO:jotain säätöä tämän ympäiorstln kanssa ok buelä
+		#... esim /e/d/locale voisio lla hyväkopsata perlin valitusten johdosra
 
 		[ -f ${CONF_squash_dir}/etc/hosts ]  && ${svm} ${CONF_squash_dir}/etc/hosts ${CONF_squash_dir}/etc/hosts.bak	
 		${spc} /etc/hosts ${CONF_squash_dir}/etc
@@ -233,13 +234,12 @@ function rst() {
 		#date > ./.chroot
 
 		${odio} chroot ./ ./bin/bash 
-
+		[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
+		
 		${smr} ./.chroot			
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
 
-		#pitäisiköhän olla ylempänä ao. testi?
-		[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
 		sleep 3
 	
 		${uom} ./dev 
@@ -248,7 +248,6 @@ function rst() {
 
 		sleep 3
 	fi
-
 }
 
 function cfd() {
@@ -342,9 +341,9 @@ case ${cmd} in
 		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs
 		${uom} ${oldd}/${CONF_source}
 	;;
-	-b) 
-		bbb		
-	;;
+#	-b) 
+#		bbb		
+#	;;
 	-d)
 
 		if [ x"${CONF_squash0}" != "x" ] ; then
@@ -372,11 +371,11 @@ case ${cmd} in
 		jlk_conf ${dir2} devuan
 
 		jlk_sums ${dir2}
-		fix_sudo
+		#fix_sudo
 	;;
-	-f)
-		fix_sudo
-	;;
+#	-f)
+#		fix_sudo
+#	;;
 	*)
 		usage
 	;;
