@@ -130,12 +130,16 @@ function xxx() {
 #
 #			${smr} ./root/.bash_history
 #			${smr} ./home/devuan/.bash_history	
+#
+#			#uusi ominaisuus 230725
+#			#for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
 #		fi
 #	fi
 #
 #	dqb "bbb().done()"
 #}
 
+#TODO:kutsuva n koodin antamien param muuttaminen, TARGET_pad_dir pois ao. fktiosta
 function jlk_main() {
 	dqb "jkl1 $1 "
 	[ x"${1}" != "x" ] || exit 66
@@ -154,6 +158,7 @@ function jlk_main() {
 	fi
 }
 
+#TODO:kutsuva n koodin antamien param muuttaminen, TARGET_pad_dir pois ao. fktiosta ?
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2})"
 
@@ -183,6 +188,7 @@ function jlk_conf() {
 
 }
 
+#TODO:kutsuva n koodin antamien param muuttaminen, TARGET_DIGESTS_dir pois ao. fktiosta ?
 function jlk_sums() {
 
 	dqb "jlk_sums( ${1} , ${2})"
@@ -237,7 +243,9 @@ function rst() {
 		#TODO:jotain säätöä tämän ympäiorstln kanssa ok buelä
 		#... esim /e/d/locale voisio lla hyväkopsata perlin valitusten johdosra
 
+		#HUOM.23725:toimiiko ao tarkistus qten tarkoityus?
 		[ -f ${CONF_squash_dir}/etc/hosts ]  && ${svm} ${CONF_squash_dir}/etc/hosts ${CONF_squash_dir}/etc/hosts.bak	
+		
 		${spc} /etc/hosts ${CONF_squash_dir}/etc
 		${odio} touch ./.chroot
 		#date > ./.chroot
