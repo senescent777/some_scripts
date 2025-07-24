@@ -47,7 +47,6 @@ function dqb() {
 function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
-
 #TODO:tähän asti juttujen korvaaminen toisen projektin common_lib
 #============================================
 
@@ -131,7 +130,6 @@ function mk_bkup() {
 #}
 
 #tarpeellinen?
-
 #function enforce_deps() {
 #	dqb "enf_deps"
 #	csleep 1

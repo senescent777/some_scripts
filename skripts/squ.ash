@@ -15,7 +15,6 @@ par=""
 function parse_opts_real() {
 	echo "squash.parse_opts_real()" #dqb
 
-
 	case ${1} in
 		--dir2)
 			dir2=${2}
@@ -53,14 +52,12 @@ parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
 function xxx() {
-
 	dqb "xxx( ${1})"
 	#tulisi stopata tässä jos ei kalaa
 	[ -s ${1} ] || exit 99
 
 	if [ x"${CONF_squash0}" != "x" ]; then
 		[ -d ${CONF_squash0} ] || ${smd} ${CONF_squash0}
-
 		cd ${CONF_squash0}
 		unsq=$(${odio} which unsquashfs)
 
@@ -71,7 +68,6 @@ function xxx() {
 		fi
 
 	fi
-
 
 	dqb "xxx d0mw"
 }
@@ -129,17 +125,16 @@ function xxx() {
 #			${sco} -R man:man ./var/cache/man
 #
 #			${smr} ./root/.bash_history
-#			${smr} ./home/devuan/.bash_history	
-#
-#			#uusi ominaisuus 230725
-#			#for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
+#			${smr} ./home/devuan/.bash_history
+#	#uusi ominaisuus 230725
+#	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
+#	
 #		fi
 #	fi
 #
 #	dqb "bbb().done()"
 #}
 
-#TODO:kutsuva n koodin antamien param muuttaminen, TARGET_pad_dir pois ao. fktiosta
 function jlk_main() {
 	dqb "jkl1 $1 "
 	[ x"${1}" != "x" ] || exit 66
@@ -152,22 +147,19 @@ function jlk_main() {
 		[ ${debug} -eq 1 ] && pwd
 		csleep 1
 
-		local d
-		for d in sh bz2 bz3 ; do ${spc} ${1}/${TARGET_pad_dir}/*.${d} . ; done
-	
+		local f
+		for f in sh bz2 bz3 ; do ${spc} ${1}/*.${f} . ; done
 	fi
 }
 
-#TODO:kutsuva n koodin antamien param muuttaminen, TARGET_pad_dir pois ao. fktiosta ?
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2})"
 
 	if [ x"${CONF_squash_dir}" != "x" ] && [ y"${1}" != "y" ] ; then
-		if [ -d ${1}/${TARGET_pad_dir} ] ; then 
-
-			if [ ! -s ${1}/${TARGET_pad_dir}/${2}.conf ] ; then
+		if [ -d ${1} ] ; then 
+			if [ ! -s ${1}/${2}.conf ] ; then
 				echo "ERROR:NO CONFIG FILE TO COPY!!!" 
-				exit 666
+				exit 66
 			fi
 
 			cd ${CONF_squash_dir}/${TARGET_pad2}
@@ -175,64 +167,52 @@ function jlk_conf() {
 			${smr} ./mf*;${smr} ./root.conf
 			${smr} ./${2}.conf
 
-
-
-			grep -v TARGET_to_ram ${1}/${TARGET_pad_dir}/${2}.conf > ./root.conf 
-
+			grep -v TARGET_to_ram ${1}/${2}.conf > ./root.conf 
 	        	echo "TARGET_to_ram=1" >> ./root.conf
-
-
 		#else
 		fi
 	fi
 
 }
 
-#TODO:kutsuva n koodin antamien param muuttaminen, TARGET_DIGESTS_dir pois ao. fktiosta ?
+sah6=$(${odio} which sha512sum)
+
 function jlk_sums() {
-
 	dqb "jlk_sums( ${1} , ${2})"
-
 	[ x"${1}" != "x" ] || exit 666
 	[ -d ${1} ] || echo "no such thing as ${1}"
 
 	cd ${CONF_squash_dir}/${TARGET_pad2}
+
 	[ -d ./0 ] || ${smd} -p ./0 ;sleep 6
 
 
-
-	${spc} -a ${1}/${TARGET_DIGESTS_dir}/* ./0
+	${spc} -a ${1}/* ./0
 
 		ls -las ./0;sleep 5
 		cd ..
-		${sh5} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
+		${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
 
 }
 
 function rst() {
-
 	dqb "rst( ${1} , ${2} )"
 
-
 	if [ x"${CONF_squash_dir}" != "x" ]; then
-		    cd ${CONF_squash_dir}
+		cd ${CONF_squash_dir}
 
-
-			  dqb "MOUNTING PTOC"
-
-			  ${som} -o bind /dev ./dev 
+		if [ ${md} -gt 0 ] ; then
+			dqb "MOUNTING PTOC"
+			${som} -o bind /dev ./dev 
 		fi
 
 		if [ ${ms} -gt 0 ] ; then
-
 			dqb "MOUNTING ssy"
-
 			${som} -o bind /sys ./sys
 		fi
 
 		if [ ${mp} -gt 0 ] ; then
 			dqb "MOUNTING PC9EOR"
-
 			${som} -o bind /proc ./proc 
 			${odio} ln -s ./proc/mounts ./etc/mtab
 		fi		 
@@ -243,9 +223,7 @@ function rst() {
 		#TODO:jotain säätöä tämän ympäiorstln kanssa ok buelä
 		#... esim /e/d/locale voisio lla hyväkopsata perlin valitusten johdosra
 
-		#HUOM.23725:toimiiko ao tarkistus qten tarkoityus?
 		[ -f ${CONF_squash_dir}/etc/hosts ]  && ${svm} ${CONF_squash_dir}/etc/hosts ${CONF_squash_dir}/etc/hosts.bak	
-		
 		${spc} /etc/hosts ${CONF_squash_dir}/etc
 		${odio} touch ./.chroot
 		#date > ./.chroot
@@ -256,7 +234,6 @@ function rst() {
 		${smr} ./.chroot			
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
-
 
 		sleep 3
 	
@@ -274,7 +251,6 @@ function cfd() {
 	[ -s ${1} ] && exit 66
 	dqb "PARS IJ"
 
-
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -b ?"
 
@@ -282,7 +258,6 @@ function cfd() {
 
 		[ -s ${1} ] && rm ${1}
 		local msq
-
 		msq=$(${odio} which mksquashfs)
 
 		if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
@@ -307,7 +282,6 @@ function usage() {
 	
 	#echo "-i <src> : Installs scripts 2 chroot_dir  (TODO?)"
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
-
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
 	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
@@ -365,7 +339,6 @@ case ${cmd} in
 #	-b) 
 #		bbb		
 #	;;
-
 	-d)
 
 		if [ x"${CONF_squash0}" != "x" ] ; then
@@ -385,23 +358,19 @@ case ${cmd} in
 		rst
 	;;
 	-j)
-
 		#sudo: unable to allocate pty: No such device
-
-		jlk_main ${par}
+		jlk_main ${par}/${TARGET_pad_dir}
 
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
-		jlk_conf ${dir2} devuan
+		jlk_conf ${dir2}/${TARGET_pad_dir}  ${n} #devuan
 
-		jlk_sums ${dir2}
-
+		jlk_sums ${dir2}/${TARGET_DIGESTS_dir}
 		#fix_sudo
 	;;
 #	-f)
 #		fix_sudo
 #	;;
-
 	*)
 		usage
 	;;
