@@ -36,7 +36,7 @@ sudo apt-get reinstall --no-install-recommends genisoimage wodim
 #dpkg: dependency problems prevent configuration of libdevmapper1.02.1:amd64:
 # libdevmapper1.02.1:amd64 depends on dmsetup (>= 2:1.02.185-2~); however:
 #  Package dmsetup is not installed.
-sudo apt-get reinstall --no-install-recommends dmsetup
+sudo apt-get reinstall --no-install-recommends dmsetup libdevmapper1
 
 #dpkg: dependency problems prevent configuration of libisoburn1:amd64:
 # libisoburn1:amd64 depends on libjte2; however:

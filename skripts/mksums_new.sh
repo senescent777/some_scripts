@@ -7,6 +7,10 @@ d=$(dirname $0)
 . ${d}/common.conf
 . ${d}/common_funcs.sh
 
+if [ -f ${d}/keys.conf ] ; then
+	. ${d}/keys.conf
+fi
+
 #jos jatkossa common_funcs tai common_lib
 if [ $# -eq 0 ] ; then
 	echo "-h"
@@ -38,7 +42,6 @@ function single_param() {
 		--iso)
 	
 			${gg} -u ${CONF_kay2name} -sb ./*.iso
-
 			exit 66
 		;;
 		--pkgs)
@@ -46,13 +49,13 @@ function single_param() {
 			[ x"${CONF_pkgsdir2}" != "x" ] || exit 64
 
 			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
+
 			${gg} -u ${CONF_kay2name} -sb ./*.deb
 			[ $? -eq 0 ] && ${gg} -u ${CONF_kay2name} -sb ./*.bz2
 			
 			exit 63
 		;;
 		--h|-h)
-
 			usage
 		;;
 	esac
@@ -67,7 +70,7 @@ function part0() {
 	local f
 
 	#pot. vaarallinen koska -R
-	${sco} -R ${n}:${n} ${1} 
+	${sco} -R ${n}:${n} ${1}  #TODO; $n parametriksi
 	${scm} 0755 ${1} 
 	${scm} u+w ${1}/* 
 	#oik/omist - asioita vosi miettiä jossain vaih että miten pitää mennä
@@ -115,7 +118,6 @@ function part123() {
 		csleep 1
 
 		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
-
 			dqb "${sh5} ${f}"
 			${sh5} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
 		done
@@ -139,7 +141,7 @@ function part456() {
 	csleep 1
 
 	if [ -s ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
-				${sh5} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} --ignore-missing
+		${sh5} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} --ignore-missing
 	else
 		echo "no such thing as ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}"		 
 	fi
@@ -168,13 +170,12 @@ function part7() {
 	dqb "part7"	
 
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
-	
-		${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
-		local i
+	${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
+	local i
 
-		for i in ${MKS_parts} ; do
-			${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}
-		done
+	for i in ${MKS_parts} ; do
+		${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}
+	done
 
 	echo $?
 	csleep 1
@@ -199,8 +200,8 @@ function part8() {
 		1)
 			${gg} -u ${CONF_kay2name} -sb ${tfile}
 			echo $?
-				${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}
 
+			${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}
 		;;
 		2)
 			dqb "2"

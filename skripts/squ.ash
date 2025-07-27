@@ -72,7 +72,6 @@ function xxx() {
 
 	fi
 
-
 	dqb "xxx d0mw"
 }
 
@@ -129,81 +128,90 @@ function xxx() {
 #			${sco} -R man:man ./var/cache/man
 #
 #			${smr} ./root/.bash_history
-#			${smr} ./home/devuan/.bash_history	
+#			${smr} ./home/devuan/.bash_history
+#	#uusi ominaisuus 230725
+#	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
+#	
 #		fi
 #	fi
 #
 #	dqb "bbb().done()"
 #}
 
+#VAIH:main-conf varten 3. param cd:tä varten? tai jtnkn muuten
+#HUOM.27725:oikeasraan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
+#poltettavalla kiekolle voisi mennä imp2+sen tarvitsemat
 function jlk_main() {
 	dqb "jkl1 $1 "
 	[ x"${1}" != "x" ] || exit 66
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -x ?"
-		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
-
-		cd ${CONF_squash_dir}/${TARGET_pad2}
+		
+		#cd ${CONF_squash_dir}/${TARGET_pad2}
 		[ ${debug} -eq 1 ] && pwd
 		csleep 1
 
-		local d
-		for d in sh bz2 bz3 ; do ${spc} ${1}/${TARGET_pad_dir}/*.${d} . ; done
-	
+		local f
+		for f in sh bz2 bz3 ; do ${spc} ${1}/*.${f} . ; done
+
 	fi
 }
 
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2})"
 
-	if [ x"${CONF_squash_dir}" != "x" ] && [ y"${1}" != "y" ] ; then
-		if [ -d ${1}/${TARGET_pad_dir} ] ; then 
+	pwd
+	csleep 2
 
-			if [ ! -s ${1}/${TARGET_pad_dir}/${2}.conf ] ; then
+
+	if [ x"${CONF_squash_dir}" != "x" ] && [ y"${1}" != "y" ] ; then
+		if [ -d ${1} ] ; then 
+			if [ ! -s ${1}/${2}.conf ] ; then
 				echo "ERROR:NO CONFIG FILE TO COPY!!!" 
-				exit 666
+				exit 66
 			fi
 
-			cd ${CONF_squash_dir}/${TARGET_pad2}
+			#cd ${CONF_squash_dir}/${TARGET_pad2}
 
 			${smr} ./mf*;${smr} ./root.conf
 			${smr} ./${2}.conf
 
-
-
-			grep -v TARGET_to_ram ${1}/${TARGET_pad_dir}/${2}.conf > ./root.conf 
-
+			grep -v TARGET_to_ram ${1}/${2}.conf > ./root.conf 
 	        	echo "TARGET_to_ram=1" >> ./root.conf
-
-
 		#else
 		fi
 	fi
 
+	dqb "jlk_conf( ${1} , ${2}) DONE4"
+	csleep 1
 }
 
+sah6=$(${odio} which sha512sum)
+
 function jlk_sums() {
-
 	dqb "jlk_sums( ${1} , ${2})"
-
 	[ x"${1}" != "x" ] || exit 666
 	[ -d ${1} ] || echo "no such thing as ${1}"
 
-	cd ${CONF_squash_dir}/${TARGET_pad2}
-	[ -d ./0 ] || ${smd} -p ./0 ;sleep 6
+	#TODO:tuolle 0-hmistolle voisi tehdä jotain, jokin CONF_xxx-juttu tilalle
+	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
 
 
+	#cd ${CONF_squash_dir}/${TARGET_pad2}
+	[ -d ./${TARGET_DGST0} ] || ${smd} -p ./${TARGET_DGST0} ;sleep 6
+	${spc} -a ${1}/* ./${TARGET_DGST0}
 
-	${spc} -a ${1}/${TARGET_DIGESTS_dir}/* ./0
-
-		ls -las ./0;sleep 5
-		cd ..
-		${sh5} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
+	ls -las ./${TARGET_DGST0};sleep 5
+	
+	cd ..
+	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
 
 }
 
+#olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
 function rst() {
+	dqb "rst( ${1} , ${2} )"
 
 	dqb "rst( ${1} , ${2} )"
 
@@ -212,13 +220,12 @@ function rst() {
 		    cd ${CONF_squash_dir}
 
 
-			  dqb "MOUNTING PTOC"
-
-			  ${som} -o bind /dev ./dev 
+		if [ ${md} -gt 0 ] ; then
+			dqb "MOUNTING PTOC"
+			${som} -o bind /dev ./dev 
 		fi
 
 		if [ ${ms} -gt 0 ] ; then
-
 			dqb "MOUNTING ssy"
 
 			${som} -o bind /sys ./sys
@@ -234,11 +241,16 @@ function rst() {
 		pwd
 		csleep 5
 
-		#TODO:jotain säätöä tämän ympäiorstln kanssa ok buelä
-		#... esim /e/d/locale voisio lla hyväkopsata perlin valitusten johdosra
 
-		[ -f ${CONF_squash_dir}/etc/hosts ]  && ${svm} ${CONF_squash_dir}/etc/hosts ${CONF_squash_dir}/etc/hosts.bak	
-		${spc} /etc/hosts ${CONF_squash_dir}/etc
+		#VAIH:jotain säätöä tämän ympäiorstln kanssa ok buelä
+		#... esim /e/d/locale voisio lla hyväkopsata perlin valitusten johdosra
+		#... oikeudet pitäisi laittaa kuntoon ainakin
+
+		locale > ./etc/default/locale
+
+		[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
+		${spc} /etc/hosts ./etc
+
 		${odio} touch ./.chroot
 		#date > ./.chroot
 
@@ -265,7 +277,6 @@ function cfd() {
 	[ x"${1}" != "x" ] || exit 6
 	[ -s ${1} ] && exit 66
 	dqb "PARS IJ"
-
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -b ?"
@@ -354,12 +365,12 @@ case ${cmd} in
 		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs
 		${uom} ${oldd}/${CONF_source}
 	;;
-#	-b) 
+
+#	-b) #HUOM.27725:kmmentoituja voisi koittaa vähitellen palauttaa
 #		bbb		
 #	;;
 
 	-d)
-
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
 			${smr} -rf ${CONF_squash0}/*
@@ -378,15 +389,21 @@ case ${cmd} in
 	;;
 	-j)
 
-		#sudo: unable to allocate pty: No such device
+		#conf:in jos saisi kopsautumaan kohteeseen
+		#... tai siis exp2 ja update pitäisi laittaa lisäämään takaisin 
+		
+		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
+		cd ${CONF_squash_dir}/${TARGET_pad2}
+		jlk_main ${par}/${TARGET_pad_dir}
 
-		jlk_main ${par}
 
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
-		jlk_conf ${dir2} devuan
+		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} #devuan
 
-		jlk_sums ${dir2}
+
+		#HUOM.27725:tökkö htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
+		jlk_sums ${dir2}/${TARGET_DIGESTS_dir}
 
 		#fix_sudo
 	;;
