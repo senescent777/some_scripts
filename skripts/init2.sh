@@ -5,6 +5,10 @@ else
 	exit 67
 fi
 
+#simppelimpi näin
+sudo ip link set ${iface} down
+
+#HUOM.27725: rules/interfaces/yms tarpeen vain mikäli nettiyhteyttä käyttää
 distro=$(cat /etc/devuan_version)
 [ -d /etc/iptables ] || sudo mkdir /etc/iptables
 
@@ -22,6 +26,7 @@ if [ -s ${basedir}/interfaces ] ; then
 	sudo ln -s /etc/network/interfaces.${distro} /etc/network/interfaces
 fi
 
+#common_lib
 function efk() {
 	sudo dpkg -i $@
 	sudo rm $@
@@ -35,37 +40,37 @@ sudo cp ${pkgsrc}/*.deb ${q}
 efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
 #efk ${q}/libjte2*.deb
 
-#sudo dpkg -i ${q}/lib*.deb
-#sudo rm ${q}/lib*.deb
+#tässä joutuisi vähän säätämään
 efk ${q}/lib*.deb
 
-#HUOM.17725:josqo lib-juttujen jälkeen pak as vain tarvittaessa, which...
 echo "BEFORE TBLZ"
 sleep 2
 
-#DEBIAN_FRONTEND=noninteractive tämän kanssa jokin juttu?
-#if_not_iptables
-x=$(sudo which iptables)
-
-if [ ! -x ${x} ] ; then
-	#DEBIAN_FRONTEND=noninteractive kanssa lottoaminen jatqyy
-	sudo dpkg -i ${q}/iptables_*.deb
-	sudo rm ${q}/iptables_*.deb
-
-	efk ${q}/net*.deb
-
-	#DEBIAN_FRONTEND=noninteractive
-	sudo dpkg -i ${q}/iptables-*.deb
-	sudo rm ${q}/iptables-*.deb
-
-	#deb uig taakse jatqssa
-	echo "after tables"
-	dpkg -l iptables*
-	sleep 2
-fi
-#/if_not_iptables
-
-#qseeko tässä kohtaa jokin?
+#HUOM.27725:josko hyldynbtäisi/prijausi common_lib.common_tbls() jatqssa
+#
+##DEBIAN_FRONTEND=noninteractive tämän kanssa jokin juttu?
+##if_not_iptables
+#x=$(sudo which iptables)
+#
+#if [ ! -x ${x} ] ; then
+#	#DEBIAN_FRONTEND=noninteractive kanssa lottoaminen jatqyy
+#	sudo dpkg -i ${q}/iptables_*.deb
+#	sudo rm ${q}/iptables_*.deb
+#
+#	efk ${q}/net*.deb
+#
+#	#DEBIAN_FRONTEND=noninteractive
+#	sudo dpkg -i ${q}/iptables-*.deb
+#	sudo rm ${q}/iptables-*.deb
+#
+#	#deb uig taakse jatqssa
+#	echo "after tables"
+#	dpkg -l iptables*
+#	sleep 2
+#fi
+##/if_not_iptables
+#
+##qseeko tässä kohtaa jokin?
 #if_not_git
 x=$(sudo which git)
 

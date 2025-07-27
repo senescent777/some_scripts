@@ -1,9 +1,13 @@
 #!/bin/bash
-
 ridk=""
-d=$(dirname $0)
+d=$(dirname $0) #sittenkin näin
+
 . ${d}/common.conf
 . ${d}/common_funcs.sh
+
+if [ -f ${d}/keys.conf ] ; then
+	. ${d}/keys.conf
+fi
 
 function usage() {
 	echo "${0} --kdir <kdir> --i Imports keys from <kdir>"
@@ -24,14 +28,11 @@ function tpop() {
 	esac
 }
 
-
-
 tpop ${1} ${2}
 tpop ${3} ${4}
 
 [ x"${ridk}" != "x" ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 [ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
-
 
 case ${cmd} in
 	--i)
@@ -39,8 +40,6 @@ case ${cmd} in
 			echo "dbg: ${gg} --import ${ridk}/${f}"
 			${gg} --import ${ridk}/${f}
 		done
-
-
 	;;
 	--e) 
 		[ x"${CONF_kay1name}" != "x" ] || exit 666
@@ -53,17 +52,25 @@ case ${cmd} in
 		${gg} --export ${CONF_kay2name} > ${ridk}/${TARGET_Dkname2}
 	;;
 	--m)
-		cd ~
-		mv ~/.gnupg ~/.gnupg.OLD
+		#cd ~
+		#mv ~/.gnupg ~/.gnupg.OLD #HUOM.27725:PAREMPI OLLA SORKKIMATTA
+
+		echo "${gg} --generate-key in 5 secs"
+		sleep 5
+
 		${gg} --generate-key
 		sleep 5
 		${gg} --generate-key
 		sleep 5
 	
-		cd ~;tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg
+		[ -s ${ridk}/k3yz.tar.bz2 ] && mv ${ridk}/k3yz.tar.bz2 ${ridk}/k3yz.tar.bz2.OLD
+		tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg
 	
-		${gg} --list-keys
-		nano ${CONF_scripts_dir}/common.conf
+		[ -s ${d}/keys.conf ] || cp  ${d}/keys.conf.example ${d}/keys.conf
+		${gg} --list-keys >> ${d}/keys.conf 
+		
+		 
+		nano ${d}/keys.conf #$EDITOR jatkossa
 	;;
 	*)
 		usage

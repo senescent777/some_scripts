@@ -135,15 +135,17 @@ function xxx() {
 #	dqb "bbb().done()"
 #}
 
+#VAIH:main-conf varten 3. param cd:tä varten? tai jtnkn muuten
+#HUOM.27725:oikeasraan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
+#poltettavalla kiekolle voisi mennä imp2+sen tarvitsemat
 function jlk_main() {
 	dqb "jkl1 $1 "
 	[ x"${1}" != "x" ] || exit 66
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
 		echo "${0} -x ?"
-		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
-
-		cd ${CONF_squash_dir}/${TARGET_pad2}
+		
+		#cd ${CONF_squash_dir}/${TARGET_pad2}
 		[ ${debug} -eq 1 ] && pwd
 		csleep 1
 
@@ -154,6 +156,8 @@ function jlk_main() {
 
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2})"
+	pwd
+	csleep 2
 
 	if [ x"${CONF_squash_dir}" != "x" ] && [ y"${1}" != "y" ] ; then
 		if [ -d ${1} ] ; then 
@@ -162,7 +166,7 @@ function jlk_conf() {
 				exit 66
 			fi
 
-			cd ${CONF_squash_dir}/${TARGET_pad2}
+			#cd ${CONF_squash_dir}/${TARGET_pad2}
 
 			${smr} ./mf*;${smr} ./root.conf
 			${smr} ./${2}.conf
@@ -173,6 +177,8 @@ function jlk_conf() {
 		fi
 	fi
 
+	dqb "jlk_conf( ${1} , ${2}) DONE4"
+	csleep 1
 }
 
 sah6=$(${odio} which sha512sum)
@@ -182,19 +188,21 @@ function jlk_sums() {
 	[ x"${1}" != "x" ] || exit 666
 	[ -d ${1} ] || echo "no such thing as ${1}"
 
-	cd ${CONF_squash_dir}/${TARGET_pad2}
+	#TODO:tuolle 0-hmistolle voisi tehdä jotain, jokin CONF_xxx-juttu tilalle
+	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
 
-	[ -d ./0 ] || ${smd} -p ./0 ;sleep 6
+	#cd ${CONF_squash_dir}/${TARGET_pad2}
+	[ -d ./${TARGET_DGST0} ] || ${smd} -p ./${TARGET_DGST0} ;sleep 6
+	${spc} -a ${1}/* ./${TARGET_DGST0}
 
-
-	${spc} -a ${1}/* ./0
-
-		ls -las ./0;sleep 5
-		cd ..
-		${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
+	ls -las ./${TARGET_DGST0};sleep 5
+	
+	cd ..
+	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
 
 }
 
+#olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
 function rst() {
 	dqb "rst( ${1} , ${2} )"
 
@@ -220,11 +228,14 @@ function rst() {
 		pwd
 		csleep 5
 
-		#TODO:jotain säätöä tämän ympäiorstln kanssa ok buelä
+		#VAIH:jotain säätöä tämän ympäiorstln kanssa ok buelä
 		#... esim /e/d/locale voisio lla hyväkopsata perlin valitusten johdosra
+		#... oikeudet pitäisi laittaa kuntoon ainakin
 
-		[ -f ${CONF_squash_dir}/etc/hosts ]  && ${svm} ${CONF_squash_dir}/etc/hosts ${CONF_squash_dir}/etc/hosts.bak	
-		${spc} /etc/hosts ${CONF_squash_dir}/etc
+		locale > ./etc/default/locale
+
+		[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
+		${spc} /etc/hosts ./etc
 		${odio} touch ./.chroot
 		#date > ./.chroot
 
@@ -336,11 +347,10 @@ case ${cmd} in
 		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs
 		${uom} ${oldd}/${CONF_source}
 	;;
-#	-b) 
+#	-b) #HUOM.27725:kmmentoituja voisi koittaa vähitellen palauttaa
 #		bbb		
 #	;;
 	-d)
-
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
 			${smr} -rf ${CONF_squash0}/*
@@ -358,13 +368,18 @@ case ${cmd} in
 		rst
 	;;
 	-j)
-		#sudo: unable to allocate pty: No such device
+		#conf:in jos saisi kopsautumaan kohteeseen
+		#... tai siis exp2 ja update pitäisi laittaa lisäämään takaisin 
+		
+		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
+		cd ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_main ${par}/${TARGET_pad_dir}
 
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
-		jlk_conf ${dir2}/${TARGET_pad_dir}  ${n} #devuan
+		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} #devuan
 
+		#HUOM.27725:tökkö htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir}
 		#fix_sudo
 	;;
