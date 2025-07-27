@@ -9,6 +9,7 @@ if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
 fi
 
+
 function usage() {
 	echo "${0} --kdir <kdir> --i Imports keys from <kdir>"
 	echo "${0} --kdir <kdir> --e Exports keys to <kdir>"
@@ -28,11 +29,13 @@ function tpop() {
 	esac
 }
 
+
 tpop ${1} ${2}
 tpop ${3} ${4}
 
 [ x"${ridk}" != "x" ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 [ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
+
 
 case ${cmd} in
 	--i)
@@ -40,6 +43,7 @@ case ${cmd} in
 			echo "dbg: ${gg} --import ${ridk}/${f}"
 			${gg} --import ${ridk}/${f}
 		done
+
 	;;
 	--e) 
 		[ x"${CONF_kay1name}" != "x" ] || exit 666
@@ -58,6 +62,7 @@ case ${cmd} in
 		echo "${gg} --generate-key in 5 secs"
 		sleep 5
 
+
 		${gg} --generate-key
 		sleep 5
 		${gg} --generate-key
@@ -71,6 +76,7 @@ case ${cmd} in
 		
 		 
 		nano ${d}/keys.conf #$EDITOR jatkossa
+
 	;;
 	*)
 		usage

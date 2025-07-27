@@ -266,4 +266,3 @@ ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*
 
 [ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
-

@@ -27,6 +27,7 @@ if [ -s ${basedir}/interfaces ] ; then
 fi
 
 #common_lib
+
 function efk() {
 	sudo dpkg -i $@
 	sudo rm $@
@@ -35,6 +36,9 @@ function efk() {
 #HUOM.18725:välillä jos kokeiltu ajaa init2 ennen generic_x- juttui, niinkin taitaa toimia
 q=$(mktemp -d)
 sudo cp ${pkgsrc}/*.deb ${q}
+
+
+
 	
 #parempi samaan aikaan dms ja libdev 
 efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
@@ -137,4 +141,5 @@ c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 #sleep 1
 #echo "#ei joulukuusia turhanbäite"
 #for f in $(find ${basedir} -type f ) ; do sudo chmod a-x ${f} ; done
+
 #for f in $(find ${basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done

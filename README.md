@@ -7,3 +7,5 @@ But at least files under minimize work for me. Those files are now under https:/
 
 Although, i will not give any guarantees. 
 If you choose to use this repository, or the others, the risk is 100% yours. Consider yourself warned. 
+
+(Using virtual machines can reduce the risks. )

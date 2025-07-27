@@ -15,6 +15,7 @@ par=""
 function parse_opts_real() {
 	echo "squash.parse_opts_real()" #dqb
 
+
 	case ${1} in
 		--dir2)
 			dir2=${2}
@@ -52,12 +53,14 @@ parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
 function xxx() {
+
 	dqb "xxx( ${1})"
 	#tulisi stopata tässä jos ei kalaa
 	[ -s ${1} ] || exit 99
 
 	if [ x"${CONF_squash0}" != "x" ]; then
 		[ -d ${CONF_squash0} ] || ${smd} ${CONF_squash0}
+
 		cd ${CONF_squash0}
 		unsq=$(${odio} which unsquashfs)
 
@@ -151,13 +154,16 @@ function jlk_main() {
 
 		local f
 		for f in sh bz2 bz3 ; do ${spc} ${1}/*.${f} . ; done
+
 	fi
 }
 
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2})"
+
 	pwd
 	csleep 2
+
 
 	if [ x"${CONF_squash_dir}" != "x" ] && [ y"${1}" != "y" ] ; then
 		if [ -d ${1} ] ; then 
@@ -191,6 +197,7 @@ function jlk_sums() {
 	#TODO:tuolle 0-hmistolle voisi tehdä jotain, jokin CONF_xxx-juttu tilalle
 	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
 
+
 	#cd ${CONF_squash_dir}/${TARGET_pad2}
 	[ -d ./${TARGET_DGST0} ] || ${smd} -p ./${TARGET_DGST0} ;sleep 6
 	${spc} -a ${1}/* ./${TARGET_DGST0}
@@ -206,8 +213,12 @@ function jlk_sums() {
 function rst() {
 	dqb "rst( ${1} , ${2} )"
 
+	dqb "rst( ${1} , ${2} )"
+
+
 	if [ x"${CONF_squash_dir}" != "x" ]; then
-		cd ${CONF_squash_dir}
+		    cd ${CONF_squash_dir}
+
 
 		if [ ${md} -gt 0 ] ; then
 			dqb "MOUNTING PTOC"
@@ -216,17 +227,20 @@ function rst() {
 
 		if [ ${ms} -gt 0 ] ; then
 			dqb "MOUNTING ssy"
+
 			${som} -o bind /sys ./sys
 		fi
 
 		if [ ${mp} -gt 0 ] ; then
 			dqb "MOUNTING PC9EOR"
+
 			${som} -o bind /proc ./proc 
 			${odio} ln -s ./proc/mounts ./etc/mtab
 		fi		 
 
 		pwd
 		csleep 5
+
 
 		#VAIH:jotain säätöä tämän ympäiorstln kanssa ok buelä
 		#... esim /e/d/locale voisio lla hyväkopsata perlin valitusten johdosra
@@ -236,6 +250,7 @@ function rst() {
 
 		[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
 		${spc} /etc/hosts ./etc
+
 		${odio} touch ./.chroot
 		#date > ./.chroot
 
@@ -245,6 +260,7 @@ function rst() {
 		${smr} ./.chroot			
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
+
 
 		sleep 3
 	
@@ -269,6 +285,7 @@ function cfd() {
 
 		[ -s ${1} ] && rm ${1}
 		local msq
+
 		msq=$(${odio} which mksquashfs)
 
 		if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
@@ -293,6 +310,7 @@ function usage() {
 	
 	#echo "-i <src> : Installs scripts 2 chroot_dir  (TODO?)"
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
+
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
 	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
@@ -347,9 +365,11 @@ case ${cmd} in
 		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs
 		${uom} ${oldd}/${CONF_source}
 	;;
+
 #	-b) #HUOM.27725:kmmentoituja voisi koittaa vähitellen palauttaa
 #		bbb		
 #	;;
+
 	-d)
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
@@ -368,6 +388,7 @@ case ${cmd} in
 		rst
 	;;
 	-j)
+
 		#conf:in jos saisi kopsautumaan kohteeseen
 		#... tai siis exp2 ja update pitäisi laittaa lisäämään takaisin 
 		
@@ -375,17 +396,21 @@ case ${cmd} in
 		cd ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_main ${par}/${TARGET_pad_dir}
 
+
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} #devuan
 
+
 		#HUOM.27725:tökkö htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir}
+
 		#fix_sudo
 	;;
 #	-f)
 #		fix_sudo
 #	;;
+
 	*)
 		usage
 	;;
