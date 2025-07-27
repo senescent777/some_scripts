@@ -66,7 +66,7 @@ case ${cmd} in
 		[ -s ${ridk}/k3yz.tar.bz2 ] && mv ${ridk}/k3yz.tar.bz2 ${ridk}/k3yz.tar.bz2.OLD
 		tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg
 	
-		[ -s ${d}/keys.conf.example ] || cp  ${d}/keys.conf.example ${d}/keys.conf
+		[ -s ${d}/keys.conf ] || cp  ${d}/keys.conf.example ${d}/keys.conf
 		${gg} --list-keys >> ${d}/keys.conf 
 		
 		 
