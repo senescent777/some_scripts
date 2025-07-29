@@ -15,7 +15,6 @@ par=""
 function parse_opts_real() {
 	echo "squash.parse_opts_real()" #dqb
 
-
 	case ${1} in
 		--dir2)
 			dir2=${2}
@@ -52,15 +51,14 @@ parse_opts ${5} ${6}
 parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
+#TODO:COBF:SQUASH parametriksi
 function xxx() {
-
 	dqb "xxx( ${1})"
 	#tulisi stopata tässä jos ei kalaa
 	[ -s ${1} ] || exit 99
 
 	if [ x"${CONF_squash0}" != "x" ]; then
 		[ -d ${CONF_squash0} ] || ${smd} ${CONF_squash0}
-
 		cd ${CONF_squash0}
 		unsq=$(${odio} which unsquashfs)
 
@@ -76,69 +74,73 @@ function xxx() {
 }
 
 #jatkossa common_lib?
-#tilapäisesti jemmmaan koska pykimistä slim:in kanssa TAAS
-#function fix_sudo() {
-#	if [ x"${CONF_squash_dir}" != "x" ]; then
-#		cd ${CONF_squash_dir}
-#		[ ${debug} -eq 1 ] && pwd
-#		csleep 1 
-#
-#		${sco} -R 0:0 ./etc/sudo*
-#		${scm} -R a-w ./etc/sudo*
-#		${sco} -R 0:0 ./usr/lib/sudo/*
-#
-#		#${sco} -R 0:0 ./usr/bin/sudo*
-#		#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
-#		#AND CHATTR MAY OT WORK WITH SOME FILESYSTEMS	
-#
-#		${scm} 0750 ./etc/sudoers.d
-#		${scm} 0440 /etc/sudoers.d/*
-#
-#		${scm} -R a-w ./usr/lib/sudo/*
-#		#${scm} -R a-w ./usr/bin/sudo*
-#		#${scm} 4555 ./usr/bin/sudo
-#		${scm} 0444 ./usr/lib/sudo/sudoers.so
-#
-#		#${sca} +ui ./usr/bin/sudo
-#		#${sca} +ui ./usr/lib/sudo/sudoers.so	
-#	fi
-#}
-#
-#function bbb() {
-#	dqb "bbb()"
-#
-#	if [ x"${CONF_squash_dir}" != "x" ]; then
-#
-#		if [ -d ${CONF_squash_dir} ] ; then 
-#			#exit 55
-#			cd ${CONF_squash_dir}
-#			[ ${debug} -eq 1 ] && pwd
-#
-#			${smr} -rf ./run/live
-#			${smr} -rf ./boot/grub/*
-#			${smr} -rf ./boot/*
-#			${smr} -rf ./usr/share/doc/*	
-#			${smr} -rf ./var/cache/apt/archives/*.deb
-#			${smr} -rf ./var/cache/apt/*.bin
-#			${smr} -rf ./tmp/*
-#
-#			#fix_sudo #tälle tarttis tehdä jotain ettei ala pykumään kun luotu kiekko bootattu
-#
-#			${scm} -R 0755 ./var/cache/man
-#			${sco} -R man:man ./var/cache/man
-#
-#			${smr} ./root/.bash_history
-#			${smr} ./home/devuan/.bash_history
-#	#uusi ominaisuus 230725
-#	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
-#	
-#		fi
-#	fi
-#
-#	dqb "bbb().done()"
-#}
+#VAIH:pois jemmasta
+#TODO:COBF:SQUASH parametriksi
+function fix_sudo() {
+	if [ x"${CONF_squash_dir}" != "x" ]; then
+		cd ${CONF_squash_dir}
+		[ ${debug} -eq 1 ] && pwd
+		csleep 1 
+
+		${sco} -R 0:0 ./etc/sudo*
+		${scm} -R a-w ./etc/sudo*
+		${sco} -R 0:0 ./usr/lib/sudo/*
+
+		#${sco} -R 0:0 ./usr/bin/sudo*
+		#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
+		#AND CHATTR MAY OT WORK WITH SOME FILESYSTEMS	
+
+		${scm} 0750 ./etc/sudoers.d
+		${scm} 0440 /etc/sudoers.d/*
+
+		${scm} -R a-w ./usr/lib/sudo/*
+		#${scm} -R a-w ./usr/bin/sudo*
+		#${scm} 4555 ./usr/bin/sudo
+		${scm} 0444 ./usr/lib/sudo/sudoers.so
+
+		#${sca} +ui ./usr/bin/sudo
+		#${sca} +ui ./usr/lib/sudo/sudoers.so	
+	fi
+}
+
+#VAIH:pois jemmasta
+#TODO:COBF:SQUASH parametriksi
+function bbb() {
+	dqb "bbb()"
+
+	if [ x"${CONF_squash_dir}" != "x" ]; then
+
+		if [ -d ${CONF_squash_dir} ] ; then 
+			#exit 55
+			cd ${CONF_squash_dir}
+			[ ${debug} -eq 1 ] && pwd
+
+			${smr} -rf ./run/live
+			${smr} -rf ./boot/grub/*
+			${smr} -rf ./boot/*
+			${smr} -rf ./usr/share/doc/*	
+			${smr} -rf ./var/cache/apt/archives/*.deb
+			${smr} -rf ./var/cache/apt/*.bin
+			${smr} -rf ./tmp/*
+
+			fix_sudo #tälle tarttis tehdä jotain ettei ala pykumään kun luotu kiekko bootattu
+
+			${scm} -R 0755 ./var/cache/man
+			${sco} -R man:man ./var/cache/man
+
+			${smr} ./root/.bash_history
+			${smr} ./home/devuan/.bash_history
+
+			#uusi ominaisuus 230725
+			for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
+		fi
+	fi
+
+	dqb "bbb().done()"
+}
 
 #VAIH:main-conf varten 3. param cd:tä varten? tai jtnkn muuten
+#TODO:COBF:SQUASH parametriksi
 #HUOM.27725:oikeasraan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
 #poltettavalla kiekolle voisi mennä imp2+sen tarvitsemat
 function jlk_main() {
@@ -154,16 +156,16 @@ function jlk_main() {
 
 		local f
 		for f in sh bz2 bz3 ; do ${spc} ${1}/*.${f} . ; done
-
 	fi
 }
 
+#TODO:COBF:SQUASH parametriksi?
+#TODO:parametreille järkev't arvot
+#TODO:chroot-ympäristlö varten oma conf (helpoitna jau necros.tar.bz2 kautta)
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2})"
-
 	pwd
 	csleep 2
-
 
 	if [ x"${CONF_squash_dir}" != "x" ] && [ y"${1}" != "y" ] ; then
 		if [ -d ${1} ] ; then 
@@ -189,14 +191,14 @@ function jlk_conf() {
 
 sah6=$(${odio} which sha512sum)
 
+#TODO:parametreille järkev't arvot
 function jlk_sums() {
 	dqb "jlk_sums( ${1} , ${2})"
 	[ x"${1}" != "x" ] || exit 666
 	[ -d ${1} ] || echo "no such thing as ${1}"
 
-	#TODO:tuolle 0-hmistolle voisi tehdä jotain, jokin CONF_xxx-juttu tilalle
+	#VAIH:tuolle 0-hmistolle voisi tehdä jotain, jokin CONF_xxx-juttu tilalle
 	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
-
 
 	#cd ${CONF_squash_dir}/${TARGET_pad2}
 	[ -d ./${TARGET_DGST0} ] || ${smd} -p ./${TARGET_DGST0} ;sleep 6
@@ -206,19 +208,14 @@ function jlk_sums() {
 	
 	cd ..
 	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
-
 }
 
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
 function rst() {
 	dqb "rst( ${1} , ${2} )"
 
-	dqb "rst( ${1} , ${2} )"
-
-
 	if [ x"${CONF_squash_dir}" != "x" ]; then
-		    cd ${CONF_squash_dir}
-
+		cd ${CONF_squash_dir}
 
 		if [ ${md} -gt 0 ] ; then
 			dqb "MOUNTING PTOC"
@@ -227,20 +224,17 @@ function rst() {
 
 		if [ ${ms} -gt 0 ] ; then
 			dqb "MOUNTING ssy"
-
 			${som} -o bind /sys ./sys
 		fi
 
 		if [ ${mp} -gt 0 ] ; then
 			dqb "MOUNTING PC9EOR"
-
 			${som} -o bind /proc ./proc 
 			${odio} ln -s ./proc/mounts ./etc/mtab
 		fi		 
 
 		pwd
 		csleep 5
-
 
 		#VAIH:jotain säätöä tämän ympäiorstln kanssa ok buelä
 		#... esim /e/d/locale voisio lla hyväkopsata perlin valitusten johdosra
@@ -250,7 +244,6 @@ function rst() {
 
 		[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
 		${spc} /etc/hosts ./etc
-
 		${odio} touch ./.chroot
 		#date > ./.chroot
 
@@ -260,7 +253,6 @@ function rst() {
 		${smr} ./.chroot			
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
-
 
 		sleep 3
 	
@@ -272,6 +264,7 @@ function rst() {
 	fi
 }
 
+#TODO:COBF:SQUASH parametriksi?
 function cfd() {
 	dqb "cfd(${1})"
 	[ x"${1}" != "x" ] || exit 6
@@ -285,7 +278,6 @@ function cfd() {
 
 		[ -s ${1} ] && rm ${1}
 		local msq
-
 		msq=$(${odio} which mksquashfs)
 
 		if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
@@ -310,7 +302,6 @@ function usage() {
 	
 	#echo "-i <src> : Installs scripts 2 chroot_dir  (TODO?)"
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
-
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
 	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
@@ -318,7 +309,7 @@ function usage() {
 	echo "-f attempts to Fix some problems w/ sudo "
 	echo "--v 1 adds Verbosity\n"
 
-	echo "--mp,--md, --ms:self-explanatory opts 4 -r (TODO)" 
+	echo "--mp,--md, --ms:self-explanatory opts 4 -r (TODO?)" 
 	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
@@ -365,11 +356,9 @@ case ${cmd} in
 		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs
 		${uom} ${oldd}/${CONF_source}
 	;;
-
-#	-b) #HUOM.27725:kmmentoituja voisi koittaa vähitellen palauttaa
-#		bbb		
-#	;;
-
+	-b) #HUOM.27725:kmmentoituja voisi koittaa vähitellen palauttaa
+		bbb		
+	;;
 	-d)
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
@@ -388,7 +377,6 @@ case ${cmd} in
 		rst
 	;;
 	-j)
-
 		#conf:in jos saisi kopsautumaan kohteeseen
 		#... tai siis exp2 ja update pitäisi laittaa lisäämään takaisin 
 		
@@ -396,21 +384,19 @@ case ${cmd} in
 		cd ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_main ${par}/${TARGET_pad_dir}
 
+		#TODO:jatkossa jo ei erikseen dir2 , vaan -j jälkeen voisi tulla uaseampi hakemisto?
 
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} #devuan
 
-
 		#HUOM.27725:tökkö htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir}
-
-		#fix_sudo
+		fix_sudo
 	;;
-#	-f)
-#		fix_sudo
-#	;;
-
+	-f)
+		fix_sudo
+	;;
 	*)
 		usage
 	;;
