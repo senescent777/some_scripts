@@ -52,9 +52,6 @@ case ${cmd} in
 		${gg} --export ${CONF_kay2name} > ${ridk}/${TARGET_Dkname2}
 	;;
 	--m)
-		#cd ~
-		#mv ~/.gnupg ~/.gnupg.OLD #HUOM.27725:PAREMPI OLLA SORKKIMATTA
-
 		echo "${gg} --generate-key in 5 secs"
 		sleep 5
 
@@ -66,11 +63,11 @@ case ${cmd} in
 		[ -s ${ridk}/k3yz.tar.bz2 ] && mv ${ridk}/k3yz.tar.bz2 ${ridk}/k3yz.tar.bz2.OLD
 		tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg
 	
-		[ -s ${d}/keys.conf ] || cp  ${d}/keys.conf.example ${d}/keys.conf
-		${gg} --list-keys >> ${d}/keys.conf 
-		
-		 
-		nano ${d}/keys.conf #$EDITOR jatkossa
+		if [ ! -s ${d}/keys.conf ] ; then
+			cp ${d}/keys.conf.example ${d}/keys.conf
+			${gg} --list-keys >> ${d}/keys.conf  
+			nano ${d}/keys.conf #$EDITOR jatkossa
+		fi
 	;;
 	*)
 		usage
