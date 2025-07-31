@@ -72,6 +72,7 @@ function part0() {
 
 	#pot. vaarallinen koska -R
 	${sco} -R ${2}:${2} ${1} 
+
 	${scm} 0755 ${1} 
 	${scm} u+w ${1}/* 
 	#oik/omist - asioita vosi miettiä jossain vaih että miten pitää mennä
@@ -180,6 +181,7 @@ function part7() {
 
 	for i in ${MKS_parts} ; do
 		${gv} --keyring ./${TARGET_Dpubkf} ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
+
 	done
 
 	echo $?
@@ -271,4 +273,3 @@ ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*
 
 [ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
-

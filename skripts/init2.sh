@@ -27,6 +27,7 @@ if [ -s ${basedir}/interfaces ] ; then
 fi
 
 #common_lib
+
 function efk() {
 	sudo dpkg -i $@
 	sudo rm $@
@@ -35,6 +36,7 @@ function efk() {
 #HUOM.18725:välillä jos kokeiltu ajaa init2 ennen generic_x- juttui, niinkin taitaa toimia
 q=$(mktemp -d)
 sudo cp ${pkgsrc}/*.deb ${q}
+
 	
 #parempi samaan aikaan dms ja libdev 
 efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb

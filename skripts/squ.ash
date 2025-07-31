@@ -71,7 +71,6 @@ function xxx() {
 			echo "${odio} apt-get install squashfs-utils"
 		fi
 
-	#fi
 	dqb "xxx d0mw"
 }
 
@@ -89,9 +88,11 @@ function fix_sudo() {
 		[ ${debug} -eq 1 ] && pwd
 		csleep 1 
 
+
 		${sco} -R 0:0 ./etc/sudo*
 		${scm} -R a-w ./etc/sudo*
 		${sco} -R 0:0 ./usr/lib/sudo/*
+
 
 		#${sco} -R 0:0 ./usr/bin/sudo*
 		#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
@@ -176,7 +177,6 @@ function jlk_main() {
 	${spc} ${1}/*.sh ${2}/${TARGET_pad2}/
 	${spc} ${1}/*.bz2 ${2}/${TARGET_pad2}/
 	${spc} ${1}/*.bz3 ${2}/${TARGET_pad2}/
-
 	dqb "jkl1 d0n3"
 }
 
@@ -212,6 +212,7 @@ function jlk_main() {
 #	dqb "jlk_conf( ) DONE4"
 #	csleep 1
 #}
+
 
 sah6=$(${odio} which sha512sum)
 
@@ -275,6 +276,7 @@ function rst() {
 
 		[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
 		${spc} /etc/hosts ./etc
+
 		${odio} touch ./.chroot
 		#date > ./.chroot
 
@@ -299,12 +301,14 @@ function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ x"${1}" == "x" ] && exit 6
 	[ -s ${1} ] && exit 66
+
 	[ x"${2}" == "x" ] && exit 7
 	[ -d ${2} ] || exit 77
 
 	dqb "PARS IJ"
 	csleep 1
 	
+
 		echo "${0} -b ?"
 
 		cd ${2}
@@ -391,6 +395,7 @@ case ${cmd} in
 	-b)
 		bbb ${CONF_squash_dir}
 	;;
+
 	-d)
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
@@ -422,6 +427,7 @@ case ${cmd} in
 		#[ -d ${dir2} ] || echo "--dir2 "
 		#jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
 
+
 		#HUOM.27725:tökkö htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
 		#jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}
 		fix_sudo ${CONF_squash_dir}
@@ -433,4 +439,3 @@ case ${cmd} in
 		usage
 	;;
 esac
-

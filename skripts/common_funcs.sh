@@ -130,6 +130,7 @@ function mk_bkup() {
 #}
 
 #tarpeellinen?
+
 #function enforce_deps() {
 #	dqb "enf_deps"
 #	csleep 1
