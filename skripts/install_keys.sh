@@ -33,6 +33,7 @@ tpop ${3} ${4}
 
 [ x"${ridk}" != "x" ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 [ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
+#aiheeseen liittyen:miten wtussa gpgtarin saa toimimaan? --create ja -t vissiin toimii mutta --extract...
 
 case ${cmd} in
 	--i)
@@ -40,7 +41,6 @@ case ${cmd} in
 			echo "dbg: ${gg} --import ${ridk}/${f}"
 			${gg} --import ${ridk}/${f}
 		done
-
 	;;
 	--e) 
 		[ x"${CONF_kay1name}" != "x" ] || exit 666
@@ -56,12 +56,12 @@ case ${cmd} in
 		echo "${gg} --generate-key in 5 secs"
 		sleep 5
 
-
 		${gg} --generate-key
 		sleep 5
 		${gg} --generate-key
 		sleep 5
 	
+		#tartteeko joka ketra tehdä tämä?
 		[ -s ${ridk}/k3yz.tar.bz2 ] && mv ${ridk}/k3yz.tar.bz2 ${ridk}/k3yz.tar.bz2.OLD
 		tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg
 	
@@ -70,7 +70,6 @@ case ${cmd} in
 			${gg} --list-keys >> ${d}/keys.conf  
 			nano ${d}/keys.conf #$EDITOR jatkossa
 		fi
-
 	;;
 	*)
 		usage

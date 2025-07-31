@@ -92,7 +92,7 @@ function copy_conf() {
 	fi
 
 	utfile=${3}/${2}.conf
-	#TODO:voisikohan ottaa hyötykäyrröönm?
+	#TODO:voisikohan ottaa hyötykäyttöönm?
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
 	echo -n "src=/" >> ${utfile}
@@ -171,7 +171,7 @@ function bootloader() {
 
 	[ ${debug} -eq 1 ] && ls -las ${CONF_target};sleep 6
 
-	#HUOM.jos touch-komentoa tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa (?)
+	#HUOM.jos touch-koentoia tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa
 	case ${1} in
 		isolinux)
 

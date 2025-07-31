@@ -71,6 +71,7 @@ function xxx() {
 			echo "${odio} apt-get install squashfs-utils"
 		fi
 
+	#fi
 	dqb "xxx d0mw"
 }
 
@@ -88,11 +89,9 @@ function fix_sudo() {
 		[ ${debug} -eq 1 ] && pwd
 		csleep 1 
 
-
 		${sco} -R 0:0 ./etc/sudo*
 		${scm} -R a-w ./etc/sudo*
 		${sco} -R 0:0 ./usr/lib/sudo/*
-
 
 		#${sco} -R 0:0 ./usr/bin/sudo*
 		#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
@@ -120,10 +119,6 @@ function bbb() {
 	dqb "pars_ok"
 	csleep 1
 
-	#if ; then
-
-		#if [ -d ${1} ] ; then 
-			#exit 55
 			cd ${1}
 			[ ${debug} -eq 1 ] && pwd
 
@@ -144,8 +139,7 @@ function bbb() {
 
 			#uusi ominaisuus 230725
 			for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
-		#fi
-	#fi
+
 
 	dqb "bbb().done()"
 }
@@ -160,28 +154,19 @@ function jlk_main() {
 	[ x"${2}" == "x" ] && exit 67
 	[ -d ${1} ] || exit 68
 	[ -d ${2} ] || exit 69
+
 	dqb "pars_ok"
 	csleep 1
-
-
-#		echo "${0} -x ?"
-#		
-#		cd ${2}/${TARGET_pad2}
-#		[ ${debug} -eq 1 ] && pwd
-#		csleep 1
-#
-	#	local f
-	#	for f in sh bz2 bz3 ; do ${spc} ${1}/*.${f} . ; done
-	#fi
 
 	${spc} ${1}/*.sh ${2}/${TARGET_pad2}/
 	${spc} ${1}/*.bz2 ${2}/${TARGET_pad2}/
 	${spc} ${1}/*.bz3 ${2}/${TARGET_pad2}/
+
 	dqb "jkl1 d0n3"
 }
 
 ##TODO:parametreille järkev't arvot
-##TODO:chroot-ympäristlö varten oma conf (helpoitna jau necros.tar.bz2 kautta)
+##TODO:chroot-ympäristlö varten oma conf? (helpoitna kai necros.tar.bz2 kautta)
 #function jlk_conf() {
 #	dqb "jlk_conf( ${1} , ${2} , ${3})"
 #	[ x"${1}" == "x" ] && exit 66
@@ -213,8 +198,8 @@ function jlk_main() {
 #	csleep 1
 #}
 
-
 sah6=$(${odio} which sha512sum)
+#TODO:avainten kopsailu sq.chroot-alle tässä? vai laittaisiko exp2 pakettiin?
 
 #function jlk_sums() {
 #	dqb "jlk_sums( ${1} , ${2}, ${3})"
@@ -236,6 +221,7 @@ sah6=$(${odio} which sha512sum)
 #	cd ..
 #	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
 #}
+
 #TODO:cofs_squash_dir?
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
 function rst() {
@@ -276,7 +262,6 @@ function rst() {
 
 		[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
 		${spc} /etc/hosts ./etc
-
 		${odio} touch ./.chroot
 		#date > ./.chroot
 
@@ -301,14 +286,12 @@ function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ x"${1}" == "x" ] && exit 6
 	[ -s ${1} ] && exit 66
-
 	[ x"${2}" == "x" ] && exit 7
 	[ -d ${2} ] || exit 77
 
 	dqb "PARS IJ"
 	csleep 1
 	
-
 		echo "${0} -b ?"
 
 		cd ${2}
@@ -395,7 +378,6 @@ case ${cmd} in
 	-b)
 		bbb ${CONF_squash_dir}
 	;;
-
 	-d)
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
@@ -427,7 +409,6 @@ case ${cmd} in
 		#[ -d ${dir2} ] || echo "--dir2 "
 		#jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
 
-
 		#HUOM.27725:tökkö htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
 		#jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}
 		fix_sudo ${CONF_squash_dir}
@@ -439,3 +420,4 @@ case ${cmd} in
 		usage
 	;;
 esac
+

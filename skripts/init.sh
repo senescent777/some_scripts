@@ -4,6 +4,8 @@ if [ -s $0.conf ] ; then
 	. $0.conf 
 fi
 
+#TODO:nimeäminen uudelleen ettei joudu vahingossa kiekolle
+
 if [ ! -s ${basedir}/sources.list ] ; then
 	sudo nano /etc/apt/sources.list #tai cp
 else

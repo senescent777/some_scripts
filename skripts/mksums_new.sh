@@ -72,7 +72,6 @@ function part0() {
 
 	#pot. vaarallinen koska -R
 	${sco} -R ${2}:${2} ${1} 
-
 	${scm} 0755 ${1} 
 	${scm} u+w ${1}/* 
 	#oik/omist - asioita vosi miettiä jossain vaih että miten pitää mennä
@@ -159,12 +158,12 @@ function part6_5() {
 	for i in ${MKS_parts} ; do
 		dqb "${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
 		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
-		echo "$?"
+		[ $? -gt 0 ] && dqb "install-keys --i ?"
 	done
 
-	if [ $? -gt 0 ] ; then
-		dqb "uliuli"
-	fi
+	#if  ; then
+	#	dqb "uliuli"
+	#fi
 
 	dqb "dibw"
 }
@@ -176,12 +175,14 @@ function part7() {
 
 	dqb "${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}"
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
+	[ $? -gt 0 ] && dqb "install-keys --i ?"
+
 	${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
+	[ $? -gt 0 ] && dqb "install-keys --i ?"
 	local i
 
 	for i in ${MKS_parts} ; do
 		${gv} --keyring ./${TARGET_Dpubkf} ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
-
 	done
 
 	echo $?
@@ -273,3 +274,4 @@ ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*
 
 [ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
+
