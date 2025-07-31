@@ -13,7 +13,7 @@ make_tgt_dirs
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
 function part0() {
-	debug=1
+	#debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
 	pwd
 	csleep 2
