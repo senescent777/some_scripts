@@ -57,7 +57,7 @@ sudo apt-get reinstall --no-install-recommends libfuse2
 sudo apt-get reinstall --no-install-recommends mtools
 
 sudo apt-get reinstall --no-install-recommends grub-common xorriso #jälkimminen toistaiseksi mukana
-
+#TODO:geany?
 if [ ! -d ${1} ] ; then
 	sudo tar -cvf ${1} /var/cache/apt/archives/*.deb
 else
