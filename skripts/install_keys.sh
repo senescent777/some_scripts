@@ -9,7 +9,6 @@ if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
 fi
 
-
 function usage() {
 	echo "${0} --kdir <kdir> --i Imports keys from <kdir>"
 	echo "${0} --kdir <kdir> --e Exports keys to <kdir>"
@@ -29,13 +28,11 @@ function tpop() {
 	esac
 }
 
-
 tpop ${1} ${2}
 tpop ${3} ${4}
 
 [ x"${ridk}" != "x" ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 [ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
-
 
 case ${cmd} in
 	--i)
@@ -56,9 +53,6 @@ case ${cmd} in
 		${gg} --export ${CONF_kay2name} > ${ridk}/${TARGET_Dkname2}
 	;;
 	--m)
-		#cd ~
-		#mv ~/.gnupg ~/.gnupg.OLD #HUOM.27725:PAREMPI OLLA SORKKIMATTA
-
 		echo "${gg} --generate-key in 5 secs"
 		sleep 5
 
@@ -71,11 +65,11 @@ case ${cmd} in
 		[ -s ${ridk}/k3yz.tar.bz2 ] && mv ${ridk}/k3yz.tar.bz2 ${ridk}/k3yz.tar.bz2.OLD
 		tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg
 	
-		[ -s ${d}/keys.conf ] || cp  ${d}/keys.conf.example ${d}/keys.conf
-		${gg} --list-keys >> ${d}/keys.conf 
-		
-		 
-		nano ${d}/keys.conf #$EDITOR jatkossa
+		if [ ! -s ${d}/keys.conf ] ; then
+			cp ${d}/keys.conf.example ${d}/keys.conf
+			${gg} --list-keys >> ${d}/keys.conf  
+			nano ${d}/keys.conf #$EDITOR jatkossa
+		fi
 
 	;;
 	*)
