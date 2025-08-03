@@ -122,6 +122,8 @@ case ${bloader} in
 
 		xi=$(sudo which xorriso)
 		gmk=$(sudo which grub-mkrescue) #pitäsikö sudottaa vielä?
+		#libburn : SORRY : Failed to open device (a pseudo-drive) : Permission denied
+		#ehkä ei tartte sudottaa jos kohde-hakemisto sopiva (esim /tmp)
 		
 		dqb "${gmk} -o ${ltarget} ${lsrcdir}"
 		${gmk} ${CONF_GRUB_OPTS} -o ${ltarget} ${lsrcdir}
