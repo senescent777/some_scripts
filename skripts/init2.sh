@@ -27,7 +27,6 @@ if [ -s ${basedir}/interfaces ] ; then
 fi
 
 #common_lib
-
 function efk() {
 	sudo dpkg -i $@
 	sudo rm $@
@@ -36,9 +35,6 @@ function efk() {
 #HUOM.18725:välillä jos kokeiltu ajaa init2 ennen generic_x- juttui, niinkin taitaa toimia
 q=$(mktemp -d)
 sudo cp ${pkgsrc}/*.deb ${q}
-
-
-
 	
 #parempi samaan aikaan dms ja libdev 
 efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
@@ -109,6 +105,10 @@ if [ ! -x ${x} ] ; then
 	efk ${q}/xorriso*.deb
 fi
 
+#TODO:nimeäminen uudelleen ettei joudu vahingossa kiekolle
+#TODO:gpg:n asennuys
+#TODO:avaimien instaus kanssa?
+
 sudo dpkg -i $q/*.deb
 sudo rm ${q}/*.deb
 
@@ -129,6 +129,8 @@ tig=$(sudo which git)
 [ x"${tig}" == "x" ] && exit 68
 [ -x${tig} ] || exit 69
 
+#TOIMIIKO TÄNÄ SKEIPRI VAI EI???
+
 #git olemassaolo pitäisi testata ennernq etenee pidemmälle
 [ -v ue ] && ${tig} config --global user.email ${ue}
 [ -v un ] && ${tig} config --global user.name ${un}
@@ -141,5 +143,4 @@ c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 #sleep 1
 #echo "#ei joulukuusia turhanbäite"
 #for f in $(find ${basedir} -type f ) ; do sudo chmod a-x ${f} ; done
-
 #for f in $(find ${basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done

@@ -2,7 +2,6 @@
 d=$(dirname $0)
 . ${d}/common.conf
 . ${d}/common_funcs.sh
-#protect_system
 
 debug=1 #nollaus myöh
 dir2=""
@@ -14,7 +13,6 @@ par=""
 
 function parse_opts_real() {
 	echo "squash.parse_opts_real()" #dqb
-
 
 	case ${1} in
 		--dir2)
@@ -53,15 +51,18 @@ parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
 function xxx() {
-
-	dqb "xxx( ${1})"
+	dqb "xxx( ${1}, ${2})"
 	#tulisi stopata tässä jos ei kalaa
 	[ -s ${1} ] || exit 99
+	[ x"${2}" == "x" ] && exit 98
+	#[ -d ${2} ]  || exit 97
 
-	if [ x"${CONF_squash0}" != "x" ]; then
-		[ -d ${CONF_squash0} ] || ${smd} ${CONF_squash0}
+	dqb "pars_ok"
+	csleep 1
 
-		cd ${CONF_squash0}
+	#if [ x"${2}" != "x" ]; then
+		[ -d ${2} ] || ${smd} ${2}
+		cd ${2}
 		unsq=$(${odio} which unsquashfs)
 
 		if [ x"${unsq}" != "x" ] ; then 
@@ -70,155 +71,164 @@ function xxx() {
 			echo "${odio} apt-get install squashfs-utils"
 		fi
 
-	fi
-
+	#fi
 	dqb "xxx d0mw"
 }
 
 #jatkossa common_lib?
-#tilapäisesti jemmmaan koska pykimistä slim:in kanssa TAAS
-#function fix_sudo() {
-#	if [ x"${CONF_squash_dir}" != "x" ]; then
-#		cd ${CONF_squash_dir}
-#		[ ${debug} -eq 1 ] && pwd
-#		csleep 1 
-#
-#		${sco} -R 0:0 ./etc/sudo*
-#		${scm} -R a-w ./etc/sudo*
-#		${sco} -R 0:0 ./usr/lib/sudo/*
-#
-#		#${sco} -R 0:0 ./usr/bin/sudo*
-#		#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
-#		#AND CHATTR MAY OT WORK WITH SOME FILESYSTEMS	
-#
-#		${scm} 0750 ./etc/sudoers.d
-#		${scm} 0440 /etc/sudoers.d/*
-#
-#		${scm} -R a-w ./usr/lib/sudo/*
-#		#${scm} -R a-w ./usr/bin/sudo*
-#		#${scm} 4555 ./usr/bin/sudo
-#		${scm} 0444 ./usr/lib/sudo/sudoers.so
-#
-#		#${sca} +ui ./usr/bin/sudo
-#		#${sca} +ui ./usr/lib/sudo/sudoers.so	
-#	fi
-#}
-#
-#function bbb() {
-#	dqb "bbb()"
-#
-#	if [ x"${CONF_squash_dir}" != "x" ]; then
-#
-#		if [ -d ${CONF_squash_dir} ] ; then 
-#			#exit 55
-#			cd ${CONF_squash_dir}
-#			[ ${debug} -eq 1 ] && pwd
-#
-#			${smr} -rf ./run/live
-#			${smr} -rf ./boot/grub/*
-#			${smr} -rf ./boot/*
-#			${smr} -rf ./usr/share/doc/*	
-#			${smr} -rf ./var/cache/apt/archives/*.deb
-#			${smr} -rf ./var/cache/apt/*.bin
-#			${smr} -rf ./tmp/*
-#
-#			#fix_sudo #tälle tarttis tehdä jotain ettei ala pykumään kun luotu kiekko bootattu
-#
-#			${scm} -R 0755 ./var/cache/man
-#			${sco} -R man:man ./var/cache/man
-#
-#			${smr} ./root/.bash_history
-#			${smr} ./home/devuan/.bash_history
-#	#uusi ominaisuus 230725
-#	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
-#	
-#		fi
-#	fi
-#
-#	dqb "bbb().done()"
-#}
+
+function fix_sudo() {
+	dqb "fix_sudo( ${1}) "
+	[ x"${1}" == "x" ] && exit 97
+	[ -d ${1} ] || exit 98
+	dqb "pars ok"
+	csleep 1
+
+	#if [ x"${CONF_squash_dir}" != "x" ]; then
+		cd ${1}
+		[ ${debug} -eq 1 ] && pwd
+		csleep 1 
+
+		${sco} -R 0:0 ./etc/sudo*
+		${scm} -R a-w ./etc/sudo*
+		${sco} -R 0:0 ./usr/lib/sudo/*
+
+		#${sco} -R 0:0 ./usr/bin/sudo*
+		#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
+		#AND CHATTR MAY OT WORK WITH SOME FILESYSTEMS	
+
+		${scm} 0750 ./etc/sudoers.d
+		${scm} 0440 /etc/sudoers.d/*
+
+		${scm} -R a-w ./usr/lib/sudo/*
+		#${scm} -R a-w ./usr/bin/sudo*
+		#${scm} 4555 ./usr/bin/sudo
+		${scm} 0444 ./usr/lib/sudo/sudoers.so
+
+		#${sca} +ui ./usr/bin/sudo
+		#${sca} +ui ./usr/lib/sudo/sudoers.so	
+	#fi
+}
+
+function bbb() {
+	dqb "bbb( ${1} )"
+	[ x"${1}" == "x" ] && exit 97
+	[ x"${1}" == "x/" ] && exit 98
+	[ -d ${1} ] || exit 99
+
+	dqb "pars_ok"
+	csleep 1
+
+			cd ${1}
+			[ ${debug} -eq 1 ] && pwd
+
+			${smr} -rf ./run/live
+			${smr} -rf ./boot/grub/*
+			${smr} -rf ./boot/*
+			${smr} -rf ./usr/share/doc/*	
+			${smr} -rf ./var/cache/apt/archives/*.deb
+			${smr} -rf ./var/cache/apt/*.bin
+			${smr} -rf ./tmp/*
+
+			fix_sudo $(pwd) #{1} #CONF_squash_dir} 
+			${scm} -R 0755 ./var/cache/man
+			${sco} -R man:man ./var/cache/man
+
+			${smr} ./root/.bash_history
+			${smr} ./home/devuan/.bash_history
+
+			#uusi ominaisuus 230725
+			for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
+
+
+	dqb "bbb().done()"
+}
 
 #VAIH:main-conf varten 3. param cd:tä varten? tai jtnkn muuten
+
 #HUOM.27725:oikeasraan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
 #poltettavalla kiekolle voisi mennä imp2+sen tarvitsemat
 function jlk_main() {
-	dqb "jkl1 $1 "
-	[ x"${1}" != "x" ] || exit 66
+	dqb "jkl1 $1 , ${2} "
+	[ x"${1}" == "x" ] && exit 66
+	[ x"${2}" == "x" ] && exit 67
+	[ -d ${1} ] || exit 68
+	[ -d ${2} ] || exit 69
 
-	if [ x"${CONF_squash_dir}" != "x" ]; then
-		echo "${0} -x ?"
-		
-		#cd ${CONF_squash_dir}/${TARGET_pad2}
-		[ ${debug} -eq 1 ] && pwd
-		csleep 1
-
-		local f
-		for f in sh bz2 bz3 ; do ${spc} ${1}/*.${f} . ; done
-
-	fi
-}
-
-function jlk_conf() {
-	dqb "jlk_conf( ${1} , ${2})"
-
-	pwd
-	csleep 2
-
-
-	if [ x"${CONF_squash_dir}" != "x" ] && [ y"${1}" != "y" ] ; then
-		if [ -d ${1} ] ; then 
-			if [ ! -s ${1}/${2}.conf ] ; then
-				echo "ERROR:NO CONFIG FILE TO COPY!!!" 
-				exit 66
-			fi
-
-			#cd ${CONF_squash_dir}/${TARGET_pad2}
-
-			${smr} ./mf*;${smr} ./root.conf
-			${smr} ./${2}.conf
-
-			grep -v TARGET_to_ram ${1}/${2}.conf > ./root.conf 
-	        	echo "TARGET_to_ram=1" >> ./root.conf
-		#else
-		fi
-	fi
-
-	dqb "jlk_conf( ${1} , ${2}) DONE4"
+	dqb "pars_ok"
 	csleep 1
+
+	${spc} ${1}/*.sh ${2}/${TARGET_pad2}/
+	${spc} ${1}/*.bz2 ${2}/${TARGET_pad2}/
+	${spc} ${1}/*.bz3 ${2}/${TARGET_pad2}/
+
+	dqb "jkl1 d0n3"
 }
+
+##TODO:parametreille järkev't arvot
+##TODO:chroot-ympäristlö varten oma conf? (helpoitna kai necros.tar.bz2 kautta)
+#function jlk_conf() {
+#	dqb "jlk_conf( ${1} , ${2} , ${3})"
+#	[ x"${1}" == "x" ] && exit 66
+#	[ x"${2}" == "x" ] && exit 67
+#	[ x"${3}" == "x" ] && exit 68
+#	[ -d ${1} ] || exit 69
+#	[ -s ${1}/${2}.conf ] || exit 70
+#	[ -d ${3} ] || exit 71
+#	
+#	dqb "params_ok"
+#	[ ${debug} -eq 1 ] && pwd
+#	csleep 2
+#
+#			if [ ! -s ${1}/${2}.conf ] ; then
+#				echo "ERROR:NO CONFIG FILE TO COPY!!!" 
+#				exit 66
+#			fi
+#
+#			#cd ${CONF_squash_dir}/${TARGET_pad2}
+#
+#			${smr} ${3}/${TARGET_pad2}/mf*
+#			${smr} ${3}/${TARGET_pad2}/root.conf
+#			${smr} ${3}/${TARGET_pad2}/${2}.conf
+#
+#			grep -v TARGET_to_ram ${1}/${2}.conf > ${3}/${TARGET_pad2}/root.conf 
+#	        	echo "TARGET_to_ram=1" >> ${3}/${TARGET_pad2}/root.conf
+#
+#	dqb "jlk_conf( ) DONE4"
+#	csleep 1
+#}
 
 sah6=$(${odio} which sha512sum)
+#TODO:avainten kopsailu sq.chroot-alle tässä? vai laittaisiko exp2 pakettiin?
 
-function jlk_sums() {
-	dqb "jlk_sums( ${1} , ${2})"
-	[ x"${1}" != "x" ] || exit 666
-	[ -d ${1} ] || echo "no such thing as ${1}"
+#function jlk_sums() {
+#	dqb "jlk_sums( ${1} , ${2}, ${3})"
+#	[ x"${1}" != "x" ] || exit 66
+#	[ -d ${1} ] || exit 67
+#
+#	[ x"${3}" != "x" ] || exit 70
+#	[ -d ${3} ] || exit 71
+#
+#
+#	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
+#
+#	
+#	[ -d ./${TARGET_DGST0} ] || ${smd} -p ./${TARGET_DGST0} ;sleep 6
+#	${spc} -a ${1}/* ${3}/${TARGET_DGST0}
+#
+#	#ls -las ./${TARGET_DGST0};sleep 5
+#	
+#	cd ..
+#	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
+#}
 
-	#TODO:tuolle 0-hmistolle voisi tehdä jotain, jokin CONF_xxx-juttu tilalle
-	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
-
-
-	#cd ${CONF_squash_dir}/${TARGET_pad2}
-	[ -d ./${TARGET_DGST0} ] || ${smd} -p ./${TARGET_DGST0} ;sleep 6
-	${spc} -a ${1}/* ./${TARGET_DGST0}
-
-	ls -las ./${TARGET_DGST0};sleep 5
-	
-	cd ..
-	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
-
-}
-
+#TODO:cofs_squash_dir?
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
 function rst() {
-	dqb "rst( ${1} , ${2} )"
-
-	dqb "rst( ${1} , ${2} )"
-
+	#dqb "rst( ${1} , ${2} )"
 
 	if [ x"${CONF_squash_dir}" != "x" ]; then
-		    cd ${CONF_squash_dir}
-
+		cd ${CONF_squash_dir}
 
 		if [ ${md} -gt 0 ] ; then
 			dqb "MOUNTING PTOC"
@@ -227,13 +237,11 @@ function rst() {
 
 		if [ ${ms} -gt 0 ] ; then
 			dqb "MOUNTING ssy"
-
 			${som} -o bind /sys ./sys
 		fi
 
 		if [ ${mp} -gt 0 ] ; then
 			dqb "MOUNTING PC9EOR"
-
 			${som} -o bind /proc ./proc 
 			${odio} ln -s ./proc/mounts ./etc/mtab
 		fi		 
@@ -241,16 +249,19 @@ function rst() {
 		pwd
 		csleep 5
 
-
-		#VAIH:jotain säätöä tämän ympäiorstln kanssa ok buelä
-		#... esim /e/d/locale voisio lla hyväkopsata perlin valitusten johdosra
-		#... oikeudet pitäisi laittaa kuntoon ainakin
+		${sco} ${n}:${n} ./etc/default/locale
+		${scm} 0644 ./etc/default/locale
+		csleep 1
 
 		locale > ./etc/default/locale
+		csleep 1
+		
+		${scm} 0444 ./etc/default/locale
+		${sco} 0:0 ./etc/default/locale
+		csleep 1
 
 		[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
 		${spc} /etc/hosts ./etc
-
 		${odio} touch ./.chroot
 		#date > ./.chroot
 
@@ -260,7 +271,6 @@ function rst() {
 		${smr} ./.chroot			
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
-
 
 		sleep 3
 	
@@ -273,19 +283,20 @@ function rst() {
 }
 
 function cfd() {
-	dqb "cfd(${1})"
-	[ x"${1}" != "x" ] || exit 6
+	dqb "cfd( ${1}  ,  ${2} )"
+	[ x"${1}" == "x" ] && exit 6
 	[ -s ${1} ] && exit 66
-	dqb "PARS IJ"
+	[ x"${2}" == "x" ] && exit 7
+	[ -d ${2} ] || exit 77
 
-	if [ x"${CONF_squash_dir}" != "x" ]; then
+	dqb "PARS IJ"
+	csleep 1
+	
 		echo "${0} -b ?"
 
-		cd ${CONF_squash_dir}
+		cd ${2}
 
-		[ -s ${1} ] && rm ${1}
 		local msq
-
 		msq=$(${odio} which mksquashfs)
 
 		if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
@@ -293,9 +304,9 @@ function cfd() {
 		else
 			echo "${odio} apt-get install squashfs-utils"
 		fi
-	fi
-
-	dqb "cfd(${1}) DONE"
+	
+	csleep 1
+	dqb "cfd() DONE"
 }
 
 function usage() {
@@ -310,7 +321,6 @@ function usage() {
 	
 	#echo "-i <src> : Installs scripts 2 chroot_dir  (TODO?)"
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
-
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
 	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
@@ -318,17 +328,17 @@ function usage() {
 	echo "-f attempts to Fix some problems w/ sudo "
 	echo "--v 1 adds Verbosity\n"
 
-	echo "--mp,--md, --ms:self-explanatory opts 4 -r (TODO)" 
+	echo "--mp,--md, --ms:self-explanatory opts 4 -r (TODO?)" 
 	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
 #function ijk() {
-#	if [ x"${CONF_squash_dir}" != "x" ]; then
+#	if [ x"${2}" != "x" ]; then
 #		echo "${0} -x ?"
 #		
 #		previous=$(pwd)
-#		${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
-#		cd ${CONF_squash_dir}/${TARGET_pad2}
+#		${smd} -p ${2}/${TARGET_pad2}
+#		cd ${2}/${TARGET_pad2}
 #	
 #		[ x"${1}" != "x" ] || exit 666
 #		[ -d ${1} ] || exit 666
@@ -347,7 +357,7 @@ function usage() {
 
 case ${cmd} in
 	-x)
-		xxx ${par}
+		xxx ${par} ${CONF_squash0}
 	;;
 	-y)
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
@@ -365,11 +375,9 @@ case ${cmd} in
 		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs
 		${uom} ${oldd}/${CONF_source}
 	;;
-
-#	-b) #HUOM.27725:kmmentoituja voisi koittaa vähitellen palauttaa
-#		bbb		
-#	;;
-
+	-b)
+		bbb ${CONF_squash_dir}
+	;;
 	-d)
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
@@ -382,35 +390,32 @@ case ${cmd} in
 		fi
 	;;
 	-c)
-		cfd ${par}
+		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
 		rst
 	;;
 	-j)
-
 		#conf:in jos saisi kopsautumaan kohteeseen
 		#... tai siis exp2 ja update pitäisi laittaa lisäämään takaisin 
 		
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
-		cd ${CONF_squash_dir}/${TARGET_pad2}
-		jlk_main ${par}/${TARGET_pad_dir}
+		#cd ${CONF_squash_dir}/${TARGET_pad2}
+		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}
 
+		#jatkossa jo ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
 
-		[ z"${dir2}" != "z" ] || echo "--dir2 "
-		[ -d ${dir2} ] || echo "--dir2 "
-		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} #devuan
-
+		#[ z"${dir2}" != "z" ] || echo "--dir2 "
+		#[ -d ${dir2} ] || echo "--dir2 "
+		#jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
 
 		#HUOM.27725:tökkö htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
-		jlk_sums ${dir2}/${TARGET_DIGESTS_dir}
-
-		#fix_sudo
+		#jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}
+		fix_sudo ${CONF_squash_dir}
 	;;
-#	-f)
-#		fix_sudo
-#	;;
-
+	-f)
+		fix_sudo ${CONF_squash_dir}
+	;;
 	*)
 		usage
 	;;
