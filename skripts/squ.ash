@@ -372,7 +372,7 @@ case ${cmd} in
 		[ ${debug} -eq 1 ] && pwd
 		csleep 3
 
-		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs
+		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs ${CONF_squash0}
 		${uom} ${oldd}/${CONF_source}
 	;;
 	-b)

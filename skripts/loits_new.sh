@@ -1,6 +1,6 @@
 #!/bin/bash
 
-debug=0 #1
+debug=1
 d=$(dirname $0)
 
 . ${d}/common.conf
