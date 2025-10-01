@@ -1,6 +1,6 @@
 #!/bin/sh
 . ./functions.sh
-
+#TODO:pois josqs? jos minimize-hmiston skripti saavat vastaavat jutut toimimaan siis...
 u=stubby
 
 ns1() {
