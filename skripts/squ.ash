@@ -409,7 +409,7 @@ case ${cmd} in
 		#[ -d ${dir2} ] || echo "--dir2 "
 		#jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
 
-		#HUOM.27725:tökkö htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
+		#HUOM.27725:tällä htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
 		#jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}
 		fix_sudo ${CONF_squash_dir}
 	;;

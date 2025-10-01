@@ -37,6 +37,7 @@ q=$(mktemp -d)
 sudo cp ${pkgsrc}/*.deb ${q}
 	
 #parempi samaan aikaan dms ja libdev 
+#HUOM.011025:mihin näitä tarvittiin?
 efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
 #efk ${q}/libjte2*.deb
 
@@ -46,7 +47,7 @@ efk ${q}/lib*.deb
 echo "BEFORE TBLZ"
 sleep 2
 
-#HUOM.27725:josko hyldynbtäisi/prijausi common_lib.common_tbls() jatqssa
+#HUOM.27725:josko hyödynbtäisi/prijausi common_lib.common_tbls() jatqssa
 #
 ##DEBIAN_FRONTEND=noninteractive tämän kanssa jokin juttu?
 ##if_not_iptables
@@ -90,6 +91,7 @@ if [ ! -x ${x} ] ; then
 fi
 #/if_not_grub
 
+#HUOM.011025:voisi kai jnkn fktionkin krijoittaa ao. if-blokkeja korvaamaan
 #ao. rivejä ei kannata unmohtaa
 #which grub geniso
 x=$(sudo which genisoimage)
@@ -105,9 +107,9 @@ if [ ! -x ${x} ] ; then
 	efk ${q}/xorriso*.deb
 fi
 
-#TODO:nimeäminen uudelleen ettei joudu vahingossa kiekolle
-#TODO:gpg:n asennuys
-#TODO:avaimien instaus kanssa?
+#TODO:nimeäminen uudelleen ettei joudu vahingossa kiekolle?
+#VAIH:gpg:n asennuys
+#VAIH:avaimien instaus kanssa?
 
 sudo dpkg -i $q/*.deb
 sudo rm ${q}/*.deb
