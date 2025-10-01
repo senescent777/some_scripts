@@ -11,6 +11,9 @@ fi
 dqb "PARAMS OK?"
 make_tgt_dirs
 
+#TODO:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
+#TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
+
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
 function part0() {
 	#debug=1
