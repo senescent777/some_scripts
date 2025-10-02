@@ -166,19 +166,19 @@ function jlk_main() {
 }
 
 ##TODO:parametreille järkev't arvot
-##TODO:chroot-ympäristlö varten oma conf? (helpoitna kai necros.tar.bz2 kautta)
-#function jlk_conf() {
-#	dqb "jlk_conf( ${1} , ${2} , ${3})"
-#	[ x"${1}" == "x" ] && exit 66
-#	[ x"${2}" == "x" ] && exit 67
-#	[ x"${3}" == "x" ] && exit 68
+#VAIH:chroot-ympäristlö varten oma conf? (helpoitna kai necros.tar.bz2 kautta)
+function jlk_conf() {
+	dqb "jlk_conf( ${1} , ${2} , ${3}) (TODO)"
+	[ x"${1}" == "x" ] && exit 66
+	[ x"${2}" == "x" ] && exit 67
+	[ x"${3}" == "x" ] && exit 68
 #	[ -d ${1} ] || exit 69
 #	[ -s ${1}/${2}.conf ] || exit 70
 #	[ -d ${3} ] || exit 71
-#	
-#	dqb "params_ok"
-#	[ ${debug} -eq 1 ] && pwd
-#	csleep 2
+	
+	dqb "params_ok"
+	[ ${debug} -eq 1 ] && pwd
+	csleep 2
 #
 #			if [ ! -s ${1}/${2}.conf ] ; then
 #				echo "ERROR:NO CONFIG FILE TO COPY!!!" 
@@ -194,33 +194,41 @@ function jlk_main() {
 #			grep -v TARGET_to_ram ${1}/${2}.conf > ${3}/${TARGET_pad2}/root.conf 
 #	        	echo "TARGET_to_ram=1" >> ${3}/${TARGET_pad2}/root.conf
 #
-#	dqb "jlk_conf( ) DONE4"
-#	csleep 1
-#}
+	dqb "jlk_conf( ) DONE4"
+	csleep 1
+}
 
 sah6=$(${odio} which sha512sum)
-#TODO:avainten kopsailu sq.chroot-alle tässä? vai laittaisiko exp2 pakettiin?
+#VAIH:avainten kopsailu sq.chroot-alle tässä? vai laittaisiko exp2 pakettiin?
 
-#function jlk_sums() {
-#	dqb "jlk_sums( ${1} , ${2}, ${3})"
-#	[ x"${1}" != "x" ] || exit 66
-#	[ -d ${1} ] || exit 67
-#
-#	[ x"${3}" != "x" ] || exit 70
-#	[ -d ${3} ] || exit 71
-#
-#
-#	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
-#
-#	
-#	[ -d ./${TARGET_DGST0} ] || ${smd} -p ./${TARGET_DGST0} ;sleep 6
-#	${spc} -a ${1}/* ${3}/${TARGET_DGST0}
-#
-#	#ls -las ./${TARGET_DGST0};sleep 5
-#	
-#	cd ..
-#	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
-#}
+#mitäköhän paranetreja tälle fktiolle piti antaa?
+function jlk_sums() {
+	debug=1
+	dqb "jlk_sums( ${1} , ${2}, ${3}) (VAIH)"
+
+	[ x"${1}" != "x" ] || exit 66
+	[ -d ${1} ] || exit 67
+
+	#[ x"${3}" != "x" ] || exit 70
+	#[ -d ${3} ] || exit 71
+	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
+
+	pwd
+	sleep 6
+	
+	[ -d ${2}/${TARGET_DGST0} ] || ${smd} -p ${2}/${TARGET_DGST0} ;sleep 6
+	dqb "${spc} -a ${1}/* ${2}/${TARGET_DGST0}"
+	sleep 3
+	${spc} -a ${1}/* ${2}/${TARGET_DGST0} #oli ${3}/${TARGET_DGST0}
+
+	ls -las ./${TARGET_DGST0};sleep 5
+	
+	cd ..
+	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
+
+	dqb "JLK_SUYMD_DONE"
+	sleep 2
+}
 
 #TODO:cofs_squash_dir?
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
@@ -403,14 +411,20 @@ case ${cmd} in
 		#cd ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}
 
-		#jatkossa jo ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
+		#jatkossa jo s ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
 
-		#[ z"${dir2}" != "z" ] || echo "--dir2 "
-		#[ -d ${dir2} ] || echo "--dir2 "
-		#jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
+		[ z"${dir2}" != "z" ] || echo "--dir2 "
+		[ -d ${dir2} ] || echo "--dir2 "
+
+		#j_cnf tuomaan mukanaan sen sq-chroot-spesifisaen konffin?
+		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
 
 		#HUOM.27725:tällä htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
-		#jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}
+		#HUOM.j011025:osko vähitellen _sums ja _conf käyttöön
+		#... josko dnamer1,dkname2 mukaan sq-chr-ymo tuon jlk_s avulla?
+		#dir2 esim $basedir/tmp/tgt
+
+		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}
 		fix_sudo ${CONF_squash_dir}
 	;;
 	-f)

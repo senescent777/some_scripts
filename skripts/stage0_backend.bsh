@@ -76,7 +76,10 @@ function copy_main() {
 	dqb "copy_main() donw"
 }
 
+#TODO:voisikohan ottaa hyötykäyttöönm? esim se sq-xhroot--ymp konftdsto
 function copy_conf() {
+	debug=1
+
 	dqb "copy_conf(${1}, ${2}. ${3})"
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
@@ -92,7 +95,6 @@ function copy_conf() {
 	fi
 
 	utfile=${3}/${2}.conf
-	#TODO:voisikohan ottaa hyötykäyttöönm?
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
 	echo -n "src=/" >> ${utfile}
@@ -122,6 +124,7 @@ function copy_conf() {
 }
 
 function copy_sums() {
+	debug=1
 
 	dqb "copy_syms(${1}, ${2})"
 	[ x"${1}" != "x" ] || exit 2
