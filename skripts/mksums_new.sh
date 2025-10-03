@@ -264,7 +264,7 @@ ${scm} 0644 ./${TARGET_DIGESTS_dir}/*
 [ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
-#HUOM.18726: dgsts.4 kanssa myös jotain jurpoilua?
+#HUOM.18726: dgsts.4 kanssa myös jotain jurpoilua? vielä 031025 ?
 dqb "${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10"
 ${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4
@@ -274,4 +274,4 @@ ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*
 
 [ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
-
+dqb "loits | squ.ash -j ?"

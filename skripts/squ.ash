@@ -147,7 +147,9 @@ function bbb() {
 #VAIH:main-conf varten 3. param cd:tä varten? tai jtnkn muuten
 
 #HUOM.27725:oikeasraan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
-#poltettavalla kiekolle voisi mennä imp2+sen tarvitsemat
+#poltettavalle kiekolle voisi mennä imp2+sen tarvitsemat (TODO:se sq-chr-versio imp2sesta)
+#... tai siis jos ln -s chroot-imp2 v/$version/pad/imp2
+
 function jlk_main() {
 	dqb "jkl1 $1 , ${2} "
 	[ x"${1}" == "x" ] && exit 66
@@ -166,7 +168,7 @@ function jlk_main() {
 }
 
 ##TODO:parametreille järkev't arvot
-#VAIH:chroot-ympäristlö varten oma conf? (helpoitna kai necros.tar.bz2 kautta)
+#VAIH:chroot-ympäristlö varten oma conf? (helpoitna kai necros.tar.bz2 kautta mutta)
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) (TODO)"
 	[ x"${1}" == "x" ] && exit 66
@@ -199,7 +201,8 @@ function jlk_conf() {
 }
 
 sah6=$(${odio} which sha512sum)
-#VAIH:avainten kopsailu sq.chroot-alle tässä? vai laittaisiko exp2 pakettiin?
+#HUOM.031025:avainten kopsailu nyt stage0f.sh kautta
+#... pitäsiköhän stage0f kopsata myös joitain skriptejä v/$version alle?
 
 #mitäköhän paranetreja tälle fktiolle piti antaa?
 function jlk_sums() {
@@ -319,6 +322,8 @@ function cfd() {
 
 function usage() {
 	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0} source_file NEEDS TO HAVE ABSOLUTE PATH"
+	echo "\t (source could be under /r/l/m/live) "
+
 	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0} NEEDS TO HAVE ABSOLUTE PATH"
 	echo "-b is supposed to be run just Before -c but after -r (TODO)"
 	echo "-d Destroys contents of ${CONF_squash0}/ and ${CONF_tmpdir} "
@@ -340,6 +345,7 @@ function usage() {
 	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
+#HUOM.031025:tätä jos voisi hyldyntää cjhrootin kanssa? patch_list:in kautta yhetiset jutut esim conf ?
 #function ijk() {
 #	if [ x"${2}" != "x" ]; then
 #		echo "${0} -x ?"
@@ -364,15 +370,17 @@ function usage() {
 #}
 
 case ${cmd} in
-	-x)
+	-x) #HUOM.031025:havaittu toimivaksi
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y)
+	-y) #HUOM.031025:toimii
+		[ -s ${par} ] || exit 666
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
 
 		oldd=$(pwd)
 		${som} -o loop,ro ${par} ${oldd}/${CONF_source}
+		[ $? -eq 0 ] || exit
 		[ ${debug} -eq 1 ] && ls -las ${oldd}/${CONF_source}/live/
 		csleep 3
 
@@ -384,34 +392,39 @@ case ${cmd} in
 		${uom} ${oldd}/${CONF_source}
 	;;
 	-b)
-		bbb ${CONF_squash_dir}
+		#TODO:katso turvallisuusyistä mitä kmntoja ajaa, ennenq takaisin käyttöön
+		echo "bbb ${CONF_squash_dir}"
 	;;
-	-d)
+	-d) #HUOM.031025:kommentit pois sittenq mahd eli ASAP
+		#pitäisikö olla -v - tark varm buoksi?
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
-			${smr} -rf ${CONF_squash0}/*
+			#${smr} -rf ${CONF_squash0}/*
 		fi
 
 		if [ x"${CONF_tmpdir}" != "x" ] ; then 
 			echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
-			${smr} -rf ${CONF_tmpdir}/*
+			#${smr} -rf ${CONF_tmpdir}/*
 		fi
 	;;
-	-c)
+	-c) #HUOM.031025:havaittu toimivgaksi
 		cfd ${par} ${CONF_squash_dir}
 	;;
-	-r)
+	-r) #HUOM.031025:havaittu toimivaksi
+		#TODO:optionaalinen ajettava komento
 		rst
 	;;
-	-j)
+	-j) #HUOM.031025:havaittu toimivaksi
 		#conf:in jos saisi kopsautumaan kohteeseen
-		#... tai siis exp2 ja update pitäisi laittaa lisäämään takaisin 
+		#... tai siis exp2 ja update pitäisi laittaa lisäämään takaisin ?
 		
+		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 		#cd ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}
 
 		#jatkossa jo s ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
+		#TODO:joko jo alkaisi suorittaa dor2 suhteen?
 
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
@@ -427,8 +440,8 @@ case ${cmd} in
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}
 		fix_sudo ${CONF_squash_dir}
 	;;
-	-f)
-		fix_sudo ${CONF_squash_dir}
+	-f) #TODO:testaa toimivuus
+		echo "fix_sudo ${CONF_squash_dir}"
 	;;
 	*)
 		usage
