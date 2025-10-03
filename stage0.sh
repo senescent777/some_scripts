@@ -11,11 +11,12 @@ bl=${CONF_bloader}
 
 function usage() {
 	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--bl BLOADER] [--v <verbosity_level>]"
-	#echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})" #pitäisi varmaan huomoida tuo suhteellisuus?
+	#echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})" #pitäisi varmaan huomoida tuo suhteellisuus? T. Albert
 	echo "${0} --get-devuan <download_dir>"
 	echo "${0} --make-dirs"
 }
 
+#HUOM.031025:toiminee tämä skripti tänään riittävästi
 function parse_opts_real() {
 	case ${1} in
 		--base)
