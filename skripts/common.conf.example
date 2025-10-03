@@ -23,6 +23,7 @@ TARGET_Dpubkg=$TARGET_DIGESTS_dir/$TARGET_Dkname2
 CONF_scripts_dir=<dir containing necessary scripts>
 CONF_keys_dir=<dir 4 keys>
 CONF_stg0file=
+#HUOM.mielellään eri osiolla tuo tmpdir kuin se kehitysymp/tmpdir0 should be in its own partition
 CONF_tmpdir0= < base_dir 4 temporary files > 
 CONF_squash0=$CONF_tmpdir0/$CONF_squash
 CONF_squash_dir=$CONF_squash0/squashfs-root
