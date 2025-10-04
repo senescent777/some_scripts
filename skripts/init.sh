@@ -4,7 +4,7 @@ if [ -s $0.conf ] ; then
 	. $0.conf 
 fi
 
-#TODO:nimeäminen uudelleen ettei joudu vahingossa kiekolle
+#031025 nimetty uudestaan ettei menisi kiekolla, wanha vefrsio saa jäädä vers.hall. jnkn aikaa
 
 if [ ! -s ${basedir}/sources.list ] ; then
 	sudo nano /etc/apt/sources.list #tai cp
