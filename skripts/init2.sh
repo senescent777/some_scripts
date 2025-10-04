@@ -109,10 +109,6 @@ if [ ! -x ${x} ] ; then
 	efk ${q}/xorriso*.deb
 fi
 
-#TODO:nimeäminen uudelleen ettei joudu vahingossa kiekolle?
-#VAIH:gpg:n asennuys
-#VAIH:avaimien instaus kanssa?
-
 sudo dpkg -i $q/*.deb
 sudo rm ${q}/*.deb
 
@@ -132,8 +128,6 @@ echo "AFTER iptables-restore "
 tig=$(sudo which git)
 [ x"${tig}" == "x" ] && exit 68
 [ -x${tig} ] || exit 69
-
-#TOIMIIKO TÄNÄ SKEIPRI VAI EI???
 
 #git olemassaolo pitäisi testata ennernq etenee pidemmälle
 [ -v ue ] && ${tig} config --global user.email ${ue}
