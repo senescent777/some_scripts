@@ -35,6 +35,8 @@ function parse_opts_real() {
 	esac	
 }
 
+#041025:-v mukaan ni kosahtaa suoritus (ei kyl haittaa kun debug asetsttu alussa mutta...)
+
 function single_param() {
 	case ${1} in
 		--make-dirs)
