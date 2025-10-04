@@ -5,6 +5,8 @@ else
 	exit 67
 fi
 
+#031025 nimetty uudestaan ettei menisi kiekolla, wanha vefrsio saa jäädä vers.hall. jnkn aikaa
+
 #simppelimpi näin
 sudo ip link set ${iface} down
 
