@@ -77,6 +77,9 @@ function copy_main() {
 }
 
 #TODO:voisikohan ottaa hyötykäyttöönm? esim se sq-xhroot--ymp konftdsto
+#tilapäisesti viritys missä conf samassa paketissa .deb kanssa (041025)
+#"sudo cat" 1 ideqa, mangle_conf() toinen
+#... jospa se devuan.conf olisi se juttu, lähdehmistoon moinen ja sit jtain
 function copy_conf() {
 	debug=1
 
@@ -85,8 +88,12 @@ function copy_conf() {
 	[ x"${2}" != "x" ] || exit 2
 	dqb "PARAMS OK"
 
+	#HUOM.041025: *.bash.conf ei tarttisi mennä kiekolle asti
+
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
+		dqb "${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}"
 		${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
+		csleep 1
 	fi
 
 	#nykyään vähän erilainen upload kuin ao. blokkia kiroittaessa
@@ -117,7 +124,10 @@ function copy_conf() {
 
 	mangle_conf TARGET_to_ram ${utfile}
 	mangle_conf TARGET_nosu_do ${utfile}
+
+	dqb "sudo cat ${1}/${2}.conf >> ${utfile}"
 	sudo cat ${1}/${2}.conf >> ${utfile}
+	csleep 3
 
 	dqb "copy_conf() donw"
 	sleep 1

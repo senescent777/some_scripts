@@ -1,6 +1,6 @@
 #!/bin/bash
 
-debug=1
+debug=1 #miten -v ?
 d=$(dirname $0)
 
 . ${d}/common.conf
@@ -100,12 +100,12 @@ function mk_pad_bak() {
 sleep 1
 
 case ${bloader} in
-	iuefi)
-		#KVG "how to make isolinux work with uefi"
-		${sco} -R ${n}:${n} .
-		${scm} -R 0755 .
-		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
-	;;
+#	iuefi)
+#		#mitä paskaa?
+#		${sco} -R ${n}:${n} .
+#		${scm} -R 0755 .
+#		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
+#	;;
 	isolinux)
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
@@ -115,7 +115,7 @@ case ${bloader} in
 		csleep 1
 
 		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} #. älä ramppaa
-		sudo chmod a-x ${ltarget}
+		
 	;;
 	grub)
 		#https://bbs.archlinux.org/viewtopic.php?id=219955
@@ -134,7 +134,7 @@ case ${bloader} in
 	;;
 esac
 
-#TODO:chmod a-wx $target_dir/*.iso a-k.a joukukuuset wttuun
-
+#VAIH:chmod a-wx $target_dira-k.a joukukuuset wttuun
+sudo chmod a-wx ${ltarget}/*.iso 
 sleep 1
 echo "stick.sh ?"

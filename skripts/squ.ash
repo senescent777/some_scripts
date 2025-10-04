@@ -111,7 +111,9 @@ function fix_sudo() {
 }
 
 function bbb() {
-	dqb "bbb( ${1} )"
+	debug=1
+	dqb "bbb( ${1} ) ohgUYHGIUTFD/()%E"
+
 	[ x"${1}" == "x" ] && exit 97
 	[ x"${1}" == "x/" ] && exit 98
 	[ -d ${1} ] || exit 99
@@ -121,6 +123,11 @@ function bbb() {
 
 			cd ${1}
 			[ ${debug} -eq 1 ] && pwd
+			#exit 100
+
+			pwd
+			echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
+			#sleep 6
 
 			${smr} -rf ./run/live
 			${smr} -rf ./boot/grub/*
@@ -141,13 +148,13 @@ function bbb() {
 			for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
 
 
-	dqb "bbb().done()"
+	dqb "BARBEQUE PARTY DONE.done()"
 }
 
 #VAIH:main-conf varten 3. param cd:tä varten? tai jtnkn muuten
 
 #HUOM.27725:oikeasraan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
-#poltettavalle kiekolle voisi mennä imp2+sen tarvitsemat (TODO:se sq-chr-versio imp2sesta)
+#poltettavalle kiekolle voisi mennä imp2+sen tarvitsemat (TODO:se sq-chr-versio imp2sesta?)
 #... tai siis jos ln -s chroot-imp2 v/$version/pad/imp2
 
 function jlk_main() {
@@ -233,31 +240,27 @@ function jlk_sums() {
 	sleep 2
 }
 
-#TODO:cofs_squash_dir?
-#olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
-function rst() {
-	#dqb "rst( ${1} , ${2} )"
+function rst_pre1() {
+	#VAIH:mx-jutut erilliseen fktioon ja ennen rst-kutsua
+	if [ ${md} -gt 0 ] ; then
+		dqb "MOUNTING PTOC"
+		${som} -o bind /dev ./dev 
+	fi
 
-	if [ x"${CONF_squash_dir}" != "x" ]; then
-		cd ${CONF_squash_dir}
+	if [ ${ms} -gt 0 ] ; then
+		dqb "MOUNTING ssy"
+		${som} -o bind /sys ./sys
+	fi
 
-		if [ ${md} -gt 0 ] ; then
-			dqb "MOUNTING PTOC"
-			${som} -o bind /dev ./dev 
-		fi
+	if [ ${mp} -gt 0 ] ; then
+		dqb "MOUNTING PC9EOR"
+		${som} -o bind /proc ./proc 
+		${odio} ln -s ./proc/mounts ./etc/mtab
+	fi		
+}
 
-		if [ ${ms} -gt 0 ] ; then
-			dqb "MOUNTING ssy"
-			${som} -o bind /sys ./sys
-		fi
-
-		if [ ${mp} -gt 0 ] ; then
-			dqb "MOUNTING PC9EOR"
-			${som} -o bind /proc ./proc 
-			${odio} ln -s ./proc/mounts ./etc/mtab
-		fi		 
-
-		pwd
+function rst_pre2() {
+			pwd
 		csleep 5
 
 		${sco} ${n}:${n} ./etc/default/locale
@@ -275,11 +278,10 @@ function rst() {
 		${spc} /etc/hosts ./etc
 		${odio} touch ./.chroot
 		#date > ./.chroot
+}
 
-		${odio} chroot ./ ./bin/bash 
-		[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
-		
-		${smr} ./.chroot			
+function rst_post() {
+			${smr} ./.chroot			
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
 
@@ -288,6 +290,27 @@ function rst() {
 		${uom} ./dev 
 		${uom} ./sys
 		${uom} ./proc
+}
+
+#TODO:cofs_squash_dir?
+#olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
+function rst() {
+	#dqb "rst( ${1} , ${2} )"
+
+	if [ x"${CONF_squash_dir}" != "x" ]; then
+		cd ${CONF_squash_dir}
+
+ 
+
+		#VAIH:$sco-jutuista erillinen fktio+tähän kutsu siihen
+		rst_pre2
+
+		${odio} chroot ./ ./bin/bash 
+		[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
+		
+		#VAIH:chrtoot jölkeiset imaan fktioon
+		rst_post
+
 
 		sleep 3
 	fi
@@ -373,7 +396,7 @@ case ${cmd} in
 	-x) #HUOM.031025:havaittu toimivaksi
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #HUOM.031025:toimii
+	-y) #HUOM.031025:toimii... paitsi että -v ei pelitä tämän option kanssa (korjaa)
 		[ -s ${par} ] || exit 666
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -392,19 +415,28 @@ case ${cmd} in
 		${uom} ${oldd}/${CONF_source}
 	;;
 	-b)
-		#TODO:katso turvallisuusyistä mitä kmntoja ajaa, ennenq takaisin käyttöön
-		echo "bbb ${CONF_squash_dir}"
+		#VAIH:katso turvallisuusyistä mitä kmntoja ajaa, ennenq takaisin käyttöön
+		bbb ${CONF_squash_dir}
+
+		#TODO;jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
-	-d) #HUOM.031025:kommentit pois sittenq mahd eli ASAP
+	-d) #HUOM.042035:josko kunnossa?
 		#pitäisikö olla -v - tark varm buoksi?
+		#jos cd ensin?
+		[ -v CONF_squash0 ] || exit 666
+
+		pwd;sleep 6
+
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
-			#${smr} -rf ${CONF_squash0}/*
+			${smr} -rf ${CONF_squash0}/*
 		fi
+
+		[ -v CONF_tmpdir ] || exit 666
 
 		if [ x"${CONF_tmpdir}" != "x" ] ; then 
 			echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
-			#${smr} -rf ${CONF_tmpdir}/*
+			${smr} -rf ${CONF_tmpdir}/*
 		fi
 	;;
 	-c) #HUOM.031025:havaittu toimivgaksi
@@ -412,19 +444,23 @@ case ${cmd} in
 	;;
 	-r) #HUOM.031025:havaittu toimivaksi
 		#TODO:optionaalinen ajettava komento
+		rst_pre1
+		
 		rst
 	;;
 	-j) #HUOM.031025:havaittu toimivaksi
 		#conf:in jos saisi kopsautumaan kohteeseen
 		#... tai siis exp2 ja update pitäisi laittaa lisäämään takaisin ?
 		
+		#...par tai dir2 ei välttämättä sama kuin stage0 --add - param, pitäisikö huiomioida?
+
 		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 		#cd ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}
 
 		#jatkossa jo s ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
-		#TODO:joko jo alkaisi suorittaa dor2 suhteen?
+		#VAIH:joko jo alkaisi suorittaa dor2 suhteen?
 
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
