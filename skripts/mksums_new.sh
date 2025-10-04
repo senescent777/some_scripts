@@ -37,7 +37,7 @@ function parse_opts_real() {
 	esac
 }
 
-#VAIH:näiden opioitden testaus (gg-jutut mielekkäitä sittenq)
+#vähitelleb voisi kokeilla mitä avainten asennuksne jälkeen käy
 function single_param() {
 	case ${1} in
 		--iso)
@@ -64,6 +64,7 @@ function single_param() {
 
 MKS_parts="1 2 3"
 
+#TODO:ekan parametrin kanssa jotain rajoitusta ettei ihan juurta muutettaisi tjsp
 function part0() {
 	dqb "part0( ${1})"
 	[ -d ${1} ] || exit 67
@@ -161,10 +162,6 @@ function part6_5() {
 		[ $? -gt 0 ] && dqb "install-keys --i ?"
 	done
 
-	#if  ; then
-	#	dqb "uliuli"
-	#fi
-
 	dqb "dibw"
 }
 
@@ -190,6 +187,7 @@ function part7() {
 	dqb "p7 done"
 }
 
+#TODO:globaaleja pois joa mahd
 function part8() {
 	dqb "p8 ${1}"
 	[ x"${TARGET_patch_name}" != "x" ] || exit 665

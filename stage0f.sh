@@ -1,5 +1,6 @@
 #!/bin/bash
-debug=0 
+debug=0
+
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
 . ./skripts/stage0_backend.bsh
@@ -60,10 +61,21 @@ function part0() {
 	csleep 1
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa
-	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir} ${CONF_tmpdir}
+	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
 	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
+#
+#	[ -v TARGET_DIGESTS_dir ] || exit 666
+#	[ -v TARGET_DGST0 ] || exit 666
+#	dqb "OUYG)(&R()%¤ER"
+#
+#	#HUOM.04§025:täsä kohtaa tökkää, kts toistuuko
+#	[ -z ${TARGET_DIGESTS_dir} ] || exit 666
+#	dqb "56448748765484"
+#
+#	[ -z ${TARGET_DGST0} ] || exit 666
+#	dqb "ÄÖ_ÅPÄÖÖÅPO"
+#
 	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
-	
 	dqb "4FT3R COPY_X"
 	csleep 1
 
@@ -71,6 +83,8 @@ function part0() {
 	${scm} 0444 ${CONF_tmpdir}/*.conf
 	${scm} 0755 ${CONF_tmpdir}/*.sh
 	
+	#TODO:omaksi fktioksi va maksasko vaivaa 1 rivin takia?
+	#TODO:sen pad-hmiston omistajuuden pakotus (d:d ei hyvä, ehkä)
 	${spc} ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
 
 	default_process ${CONF_target}/${TARGET_pad_dir}
@@ -86,9 +100,10 @@ function part0() {
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3}
 else
-	if [ -s ${1} ] ; then
+	if [ -s ${1} ] && [ -r ${1} ] ; then #tössö jokin qsee 041025
 		dqb "${som} -o loop,ro ${1} ${CONF_source}"
 		csleep 3
+
 		${som} -o loop,ro ${1} ${CONF_source} 
 		[ $? -eq 0 ] || exit 666
 		sleep 6

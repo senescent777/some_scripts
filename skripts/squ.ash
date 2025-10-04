@@ -61,6 +61,7 @@ function xxx() {
 	csleep 1
 
 	#if [ x"${2}" != "x" ]; then
+		#ao.blikki toistruu melkein samanlöaisena toisessa kohtaa...
 		[ -d ${2} ] || ${smd} ${2}
 		cd ${2}
 		unsq=$(${odio} which unsquashfs)
@@ -157,6 +158,7 @@ function bbb() {
 #poltettavalle kiekolle voisi mennä imp2+sen tarvitsemat (TODO:se sq-chr-versio imp2sesta?)
 #... tai siis jos ln -s chroot-imp2 v/$version/pad/imp2
 
+#TODO:Const t_p23 kutsuvaan koodiin
 function jlk_main() {
 	dqb "jkl1 $1 , ${2} "
 	[ x"${1}" == "x" ] && exit 66
@@ -174,37 +176,59 @@ function jlk_main() {
 	dqb "jkl1 d0n3"
 }
 
-##TODO:parametreille järkev't arvot
+##TODO:parametreille järkev't arvot?
 #VAIH:chroot-ympäristlö varten oma conf? (helpoitna kai necros.tar.bz2 kautta mutta)
+#... ideana aiemmin että root.conf olisi sq-chr-ymp varten , devuan.conf taas ei
+
+#VAIH:koita arpoa voisiko tämän ottaa käyttöön bvai ei (stage0f kautta tulisi se devuan.cnf jos on tullakseen)
+#VAIH:Const T_P2 mäkeen fktiosta
 function jlk_conf() {
-	dqb "jlk_conf( ${1} , ${2} , ${3}) (TODO)"
+	dqb "jlk_conf( ${1} , ${2} , ${3}) (VAIH)"
 	[ x"${1}" == "x" ] && exit 66
 	[ x"${2}" == "x" ] && exit 67
 	[ x"${3}" == "x" ] && exit 68
-#	[ -d ${1} ] || exit 69
-#	[ -s ${1}/${2}.conf ] || exit 70
-#	[ -d ${3} ] || exit 71
+
+	[ -d ${1} ] || exit 69
+	[ -s ${1}/${2}.conf ] || exit 70 #jatkossa pois tämä vai ei?
+	[ -d ${3} ] || exit 71
 	
 	dqb "params_ok"
 	[ ${debug} -eq 1 ] && pwd
 	csleep 2
-#
-#			if [ ! -s ${1}/${2}.conf ] ; then
-#				echo "ERROR:NO CONFIG FILE TO COPY!!!" 
-#				exit 66
-#			fi
-#
-#			#cd ${CONF_squash_dir}/${TARGET_pad2}
-#
-#			${smr} ${3}/${TARGET_pad2}/mf*
-#			${smr} ${3}/${TARGET_pad2}/root.conf
-#			${smr} ${3}/${TARGET_pad2}/${2}.conf
-#
-#			grep -v TARGET_to_ram ${1}/${2}.conf > ${3}/${TARGET_pad2}/root.conf 
-#	        	echo "TARGET_to_ram=1" >> ${3}/${TARGET_pad2}/root.conf
-#
+##	exit
+##
+##			if [ ! -s ${1}/${2}.conf ] ; then
+##				echo "ERROR:NO CONFIG FILE TO COPY!!!" 
+##				exit 66
+##			fi
+##
+##			#cd ${CONF_squash_dir}/${TARGET_pad2}
+##
+			
+	local t
+	t=${3}/${TARGET_pad2}
+		
+	${smr} ${t}/mf*
+	${smr} ${t}/root.conf
+	${smr} ${t}/${2}.conf
+			
+	sleep 5
+
+	sudo touch ${t}/root.conf
+	${sco} $(whoami):$(whoami) ${t}/root.conf
+	${scm} 0644 ${t}/root.conf
+
+	sleep 5 #jatkossa csleep
+
+	grep -v TARGET_to_ram ${1}/${2}.conf > ${t}/root.conf 
+	echo "TARGET_to_ram=1" >> ${t}/root.conf
+	sleep 5
+
+	ls -las ${t}/*.conf
+	sleep 5
+
 	dqb "jlk_conf( ) DONE4"
-	csleep 1
+	csleep 5
 }
 
 sah6=$(${odio} which sha512sum)
@@ -212,6 +236,7 @@ sah6=$(${odio} which sha512sum)
 #... pitäsiköhän stage0f kopsata myös joitain skriptejä v/$version alle?
 
 #mitäköhän paranetreja tälle fktiolle piti antaa?
+#T_XXX kutsuvaanm kpoodiin vai ei?
 function jlk_sums() {
 	debug=1
 	dqb "jlk_sums( ${1} , ${2}, ${3}) (VAIH)"
@@ -242,6 +267,9 @@ function jlk_sums() {
 
 function rst_pre1() {
 	#VAIH:mx-jutut erilliseen fktioon ja ennen rst-kutsua
+	dqb "rst_pre1()"
+	csleep 1
+
 	if [ ${md} -gt 0 ] ; then
 		dqb "MOUNTING PTOC"
 		${som} -o bind /dev ./dev 
@@ -256,12 +284,20 @@ function rst_pre1() {
 		dqb "MOUNTING PC9EOR"
 		${som} -o bind /proc ./proc 
 		${odio} ln -s ./proc/mounts ./etc/mtab
-	fi		
+	fi
+
+	dqb "DONME"
+	csleep 1		
 }
 
 function rst_pre2() {
-			pwd
-		csleep 5
+	dqb "rst_pre2()"
+	csleep 1
+	pwd
+	csleep 1
+
+	[ -d ./etc ] || exit 666
+	csleep 1
 
 		${sco} ${n}:${n} ./etc/default/locale
 		${scm} 0644 ./etc/default/locale
@@ -278,9 +314,18 @@ function rst_pre2() {
 		${spc} /etc/hosts ./etc
 		${odio} touch ./.chroot
 		#date > ./.chroot
+
+	dqb "rst_pre2() done"
+	csleep 1
 }
 
 function rst_post() {
+	dqb "rst_post()"
+	csleep 1
+
+	pwd
+	csleep 1
+
 			${smr} ./.chroot			
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
@@ -290,16 +335,24 @@ function rst_post() {
 		${uom} ./dev 
 		${uom} ./sys
 		${uom} ./proc
+
+	dqb "DONE"
+	csleep 1
 }
 
-#TODO:cofs_squash_dir?
+#VAIH:cofs_squash_dir?
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
 function rst() {
-	#dqb "rst( ${1} , ${2} )"
+	dqb "rst( ${1} , ${2} )"
+	[ -z ${1} ] && exit 13
+	[ -d ${1} ] || exit 14
+	dqb "params ok (maybe)"
+	csleep 1
 
-	if [ x"${CONF_squash_dir}" != "x" ]; then
-		cd ${CONF_squash_dir}
-
+	#if [ x"${CONF_squash_dir}" != "x" ]; then
+		cd ${1} #CONF_squash_dir}
+		pwd
+		csleep 1
  
 
 		#VAIH:$sco-jutuista erillinen fktio+tähän kutsu siihen
@@ -313,7 +366,10 @@ function rst() {
 
 
 		sleep 3
-	fi
+	#fi
+
+	dqb "rst() done"
+	csleep 1
 }
 
 function cfd() {
@@ -396,7 +452,7 @@ case ${cmd} in
 	-x) #HUOM.031025:havaittu toimivaksi
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #HUOM.031025:toimii... paitsi että -v ei pelitä tämän option kanssa (korjaa)
+	-y) #HUOM.031025:toimii... paitsi että -v ei pelitä tämän option kanssa (korj jos toist)
 		[ -s ${par} ] || exit 666
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -424,7 +480,7 @@ case ${cmd} in
 		#pitäisikö olla -v - tark varm buoksi?
 		#jos cd ensin?
 		[ -v CONF_squash0 ] || exit 666
-
+		#[ -z ] && exit (TODO)
 		pwd;sleep 6
 
 		if [ x"${CONF_squash0}" != "x" ] ; then
@@ -443,10 +499,13 @@ case ${cmd} in
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r) #HUOM.031025:havaittu toimivaksi
-		#TODO:optionaalinen ajettava komento
+		[ -v CONF_squash_dir ] || exit 666
+		[ -z ${CONF_squash_dir} ] && exit 666
+
+		#TODO:optionaalinen ajettava komento?
 		rst_pre1
 		
-		rst
+		rst ${CONF_squash_dir}
 	;;
 	-j) #HUOM.031025:havaittu toimivaksi
 		#conf:in jos saisi kopsautumaan kohteeseen
