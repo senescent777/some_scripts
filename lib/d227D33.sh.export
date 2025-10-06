@@ -2,7 +2,7 @@
 . ./functions.sh
 #TODO:pois josqs? jos minimize-hmiston skripti saavat vastaavat jutut toimimaan siis...
 u=stubby
-
+#to state the obvious:changedns.sh tekee vähän samaaq tämä
 ns1() {
 	sudo chmod u+w /etc	
 	sudo chmod u+w /etc/iptables
