@@ -4,6 +4,8 @@ if [ -s $0.conf ] ; then
 	. $0.conf 
 fi
 
+#031025 nimetty uudestaan ettei menisi kiekolla, wanha vefrsio saa jäädä vers.hall. jnkn aikaa
+
 if [ ! -s ${basedir}/sources.list ] ; then
 	sudo nano /etc/apt/sources.list #tai cp
 else
@@ -57,7 +59,7 @@ sudo apt-get reinstall --no-install-recommends libfuse2
 sudo apt-get reinstall --no-install-recommends mtools
 
 sudo apt-get reinstall --no-install-recommends grub-common xorriso #jälkimminen toistaiseksi mukana
-
+#TODO:geany?
 if [ ! -d ${1} ] ; then
 	sudo tar -cvf ${1} /var/cache/apt/archives/*.deb
 else

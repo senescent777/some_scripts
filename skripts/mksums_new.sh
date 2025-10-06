@@ -1,6 +1,6 @@
 #!/bin/bash
 b=0
-debug=0 #1
+debug=1
 source=""
 
 d=$(dirname $0)
@@ -24,6 +24,7 @@ function usage() {
 	echo "$0 -h" #voisi olla vakiovaruste tuo optio ja liityvä fktio
 }
 
+#miten se -v?
 function parse_opts_real() {
 
 	case ${1} in
@@ -36,7 +37,7 @@ function parse_opts_real() {
 	esac
 }
 
-#VAIH:näiden opioitden testaus (gg-jutut mielekkäitä sittenq)
+#vähitelleb voisi kokeilla mitä avainten asennuksne jälkeen käy
 function single_param() {
 	case ${1} in
 		--iso)
@@ -63,14 +64,15 @@ function single_param() {
 
 MKS_parts="1 2 3"
 
+#TODO:ekan parametrin kanssa jotain rajoitusta ettei ihan juurta muutettaisi tjsp
 function part0() {
 	dqb "part0( ${1})"
 	[ -d ${1} ] || exit 67
-
+	[ z"${2}" == "z" ] && exit 69
 	local f
 
 	#pot. vaarallinen koska -R
-	${sco} -R ${n}:${n} ${1}  #TODO; $n parametriksi
+	${sco} -R ${2}:${2} ${1} 
 	${scm} 0755 ${1} 
 	${scm} u+w ${1}/* 
 	#oik/omist - asioita vosi miettiä jossain vaih että miten pitää mennä
@@ -155,26 +157,29 @@ function part6_5() {
 	csleep 1
 
 	for i in ${MKS_parts} ; do
-		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_file}.${i}
-		echo "$?"
+		dqb "${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
+		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
+		[ $? -gt 0 ] && dqb "install-keys --i ?"
 	done
-
-	if [ $? -gt 0 ] ; then
-		dqb "uliuli"
-	fi
 
 	dqb "dibw"
 }
 
 function part7() {
 	dqb "part7"	
+	pwd
+	sleep 2
 
+	dqb "${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}"
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
+	[ $? -gt 0 ] && dqb "install-keys --i ?"
+
 	${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
+	[ $? -gt 0 ] && dqb "install-keys --i ?"
 	local i
 
 	for i in ${MKS_parts} ; do
-		${gv} --keyring ${TARGET_Dpubkf} ${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_file}.${i}
+		${gv} --keyring ./${TARGET_Dpubkf} ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
 	done
 
 	echo $?
@@ -182,6 +187,7 @@ function part7() {
 	dqb "p7 done"
 }
 
+#TODO:globaaleja pois joa mahd
 function part8() {
 	dqb "p8 ${1}"
 	[ x"${TARGET_patch_name}" != "x" ] || exit 665
@@ -222,7 +228,7 @@ parse_opts ${3} ${4}
 dqb "${source} exists"
 csleep 1
 [ ${debug} -eq 1 ] && pwd
-part0 ${source}/${TARGET_DIGESTS_dir}
+part0 ${source}/${TARGET_DIGESTS_dir} ${n}
 
 #HUOM.18725:toisinkin voisi tehdä, nyt näin
 case ${CONF_bloader} in
@@ -240,7 +246,7 @@ part123 3 live ${source}
 cd ${source}  #${CONF_target}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
-#6_5-8 mielekästä ajaa vatsa wittenq avaimet olemassa
+#HUOM.30725:jokohan alkaisi jo avainjutut toimia
 if [ x"${gg}" != "x" ] ; then 
 	part6_5
 fi
@@ -256,7 +262,7 @@ ${scm} 0644 ./${TARGET_DIGESTS_dir}/*
 [ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
-#HUOM.18726: dgsts.4 kassa myös jotain jurpoilua?
+#HUOM.18726: dgsts.4 kanssa myös jotain jurpoilua? vielä 031025 ?
 dqb "${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10"
 ${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4
@@ -266,3 +272,4 @@ ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*
 
 [ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
+dqb "loits | squ.ash -j ?"

@@ -5,6 +5,8 @@ else
 	exit 67
 fi
 
+#031025 nimetty uudestaan ettei menisi kiekolla, wanha vefrsio saa jäädä vers.hall. jnkn aikaa
+
 #simppelimpi näin
 sudo ip link set ${iface} down
 
@@ -27,7 +29,6 @@ if [ -s ${basedir}/interfaces ] ; then
 fi
 
 #common_lib
-
 function efk() {
 	sudo dpkg -i $@
 	sudo rm $@
@@ -36,11 +37,9 @@ function efk() {
 #HUOM.18725:välillä jos kokeiltu ajaa init2 ennen generic_x- juttui, niinkin taitaa toimia
 q=$(mktemp -d)
 sudo cp ${pkgsrc}/*.deb ${q}
-
-
-
 	
 #parempi samaan aikaan dms ja libdev 
+#HUOM.011025:mihin näitä tarvittiin?
 efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
 #efk ${q}/libjte2*.deb
 
@@ -50,7 +49,7 @@ efk ${q}/lib*.deb
 echo "BEFORE TBLZ"
 sleep 2
 
-#HUOM.27725:josko hyldynbtäisi/prijausi common_lib.common_tbls() jatqssa
+#HUOM.27725:josko hyödynbtäisi/prijausi common_lib.common_tbls() jatqssa
 #
 ##DEBIAN_FRONTEND=noninteractive tämän kanssa jokin juttu?
 ##if_not_iptables
@@ -94,6 +93,7 @@ if [ ! -x ${x} ] ; then
 fi
 #/if_not_grub
 
+#HUOM.011025:voisi kai jnkn fktionkin krijoittaa ao. if-blokkeja korvaamaan
 #ao. rivejä ei kannata unmohtaa
 #which grub geniso
 x=$(sudo which genisoimage)
@@ -141,5 +141,4 @@ c=$(grep $0.conf ${basedir}/.gitignore | wc -l)
 #sleep 1
 #echo "#ei joulukuusia turhanbäite"
 #for f in $(find ${basedir} -type f ) ; do sudo chmod a-x ${f} ; done
-
 #for f in $(find ${basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done

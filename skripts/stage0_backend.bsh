@@ -18,7 +18,6 @@ function get_devuan() {
 
 function make_src_dirs() {
 	dqb "s0b.make_s_DIrs"
-
 	${smd} ${CONF_keys_dir}
 	${smd} ${CONF_distros_dir}
 
@@ -40,6 +39,7 @@ function cleanup() {
 	sudo umount ${CONF_source}
 }
 
+#VAIH:conf_scripts_dir parametriksi vai ei? entä CONF_tmpdir?
 function copy_main() {
 	#debug=1
 	dqb "copy_main(${1}, ${2}, ${3} )"
@@ -47,58 +47,85 @@ function copy_main() {
 	[ x"${1}" != "x" ] || exit 2
 	[ -d ${2} ] || exit 2 
 
-	#CONF_tmpdir
 	[ y"${3}" != "y" ] || exit 33
-	#CONF_tmpdir} ] || exit 34
 	[ -d ${3} ] || exit 34
 
-	[ -v CONF_scripts_dir ] || echo "CONF_SCRIPTS_DIR NOT DEFINED"
-	[ z"${CONF_scripts_dir}" != "z" ] || echo "n.s.t.as ${CONF_scripts_dir}"
+#	[ -v CONF_scripts_dir ] || echo "CONF_SCRIPTS_DIR NOT DEFINED"
+#	[ z"${CONF_scripts_dir}" != "z" ] || echo "n.s.t.as ${CONF_scripts_dir}"
 
 	dqb "CHECKS PASSED"
 	local f
-	
-	#TODO:ao. kohtaa mietittäbä, minne ovat kalat menossa, mikä oli koko blokin fktio
-	if [ -d ${CONF_scripts_dir} ]; then 
-		#${spc} -a ${CONF_scripts_dir}/*.sh ${3} #CONF_tmpdir}
+	dqb "ONE BATCH"	
+	csleep 1
 
-		for f in $(find ${CONF_scripts_dir} -type f -name '*.sh') ; do
-			dqb "${spc} ${f} ${CONF_tmpdir} (TODO,maybe)"
-			#${spc} ${f} ${3} #CONF_tmpdir}
+#	if [ -d ${CONF_scripts_dir} ]; then 
+#		for f in $(find ${CONF_scripts_dir} -type f -name '*.sh') ; do
+		for f in $(find ${3} -type f -name '*.sh') ; do	
+			dqb "${spc} ${f} ${2}/../.. "
+			${spc} ${f} ${2}/../.. 
 		done
-	fi
+#	fi
+
+	dqb "TWO BATCH"
+	csleep 1
 
 	for f in $(find ${1} -type f -name '*.sh') ; do
-		dqb "${spc} ${f} ${2} (TODO,maybe)"
-		#${spc} ${f} ${2}
+		dqb "${spc} ${f} ${2} "
+		${spc} ${f} ${2}
 	done
 	
+	dqb "PENNY AND A DIME"
+	csleep 1
+
 	for f in $(find ${1} -type f -name '*.bz2') ; do
 		dqb "${spc} ${f} ${2}"
 		${spc} ${f} ${2}
 	done
 
-	dqb "copy_main() donw"
+	dqb "copy_main() donw\n"
 }
 
+#VAIH:voisikohan ottaa hyötykäyttöönm? esim se sq-xhroot--ymp konftdsto
+#tilapäisesti viritys missä conf samassa paketissa .deb kanssa (041025)
+#"sudo cat" 1 ideqa, mangle_conf() toinen
+#... jospa se devuan.conf olisi se juttu, lähdehmistoon moinen ja sit jtain
+#... vielä d.c squash-hmistoon EIKU
 function copy_conf() {
-	dqb "copy_conf(${1}, ${2}. ${3})"
+	debug=1
+
+	dqb "copy_conf(${1}, ${2} , ${3})"
 	[ x"${1}" != "x" ] || exit 2
 	[ x"${2}" != "x" ] || exit 2
+	[ -z ${3} ] && exit 3
+	[ -d ${3} ] || exit 4
+
 	dqb "PARAMS OK"
+	#HUOM.041025: *.bash.conf ei tarttisi mennä kiekolle asti(TEHTY)
 
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
-		${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
+		#dqb "${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}"
+		# -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
+
+		for f in $(find ${CONF_scripts_dir} -type f -name '*.conf' | grep -v bash) ; do
+			#dqb "${spc} ${f} ${CONF_tmpdir}"
+			dqb "${spc} ${f}  ${3}/../.."
+			${spc} ${f} ${3}/../.. #${CONF_tmpdir}		
+		done
+
+		csleep 1
 	fi
 
+	#nykyään vähän erilainen upload kuin ao. blokkia kiroittaessa
 	if [ -s ${3}/upload.sh ] || [ -s ${3}/extras.tar.bz2 ] ; then 
 		for f in ${CONF_g2} ; do mangle_conf ${f} ${3}/${2}.conf ; done
 	fi
 
 	utfile=${3}/${2}.conf
+	#HUON.041025:manlge_conf():iin pitäisi vähitellen keksiä sopiva sisältö
+	#... ja CONF_G1 kanssa 
 
+	#TODO:tämä lisäilemään ne avain-jutut jatkossa? vaiko se toinen copy_conf() ?
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
-
 
 	echo -n "src=/" >> ${utfile}
 	echo -n "$" >> ${utfile}
@@ -120,19 +147,53 @@ function copy_conf() {
 
 	mangle_conf TARGET_to_ram ${utfile}
 	mangle_conf TARGET_nosu_do ${utfile}
-	sudo cat ${1}/${2}.conf >> ${utfile}
 
-	dqb "copy_conf() donw"
+	dqb "sudo cat ${1}/${2}.conf >> ${utfile}"
+	sudo cat ${1}/${2}.conf >> ${utfile}
+	csleep 3
+
+	dqb "copy_conf() donw\n"
 	sleep 1
 }
 
+#VAIH:target_dgst0 pois tsätä fktiosta, kutsuvaan koodiin (sitten josqs)
 function copy_sums() {
+	#debug=1
 
 	dqb "copy_syms(${1}, ${2})"
-	[ x"${1}" != "x" ] || exit 2
-	[ -d ${2} ] || exit 2 
-	#TODO:jotain tähänkin?
-	dqb "copy_syms(${1}, ${2}) dn0w"
+	#[ x"${1}" != "x" ] || exit 2
+	#[ -d ${2} ] || exit 2 
+
+	[ -z ${1} ] && exit 2
+	[ -d ${1} ] || exit 3
+	[ -z ${2} ] && exit 3
+
+	dqb "pars ok"
+	pwd
+	csleep 1
+
+	#pitäisiköä avainkikkailun olla erillisessä fktiossa?
+	#niinja miten avaimet+squ.ash? tarttisiko jotain kikkailua?
+
+	if [ -d ${1}/${TARGET_DGST0} ] ; then
+		dqb "JI"
+		#jos lähde olemassa, mitä sitten? pitäisi varmaan kopsata jotain jonnekin?
+	else
+		dqb "NO ${1}/${TARGET_DGST0} , YSINBF DEFAYLT KEYDIR "
+
+		if [ -d ${2}/${TARGET_DIGESTS_dir} ] ; then
+			dqb "${2}/${TARGET_DIGESTS_dir} ALREADY EXZUISWTS"
+		else
+			${smd} -p ${2}/${TARGET_DIGESTS_dir} #meneeköhän nyt oikein?
+		fi
+
+		#TODO:jatkossa pois nuo kopsaukset, toisella tavalla
+		dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkf}"
+		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkf}
+		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkg}
+	fi
+
+	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
 function bootloader() {
@@ -214,7 +275,7 @@ function bootloader() {
 	esac
 
 
-	dqb "bootloader(${1}, ${2}) EN0D"
+	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
 
 function make_tgt_dirs() {
@@ -268,10 +329,10 @@ function make_tgt_dirs() {
 	#miten oikeydet?
 	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
 
-	#TODO:avainhakemisto
+	#TODO:avainhakemisto (mitä siitä?)
 
 	#ls -la  ${CONF_target};sleep 6 dbq taakse
-	echo "...done"
+	echo "...done\n"
 }
 
 function default_process() {
@@ -283,5 +344,5 @@ function default_process() {
 	${scm} 0755 ${1}
 	${scm} 0444 ${1}/*
 
-	dqb "xt default_process(${1})"
+	dqb "xt default_process(${1})\n"
 }
