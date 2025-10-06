@@ -3,7 +3,7 @@
 n=$(whoami) 
 . ./"${n}".conf
 
-
+#toisessa repossa vastine check_bin()
 start_this_shit() {
 	siptr=$(sudo which iptables-restore) 
 	sifd=$(sudo which ifdown)
@@ -48,6 +48,7 @@ start_this_shit() {
 
 start_this_shit
 
+#toisessa repossa oli psqa()
 cond_check() {
 	if [ -s "$1" ] ; then 
 		cd "${src}"
@@ -75,15 +76,18 @@ cond_check() {
 	fi
 }
 
+#sharpy()
 sarp() {
 	${sag} remove --purge "$@"
 	sudo apt autoremove
 }
 
+#myös SBU
 SBU() {
 	sudo shred -fu "$1"
 }
 
+#loppuosa niinqu omega.sh
 cleanup1() {
 	cd /home/"$1"
 	SBU "${pkgdir}"/*
@@ -110,6 +114,7 @@ cleanup1() {
 	SBU /tmp/machupo.tar.bz2
 	/usr/bin/killall xfce4-session
 }
+#common_lib sisältää myös efk()
 efk() {
 	[ -s "$1" ] || exit
 	[ "${to_ram}" -eq 1 ] && sudo cp "${src}"/foxp3.tar.bz2 "${src}"/foxp3.tar.bz2.BACKUP
@@ -127,6 +132,7 @@ efk() {
 		sudo mv "${src}"/foxp3.tar.bz2.BACKUP "${src}"/foxp3.tar.bz2
 	fi
 }
+#common_lib, part1() taisi vastata tätä jossain määrin
 tablz() {
 	[ -d /etc/iptables ] || sudo mkdir /etc/iptables	
 	cd /etc/iptables
@@ -159,6 +165,7 @@ tablz() {
 	sudo /sbin/sysctl -w net.ipv6.conf.default.disable_ipv6=1
 }
 
+#common_lib sisälsi samantap fktion myös, part1_5 ehkä
 s0rsat() {
 	cd /etc/apt/
 	sudo mv sources.list sources.list.ORIG
