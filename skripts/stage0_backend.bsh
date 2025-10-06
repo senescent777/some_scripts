@@ -123,6 +123,8 @@ function copy_conf() {
 	utfile=${3}/${2}.conf
 	#HUON.041025:manlge_conf():iin pitäisi vähitellen keksiä sopiva sisältö
 	#... ja CONF_G1 kanssa 
+
+	#TODO:tämä lisäilemään ne avain-jutut jatkossa? vaiko se toinen copy_conf() ?
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
 	echo -n "src=/" >> ${utfile}
@@ -185,6 +187,7 @@ function copy_sums() {
 			${smd} -p ${2}/${TARGET_DIGESTS_dir} #meneeköhän nyt oikein?
 		fi
 
+		#TODO:jatkossa pois nuo kopsaukset, toisella tavalla
 		dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkf}"
 		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkf}
 		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkg}
