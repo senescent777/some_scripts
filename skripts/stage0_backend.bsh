@@ -30,7 +30,6 @@ function make_src_dirs() {
 		;;
 	esac
 
-
 	${smd} ${CONF_pkgsdir2}
 	${smd} ./v
 }
@@ -50,21 +49,15 @@ function copy_main() {
 	[ y"${3}" != "y" ] || exit 33
 	[ -d ${3} ] || exit 34
 
-#	[ -v CONF_scripts_dir ] || echo "CONF_SCRIPTS_DIR NOT DEFINED"
-#	[ z"${CONF_scripts_dir}" != "z" ] || echo "n.s.t.as ${CONF_scripts_dir}"
-
 	dqb "CHECKS PASSED"
 	local f
 	dqb "ONE BATCH"	
 	csleep 1
 
-#	if [ -d ${CONF_scripts_dir} ]; then 
-#		for f in $(find ${CONF_scripts_dir} -type f -name '*.sh') ; do
 		for f in $(find ${3} -type f -name '*.sh') ; do	
 			dqb "${spc} ${f} ${2}/../.. "
 			${spc} ${f} ${2}/../.. 
 		done
-#	fi
 
 	dqb "TWO BATCH"
 	csleep 1
@@ -103,11 +96,7 @@ function copy_conf() {
 	#HUOM.041025: *.bash.conf ei tarttisi mennä kiekolle asti(TEHTY)
 
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
-		#dqb "${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}"
-		# -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
-
 		for f in $(find ${CONF_scripts_dir} -type f -name '*.conf' | grep -v bash) ; do
-			#dqb "${spc} ${f} ${CONF_tmpdir}"
 			dqb "${spc} ${f}  ${3}/../.."
 			${spc} ${f} ${3}/../.. #${CONF_tmpdir}		
 		done
@@ -123,8 +112,6 @@ function copy_conf() {
 	utfile=${3}/${2}.conf
 	#HUON.041025:manlge_conf():iin pitäisi vähitellen keksiä sopiva sisältö
 	#... ja CONF_G1 kanssa 
-
-	#TODO:tämä lisäilemään ne avain-jutut jatkossa? vaiko se toinen copy_conf() ?
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
 	echo -n "src=/" >> ${utfile}
@@ -158,11 +145,7 @@ function copy_conf() {
 
 #VAIH:target_dgst0 pois tsätä fktiosta, kutsuvaan koodiin (sitten josqs)
 function copy_sums() {
-	#debug=1
-
 	dqb "copy_syms(${1}, ${2})"
-	#[ x"${1}" != "x" ] || exit 2
-	#[ -d ${2} ] || exit 2 
 
 	[ -z ${1} ] && exit 2
 	[ -d ${1} ] || exit 3
@@ -187,7 +170,7 @@ function copy_sums() {
 			${smd} -p ${2}/${TARGET_DIGESTS_dir} #meneeköhän nyt oikein?
 		fi
 
-		#TODO:jatkossa pois nuo kopsaukset, toisella tavalla
+		#TODO:tämä kohta uusiksi
 		dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkf}"
 		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkf}
 		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkg}
@@ -196,6 +179,7 @@ function copy_sums() {
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
+#TODO:$c_tgt-> $3 
 function bootloader() {
 	#debug=1
 	dqb "bootloader(${1}, ${2}, ${3})"
@@ -299,7 +283,6 @@ function make_tgt_dirs() {
 	${scm} 0755 ${CONF_target}	
 
 	if [ ! -d ${CONF_target} ] ; then
-
 		dqb "mkdir ${CONF_target}";sleep 6
 		${smd} -p ${CONF_target}
 	else

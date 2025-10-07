@@ -64,11 +64,12 @@ function single_param() {
 
 MKS_parts="1 2 3"
 
-#TODO:ekan parametrin kanssa jotain rajoitusta ettei ihan juurta muutettaisi tjsp
+#VAIH:ekan parametrin kanssa jotain rajoitusta ettei ihan juurta muutettaisi tjsp
 function part0() {
 	dqb "part0( ${1})"
+	[ -z ${1} ] && exit 65
 	[ -d ${1} ] || exit 67
-	[ z"${2}" == "z" ] && exit 69
+	[ z"${2}" == "z" ] && exit 69 #pitöisikö lisäksi grepata /e/passwd ?
 	local f
 
 	#pot. vaarallinen koska -R
@@ -87,19 +88,6 @@ function part0() {
 	dqb "part0 d0n3"
 	csleep 1
 }
-
-#function part1234() {
-#	local olddir=$(pwd)	
-#
-#
-#	local f
-#
-#	for f in $(find . -name SAM.${1}.*) ; do
-#		echo	
-#	done
-#
-#	cd ${olddir}
-#}
 
 function part123() {
 	#debug=1
@@ -220,7 +208,6 @@ function part8() {
 	cd ${olddir}
 }
 
-#enforce_deps
 parse_opts ${1} ${2}
 parse_opts ${3} ${4}
 

@@ -134,7 +134,6 @@ case ${bloader} in
 	;;
 esac
 
-#VAIH:chmod a-wx $target_dira-k.a joukukuuset wttuun
 sudo chmod a-wx ${ltarget}/*.iso 
 sleep 1
 echo "stick.sh ?"

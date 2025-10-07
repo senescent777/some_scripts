@@ -85,7 +85,7 @@ function fix_sudo() {
 	dqb "pars ok"
 	csleep 1
 
-	#if [ x"${CONF_squash_dir}" != "x" ]; then
+	
 		cd ${1}
 		[ ${debug} -eq 1 ] && pwd
 		csleep 1 
@@ -108,7 +108,7 @@ function fix_sudo() {
 
 		#${sca} +ui ./usr/bin/sudo
 		#${sca} +ui ./usr/lib/sudo/sudoers.so	
-	#fi
+	
 }
 
 function bbb() {
@@ -155,12 +155,13 @@ function bbb() {
 #VAIH:main-conf varten 3. param cd:tä varten? tai jtnkn muuten
 
 #HUOM.27725:oikeasraan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
-#poltettavalle kiekolle voisi mennä imp2+sen tarvitsemat (TODO:se sq-chr-versio imp2sesta?)
+#poltettavalle kiekolle voisi mennä imp2+sen tarvitsemat (VAIH:se sq-chr-versio imp2sesta?)
 #... tai siis jos ln -s chroot-imp2 v/$version/pad/imp2
 
-#TODO:Const t_p23 kutsuvaan koodiin
+#VAIH:Const t_p23 kutsuvaan koodiin
 function jlk_main() {
 	dqb "jkl1 $1 , ${2} "
+
 	[ x"${1}" == "x" ] && exit 66
 	[ x"${2}" == "x" ] && exit 67
 	[ -d ${1} ] || exit 68
@@ -168,10 +169,14 @@ function jlk_main() {
 
 	dqb "pars_ok"
 	csleep 1
+#
+#	${spc} ${1}/*.sh ${2}/${TARGET_pad2}/
+#	${spc} ${1}/*.bz2 ${2}/${TARGET_pad2}/
+#	${spc} ${1}/*.bz3 ${2}/${TARGET_pad2}/
 
-	${spc} ${1}/*.sh ${2}/${TARGET_pad2}/
-	${spc} ${1}/*.bz2 ${2}/${TARGET_pad2}/
-	${spc} ${1}/*.bz3 ${2}/${TARGET_pad2}/
+	${spc} ${1}/*.sh ${2}
+	${spc} ${1}/*.bz2 ${2}
+	${spc} ${1}/*.bz3 ${2}
 
 	dqb "jkl1 d0n3"
 }
@@ -195,15 +200,6 @@ function jlk_conf() {
 	dqb "params_ok"
 	[ ${debug} -eq 1 ] && pwd
 	csleep 2
-##	exit
-##
-##			if [ ! -s ${1}/${2}.conf ] ; then
-##				echo "ERROR:NO CONFIG FILE TO COPY!!!" 
-##				exit 66
-##			fi
-##
-##			#cd ${CONF_squash_dir}/${TARGET_pad2}
-##
 			
 	local t
 	t=${3}/${TARGET_pad2}
@@ -243,21 +239,23 @@ function jlk_sums() {
 
 	[ x"${1}" != "x" ] || exit 66
 	[ -d ${1} ] || exit 67
+	#TODO:$2 tark
 
-	#[ x"${3}" != "x" ] || exit 70
-	#[ -d ${3} ] || exit 71
 	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
-
 	pwd
 	sleep 6
-	
-	[ -d ${2}/${TARGET_DGST0} ] || ${smd} -p ${2}/${TARGET_DGST0} ;sleep 6
-	dqb "${spc} -a ${1}/* ${2}/${TARGET_DGST0}"
-	sleep 3
-	${spc} -a ${1}/* ${2}/${TARGET_DGST0} #oli ${3}/${TARGET_DGST0}
+#	
+#	[ -d ${2}/${TARGET_DGST0} ] || ${smd} -p ${2}/${TARGET_DGST0} ;sleep 6
+#	dqb "${spc} -a ${1}/* ${2}/${TARGET_DGST0}"
+#	sleep 3
+#	/${TARGET_DGST0} #oli ${3}/${TARGET_DGST0}
 
-	ls -las ./${TARGET_DGST0};sleep 5
-	
+	[ -d ${2}} ] || ${smd} -p ${2}
+	dqb "${spc} -a ${1}/* ${2}"
+	csleep 3
+	${spc} -a ${1}/* ${2}
+
+	ls -las ./${TARGET_DGST0};sleep 5 #pitäisikö olla $2?
 	cd ..
 	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
 
@@ -266,7 +264,6 @@ function jlk_sums() {
 }
 
 function rst_pre1() {
-	#VAIH:mx-jutut erilliseen fktioon ja ennen rst-kutsua
 	dqb "rst_pre1()"
 	csleep 1
 
@@ -340,7 +337,6 @@ function rst_post() {
 	csleep 1
 }
 
-#VAIH:cofs_squash_dir?
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
 function rst() {
 	dqb "rst( ${1} , ${2} )"
@@ -349,24 +345,18 @@ function rst() {
 	dqb "params ok (maybe)"
 	csleep 1
 
-	#if [ x"${CONF_squash_dir}" != "x" ]; then
-		cd ${1} #CONF_squash_dir}
+		cd ${1}
 		pwd
 		csleep 1
  
-
-		#VAIH:$sco-jutuista erillinen fktio+tähän kutsu siihen
 		rst_pre2
 
 		${odio} chroot ./ ./bin/bash 
 		[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
 		
-		#VAIH:chrtoot jölkeiset imaan fktioon
+
 		rst_post
-
-
 		sleep 3
-	#fi
 
 	dqb "rst() done"
 	csleep 1
@@ -383,7 +373,6 @@ function cfd() {
 	csleep 1
 	
 		echo "${0} -b ?"
-
 		cd ${2}
 
 		local msq
@@ -504,7 +493,6 @@ case ${cmd} in
 
 		#TODO:optionaalinen ajettava komento?
 		rst_pre1
-		
 		rst ${CONF_squash_dir}
 	;;
 	-j) #HUOM.031025:havaittu toimivaksi
@@ -516,8 +504,10 @@ case ${cmd} in
 		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 		#cd ${CONF_squash_dir}/${TARGET_pad2}
-		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}
 
+		#jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}
+		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2}/
+		
 		#jatkossa jo s ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
 		#VAIH:joko jo alkaisi suorittaa dor2 suhteen?
 
@@ -532,7 +522,8 @@ case ${cmd} in
 		#... josko dnamer1,dkname2 mukaan sq-chr-ymo tuon jlk_s avulla?
 		#dir2 esim $basedir/tmp/tgt
 
-		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}
+		#jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}
+		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
 	-f) #TODO:testaa toimivuus
@@ -542,4 +533,3 @@ case ${cmd} in
 		usage
 	;;
 esac
-
