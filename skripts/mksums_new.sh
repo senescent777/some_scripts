@@ -67,16 +67,25 @@ MKS_parts="1 2 3"
 #VAIH:ekan parametrin kanssa jotain rajoitusta ettei ihan juurta muutettaisi tjsp
 function part0() {
 	dqb "part0( ${1})"
+	csleep 1
+
 	[ -z ${1} ] && exit 65
 	[ -d ${1} ] || exit 67
 	[ z"${2}" == "z" ] && exit 69 #pitöisikö lisäksi grepata /e/passwd ?
-	local f
+	[ "${2}" == "/" ] && exit 70	
+	
+	grep ${2} /etc/passwd
+	csleep 1
+	dqb "PARAMS OK"
+	csleep 1
 
 	#pot. vaarallinen koska -R
 	${sco} -R ${2}:${2} ${1} 
 	${scm} 0755 ${1} 
 	${scm} u+w ${1}/* 
-	#oik/omist - asioita vosi miettiä jossain vaih että miten pitää mennä
+
+	#oik/omist - asioita voisi miettiä jossain vaih että miten pitää mennä
+	local f
 
 	for f in $(find ${1} -type f -name '${TARGET_DIGESTS_file}*') ; do
 		rm ${f}
@@ -162,6 +171,7 @@ function part7() {
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
 
+	#--keyring kanssa jatkossakin?
 	${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
 	local i
@@ -175,7 +185,7 @@ function part7() {
 	dqb "p7 done"
 }
 
-#TODO:globaaleja pois joa mahd
+#VAIH:globaaleja pois joa mahd
 function part8() {
 	dqb "p8 ${1}"
 	[ x"${TARGET_patch_name}" != "x" ] || exit 665
@@ -183,19 +193,19 @@ function part8() {
 
 	dqb "params ok"
 
-	local tfile=${TARGET_patch_name}.tar.bz2
-	#[ -s ./${TARGET_pad_dir}/${tfile} ] || exit 666		
+	#local tfile=${TARGET_patch_name}.tar.bz2
+	##[ -s ./${TARGET_pad_dir}/${tfile} ] || exit 666		
 
 	local olddir=$(pwd)	
-	[ -s ./${TARGET_pad_dir}/${tfile} ] && cp ./${TARGET_pad_dir}/${tfile} ../out
+	#[ -s ./${TARGET_pad_dir}/${tfile} ] && cp ./${TARGET_pad_dir}/${tfile} ../out
 	cd ../out
 
 	case ${1} in
 		1)
-			${gg} -u ${CONF_kay2name} -sb ${tfile}
+			#${gg} -u ${CONF_kay2name} -sb ${tfile}
 			echo $?
 
-			${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}
+			#${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}
 		;;
 		2)
 			dqb "2"

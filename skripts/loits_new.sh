@@ -107,6 +107,7 @@ case ${bloader} in
 #		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
 #	;;
 	isolinux)
+		#HUOM.081025:onko testattu tämän casen toimivuus?
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
@@ -115,7 +116,6 @@ case ${bloader} in
 		csleep 1
 
 		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} #. älä ramppaa
-		
 	;;
 	grub)
 		#https://bbs.archlinux.org/viewtopic.php?id=219955
