@@ -55,7 +55,7 @@ function single_param() {
 if [ -d ${CONF_tmpdir0} ] ; then
 	dqb "CONF_TMPDIR0 EXISTS"
 else
-	echo "CONF_TMPDIR0"
+	echo "s.HOULD mkdir ${CONF_TMPDIR0}"
 	exit 7
 fi
 

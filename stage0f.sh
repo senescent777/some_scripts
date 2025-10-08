@@ -63,19 +63,19 @@ function part0() {
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa
 	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
 	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
-#
-#	[ -v TARGET_DIGESTS_dir ] || exit 666
-#	[ -v TARGET_DGST0 ] || exit 666
-#	dqb "OUYG)(&R()%¤ER"
-#
-#	#HUOM.04§025:täsä kohtaa tökkää, kts toistuuko
-#	[ -z ${TARGET_DIGESTS_dir} ] || exit 666
-#	dqb "56448748765484"
-#
-#	[ -z ${TARGET_DGST0} ] || exit 666
-#	dqb "ÄÖ_ÅPÄÖÖÅPO"
-#
-	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
+
+	[ -v TARGET_DIGESTS_dir ] || exit 666
+	[ -v TARGET_DGST0 ] || exit 666
+	dqb "OUYG)(&R()%¤ER"
+
+	#HUOM.04§025:täsä kohtaa tökkää, kts toistuuko
+	[ -z ${TARGET_DIGESTS_dir} ] && exit 65
+	dqb "56448748765484"
+
+	[ -z ${TARGET_DGST0} ] && exit 66
+	dqb "ÄÖ_ÅPÄÖÖÅPO"
+
+	copy_sums ${src2}/${TARGET_DGST0} ${CONF_target}/${TARGET_DIGESTS_dir}
 	dqb "4FT3R COPY_X"
 	csleep 1
 
@@ -85,9 +85,11 @@ function part0() {
 	
 	#TODO:omaksi fktioksi va maksasko vaivaa 1 rivin takia?
 	#TODO:sen pad-hmiston omistajuuden pakotus (d:d ei hyvä, ehkä)
-	${spc} ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
+	#keys-hmistossa ei juuri nyt taida olla .gpg-tdstoja... (081025)
 
+	${spc} ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
 	default_process ${CONF_target}/${TARGET_pad_dir}
+
 	${scm} 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
 	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
 	
