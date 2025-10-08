@@ -250,7 +250,7 @@ function jlk_sums() {
 #	sleep 3
 #	/${TARGET_DGST0} #oli ${3}/${TARGET_DGST0}
 
-	[ -d ${2}} ] || ${smd} -p ${2}
+	[ -d ${2} ] || ${smd} -p ${2}
 	dqb "${spc} -a ${1}/* ${2}"
 	csleep 3
 	${spc} -a ${1}/* ${2}
