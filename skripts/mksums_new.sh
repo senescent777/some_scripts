@@ -13,7 +13,7 @@ fi
 
 #jos jatkossa common_funcs tai common_lib
 if [ $# -eq 0 ] ; then
-	echo "-h"
+	echo "-h" #tällä parametrilla ei tarttisi jatkaa isage():a pidemmälle
 	exit
 fi
 
@@ -22,6 +22,7 @@ function usage() {
 	echo "$0 --iso"
 	echo "$0 --pkgs"
 	echo "$0 -h" #voisi olla vakiovaruste tuo optio ja liityvä fktio
+	exit 44
 }
 
 #miten se -v?
@@ -58,6 +59,7 @@ function single_param() {
 		;;
 		--h|-h)
 			usage
+			exit 65
 		;;
 	esac
 }
@@ -71,8 +73,9 @@ function part0() {
 
 	[ -z ${1} ] && exit 65
 	[ -d ${1} ] || exit 67
-	[ z"${2}" == "z" ] && exit 69 #pitöisikö lisäksi grepata /e/passwd ?
-	[ "${2}" == "/" ] && exit 70	
+
+	[ -z ${2} ] && exit 69 #pitäisikö lisäksi grepata /e/passwd ?
+	[ "${1}" == "/" ] && exit 71	
 	
 	grep ${2} /etc/passwd
 	csleep 1
@@ -103,7 +106,7 @@ function part123() {
 	dqb "part123(${1}, ${2} , ${3} )"
 
 	[ z"${1}" != "z" ] || exit 111
-	#[ -d ${2} ] || exit 112
+	#[ -d ${2} ] || exit 112 #miksi kommenteissa?
 	[ -d ${3} ] || exit 113
 
 	local old
@@ -117,8 +120,8 @@ function part123() {
 		csleep 1
 
 		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
-			dqb "${sh5} ${f}"
-			${sh5} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
+			dqb "${sah6} ${f}"
+			${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
 		done
 
 		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
@@ -140,7 +143,7 @@ function part456() {
 	csleep 1
 
 	if [ -s ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
-		${sh5} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} --ignore-missing
+		${sah6} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} --ignore-missing
 	else
 		echo "no such thing as ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}"		 
 	fi
@@ -185,7 +188,7 @@ function part7() {
 	dqb "p7 done"
 }
 
-#VAIH:globaaleja pois joa mahd
+#VAIH:globaaleja pois jos mahd
 function part8() {
 	dqb "p8 ${1}"
 	[ x"${TARGET_patch_name}" != "x" ] || exit 665
@@ -227,8 +230,8 @@ csleep 1
 [ ${debug} -eq 1 ] && pwd
 part0 ${source}/${TARGET_DIGESTS_dir} ${n}
 
-#HUOM.18725:toisinkin voisi tehdä, nyt näin
-case ${CONF_bloader} in
+#CONF_bloader=isolinux
+case ${CONF_bloader} in #pitääkö olla juuri näin?
 	grub)
 		part123 1 boot/grub ${source}
 	;;
@@ -254,14 +257,15 @@ part7
 part8 ${b}
 [ ${debug} -eq 1 ] && pwd
 
+#TODO:$sc-juttujen kanssa sudoersiin rajoitus jos mahd
 ${sco} ${n}:${n} ./${TARGET_DIGESTS_dir}/* 
 ${scm} 0644 ./${TARGET_DIGESTS_dir}/* 
 [ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
-#HUOM.18726: dgsts.4 kanssa myös jotain jurpoilua? vielä 031025 ?
-dqb "${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10"
-${sh5} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
+#HUOM.18726: dgsts.4 kanssa myös jotain jurpoilua? vielä 031025 ? joo (tee jotain)
+dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10"
+${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4
 
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}

@@ -1,10 +1,10 @@
 odio=$(which sudo) 
-
+#TODO:sudoon liittyen se sudoers-meshuggah-jekku käyttöön myös näöhin remasterointiskripteihimn, varm. vuoksi
 #========================tilapäisesti tässä, common_lib myöh==
 
-sh5=$(${odio} which sha512sum)
-sh5=$(${odio} which sha512sum)
-[ -x ${sh5} ] || echo "install sha512sum !!!" #vissiin coreutils sisälsi tuon
+sah6=$(${odio} which sha512sum)
+sah6=$(${odio} which sha512sum)
+[ -x ${sah6} ] || echo "install sha512sum !!!" #vissiin coreutils sisälsi tuon
 
 gg=$(${odio} which gpg)
 gv=$(${odio} which gpgv)
@@ -50,7 +50,6 @@ function csleep() {
 #TODO:tähän asti juttujen korvaaminen toisen projektin common_lib
 #============================================
 
-
 #se uusi gpo() tilalle?
 function parse_opts() {
 
@@ -91,13 +90,12 @@ function parse_opts() {
 		fi
 	fi
 }
-
-#missä tätä käytetään?
-function mk_bkup() { 
-	dqb "mk_bkup(${1})"
-	
-	if [ -s ${1} ] ; then
-		${svm} ${1} ${1}.OLD
-	fi
-}
-
+#
+##missä tätä käytetään?
+#function mk_bkup() { 
+#	dqb "mk_bkup(${1})"
+#	
+#	if [ -s ${1} ] ; then
+#		${svm} ${1} ${1}.OLD
+#	fi
+#}

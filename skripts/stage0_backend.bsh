@@ -33,11 +33,11 @@ function make_src_dirs() {
 	${smd} ${CONF_pkgsdir2}
 	${smd} ./v
 }
-
-function cleanup() {
-	sudo umount ${CONF_source}
-}
-
+#tarpeellinen?
+#function cleanup() {
+#	sudo umount ${CONF_source}
+#}
+#
 #VAIH:conf_scripts_dir parametriksi vai ei? entä CONF_tmpdir?
 function copy_main() {
 	#debug=1
@@ -54,10 +54,10 @@ function copy_main() {
 	dqb "ONE BATCH"	
 	csleep 1
 
-		for f in $(find ${3} -type f -name '*.sh') ; do	
-			dqb "${spc} ${f} ${2}/../.. "
-			${spc} ${f} ${2}/../.. 
-		done
+	for f in $(find ${3} -type f -name '*.sh') ; do	
+		dqb "${spc} ${f} ${2}/../.. "
+		${spc} ${f} ${2}/../.. 
+	done
 
 	dqb "TWO BATCH"
 	csleep 1
@@ -144,9 +144,10 @@ function copy_conf() {
 }
 
 #VAIH:target_dgst0 pois tsätä fktiosta, kutsuvaan koodiin (sitten josqs)
+#pitäisikö tämän fktio olla kopsata tsummia?
 function copy_sums() {
 	debug=1
-	dqb "copy_syms(${1}, ${2})"
+	#dqb "copy_syms(${1}, ${2})" #tämäkö qsee?
 
 	[ -z ${1} ] && exit 2
 	#[ -d ${1} ] || exit 3 #ei tätä koska alempana x
@@ -155,22 +156,15 @@ function copy_sums() {
 	dqb "pars ok"
 	pwd
 	csleep 1
+#
+#	#pitäisiköä avainkikkailun olla erillisessä fktiossa?
+#	#niinja miten avaimet+squ.ash? tarttisiko jotain kikkailua?
 
-	#pitäisiköä avainkikkailun olla erillisessä fktiossa?
-	#niinja miten avaimet+squ.ash? tarttisiko jotain kikkailua?
-
-	#if [ -d ${1}/${TARGET_DGST0} ] ; then
 	if [ -d ${1} ] ; then
 		dqb "JI"
 		#jos lähde olemassa, mitä sitten? pitäisi varmaan kopsata jotain jonnekin?
 	else
 		dqb "NO ${1} / \${TARGET_DGST0} , YSINBF DEFAYLT KEYDIR "
-
-		#if [ -d ${2}/${TARGET_DIGESTS_dir} ] ; then
-		#	dqb "${2}/${TARGET_DIGESTS_dir} ALREADY EXZUISWTS"
-		#else
-		#	${smd} -p ${2}/${TARGET_DIGESTS_dir} #meneeköhän nyt oikein?
-		#fi
 
 		if [ -d ${2} ] ; then
 			dqb "${2}  ALREADY EXZUISWTS"
@@ -179,9 +173,9 @@ function copy_sums() {
 		fi
 
 		#VAIH:tämä kohta uusiksi (jatkossa jos .bz3 sisältäisi julk avaimet)
-		dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2} #/ \${TARGET_Dpubkf}"
-		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2} #/${TARGET_Dpubkf}
-		${spc} ${CONF_keys_dir}/${TARGET_Dkname2} ${2} #/${TARGET_Dpubkg}
+		dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}"
+		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}
+		${spc} ${CONF_keys_dir}/${TARGET_Dkname2} ${2}
 	fi
 
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
@@ -270,6 +264,7 @@ function bootloader() {
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
 
+#TODO:conf_t ja conf_s parametriksi
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS()"
 

@@ -43,9 +43,11 @@ case ${cmd} in
 		done
 	;;
 	--e) 
+		#TODO: -v
 		[ x"${CONF_kay1name}" != "x" ] || exit 666
 		[ x"${CONF_kay2name}" != "x" ] || exit 666
 
+		#TODO:$smr
 		sudo rm ${ridk}/${TARGET_Dkname1}*
 		sudo rm ${ridk}/${TARGET_Dkname2}*
 
@@ -67,8 +69,10 @@ case ${cmd} in
 	
 		if [ ! -s ${d}/keys.conf ] ; then
 			cp ${d}/keys.conf.example ${d}/keys.conf
-			${gg} --list-keys >> ${d}/keys.conf  
-			nano ${d}/keys.conf #$EDITOR jatkossa
+			${gg} --list-keys >> ${d}/keys.conf 
+
+			nano ${d}/keys.conf
+			#$EDITOR ${d}/keys.conf
 		fi
 	;;
 	*)

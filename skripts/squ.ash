@@ -50,9 +50,12 @@ parse_opts ${5} ${6}
 parse_opts ${7} ${8}
 parse_opts ${9} ${10}
 
+#HUOM.091025:OK
 function xxx() {
+	#debug=1
 	dqb "xxx( ${1}, ${2})"
 	#tulisi stopata tässä jos ei kalaa
+
 	[ -s ${1} ] || exit 99
 	[ x"${2}" == "x" ] && exit 98
 	#[ -d ${2} ]  || exit 97
@@ -61,9 +64,11 @@ function xxx() {
 	csleep 1
 
 	#if [ x"${2}" != "x" ]; then
-		#ao.blikki toistruu melkein samanlöaisena toisessa kohtaa...
+		#ao.blokki toistruu melkein samanlöaisena toisessa kohtaa, cfd()
 		[ -d ${2} ] || ${smd} ${2}
 		cd ${2}
+
+		local unsq
 		unsq=$(${odio} which unsquashfs)
 
 		if [ x"${unsq}" != "x" ] ; then 
@@ -71,13 +76,13 @@ function xxx() {
 		else
 			echo "${odio} apt-get install squashfs-utils"
 		fi
-
 	#fi
+
 	dqb "xxx d0mw"
 }
 
 #jatkossa common_lib?
-
+#HUOM.091025;
 function fix_sudo() {
 	dqb "fix_sudo( ${1}) "
 	[ x"${1}" == "x" ] && exit 97
@@ -111,6 +116,8 @@ function fix_sudo() {
 	
 }
 
+#HUOM.091025:OK
+#sudoers-jekku hyväksi tässäkin
 function bbb() {
 	debug=1
 	dqb "bbb( ${1} ) ohgUYHGIUTFD/()%E"
@@ -124,7 +131,7 @@ function bbb() {
 
 			cd ${1}
 			[ ${debug} -eq 1 ] && pwd
-			#exit 100
+			csleep 4
 
 			pwd
 			echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
@@ -138,7 +145,7 @@ function bbb() {
 			${smr} -rf ./var/cache/apt/*.bin
 			${smr} -rf ./tmp/*
 
-			fix_sudo $(pwd) #{1} #CONF_squash_dir} 
+			fix_sudo $(pwd)
 			${scm} -R 0755 ./var/cache/man
 			${sco} -R man:man ./var/cache/man
 
@@ -147,7 +154,6 @@ function bbb() {
 
 			#uusi ominaisuus 230725
 			for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
-
 
 	dqb "BARBEQUE PARTY DONE.done()"
 }
@@ -158,7 +164,7 @@ function bbb() {
 #poltettavalle kiekolle voisi mennä imp2+sen tarvitsemat (VAIH:se sq-chr-versio imp2sesta?)
 #... tai siis jos ln -s chroot-imp2 v/$version/pad/imp2
 
-#VAIH:Const t_p23 kutsuvaan koodiin
+#HUOM.091025:OK
 function jlk_main() {
 	dqb "jkl1 $1 , ${2} "
 
@@ -169,10 +175,6 @@ function jlk_main() {
 
 	dqb "pars_ok"
 	csleep 1
-#
-#	${spc} ${1}/*.sh ${2}/${TARGET_pad2}/
-#	${spc} ${1}/*.bz2 ${2}/${TARGET_pad2}/
-#	${spc} ${1}/*.bz3 ${2}/${TARGET_pad2}/
 
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2}
@@ -182,13 +184,15 @@ function jlk_main() {
 }
 
 ##TODO:parametreille järkev't arvot?
-#VAIH:chroot-ympäristlö varten oma conf? (helpoitna kai necros.tar.bz2 kautta mutta)
-#... ideana aiemmin että root.conf olisi sq-chr-ymp varten , devuan.conf taas ei
 
+#... ideana aiemmin että root.conf olisi sq-chr-ymp varten , devuan.conf taas ei
+#
 #VAIH:koita arpoa voisiko tämän ottaa käyttöön bvai ei (stage0f kautta tulisi se devuan.cnf jos on tullakseen)
 #VAIH:Const T_P2 mäkeen fktiosta
+
+#HUOM.091026:OK
 function jlk_conf() {
-	dqb "jlk_conf( ${1} , ${2} , ${3}) (VAIH)"
+	dqb "jlk_conf( ${1} , ${2} , ${3}) "
 	[ x"${1}" == "x" ] && exit 66
 	[ x"${2}" == "x" ] && exit 67
 	[ x"${3}" == "x" ] && exit 68
@@ -227,12 +231,13 @@ function jlk_conf() {
 	csleep 5
 }
 
-sah6=$(${odio} which sha512sum)
+#sah6=$(${odio} which sha512sum) c_funcs nykyään
 #HUOM.031025:avainten kopsailu nyt stage0f.sh kautta
 #... pitäsiköhän stage0f kopsata myös joitain skriptejä v/$version alle?
-
+#
 #mitäköhän paranetreja tälle fktiolle piti antaa?
-#T_XXX kutsuvaanm kpoodiin vai ei?
+#T_yyy kutsuvaanm kpoodiin vai ei?
+#HUOM.091025:OK
 function jlk_sums() {
 	debug=1
 	dqb "jlk_sums( ${1} , ${2}, ${3}) (VAIH)"
@@ -244,13 +249,8 @@ function jlk_sums() {
 	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
 	pwd
 	sleep 6
-#	
-#	[ -d ${2}/${TARGET_DGST0} ] || ${smd} -p ${2}/${TARGET_DGST0} ;sleep 6
-#	dqb "${spc} -a ${1}/* ${2}/${TARGET_DGST0}"
-#	sleep 3
-#	/${TARGET_DGST0} #oli ${3}/${TARGET_DGST0}
 
-	[ -d ${2} ] || ${smd} -p ${2}
+	[ -d ${2}} ] || ${smd} -p ${2}
 	dqb "${spc} -a ${1}/* ${2}"
 	csleep 3
 	${spc} -a ${1}/* ${2}
@@ -263,6 +263,7 @@ function jlk_sums() {
 	sleep 2
 }
 
+#HUOM.091§025:OK
 function rst_pre1() {
 	dqb "rst_pre1()"
 	csleep 1
@@ -287,19 +288,22 @@ function rst_pre1() {
 	csleep 1		
 }
 
+#HUOM.091025:OK
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
 	pwd
 	csleep 1
 
-	[ -d ./etc ] || exit 666
+	[ -d ./etc ] || exit 66
 	csleep 1
 
-		${sco} ${n}:${n} ./etc/default/locale
+		${sco} ${n}:${n} ./etc/default/locale #n parametriksi?
 		${scm} 0644 ./etc/default/locale
 		csleep 1
 
+		#HUOM.091025:lokaaleihjin liittyen:
+		#LANGUAGE ja LC_ALL jos asettaisi jhnkn arvoon
 		locale > ./etc/default/locale
 		csleep 1
 		
@@ -316,6 +320,7 @@ function rst_pre2() {
 	csleep 1
 }
 
+#HUOM.091025:OK
 function rst_post() {
 	dqb "rst_post()"
 	csleep 1
@@ -323,7 +328,7 @@ function rst_post() {
 	pwd
 	csleep 1
 
-			${smr} ./.chroot			
+		${smr} ./.chroot			
 		${svm} ./etc/hosts.bak ./etc/hosts
 		${smr} ./etc/mtab
 
@@ -338,10 +343,12 @@ function rst_post() {
 }
 
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
-function rst() {
+function rst() { #HUOM.091025:OK
 	dqb "rst( ${1} , ${2} )"
 	[ -z ${1} ] && exit 13
 	[ -d ${1} ] || exit 14
+
+	#TODO: $1 suhteen muitakin tarkistuksia?
 	dqb "params ok (maybe)"
 	csleep 1
 
@@ -351,10 +358,9 @@ function rst() {
  
 		rst_pre2
 
-		${odio} chroot ./ ./bin/bash 
+		${odio} chroot ./ ./bin/bash #{scr} ?
 		[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
 		
-
 		rst_post
 		sleep 3
 
@@ -362,6 +368,9 @@ function rst() {
 	csleep 1
 }
 
+#TODO:tämän tdston pilkkominen in the name of MVC?
+
+#HUOM.091025:OK
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ x"${1}" == "x" ] && exit 6
@@ -377,6 +386,7 @@ function cfd() {
 
 		local msq
 		msq=$(${odio} which mksquashfs)
+		#common_lib , ocs() ?
 
 		if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
 			${odio} ${msq} . ${1} -comp xz -b 1048576
@@ -413,7 +423,7 @@ function usage() {
 	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
-#HUOM.031025:tätä jos voisi hyldyntää cjhrootin kanssa? patch_list:in kautta yhetiset jutut esim conf ?
+#HUOM.031025:tätä jos voisi hyÖdyntää cHrootin kanssa? patch_list:in kautta yhetiset jutut esim conf ?
 #function ijk() {
 #	if [ x"${2}" != "x" ]; then
 #		echo "${0} -x ?"
@@ -438,16 +448,19 @@ function usage() {
 #}
 
 case ${cmd} in
-	-x) #HUOM.031025:havaittu toimivaksi
+	-x) #HUOM.091025:havaittu toimivaksi
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #HUOM.031025:toimii... paitsi että -v ei pelitä tämän option kanssa (korj jos toist)
+	-y) #HUOM.091025:toimii... 
+		#... vaan miten se -v tämän option kanssa?
+
 		[ -s ${par} ] || exit 666
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
 
 		oldd=$(pwd)
 		${som} -o loop,ro ${par} ${oldd}/${CONF_source}
+
 		[ $? -eq 0 ] || exit
 		[ ${debug} -eq 1 ] && ls -las ${oldd}/${CONF_source}/live/
 		csleep 3
@@ -460,16 +473,16 @@ case ${cmd} in
 		${uom} ${oldd}/${CONF_source}
 	;;
 	-b)
-		#VAIH:katso turvallisuusyistä mitä kmntoja ajaa, ennenq takaisin käyttöön
+		#HUOM.091025:OK
 		bbb ${CONF_squash_dir}
-
 		#TODO;jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
-	-d) #HUOM.042035:josko kunnossa?
+	-d) #HUOM.091025:OK
 		#pitäisikö olla -v - tark varm buoksi?
 		#jos cd ensin?
-		[ -v CONF_squash0 ] || exit 666
-		#[ -z ] && exit (TODO)
+
+		[ -v CONF_squash0 ] || exit 66
+		[ -z CONF_squash0 ] && exit 67
 		pwd;sleep 6
 
 		if [ x"${CONF_squash0}" != "x" ] ; then
@@ -477,17 +490,18 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 
-		[ -v CONF_tmpdir ] || exit 666
+		[ -v CONF_tmpdir ] || exit 68
 
 		if [ x"${CONF_tmpdir}" != "x" ] ; then 
 			echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
 			${smr} -rf ${CONF_tmpdir}/*
 		fi
 	;;
-	-c) #HUOM.031025:havaittu toimivgaksi
+	-c) #HUOM.091025:OK
+		#HUOM.tässäkin -v aiheutti urputuksen, tee jotain(TODO)
 		cfd ${par} ${CONF_squash_dir}
 	;;
-	-r) #HUOM.031025:havaittu toimivaksi
+	-r) #HUOM.091025:OK
 		[ -v CONF_squash_dir ] || exit 666
 		[ -z ${CONF_squash_dir} ] && exit 666
 
@@ -495,17 +509,10 @@ case ${cmd} in
 		rst_pre1
 		rst ${CONF_squash_dir}
 	;;
-	-j) #HUOM.031025:havaittu toimivaksi
-		#conf:in jos saisi kopsautumaan kohteeseen
-		#... tai siis exp2 ja update pitäisi laittaa lisäämään takaisin ?
-		
-		#...par tai dir2 ei välttämättä sama kuin stage0 --add - param, pitäisikö huiomioida?
-
+	-j) #HUOM.091025:OK?
 		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
-		#cd ${CONF_squash_dir}/${TARGET_pad2}
 
-		#jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2}/
 		
 		#jatkossa jo s ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
@@ -517,17 +524,11 @@ case ${cmd} in
 		#j_cnf tuomaan mukanaan sen sq-chroot-spesifisaen konffin?
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
 
-		#HUOM.27725:tällä htkellä noilla tsummilla ei tee juuri mitään, pitäisikö tehdä?
-		#HUOM.j011025:osko vähitellen _sums ja _conf käyttöön
-		#... josko dnamer1,dkname2 mukaan sq-chr-ymo tuon jlk_s avulla?
-		#dir2 esim $basedir/tmp/tgt
-
-		#jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
-	-f) #TODO:testaa toimivuus
-		echo "fix_sudo ${CONF_squash_dir}"
+	-f) #VAIH:testaa toimivuus
+		fix_sudo ${CONF_squash_dir}
 	;;
 	*)
 		usage

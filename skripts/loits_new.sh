@@ -101,7 +101,7 @@ sleep 1
 
 case ${bloader} in
 #	iuefi)
-#		#mitä paskaa?
+#		#mitä paskaa? - Jansson
 #		${sco} -R ${n}:${n} .
 #		${scm} -R 0755 .
 #		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
