@@ -1,5 +1,5 @@
 #!/bin/bash
-debug=0
+debug=1 #pois taas kun isolinux.cfg kanssa asiat ok
 
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
@@ -10,8 +10,7 @@ if [ -f ./skripts/keys.conf ] ; then
 fi
 
 dqb "PARAMS OK?"
-make_tgt_dirs
-echo "TODO:insolinux.cfg"
+echo "VAIH:isolubnux.cfg";sleep 5
 
 #TODO:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
@@ -61,10 +60,7 @@ function part0() {
 	dqb "BEFORE COPY_x"
 	csleep 1
 
-	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa
-	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
-	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
-
+	#älämölöt aiemmaksi
 	[ -v TARGET_DIGESTS_dir ] || exit 666
 	[ -v TARGET_DGST0 ] || exit 666
 	dqb "OUYG)(&R()%¤ER"
@@ -76,7 +72,11 @@ function part0() {
 	[ -z ${TARGET_DGST0} ] && exit 66
 	dqb "ÄÖ_ÅPÄÖÖÅPO"
 
+	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
+	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
+	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
 	copy_sums ${src2}/${TARGET_DGST0} ${CONF_target}/${TARGET_DIGESTS_dir}
+	
 	dqb "4FT3R COPY_X"
 	csleep 1
 
@@ -99,6 +99,8 @@ function part0() {
 
 	dqb "part0 d0ne"
 }
+
+make_tgt_dirs ${CONF_target} ${CONF_source} ${3} #CONF_bloader}
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3}

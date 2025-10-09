@@ -7,7 +7,9 @@ debug=1
 
 base=""
 source2=""
-bl=${CONF_bloader}
+bl=${CONF_bloader} #jossain koshtaa bl tluisi jyrtä
+
+echo "VAIH:isolubnux.cfg";sleep 5
 
 function usage() {
 	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--bl BLOADER] [--v <verbosity_level>]"
@@ -69,7 +71,6 @@ else
 	usage
 fi
 
-echo "TODO:insolinux.cfg"
 #stage0f==glorified cp
 #dqb "mkdir -p ./v/smthing;mkdir -p ./v/smthing/{isolinux,grub};ln -s ~/Desktop/minimize ./v/something/pad ?"
 echo "./stage0f.sh ${base} ${source2} ${bl} <verbosity_level>"
