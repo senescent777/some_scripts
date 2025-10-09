@@ -1,11 +1,14 @@
 #!/bin/bash
 b=0
-debug=1
+debug=0 #1
 source=""
 
 d=$(dirname $0)
 . ${d}/common.conf
 . ${d}/common_funcs.sh
+
+bl=${CONF_bloader}
+echo "VAIH:isolubnux.cfg";sleep 5
 
 if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
@@ -17,10 +20,8 @@ if [ $# -eq 0 ] ; then
 	exit
 fi
 
-echo "TODO:isolinux.cfg"
-
 function usage() {
-	echo "$0 --in <source> [-b <mode>]"
+	echo "$0 --in <source> [-b <mode>] [--bl <BLOADER>]"
 	echo "$0 --iso"
 	echo "$0 --pkgs"
 	echo "$0 -h" #voisi olla vakiovaruste tuo optio ja liityvä fktio
@@ -29,6 +30,7 @@ function usage() {
 
 #miten se -v?
 function parse_opts_real() {
+	#VAIH:--bl
 
 	case ${1} in
 		-b)
@@ -36,6 +38,9 @@ function parse_opts_real() {
 		;;
 		--in)
 			source=${2}
+		;;
+		--bl)
+			bl=${2}
 		;;
 	esac
 }
@@ -121,6 +126,7 @@ function part123() {
 		dqb "find ./${2} -type f"
 		csleep 1
 
+		#helpompi bain hakea .cfg-päätteiset?
 		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
 			dqb "${sah6} ${f}"
 			${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
@@ -232,16 +238,26 @@ csleep 1
 [ ${debug} -eq 1 ] && pwd
 part0 ${source}/${TARGET_DIGESTS_dir} ${n}
 
-#CONF_bloader=isolinux
-case ${CONF_bloader} in #pitääkö olla juuri näin?
+csleep 5
+dqb "BOOTLEODER"
+
+case ${bl} in
 	grub)
 		part123 1 boot/grub ${source}
 	;;
 	*)
-		part123 1 ${CONF_bloader} ${source}
+		ls -las  ${source}/${bl}/*.cfg || exit 99
+		csleep 1
+
+		part123 1 ${bl} ${source}
 	;;
 esac
 
+csleep 5
+dqb "BOOTLEREOD ONEDD"
+csleep 1
+
+#jotebkin toisin jatkossa? hakemistoa kohti 1 tdsto ja täts it? eio erikseen 1,2,3-juttui
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 

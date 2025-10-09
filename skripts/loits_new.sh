@@ -1,6 +1,6 @@
 #!/bin/bash
 
-debug=1 #miten -v ?
+debug=0 #1 #miten -v ?
 d=$(dirname $0)
 
 . ${d}/common.conf
@@ -9,8 +9,6 @@ d=$(dirname $0)
 ltarget="" 
 bloader=""
 lsrcdir=""
-
-echo "TODO:isolinux.xfg"
 
 function usage() {
 	echo "a glorified wrapper for genisoimage"
@@ -90,17 +88,20 @@ function check_params() {
 check_params
 [ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
 
-function mk_pad_bak() {
-	dqb "mk_pad_bak (${1} , ${2})"
-
-	if [ -s ./${1} ] ; then
-		dqb "${svm} ${1} ${1}.OLD"
-		${svm} ${1} ${1}.OLD
-	fi
-}
-
+#function mk_pad_bak() { #tarpeellinen nykyään?
+#	dqb "mk_pad_bak (${1} , ${2})"
+#
+#	if [ -s ./${1} ] ; then
+#		dqb "${svm} ${1} ${1}.OLD"
+#		${svm} ${1} ${1}.OLD
+#	fi
+#}
+#
 sleep 1
+dqb "bloader=${bloader}"
+csleep 4
 
+#VAIH:exit jos ei konftdstoa lähteestä löydy
 case ${bloader} in
 #	iuefi)
 #		#mitä paskaa? - Jansson
@@ -109,9 +110,12 @@ case ${bloader} in
 #		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
 #	;;
 	isolinux)
-		#HUOM.081025:onko testattu tämän casen toimivuus?
+		#VAIH:toimivuuden testaus
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
+
+		ls -las ${lsrcdir}/${bloader}/*.cfg || exit 99
+		csleep 2
 
 		[ ${debug} -eq 1] && pwd 
 		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir}"
@@ -120,10 +124,14 @@ case ${bloader} in
 		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} #. älä ramppaa
 	;;
 	grub)
+
+		ls -las ${lsrcdir}/boot/${bloader}/*.cfg || exit 99
+		csleep 2
+
 		#https://bbs.archlinux.org/viewtopic.php?id=219955
 
-		xi=$(sudo which xorriso)
-		gmk=$(sudo which grub-mkrescue) #pitäsikö sudottaa vielä?
+		#xi=$(sudo which xorriso)
+		#gmk=$(sudo which grub-mkrescue) #pitäsikö sudottaa vielä?
 		#libburn : SORRY : Failed to open device (a pseudo-drive) : Permission denied
 		#ehkä ei tartte sudottaa jos kohde-hakemisto sopiva (esim /tmp)
 		
@@ -136,6 +144,6 @@ case ${bloader} in
 	;;
 esac
 
-sudo chmod a-wx ${ltarget}/*.iso 
+#[ -f ${ltarget} ] && ${scm} a-wx ${ltarget} #/*.iso 
 sleep 1
 echo "stick.sh ?"
