@@ -17,6 +17,8 @@ if [ $# -eq 0 ] ; then
 	exit
 fi
 
+echo "TODO:isolinux.cfg"
+
 function usage() {
 	echo "$0 --in <source> [-b <mode>]"
 	echo "$0 --iso"
