@@ -5,6 +5,8 @@ function mangle_conf() {
 
 }
 
+echo "TODO:isolinux.cfg"
+
 #tällekin voisi tehdä josqs jotain
 function get_devuan() {
 	[ -d ${CONF_distros_dir} ] || ${smd} ${CONF_distros_dir}
