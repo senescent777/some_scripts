@@ -10,6 +10,7 @@ md=0
 mp=0
 ms=0
 par=""
+echo "TODO:isolinux.cfg"
 
 function parse_opts_real() {
 	echo "squash.parse_opts_real()" #dqb
