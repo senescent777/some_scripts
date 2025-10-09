@@ -10,6 +10,8 @@ ltarget=""
 bloader=""
 lsrcdir=""
 
+echo "TODO:isolinux.xfg"
+
 function usage() {
 	echo "a glorified wrapper for genisoimage"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
