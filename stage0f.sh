@@ -11,6 +11,7 @@ fi
 
 dqb "PARAMS OK?"
 make_tgt_dirs
+echo "TODO:insolinux.cfg"
 
 #TODO:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
