@@ -5,34 +5,36 @@ function mangle_conf() {
 
 echo "VAIH:isolubnux.cfg";sleep 5
 
-##tällekin voisi tehdä josqs jotain
-#function get_devuan() {
+#tällekin voisi tehdä josqs jotain, esim tarkistukset
+#... koita myös päättää mitä tuo $1 edustaa
+function get_devuan() {
 #	[ -d ${CONF_distros_dir} ] || ${smd} ${CONF_distros_dir}
-#	cd ${CONF_distros_dir}
-#
-#		wget ${CONF_wget_opts} ${1}
-#
-#	sha256sum -c SHA256SUMS
-#	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
-#}
-#
-#function make_src_dirs() {
-#	dqb "s0b.make_s_DIrs"
-#	${smd} ${CONF_keys_dir}
-#	${smd} ${CONF_distros_dir}
-#
-#	case ${CONF_bloader} in paramersiksi tämäkin ?
-#		grub)
-#			${smd} -p ./boot/grub
-#		;;
-#		*)
-#			${smd} ${CONF_bloader}	
-#		;;
-#	esac
-#
-#	${smd} ${CONF_pkgsdir2}
-#	${smd} ./v
-#}
+	echo "cd ${1} #CONF_distros_dir}"
+
+	echo "wget ${CONF_wget_opts} ${1}"
+
+	echo "sha256sum -c SHA256SUMS"
+	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
+}
+
+function make_src_dirs() {
+	dqb "s0b.make_s_DIrs"
+	${smd} ${CONF_keys_dir}
+	${smd} ${CONF_distros_dir}
+
+	case ${CONF_bloader} in #TODO:paramersiksi tämäkin ?
+		grub)
+			${smd} -p ./boot/grub
+		;;
+		*)
+			${smd} ${CONF_bloader}	
+		;;
+	esac
+
+	${smd} ${CONF_pkgsdir2}
+	${smd} ./v
+}
+
 ##tarpeellinen?
 ##function cleanup() {
 ##	sudo umount ${CONF_source}
@@ -118,17 +120,17 @@ function copy_conf() {
 
 	echo -n "src=/" >> ${utfile}
 	echo -n "$" >> ${utfile}
-	echo -n "{TARGET_pad2}" >> ${utfile}	
+	echo "{TARGET_pad2}" >> ${utfile}	
 
 	echo -n "tmpdir=" >> ${utfile}
 	echo -n "$" >> ${utfile}
-	echo -n "{TARGET_tmpdir}" >> ${utfile}	
+	echo "{TARGET_tmpdir}" >> ${utfile}	
 
 	echo -n "pkgdir=" >> ${utfile}
 	echo -n "$" >> ${utfile}
-	echo -n "{TARGET_pkgdir}" >> ${utfile}	
+	echo "{TARGET_pkgdir}" >> ${utfile}	
 
-	#jatkosa niin että grepattaisiin oletus-konftdstosta hakusanan muaksia kohde-tdstoon (näinnkö se meni 2+ vuotta sitten? ehkä)
+	#jatkosssssa niin että grepattaisiin oletus-konftdstosta hakusanan muaksia kohde-tdstoon (näinnkö se meni 2+ vuotta sitten? ehkä)
 	mangle_conf TARGET_to_ram ${utfile}
 	mangle_conf TARGET_nosu_do ${utfile}
 
