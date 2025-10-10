@@ -1,5 +1,5 @@
 #!/bin/bash
-debug=1 #pois taas kun isolinux.cfg kanssa asiat ok
+debug=0 #pois taas kun isolinux.cfg kanssa asiat ok
 
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
@@ -84,7 +84,6 @@ function part0() {
 	${scm} 0444 ${CONF_tmpdir}/*.conf
 	${scm} 0755 ${CONF_tmpdir}/*.sh
 	
-	#TODO:omaksi fktioksi va maksasko vaivaa 1 rivin takia?
 	#TODO:sen pad-hmiston omistajuuden pakotus (d:d ei hyvä, ehkä)
 	#keys-hmistossa ei juuri nyt taida olla .gpg-tdstoja... (081025)
 

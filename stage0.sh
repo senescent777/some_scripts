@@ -1,5 +1,5 @@
 #!/bin/bash
-debug=1
+debug=0 #1
 
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
