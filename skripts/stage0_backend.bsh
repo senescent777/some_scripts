@@ -1,33 +1,38 @@
 function mangle_conf() {
 	dqb "mangle_conf( ${1}, ${2}, ${3})"
-	#TODO:jotain muutakin tähän, ehkä
+	#TODO:jotain muutakin tähän, ehkä (lähteen greppailu kohteeseen)
 }
 
-echo "VAIH:isolubnux.cfg";sleep 5
+#echo "TEHTY?:isolubnux.cfg";sleep 5
 
-#tällekin voisi tehdä josqs jotain, esim tarkistukset
-#... koita myös päättää mitä tuo $1 edustaa
+#... koita päättää mitä tuo $1 edustaa
 function get_devuan() {
 #	[ -d ${CONF_distros_dir} ] || ${smd} ${CONF_distros_dir}
 	echo "cd ${1} #CONF_distros_dir}"
-
 	echo "wget ${CONF_wget_opts} ${1}"
-
 	echo "sha256sum -c SHA256SUMS"
 	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 }
 
 function make_src_dirs() {
-	dqb "s0b.make_s_DIrs"
+	#debug=1
+	dqb "s0b.make_s_DIrs( ${1})"
+	csleep 1
+
+	[ -z ${1} ] && exit 99
+	[ z"{1}" == "z/" ] && exit 100
+	dqb "pars_ok"
+	csleep 1
+
 	${smd} ${CONF_keys_dir}
 	${smd} ${CONF_distros_dir}
 
-	case ${CONF_bloader} in #TODO:paramersiksi tämäkin ?
+	case ${1} in 
 		grub)
 			${smd} -p ./boot/grub
 		;;
 		*)
-			${smd} ${CONF_bloader}	
+			${smd} ${1}	
 		;;
 	esac
 
@@ -135,7 +140,7 @@ function copy_conf() {
 	mangle_conf TARGET_nosu_do ${utfile}
 
 	dqb "sudo cat ${1}/${2}.conf >> ${utfile}"
-	sudo cat ${1}/${2}.conf >> ${utfile} #odio
+	${odio} cat ${1}/${2}.conf >> ${utfile}
 	csleep 3
 
 	dqb "copy_conf() donw\n"
@@ -172,9 +177,9 @@ function copy_sums() {
 		fi
 
 		#VAIH:tämä kohta uusiksi (jatkossa jos .bz3 sisältäisi julk avaimet)
-		dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}"
-		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}
-		${spc} ${CONF_keys_dir}/${TARGET_Dkname2} ${2}
+		#dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}"
+		#${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}
+		#${spc} ${CONF_keys_dir}/${TARGET_Dkname2} ${2}
 	fi
 
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
@@ -247,7 +252,7 @@ function bootloader() {
 				${spc} -a ${3}/boot/ ${CONF_target} || exit 8
 	
 				#jos ei automaagisesti jatkossa
-				${smr} ${CONF_target}/boot/grub/*.cfg
+				${smr} ${CONF_target}/boot/grub/*.cfg #TODO:uusi apumuuttuja
 				${smr} ${CONF_target}/boot/grub/*.png
 				
 				for f in $(find ${ks2} -name '*.cfg') ; do
@@ -255,7 +260,7 @@ function bootloader() {
 					${spc} ${f} ${CONF_target}/boot/grub
 				done
 
-				#TODO:tähänkin reagointi puuttuvaan konftdstoon
+				ls -las ${CONF_target}/boot/grub/*.cfg || exit 99
 
 				for f in $(find ${ks2} -name '*.png') ; do
 					dqb "spc ${f} ${CONF_target}/boot/grub"
@@ -272,7 +277,6 @@ function bootloader() {
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
 
-#VAIH:conf_t ja conf_s parametriksi
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1
@@ -327,11 +331,10 @@ function make_tgt_dirs() {
 
 	#miten oikeydet?
 	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
+	#avainhakemisto (mitä siitä?)
 
-	#TODO:avainhakemisto (mitä siitä?)
-
-	#ls -la  ${1};sleep 6 dbq taakse
-	echo "...done\n"
+	#ls -la  ${1};csleep 6 dbq taakse
+	dqb "...done\n"
 }
 
 #tämän saman joutaisitehdä useammalle tgt-hmiston alaiselle

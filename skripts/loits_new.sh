@@ -73,7 +73,6 @@ function check_params() {
 		fi
 	else
 		exit 143
-
 	fi
 
 	if [ x"${bloader}" != "x" ] ; then
@@ -88,29 +87,14 @@ function check_params() {
 check_params
 [ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
 
-#function mk_pad_bak() { #tarpeellinen nykyään?
-#	dqb "mk_pad_bak (${1} , ${2})"
-#
-#	if [ -s ./${1} ] ; then
-#		dqb "${svm} ${1} ${1}.OLD"
-#		${svm} ${1} ${1}.OLD
-#	fi
-#}
-#
+
 sleep 1
 dqb "bloader=${bloader}"
 csleep 4
 
-#VAIH:exit jos ei konftdstoa lähteestä löydy
 case ${bloader} in
-#	iuefi)
-#		#mitä paskaa? - Jansson
-#		${sco} -R ${n}:${n} .
-#		${scm} -R 0755 .
-#		${gi} -o ${ltarget} ${CONF_gi_opts2} ${lsrcdir}	
-#	;;
 	isolinux)
-		#VAIH:toimivuuden testaus
+		#VAIH:toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
@@ -124,15 +108,11 @@ case ${bloader} in
 		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} #. älä ramppaa
 	;;
 	grub)
-
 		ls -las ${lsrcdir}/boot/${bloader}/*.cfg || exit 99
 		csleep 2
 
 		#https://bbs.archlinux.org/viewtopic.php?id=219955
 
-		#xi=$(sudo which xorriso)
-		#gmk=$(sudo which grub-mkrescue) #pitäsikö sudottaa vielä?
-		#libburn : SORRY : Failed to open device (a pseudo-drive) : Permission denied
 		#ehkä ei tartte sudottaa jos kohde-hakemisto sopiva (esim /tmp)
 		
 		dqb "${gmk} -o ${ltarget} ${lsrcdir}"

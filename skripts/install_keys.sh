@@ -43,13 +43,14 @@ case ${cmd} in
 		done
 	;;
 	--e) 
-		#TODO: -v
+		[ -v CONF_kay1name ] || exit 666
+		[ -v CONF_kay2name ] || exit 666
 		[ x"${CONF_kay1name}" != "x" ] || exit 666
 		[ x"${CONF_kay2name}" != "x" ] || exit 666
 
-		#TODO:$smr
-		sudo rm ${ridk}/${TARGET_Dkname1}*
-		sudo rm ${ridk}/${TARGET_Dkname2}*
+		#VAIH:$smr
+		${smr} ${ridk}/${TARGET_Dkname1}*
+		${smr} ${ridk}/${TARGET_Dkname2}*
 
 		${gg} --export ${CONF_kay1name} > ${ridk}/${TARGET_Dkname1}
 		${gg} --export ${CONF_kay2name} > ${ridk}/${TARGET_Dkname2}

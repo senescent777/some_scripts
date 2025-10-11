@@ -3,7 +3,7 @@ d=$(dirname $0)
 . ${d}/common.conf
 . ${d}/common_funcs.sh
 
-debug=1 #nollaus myöh
+debug=0 #1
 dir2=""
 cmd=""
 md=0
@@ -59,7 +59,7 @@ function usage() {
 
 	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0} NEEDS TO HAVE ABSOLUTE PATH"
 	echo "-b is supposed to be run just Before -c but after -r "
-	echo "-d Destroys contents of ${CONF_squash0}/ and ${CONF_tmpdir} "
+	echo "-d Destroys contents of ${CONF_squash0}/ "
 	echo "\t if possible, use -b instead\n"
 
 	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n NEEDS TO HAVE ABSOLUTE PATH"
@@ -112,8 +112,8 @@ case ${cmd} in
 		#TODO;jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
 	-d) #HUOM.091025:OK
-		#pitäisikö olla -v - tark varm buoksi?
-		#jos cd ensin?
+		#VAIH:siirto toiseen skriptiin, olisiko stage0 hyvä?
+		#... tai voisi jättää squash-hmiston jyräyksen tähän
 
 		[ -v CONF_squash0 ] || exit 66
 		[ -z CONF_squash0 ] && exit 67
@@ -122,13 +122,6 @@ case ${cmd} in
 		if [ x"${CONF_squash0}" != "x" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
 			${smr} -rf ${CONF_squash0}/*
-		fi
-
-		[ -v CONF_tmpdir ] || exit 68
-
-		if [ x"${CONF_tmpdir}" != "x" ] ; then 
-			echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
-			${smr} -rf ${CONF_tmpdir}/*
 		fi
 	;;
 	-c) #HUOM.091025:OK

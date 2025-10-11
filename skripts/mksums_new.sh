@@ -8,7 +8,7 @@ d=$(dirname $0)
 . ${d}/common_funcs.sh
 
 bl=${CONF_bloader}
-echo "VAIH:isolubnux.cfg";sleep 5
+#echo "TEHTY?:isolubnux.cfg";sleep 5
 
 if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
@@ -30,8 +30,6 @@ function usage() {
 
 #miten se -v?
 function parse_opts_real() {
-	#VAIH:--bl
-
 	case ${1} in
 		-b)
 			b=${2}
@@ -49,11 +47,14 @@ function parse_opts_real() {
 function single_param() {
 	case ${1} in
 		--iso)
-	
+			[ -v CONF_kay2name ] || exit 68
 			${gg} -u ${CONF_kay2name} -sb ./*.iso
-			exit 66
+			exit 61
 		;;
 		--pkgs)
+			[ -v CONF_kay2name ] || exit 68
+			[ -v CONF_pkgsdir2 ] || exit 67
+			[ -v CONF_BASEDIR ] || exit 66
 			[ x"${CONF_BASEDIR}" != "x" ] || exit 65
 			[ x"${CONF_pkgsdir2}" != "x" ] || exit 64
 
@@ -183,12 +184,15 @@ function part7() {
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
 
 	#--keyring kanssa jatkossakin?
-	${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
+	#${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
+	${gg} --verify ./${TARGET_Dpubkf}.sig
+
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
 	local i
 
 	for i in ${MKS_parts} ; do
-		${gv} --keyring ./${TARGET_Dpubkf} ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
+		#${gv} --keyring ./${TARGET_Dpubkf} ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
+		${gg} --verify ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig 
 	done
 
 	echo $?
@@ -243,12 +247,12 @@ dqb "BOOTLEODER"
 
 case ${bl} in
 	grub)
+		ls -las  ${source}/boot/grub/*.cfg || exit 99
 		part123 1 boot/grub ${source}
 	;;
 	*)
 		ls -las  ${source}/${bl}/*.cfg || exit 99
 		csleep 1
-
 		part123 1 ${bl} ${source}
 	;;
 esac
@@ -291,4 +295,4 @@ ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*
 
 [ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
-dqb "loits | squ.ash -j ?"
+echo "loits | squ.ash -j ?"

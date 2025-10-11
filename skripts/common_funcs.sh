@@ -1,6 +1,6 @@
 odio=$(which sudo) 
-##TODO:sudoon liittyen se sudoers-meshuggah-jekku käyttöön myös näöhin remasterointiskripteihimn, varm. vuoksi
-##========================tilapäisesti tässä, common_lib myöh==
+#TODO:sudoon liittyen se sudoers-meshuggah-jekku käyttöön myös näihin remasterointiskripteihimn, varm. vuoksi
+#========================tilapäisesti tässä, common_lib myöh==
 
 sah6=$(${odio} which sha512sum)
 sah6=$(${odio} which sha512sum)
@@ -18,8 +18,8 @@ xi=$(${odio} which xorriso)
 #sca=$(${odio} which chattr)
 #sca="${odio} ${sca}"
 
-#svm=$(${odio} which mv) #missä nitä tarvittiin vai tarvittiinko?
-#svm="${odio} ${svm}"
+svm=$(${odio} which mv) #kts. loitrs_new ...EIQ
+svm="${odio} ${svm}"
 
 smd=$(${odio} which mkdir)
 smd="${odio} ${smd}"
@@ -52,6 +52,7 @@ function csleep() {
 #============================================
 
 #se uusi gpo() tilalle?
+#TODO:VÄHITELLEN SE "-v"-OPTIO QNTOON
 function parse_opts() {
 
 	dqb "parse_opts(${1}, ${2})"
@@ -92,12 +93,3 @@ function parse_opts() {
 		fi
 	fi
 }
-
-###missä tätä käytetään?
-##function mk_bkup() { 
-##	dqb "mk_bkup(${1})"
-##	
-##	if [ -s ${1} ] ; then
-##		${svm} ${1} ${1}.OLD
-##	fi
-##}##

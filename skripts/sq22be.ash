@@ -1,3 +1,4 @@
+#function ekf2() {}
 
 #HUOM.091025:OK
 function xxx() {
@@ -68,7 +69,7 @@ function fix_sudo() {
 #HUOM.091025:OK
 #sudoers-jekku hyväksi tässäkin
 function bbb() {
-	debug=1
+	#debug=1
 	dqb "bbb( ${1} ) ohgUYHGIUTFD/()%E"
 
 	[ x"${1}" == "x" ] && exit 97
@@ -159,31 +160,25 @@ function jlk_conf() {
 		
 	${smr} ${t}/mf*
 	${smr} ${t}/root.conf
-	${smr} ${t}/${2}.conf
-			
-	sleep 5
+	${smr} ${t}/${2}.conf	
+	csleep 5
 
-	sudo touch ${t}/root.conf
+	${odio} touch ${t}/root.conf
 	${sco} $(whoami):$(whoami) ${t}/root.conf
 	${scm} 0644 ${t}/root.conf
-
-	sleep 5 #jatkossa csleep
+	csleep 5
 
 	grep -v TARGET_to_ram ${1}/${2}.conf > ${t}/root.conf 
 	echo "TARGET_to_ram=1" >> ${t}/root.conf
-	sleep 5
+	csleep 5
 
 	ls -las ${t}/*.conf
-	sleep 5
+	csleep 5
 
 	dqb "jlk_conf( ) DONE4"
 	csleep 5
 }
 
-#sah6=$(${odio} which sha512sum) c_funcs nykyään
-#HUOM.031025:avainten kopsailu nyt stage0f.sh kautta
-#... pitäsiköhän stage0f kopsata myös joitain skriptejä v/$version alle?
-#
 #mitäköhän paranetreja tälle fktiolle piti antaa?
 #T_yyy kutsuvaanm kpoodiin vai ei?
 #HUOM.091025:OK
@@ -193,7 +188,7 @@ function jlk_sums() {
 
 	[ x"${1}" != "x" ] || exit 66
 	[ -d ${1} ] || exit 67
-	#TODO:$2 tark
+	echo "#TODO:$2 tark"
 
 	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
 	pwd
@@ -204,7 +199,7 @@ function jlk_sums() {
 	csleep 3
 	${spc} -a ${1}/* ${2}
 
-	ls -las ./${TARGET_DGST0};sleep 5 #pitäisikö olla $2?
+	ls -las ./${TARGET_DGST0};csleep 5 #pitäisikö olla $2?
 	cd ..
 	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
 
