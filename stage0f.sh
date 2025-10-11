@@ -5,17 +5,18 @@ debug=0 #pois taas kun isolinux.cfg kanssa asiat ok
 . ./skripts/common_funcs.sh
 . ./skripts/stage0_backend.bsh
 
-if [ -f ./skripts/keys.conf ] ; then
+if [ -f ./skripts/keys.conf ] ; then #HUOM.111025:tarvittiinko tätä?
 	. ./skripts/keys.conf
 fi
 
+#TODO:verbosity_level_jutut?
 dqb "PARAMS OK?"
-echo "VAIH:isolubnux.cfg";sleep 5
+#echo "TEHTY?:isolubnux.cfg";sleep 5
 
-#TODO:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
+#TEHTY?:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
 #TODO:CONF_T parametriksi?
-#HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graft-points vielä parempi
+#HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 function part0() {
 	#debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
@@ -28,7 +29,6 @@ function part0() {
 	#ei aina tarttisi näiTä renkata
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
-			
 			${spc} ${2}/live/${f} ${CONF_target}/live
 		else
 			dqb "${1}/live/${f}"
@@ -46,7 +46,7 @@ function part0() {
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää 	CONF_SOURCE
 	bootloader ${3} ${2} ${1} 
-	#${odio} touch ${CONF_target}/${CONF_bloader}/* #saattaa vähän paskoa asioita
+	#${odio} touch ${CONF_target}/${CONF_bloader}/* #saattaa vähän paskoa asioita?
 
 	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
@@ -60,12 +60,10 @@ function part0() {
 	dqb "BEFORE COPY_x"
 	csleep 1
 
-	#älämölöt aiemmaksi
 	[ -v TARGET_DIGESTS_dir ] || exit 666
 	[ -v TARGET_DGST0 ] || exit 666
 	dqb "OUYG)(&R()%¤ER"
 
-	#HUOM.04§025:täsä kohtaa tökkää, kts toistuuko
 	[ -z ${TARGET_DIGESTS_dir} ] && exit 65
 	dqb "56448748765484"
 
@@ -99,12 +97,12 @@ function part0() {
 	dqb "part0 d0ne"
 }
 
-make_tgt_dirs ${CONF_target} ${CONF_source} ${3} #CONF_bloader}
+make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3}
 else
-	if [ -s ${1} ] && [ -r ${1} ] ; then #tössö jokin qsee 041025
+	if [ -s ${1} ] && [ -r ${1} ] ; then #vieläkö tässä jokin qsee 111025?
 		dqb "${som} -o loop,ro ${1} ${CONF_source}"
 		csleep 3
 

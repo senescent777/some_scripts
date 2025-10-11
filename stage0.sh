@@ -7,15 +7,15 @@ debug=0 #1
 
 base=""
 source2=""
-bl=${CONF_bloader} #jossain koshtaa bl tluisi jyrtä
-
-echo "VAIH:isolubnux.cfg";sleep 5
+bl=${CONF_bloader}
+#echo "TEHTY?:isolubnux.cfg";sleep 5
 
 function usage() {
 	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--bl BLOADER] [--v <verbosity_level>]"
-	#echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})" #pitäisi varmaan huomoida tuo suhteellisuus? T. Albert
+	#echo "(<THINGS_TO_ADD> is path relative to ${CONF_BASEDIR})" #pitäisi varmaan huomioida tuo suhteellisuus? T. Albert
 	echo "${0} --get-devuan <download_dir>"
-	echo "${0} --make-dirs"
+	echo "${0} -d Destroys contents of ${CONF_tmpdir}"
+	echo "${0} --make-dirs creates some dirs under ${CONF_tmpdir}"
 }
 
 #HUOM.031025:toiminee tämä skripti tänään riittävästi
@@ -42,12 +42,22 @@ function parse_opts_real() {
 function single_param() {
 	case ${1} in
 		--make-dirs)
-			#TODO:init.bash käskyttämään tätä case:a tarvittaessa?
-			make_src_dirs
+			#init.bash käskyttämään tätä case:a tarvittaessa?
+			make_src_dirs ${CONF_bloader}
 			make_tgt_dirs
 		;;
 		--h)
 			usage
+		;;
+		-d)
+			[ -v CONF_tmpdir ] || exit 68
+
+			if [ x"${CONF_tmpdir}" != "x" ] ; then 
+				echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
+				${smr} -rf ${CONF_tmpdir}/*
+			fi
+
+			exit
 		;;
 	esac
 
