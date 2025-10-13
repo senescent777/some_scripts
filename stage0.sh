@@ -21,7 +21,7 @@ function usage() {
 #HUOM.031025:toiminee tämä skripti tänään riittävästi
 function parse_opts_real() {
 	case ${1} in
-		--base)
+		--base) #--in ,--out yleisiksi param jrkossa?
 			base=${2}
 		;;
 		--add)
@@ -31,9 +31,9 @@ function parse_opts_real() {
 			get_devuan ${2}
 			exit
 		;;
-		--bl|-bl)
-			bl=${2}
-		;;
+#		--bl|-bl)
+#			bl=${2}
+#		;;
 	esac	
 }
 
@@ -46,9 +46,9 @@ function single_param() {
 			make_src_dirs ${CONF_bloader}
 			make_tgt_dirs
 		;;
-		--h)
-			usage
-		;;
+#		--h)
+#			usage
+#		;;
 		-d)
 			[ -v CONF_tmpdir ] || exit 68
 

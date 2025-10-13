@@ -4,10 +4,10 @@ debug=0 #pois taas kun isolinux.cfg kanssa asiat ok
 . ./skripts/common.conf
 . ./skripts/common_funcs.sh
 . ./skripts/stage0_backend.bsh
-
-if [ -f ./skripts/keys.conf ] ; then #HUOM.111025:tarvittiinko tätä?
-	. ./skripts/keys.conf
-fi
+#
+#if [ -f ./skripts/keys.conf ] ; then #HUOM.111025:tarvittiinko tätä?
+#	. ./skripts/keys.conf
+#fi
 
 #TODO:verbosity_level_jutut?
 dqb "PARAMS OK?"
