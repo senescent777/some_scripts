@@ -95,6 +95,31 @@ function csleep() {
 #	fi
 #}
 
+function parse_opts_1() {
+	case ${1} in
+		-h|--h)
+			usage
+			exit
+		;;
+		-v|--v)
+			debug=1
+		;;
+		*)
+			single_param ${1}
+		;;
+	esac
+}
+
+function parse_opts_1() {
+	case ${1} in
+		--bl|-bl) #TOFO:--in ,--out yleisiksi param jrkossa?
+			bl=${2}
+		;;
+		*)
+			parse_opts_real  ${1}  ${2}
+		;;
+	esac
+}
 #====================common_lib.sh==================================
 function gpo() {
 	dqb "GPO"
