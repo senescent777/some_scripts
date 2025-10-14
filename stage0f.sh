@@ -1,5 +1,5 @@
 #!/bin/bash
-debug=1
+debug=0
 src=""
 bl=""
 
@@ -10,15 +10,11 @@ function usage() {
 }
 
 function parse_opts_real() {
-	echo "TODO"
+	echo "TODO:parse_opts_real() ? "
 }
 
 function single_param() {
-	echo "TODO"
-
-	#[ -z ${src} ] && src=${1}
-	#[ -z ${src2} ] && src2=${1}
-	#[ -z ${bl} ] && bl=${1}
+	echo "TODO:  single_param() ?"
 }
 
 [ $# -gt 3 ] && debug=${4}
@@ -26,11 +22,11 @@ function single_param() {
 . ./skripts/common_funcs.sh
 
 #
-#if [ -f ./skripts/keys.conf ] ; then #HUOM.111025:tarvittiinko tätä?
+#if [ -f ./skripts/keys.conf ] ; then #HUOM.141025:kts. copy_sums()
 #	. ./skripts/keys.conf
 #fi
 
-#TODO:verbosity_level_jutut?
+#VAIH:verbosity_level_jutut?
 dqb "PARAMS OK?"
 #echo "TEHTY?:isolubnux.cfg";sleep 5
 
@@ -67,8 +63,7 @@ function part0() {
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää 	CONF_SOURCE
 	bootloader ${3} ${2} ${1} 
-	#${odio} touch ${CONF_target}/${CONF_bloader}/* #saattaa vähän paskoa asioita?
-
+	
 	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
 
@@ -92,9 +87,15 @@ function part0() {
 	dqb "ÄÖ_ÅPÄÖÖÅPO"
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
+
+	#TODO:$2/TARGET_pad kuitenkin? find voi perioaatteessa löytää väärää matskua...
 	copy_main ${2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
-	copy_conf ${2} ${n} ${CONF_target}/${TARGET_pad_dir}
-	copy_sums ${2}/${TARGET_DGST0} ${CONF_target}/${TARGET_DIGESTS_dir}
+	
+	#HUOM.141025:vaihdettu $2 -> $2/T_PAD koska Syyt
+	copy_conf ${2}/${TARGET_pad_dir} ${n} ${CONF_target}/${TARGET_pad_dir}
+
+	#HUOM.141025:vaihdettu $2 -> $2/T_PAD koska Syyt
+	copy_sums ${2}/${TARGET_DIGESTS_dir} ${CONF_target}/${TARGET_DIGESTS_dir}
 	
 	dqb "4FT3R COPY_X"
 	csleep 1
@@ -131,9 +132,6 @@ else
 		${som} -o loop,ro ${1} ${CONF_source} 
 		[ $? -eq 0 ] || exit 666
 		sleep 6
-
-		#[ ${debug} -eq 1 ] && ls -las ${CONF_target}
-		#csleep 4
 
 		part0 ${CONF_source} ${2} ${3}	
 		${uom} ${CONF_source} 
