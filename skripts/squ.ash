@@ -6,6 +6,7 @@ md=0
 mp=0
 ms=0
 par=""
+
 d=$(dirname $0)
 . ${d}/common.conf
 
@@ -31,61 +32,78 @@ function usage() {
 	echo "-f attempts to Fix some problems w/ sudo "
 	echo "--v 1 adds Verbosity\n"
 
-	echo "--mp,--md, --ms:self-explanatory opts 4 -r " 
+	echo "--mp,--md, --ms:abt mounting some pseudo-filesystems 4 -r " 
 	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
 function parse_opts_real() {
-	echo "squash.parse_opts_real()" #dqb
+	dqb "squash.parse_opts_real(${1}, ${2})"
 
 	case ${1} in
 		--dir2)
 			dir2=${2}
-			[ -d ${2} ] || exit 666
+			[ -z ${2} ] && exit 65
+			[ -d ${2} ] || exit 66	
 		;;
 		-x|-y|-i|-j)
 			if [ -s ${2} ] || [ -d ${2} ] ; then
 				par=${2}
+			else
+				exit 67
 			fi
+
+			#[ -z ${2} ] && exit 65	
+			cmd=${1}
 		;;
 		-c)
+			[ -z ${2} ] && exit 68
+			[ -s ${2} ] && exit 69
+
 			par=${2}
-		;;
+			cmd=${1}
+		;; 
+	esac
+
+	#if [ "${1}" != "--dir2" ] ; then #EI NÄIN
+	#	cmd=${1} 
+	#fi
+}
+
+function single_param() {
+	dqb "sp ${1}"
+
+	case ${1} in
+		#ao.jutut jatkossa single_param
 		-mp|--mp)
-			mp=${2}
+			mp=1
 		;;
 		-md|--md)
-			md=${2}
+			md=1
 		;;
 		-ms|--ms)
-			ms=${2}
+			ms=1
+		;;
+		-f|-r|-d|-b)
+			cmd=${1}
 		;;
 	esac
 }
 
-function single_param() {
-	cmd=${1}
-	echo "sp"
-}
 . ${d}/common_funcs.sh
-#
-#
-#parse_opts ${1} ${2}
-#parse_opts ${3} ${4}
-#parse_opts ${5} ${6}
-#parse_opts ${7} ${8}
-#parse_opts ${9} ${10}
-#
 #VAIH:JOSKO JO SE PARSETUSONGELMA
+
+dqb "cmd=${cmd}"
+dqb "par=${par}"
+#exit
 
 tmp=$(dirname $0)
 . ${tmp}/sq22be.ash
 
 case ${cmd} in
-	-x) #HUOM.091025:havaittu toimivaksi
+	-x) #HUOM.091025:havaittu toimivaksi (myös 141025)
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #HUOM.091025:toimii... 
+	-y) #TODO:TESTAA UUDESTAAN
 		#... vaan miten se -v tämän option kanssa?
 
 		[ -s ${par} ] || exit 666
@@ -106,15 +124,11 @@ case ${cmd} in
 		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs ${CONF_squash0}
 		${uom} ${oldd}/${CONF_source}
 	;;
-	-b)
-		#HUOM.091025:OK
+	-b) #141025:OK?
 		bbb ${CONF_squash_dir}
 		#TODO;jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
-	-d) #HUOM.091025:OK
-		#VAIH:siirto toiseen skriptiin, olisiko stage0 hyvä?
-		#... tai voisi jättää squash-hmiston jyräyksen tähän
-
+	-d)  #141025:OK
 		[ -v CONF_squash0 ] || exit 66
 		[ -z CONF_squash0 ] && exit 67
 		pwd;sleep 6
@@ -124,11 +138,11 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c) #HUOM.091025:OK
+	-c)  #TODO:TESTAA UUDESTAAN
 		#HUOM.tässäkin -v aiheutti urputuksen, tee jotain(TODO)
 		cfd ${par} ${CONF_squash_dir}
 	;;
-	-r) #HUOM.091025:OK
+	-r)  #141025:OK?
 		[ -v CONF_squash_dir ] || exit 666
 		[ -z ${CONF_squash_dir} ] && exit 666
 
@@ -136,7 +150,7 @@ case ${cmd} in
 		rst_pre1
 		rst ${CONF_squash_dir}
 	;;
-	-j) #HUOM.091025:OK?
+	-j)  #OK?
 		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 
@@ -154,7 +168,7 @@ case ${cmd} in
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
-	-f) #VAIH:testaa toimivuus
+	-f)  #151025:OK?
 		fix_sudo ${CONF_squash_dir}
 	;;
 	*)

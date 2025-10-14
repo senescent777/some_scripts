@@ -95,7 +95,7 @@ function csleep() {
 #}
 
 function parse_opts_1() {
-	#dqb "cpars.op-1(${1})"
+	dqb "cpars.op-1(${1})"
 
 	case ${1} in
 		-h|--h)
@@ -114,7 +114,7 @@ function parse_opts_1() {
 function parse_opts_2() {
 	case ${1} in
 		--bl|-bl)
-			#VAIH:--in ,--out yleisiksi param jtkossa?
+			#VAIH:--out yleisEksi param jtkossa?
 			bl=${2}
 		;;
 		--in)

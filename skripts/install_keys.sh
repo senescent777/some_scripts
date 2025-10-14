@@ -1,9 +1,8 @@
 #!/bin/bash
 ridk=""
 d=$(dirname $0) #sittenkin näin
-
+debug=0
 . ${d}/common.conf
-
 
 if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
@@ -15,24 +14,35 @@ function usage() {
 	echo "${0} --kdir <kdir> --m Makes 2 keys , <kdir> still needed"
 }
 
+function single_param() {
+	dqb "instk.single-param(${1})"
+	cmd=${1}
+}
+
+function parse_opts_real () {
+	case "${1}" in
+		--kdir)
+			ridk=${2}
+		;;
+	esac
+}
+
 . ${d}/common_funcs.sh
-#function tpop() { #CAIH:PARSETISEN UUSINTA
-#	case ${1} in
-#		--kdir)
-#			ridk=${2}
-#		;;
+[ $# -gt 0 ] || exit #TODO:->gpo()
+
+
 #		--v)
 #		;;
 #		*)
-#			cmd=${1}
+#			
 #		;;
 #	esac
 #}
+#
+#tpop ${1} ${2}
+#tpop ${3} ${4}
 
-tpop ${1} ${2}
-tpop ${3} ${4}
-
-[ x"${ridk}" != "x" ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
+[ -z ${ridk} ] && echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 [ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 #aiheeseen liittyen:miten wtussa gpgtarin saa toimimaan? --create ja -t vissiin toimii mutta --extract...
 
@@ -49,7 +59,6 @@ case ${cmd} in
 		[ x"${CONF_kay1name}" != "x" ] || exit 666
 		[ x"${CONF_kay2name}" != "x" ] || exit 666
 
-		#VAIH:$smr
 		${smr} ${ridk}/${TARGET_Dkname1}*
 		${smr} ${ridk}/${TARGET_Dkname2}*
 

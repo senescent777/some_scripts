@@ -17,27 +17,15 @@ function usage() {
 
 #miten se -v?
 function parse_opts_real() {
-#	case ${1} in
-##		-b)
-##			b=${2}
-##		;;
-##		--in)
-##			source=${2}
-##		;;
-##		--bl)
-##			bl=${2}
-##		;;
-#		*)
-			echo "asd.asd"
-#		;;
-#	esac
+	echo "asd.asd"
+
 }
 
 if [ -f ${d}/keys.conf ] ; then #tarcitaan, kts sibgle_param
 	. ${d}/keys.conf
 fi
 
-#vähitelleb voisi kokeilla mitä avainten asennuksne jälkeen käy
+#141025:toiminee avainten asennuksne jälkeen
 function single_param() {
 	case ${1} in
 		--iso)
@@ -59,28 +47,15 @@ function single_param() {
 			
 			exit 63
 		;;
-#		--h|-h)
-#			usage
-#			exit 65
-#		;;
 	esac
 }
 
 . ${d}/common_funcs.sh
 
-
-#echo "TEHTY?:isolubnux.cfg";sleep 5
-
-
-
-#jos jatkossa common_funcs tai common_lib
 if [ $# -eq 0 ] ; then
-#	echo "-h" #tällä parametrilla ei tarttisi jatkaa isage():a pidemmälle
 	exit
 fi
 
-
-#VAIH:ekan parametrin kanssa jotain rajoitusta ettei ihan juurta muutettaisi tjsp
 function part0() {
 	dqb "part0( ${1})"
 	csleep 1
@@ -101,7 +76,7 @@ function part0() {
 	${scm} 0755 ${1} 
 	${scm} u+w ${1}/* 
 
-	#oik/omist - asioita voisi miettiä jossain vaih että miten pitää mennä
+	#oik/omist - asioita voisi miettiä että miten pitää mennä
 	local f
 
 	for f in $(find ${1} -type f -name '${TARGET_DIGESTS_file}*') ; do
@@ -206,27 +181,19 @@ function part7() {
 	dqb "p7 done"
 }
 
-#VAIH:globaaleja pois jos mahd
 function part8() {
 	dqb "p8 ${1}"
 	[ x"${TARGET_patch_name}" != "x" ] || exit 665
 	[ x"${1}" != "x" ] || exit 665
 
-	dqb "params ok"
-
-	#local tfile=${TARGET_patch_name}.tar.bz2
-	##[ -s ./${TARGET_pad_dir}/${tfile} ] || exit 666		
+	dqb "params ok"		
 
 	local olddir=$(pwd)	
-	#[ -s ./${TARGET_pad_dir}/${tfile} ] && cp ./${TARGET_pad_dir}/${tfile} ../out
 	cd ../out
 
 	case ${1} in
 		1)
-			#${gg} -u ${CONF_kay2name} -sb ${tfile}
 			echo $?
-
-			#${gv} --keyring ${CONF_target}/${TARGET_Dpubkg} ${tfile}.sig ${tfile}
 		;;
 		2)
 			dqb "2"
@@ -238,9 +205,6 @@ function part8() {
 
 	cd ${olddir}
 }
-#
-#parse_opts ${1} ${2}
-#parse_opts ${3} ${4}
 
 [ -d ${source} ] || exit 99
 dqb "${source} exists"
@@ -271,7 +235,7 @@ csleep 1
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 
-cd ${source}  #${CONF_target}
+cd ${source}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
 #HUOM.30725:jokohan alkaisi jo avainjutut toimia

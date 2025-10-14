@@ -5,8 +5,8 @@
 CONF_kay1name=12341234
 CONF_kay2name=98769876
 
-TARGET_Dkname1=dk1 #<filename correllating to >
-TARGET_Dkname2=dk2 #<filename correllating to CONF_kayid2>
+TARGET_Dkname1=dk1 #<filename correllating to pubK ? >
+TARGET_Dkname2=dk2 #<filename correllating to KsK?>
 
 TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${TARGET_Dkname1}
 TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${TARGET_Dkname2}

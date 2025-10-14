@@ -32,7 +32,7 @@ function xxx() {
 }
 
 #jatkossa common_lib?
-#HUOM.091025;
+#josko toimisi kuteb tarkoitettu 141025
 function fix_sudo() {
 	dqb "fix_sudo( ${1}) "
 	[ x"${1}" == "x" ] && exit 97
@@ -40,30 +40,28 @@ function fix_sudo() {
 	dqb "pars ok"
 	csleep 1
 
-	
-		cd ${1}
-		[ ${debug} -eq 1 ] && pwd
-		csleep 1 
+	cd ${1}
+	[ ${debug} -eq 1 ] && pwd
+	csleep 1 
 
-		${sco} -R 0:0 ./etc/sudo*
-		${scm} -R a-w ./etc/sudo*
-		${sco} -R 0:0 ./usr/lib/sudo/*
+	${sco} -R 0:0 ./etc/sudo*
+	${scm} -R a-w ./etc/sudo*
+	${sco} -R 0:0 ./usr/lib/sudo/*
 
-		#${sco} -R 0:0 ./usr/bin/sudo*
-		#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
-		#AND CHATTR MAY OT WORK WITH SOME FILESYSTEMS	
+	#${sco} -R 0:0 ./usr/bin/sudo*
+	#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
+	#AND CHATTR MAY OT WORK WITH SOME FILESYSTEMS	
 
-		${scm} 0750 ./etc/sudoers.d
-		${scm} 0440 /etc/sudoers.d/*
+	${scm} 0750 ./etc/sudoers.d
+	${scm} 0440 /etc/sudoers.d/*
 
-		${scm} -R a-w ./usr/lib/sudo/*
-		#${scm} -R a-w ./usr/bin/sudo*
-		#${scm} 4555 ./usr/bin/sudo
-		${scm} 0444 ./usr/lib/sudo/sudoers.so
+	${scm} -R a-w ./usr/lib/sudo/*
+	#${scm} -R a-w ./usr/bin/sudo*
+	#${scm} 4555 ./usr/bin/sudo
+	${scm} 0444 ./usr/lib/sudo/sudoers.so
 
-		#${sca} +ui ./usr/bin/sudo
-		#${sca} +ui ./usr/lib/sudo/sudoers.so	
-	
+	#${sca} +ui ./usr/bin/sudo
+	#${sca} +ui ./usr/lib/sudo/sudoers.so	
 }
 
 #HUOM.091025:OK
@@ -133,8 +131,6 @@ function jlk_main() {
 	dqb "jkl1 d0n3"
 }
 
-##TODO:parametreille järkev't arvot?
-
 #... ideana aiemmin että root.conf olisi sq-chr-ymp varten , devuan.conf taas ei
 #
 #VAIH:koita arpoa voisiko tämän ottaa käyttöön bvai ei (stage0f kautta tulisi se devuan.cnf jos on tullakseen)
@@ -168,8 +164,11 @@ function jlk_conf() {
 	${scm} 0644 ${t}/root.conf
 	csleep 5
 
+	ls -las ${1}/${2}.conf	
+	csleep 5
+
 	grep -v TARGET_to_ram ${1}/${2}.conf > ${t}/root.conf 
-	echo "TARGET_to_ram=1" >> ${t}/root.conf
+	echo "TARGET_to_ram=1" >> ${t}/root.conf #whether u can write to / or not
 	csleep 5
 
 	ls -las ${t}/*.conf
@@ -184,11 +183,11 @@ function jlk_conf() {
 #HUOM.091025:OK
 function jlk_sums() {
 	debug=1
-	dqb "jlk_sums( ${1} , ${2}, ${3}) (VAIH)"
+	dqb "jlk_sums( ${1} , ${2}, ${3}) "
 
 	[ x"${1}" != "x" ] || exit 66
 	[ -d ${1} ] || exit 67
-	echo "#TODO:$2 tark"
+	[ -z ${2} ] && exit 68
 
 	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
 	pwd
@@ -311,8 +310,6 @@ function rst() { #HUOM.091025:OK
 	dqb "rst() done"
 	csleep 1
 }
-
-#vaih:tämän tdston pilkkominen in the name of MVC?
 
 #HUOM.091025:OK
 function cfd() {
