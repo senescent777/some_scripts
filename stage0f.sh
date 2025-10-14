@@ -1,9 +1,30 @@
 #!/bin/bash
-debug=0 #pois taas kun isolinux.cfg kanssa asiat ok
+debug=1
+src=""
+bl=""
 
 . ./skripts/common.conf
-. ./skripts/common_funcs.sh
+
+function usage() {
+	echo "$0 <src1> <stuff_to_add> <bloader> [debug?]"
+}
+
+function parse_opts_real() {
+	echo "TODO"
+}
+
+function single_param() {
+	echo "TODO"
+
+	#[ -z ${src} ] && src=${1}
+	#[ -z ${src2} ] && src2=${1}
+	#[ -z ${bl} ] && bl=${1}
+}
+
+[ $# -gt 3 ] && debug=${4}
 . ./skripts/stage0_backend.bsh
+. ./skripts/common_funcs.sh
+
 #
 #if [ -f ./skripts/keys.conf ] ; then #HUOM.111025:tarvittiinko tätä?
 #	. ./skripts/keys.conf
@@ -71,9 +92,9 @@ function part0() {
 	dqb "ÄÖ_ÅPÄÖÖÅPO"
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
-	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
-	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
-	copy_sums ${src2}/${TARGET_DGST0} ${CONF_target}/${TARGET_DIGESTS_dir}
+	copy_main ${2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
+	copy_conf ${2} ${n} ${CONF_target}/${TARGET_pad_dir}
+	copy_sums ${2}/${TARGET_DGST0} ${CONF_target}/${TARGET_DIGESTS_dir}
 	
 	dqb "4FT3R COPY_X"
 	csleep 1
@@ -97,6 +118,7 @@ function part0() {
 	dqb "part0 d0ne"
 }
 
+echo "src= ${1} , stc2= ${2} , bl= ${3}"
 make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
 
 if [ -d ${1} ] ; then

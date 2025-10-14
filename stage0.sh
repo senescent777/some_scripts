@@ -1,14 +1,16 @@
 #!/bin/bash
-debug=0 #1
+debug=1
 
 . ./skripts/common.conf
-. ./skripts/common_funcs.sh
-. ./skripts/stage0_backend.bsh
-
 base=""
 source2=""
 bl=${CONF_bloader}
 #echo "TEHTY?:isolubnux.cfg";sleep 5
+
+if [ $# -lt 1 ] ; then
+	echo "$0 -h"
+	exit
+fi
 
 function usage() {
 	echo "${0} --base <BASE> --add <THINGS_TO_ADD> [--bl BLOADER] [--v <verbosity_level>]"
@@ -18,8 +20,13 @@ function usage() {
 	echo "${0} --make-dirs creates some dirs under ${CONF_tmpdir}"
 }
 
+#041025:-v mukaan ni kosahtaa suoritus (ei kyl haittaa kun debug asetsttu alussa mutta...)
+. ./skripts/stage0_backend.bsh
+
 #HUOM.031025:toiminee tämä skripti tänään riittävästi
 function parse_opts_real() {
+	dqb "douböe(${1} , ${2})"
+
 	case ${1} in
 		--base) #--in ,--out yleisiksi param jrkossa?
 			base=${2}
@@ -37,14 +44,15 @@ function parse_opts_real() {
 	esac	
 }
 
-#041025:-v mukaan ni kosahtaa suoritus (ei kyl haittaa kun debug asetsttu alussa mutta...)
-
 function single_param() {
+	dqb "subgle(${1} , ${2})"
+
 	case ${1} in
 		--make-dirs)
 			#init.bash käskyttämään tätä case:a tarvittaessa?
 			make_src_dirs ${CONF_bloader}
 			make_tgt_dirs
+			exit
 		;;
 #		--h)
 #			usage
@@ -61,8 +69,10 @@ function single_param() {
 		;;
 	esac
 
-	exit 13
+	#exit 13
 }
+
+. ./skripts/common_funcs.sh
 
 if [ -d ${CONF_tmpdir0} ] ; then
 	dqb "CONF_TMPDIR0 EXISTS"
@@ -71,16 +81,16 @@ else
 	exit 7
 fi
 
-if [ $# -gt 0 ] ; then
-	parse_opts ${1} ${2}
-	parse_opts ${3} ${4}
-	parse_opts ${5} ${6}
-	parse_opts ${7} ${8}
-	parse_opts ${9} ${10}
-else
-	usage
-fi
+#if [ $# -gt 0 ] ; then
+#	parse_opts ${1} ${2}
+#	parse_opts ${3} ${4}
+#	parse_opts ${5} ${6}
+#	parse_opts ${7} ${8}
+#	parse_opts ${9} ${10}
+#else
+#	usage
+#fi
 
 #stage0f==glorified cp
 #dqb "mkdir -p ./v/smthing;mkdir -p ./v/smthing/{isolinux,grub};ln -s ~/Desktop/minimize ./v/something/pad ?"
-echo "./stage0f.sh ${base} ${source2} ${bl} <verbosity_level>"
+echo "./stage0f.sh ${base} ${source2} ${bl} ${debug}"
