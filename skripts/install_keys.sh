@@ -3,7 +3,7 @@ ridk=""
 d=$(dirname $0) #sittenkin näin
 
 . ${d}/common.conf
-. ${d}/common_funcs.sh
+
 
 if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
@@ -15,18 +15,19 @@ function usage() {
 	echo "${0} --kdir <kdir> --m Makes 2 keys , <kdir> still needed"
 }
 
-function tpop() {
-	case ${1} in
-		--kdir)
-			ridk=${2}
-		;;
-		--v)
-		;;
-		*)
-			cmd=${1}
-		;;
-	esac
-}
+. ${d}/common_funcs.sh
+#function tpop() { #CAIH:PARSETISEN UUSINTA
+#	case ${1} in
+#		--kdir)
+#			ridk=${2}
+#		;;
+#		--v)
+#		;;
+#		*)
+#			cmd=${1}
+#		;;
+#	esac
+#}
 
 tpop ${1} ${2}
 tpop ${3} ${4}

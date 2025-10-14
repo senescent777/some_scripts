@@ -1,8 +1,4 @@
 #!/bin/bash
-d=$(dirname $0)
-. ${d}/common.conf
-. ${d}/common_funcs.sh
-
 debug=0 #1
 dir2=""
 cmd=""
@@ -10,6 +6,34 @@ md=0
 mp=0
 ms=0
 par=""
+d=$(dirname $0)
+. ${d}/common.conf
+
+#ennen vai jälkeen parse_opts esittelyn?
+function usage() {
+	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0} source_file NEEDS TO HAVE ABSOLUTE PATH"
+	echo "\t (source could be under /r/l/m/live) "
+
+	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0} NEEDS TO HAVE ABSOLUTE PATH"
+	echo "-b is supposed to be run just Before -c but after -r "
+	echo "-d Destroys contents of ${CONF_squash0}/ "
+	echo "\t if possible, use -b instead\n"
+
+	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n NEEDS TO HAVE ABSOLUTE PATH"
+	echo "-r :runs chRoot in ${CONF_squash_dir} "
+	
+	#echo "-i <src> : Installs scripts 2 chroot_dir  "
+	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
+	echo "\t to state the obvious:"
+	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
+	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
+
+	echo "-f attempts to Fix some problems w/ sudo "
+	echo "--v 1 adds Verbosity\n"
+
+	echo "--mp,--md, --ms:self-explanatory opts 4 -r " 
+	echo "\t potentially dangerous, so disabled by default , 1 enables"
+}
 
 function parse_opts_real() {
 	echo "squash.parse_opts_real()" #dqb
@@ -43,40 +67,16 @@ function single_param() {
 	cmd=${1}
 	echo "sp"
 }
-
-parse_opts ${1} ${2}
-parse_opts ${3} ${4}
-parse_opts ${5} ${6}
-parse_opts ${7} ${8}
-parse_opts ${9} ${10}
-
-#JOSKO JO SE PARSETUSONGELMA
-
-#ennen vai jälkeen parse_opts esittelyn?
-function usage() {
-	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0} source_file NEEDS TO HAVE ABSOLUTE PATH"
-	echo "\t (source could be under /r/l/m/live) "
-
-	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0} NEEDS TO HAVE ABSOLUTE PATH"
-	echo "-b is supposed to be run just Before -c but after -r "
-	echo "-d Destroys contents of ${CONF_squash0}/ "
-	echo "\t if possible, use -b instead\n"
-
-	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n NEEDS TO HAVE ABSOLUTE PATH"
-	echo "-r :runs chRoot in ${CONF_squash_dir} "
-	
-	#echo "-i <src> : Installs scripts 2 chroot_dir  "
-	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
-	echo "\t to state the obvious:"
-	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
-	echo "\t ... and <src> has to contain subdirectory ${TARGET_pad_dir} \n"
-
-	echo "-f attempts to Fix some problems w/ sudo "
-	echo "--v 1 adds Verbosity\n"
-
-	echo "--mp,--md, --ms:self-explanatory opts 4 -r " 
-	echo "\t potentially dangerous, so disabled by default , 1 enables"
-}
+. ${d}/common_funcs.sh
+#
+#
+#parse_opts ${1} ${2}
+#parse_opts ${3} ${4}
+#parse_opts ${5} ${6}
+#parse_opts ${7} ${8}
+#parse_opts ${9} ${10}
+#
+#VAIH:JOSKO JO SE PARSETUSONGELMA
 
 tmp=$(dirname $0)
 . ${tmp}/sq22be.ash

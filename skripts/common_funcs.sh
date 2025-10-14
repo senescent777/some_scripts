@@ -49,7 +49,7 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
-#TODO:tähän asti juttujen korvaaminen toisen projektin common_lib
+#VAIH:än asti juttujen korvaaminen toisen projektin common_lib
 #============================================
 #
 ##se uusi gpo() tilalle?
@@ -61,7 +61,6 @@ function csleep() {
 #	local common_pars
 #	common_pars=0
 #
-#	#TODO:--bl mukaan yelisiin optioihin?
 #	if [ x"$1" != "x" ] ; then 
 #		if [ x"$2" != "x" ] ; then
 #			case ${1} in
@@ -96,6 +95,8 @@ function csleep() {
 #}
 
 function parse_opts_1() {
+	#dqb "cpars.op-1(${1})"
+
 	case ${1} in
 		-h|--h)
 			usage
@@ -110,16 +111,21 @@ function parse_opts_1() {
 	esac
 }
 
-function parse_opts_1() {
+function parse_opts_2() {
 	case ${1} in
-		--bl|-bl) #TOFO:--in ,--out yleisiksi param jrkossa?
+		--bl|-bl)
+			#VAIH:--in ,--out yleisiksi param jtkossa?
 			bl=${2}
 		;;
+		--in)
+			source=${2}
+		;;
 		*)
-			parse_opts_real  ${1}  ${2}
+			parse_opts_real ${1} ${2}
 		;;
 	esac
 }
+
 #====================common_lib.sh==================================
 function gpo() {
 	dqb "GPO"
@@ -128,6 +134,7 @@ function gpo() {
 	local prevopt
 	local opt
 	prevopt=""
+	[ $# -gt 0 ] || echo "$0 -h"
 
 	for opt in $@ ; do
 		parse_opts_1 ${opt}

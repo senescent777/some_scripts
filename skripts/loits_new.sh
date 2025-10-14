@@ -1,14 +1,13 @@
 #!/bin/bash
 
-debug=0 #1 #miten -v ?
+debug=1 #miten -v ?
 d=$(dirname $0)
+ltarget="" 
+
+source=""
 
 . ${d}/common.conf
-. ${d}/common_funcs.sh
-
-ltarget="" 
-bloader=""
-lsrcdir=""
+bl=${CONF_bloader}
 
 function usage() {
 	echo "a glorified wrapper for genisoimage"
@@ -20,18 +19,18 @@ function parse_opts_real() {
 	dqb "parse_opts_real( ${1} , ${2})"
 
 	case ${1} in
-		--in)
-			lsrcdir=${2}
-		;;
+#		--in)
+#			source=${2}
+#		;;
 		--out)
 			ltarget=${2}
 		;;
-		--bl) 
-			bloader=${2}
-		;; 
-		*)
-			usage
-		;;
+#		--bl) 
+#			bl=${2}
+#		;; 
+#		*)
+#			usage
+#		;;
 	esac
 }
 
@@ -40,27 +39,29 @@ function single_param() {
 	dqb "signle_param ( ${1} , ${2} )"
 }
 
-if [ $# -gt 0 ] ; then
-	parse_opts ${1} ${2}
-	parse_opts ${3} ${4}
-	parse_opts ${5} ${6}
-	parse_opts ${7} ${8}
-else
-	usage
-fi
+. ${d}/common_funcs.sh
+#
+#if [ $# -gt 0 ] ; then
+#	parse_opts ${1} ${2}
+#	parse_opts ${3} ${4}
+#	parse_opts ${5} ${6}
+#	parse_opts ${7} ${8}
+#else
+#	usage
+#fi
 
 function check_params() {
 	dqb "check_params()"
 
-	if [ x"${lsrcdir}" != "x" ] ; then
-		if [ -d ./${lsrcdir} ] ; then
+	if [ x"${source}" != "x" ] ; then
+		if [ -d ./${source} ] ; then
 			dqb "k0"
 		else
-			echo "no such thing as ${lsrcdir}"
+			echo "no such thing as ${source}"
 			exit 141
 		fi
 	else
-		dqb "lsrcdir missing"
+		dqb "source missing"
 		exit 140
 	fi
 
@@ -75,10 +76,10 @@ function check_params() {
 		exit 143
 	fi
 
-	if [ x"${bloader}" != "x" ] ; then
+	if [ x"${bl}" != "x" ] ; then
 		echo "b"
-	else
-		bloader=${CONF_bloader}
+	#else
+	#
 	fi
 
 	dqb "check_params() done"
@@ -87,39 +88,38 @@ function check_params() {
 check_params
 [ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
 
-
 sleep 1
-dqb "bloader=${bloader}"
+dqb "bl=${bl}"
 csleep 4
 
-case ${bloader} in
+case ${bl} in
 	isolinux)
 		#VAIH:toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
 		${sco} -R ${n}:${n} .
 		${scm} -R 0755 .
 
-		ls -las ${lsrcdir}/${bloader}/*.cfg || exit 99
+		ls -las ${source}/${bl}/*.cfg || exit 99
 		csleep 2
 
 		[ ${debug} -eq 1] && pwd 
-		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir}"
+		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${source}"
 		csleep 1
 
-		${gi} -o ${ltarget} ${CONF_gi_opts} ${lsrcdir} #. älä ramppaa
+		${gi} -o ${ltarget} ${CONF_gi_opts} ${source} #. älä ramppaa
 	;;
 	grub)
-		ls -las ${lsrcdir}/boot/${bloader}/*.cfg || exit 99
+		ls -las ${source}/boot/${bl}/*.cfg || exit 99
 		csleep 2
 
 		#https://bbs.archlinux.org/viewtopic.php?id=219955
 
 		#ehkä ei tartte sudottaa jos kohde-hakemisto sopiva (esim /tmp)
 		
-		dqb "${gmk} -o ${ltarget} ${lsrcdir}"
-		${gmk} ${CONF_GRUB_OPTS} -o ${ltarget} ${lsrcdir}
+		dqb "${gmk} -o ${ltarget} ${source}"
+		${gmk} ${CONF_GRUB_OPTS} -o ${ltarget} ${source}
 	;;
 	*)
-		echo "bl= ${bloader}"
+		echo "bl= ${bl}"
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac

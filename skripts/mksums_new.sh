@@ -2,26 +2,13 @@
 b=0
 debug=0 #1
 source=""
-
 d=$(dirname $0)
+MKS_parts="1 2 3"
 . ${d}/common.conf
-. ${d}/common_funcs.sh
-
 bl=${CONF_bloader}
-#echo "TEHTY?:isolubnux.cfg";sleep 5
-
-if [ -f ${d}/keys.conf ] ; then
-	. ${d}/keys.conf
-fi
-
-#jos jatkossa common_funcs tai common_lib
-if [ $# -eq 0 ] ; then
-	echo "-h" #tällä parametrilla ei tarttisi jatkaa isage():a pidemmälle
-	exit
-fi
 
 function usage() {
-	echo "$0 --in <source> [-b <mode>] [--bl <BLOADER>]"
+	echo "$0 --in <source> [--bl <BLOADER>]"
 	echo "$0 --iso"
 	echo "$0 --pkgs"
 	echo "$0 -h" #voisi olla vakiovaruste tuo optio ja liityvä fktio
@@ -30,18 +17,25 @@ function usage() {
 
 #miten se -v?
 function parse_opts_real() {
-	case ${1} in
-		-b)
-			b=${2}
-		;;
-		--in)
-			source=${2}
-		;;
-		--bl)
-			bl=${2}
-		;;
-	esac
+#	case ${1} in
+##		-b)
+##			b=${2}
+##		;;
+##		--in)
+##			source=${2}
+##		;;
+##		--bl)
+##			bl=${2}
+##		;;
+#		*)
+			echo "asd.asd"
+#		;;
+#	esac
 }
+
+if [ -f ${d}/keys.conf ] ; then #tarcitaan, kts sibgle_param
+	. ${d}/keys.conf
+fi
 
 #vähitelleb voisi kokeilla mitä avainten asennuksne jälkeen käy
 function single_param() {
@@ -65,14 +59,26 @@ function single_param() {
 			
 			exit 63
 		;;
-		--h|-h)
-			usage
-			exit 65
-		;;
+#		--h|-h)
+#			usage
+#			exit 65
+#		;;
 	esac
 }
 
-MKS_parts="1 2 3"
+. ${d}/common_funcs.sh
+
+
+#echo "TEHTY?:isolubnux.cfg";sleep 5
+
+
+
+#jos jatkossa common_funcs tai common_lib
+if [ $# -eq 0 ] ; then
+#	echo "-h" #tällä parametrilla ei tarttisi jatkaa isage():a pidemmälle
+	exit
+fi
+
 
 #VAIH:ekan parametrin kanssa jotain rajoitusta ettei ihan juurta muutettaisi tjsp
 function part0() {
@@ -127,7 +133,7 @@ function part123() {
 		dqb "find ./${2} -type f"
 		csleep 1
 
-		#helpompi bain hakea .cfg-päätteiset?
+		#helpompi bain hakea .cfg-päätteiset? tai kts grubin osalta se manuaali että
 		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
 			dqb "${sah6} ${f}"
 			${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
@@ -232,9 +238,9 @@ function part8() {
 
 	cd ${olddir}
 }
-
-parse_opts ${1} ${2}
-parse_opts ${3} ${4}
+#
+#parse_opts ${1} ${2}
+#parse_opts ${3} ${4}
 
 [ -d ${source} ] || exit 99
 dqb "${source} exists"
