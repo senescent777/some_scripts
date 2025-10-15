@@ -1,9 +1,8 @@
 #!/bin/bash
 ridk=""
 d=$(dirname $0) #sittenkin näin
-
+debug=0
 . ${d}/common.conf
-. ${d}/common_funcs.sh
 
 if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
@@ -15,23 +14,35 @@ function usage() {
 	echo "${0} --kdir <kdir> --m Makes 2 keys , <kdir> still needed"
 }
 
-function tpop() {
-	case ${1} in
+function single_param() {
+	dqb "instk.single-param(${1})"
+	cmd=${1}
+}
+
+function parse_opts_real () {
+	case "${1}" in
 		--kdir)
 			ridk=${2}
-		;;
-		--v)
-		;;
-		*)
-			cmd=${1}
 		;;
 	esac
 }
 
-tpop ${1} ${2}
-tpop ${3} ${4}
+. ${d}/common_funcs.sh
+[ $# -gt 0 ] || exit #TODO:->gpo()
 
-[ x"${ridk}" != "x" ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
+
+#		--v)
+#		;;
+#		*)
+#			
+#		;;
+#	esac
+#}
+#
+#tpop ${1} ${2}
+#tpop ${3} ${4}
+
+[ -z ${ridk} ] && echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 [ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 #aiheeseen liittyen:miten wtussa gpgtarin saa toimimaan? --create ja -t vissiin toimii mutta --extract...
 
@@ -43,11 +54,13 @@ case ${cmd} in
 		done
 	;;
 	--e) 
+		[ -v CONF_kay1name ] || exit 666
+		[ -v CONF_kay2name ] || exit 666
 		[ x"${CONF_kay1name}" != "x" ] || exit 666
 		[ x"${CONF_kay2name}" != "x" ] || exit 666
 
-		sudo rm ${ridk}/${TARGET_Dkname1}*
-		sudo rm ${ridk}/${TARGET_Dkname2}*
+		${smr} ${ridk}/${TARGET_Dkname1}*
+		${smr} ${ridk}/${TARGET_Dkname2}*
 
 		${gg} --export ${CONF_kay1name} > ${ridk}/${TARGET_Dkname1}
 		${gg} --export ${CONF_kay2name} > ${ridk}/${TARGET_Dkname2}
@@ -67,8 +80,10 @@ case ${cmd} in
 	
 		if [ ! -s ${d}/keys.conf ] ; then
 			cp ${d}/keys.conf.example ${d}/keys.conf
-			${gg} --list-keys >> ${d}/keys.conf  
-			nano ${d}/keys.conf #$EDITOR jatkossa
+			${gg} --list-keys >> ${d}/keys.conf 
+
+			nano ${d}/keys.conf
+			#$EDITOR ${d}/keys.conf
 		fi
 	;;
 	*)

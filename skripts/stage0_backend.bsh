@@ -1,42 +1,43 @@
 function mangle_conf() {
-
 	dqb "mangle_conf( ${1}, ${2}, ${3})"
-	#TODO:jotain muutakin tähän, ehkä
-
+	#TODO:jotain muutakin tähän, ehkä (lähteen greppailu kohteeseen)
 }
 
-#tällekin voisi tehdä josqs jotain
+#echo "TEHTY?:isolubnux.cfg";sleep 5
+
+#... koita päättää mitä tuo $1 edustaa
 function get_devuan() {
-	[ -d ${CONF_distros_dir} ] || ${smd} ${CONF_distros_dir}
-	cd ${CONF_distros_dir}
-
-		wget ${CONF_wget_opts} ${1}
-
-	sha256sum -c SHA256SUMS
+#	[ -d ${CONF_distros_dir} ] || ${smd} ${CONF_distros_dir}
+	echo "cd ${1} #CONF_distros_dir}"
+	echo "wget ${CONF_wget_opts} ${1}"
+	echo "sha256sum -c SHA256SUMS"
 	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 }
 
 function make_src_dirs() {
-	dqb "s0b.make_s_DIrs"
+	#debug=1
+	dqb "s0b.make_s_DIrs( ${1})"
+	csleep 1
+
+	[ -z ${1} ] && exit 99
+	[ z"{1}" == "z/" ] && exit 100
+	dqb "pars_ok"
+	csleep 1
+
 	${smd} ${CONF_keys_dir}
 	${smd} ${CONF_distros_dir}
 
-	case ${CONF_bloader} in
+	case ${1} in 
 		grub)
 			${smd} -p ./boot/grub
 		;;
 		*)
-			${smd} ${CONF_bloader}	
+			${smd} ${1}	
 		;;
 	esac
 
-
 	${smd} ${CONF_pkgsdir2}
 	${smd} ./v
-}
-
-function cleanup() {
-	sudo umount ${CONF_source}
 }
 
 #VAIH:conf_scripts_dir parametriksi vai ei? entä CONF_tmpdir?
@@ -50,22 +51,17 @@ function copy_main() {
 	[ y"${3}" != "y" ] || exit 33
 	[ -d ${3} ] || exit 34
 
-#	[ -v CONF_scripts_dir ] || echo "CONF_SCRIPTS_DIR NOT DEFINED"
-#	[ z"${CONF_scripts_dir}" != "z" ] || echo "n.s.t.as ${CONF_scripts_dir}"
-
 	dqb "CHECKS PASSED"
 	local f
 	dqb "ONE BATCH"	
 	csleep 1
 
-#	if [ -d ${CONF_scripts_dir} ]; then 
-#		for f in $(find ${CONF_scripts_dir} -type f -name '*.sh') ; do
-		for f in $(find ${3} -type f -name '*.sh') ; do	
-			dqb "${spc} ${f} ${2}/../.. "
-			${spc} ${f} ${2}/../.. 
-		done
-#	fi
+	for f in $(find ${3} -type f -name '*.sh') ; do	
+		dqb "${spc} ${f} ${2}/../.. "
+		${spc} ${f} ${2}/../.. 
+	done
 
+	#HUOM.nuo 2 blokkia alla voisi yhdistää , "-or -name"
 	dqb "TWO BATCH"
 	csleep 1
 
@@ -87,11 +83,11 @@ function copy_main() {
 
 #VAIH:voisikohan ottaa hyötykäyttöönm? esim se sq-xhroot--ymp konftdsto
 #tilapäisesti viritys missä conf samassa paketissa .deb kanssa (041025)
-#"sudo cat" 1 ideqa, mangle_conf() toinen
-#... jospa se devuan.conf olisi se juttu, lähdehmistoon moinen ja sit jtain
-#... vielä d.c squash-hmistoon EIKU
+#sudo cat" 1 ideqa, mangle_conf() toinen
+#.. jospa se devuan.conf olisi se juttu, lähdehmistoon moinen ja sit jtain
+#.. vielä d.c squash-hmistoon EIKU
 function copy_conf() {
-	debug=1
+	#debug=1
 
 	dqb "copy_conf(${1}, ${2} , ${3})"
 	[ x"${1}" != "x" ] || exit 2
@@ -101,14 +97,11 @@ function copy_conf() {
 
 	dqb "PARAMS OK"
 	#HUOM.041025: *.bash.conf ei tarttisi mennä kiekolle asti(TEHTY)
+	csleep 3
 
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
-		#dqb "${spc} -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}"
-		# -a ${CONF_scripts_dir}/*.conf ${CONF_tmpdir}
-
 		for f in $(find ${CONF_scripts_dir} -type f -name '*.conf' | grep -v bash) ; do
-			#dqb "${spc} ${f} ${CONF_tmpdir}"
-			dqb "${spc} ${f}  ${3}/../.."
+			dqb "${spc} ${f} ${3}/../.."
 			${spc} ${f} ${3}/../.. #${CONF_tmpdir}		
 		done
 
@@ -129,73 +122,68 @@ function copy_conf() {
 
 	echo -n "src=/" >> ${utfile}
 	echo -n "$" >> ${utfile}
-	echo -n "{" >> ${utfile}
-	echo -n "TARGET_pad2" >> ${utfile}
-	echo "}" >> ${utfile}	
+	echo "{TARGET_pad2}" >> ${utfile}	
 
 	echo -n "tmpdir=" >> ${utfile}
 	echo -n "$" >> ${utfile}
-	echo -n "{" >> ${utfile}
-	echo -n "TARGET_tmpdir" >> ${utfile}
-	echo "}" >> ${utfile}	
+	echo "{TARGET_tmpdir}" >> ${utfile}	
 
 	echo -n "pkgdir=" >> ${utfile}
 	echo -n "$" >> ${utfile}
-	echo -n "{" >> ${utfile}
-	echo -n "TARGET_pkgdir" >> ${utfile}
-	echo "}" >> ${utfile}	
+	echo "{TARGET_pkgdir}" >> ${utfile}	
 
+	#jatkosssssa niin että grepattaisiin oletus-konftdstosta hakusanan muaksia kohde-tdstoon (näinnkö se meni 2+ vuotta sitten? ehkä)
 	mangle_conf TARGET_to_ram ${utfile}
 	mangle_conf TARGET_nosu_do ${utfile}
+	
+	#TODO:utfile:n käyttöokeudet s.e. sudoa ei tarvura
 
-	dqb "sudo cat ${1}/${2}.conf >> ${utfile}"
-	sudo cat ${1}/${2}.conf >> ${utfile}
-	csleep 3
+	dqb " grep -v '#' ${1}/${2}.conf >> ${utfile}"
+	grep -v '#' ${1}/${2}.conf >> ${utfile}
+	csleep 6
 
 	dqb "copy_conf() donw\n"
 	sleep 1
 }
 
-#VAIH:target_dgst0 pois tsätä fktiosta, kutsuvaan koodiin (sitten josqs)
+#pitäisikö tämän fktio olla kopsata tsummia?
 function copy_sums() {
 	#debug=1
-
-	dqb "copy_syms(${1}, ${2})"
-	#[ x"${1}" != "x" ] || exit 2
-	#[ -d ${2} ] || exit 2 
+	dqb "copy_syms(${1}, ${2})" #tämäkö qsee?
 
 	[ -z ${1} ] && exit 2
-	[ -d ${1} ] || exit 3
-	[ -z ${2} ] && exit 3
+	#[ -d ${1} ] || exit 3 #ei tätä koska alempana x
+	[ -z ${2} ] && exit 4
 
 	dqb "pars ok"
 	pwd
 	csleep 1
+#
+#	#pitäisiköä avainkikkailun olla erillisessä fktiossa?
+#	#niinja miten avaimet+squ.ash? tarttisiko jotain kikkailua?
 
-	#pitäisiköä avainkikkailun olla erillisessä fktiossa?
-	#niinja miten avaimet+squ.ash? tarttisiko jotain kikkailua?
-
-	if [ -d ${1}/${TARGET_DGST0} ] ; then
+	if [ -d ${1} ] ; then
 		dqb "JI"
 		#jos lähde olemassa, mitä sitten? pitäisi varmaan kopsata jotain jonnekin?
 	else
-		dqb "NO ${1}/${TARGET_DGST0} , YSINBF DEFAYLT KEYDIR "
+		dqb "NO ${1} / \${TARGET_DGST0} , YSINBF DEFAYLT KEYDIR "
 
-		if [ -d ${2}/${TARGET_DIGESTS_dir} ] ; then
-			dqb "${2}/${TARGET_DIGESTS_dir} ALREADY EXZUISWTS"
+		if [ -d ${2} ] ; then
+			dqb "${2}  ALREADY EXZUISWTS"
 		else
-			${smd} -p ${2}/${TARGET_DIGESTS_dir} #meneeköhän nyt oikein?
+			${smd} -p ${2}
 		fi
 
-		#TODO:jatkossa pois nuo kopsaukset, toisella tavalla
-		dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkf}"
-		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkf}
-		${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}/${TARGET_Dpubkg}
+		#VAIH:tämä kohta uusiksi (jatkossa jos .bz3 sisältäisi julk avaimet)
+		#dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}"
+		#${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}
+		#${spc} ${CONF_keys_dir}/${TARGET_Dkname2} ${2}
 	fi
 
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
+#$c_tgt-> $3 jatkossa?
 function bootloader() {
 	#debug=1
 	dqb "bootloader(${1}, ${2}, ${3})"
@@ -217,7 +205,7 @@ function bootloader() {
 
 	[ ${debug} -eq 1 ] && ls -las ${CONF_target};sleep 6
 
-	#HUOM.jos touch-koentoia tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa
+	#HUOM.jos touch-komentoja tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa (?)
 	case ${1} in
 		isolinux)
 
@@ -226,26 +214,34 @@ function bootloader() {
 
 			${spc} -a ${3}/isolinux/ ${CONF_target} || exit 8
 			ks2=${2}/isolinux
+			#[ -d ${ks2} ] || exit 9
 			csleep 1
 
-			#jos siirtäisi ennen case;a nää, penin muutoksin
+			[ ${debug} -eq 1 ] && find ${3}/isolinux -type f -name '*.cfg'
+			csleep 5
+
+			#jos siirtäisi ennen case;a nää, pienin muutoksin
+			dqb "${smr} ${CONF_target}/isolinux/*.cfg"
 			${smr} ${CONF_target}/isolinux/*.cfg
 			${smr} ${CONF_target}/isolinux/*.png
+
 			csleep 2
+			dqb "TRYI1NG T0 R3PLACE IS0LINUX.CGF"
 
 			for f in $(find ${ks2} -name '*.cfg') ; do
 				dqb "spc ${f} ${CONF_target}/isolinux/"
 				${spc} ${f} ${CONF_target}/isolinux/
 			done
-			
+
+			#jos ei muuta keksi niln -s /r/l/m/i $tgt
+			ls -las ${CONF_target}/isolinux/*.cfg || exit			
 			csleep 2
+			dqb "PNG"	
 
 			for f in $(find ${ks2} -name '*.png') ; do
 				dqb "spc ${f} ${CONF_target}/isolinux/"
 				${spc} ${f} ${CONF_target}/isolinux/
 			done
-				
-			csleep 2	
 		;;
 		grub)
 			ks2=${2}/boot #jos siirtäisi ennen case;a nää
@@ -254,13 +250,15 @@ function bootloader() {
 				${spc} -a ${3}/boot/ ${CONF_target} || exit 8
 	
 				#jos ei automaagisesti jatkossa
-				${smr} ${CONF_target}/boot/grub/*.cfg
+				${smr} ${CONF_target}/boot/grub/*.cfg #TODO:uusi apumuuttuja
 				${smr} ${CONF_target}/boot/grub/*.png
 				
 				for f in $(find ${ks2} -name '*.cfg') ; do
 					dqb "spc ${f} ${CONF_target}/boot/grub"
 					${spc} ${f} ${CONF_target}/boot/grub
 				done
+
+				ls -las ${CONF_target}/boot/grub/*.cfg || exit 99
 
 				for f in $(find ${ks2} -name '*.png') ; do
 					dqb "spc ${f} ${CONF_target}/boot/grub"
@@ -274,70 +272,73 @@ function bootloader() {
 		;;
 	esac
 
-
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
 
 function make_tgt_dirs() {
-	dqb "s0b.MAKE_t_DIRS()"
+	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
+	csleep 1
 
-	[ x"${CONF_target}" != "x" ] || exit 99
-	[ x"${CONF_target}" != "x/" ] || exit 100
+	[ x"${1}" != "x" ] || exit 99
+	[ x"${1}" != "x/" ] || exit 100
+	[ -z ${3} ] && exit 101 #WTUN KAARISULKEET 666!!!
 
-	dqb "${CONF_target} ok"
+	dqb "${1} ok"
+	csleep 1
 
 	#HUOm. cource_jutut kai toisessa fktiossa kuiotenkin?
-	[ y"${CONF_source}" != "y" ] || exit 101
-	[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
+	[ y"${2}" != "y" ] || exit 101
+	[ -d ${2} ] || ${smd} -p ${2}
 
-	dqb "${CONF_source} ok?"
+	dqb "PARAMZx OK"
+	csleep 1
 
-	${sco} 0:0 ${CONF_source}
-	${scm} 0755 ${CONF_source}
+	dqb "${2} ok?"
+	${sco} 0:0 ${2}
+	${scm} 0755 ${2}
 	
-	${sco} -R ${n}:${n} ${CONF_target}
-	${scm} 0755 ${CONF_target}	
+	${sco} -R ${n}:${n} ${1} #TODO:$n parametriksi?
+	${scm} 0755 ${1}	
 
-	if [ ! -d ${CONF_target} ] ; then
-
-		dqb "mkdir ${CONF_target}";sleep 6
-		${smd} -p ${CONF_target}
+	if [ ! -d ${1} ] ; then
+		dqb "mkdir ${1}";sleep 6
+		${smd} -p ${1}
 	else
-		dqb "rm ${CONF_target}";sleep 6
-		${smr} -rf ${CONF_target};sleep 1
+		dqb "rm ${1}";sleep 6
+		${smr} -rf ${1};sleep 1
 	fi
 	
-	[ -d ${CONF_target}/live ] || ${smd} -p ${CONF_target}/live
-	${sco} -R ${n}:${n} ${CONF_target}/live
+	[ -d ${1}/live ] || ${smd} -p ${1}/live
+	${sco} -R ${n}:${n} ${1}/live
 
-	[ -d ${CONF_target}/${TARGET_DIGESTS_dir} ] || ${smd} -p ${CONF_target}/${TARGET_DIGESTS_dir}
-	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}/..
+	[ -d ${1}/${TARGET_DIGESTS_dir} ] || ${smd} -p ${1}/${TARGET_DIGESTS_dir}
+	${sco} -R ${n}:${n} ${1}/${TARGET_DIGESTS_dir}/..
 
-	#HUOM.18725:tätä kohtaa joutaisi miettiä vielä
-	#[ -d ${CONF_target}/${CONF_bloader} ] || ${smd} -p ${CONF_target}/${CONF_bloader}
-	[ -d ${CONF_target}/${CONF_bloader} ] && ${sco} -R ${n}:${n} ${CONF_target}/${CONF_bloader}
-
-	${sco} 0:0 ${CONF_target}
+	dqb "BLOADER"
+	#[ -d ${1}/${3} ] || ${smd} -p ${1}/${3}
+	[ -d ${1}/${3} ] && ${sco} -R ${n}:${n} ${1}/${3}
+	${sco} 0:0 ${1}
+	csleep 1
 
 	#11725:tämä vaikutti puuttuvan
-	[ -d ${CONF_target}/${TARGET_pad_dir} ] || ${smd} -p ${CONF_target}/${TARGET_pad_dir}
+	[ -d ${1}/${TARGET_pad_dir} ] || ${smd} -p ${1}/${TARGET_pad_dir}
 
-	[ -d ${CONF_target}/../out ] || ${smd} -p ${CONF_target}/../out
-	${sco} -R ${n}:${n} ${CONF_target}/../out
-	${scm} 0755 ${CONF_target}/../out
+	[ -d ${1}/../out ] || ${smd} -p ${1}/../out
+	${sco} -R ${n}:${n} ${1}/../out
+	${scm} 0755 ${1}/../out
 
 	#miten oikeydet?
 	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
+	#avainhakemisto (mitä siitä?)
 
-	#TODO:avainhakemisto (mitä siitä?)
-
-	#ls -la  ${CONF_target};sleep 6 dbq taakse
-	echo "...done\n"
+	#ls -la  ${1};csleep 6 dbq taakse
+	dqb "...done\n"
 }
 
+#tämän saman joutaisitehdä useammalle tgt-hmiston alaiselle
 function default_process() {
 	dqb "nt default_process(${1})"
-
+	#-z myös?
 	[ -d ${1} ] || exit 666
 
 	${sco} -R 0:0 ${1}

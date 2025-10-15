@@ -1,91 +1,7 @@
 #!/bin/sh
 
-n=$(whoami) 
-. ./"${n}".conf
 
-#toisessa repossa vastine check_bin()
-start_this_shit() {
-	siptr=$(sudo which iptables-restore) 
-	sifd=$(sudo which ifdown)
-	sifu=$(sudo which ifup)
-	sipt=$(sudo which iptables)
-	sipts=$(sudo which iptables-save)
-	sag=$(sudo which apt-get)
-	srat=$(sudo which tar)
-	spd=$(sudo which dpkg)
 
-		echo "${src}"
-
-		echo "${sipt}"
-		echo "${siptr}"
-		echo "${sipts}"
-		echo "${sifu}"
-		echo "${sifd}"
-
-		echo "${sag}"
-		echo "${srat}" 
-		echo "${spd}"
-
-		[ "$nosu_do" -eq 1 ] && sleep 10
-
-	[ -x "${sag}" ] || exit
-	[ -x "${srat}" ] || exit
-	[ -s "${spd}" ] || exit
-
-	srat="sudo ${srat} " 
-
-		srat="${srat} -v "
-
-	sifd="sudo ${sifd} "
-	sifu="sudo ${ifu} "
-	srat="${srat} -jxpf "
-	spd="sudo ${spd} -i "
-	sag="sudo ${sag} "
-	sipts="sudo ${sipts} "
-	sipt="sudo ${sipt} "
-	siptr="sudo ${siptr} "
-}
-
-start_this_shit
-
-#toisessa repossa oli psqa()
-cond_check() {
-	if [ -s "$1" ] ; then 
-		cd "${src}"
-		gpgv --keyring ./0/pubK.gpg "$1".sig "$1" 
-
-		if [ "$?" -eq 0 ] ; then
-			echo "kakka"
-		else
-				echo "Serrano"
-				exit 666
-		fi
-
-		cd ..
-		sha512sum --ignore-missing -c "$1"
-
-		if [ "$?" -eq 0 ]; then 
-			echo "pissa"
-		else
-				echo "SHITTER LIMITED"
-				exit 667
-		fi
-
-	else
-		echo "K.Palsa"
-	fi
-}
-
-#sharpy()
-sarp() {
-	${sag} remove --purge "$@"
-	sudo apt autoremove
-}
-
-#myös SBU
-SBU() {
-	sudo shred -fu "$1"
-}
 
 #loppuosa niinqu omega.sh
 cleanup1() {
@@ -114,25 +30,7 @@ cleanup1() {
 	SBU /tmp/machupo.tar.bz2
 	/usr/bin/killall xfce4-session
 }
-#common_lib sisältää myös efk()
-efk() {
-	[ -s "$1" ] || exit
-	[ "${to_ram}" -eq 1 ] && sudo cp "${src}"/foxp3.tar.bz2 "${src}"/foxp3.tar.bz2.BACKUP
 
-	cd /;${srat} "$1"
-
-	${spd} "${pkgdir}"/lib*.deb
-	SBU "${pkgdir}"/lib*.deb
-
-	${spd} "${pkgdir}"/*.deb 
-	SBU "${pkgdir}"/*.deb
-
-	if [ "${to_ram}" -eq 1 ] ; then
-		SBU "$1"
-		sudo mv "${src}"/foxp3.tar.bz2.BACKUP "${src}"/foxp3.tar.bz2
-	fi
-}
-#common_lib, part1() taisi vastata tätä jossain määrin
 tablz() {
 	[ -d /etc/iptables ] || sudo mkdir /etc/iptables	
 	cd /etc/iptables
@@ -165,21 +63,5 @@ tablz() {
 	sudo /sbin/sysctl -w net.ipv6.conf.default.disable_ipv6=1
 }
 
-#common_lib sisälsi samantap fktion myös, part1_5 ehkä
-s0rsat() {
-	cd /etc/apt/
-	sudo mv sources.list sources.list.ORIG
-	sudo chmod a+w /etc/apt/conf.d
 
-
-	sudo chmod a-w /etc/apt/conf.d
-	cat /etc/apt/apt.conf.d/01recommended;sleep 2
-
-	sources_ok=$(grep https /etc/apt/sources.list | wc -l)
-
-		echo "sources_ok=${sources_ok}"
-		if [ "${sources_ok}" -eq 1 ] ; then
-			 ${sag} update
-		fi
-}
 

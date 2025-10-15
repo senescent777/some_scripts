@@ -48,13 +48,13 @@ echo -n "CONF_source=\$CONF_tmpdir/< temporary mount point 4 base > "
 
 echo "CONF_target=\$CONF_tmpdir/< target where base and additional stuff are copied , different from \$CONF_squash  and \$CONF_source -dirs>"
 echo "CONF_bloader=<preferred bootloader>"
-echo "CONF_distros_dir=<Directory Supposed To Contain Distro .isos To Modify, inspired by Karl Sanders >"
-
-echo "CONF_wget_opts=\"--https-only --show-progress\""
-echo "CONF_wget_def_url=https://<add mirror url here>"
-
-echo "TARGET_DHCP_row1=\"<options 4 dhclient>\""
-
-echo "CONF_patch_name="
-echo "CONF_patch_list_1=\"<options 4 stage0.copy_conf()>\""
-echo "CONF_patch_list_2=\"<more options 4 stage0.copy_conf()>\""
+#echo "CONF_distros_dir=<Directory Supposed To Contain Distro .isos To Modify, inspired by Karl Sanders >"
+#
+#echo "CONF_wget_opts=\"--https-only --show-progress\""
+#echo "CONF_wget_def_url=https://<add mirror url here>"
+#
+#echo "TARGET_DHCP_row1=\"<options 4 dhclient>\""
+#
+#echo "CONF_patch_name="
+#echo "CONF_patch_list_1=\"<options 4 stage0.copy_conf()>\""
+#echo "CONF_patch_list_2=\"<more options 4 stage0.copy_conf()>\""

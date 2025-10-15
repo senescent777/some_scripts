@@ -1,21 +1,39 @@
 #!/bin/bash
 debug=0
+src=""
+bl=""
 
 . ./skripts/common.conf
-. ./skripts/common_funcs.sh
+
+function usage() {
+	echo "$0 <src1> <stuff_to_add> <bloader> [debug?]"
+}
+
+function parse_opts_real() {
+	echo "TODO:parse_opts_real() ? "
+}
+
+function single_param() {
+	echo "TODO:  single_param() ?"
+}
+
+[ $# -gt 3 ] && debug=${4}
 . ./skripts/stage0_backend.bsh
+. ./skripts/common_funcs.sh
 
-if [ -f ./skripts/keys.conf ] ; then
-	. ./skripts/keys.conf
-fi
+#
+#if [ -f ./skripts/keys.conf ] ; then #HUOM.141025:kts. copy_sums()
+#	. ./skripts/keys.conf
+#fi
 
+#VAIH:verbosity_level_jutut?
 dqb "PARAMS OK?"
-make_tgt_dirs
+#echo "TEHTY?:isolubnux.cfg";sleep 5
 
-#TODO:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
+#TEHTY?:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
-
-#HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämö kikkailut, graf-points vielä parempi
+#TODO:CONF_T parametriksi?
+#HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 function part0() {
 	#debug=1
 	dqb "PART0 ${1}, ${2} , ${3}"
@@ -28,7 +46,6 @@ function part0() {
 	#ei aina tarttisi näiTä renkata
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
-			
 			${spc} ${2}/live/${f} ${CONF_target}/live
 		else
 			dqb "${1}/live/${f}"
@@ -46,8 +63,7 @@ function part0() {
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää 	CONF_SOURCE
 	bootloader ${3} ${2} ${1} 
-	#${odio} touch ${CONF_target}/${CONF_bloader}/* #saattaa vähän paskoa asioita
-
+	
 	default_process ${CONF_target}/live
 	local src2=${2}/${TARGET_pad_dir}
 
@@ -60,22 +76,27 @@ function part0() {
 	dqb "BEFORE COPY_x"
 	csleep 1
 
-	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa
-	copy_main ${src2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
-	copy_conf ${src2} ${n} ${CONF_target}/${TARGET_pad_dir}
-#
-#	[ -v TARGET_DIGESTS_dir ] || exit 666
-#	[ -v TARGET_DGST0 ] || exit 666
-#	dqb "OUYG)(&R()%¤ER"
-#
-#	#HUOM.04§025:täsä kohtaa tökkää, kts toistuuko
-#	[ -z ${TARGET_DIGESTS_dir} ] || exit 666
-#	dqb "56448748765484"
-#
-#	[ -z ${TARGET_DGST0} ] || exit 666
-#	dqb "ÄÖ_ÅPÄÖÖÅPO"
-#
-	copy_sums ${src2} ${CONF_target}/${TARGET_digests_dir}
+	[ -v TARGET_DIGESTS_dir ] || exit 666
+	[ -v TARGET_DGST0 ] || exit 666
+	dqb "OUYG)(&R()%¤ER"
+
+	[ -z ${TARGET_DIGESTS_dir} ] && exit 65
+	dqb "56448748765484"
+
+	[ -z ${TARGET_DGST0} ] && exit 66
+	dqb "ÄÖ_ÅPÄÖÖÅPO"
+
+	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
+
+	#TODO:$2/TARGET_pad kuitenkin? find voi perioaatteessa löytää väärää matskua...
+	copy_main ${2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
+	
+	#HUOM.141025:vaihdettu $2 -> $2/T_PAD koska Syyt
+	copy_conf ${2}/${TARGET_pad_dir} ${n} ${CONF_target}/${TARGET_pad_dir}
+
+	#HUOM.141025:vaihdettu $2 -> $2/T_PAD koska Syyt
+	copy_sums ${2}/${TARGET_DIGESTS_dir} ${CONF_target}/${TARGET_DIGESTS_dir}
+	
 	dqb "4FT3R COPY_X"
 	csleep 1
 
@@ -83,11 +104,12 @@ function part0() {
 	${scm} 0444 ${CONF_tmpdir}/*.conf
 	${scm} 0755 ${CONF_tmpdir}/*.sh
 	
-	#TODO:omaksi fktioksi va maksasko vaivaa 1 rivin takia?
 	#TODO:sen pad-hmiston omistajuuden pakotus (d:d ei hyvä, ehkä)
-	${spc} ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
+	#keys-hmistossa ei juuri nyt taida olla .gpg-tdstoja... (081025)
 
+	${spc} ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
 	default_process ${CONF_target}/${TARGET_pad_dir}
+
 	${scm} 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
 	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
 	
@@ -97,19 +119,19 @@ function part0() {
 	dqb "part0 d0ne"
 }
 
+echo "src= ${1} , stc2= ${2} , bl= ${3}"
+make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
+
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3}
 else
-	if [ -s ${1} ] && [ -r ${1} ] ; then #tössö jokin qsee 041025
+	if [ -s ${1} ] && [ -r ${1} ] ; then #vieläkö tässä jokin qsee 111025?
 		dqb "${som} -o loop,ro ${1} ${CONF_source}"
 		csleep 3
 
 		${som} -o loop,ro ${1} ${CONF_source} 
 		[ $? -eq 0 ] || exit 666
 		sleep 6
-
-		#[ ${debug} -eq 1 ] && ls -las ${CONF_target}
-		#csleep 4
 
 		part0 ${CONF_source} ${2} ${3}	
 		${uom} ${CONF_source} 
