@@ -3,6 +3,7 @@
 
 
 
+#loppuosa niinqu omega.sh
 cleanup1() {
 	cd /home/"$1"
 	SBU "${pkgdir}"/*

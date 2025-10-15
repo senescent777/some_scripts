@@ -12,9 +12,10 @@ fi
 
 cd "${src}"
 pwd
-
+#tässä tdstossa vähän sama idea q wrappr
 case "${cmd}" in
 	upload)
+		#vähän niinqu upload.sh
 		cd "${tmpdir}"
 		[ -d "${tmpdir}"/pad/0 ] || sudo mkdir -p "${tmpdir}"/pad/0
 
@@ -25,6 +26,7 @@ case "${cmd}" in
 		up56
 	;;
      	d)
+		#tämä case+pellinpasqa vähän niinqu g_pt2
 		sudo shred -fu /tmp/var/*
 	        sudo rm -rf /tmp/var
 
@@ -52,6 +54,7 @@ case "${cmd}" in
 		sudo rm -rf /home/Downloads
 		sudo rm -rf /home/"${n}"/package_list
         ;;
+	#tämä+seur vähän niinqi g_pt2 kanssa?
 	c|C) 
 		cleanup1
 		cleanup1_2 "${n}"
@@ -59,6 +62,7 @@ case "${cmd}" in
 	c1)
 		cleanup1
 	;;
+	#import2 , case q tai r
 	goatpenis|goatsemen)
 		if [ ! -x "${src}"/profs.sh ] ; then 
 			cd /;efk "${src}"/profs.tar.bz2
@@ -78,6 +82,7 @@ case "${cmd}" in
 		fi
 	;;
 	*)
+		#yleisempi tapaus mitä wrapper ei sisällä
 		kala=""
 		kala2=""
 		cd "${src}"

@@ -117,6 +117,7 @@ function copy_conf() {
 	#HUON.041025:manlge_conf():iin pitäisi vähitellen keksiä sopiva sisältö
 	#... ja CONF_G1 kanssa 
 
+	#TODO:tämä lisäilemään ne avain-jutut jatkossa? vaiko se toinen copy_conf() ?
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
 	echo -n "src=/" >> ${utfile}

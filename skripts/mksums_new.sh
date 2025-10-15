@@ -1,6 +1,6 @@
 #!/bin/bash
 b=0
-debug=0 #1
+debug=1
 source=""
 d=$(dirname $0)
 MKS_parts="1 2 3"
@@ -56,6 +56,7 @@ if [ $# -eq 0 ] ; then
 	exit
 fi
 
+#TODO:ekan parametrin kanssa jotain rajoitusta ettei ihan juurta muutettaisi tjsp
 function part0() {
 	dqb "part0( ${1})"
 	csleep 1
@@ -181,6 +182,7 @@ function part7() {
 	dqb "p7 done"
 }
 
+#TODO:globaaleja pois joa mahd
 function part8() {
 	dqb "p8 ${1}"
 	[ x"${TARGET_patch_name}" != "x" ] || exit 665

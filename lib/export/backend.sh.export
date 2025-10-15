@@ -13,6 +13,7 @@ cond_check "${src}"/0/sha512sums.1
 cond_check "${src}"/0/sha512sums.3
 cond_check "${src}"/0/sha512sums.2
 
+#common_lib , e_xxx - fktiot vähän samaq tätä+seur fktio
 molest() {
 	echo "MOLESTING THE DECAPITATED REMAINS OF ${1}"
 	sudo chown root:root "$1"
@@ -32,6 +33,7 @@ ilemak() {
 	sudo chown "${n}":"${n}" /home/"${n}"
 }
 
+#common_lib sis myös:whack()
 whack() {
 	sudo killall "$1"
 
@@ -39,6 +41,7 @@ whack() {
 	fi
 }
 
+#samassa kirjastossa e_xxx jossain määrin vastaavat tätä
 meshuggah() {
 
 	sudo shred -fu /home/"$1"/Desktop/*
