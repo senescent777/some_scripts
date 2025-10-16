@@ -23,7 +23,6 @@ function usage() {
 	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n NEEDS TO HAVE ABSOLUTE PATH"
 	echo "-r :runs chRoot in ${CONF_squash_dir} "
 	
-	#echo "-i <src> : Installs scripts 2 chroot_dir  "
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
@@ -56,8 +55,8 @@ function parse_opts_real() {
 			cmd=${1}
 		;;
 		-c)
-			[ -z ${2} ] && exit 68
-			[ -s ${2} ] && exit 69
+			#[ -z "${2}" ] && exit 68 jotain syystä ei toimi 
+			#[ -s ${2} ] && exit 69
 
 			par=${2}
 			cmd=${1}
@@ -73,7 +72,6 @@ function single_param() {
 	dqb "sp ${1}"
 
 	case ${1} in
-		#ao.jutut jatkossa single_param
 		-mp|--mp)
 			mp=1
 		;;
@@ -90,8 +88,6 @@ function single_param() {
 }
 
 . ${d}/common_funcs.sh
-#VAIH:JOSKO JO SE PARSETUSONGELMA
-
 dqb "cmd=${cmd}"
 dqb "par=${par}"
 #exit
@@ -106,7 +102,7 @@ case ${cmd} in
 	-y) #TODO:TESTAA UUDESTAAN
 		#... vaan miten se -v tämän option kanssa?
 
-		[ -s ${par} ] || exit 666
+		[ -s ${par} ] || exit 666 #xxx kyllä ...
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
 
@@ -130,7 +126,7 @@ case ${cmd} in
 	;;
 	-d)  #141025:OK
 		[ -v CONF_squash0 ] || exit 66
-		[ -z CONF_squash0 ] && exit 67
+		[ -z "${CONF_squash0}" ] && exit 67
 		pwd;sleep 6
 
 		if [ x"${CONF_squash0}" != "x" ] ; then
@@ -138,19 +134,19 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #TODO:TESTAA UUDESTAAN
-		#HUOM.tässäkin -v aiheutti urputuksen, tee jotain(TODO)
+	-c)  #161025:OK
+		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
-	-r)  #141025:OK?
+	-r)  #141025:OK
 		[ -v CONF_squash_dir ] || exit 666
-		[ -z ${CONF_squash_dir} ] && exit 666
+		[ -z "${CONF_squash_dir}" ] && exit 666
 
 		#optionaalinen ajettava komento?
 		rst_pre1
 		rst ${CONF_squash_dir}
 	;;
-	-j)  #OK?
+	-j)  #OK
 		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 

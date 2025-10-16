@@ -9,7 +9,7 @@ TARGET_archdir=$TARGET_archdir0/< 4 archiving stuff>
 TARGET_backup_part=disk/by-uuid/<devicefile reserved for archiving>
 TARGET_scripts_bak_file=<file to archive scripts>
 TARGET_pad_bak_file=<file to archive .iso's additional stuff>
-TARGET_DTAR_OPTS="--exclude=*.bz3 --exclude=$TARGET_Dkname2"
+TARGET_DTAR_OPTS="--exclude=*.bz3 --exclude=$TARGET_Dkname2" #käyttöön?
 TARGET_pad_dir=
 TARGET_padfile=
 TARGET_pad2=
@@ -31,10 +31,10 @@ the line  ext2 noauto,user,exec,suid,dev 0 0 should be found in /etc/fstab
 CONF_tmpdir=$CONF_tmpdir0/ < temp dir 4 additional stuff > 
 CONF_source=$CONF_tmpdir/< temporary mount point 4 base > CONF_target=$CONF_tmpdir/< target where base and additional stuff are copied , different from $CONF_squash  and $CONF_source -dirs>
 CONF_bloader=<preferred bootloader>
-CONF_distros_dir=<Directory Supposed To Contain Distro .isos To Modify, inspired by Karl Sanders >
-CONF_wget_opts="--https-only --show-progress"
-CONF_wget_def_url=https://<add mirror url here>
-TARGET_DHCP_row1="<options 4 dhclient>"
-CONF_patch_name=
-CONF_patch_list_1="<options 4 stage0.copy_conf()>"
-CONF_patch_list_2="<more options 4 stage0.copy_conf()>"
+#CONF_distros_dir=<Directory Supposed To Contain Distro .isos To Modify, inspired by Karl Sanders >
+#CONF_wget_opts="--https-only --show-progress"
+#CONF_wget_def_url=https://<add mirror url here>
+#TARGET_DHCP_row1="<options 4 dhclient>"
+#CONF_patch_name= #turha nykyään?
+#CONF_patch_list_1="<options 4 stage0.copy_conf()>"
+#CONF_patch_list_2="<more options 4 stage0.copy_conf()>"

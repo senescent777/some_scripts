@@ -2,7 +2,6 @@
 debug=0
 src=""
 bl=""
-
 . ./skripts/common.conf
 
 function usage() {
@@ -10,23 +9,21 @@ function usage() {
 }
 
 function parse_opts_real() {
-	echo "TODO:parse_opts_real() ? "
+	dqb "TODO:parse_opts_real() ? "
 }
 
 function single_param() {
-	echo "TODO:  single_param() ?"
+	dqb "TODO:  single_param() ?"
 }
 
 [ $# -gt 3 ] && debug=${4}
 . ./skripts/stage0_backend.bsh
 . ./skripts/common_funcs.sh
-
-#
 #if [ -f ./skripts/keys.conf ] ; then #HUOM.141025:kts. copy_sums()
 #	. ./skripts/keys.conf
 #fi
 
-#VAIH:verbosity_level_jutut?
+#VAIH:verbosity_level_jutut? vähitellen kunnssa?
 dqb "PARAMS OK?"
 #echo "TEHTY?:isolubnux.cfg";sleep 5
 
@@ -120,6 +117,8 @@ function part0() {
 }
 
 echo "src= ${1} , stc2= ${2} , bl= ${3}"
+[ -v CONF_source ] || exit 666
+[ -v CONF_target ] || exit 666
 make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
 
 if [ -d ${1} ] ; then

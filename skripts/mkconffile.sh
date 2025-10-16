@@ -15,7 +15,7 @@ echo "TARGET_scripts_bak_file=<file to archive scripts>"
 echo "TARGET_pad_bak_file=<file to archive .iso's additional stuff>"
 
 echo -n "TARGET_DTAR_OPTS=\"--exclude=*.bz3"
-echo -n " --exclude=\$TARGET_Dkname2\"" 
+echo -n " --exclude=\$TARGET_Dkname2\"" #tarpeellinen nykyään?
 echo
 
 echo "TARGET_pad_dir="
