@@ -1,6 +1,5 @@
 #!/bin/bash
 debug=0
-
 . ./skripts/common.conf
 base=""
 source2=""
@@ -18,15 +17,14 @@ function usage() {
 	echo "${0} --make-dirs creates some dirs under ${CONF_tmpdir}"
 }
 
-#041025:-v mukaan ni kosahtaa suoritus (ei kyl haittaa kun debug asetsttu alussa mutta...)
+#151025:miten nykyään -v:n kanssa?
 . ./skripts/stage0_backend.bsh
 
-#HUOM.031025:toiminee tämä skripti tänään riittävästi
 function parse_opts_real() {
 	dqb "douböe(${1} , ${2})"
 
 	case ${1} in
-		--base) #--in ,--out yleisiksi param jrkossa?
+		--base)
 			base=${2}
 		;;
 		--add)
@@ -38,8 +36,6 @@ function parse_opts_real() {
 		;;
 	esac	
 }
-
-#041025:-v mukaan ni kosahtaa suoritus (ei kyl haittaa kun debug asetsttu alussa mutta...)
 
 function single_param() {
 	dqb "subgle(${1} , ${2})"
