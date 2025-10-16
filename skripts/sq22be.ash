@@ -182,7 +182,7 @@ function jlk_conf() {
 #T_yyy kutsuvaanm kpoodiin vai ei?
 #HUOM.091025:OK
 function jlk_sums() {
-	debug=1
+	#debug=1
 	dqb "jlk_sums( ${1} , ${2}, ${3}) "
 
 	[ x"${1}" != "x" ] || exit 66

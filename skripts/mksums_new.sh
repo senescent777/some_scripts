@@ -107,8 +107,14 @@ function part123() {
 		dqb "find ./${2} -type f"
 		csleep 1
 
-		#helpompi bain hakea .cfg-päätteiset? tai kts grubin osalta se manuaali että
-		for f in $(find ./${2} -type f  | grep -v ${TARGET_patch_name} | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
+		#helpompi bain hakea .cfg-päätteiset? tai kts grubin osalta se manuaali että mitkä aiheellisia
+		#| grep -v ${TARGET_patch_name}
+
+		#-name "*.cfg" -or -name "*.lst" -or \
+  		#-name "*.mod" -or -name "vmlinuz*" -or -name "initrd*" -or \
+  		#-name "grubenv"`;
+
+		for f in $(find ./${2} -type f | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
 			dqb "${sah6} ${f}"
 			${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
 		done
@@ -161,7 +167,9 @@ function part7() {
 
 	dqb "${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}"
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
+
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
+	csleep 2
 
 	${gg} --verify ./${TARGET_Dpubkf}.sig
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
@@ -252,8 +260,8 @@ ${scm} 0644 ./${TARGET_DIGESTS_dir}/*
 csleep 1
 
 #HUOM.18726: dgsts.4 kanssa myös jotain jurpoilua? vielä 031025 ? joo (tee jotain)
-dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10"
-${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | grep -v 'SAM' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
+dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 10" # | grep -v 'SAM' turha?
+${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4
 
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}

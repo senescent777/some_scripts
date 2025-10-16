@@ -1,11 +1,11 @@
 function mangle_conf() {
-	dqb "mangle_conf( ${1}, ${2}, ${3})"
+	dqb "mangle_conf ${1}, ${2}, ${3} "
 	#TODO:jotain muutakin tähän, ehkä (lähteen greppailu kohteeseen)
 }
 
 #... koita päättää mitä tuo $1 edustaa
 function get_devuan() {
-	echo "cd ${1}
+	echo "cd ${1}"
 	echo "wget ${CONF_wget_opts} ${1}"
 	echo "sha256sum -c SHA256SUMS"
 	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
