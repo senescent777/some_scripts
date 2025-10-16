@@ -28,19 +28,7 @@ function parse_opts_real () {
 }
 
 . ${d}/common_funcs.sh
-[ $# -gt 0 ] || exit #TODO:->gpo()
-
-
-#		--v)
-#		;;
-#		*)
-#			
-#		;;
-#	esac
-#}
-#
-#tpop ${1} ${2}
-#tpop ${3} ${4}
+[ $# -gt 0 ] || exit #VAIH:->gpo()
 
 [ -z ${ridk} ] && echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 [ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"

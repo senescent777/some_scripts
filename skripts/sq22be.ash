@@ -77,31 +77,31 @@ function bbb() {
 	dqb "pars_ok"
 	csleep 1
 
-			cd ${1}
-			[ ${debug} -eq 1 ] && pwd
-			csleep 4
+	cd ${1}
+	[ ${debug} -eq 1 ] && pwd
+	csleep 4
 
-			pwd
-			echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
-			#sleep 6
+	pwd
+	echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
+	#sleep 6
 
-			${smr} -rf ./run/live
-			${smr} -rf ./boot/grub/*
-			${smr} -rf ./boot/*
-			${smr} -rf ./usr/share/doc/*	
-			${smr} -rf ./var/cache/apt/archives/*.deb
-			${smr} -rf ./var/cache/apt/*.bin
-			${smr} -rf ./tmp/*
+	${smr} -rf ./run/live
+	${smr} -rf ./boot/grub/*
+	${smr} -rf ./boot/*
+	${smr} -rf ./usr/share/doc/*	
+	${smr} -rf ./var/cache/apt/archives/*.deb
+	${smr} -rf ./var/cache/apt/*.bin
+	${smr} -rf ./tmp/*
 
-			fix_sudo $(pwd)
-			${scm} -R 0755 ./var/cache/man
-			${sco} -R man:man ./var/cache/man
+	fix_sudo $(pwd)
+	${scm} -R 0755 ./var/cache/man
+	${sco} -R man:man ./var/cache/man
 
-			${smr} ./root/.bash_history
-			${smr} ./home/devuan/.bash_history
+	${smr} ./root/.bash_history
+	${smr} ./home/devuan/.bash_history
 
-			#uusi ominaisuus 230725
-			for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
+	#uusi ominaisuus 230725
+	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
 
 	dqb "BARBEQUE PARTY DONE.done()"
 }
@@ -241,23 +241,23 @@ function rst_pre2() {
 	[ -d ./etc ] || exit 66
 	csleep 1
 
-		${sco} ${n}:${n} ./etc/default/locale #n parametriksi?
-		${scm} 0644 ./etc/default/locale
-		csleep 1
+	${sco} ${n}:${n} ./etc/default/locale #n parametriksi?
+	${scm} 0644 ./etc/default/locale
+	csleep 1
 
-		#HUOM.091025:lokaaleihjin liittyen:
-		#LANGUAGE ja LC_ALL jos asettaisi jhnkn arvoon
-		locale > ./etc/default/locale
-		csleep 1
+	#HUOM.091025:lokaaleihjin liittyen:
+	#LANGUAGE ja LC_ALL jos asettaisi jhnkn arvoon
+	locale > ./etc/default/locale
+	csleep 1
 		
-		${scm} 0444 ./etc/default/locale
-		${sco} 0:0 ./etc/default/locale
-		csleep 1
+	${scm} 0444 ./etc/default/locale
+	${sco} 0:0 ./etc/default/locale
+	csleep 1
 
-		[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
-		${spc} /etc/hosts ./etc
-		${odio} touch ./.chroot
-		#date > ./.chroot
+	[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
+	${spc} /etc/hosts ./etc
+	${odio} touch ./.chroot
+	#date > ./.chroot
 
 	dqb "rst_pre2() done"
 	csleep 1
@@ -271,15 +271,14 @@ function rst_post() {
 	pwd
 	csleep 1
 
-		${smr} ./.chroot			
-		${svm} ./etc/hosts.bak ./etc/hosts
-		${smr} ./etc/mtab
-
-		sleep 3
+	${smr} ./.chroot			
+	${svm} ./etc/hosts.bak ./etc/hosts
+	${smr} ./etc/mtab
+	sleep 3
 	
-		${uom} ./dev 
-		${uom} ./sys
-		${uom} ./proc
+	${uom} ./dev 
+	${uom} ./sys
+	${uom} ./proc
 
 	dqb "DONE"
 	csleep 1
@@ -295,17 +294,17 @@ function rst() { #HUOM.091025:OK
 	dqb "params ok (maybe)"
 	csleep 1
 
-		cd ${1}
-		pwd
-		csleep 1
+	cd ${1}
+	pwd
+	csleep 1
  
-		rst_pre2
+	rst_pre2
 
-		${odio} chroot ./ ./bin/bash #{scr} ?
-		[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
-		
-		rst_post
-		sleep 3
+	${odio} chroot ./ ./bin/bash #{scr} ?
+	[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
+	
+	rst_post
+	sleep 3
 
 	dqb "rst() done"
 	csleep 1
@@ -322,18 +321,18 @@ function cfd() {
 	dqb "PARS IJ"
 	csleep 1
 	
-		echo "${0} -b ?"
-		cd ${2}
+	echo "${0} -b ?"
+	cd ${2}
 
-		local msq
-		msq=$(${odio} which mksquashfs)
-		#common_lib , ocs() ?
+	local msq
+	msq=$(${odio} which mksquashfs)
+	#common_lib , ocs() ?
 
-		if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
-			${odio} ${msq} . ${1} -comp xz -b 1048576
-		else
-			echo "${odio} apt-get install squashfs-utils"
-		fi
+	if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
+		${odio} ${msq} . ${1} -comp xz -b 1048576
+	else
+		echo "${odio} apt-get install squashfs-utils"
+	fi
 	
 	csleep 1
 	dqb "cfd() DONE"

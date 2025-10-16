@@ -1,6 +1,6 @@
 #!/bin/bash
 b=0
-debug=1
+debug=0 #1
 source=""
 d=$(dirname $0)
 MKS_parts="1 2 3"
@@ -17,8 +17,7 @@ function usage() {
 
 #miten se -v?
 function parse_opts_real() {
-	echo "asd.asd"
-
+	dqb "asd.asd"
 }
 
 if [ -f ${d}/keys.conf ] ; then #tarcitaan, kts sibgle_param
@@ -56,7 +55,6 @@ if [ $# -eq 0 ] ; then
 	exit
 fi
 
-#TODO:ekan parametrin kanssa jotain rajoitusta ettei ihan juurta muutettaisi tjsp
 function part0() {
 	dqb "part0( ${1})"
 	csleep 1
@@ -158,17 +156,14 @@ function part6_5() {
 
 function part7() {
 	dqb "part7"	
-	pwd
-	sleep 2
+	[ ${debug} -eq 1 ] && pwd
+	csleep 2
 
 	dqb "${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}"
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
 
-	#--keyring kanssa jatkossakin?
-	#${gv} --keyring ./${TARGET_Dpubkg} ./${TARGET_Dpubkf}.sig ./${TARGET_Dpubkf}
 	${gg} --verify ./${TARGET_Dpubkf}.sig
-
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
 	local i
 
@@ -182,7 +177,6 @@ function part7() {
 	dqb "p7 done"
 }
 
-#TODO:globaaleja pois joa mahd
 function part8() {
 	dqb "p8 ${1}"
 	[ x"${TARGET_patch_name}" != "x" ] || exit 665

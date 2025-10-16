@@ -23,7 +23,6 @@ function usage() {
 	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n NEEDS TO HAVE ABSOLUTE PATH"
 	echo "-r :runs chRoot in ${CONF_squash_dir} "
 	
-	#echo "-i <src> : Installs scripts 2 chroot_dir  "
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
@@ -73,7 +72,6 @@ function single_param() {
 	dqb "sp ${1}"
 
 	case ${1} in
-		#ao.jutut jatkossa single_param
 		-mp|--mp)
 			mp=1
 		;;
@@ -90,7 +88,6 @@ function single_param() {
 }
 
 . ${d}/common_funcs.sh
-#VAIH:JOSKO JO SE PARSETUSONGELMA
 
 dqb "cmd=${cmd}"
 dqb "par=${par}"

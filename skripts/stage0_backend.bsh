@@ -3,12 +3,9 @@ function mangle_conf() {
 	#TODO:jotain muutakin tähän, ehkä (lähteen greppailu kohteeseen)
 }
 
-#echo "TEHTY?:isolubnux.cfg";sleep 5
-
 #... koita päättää mitä tuo $1 edustaa
 function get_devuan() {
-#	[ -d ${CONF_distros_dir} ] || ${smd} ${CONF_distros_dir}
-	echo "cd ${1} #CONF_distros_dir}"
+	echo "cd ${1}
 	echo "wget ${CONF_wget_opts} ${1}"
 	echo "sha256sum -c SHA256SUMS"
 	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
@@ -24,6 +21,7 @@ function make_src_dirs() {
 	dqb "pars_ok"
 	csleep 1
 
+	#-v,-z ?
 	${smd} ${CONF_keys_dir}
 	${smd} ${CONF_distros_dir}
 
@@ -117,7 +115,6 @@ function copy_conf() {
 	#HUON.041025:manlge_conf():iin pitäisi vähitellen keksiä sopiva sisältö
 	#... ja CONF_G1 kanssa 
 
-	#TODO:tämä lisäilemään ne avain-jutut jatkossa? vaiko se toinen copy_conf() ?
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
 	echo -n "src=/" >> ${utfile}
@@ -136,7 +133,7 @@ function copy_conf() {
 	mangle_conf TARGET_to_ram ${utfile}
 	mangle_conf TARGET_nosu_do ${utfile}
 	
-	#TODO:utfile:n käyttöokeudet s.e. sudoa ei tarvura
+	#TODO:utfile:n käyttöokeudet s.e. sudoa ei tarvura?
 
 	dqb " grep -v '#' ${1}/${2}.conf >> ${utfile}"
 	grep -v '#' ${1}/${2}.conf >> ${utfile}

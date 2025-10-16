@@ -1,11 +1,8 @@
 #!/bin/bash
-
-debug=1 #miten -v ?
+debug=0 #miten -v ?
 d=$(dirname $0)
 ltarget="" 
-
 source=""
-
 . ${d}/common.conf
 bl=${CONF_bloader}
 
@@ -19,18 +16,9 @@ function parse_opts_real() {
 	dqb "parse_opts_real( ${1} , ${2})"
 
 	case ${1} in
-#		--in)
-#			source=${2}
-#		;;
 		--out)
 			ltarget=${2}
 		;;
-#		--bl) 
-#			bl=${2}
-#		;; 
-#		*)
-#			usage
-#		;;
 	esac
 }
 
@@ -40,15 +28,6 @@ function single_param() {
 }
 
 . ${d}/common_funcs.sh
-#
-#if [ $# -gt 0 ] ; then
-#	parse_opts ${1} ${2}
-#	parse_opts ${3} ${4}
-#	parse_opts ${5} ${6}
-#	parse_opts ${7} ${8}
-#else
-#	usage
-#fi
 
 function check_params() {
 	dqb "check_params()"
@@ -66,7 +45,6 @@ function check_params() {
 	fi
 
 	if [ x"${ltarget}" != "x" ] ; then 
-
 		if [ -s out/${ltarget} ] ; then
 			echo "out/${ltarget} already exists"
 
@@ -78,8 +56,6 @@ function check_params() {
 
 	if [ x"${bl}" != "x" ] ; then
 		echo "b"
-	#else
-	#
 	fi
 
 	dqb "check_params() done"
@@ -87,7 +63,6 @@ function check_params() {
 
 check_params
 [ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
-
 sleep 1
 dqb "bl=${bl}"
 csleep 4
@@ -112,7 +87,6 @@ case ${bl} in
 		csleep 2
 
 		#https://bbs.archlinux.org/viewtopic.php?id=219955
-
 		#ehkä ei tartte sudottaa jos kohde-hakemisto sopiva (esim /tmp)
 		
 		dqb "${gmk} -o ${ltarget} ${source}"
