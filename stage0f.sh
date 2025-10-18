@@ -25,7 +25,7 @@ function single_param() {
 
 #VAIH:verbosity_level_jutut? vähitellen kunnssa?
 dqb "PARAMS OK?"
-#echo "TEHTY?:isolubnux.cfg";sleep 5
+
 
 #TEHTY?:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
@@ -85,8 +85,8 @@ function part0() {
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
-	#TODO:$2/TARGET_pad kuitenkin? find voi perioaatteessa löytää väärää matskua...
-	copy_main ${2} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
+	#VAIH:$2/TARGET_pad kuitenkin 1. parametriks9? find voi perioaatteessa löytää väärää matskua...
+	copy_main ${2}/${TARGET_pad_dir} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
 	
 	#HUOM.141025:vaihdettu $2 -> $2/T_PAD koska Syyt
 	copy_conf ${2}/${TARGET_pad_dir} ${n} ${CONF_target}/${TARGET_pad_dir}
@@ -101,11 +101,12 @@ function part0() {
 	${scm} 0444 ${CONF_tmpdir}/*.conf
 	${scm} 0755 ${CONF_tmpdir}/*.sh
 	
-	#TODO:sen pad-hmiston omistajuuden pakotus (d:d ei hyvä, ehkä)
 	#keys-hmistossa ei juuri nyt taida olla .gpg-tdstoja... (081025)
 
 	${spc} ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
 	default_process ${CONF_target}/${TARGET_pad_dir}
+	[ ${debug} -eq 1 ] && ls -las ${CONF_target}
+	csleep 10
 
 	${scm} 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
 	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
@@ -116,7 +117,7 @@ function part0() {
 	dqb "part0 d0ne"
 }
 
-echo "src= ${1} , stc2= ${2} , bl= ${3}"
+dqb "src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 666
 [ -v CONF_target ] || exit 666
 make_tgt_dirs ${CONF_target} ${CONF_source} ${3}

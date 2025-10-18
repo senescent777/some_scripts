@@ -24,7 +24,7 @@ function parse_opts_real() {
 	dqb "douböe(${1} , ${2})"
 
 	case ${1} in
-		--base) #--in ,--out yleisiksi param jrkossa?
+		--base)
 			base=${2}
 		;;
 		--add)
