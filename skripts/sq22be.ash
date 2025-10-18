@@ -7,26 +7,23 @@ function xxx() {
 	#tulisi stopata tässä jos ei kalaa
 
 	[ -s ${1} ] || exit 99
-	[ x"${2}" == "x" ] && exit 98
-	#[ -d ${2} ]  || exit 97
+	[ -z "${2}" ] && exit 98
 
 	dqb "pars_ok"
 	csleep 1
 
-	#if [ x"${2}" != "x" ]; then
-		#ao.blokki toistruu melkein samanlöaisena toisessa kohtaa, cfd()
-		[ -d ${2} ] || ${smd} ${2}
-		cd ${2}
+	#ao.blokki toistruu melkein samanlöaisena toisessa kohtaa, cfd()
+	[ -d ${2} ] || ${smd} ${2}
+	cd ${2}
 
-		local unsq
-		unsq=$(${odio} which unsquashfs)
+	local unsq
+	unsq=$(${odio} which unsquashfs)
 
-		if [ x"${unsq}" != "x" ] ; then 
-			${odio} ${unsq} ${1}
-		else
-			echo "${odio} apt-get install squashfs-utils"
-		fi
-	#fi
+	if [ x"${unsq}" != "x" ] ; then 
+		${odio} ${unsq} ${1}
+	else
+		echo "${odio} apt-get install squashfs-utils"
+	fi
 
 	dqb "xxx d0mw"
 }
@@ -106,9 +103,7 @@ function bbb() {
 	dqb "BARBEQUE PARTY DONE.done()"
 }
 
-#VAIH:main-conf varten 3. param cd:tä varten? tai jtnkn muuten
-
-#HUOM.27725:oikeasraan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
+#HUOM.27725:oikeastaan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
 #poltettavalle kiekolle voisi mennä imp2+sen tarvitsemat (VAIH:se sq-chr-versio imp2sesta?)
 #... tai siis jos ln -s chroot-imp2 v/$version/pad/imp2
 

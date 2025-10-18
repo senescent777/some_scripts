@@ -1,0 +1,81 @@
+#!/bin/bash
+ridk=""
+d=$(dirname $0) #sittenkin näin
+debug=0
+. ${d}/common.conf
+
+#TODO:nimeäminen udestaan, ei ihan vlttämätön tmp-hmiston alla?
+if [ -f ${d}/keys.conf ] ; then
+	. ${d}/keys.conf
+fi
+
+function usage() {
+	echo "${0} --kdir <kdir> --i Imports keys from <kdir>"
+	echo "${0} --kdir <kdir> --e Exports keys to <kdir>"
+	echo "${0} --kdir <kdir> --m Makes 2 keys , <kdir> still needed"
+}
+
+function single_param() {
+	dqb "instk.single-param(${1})"
+	cmd=${1}
+}
+
+function parse_opts_real () {
+	case "${1}" in
+		--kdir)
+			ridk=${2}
+		;;
+	esac
+}
+
+. ${d}/common_funcs.sh
+#[ $# -gt 0 ] || exit #VAIH:->gpo()
+
+[ -z "${ridk}" ] && echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
+[ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
+#aiheeseen liittyen:miten wtussa gpgtarin saa toimimaan? --create ja -t vissiin toimii mutta --extract...
+
+case ${cmd} in
+	--i)
+		for f in ${TARGET_Dkname1} ${TARGET_Dkname2} ${TARGET_Dkname1}.secret ${TARGET_Dkname2}.secret ; do
+			echo "dbg: ${gg} --import ${ridk}/${f}"
+			${gg} --import ${ridk}/${f}
+		done
+	;;
+	--e) 
+		[ -v CONF_kay1name ] || exit 666
+		[ -v CONF_kay2name ] || exit 666
+		[ x"${CONF_kay1name}" != "x" ] || exit 666
+		[ x"${CONF_kay2name}" != "x" ] || exit 666
+
+		${smr} ${ridk}/${TARGET_Dkname1}*
+		${smr} ${ridk}/${TARGET_Dkname2}*
+
+		${gg} --export ${CONF_kay1name} > ${ridk}/${TARGET_Dkname1}
+		${gg} --export ${CONF_kay2name} > ${ridk}/${TARGET_Dkname2}
+	;;
+	--m)
+		echo "${gg} --generate-key in 5 secs"
+		sleep 5
+
+		${gg} --generate-key
+		sleep 5
+		${gg} --generate-key
+		sleep 5
+	
+		#tartteeko joka ketra tehdä tämä?
+		[ -s ${ridk}/k3yz.tar.bz2 ] && mv ${ridk}/k3yz.tar.bz2 ${ridk}/k3yz.tar.bz2.OLD
+		tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg
+	
+		if [ ! -s ${d}/keys.conf ] ; then
+			cp ${d}/keys.conf.example ${d}/keys.conf
+			${gg} --list-keys >> ${d}/keys.conf 
+
+			nano ${d}/keys.conf
+			#$EDITOR ${d}/keys.conf
+		fi
+	;;
+	*)
+		usage
+	;;
+esac

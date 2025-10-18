@@ -1,4 +1,4 @@
-# !  / bin / b ash
+# !  / bin \ b ash
 #
 #debug=1
 #d=$(dirname $0)

@@ -1,6 +1,7 @@
 #TODO:ce common_lib.sh includeointi
 odio=$(which sudo) 
-#TODO:sudoon liittyen se sudoers-meshuggah-jekku käyttöön myös näihin remasterointiskripteihimn, varm. vuoksi
+#VAIH:sudoon liittyen se sudoers-meshuggah-jekku käyttöön myös näihin remasterointiskripteihimn, varm. vuoksi
+#seur. pitäisi testata mitä tapahtuu omegan ajamisen jölkeen
 #========================tilapäisesti tässä, common_lib myöh==
 
 sah6=$(${odio} which sha512sum)
@@ -91,7 +92,11 @@ function gpo() {
 	local prevopt
 	local opt
 	prevopt=""
-	[ $# -gt 0 ] || echo "$0 -h"#TODO:exit jos ei param
+
+	if [ $# -lt 1 ] ; then
+		echo "$0 -h" #VAIH:exit jos ei param
+		exit
+	fi
 
 	for opt in $@ ; do
 		parse_opts_1 ${opt}

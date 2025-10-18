@@ -1,6 +1,7 @@
 function mangle_conf() {
 	dqb "mangle_conf ${1}, ${2}, ${3} "
 	#TODO:jotain muutakin tähän, ehkä (lähteen greppailu kohteeseen)
+	#tdstista common.conf ja keys.conf pitäisi saada TARGET_D ja CONF_k - alkuiset
 }
 
 #... koita päättää mitä tuo $1 edustaa
@@ -100,7 +101,7 @@ function copy_conf() {
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
 		for f in $(find ${CONF_scripts_dir} -type f -name '*.conf' | grep -v bash) ; do
 			dqb "${spc} ${f} ${3}/../.."
-			${spc} ${f} ${3}/../.. #${CONF_tmpdir}		
+			${spc} ${f} ${3}/../.. 	
 		done
 
 		csleep 1
@@ -133,7 +134,7 @@ function copy_conf() {
 	mangle_conf TARGET_to_ram ${utfile}
 	mangle_conf TARGET_nosu_do ${utfile}
 	
-	#TODO:utfile:n käyttöokeudet s.e. sudoa ei tarvura?
+	#utfile:n käyttöokeudet s.e. sudoa ei tarvita?
 
 	dqb " grep -v '#' ${1}/${2}.conf >> ${utfile}"
 	grep -v '#' ${1}/${2}.conf >> ${utfile}
@@ -155,9 +156,6 @@ function copy_sums() {
 	dqb "pars ok"
 	pwd
 	csleep 1
-#
-#	#pitäisiköä avainkikkailun olla erillisessä fktiossa?
-#	#niinja miten avaimet+squ.ash? tarttisiko jotain kikkailua?
 
 	if [ -d ${1} ] ; then
 		dqb "JI"
@@ -205,7 +203,6 @@ function bootloader() {
 	#HUOM.jos touch-komentoja tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa (?)
 	case ${1} in
 		isolinux)
-
 			dqb "${spc} -a ${3}/isolinux/ ${CONF_target} || exit 8"
 			csleep 1
 
@@ -332,15 +329,20 @@ function make_tgt_dirs() {
 	dqb "...done\n"
 }
 
+#pad-hmiston omistajuuden pakotus jossain toisaalla, tässä omistajaksi menisi root
 #tämän saman joutaisitehdä useammalle tgt-hmiston alaiselle
 function default_process() {
 	dqb "nt default_process(${1})"
-	#-z myös?
-	[ -d ${1} ] || exit 666
+	[ -z "{1}" ] && exit 65
+	[ -d ${1} ] || exit 66
+	dqb "params_checked"
+	csleep 2
 
+	#dqb "${sco} -R 0:0 ${1}"
 	${sco} -R 0:0 ${1}
 	${scm} 0755 ${1}
 	${scm} 0444 ${1}/*
 
-	dqb "xt default_process(${1})\n"
+	dqb "xt default_process ${1}\n"
+	csleep 3
 }

@@ -99,26 +99,23 @@ case ${cmd} in
 	-x) #HUOM.091025:havaittu toimivaksi (myös 141025)
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #TODO:TESTAA UUDESTAAN
-		#... vaan miten se -v tämän option kanssa?
-
+	-y) #171025:toimi ainakin kerran
 		[ -s ${par} ] || exit 666 #xxx kyllä ...
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
 
-		oldd=$(pwd)
-		${som} -o loop,ro ${par} ${oldd}/${CONF_source}
+		${som} -o loop,ro ${par} ${CONF_source}
 
 		[ $? -eq 0 ] || exit
-		[ ${debug} -eq 1 ] && ls -las ${oldd}/${CONF_source}/live/
+		[ ${debug} -eq 1 ] && ls -las ${CONF_source}/live/
 		csleep 3
 
 		#[ ${debug} -eq 1 ] && dirname $0
 		[ ${debug} -eq 1 ] && pwd
 		csleep 3
 
-		xxx ${oldd}/${CONF_source}/live/filesystem.squashfs ${CONF_squash0}
-		${uom} ${oldd}/${CONF_source}
+		xxx ${CONF_source}/live/filesystem.squashfs ${CONF_squash0}
+		${uom} ${CONF_source}
 	;;
 	-b) #141025:OK?
 		bbb ${CONF_squash_dir}

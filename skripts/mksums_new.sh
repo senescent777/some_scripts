@@ -123,6 +123,7 @@ function part123() {
 		#${sco} 0:0 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
 		cd ${old}
 	else
+		#dgsts.4 luonti ei onnistu?
 		dqb "ERROR TERROR"
 	fi
 
@@ -191,7 +192,6 @@ function part8() {
 	[ x"${1}" != "x" ] || exit 665
 
 	dqb "params ok"		
-
 	local olddir=$(pwd)	
 	cd ../out
 
@@ -250,10 +250,9 @@ fi
 part7 
 [ ${debug} -eq 1 ] && pwd
 
-part8 ${b}
+#part8 ${b}
 [ ${debug} -eq 1 ] && pwd
 
-#TODO:$sc-juttujen kanssa sudoersiin rajoitus jos mahd
 ${sco} ${n}:${n} ./${TARGET_DIGESTS_dir}/* 
 ${scm} 0644 ./${TARGET_DIGESTS_dir}/* 
 [ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
