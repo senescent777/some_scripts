@@ -23,9 +23,7 @@ function single_param() {
 #	. ./skripts/keys.conf
 #fi
 
-#VAIH:verbosity_level_jutut? vähitellen kunnssa?
 dqb "PARAMS OK?"
-
 
 #TEHTY?:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
@@ -85,13 +83,8 @@ function part0() {
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
-	#VAIH:$2/TARGET_pad kuitenkin 1. parametriks9? find voi perioaatteessa löytää väärää matskua...
 	copy_main ${2}/${TARGET_pad_dir} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
-	
-	#HUOM.141025:vaihdettu $2 -> $2/T_PAD koska Syyt
 	copy_conf ${2}/${TARGET_pad_dir} ${n} ${CONF_target}/${TARGET_pad_dir}
-
-	#HUOM.141025:vaihdettu $2 -> $2/T_PAD koska Syyt
 	copy_sums ${2}/${TARGET_DIGESTS_dir} ${CONF_target}/${TARGET_DIGESTS_dir}
 	
 	dqb "4FT3R COPY_X"
