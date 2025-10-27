@@ -149,7 +149,7 @@ function jlk_conf() {
 	local t
 	t=${3}/${TARGET_pad2}
 		
-	${smr} ${t}/mf*
+	#${smr} ${t}/mf*
 	${smr} ${t}/root.conf
 	${smr} ${t}/${2}.conf	
 	csleep 5
@@ -185,8 +185,8 @@ function jlk_sums() {
 	[ -z ${2} ] && exit 68
 
 	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
-	pwd
-	sleep 6
+	[ ${debug} -eq 1 ] && pwd
+	csleep 6
 
 	[ -d ${2}} ] || ${smd} -p ${2}
 	dqb "${spc} -a ${1}/* ${2}"

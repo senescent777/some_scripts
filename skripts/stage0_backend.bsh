@@ -140,6 +140,10 @@ function copy_conf() {
 	grep -v '#' ${1}/${2}.conf >> ${utfile}
 	csleep 6
 
+	#tämä oikea paikka varmistaa että kys asetus mukana?
+	grep dnsm  ${utfile}
+	csleep 6
+
 	dqb "copy_conf() donw\n"
 	sleep 1
 }

@@ -99,8 +99,8 @@ case ${cmd} in
 	-x) #HUOM.091025:havaittu toimivaksi (myös 141025)
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #171025:toimi ainakin kerran
-		[ -s ${par} ] || exit 666 #xxx kyllä ...
+	-y) #171025:toimi ainakin kerran, 271025 toisen kerran
+		[ -s ${par} ] || exit 66 #xxx kyllä ...
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
 
@@ -108,13 +108,17 @@ case ${cmd} in
 
 		[ $? -eq 0 ] || exit
 		[ ${debug} -eq 1 ] && ls -las ${CONF_source}/live/
-		csleep 3
 
-		#[ ${debug} -eq 1 ] && dirname $0
-		[ ${debug} -eq 1 ] && pwd
-		csleep 3
+		if [ $? -eq 0 ] ; then
+			csleep 3
 
-		xxx ${CONF_source}/live/filesystem.squashfs ${CONF_squash0}
+			#[ ${debug} -eq 1 ] && dirname $0
+			[ ${debug} -eq 1 ] && pwd
+			csleep 3
+
+			xxx ${CONF_source}/live/filesystem.squashfs ${CONF_squash0}
+		fi
+
 		${uom} ${CONF_source}
 	;;
 	-b) #141025:OK?
