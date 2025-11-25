@@ -27,11 +27,11 @@ dqb "PARAMS OK?"
 
 #TEHTY?:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
-#TODO:CONF_T parametriksi?
+#VAIH:CONF_T parametriksi?
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 function part0() {
 	#debug=1
-	dqb "PART0 ${1}, ${2} , ${3}"
+	dqb "PART0 ${1}, ${2} , ${3} , ${4}"
 	pwd
 	csleep 2
 
@@ -41,10 +41,10 @@ function part0() {
 	#ei aina tarttisi näiTä renkata
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
-			${spc} ${2}/live/${f} ${CONF_target}/live
+			${spc} ${2}/live/${f} ${4}/live
 		else
 			dqb "${1}/live/${f}"
-			${spc} ${1}/live/${f} ${CONF_target}/live
+			${spc} ${1}/live/${f} ${4}/live
 		fi
 		
 		dqb "NECKST"
@@ -52,21 +52,21 @@ function part0() {
 	done
 
 	#efi uutena 13725
-	dqb "${spc} -a ${1}/efi ${CONF_target}"
-	${spc} -a ${1}/efi ${CONF_target}
+	dqb "${spc} -a ${1}/efi ${4}"
+	${spc} -a ${1}/efi ${4}
 	csleep 1
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää 	CONF_SOURCE
 	bootloader ${3} ${2} ${1} 
 	
-	default_process ${CONF_target}/live
+	default_process ${4}/live
 	local src2=${2}/${TARGET_pad_dir}
 
-	${scm} o+w ${CONF_target}/${TARGET_pad_dir}
-	${odio} touch ${CONF_target}/${TARGET_pad_dir}/${n}.conf
-	${scm} 0644 ${CONF_target}/${TARGET_pad_dir}/${n}.conf
-	${sco} ${n}:${n} ${CONF_target}/${TARGET_pad_dir}/${n}.conf
-	${scm} o-w ${CONF_target}/${TARGET_pad_dir}
+	${scm} o+w ${4}/${TARGET_pad_dir}
+	${odio} touch ${4}/${TARGET_pad_dir}/${n}.conf
+	${scm} 0644 ${4}/${TARGET_pad_dir}/${n}.conf
+	${sco} ${n}:${n} ${4}/${TARGET_pad_dir}/${n}.conf
+	${scm} o-w ${4}/${TARGET_pad_dir}
 
 	dqb "BEFORE COPY_x"
 	csleep 1
@@ -83,29 +83,29 @@ function part0() {
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
-	copy_main ${2}/${TARGET_pad_dir} ${CONF_target}/${TARGET_pad_dir} ${CONF_scripts_dir}
-	copy_conf ${2}/${TARGET_pad_dir} ${n} ${CONF_target}/${TARGET_pad_dir}
-	copy_sums ${2}/${TARGET_DIGESTS_dir} ${CONF_target}/${TARGET_DIGESTS_dir}
+	copy_main ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} ${CONF_scripts_dir}
+	copy_conf ${2}/${TARGET_pad_dir} ${n} ${4}/${TARGET_pad_dir}
+	copy_sums ${2}/${TARGET_DIGESTS_dir} ${4}/${TARGET_DIGESTS_dir}
 	
 	dqb "4FT3R COPY_X"
 	csleep 1
 
-	${odio} touch ${CONF_target}/${TARGET_pad_dir}/*
+	${odio} touch ${4}/${TARGET_pad_dir}/*
 	${scm} 0444 ${CONF_tmpdir}/*.conf
 	${scm} 0755 ${CONF_tmpdir}/*.sh
 	
 	#keys-hmistossa ei juuri nyt taida olla .gpg-tdstoja... (081025)
 
-	${spc} ${CONF_keys_dir}/*.gpg ${CONF_target}/${TARGET_DIGESTS_dir}
-	default_process ${CONF_target}/${TARGET_pad_dir}
-	[ ${debug} -eq 1 ] && ls -las ${CONF_target}
+	${spc} ${CONF_keys_dir}/*.gpg ${4}/${TARGET_DIGESTS_dir}
+	default_process ${4}/${TARGET_pad_dir}
+	[ ${debug} -eq 1 ] && ls -las ${4}
 	csleep 10
 
-	${scm} 0555 ${CONF_target}/${TARGET_pad_dir}/*.sh
-	${sco} -R ${n}:${n} ${CONF_target}/${TARGET_DIGESTS_dir}
+	${scm} 0555 ${4}/${TARGET_pad_dir}/*.sh
+	${sco} -R ${n}:${n} ${4}/${TARGET_DIGESTS_dir}
 	
-	${scm} 0555 ${CONF_target}/live
-	${scm} 0755 ${CONF_target}/${TARGET_DIGESTS_dir}
+	${scm} 0555 ${4}/live
+	${scm} 0755 ${4}/${TARGET_DIGESTS_dir}
 
 	dqb "part0 d0ne"
 }
@@ -116,7 +116,7 @@ dqb "src= ${1} , stc2= ${2} , bl= ${3}"
 make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
 
 if [ -d ${1} ] ; then
-	part0 ${1} ${2} ${3}
+	part0 ${1} ${2} ${3} ${CONF_target}
 else
 	if [ -s ${1} ] && [ -r ${1} ] ; then #vieläkö tässä jokin qsee 111025?
 		dqb "${som} -o loop,ro ${1} ${CONF_source}"
@@ -126,7 +126,7 @@ else
 		[ $? -eq 0 ] || exit 666
 		sleep 6
 
-		part0 ${CONF_source} ${2} ${3}	
+		part0 ${CONF_source} ${2} ${3} ${CONF_target}	
 		${uom} ${CONF_source} 
 	else
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o";exit 666	
