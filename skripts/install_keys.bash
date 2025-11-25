@@ -4,7 +4,7 @@ d=$(dirname $0) #sittenkin näin
 debug=0
 . ${d}/common.conf
 
-#TODO:nimeäminen udestaan, ei ihan vlttämätön tmp-hmiston alla?
+#VAIH:nimeäminen udestaan, ei ihan vlttämätön tmp-hmiston alla?
 if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
 fi
@@ -29,7 +29,6 @@ function parse_opts_real () {
 }
 
 . ${d}/common_funcs.sh
-#[ $# -gt 0 ] || exit #VAIH:->gpo()
 
 [ -z "${ridk}" ] && echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 [ -d ${ridk} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
