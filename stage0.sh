@@ -17,7 +17,6 @@ function usage() {
 	echo "${0} --make-dirs creates some dirs under ${CONF_tmpdir}"
 }
 
-#151025:miten nykyään -v:n kanssa?
 . ./skripts/stage0_backend.bsh
 
 function parse_opts_real() {
@@ -44,12 +43,13 @@ function single_param() {
 		--make-dirs)
 			#init.bash käskyttämään tätä case:a tarvittaessa?
 			make_src_dirs ${CONF_bloader}
-			make_tgt_dirs
+			make_tgt_dirs ${CONF_target} ${CONF_source} ${CONF_bloader} #VAIH:params
 			exit
 		;;
 		-d)
 			[ -v CONF_tmpdir ] || exit 68
 
+			#TODO:man chattr pitkästä aikaa
 			if [ x"${CONF_tmpdir}" != "x" ] ; then 
 				echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
 				${smr} -rf ${CONF_tmpdir}/*
