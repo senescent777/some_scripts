@@ -56,7 +56,7 @@ if [ $# -eq 0 ] ; then
 fi
 
 function part0() {
-	dqb "part0( ${1})"
+	dqb "part0( ${1}, ${2})"
 	csleep 1
 
 	[ -z ${1} ] && exit 65

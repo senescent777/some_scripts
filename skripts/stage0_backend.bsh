@@ -22,9 +22,14 @@ function make_src_dirs() {
 	dqb "pars_ok"
 	csleep 1
 
-	#-v,-z ?
+	#VAIH:-v,-z ?
 	${smd} ${CONF_keys_dir}
-	${smd} ${CONF_distros_dir}
+
+	if [ -v CONF_distros_dir ] ; then
+		if [ ! -z ${CONF_distros_dir} ] ; then
+			${smd} ${CONF_distros_dir}
+		fi
+	fi
 
 	case ${1} in 
 		grub)
