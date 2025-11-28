@@ -56,18 +56,19 @@ function part0() {
 	${spc} -a ${1}/efi ${4}
 	csleep 1
 
-	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää 	CONF_SOURCE
+	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää CONF_SOURCE
 	bootloader ${3} ${2} ${1} 
 	
 	default_process ${4}/live
 	local src2=${2}/${TARGET_pad_dir}
-
 	${scm} o+w ${4}/${TARGET_pad_dir}
+
+	#TODO:fasdfasd() ?
 	${odio} touch ${4}/${TARGET_pad_dir}/${n}.conf
 	${scm} 0644 ${4}/${TARGET_pad_dir}/${n}.conf
 	${sco} ${n}:${n} ${4}/${TARGET_pad_dir}/${n}.conf
-	${scm} o-w ${4}/${TARGET_pad_dir}
 
+	${scm} o-w ${4}/${TARGET_pad_dir}
 	dqb "BEFORE COPY_x"
 	csleep 1
 
