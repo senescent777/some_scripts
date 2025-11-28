@@ -47,7 +47,7 @@ function fix_sudo() {
 
 	#${sco} -R 0:0 ./usr/bin/sudo*
 	#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
-	#AND CHATTR MAY OT WORK WITH SOME FILESYSTEMS	
+	#AND CHATTR MAY NOT WORK WITH SOME FILESYSTEMS	
 
 	${scm} 0750 ./etc/sudoers.d
 	${scm} 0440 /etc/sudoers.d/*
@@ -62,10 +62,11 @@ function fix_sudo() {
 }
 
 #HUOM.091025:OK
-#sudoers-jekku hyväksi tässäkin
+#myös 281125 testattu ja taisi toimia ok
+#sudoers-jekku olisi hyväksi tässäkin
 function bbb() {
 	#debug=1
-	dqb "bbb( ${1} ) ohgUYHGIUTFD/()%E"
+	dqb "bbb( ${1} ) OGDRU JAHAD"
 
 	[ x"${1}" == "x" ] && exit 97
 	[ x"${1}" == "x/" ] && exit 98
@@ -97,17 +98,11 @@ function bbb() {
 	${smr} ./root/.bash_history
 	${smr} ./home/devuan/.bash_history
 
-	#uusi ominaisuus 230725
 	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
-
 	dqb "BARBEQUE PARTY DONE.done()"
 }
 
-#HUOM.27725:oikeastaan ch-ymp tarttisi gen_x-skriptut, common_lib ja necros.tz2 +ehkä import2
-#poltettavalle kiekolle voisi mennä imp2+sen tarvitsemat (VAIH:se sq-chr-versio imp2sesta?)
-#... tai siis jos ln -s chroot-imp2 v/$version/pad/imp2
-
-#HUOM.091025:OK
+#VAIH:testattava uusiksi koska x , lienee kai ok 281125
 function jlk_main() {
 	dqb "jkl1 $1 , ${2} "
 
@@ -119,21 +114,26 @@ function jlk_main() {
 	dqb "pars_ok"
 	csleep 1
 
+	#HUOM.olisi hyvä olemassa sellainen bz3 tai bz2 missä julk av
+
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2}
-	${spc} ${1}/*.bz3 ${2}
+	${spc} ${1}/*.bz3* ${2}
 
 	dqb "jkl1 d0n3"
 }
 
 #... ideana aiemmin että root.conf olisi sq-chr-ymp varten , devuan.conf taas ei
+#kts. myös stage0_backend.bsh , copy_conf()
 #
 #VAIH:koita arpoa voisiko tämän ottaa käyttöön bvai ei (stage0f kautta tulisi se devuan.cnf jos on tullakseen)
-#VAIH:Const T_P2 mäkeen fktiosta
-
-#HUOM.091026:OK
+#VAIH:Const T_P2 mäkeen fktiosta?
+#
+#VAIH:testattava uudestaan (lienee ok 281125)
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
+	csleep 2
+
 	[ x"${1}" == "x" ] && exit 66
 	[ x"${2}" == "x" ] && exit 67
 	[ x"${3}" == "x" ] && exit 68
@@ -154,6 +154,7 @@ function jlk_conf() {
 	${smr} ${t}/${2}.conf	
 	csleep 5
 
+	#TODO:fasdfasd()
 	${odio} touch ${t}/root.conf
 	${sco} $(whoami):$(whoami) ${t}/root.conf
 	${scm} 0644 ${t}/root.conf
@@ -162,8 +163,12 @@ function jlk_conf() {
 	ls -las ${1}/${2}.conf	
 	csleep 5
 
+	#VAIH:se dnsm-juttu
 	grep -v TARGET_to_ram ${1}/${2}.conf > ${t}/root.conf 
 	echo "TARGET_to_ram=1" >> ${t}/root.conf #whether u can write to / or not
+	csleep 5
+
+	grep dnsm ${t}/root.conf
 	csleep 5
 
 	ls -las ${t}/*.conf
@@ -173,12 +178,17 @@ function jlk_conf() {
 	csleep 5
 }
 
-#mitäköhän paranetreja tälle fktiolle piti antaa?
-#T_yyy kutsuvaanm kpoodiin vai ei?
-#HUOM.091025:OK
+#1.mitäköhän paranetreja tälle fktiolle piti antaa?
+#2.T_yyy kutsuvaanm koodiin vai ei?
+#
+#VAIH:selvitä mitä tämä tekee nykyään
+#sopivilla parametreilla voisi kopsata ne julk avaimet kohteeseen?
+#... jos lähteestä löytyy julk av ni luulisi kopsautuva kohteeseen
+#
 function jlk_sums() {
 	#debug=1
 	dqb "jlk_sums( ${1} , ${2}, ${3}) "
+	csleep 4
 
 	[ x"${1}" != "x" ] || exit 66
 	[ -d ${1} ] || exit 67
@@ -195,6 +205,8 @@ function jlk_sums() {
 
 	ls -las ./${TARGET_DGST0};csleep 5 #pitäisikö olla $2?
 	cd ..
+
+	#HUOM.281125:ei löydy .2_sta, pitäisikö?
 	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
 
 	dqb "JLK_SUYMD_DONE"

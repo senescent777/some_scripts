@@ -96,7 +96,7 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.ash
 
 case ${cmd} in
-	-x) #HUOM.091025:havaittu toimivaksi (myös 141025)
+	-x) #281125:OK
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #171025:toimi ainakin kerran, 271025 toisen kerran
@@ -121,11 +121,11 @@ case ${cmd} in
 
 		${uom} ${CONF_source}
 	;;
-	-b) #141025:OK?
+	-b) #281125:lienee ok
 		bbb ${CONF_squash_dir}
-		#TODO;jhnkin se squash/pad-hmistn omistajuuden pakotus
+		#TODO:jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
-	-d)  #141025:OK
+	-d)  #281125:OK
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
 		pwd;sleep 6
@@ -135,11 +135,11 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #161025:OK
+	-c)  #281125:teki tiedoston
 		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
-	-r)  #141025:OK
+	-r)  #281125:OK
 		[ -v CONF_squash_dir ] || exit 666
 		[ -z "${CONF_squash_dir}" ] && exit 666
 
@@ -147,7 +147,7 @@ case ${cmd} in
 		rst_pre1
 		rst ${CONF_squash_dir}
 	;;
-	-j)  #OK
+	-j)  #VAIH:testaa taas (271125)
 		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 

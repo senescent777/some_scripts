@@ -186,29 +186,29 @@ function part7() {
 	dqb "p7 done"
 }
 
-function part8() {
-	dqb "p8 ${1}"
-	[ x"${TARGET_patch_name}" != "x" ] || exit 665
-	[ x"${1}" != "x" ] || exit 665
-
-	dqb "params ok"		
-	local olddir=$(pwd)	
-	cd ../out
-
-	case ${1} in
-		1)
-			echo $?
-		;;
-		2)
-			dqb "2"
-		;;
-		*)
-			dqb "default"
-		;;
-	esac 
-
-	cd ${olddir}
-}
+#function part8() {
+#	dqb "p8 ${1}"
+#	[ x"${TARGET_patch_name}" != "x" ] || exit 665
+#	[ x"${1}" != "x" ] || exit 665
+#
+#	dqb "params ok"		
+#	local olddir=$(pwd)	
+#	cd ../out
+#
+#	case ${1} in
+#		1)
+#			echo $?
+#		;;
+#		2)
+#			dqb "2"
+#		;;
+#		*)
+#			dqb "default"
+#		;;
+#	esac 
+#
+#	cd ${olddir}
+#}
 
 [ -d ${source} ] || exit 99
 dqb "${source} exists"
@@ -242,7 +242,10 @@ part123 3 live ${source}
 cd ${source}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
-#HUOM.30725:jokohan alkaisi jo avainjutut toimia
+#271125:pitäisiköhän pad-hmiston sisällöstä tehdä dgsts.x kanssa?
+#kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim
+#niinja nw julk av pitäisi myös tulla mukaan
+
 if [ x"${gg}" != "x" ] ; then 
 	part6_5
 fi
@@ -258,7 +261,7 @@ ${scm} 0644 ./${TARGET_DIGESTS_dir}/*
 [ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
-#HUOM.18726: dgsts.4 kanssa myös jotain jurpoilua? vielä 031025 ? joo (tee jotain)
+#271125:josko ao. blokki jo kunnossa?
 dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 10" # | grep -v 'SAM' turha?
 ${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4

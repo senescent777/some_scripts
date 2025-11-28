@@ -85,7 +85,7 @@ function copy_main() {
 	dqb "copy_main() donw\n"
 }
 
-#VAIH:voisikohan ottaa hyötykäyttöönm? esim se sq-xhroot--ymp konftdsto
+#VAIH:voisikohan ottaa hyötykäyttöönm? esim se sq-chroot-ymp konftdsto
 #tilapäisesti viritys missä conf samassa paketissa .deb kanssa (041025)
 #sudo cat" 1 ideqa, mangle_conf() toinen
 #.. jospa se devuan.conf olisi se juttu, lähdehmistoon moinen ja sit jtain
@@ -98,12 +98,13 @@ function copy_conf() {
 	[ x"${2}" != "x" ] || exit 2
 	[ -z ${3} ] && exit 3
 	[ -d ${3} ] || exit 4
-
-	dqb "PARAMS OK"
-	#HUOM.041025: *.bash.conf ei tarttisi mennä kiekolle asti(TEHTY)
 	csleep 3
 
-	if [ x"${CONF_scripts_dir}" != "x" ] ; then 
+	dqb "PARAMS OK"
+	csleep 3
+
+	if [ x"${CONF_scripts_dir}" != "x" ] ; then
+		#pystyisi varmaan tekemään pelkällä findillä
 		for f in $(find ${CONF_scripts_dir} -type f -name '*.conf' | grep -v bash) ; do
 			dqb "${spc} ${f} ${3}/../.."
 			${spc} ${f} ${3}/../.. 	
