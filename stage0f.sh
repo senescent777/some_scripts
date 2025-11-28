@@ -63,10 +63,11 @@ function part0() {
 	local src2=${2}/${TARGET_pad_dir}
 	${scm} o+w ${4}/${TARGET_pad_dir}
 
-	#TODO:fasdfasd() ?
-	${odio} touch ${4}/${TARGET_pad_dir}/${n}.conf
-	${scm} 0644 ${4}/${TARGET_pad_dir}/${n}.conf
-	${sco} ${n}:${n} ${4}/${TARGET_pad_dir}/${n}.conf
+	#VAIH:fasdfasd() ?
+	#${odio} touch ${4}/${TARGET_pad_dir}/${n}.conf
+	#${scm} 0644 ${4}/${TARGET_pad_dir}/${n}.conf
+	#${sco} ${n}:${n} ${4}/${TARGET_pad_dir}/${n}.conf
+	fasdfasd ${4}/${TARGET_pad_dir}/${n}.conf
 
 	${scm} o-w ${4}/${TARGET_pad_dir}
 	dqb "BEFORE COPY_x"
