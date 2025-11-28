@@ -22,8 +22,11 @@ function make_src_dirs() {
 	dqb "pars_ok"
 	csleep 1
 
-	#VAIH:-v,-z ?
-	${smd} ${CONF_keys_dir}
+	if [ -v CONF_keys_dir ] ; then
+		if [ ! -z ${CONF_keys_dir} ] ; then
+			${smd} ${CONF_keys_dir}
+		fi
+	fi
 
 	if [ -v CONF_distros_dir ] ; then
 		if [ ! -z ${CONF_distros_dir} ] ; then

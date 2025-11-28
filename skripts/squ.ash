@@ -147,14 +147,14 @@ case ${cmd} in
 		rst_pre1
 		rst ${CONF_squash_dir}
 	;;
-	-j)  #VAIH:testaa taas (271125)
+	-j)  #281125:OK
 		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2}/
 		
 		#jatkossa jo s ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
-		#VAIH:joko jo alkaisi suorittaa dor2 suhteen?
+		#281125:olisikohan dir2-jutut jo kunnossa? sitten vain siirtymä s.e. -j voisi ottaa useamman hmiston parametreiksi
 
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
@@ -165,7 +165,7 @@ case ${cmd} in
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
-	-f)  #151025:OK?
+	-f)  #151025:OK
 		fix_sudo ${CONF_squash_dir}
 	;;
 	*)

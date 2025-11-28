@@ -82,6 +82,9 @@ function part0() {
 		rm ${f}
 	done
 
+	[ ${debug} -eq 1 ] && ls -las ${1}/${TARGET_DIGESTS_file}*
+	csleep 6
+
 	local i
 	for i in ${MKS_parts} 4 ;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
 	
@@ -89,12 +92,13 @@ function part0() {
 	csleep 1
 }
 
+#HUOM.281125:pad alla julk avaimet .bz2:sessa olisi idea
 function part123() {
 	#debug=1
 	dqb "part123(${1}, ${2} , ${3} )"
 
 	[ z"${1}" != "z" ] || exit 111
-	#[ -d ${2} ] || exit 112 #miksi kommenteissa?
+	#[ -d ${2} ] || exit 112 #miksi kommenteissa? testaa syy?
 	[ -d ${3} ] || exit 113
 
 	local old
@@ -105,7 +109,7 @@ function part123() {
 		cd ${3}
 		[ ${debug} -eq 1 ] && pwd
 		dqb "find ./${2} -type f"
-		csleep 1
+		csleep 5
 
 		#helpompi bain hakea .cfg-päätteiset? tai kts grubin osalta se manuaali että mitkä aiheellisia
 		#| grep -v ${TARGET_patch_name}
@@ -114,13 +118,20 @@ function part123() {
   		#-name "*.mod" -or -name "vmlinuz*" -or -name "initrd*" -or \
   		#-name "grubenv"`;
 
-		for f in $(find ./${2} -type f | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
-			dqb "${sah6} ${f}"
-			${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
-		done
+		#for f in $(find ./${2} -type f | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
+		#	dqb "${sah6} ${f}"
+		#	${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
+		#done
+
+		#HUOM.281125:saattaa joutua muuttamaan vielä jos isolinuxin kanssa alkaa säätää
+		for f in $(find ./${2} -type f -name "*.cfg" -or -name "*.lst" -or -name "grubenv") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
+		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
+		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
+
+		#HUOM.siinä aiemmassa virityksessä taisi tulla myls devuan.conf (tjsp) mukaan
 
 		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
-		#${sco} 0:0 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
+		#${sco} 0:0 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} #ei hyvä idea?
 		cd ${old}
 	else
 		#dgsts.4 luonti ei onnistu?
@@ -242,7 +253,7 @@ part123 3 live ${source}
 cd ${source}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
-#271125:pitäisiköhän pad-hmiston sisällöstä tehdä dgsts.x kanssa?
+#271125:pitäisiköhän pad-hmiston sisällöstä tehdä dgsts.x kanssa? part123 hoitaa?
 #kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim
 #niinja nw julk av pitäisi myös tulla mukaan
 

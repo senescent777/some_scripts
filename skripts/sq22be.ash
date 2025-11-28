@@ -102,7 +102,7 @@ function bbb() {
 	dqb "BARBEQUE PARTY DONE.done()"
 }
 
-#VAIH:testattava uusiksi koska x , lienee kai ok 281125
+#lienee kai ok 281125
 function jlk_main() {
 	dqb "jkl1 $1 , ${2} "
 
@@ -115,6 +115,7 @@ function jlk_main() {
 	csleep 1
 
 	#HUOM.olisi hyvä olemassa sellainen bz3 tai bz2 missä julk av
+	#vieläpä s.e. hakemistosaraknteessa mukana pad/ jnka alla ne av
 
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2}
@@ -126,10 +127,10 @@ function jlk_main() {
 #... ideana aiemmin että root.conf olisi sq-chr-ymp varten , devuan.conf taas ei
 #kts. myös stage0_backend.bsh , copy_conf()
 #
-#VAIH:koita arpoa voisiko tämän ottaa käyttöön bvai ei (stage0f kautta tulisi se devuan.cnf jos on tullakseen)
-#VAIH:Const T_P2 mäkeen fktiosta?
+#mankeloi sen conf-tiedoston (281125:oliko vielä jotain spesifistä juttua tähän liittyen?)
+#Const T_P2 mäkeen fktiosta?
 #
-#VAIH:testattava uudestaan (lienee ok 281125)
+#lienee ok 281125?
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
 	csleep 2
@@ -149,21 +150,21 @@ function jlk_conf() {
 	local t
 	t=${3}/${TARGET_pad2}
 		
-	#${smr} ${t}/mf*
 	${smr} ${t}/root.conf
 	${smr} ${t}/${2}.conf	
 	csleep 5
 
-	#TODO:fasdfasd()
-	${odio} touch ${t}/root.conf
-	${sco} $(whoami):$(whoami) ${t}/root.conf
-	${scm} 0644 ${t}/root.conf
+	#VAIH:fasdfasd()
+	#${odio} touch ${t}/root.conf
+	#${sco} $(whoami):$(whoami) ${t}/root.conf
+	#${scm} 0644 ${t}/root.conf
+
+	fasdfasd  ${t}/root.conf
 	csleep 5
 
 	ls -las ${1}/${2}.conf	
 	csleep 5
 
-	#VAIH:se dnsm-juttu
 	grep -v TARGET_to_ram ${1}/${2}.conf > ${t}/root.conf 
 	echo "TARGET_to_ram=1" >> ${t}/root.conf #whether u can write to / or not
 	csleep 5
@@ -181,9 +182,7 @@ function jlk_conf() {
 #1.mitäköhän paranetreja tälle fktiolle piti antaa?
 #2.T_yyy kutsuvaanm koodiin vai ei?
 #
-#VAIH:selvitä mitä tämä tekee nykyään
-#sopivilla parametreilla voisi kopsata ne julk avaimet kohteeseen?
-#... jos lähteestä löytyy julk av ni luulisi kopsautuva kohteeseen
+#sopivilla parametreilla kopsaa dgsts-hkiston kohteeseen, ensisij tsummat , jos julk av löytyvät lähteestä niin nekin 
 #
 function jlk_sums() {
 	#debug=1
