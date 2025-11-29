@@ -157,17 +157,17 @@ function copy_conf() {
 	sleep 1
 }
 
-#pitäisikö tämän fktio olla kopsata tsummia?
+#pitäisikö tämän fktio olla kopsata tsummia? josko tekisi jotain tavoitteen hyväksi?
 function copy_sums() {
 	#debug=1
-	dqb "copy_syms(${1}, ${2})" #tämäkö qsee?
+	dqb "copy_syms(${1}, ${2})" 
 
 	[ -z ${1} ] && exit 2
 	#[ -d ${1} ] || exit 3 #ei tätä koska alempana x
 	[ -z ${2} ] && exit 4
 
 	dqb "pars ok"
-	pwd
+	[ ${debug} -eq 1 ] && pwd
 	csleep 1
 
 	if [ -d ${1} ] ; then
@@ -182,7 +182,7 @@ function copy_sums() {
 			${smd} -p ${2}
 		fi
 
-		#VAIH:tämä kohta uusiksi (jatkossa jos .bz3 sisältäisi julk avaimet)
+		#VAIH:tämä kohta uusiksi (jatkossa jos .bz3 sisältäisi julk avaimet hmistorakenteella? vai mitenkä?)
 		#dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}"
 		#${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}
 		#${spc} ${CONF_keys_dir}/${TARGET_Dkname2} ${2}

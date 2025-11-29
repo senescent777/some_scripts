@@ -12,7 +12,7 @@ function xxx() {
 	dqb "pars_ok"
 	csleep 1
 
-	#ao.blokki toistruu melkein samanlöaisena toisessa kohtaa, cfd()
+	#ao.blokki toistruu melkein samanlaisena toisessa kohtaa, cfd()
 	[ -d ${2} ] || ${smd} ${2}
 	cd ${2}
 
@@ -26,6 +26,34 @@ function xxx() {
 	fi
 
 	dqb "xxx d0mw"
+}
+
+#HUOM.091025:OK
+function cfd() {
+	dqb "cfd( ${1}  ,  ${2} )"
+	[ x"${1}" == "x" ] && exit 6
+	[ -s ${1} ] && exit 66
+	[ x"${2}" == "x" ] && exit 7
+	[ -d ${2} ] || exit 77
+
+	dqb "PARS IJ"
+	csleep 1
+	
+	echo "${0} -b ?"
+	cd ${2}
+
+	local msq
+	msq=$(${odio} which mksquashfs)
+	#common_lib , ocs() ?
+
+	if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
+		${odio} ${msq} . ${1} -comp xz -b 1048576
+	else
+		echo "${odio} apt-get install squashfs-utils"
+	fi
+	
+	csleep 1
+	dqb "cfd() DONE"
 }
 
 #jatkossa common_lib?
@@ -109,16 +137,16 @@ function jlk_main() {
 	[ x"${1}" == "x" ] && exit 66
 	[ x"${2}" == "x" ] && exit 67
 	[ -d ${1} ] || exit 68
-	[ -d ${2} ] || exit 69
+	[ -d ${2} ] || exit 69 #291125:jos ei ole ni pitäisikö luoda?
 
 	dqb "pars_ok"
 	csleep 1
 
 	#HUOM.olisi hyvä olemassa sellainen bz3 tai bz2 missä julk av
-	#vieläpä s.e. hakemistosaraknteessa mukana pad/ jnka alla ne av
+	#vieläpä s.e. hakemistorakenteessa mukana pad/ jnka alla ne av
 
 	${spc} ${1}/*.sh ${2}
-	${spc} ${1}/*.bz2 ${2}
+	${spc} ${1}/*.bz2 ${2} #myös bz2.sha mukaan?
 	${spc} ${1}/*.bz3* ${2}
 
 	dqb "jkl1 d0n3"
@@ -130,7 +158,10 @@ function jlk_main() {
 #mankeloi sen conf-tiedoston (281125:oliko vielä jotain spesifistä juttua tähän liittyen?)
 #Const T_P2 mäkeen fktiosta?
 #
-#lienee ok 281125?
+#lienee ok 281125
+#
+#291125:voisi toimia jatkossa niinkin että ajaa "squ.ash -j" "squ.ash -x":n jälkeen, ei ennen? 
+#
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
 	csleep 2
@@ -153,11 +184,6 @@ function jlk_conf() {
 	${smr} ${t}/root.conf
 	${smr} ${t}/${2}.conf	
 	csleep 5
-
-	#VAIH:fasdfasd()
-	#${odio} touch ${t}/root.conf
-	#${sco} $(whoami):$(whoami) ${t}/root.conf
-	#${scm} 0644 ${t}/root.conf
 
 	fasdfasd  ${t}/root.conf
 	csleep 5
@@ -316,33 +342,7 @@ function rst() { #HUOM.091025:OK
 	csleep 1
 }
 
-#HUOM.091025:OK
-function cfd() {
-	dqb "cfd( ${1}  ,  ${2} )"
-	[ x"${1}" == "x" ] && exit 6
-	[ -s ${1} ] && exit 66
-	[ x"${2}" == "x" ] && exit 7
-	[ -d ${2} ] || exit 77
 
-	dqb "PARS IJ"
-	csleep 1
-	
-	echo "${0} -b ?"
-	cd ${2}
-
-	local msq
-	msq=$(${odio} which mksquashfs)
-	#common_lib , ocs() ?
-
-	if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
-		${odio} ${msq} . ${1} -comp xz -b 1048576
-	else
-		echo "${odio} apt-get install squashfs-utils"
-	fi
-	
-	csleep 1
-	dqb "cfd() DONE"
-}
 
 #HUOM.031025:tätä jos voisi hyÖdyntää cHrootin kanssa? patch_list:in kautta yhetiset jutut esim conf ?
 #function ijk() {

@@ -62,7 +62,7 @@ function part0() {
 	[ -z ${1} ] && exit 65
 	[ -d ${1} ] || exit 67
 
-	[ -z ${2} ] && exit 69 #pitäisikö lisäksi grepata /e/passwd ?
+	[ -z ${2} ] && exit 69
 	[ "${1}" == "/" ] && exit 71	
 	
 	grep ${2} /etc/passwd
@@ -109,26 +109,14 @@ function part123() {
 		cd ${3}
 		[ ${debug} -eq 1 ] && pwd
 		dqb "find ./${2} -type f"
-		csleep 5
-
-		#helpompi bain hakea .cfg-päätteiset? tai kts grubin osalta se manuaali että mitkä aiheellisia
-		#| grep -v ${TARGET_patch_name}
-
-		#-name "*.cfg" -or -name "*.lst" -or \
-  		#-name "*.mod" -or -name "vmlinuz*" -or -name "initrd*" -or \
-  		#-name "grubenv"`;
-
-		#for f in $(find ./${2} -type f | grep -v ${TARGET_DIGESTS_file0} | grep -v boot.cat | grep -v isolinux.bin | grep -v '.mod' | grep -v '.c32') ; do
-		#	dqb "${sah6} ${f}"
-		#	${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}			
-		#done
+		csleep 3
 
 		#HUOM.281125:saattaa joutua muuttamaan vielä jos isolinuxin kanssa alkaa säätää
 		for f in $(find ./${2} -type f -name "*.cfg" -or -name "*.lst" -or -name "grubenv") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 
-		#HUOM.siinä aiemmassa virityksessä taisi tulla myls devuan.conf (tjsp) mukaan
+		#HUOM.siinä aiemmassa virityksessä taisi tulla myös devuan.conf (tjsp) mukaan (TODO)
 
 		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
 		#${sco} 0:0 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} #ei hyvä idea?
@@ -142,7 +130,6 @@ function part123() {
 }
 
 function part456() {
-	#debug=1
 	dqb "part456 $1 ; $2 ; $3"
 	[ z"${1}" != "z" ] || exit 666
 	
@@ -196,30 +183,6 @@ function part7() {
 	csleep 1
 	dqb "p7 done"
 }
-
-#function part8() {
-#	dqb "p8 ${1}"
-#	[ x"${TARGET_patch_name}" != "x" ] || exit 665
-#	[ x"${1}" != "x" ] || exit 665
-#
-#	dqb "params ok"		
-#	local olddir=$(pwd)	
-#	cd ../out
-#
-#	case ${1} in
-#		1)
-#			echo $?
-#		;;
-#		2)
-#			dqb "2"
-#		;;
-#		*)
-#			dqb "default"
-#		;;
-#	esac 
-#
-#	cd ${olddir}
-#}
 
 [ -d ${source} ] || exit 99
 dqb "${source} exists"
