@@ -4,15 +4,15 @@ d=$(dirname $0) #sittenkin näin
 debug=0
 . ${d}/common.conf
 
-#VAIH:nimeäminen udestaan, ei ihan vlttämätön tmp-hmiston alla?
 if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
 fi
 
 function usage() {
-	echo "${0} --kdir <kdir> --i Imports keys from <kdir>"
+	echo "${0} --kdir <kdir> --i Imports (public) keys from <kdir>"
 	echo "${0} --kdir <kdir> --e Exports keys to <kdir>"
 	echo "${0} --kdir <kdir> --m Makes 2 keys , <kdir> still needed"
+	echo "${0} --kdir <kdir> --j: 4 importing private keys (WORK IN PROGRESS)"
 }
 
 function single_param() {
@@ -36,7 +36,7 @@ function parse_opts_real () {
 
 case ${cmd} in
 	--i)
-		for f in ${TARGET_Dkname1} ${TARGET_Dkname2} ${TARGET_Dkname1}.secret ${TARGET_Dkname2}.secret ; do
+		for f in ${TARGET_Dkname1} ${TARGET_Dkname2}  ; do #${TARGET_Dkname1}.secret ${TARGET_Dkname2}.secret
 			echo "dbg: ${gg} --import ${ridk}/${f}"
 			${gg} --import ${ridk}/${f}
 		done
@@ -63,6 +63,8 @@ case ${cmd} in
 		sleep 5
 	
 		#tartteeko joka ketra tehdä tämä?
+		#TODO:jatkossa jos sanoisi ihan arkiston nimen eikä vain hakemiston
+
 		[ -s ${ridk}/k3yz.tar.bz2 ] && mv ${ridk}/k3yz.tar.bz2 ${ridk}/k3yz.tar.bz2.OLD
 		tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg
 	
@@ -73,6 +75,11 @@ case ${cmd} in
 			nano ${d}/keys.conf
 			#$EDITOR ${d}/keys.conf
 		fi
+	;;
+	--j)
+		#271125:jatkossa myös erillinen optio salaisia avaima varten vai ei? 
+		tar -C / -jxvf ${ridk}/k3yz.tar.bz2
+		${gg} --list-keys
 	;;
 	*)
 		usage

@@ -22,6 +22,7 @@ function parse_opts_2() {
 			bl=${2}
 		;;
 		--in)
+			dqb "LIIMANAAMA"
 			source=${2}
 		;;
 		*)
@@ -35,10 +36,15 @@ fq=$(find ${CONF_BASEDIR} -type f -name common_lib.sh | head -n 1)
 if [ -z ${fq} ] ; then
 	. ./common_funcs_old.sh
 else
-	debug=1
+	#debug=1 301125:josko jo riittäisi debug-ulostukset
 
 	if [ -x ${fq} ] ; then
 		. ${fq}
+
+		#061225:toistaiseksi tässä kunnes
+		gi=$(${odio} which genisoimage)
+		gmk=$(${odio} which grub-mkrescue)
+		xi=$(${odio} which xorriso)
 	else
 		. ./common_funcs_old.sh
 	fi
