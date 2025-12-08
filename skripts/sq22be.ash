@@ -263,18 +263,20 @@ function rst_pre1() {
 	csleep 1		
 }
 
-#HUOM.091025:OK
+#HUOM.081225:
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
 	pwd
 	csleep 1
 
-	[ -d ./etc ] || exit 66
+	[ -d ./etc ] || exit 66 #koita keksiä jokin toinen virhekoodi, tuthan yleinen
 	csleep 1
 
-	${sco} ${n}:${n} ./etc/default/locale #n parametriksi?
-	${scm} 0644 ./etc/default/locale
+	#VAIH:fasdfasd()
+	#${sco} ${n}:${n} ./etc/default/locale #n parametriksi?
+	#${scm} 0644 ./etc/default/locale
+	fasdfasd ./etc/default/locale
 	csleep 1
 
 	#HUOM.091025:lokaaleihjin liittyen:

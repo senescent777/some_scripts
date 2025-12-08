@@ -83,7 +83,7 @@ function part0() {
 	done
 
 	[ ${debug} -eq 1 ] && ls -las ${1}/${TARGET_DIGESTS_file}*
-	csleep 6
+	csleep 3
 
 	local i
 	for i in ${MKS_parts} 4 ;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
@@ -116,7 +116,8 @@ function part123() {
 		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 
-		#HUOM.siinä aiemmassa virityksessä taisi tulla myös devuan.conf (tjsp) mukaan (VAIH)
+		#HUOM.siinä aiemmassa virityksessä taisi tulla myös devuan.conf (tjsp) mukaan
+		#... ja ne 2 julk av myös
 		for f in $(find ./${2} -type f -name "*.conf")  ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 
 		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}

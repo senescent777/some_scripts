@@ -2,6 +2,7 @@ function parse_opts_1() {
 	dqb "cpars.op-1(${1})"
 
 	#HUOM.271125:pari ekaa casea eivät ehkä tarpeellisia nykyään koska x
+	#... tekisikö jotain?		
 	case ${1} in
 		-h|--h)
 			usage
@@ -22,7 +23,7 @@ function parse_opts_2() {
 			bl=${2}
 		;;
 		--in)
-			dqb "LIIMANAAMA"
+			dqb "L11NAHAMAR1"
 			source=${2}
 		;;
 		*)
@@ -32,9 +33,10 @@ function parse_opts_2() {
 }
 
 fq=$(find ${CONF_BASEDIR} -type f -name common_lib.sh | head -n 1)
-
+fr=$(find ${CONF_BASEDIR} -type f -name common_funcs_old.sh | head -n 1)
+	
 if [ -z ${fq} ] ; then
-	. ./common_funcs_old.sh
+	. ${fr} #./common_funcs_old.sh
 else
 	#debug=1 301125:josko jo riittäisi debug-ulostukset
 
@@ -46,8 +48,9 @@ else
 		gmk=$(${odio} which grub-mkrescue)
 		xi=$(${odio} which xorriso)
 	else
-		. ./common_funcs_old.sh
+		. ${fr} #./common_funcs_old.sh
 	fi
 fi
 
 unset fq
+unset fr

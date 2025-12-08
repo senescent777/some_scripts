@@ -139,9 +139,10 @@ case ${cmd} in
 		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
-	-r)  #281125:OK
-		[ -v CONF_squash_dir ] || exit 666
-		[ -z "${CONF_squash_dir}" ] && exit 666
+	-r)  #081225:
+		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
+		[ -v CONF_squash_dir ] || exit 111
+		[ -z "${CONF_squash_dir}" ] && exit 112
 
 		#optionaalinen ajettava komento?
 		rst_pre1
@@ -156,6 +157,7 @@ case ${cmd} in
 		#jatkossa jo s ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
 		#281125:olisikohan dir2-jutut jo kunnossa? sitten vain siirtymä s.e. -j voisi ottaa useamman hmiston parametreiksi
 
+		#pitäisiköhän keskeyttää jos näillä main jos dir2 puuttuu?
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
 

@@ -36,6 +36,7 @@ function parse_opts_real () {
 
 case ${cmd} in
 	--i)
+		#VAIH:array konftdstoon?
 		for f in ${TARGET_Dkname1} ${TARGET_Dkname2}  ; do #${TARGET_Dkname1}.secret ${TARGET_Dkname2}.secret
 			echo "dbg: ${gg} --import ${ridk}/${f}"
 			${gg} --import ${ridk}/${f}
@@ -64,6 +65,7 @@ case ${cmd} in
 	
 		#tartteeko joka ketra tehdä tämä?
 		#TODO:jatkossa jos sanoisi ihan arkiston nimen eikä vain hakemiston
+		#...sitten alkaisi tämä skripti olla osittain päällekkäinen imp2 ja exp2 kanssa
 
 		[ -s ${ridk}/k3yz.tar.bz2 ] && mv ${ridk}/k3yz.tar.bz2 ${ridk}/k3yz.tar.bz2.OLD
 		tar -jcvf ${ridk}/k3yz.tar.bz2 ~/.gnupg

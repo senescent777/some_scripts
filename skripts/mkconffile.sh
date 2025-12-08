@@ -14,6 +14,7 @@ echo "TARGET_backup_part=disk/by-uuid/<devicefile reserved for archiving>"
 echo "TARGET_scripts_bak_file=<file to archive scripts>"
 echo "TARGET_pad_bak_file=<file to archive .iso's additional stuff>"
 
+#miten tuo tuossa alla sihtautuu TPX-juttuihin?
 echo -n "TARGET_DTAR_OPTS=\"--exclude=*.bz3"
 echo -n " --exclude=\$TARGET_Dkname2\"" #tarpeellinen nykyään?
 echo
@@ -54,7 +55,5 @@ echo "CONF_bloader=<preferred bootloader>"
 #echo "CONF_wget_def_url=https://<add mirror url here>"
 #
 #echo "TARGET_DHCP_row1=\"<options 4 dhclient>\""
-#
-#echo "CONF_patch_name="
-#echo "CONF_patch_list_1=\"<options 4 stage0.copy_conf()>\""
-#echo "CONF_patch_list_2=\"<more options 4 stage0.copy_conf()>\""
+#071225:pitäisiköhän tätäkin päivittää josqs?
+

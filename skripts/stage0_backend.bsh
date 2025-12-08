@@ -47,7 +47,6 @@ function make_src_dirs() {
 	${smd} ./v
 }
 
-#VAIH:conf_scripts_dir parametriksi vai ei? entä CONF_tmpdir?
 function copy_main() {
 	#debug=1
 	dqb "copy_main(${1}, ${2}, ${3} )"
@@ -101,10 +100,10 @@ function copy_conf() {
 	[ x"${2}" != "x" ] || exit 2
 	[ -z ${3} ] && exit 3
 	[ -d ${3} ] || exit 4
-	csleep 3
+	csleep 1
 
 	dqb "PARAMS OK"
-	csleep 3
+	csleep 1
 
 	if [ x"${CONF_scripts_dir}" != "x" ] ; then
 		#pystyisi varmaan tekemään pelkällä findillä
@@ -147,11 +146,11 @@ function copy_conf() {
 
 	dqb " grep -v '#' ${1}/${2}.conf >> ${utfile}"
 	grep -v '#' ${1}/${2}.conf >> ${utfile}
-	csleep 6
+	csleep 2
 
 	#tämä oikea paikka varmistaa että kys asetus mukana?
 	grep dnsm  ${utfile}
-	csleep 6
+	csleep 2
 
 	dqb "copy_conf() donw\n"
 	sleep 1
