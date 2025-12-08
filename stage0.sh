@@ -50,6 +50,7 @@ function single_param() {
 			[ -v CONF_tmpdir ] || exit 68
 
 			#TODO:man chattr pitkästä aikaa
+			#081225:v-hmiston alta jotain siivoilua myös?
 			if [ x"${CONF_tmpdir}" != "x" ] ; then 
 				echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
 				${smr} -rf ${CONF_tmpdir}/*
