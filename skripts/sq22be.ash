@@ -131,6 +131,7 @@ function bbb() {
 }
 
 #lienee kai ok 281125
+#111225:mistä se f.tar ilmestyi kohteeseen?
 function jlk_main() {
 	dqb "jkl1 $1 , ${2} "
 
@@ -263,7 +264,7 @@ function rst_pre1() {
 	csleep 1		
 }
 
-#HUOM.081225:
+#HUOM.111225:toimii vai ei?
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
@@ -281,11 +282,14 @@ function rst_pre2() {
 
 	#HUOM.091025:lokaaleihjin liittyen:
 	#LANGUAGE ja LC_ALL jos asettaisi jhnkn arvoon
+	#HUOM.111225:miten suhtautuu check_bin2() nykyään tähän ao. riviin?
+
 	locale > ./etc/default/locale
 	csleep 1
 		
-	${scm} 0444 ./etc/default/locale
-	${sco} 0:0 ./etc/default/locale
+	#${scm} 0444 ./etc/default/locale
+	#${sco} 0:0 ./etc/default/locale
+	reqwreqw ./etc/default/locale
 	csleep 1
 
 	[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	

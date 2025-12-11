@@ -11,7 +11,7 @@ function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
 	echo "$0 --iso"
 	echo "$0 --pkgs"
-	echo "$0 -h" #voisi olla vakiovaruste tuo optio ja liityvä fktio
+	echo "$0 -h" #voisi olla vakiovaruste tuo optio ja liityvä fktio (jos vähän jo 111225 siihen suunyaan)
 	exit 44
 }
 
@@ -161,6 +161,7 @@ function part6_5() {
 	dqb "dibw"
 }
 
+#TODO:Constit kuntoon tässä alla, sign pubK w/ KsK 
 function part7() {
 	dqb "part7"	
 	[ ${debug} -eq 1 ] && pwd
@@ -177,7 +178,6 @@ function part7() {
 	local i
 
 	for i in ${MKS_parts} ; do
-		#${gv} --keyring ./${TARGET_Dpubkf} ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
 		${gg} --verify ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig 
 	done
 
