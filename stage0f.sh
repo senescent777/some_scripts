@@ -25,9 +25,7 @@ function single_param() {
 
 dqb "PARAMS OK?"
 
-#TEHTY?:jotenkin kätevösti pitäisi saada menemään juttujen kopioituminen squash-hmiston alle
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
-#VAIH:CONF_T parametriksi?
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 function part0() {
 	#debug=1
@@ -63,10 +61,6 @@ function part0() {
 	local src2=${2}/${TARGET_pad_dir}
 	${scm} o+w ${4}/${TARGET_pad_dir}
 
-	#VAIH:fasdfasd() ?
-	#${odio} touch ${4}/${TARGET_pad_dir}/${n}.conf
-	#${scm} 0644 ${4}/${TARGET_pad_dir}/${n}.conf
-	#${sco} ${n}:${n} ${4}/${TARGET_pad_dir}/${n}.conf
 	fasdfasd ${4}/${TARGET_pad_dir}/${n}.conf
 
 	${scm} o-w ${4}/${TARGET_pad_dir}
