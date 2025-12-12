@@ -2,15 +2,15 @@ function parse_opts_1() {
 	dqb "cpars.op-1(${1})"
 
 	#HUOM.271125:pari ekaa casea eivät ehkä tarpeellisia nykyään koska x
-	#... tekisikö jotain?		
+	#... tekisikö jotain?	(VAIH)	
 	case ${1} in
-		-h|--h)
+		-h|--h) #121225:antaa tämän olla vielä tässä
 			usage
 			exit
 		;;
-		-v|--v)
-			debug=1
-		;;
+#		-v|--v)
+#			debug=1
+#		;;
 		*)
 			single_param ${1}
 		;;
@@ -23,7 +23,7 @@ function parse_opts_2() {
 			bl=${2}
 		;;
 		--in)
-			dqb "L11NAHAMAR1"
+			dqb "TR0LLKAMMAR3N"
 			source=${2}
 		;;
 		*)
@@ -47,6 +47,8 @@ else
 		gi=$(${odio} which genisoimage)
 		gmk=$(${odio} which grub-mkrescue)
 		xi=$(${odio} which xorriso)
+
+		#121225:pitäisiköhän niitä check_bin() - åerheen fktioita kutsua? (TODO)
 	else
 		. ${fr} #./common_funcs_old.sh
 	fi

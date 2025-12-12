@@ -35,6 +35,7 @@ function usage() {
 	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
+#12125:cmd kantsisi asettaa vain jos tyhjä
 function parse_opts_real() {
 	dqb "squash.parse_opts_real(${1}, ${2})"
 
@@ -68,6 +69,7 @@ function parse_opts_real() {
 	#fi
 }
 
+#12125:cmd kantsisi asettaa vain jos tyhjä
 function single_param() {
 	dqb "sp ${1}"
 
@@ -96,10 +98,10 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.ash
 
 case ${cmd} in
-	-x) #281125:OK
+	-x) #121225:OK
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #171025:toimi ainakin kerran, 271025 toisen kerran
+	-y) #jos testaisi jo uudesdtaan?
 		[ -s ${par} ] || exit 66 #xxx kyllä ...
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -121,11 +123,12 @@ case ${cmd} in
 
 		${uom} ${CONF_source}
 	;;
-	-b) #281125:lienee ok
+	-b) #121225:lienee ok
 		bbb ${CONF_squash_dir}
 		#TODO:jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
-	-d)  #281125:OK
+	-d)  #121225:OK
+	#TODO:pudon sydorys
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
 		pwd;sleep 6
@@ -135,11 +138,11 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #281125:teki tiedoston
+	-c)  #121125:teki tiedoston
 		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
-	-r)  #081225:
+	-r)  #121225:ok
 		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
@@ -148,7 +151,7 @@ case ${cmd} in
 		rst_pre1
 		rst ${CONF_squash_dir}
 	;;
-	-j)  #281125:OK
+	-j)  #121225:OK
 		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 
@@ -163,7 +166,6 @@ case ${cmd} in
 
 		#j_cnf tuomaan mukanaan sen sq-chroot-spesifisaen konffin?
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
-
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;

@@ -1,4 +1,3 @@
-#function ekf2() {}
 
 #HUOM.091025:OK
 function xxx() {
@@ -59,7 +58,7 @@ function cfd() {
 #jatkossa common_lib?
 #josko toimisi kuteb tarkoitettu 141025
 function fix_sudo() {
-	dqb "fix_sudo( ${1}) "
+	dqb "sq22.fix_sudo( ${1}) "
 	[ x"${1}" == "x" ] && exit 97
 	[ -d ${1} ] || exit 98
 	dqb "pars ok"
@@ -89,7 +88,6 @@ function fix_sudo() {
 	#${sca} +ui ./usr/lib/sudo/sudoers.so	
 }
 
-#HUOM.091025:OK
 #myös 281125 testattu ja taisi toimia ok
 #sudoers-jekku olisi hyväksi tässäkin
 function bbb() {
@@ -109,7 +107,6 @@ function bbb() {
 
 	pwd
 	echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
-	#sleep 6
 
 	${smr} -rf ./run/live
 	${smr} -rf ./boot/grub/*
@@ -131,7 +128,6 @@ function bbb() {
 }
 
 #lienee kai ok 281125
-#111225:mistä se f.tar ilmestyi kohteeseen?
 function jlk_main() {
 	dqb "jkl1 $1 , ${2} "
 
@@ -161,7 +157,6 @@ function jlk_main() {
 #
 #lienee ok 281125
 #
-#291125:voisi toimia jatkossa niinkin että ajaa "squ.ash -j" "squ.ash -x":n jälkeen, ei ennen? 
 #
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
@@ -264,7 +259,7 @@ function rst_pre1() {
 	csleep 1		
 }
 
-#HUOM.111225:toimii vai ei?
+#HUOM.111225:toimii vai ei? kylkait
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
@@ -274,9 +269,6 @@ function rst_pre2() {
 	[ -d ./etc ] || exit 66 #koita keksiä jokin toinen virhekoodi, tuthan yleinen
 	csleep 1
 
-	#VAIH:fasdfasd()
-	#${sco} ${n}:${n} ./etc/default/locale #n parametriksi?
-	#${scm} 0644 ./etc/default/locale
 	fasdfasd ./etc/default/locale
 	csleep 1
 
@@ -284,11 +276,11 @@ function rst_pre2() {
 	#LANGUAGE ja LC_ALL jos asettaisi jhnkn arvoon
 	#HUOM.111225:miten suhtautuu check_bin2() nykyään tähän ao. riviin?
 
+	#TODO:jotenkin toisin? kopsaisi vain jnkn pohjan jostain
+	#, vaikka "env | grep {LA,LC}"?
 	locale > ./etc/default/locale
 	csleep 1
 		
-	#${scm} 0444 ./etc/default/locale
-	#${sco} 0:0 ./etc/default/locale
 	reqwreqw ./etc/default/locale
 	csleep 1
 
@@ -347,8 +339,6 @@ function rst() { #HUOM.091025:OK
 	dqb "rst() done"
 	csleep 1
 }
-
-
 
 #HUOM.031025:tätä jos voisi hyÖdyntää cHrootin kanssa? patch_list:in kautta yhetiset jutut esim conf ?
 #function ijk() {

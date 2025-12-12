@@ -4,14 +4,6 @@ function mangle_conf() {
 	#tdstista common.conf ja keys.conf pitäisi saada TARGET_D ja CONF_k - alkuiset
 }
 
-#... koita päättää mitä tuo $1 edustaa
-function get_devuan() {
-	echo "cd ${1}"
-	echo "wget ${CONF_wget_opts} ${1}"
-	echo "sha256sum -c SHA256SUMS"
-	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
-}
-
 function make_src_dirs() {
 	#debug=1
 	dqb "s0b.make_s_DIrs( ${1})"
@@ -22,29 +14,41 @@ function make_src_dirs() {
 	dqb "pars_ok"
 	csleep 1
 
+	#miten sen sudotuksen kanssa?
+	dqb "smd= ${smd}"
+	csleep 1
+
 	if [ -v CONF_keys_dir ] ; then
 		if [ ! -z ${CONF_keys_dir} ] ; then
-			${smd} ${CONF_keys_dir}
+			if [ ! -d ${CONF_keys_dir} ] ; then
+				dqb "${smd} ${CONF_keys_dir}"
+				${smd} ${CONF_keys_dir}
+				csleep 1
+			fi
 		fi
 	fi
 
 	if [ -v CONF_distros_dir ] ; then
 		if [ ! -z ${CONF_distros_dir} ] ; then
-			${smd} ${CONF_distros_dir}
+			if [ ! -d ${CONF_distros_dir} ] ; then
+				dqb "${smd} ${CONF_distros_dir}"
+				${smd} ${CONF_distros_dir}
+			fi
 		fi
 	fi
 
 	case ${1} in 
 		grub)
-			${smd} -p ./boot/grub
+			[ -d ./boot/grub ] || ${smd} -p ./boot/grub
 		;;
 		*)
-			${smd} ${1}	
+			#kai vähän voisi rajoittaa
+			[ -d .${1} ] || ${smd} ${1}	
 		;;
 	esac
 
-	${smd} ${CONF_pkgsdir2}
-	${smd} ./v
+	[ -d  ${CONF_pkgsdir2} ] || ${smd} ${CONF_pkgsdir2}
+	[ -d ./v ] || ${smd} ./v
 }
 
 function copy_main() {
@@ -87,7 +91,6 @@ function copy_main() {
 	dqb "copy_main() donw\n"
 }
 
-#VAIH:voisikohan ottaa hyötykäyttöönm? esim se sq-chroot-ymp konftdsto
 #tilapäisesti viritys missä conf samassa paketissa .deb kanssa (041025)
 #sudo cat" 1 ideqa, mangle_conf() toinen
 #.. jospa se devuan.conf olisi se juttu, lähdehmistoon moinen ja sit jtain
@@ -182,6 +185,7 @@ function copy_sums() {
 		fi
 
 		#VAIH:tämä kohta uusiksi (jatkossa jos .bz3 sisältäisi julk avaimet hmistorakenteella? vai mitenkä?)
+		#121225:sitä array:tä voisi hyödyntää		
 		#dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}"
 		#${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}
 		#${spc} ${CONF_keys_dir}/${TARGET_Dkname2} ${2}
@@ -190,7 +194,8 @@ function copy_sums() {
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
-#$c_tgt-> $3 jatkossa?
+#TODO:$c_tgt-> $3 jatkossa?
+#TODO:sudon pudon pudotus?
 function bootloader() {
 	#debug=1
 	dqb "bootloader(${1}, ${2}, ${3})"
@@ -199,6 +204,7 @@ function bootloader() {
 	[ x"${2}" != "x" ] || exit 2
 	[ x"${CONF_target}" != "x" ] || exit 3
 	[ -d ${CONF_target} ] || exit 3
+	#TODO:$3 tarkistus	
 
 	dqb "pars_ok"
 	csleep 3
@@ -281,6 +287,7 @@ function bootloader() {
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
 
+#TODO:sudon pudon pudotus?
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1
