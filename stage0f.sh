@@ -19,6 +19,7 @@ function single_param() {
 [ $# -gt 3 ] && debug=${4}
 . ./skripts/stage0_backend.bsh
 . ./skripts/common_funcs.sh
+
 #if [ -f ./skripts/keys.conf ] ; then #HUOM.141025:kts. copy_sums()
 #	. ./skripts/keys.conf
 #fi
@@ -35,6 +36,7 @@ function part0() {
 
 	dqb "COPY1NG FILES IN 1 SEC"
 	csleep 1
+	#spc=(which cp) ? vaiko odio="" jhnkn?
 
 	#ei aina tarttisi näiTä renkata
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
@@ -91,8 +93,14 @@ function part0() {
 	${scm} 0755 ${CONF_tmpdir}/*.sh
 	
 	#keys-hmistossa ei juuri nyt taida olla .gpg-tdstoja... (081025)
+	if [ -v CONF_keys_dir ] ; then #keys.conf.. eiku common.conf ainakin vielä
+		if [ ! -z ${CONF_keys_dir}} ] ; then
+			if [ -d ${CONF_keys_dir} ] ; then
+				${spc} ${CONF_keys_dir}/*.gpg ${4}/${TARGET_DIGESTS_dir}
+			fi
+		fi
+	fi
 
-	${spc} ${CONF_keys_dir}/*.gpg ${4}/${TARGET_DIGESTS_dir}
 	default_process ${4}/${TARGET_pad_dir}
 	[ ${debug} -eq 1 ] && ls -las ${4}
 	csleep 10
