@@ -1,7 +1,7 @@
 function mangle_conf() {
 	dqb "mangle_conf ${1}, ${2}, ${3} "
 	#TODO:jotain muutakin tähän, ehkä (lähteen greppailu kohteeseen)
-	#tdstista common.conf ja keys.conf pitäisi saada TARGET_D ja CONF_k - alkuiset
+	#tdstoista common.conf ja keys.conf pitäisi saada TARGET_D ja CONF_k - alkuiset
 }
 
 function make_src_dirs() {
@@ -14,15 +14,26 @@ function make_src_dirs() {
 	dqb "pars_ok"
 	csleep 1
 
-	#miten sen sudotuksen kanssa?
+	#TODO:PITÄISI VARMAANKIN TESTATA ONKO NÄINh YVÄ jos on ni se pudon sudotus seur.
+	#... ellei sitten kuitenkin sudoers
+	dqb "pwd= $(pwd)"
 	dqb "smd= ${smd}"
 	csleep 1
+
+	#141225:saman asian kuin tuossa alla pystyisi tekemään vähemmiolläkin riveillä
+	#... ja ehkä kuuluisi pikemminkin init1.bash tontille
 
 	if [ -v CONF_keys_dir ] ; then
 		if [ ! -z ${CONF_keys_dir} ] ; then
 			if [ ! -d ${CONF_keys_dir} ] ; then
-				dqb "${smd} ${CONF_keys_dir}"
+				dqb "${smd} ${CONF_keys_dir} + ${sco} också"
+				
 				${smd} ${CONF_keys_dir}
+				csleep 1
+
+				#pitäisikö sco-juttujen ollakommenteissa vaiko ei?
+				${sco} $(whoami):$(whoami) ${CONF_keys_dir}
+				${scm} 0755 ${CONF_keys_dir} 
 				csleep 1
 			fi
 		fi
@@ -31,8 +42,14 @@ function make_src_dirs() {
 	if [ -v CONF_distros_dir ] ; then
 		if [ ! -z ${CONF_distros_dir} ] ; then
 			if [ ! -d ${CONF_distros_dir} ] ; then
-				dqb "${smd} ${CONF_distros_dir}"
+				dqb "${smd} ${CONF_distros_dir} och sjutton också"
+
 				${smd} ${CONF_distros_dir}
+				csleep 1
+
+				${sco} $(whoami):$(whoami) ${CONF_distros_dir}
+				${scm} 0755 ${CONF_distros_dir}				
+				csleep 1
 			fi
 		fi
 	fi
@@ -40,15 +57,29 @@ function make_src_dirs() {
 	case ${1} in 
 		grub)
 			[ -d ./boot/grub ] || ${smd} -p ./boot/grub
+			${sco} $(whoami):$(whoami) ./boot/grub
+			${scm} 0755 ./boot/grub
 		;;
-		*)
-			#kai vähän voisi rajoittaa
+		isolinux)
 			[ -d .${1} ] || ${smd} ${1}	
+			${sco} $(whoami):$(whoami) ${1}
+			${scm} 0755 ${1}
+		;;
+		*) #kai vähän voisi rajoittaa
+			echo "MEE PELLE WTTUUN"
+			exit 666
 		;;
 	esac
 
 	[ -d  ${CONF_pkgsdir2} ] || ${smd} ${CONF_pkgsdir2}
+	${sco} $(whoami):$(whoami) ${CONF_pkgsdir2}
+ 	${scm} 0755 ${CONF_pkgsdir2}
+
 	[ -d ./v ] || ${smd} ./v
+	${sco} $(whoami):$(whoami) ./v
+	${scm} 0755 ./v
+
+	csleep 1	
 }
 
 function copy_main() {
@@ -63,6 +94,8 @@ function copy_main() {
 
 	dqb "CHECKS PASSED"
 	local f
+	csleep 1
+
 	dqb "ONE BATCH"	
 	csleep 1
 
@@ -129,6 +162,7 @@ function copy_conf() {
 
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
+	#TODO:saattanee joutua muuttamaan ao. rivejä koska x
 	echo -n "src=/" >> ${utfile}
 	echo -n "$" >> ${utfile}
 	echo "{TARGET_pad2}" >> ${utfile}	
@@ -152,7 +186,7 @@ function copy_conf() {
 	csleep 2
 
 	#tämä oikea paikka varmistaa että kys asetus mukana?
-	grep dnsm  ${utfile}
+	grep dnsm ${utfile}
 	csleep 2
 
 	dqb "copy_conf() donw\n"
@@ -165,7 +199,6 @@ function copy_sums() {
 	dqb "copy_syms(${1}, ${2})" 
 
 	[ -z ${1} ] && exit 2
-	#[ -d ${1} ] || exit 3 #ei tätä koska alempana x
 	[ -z ${2} ] && exit 4
 
 	dqb "pars ok"
@@ -194,8 +227,8 @@ function copy_sums() {
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
-#TODO:$c_tgt-> $3 jatkossa?
-#TODO:sudon pudon pudotus?
+#TODO:$c_tgt-> $4 jatkossa?
+#TODO:sudon pudon pudotus josqs myöh?
 function bootloader() {
 	#debug=1
 	dqb "bootloader(${1}, ${2}, ${3})"
@@ -216,7 +249,9 @@ function bootloader() {
 	local t
 	t=""
 
-	[ ${debug} -eq 1 ] && ls -las ${CONF_target};sleep 6
+	#[ ${debug} -eq 1 ] && ls -las ${CONF_target};sleep 6
+	local k3
+	k3=""
 
 	#HUOM.jos touch-komentoja tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa (?)
 	case ${1} in
@@ -226,6 +261,7 @@ function bootloader() {
 
 			${spc} -a ${3}/isolinux/ ${CONF_target} || exit 8
 			ks2=${2}/isolinux
+			k3=${CONF_target}/isolinux
 			#[ -d ${ks2} ] || exit 9
 			csleep 1
 
@@ -233,48 +269,58 @@ function bootloader() {
 			csleep 5
 
 			#jos siirtäisi ennen case;a nää, pienin muutoksin
-			dqb "${smr} ${CONF_target}/isolinux/*.cfg"
-			${smr} ${CONF_target}/isolinux/*.cfg
-			${smr} ${CONF_target}/isolinux/*.png
+			dqb "${smr} ${k3}/*.cfg"
+			${smr} ${k3}/*.cfg
+			${smr} ${k3}/*.png
 
 			csleep 2
 			dqb "TRYI1NG T0 R3PLACE IS0LINUX.CGF"
 
 			for f in $(find ${ks2} -name '*.cfg') ; do
-				dqb "spc ${f} ${CONF_target}/isolinux/"
-				${spc} ${f} ${CONF_target}/isolinux/
+				dqb "spc ${f} ${k3}/"
+				${spc} ${f} ${k3}/
 			done
 
 			#jos ei muuta keksi niln -s /r/l/m/i $tgt
-			ls -las ${CONF_target}/isolinux/*.cfg || exit			
+			ls -las ${k3}/*.cfg || exit 99			
 			csleep 2
 			dqb "PNG"	
 
 			for f in $(find ${ks2} -name '*.png') ; do
-				dqb "spc ${f} ${CONF_target}/isolinux/"
-				${spc} ${f} ${CONF_target}/isolinux/
+				dqb "spc ${f} ${k3}/"
+				${spc} ${f} ${k3}/
 			done
 		;;
 		grub)
 			ks2=${2}/boot #jos siirtäisi ennen case;a nää
 			
 			if [ -d ${ks2} ] ; then
+				#141225:meneekö kopsailut oikein?
+				dqb "${spc} -a ${3}/boot/ ${CONF_target} || exit 8"
+				csleep 3
+
 				${spc} -a ${3}/boot/ ${CONF_target} || exit 8
-	
-				#jos ei automaagisesti jatkossa
-				${smr} ${CONF_target}/boot/grub/*.cfg #TODO:uusi apumuuttuja
-				${smr} ${CONF_target}/boot/grub/*.png
+				#dqb "smr= ${smr}"
+				csleep 1
+
+				k3=${CONF_target}/boot/grub
+				[ ${debug} -gt 0 ] && ls -las ${k3}/*.cfg
+				csleep 5
+
+				#jos ei automaagisesti jatkossa... mikä?
+				${smr} ${k3}/*.cfg #VAIH:uusi apumuuttuja
+				${smr} ${k3}/*.png
 				
 				for f in $(find ${ks2} -name '*.cfg') ; do
-					dqb "spc ${f} ${CONF_target}/boot/grub"
-					${spc} ${f} ${CONF_target}/boot/grub
+					dqb "spc ${f} ${k3}"
+					${spc} ${f} ${k3}
 				done
 
-				ls -las ${CONF_target}/boot/grub/*.cfg || exit 99
+				ls -las ${k3}/*.cfg || exit 99
 
 				for f in $(find ${ks2} -name '*.png') ; do
-					dqb "spc ${f} ${CONF_target}/boot/grub"
-					${spc} ${f} ${CONF_target}/boot/grub
+					dqb "spc ${f} ${k3}"
+					${spc} ${f} ${k3}
 				done	
 			fi
 		;;
@@ -287,69 +333,110 @@ function bootloader() {
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
 
-#TODO:sudon pudon pudotus?
+#VAIH:sudon pudon pudotus tjsp? testaappa taas
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1
 
 	[ x"${1}" != "x" ] || exit 99
 	[ x"${1}" != "x/" ] || exit 100
-	[ -z ${3} ] && exit 101 #WTUN KAARISULKEET 666!!!
-
-	dqb "${1} ok"
-	csleep 1
-
-	#HUOm. cource_jutut kai toisessa fktiossa kuiotenkin?
 	[ y"${2}" != "y" ] || exit 101
-	[ -d ${2} ] || ${smd} -p ${2}
-
+	[ -z ${3} ] && exit 102 #WTUN KAARISULKEET 666!!!
+	
 	dqb "PARAMZx OK"
 	csleep 1
 
-	dqb "${2} ok?"
+	dqb "CRS"
+	[ -d ${2} ] || ${smd} -p ${2}
 	${sco} 0:0 ${2}
 	${scm} 0755 ${2}
+	csleep 1	
 	
-	${sco} -R ${n}:${n} ${1} #TODO:$n parametriksi?
-	${scm} 0755 ${1}	
-
+	dqb "FR0ST"
+	
 	if [ ! -d ${1} ] ; then
-		dqb "mkdir ${1}";sleep 6
+		#dqb "mkdir ${1}";sleep 6
 		${smd} -p ${1}
 	else
-		dqb "rm ${1}";sleep 6
-		${smr} -rf ${1};sleep 1
+		dqb "rm ${1}"
+		sleep 6
+
+		${smr} -rf ${1}/* #menisikö näin? , jatkossa kuitenkin sudo pois tästä komennosta
 	fi
-	
-	[ -d ${1}/live ] || ${smd} -p ${1}/live
-	${sco} -R ${n}:${n} ${1}/live
 
-	[ -d ${1}/${TARGET_DIGESTS_dir} ] || ${smd} -p ${1}/${TARGET_DIGESTS_dir}
-	${sco} -R ${n}:${n} ${1}/${TARGET_DIGESTS_dir}/..
+	#${sco} 0:0 ${1} #tarpeellinen?
+	csleep 1
+	dqb "BLADDER"
 
-	dqb "BLOADER"
-	#[ -d ${1}/${3} ] || ${smd} -p ${1}/${3}
-	[ -d ${1}/${3} ] && ${sco} -R ${n}:${n} ${1}/${3}
-	${sco} 0:0 ${1}
+	if [ "${3}" != "grub" ] ; then
+		#tapauksessa grub menee mettään näin
+		[ -d ${1}/${3} ] || ${smd} -p ${1}/${3} #miksi kommenteissa?
+		#[ -d ${1}/${3} ] && ${sco} -R ${n}:${n} ${1}/${3}
+	else
+		[ -d ${1}/boot/grub ] || ${smd} -p ${1}/boot/grub 
+		#[ -d ${1}/boot/grub ] && ${sco} -R ${n}:${n} ${1}/boot/grub 
+	fi
+
 	csleep 1
 
-	#11725:tämä vaikutti puuttuvan
+	#dqb "NIAM"
+	#141225:josqs taas pois kommenteista?
+	#smd=$(which mkdir) #aiemmaksi jatkossa?
+	#smr=$(which rm)
+	#sco=$(which chown)
+	#scm=$(which chmod)
+	##${sco} -R ${n}:${n} ${1} #oikeassa paikassa?
+	#csleep 1
+
+	dqb "LIVE-EVIL"
+	[ -d ${1}/live ] || ${smd} -p ${1}/live
+	#${sco} -R ${n}:${n} ${1}/live
+	#${scm} 0755 ${1}/live
+	csleep 1 
+
+	dqb "DGSTS"
+	[ -d ${1}/${TARGET_DIGESTS_dir} ] || ${smd} -p ${1}/${TARGET_DIGESTS_dir}
+	#${sco} -R ${n}:${n} ${1}/${TARGET_DIGESTS_dir}/..
+	#${scm} 0755 ${1}/${TARGET_DIGESTS_dir}/..
+	csleep 1
+
+	dqb "DAP"
 	[ -d ${1}/${TARGET_pad_dir} ] || ${smd} -p ${1}/${TARGET_pad_dir}
+	#${sco} -R ${n}:${n} ${1}/${TARGET_pad_dir}
+	#${scm} 0755 ${1}/${TARGET_pad_dir}
+	csleep 1 #${1}/${TARGET_pad_dir}
 
+	dqb "TUQ"
 	[ -d ${1}/../out ] || ${smd} -p ${1}/../out
-	${sco} -R ${n}:${n} ${1}/../out
-	${scm} 0755 ${1}/../out
+	#${sco} -R ${n}:${n} ${1}/../out
+	#${scm} 0755 ${1}/../out
+	csleep 1
 
-	#miten oikeydet?
+	dqb "UQS(${CONF_squash_dir})"
+	#miten rämän pitää mennä, vähän eri kuin yleinen tapaus
 	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
+	#${sco} -R ${n}:${n} ${CONF_squash_dir}
+	#${scm} 0755 ${CONF_squash_dir}
+	[ ${debug} -gt 0 ] && ls -las ${CONF_squash_dir}
 	#avainhakemisto (mitä siitä?)
+	csleep 2
 
-	#ls -la  ${1};csleep 6 dbq taakse
+	dqb "FN1AL"
+	${sco} -R $(whoami):$(whoami) ${1} #nämä 2 fktion loppuun olisi idea
+
+	#${scm} 0755 ${1} #oikeassa paikassa? pitäiskö findin kanssa kuitnkin?
+	local f
+	for f in $(find ${1} -type d ); do ${scm} 0755 ${f} ; done
+
+	csleep 1
+	[ ${debug} -gt 0 ] && ls -laR ${1}
+	csleep 7
 	dqb "...done\n"
 }
 
 #pad-hmiston omistajuuden pakotus jossain toisaalla, tässä omistajaksi menisi root
 #tämän saman joutaisitehdä useammalle tgt-hmiston alaiselle
+#141225:missä tätä käytetään nykyään?
 function default_process() {
 	dqb "nt default_process(${1})"
 	[ -z "{1}" ] && exit 65

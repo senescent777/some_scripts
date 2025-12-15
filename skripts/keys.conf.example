@@ -4,10 +4,12 @@
 #mm. mksums_new tarvitsee
 CONF_kay1name=12341234
 CONF_kay2name=98769876
+CONF_karray="${CONF_kay1name} ${CONF_kay2name}"
 
-TARGET_Dkname1=d1k #<filename correllating to pubK ? >
+TARGET_Dkname1=d1k.t1t #<filename correllating to pubK ? >
 TARGET_Dkname2=d2k #<filename correllating to KsK?>
+TARGET_Dkarray="${TARGET_Dkname1} ${TARGET_Dkname2}"
 
-#tulusikohan näihin alla muutos?
+#tulisikohan näihin alla muutos?
 TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${TARGET_Dkname1}
 TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${TARGET_Dkname2}

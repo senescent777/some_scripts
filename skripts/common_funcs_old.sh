@@ -84,6 +84,39 @@ function parse_opts_2() {
 	esac
 }
 
+#jatkossa common_lib? tai siis tämä siihen common_funcs_old.sh (VAIH)
+#josko toimisi kuteb tarkoitettu 141025
+function fix_sudo() {
+	dqb "sq22.fix_sudo( ${1}) "
+	[ x"${1}" == "x" ] && exit 97
+	[ -d ${1} ] || exit 98
+	dqb "pars ok"
+	csleep 1
+
+	cd ${1}
+	[ ${debug} -eq 1 ] && pwd
+	csleep 1 
+
+	#${sco} -R 0:0 ./etc/sudo*
+	#${scm} -R a-w ./etc/sudo*
+	#${sco} -R 0:0 ./usr/lib/sudo/*
+
+	#${sco} -R 0:0 ./usr/bin/sudo*
+	#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
+	#AND CHATTR MAY NOT WORK WITH SOME FILESYSTEMS	
+
+	#${scm} 0750 ./etc/sudoers.d
+	#${scm} 0440 /etc/sudoers.d/*
+
+	#${scm} -R a-w ./usr/lib/sudo/*
+	#${scm} -R a-w ./usr/bin/sudo*
+	#${scm} 4555 ./usr/bin/sudo
+	#${scm} 0444 ./usr/lib/sudo/sudoers.so
+
+	#${sca} +ui ./usr/bin/sudo
+	#${sca} +ui ./usr/lib/sudo/sudoers.so	
+}
+
 #====================common_lib.sh==================================
 function gpo() {
 	dqb "GPO"

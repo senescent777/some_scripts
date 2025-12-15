@@ -15,12 +15,11 @@ function usage() {
 	exit 44
 }
 
-#miten se -v?
 function parse_opts_real() {
 	dqb "asd.asd"
 }
 
-if [ -f ${d}/keys.conf ] ; then #tarcitaan, kts sibgle_param
+if [ -f ${d}/keys.conf ] ; then #tarvitaan, kts sibgle_param
 	. ${d}/keys.conf
 fi
 
@@ -145,7 +144,7 @@ function part456() {
 	fi
 }
 
-#HUOM.kandee ajaa vain jos binäärit ja avaimet olemassa
+#HUOM.kandee ajaa tämä vain jos binäärit ja avaimet olemassa
 function part6_5() {
 	dqb "part65( ${1}, ${2}, ${3})"
 	local i
@@ -155,30 +154,32 @@ function part6_5() {
 	for i in ${MKS_parts} ; do
 		dqb "${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
 		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
-		[ $? -gt 0 ] && dqb "install-keys --i ?"
+		[ $? -gt 0 ] && dqb "install-keys --i | --j ?"
 	done
 
 	dqb "dibw"
 }
 
-#TODO:Constit kuntoon tässä alla, sign pubK w/ KsK 
+#151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(TODO)
 function part7() {
 	dqb "part7"	
 	[ ${debug} -eq 1 ] && pwd
-	csleep 2
+	csleep 1
 
 	dqb "${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}"
 	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
-
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
-	csleep 2
+	csleep 5
 
 	${gg} --verify ./${TARGET_Dpubkf}.sig
 	[ $? -gt 0 ] && dqb "install-keys --i ?"
+	csleep 5
+
 	local i
 
 	for i in ${MKS_parts} ; do
 		${gg} --verify ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig 
+		csleep 1
 	done
 
 	echo $?
@@ -211,16 +212,16 @@ csleep 5
 dqb "BOOTLEREOD ONEDD"
 csleep 1
 
-#jotebkin toisin jatkossa? hakemistoa kohti 1 tdsto ja täts it? eio erikseen 1,2,3-juttui
+#jotebkin toisin jatkossa? hakemistoa kohti 1 tdsto ja täts it? ei erikseen 1,2,3-juttui
+#part123() nykyisellään ei tee .sh-tiedostoista tsummia, mutta jos pakkaisi bz2:seen...
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 
 cd ${source}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
-#271125:pitäisiköhän pad-hmiston sisällöstä tehdä dgsts.x kanssa? part123 hoitaa?
 #kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim
-#niinja nw julk av pitäisi myös tulla mukaan
+#niinja nw julk av pitäisi myös tulla mukaan, kts stage0_backend liittyen
 
 if [ x"${gg}" != "x" ] ; then 
 	part6_5

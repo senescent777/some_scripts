@@ -55,39 +55,6 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#jatkossa common_lib?
-#josko toimisi kuteb tarkoitettu 141025
-function fix_sudo() {
-	dqb "sq22.fix_sudo( ${1}) "
-	[ x"${1}" == "x" ] && exit 97
-	[ -d ${1} ] || exit 98
-	dqb "pars ok"
-	csleep 1
-
-	cd ${1}
-	[ ${debug} -eq 1 ] && pwd
-	csleep 1 
-
-	${sco} -R 0:0 ./etc/sudo*
-	${scm} -R a-w ./etc/sudo*
-	${sco} -R 0:0 ./usr/lib/sudo/*
-
-	#${sco} -R 0:0 ./usr/bin/sudo*
-	#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
-	#AND CHATTR MAY NOT WORK WITH SOME FILESYSTEMS	
-
-	${scm} 0750 ./etc/sudoers.d
-	${scm} 0440 /etc/sudoers.d/*
-
-	${scm} -R a-w ./usr/lib/sudo/*
-	#${scm} -R a-w ./usr/bin/sudo*
-	#${scm} 4555 ./usr/bin/sudo
-	${scm} 0444 ./usr/lib/sudo/sudoers.so
-
-	#${sca} +ui ./usr/bin/sudo
-	#${sca} +ui ./usr/lib/sudo/sudoers.so	
-}
-
 #myös 281125 testattu ja taisi toimia ok
 #sudoers-jekku olisi hyväksi tässäkin
 function bbb() {
@@ -187,7 +154,7 @@ function jlk_conf() {
 	ls -las ${1}/${2}.conf	
 	csleep 5
 
-	grep -v TARGET_to_ram ${1}/${2}.conf > ${t}/root.conf 
+	grep -v TARGET_to_ram ${1}/${2}.conf > ${t}/root.conf #tarpeellinen nykyään?
 	echo "TARGET_to_ram=1" >> ${t}/root.conf #whether u can write to / or not
 	csleep 5
 
@@ -259,7 +226,6 @@ function rst_pre1() {
 	csleep 1		
 }
 
-#HUOM.111225:toimii vai ei? kylkait
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
@@ -276,9 +242,12 @@ function rst_pre2() {
 	#LANGUAGE ja LC_ALL jos asettaisi jhnkn arvoon
 	#HUOM.111225:miten suhtautuu check_bin2() nykyään tähän ao. riviin?
 
-	#TODO:jotenkin toisin? kopsaisi vain jnkn pohjan jostain
+	#VAih:jotenkin toisin? kopsaisi vain jnkn pohjan jostain
 	#, vaikka "env | grep {LA,LC}"?
-	locale > ./etc/default/locale
+	#locale > ./etc/default/locale
+
+	env | grep LA > ./etc/default/locale
+	env | grep LA >> ./etc/default/locale
 	csleep 1
 		
 	reqwreqw ./etc/default/locale

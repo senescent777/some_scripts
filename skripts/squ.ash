@@ -98,7 +98,7 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.ash
 
 case ${cmd} in
-	-x) #121225:OK
+	-x) #151225:toimii, mutta ensin tämä sitten -j (vesi/happo/käsi/rakko)
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #jos testaisi jo uudesdtaan?
@@ -123,12 +123,12 @@ case ${cmd} in
 
 		${uom} ${CONF_source}
 	;;
-	-b) #121225:lienee ok
+	-b) #151225:ajettu tämäkin taas, kai toimii
 		bbb ${CONF_squash_dir}
 		#TODO:jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
-	-d)  #121225:OK
-	#TODO:pudon sydorys
+	-d)  #151225:OK
+	#TODO:pudon sudotus
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
 		pwd;sleep 6
@@ -138,12 +138,15 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #121125:teki tiedoston
+	-c)  #151225:ajettu tämäkin, toimii
 		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
-	-r)  #121225:ok
+	-r)  #151225:toimi ainakin kerran, rst_pre2() locale-muutokset viuelä testattava
+		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
 		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
+		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
+
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
@@ -151,25 +154,29 @@ case ${cmd} in
 		rst_pre1
 		rst ${CONF_squash_dir}
 	;;
-	-j)  #121225:OK
+	-j)  #151225:taitaa toimia (ansk katsoa miten fix_sudo:n siirto vaikuttaa)
 		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
-		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 
+		#jostain syystä näin		
+		smd=$(${odio} which mkdir)
+		smd="${odio} ${smd}"
+
+		dqb "smd= ${smd} "
+		csleep 2
+
+		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2}/
 		
-		#jatkossa jo s ei erikseen dir2? , vaan -j jälkeen voisi tulla uaseampi hakemisto?
-		#281125:olisikohan dir2-jutut jo kunnossa? sitten vain siirtymä s.e. -j voisi ottaa useamman hmiston parametreiksi
-
 		#pitäisiköhän keskeyttää jos näillä main jos dir2 puuttuu?
 		[ z"${dir2}" != "z" ] || echo "--dir2 "
 		[ -d ${dir2} ] || echo "--dir2 "
 
-		#j_cnf tuomaan mukanaan sen sq-chroot-spesifisaen konffin?
+		#j_cnf tuo mukanaan sen sq-chroot-spesifisen konffin (tai siis muokkaa moisen olemaan)
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
-	-f)  #151025:OK
+	-f)  #151225:
 		fix_sudo ${CONF_squash_dir}
 	;;
 	*)

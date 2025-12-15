@@ -4,11 +4,11 @@ function parse_opts_1() {
 	#HUOM.271125:pari ekaa casea eivät ehkä tarpeellisia nykyään koska x
 	#... tekisikö jotain?	(VAIH)	
 	case ${1} in
-		-h|--h) #121225:antaa tämän olla vielä tässä
+		-h|--h) #121225:antaa tämän olla vielä tässä (josqs pois?)
 			usage
 			exit
 		;;
-#		-v|--v)
+#		-v|--v) #samaan tapaan common_lib.gpo():ssa jatkossa? erillinen case siis
 #			debug=1
 #		;;
 		*)
