@@ -1,16 +1,11 @@
 function parse_opts_1() {
 	dqb "cpars.op-1(${1})"
 
-	#HUOM.271125:pari ekaa casea eivät ehkä tarpeellisia nykyään koska x
-	#... tekisikö jotain?	(VAIH)	
 	case ${1} in
 		-h|--h) #121225:antaa tämän olla vielä tässä (josqs pois?)
 			usage
 			exit
 		;;
-#		-v|--v) #samaan tapaan common_lib.gpo():ssa jatkossa? erillinen case siis
-#			debug=1
-#		;;
 		*)
 			single_param ${1}
 		;;
@@ -42,13 +37,15 @@ else
 
 	if [ -x ${fq} ] ; then
 		. ${fq}
+		
+		#151225:jos tästä olisi jotain hyötyä
+		check_binaries
+		check_binaries2
 
-		#061225:toistaiseksi tässä kunnes
+		#061225:toistaiseksi tässä ellei
 		gi=$(${odio} which genisoimage)
 		gmk=$(${odio} which grub-mkrescue)
 		xi=$(${odio} which xorriso)
-
-		#121225:pitäisiköhän niitä check_bin() - åerheen fktioita kutsua? (TODO)
 	else
 		. ${fr} #./common_funcs_old.sh
 	fi

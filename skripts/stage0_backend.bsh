@@ -83,7 +83,6 @@ function make_src_dirs() {
 }
 
 function copy_main() {
-	#debug=1
 	dqb "copy_main(${1}, ${2}, ${3} )"
 
 	[ x"${1}" != "x" ] || exit 2
@@ -124,8 +123,8 @@ function copy_main() {
 	dqb "copy_main() donw\n"
 }
 
-#tilapäisesti viritys missä conf samassa paketissa .deb kanssa (041025)
-#sudo cat" 1 ideqa, mangle_conf() toinen
+#tilapäisesti viritys missä conf samassa paketissa .deb kanssa (041025) ?
+#sudo cat" 1 idea, mangle_conf() toinen
 #.. jospa se devuan.conf olisi se juttu, lähdehmistoon moinen ja sit jtain
 #.. vielä d.c squash-hmistoon EIKU
 function copy_conf() {
@@ -151,18 +150,18 @@ function copy_conf() {
 		csleep 1
 	fi
 
-	#nykyään vähän erilainen upload kuin ao. blokkia kiroittaessa
+	#nykyään vähän erilainen upload kuin ao. blokkia kirJoittaessa
 	if [ -s ${3}/upload.sh ] || [ -s ${3}/extras.tar.bz2 ] ; then 
 		for f in ${CONF_g2} ; do mangle_conf ${f} ${3}/${2}.conf ; done
 	fi
 
 	utfile=${3}/${2}.conf
 	#HUON.041025:manlge_conf():iin pitäisi vähitellen keksiä sopiva sisältö
-	#... ja CONF_G1 kanssa 
+	#... ja CONF_G1 kanssa ?
 
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
-	#TODO:saattanee joutua muuttamaan ao. rivejä koska x
+	#TODO:saattanee joutua muuttamaan ao. rivejä koska x? mikä?
 	echo -n "src=/" >> ${utfile}
 	echo -n "$" >> ${utfile}
 	echo "{TARGET_pad2}" >> ${utfile}	
@@ -206,7 +205,7 @@ function copy_sums() {
 	csleep 1
 
 	if [ -d ${1} ] ; then
-		dqb "JI"
+		dqb "W HAT AM I SUPPOSED TO DO HERE?"
 		#jos lähde olemassa, mitä sitten? pitäisi varmaan kopsata jotain jonnekin?
 	else
 		dqb "NO ${1} / \${TARGET_DGST0} , YSINBF DEFAYLT KEYDIR "
@@ -218,10 +217,10 @@ function copy_sums() {
 		fi
 
 		#VAIH:tämä kohta uusiksi (jatkossa jos .bz3 sisältäisi julk avaimet hmistorakenteella? vai mitenkä?)
-		#121225:sitä array:tä voisi hyödyntää		
-		#dqb "${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}"
-		#${spc} ${CONF_keys_dir}/${TARGET_Dkname1} ${2}
-		#${spc} ${CONF_keys_dir}/${TARGET_Dkname2} ${2}
+		#121225:sitä array:tä voisi hyödyntää (CONF_karray?)		
+		#taI sitten vain CONF_keys_pub alta kaikki .gpg kohteeseen cp:llä ja täts it?
+
+		dqb "W HAT AM I SUPPOSED TO DO HERE? pt 2"
 	fi
 
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
@@ -295,7 +294,6 @@ function bootloader() {
 			ks2=${2}/boot #jos siirtäisi ennen case;a nää
 			
 			if [ -d ${ks2} ] ; then
-				#141225:meneekö kopsailut oikein?
 				dqb "${spc} -a ${3}/boot/ ${CONF_target} || exit 8"
 				csleep 3
 
@@ -308,7 +306,7 @@ function bootloader() {
 				csleep 5
 
 				#jos ei automaagisesti jatkossa... mikä?
-				${smr} ${k3}/*.cfg #VAIH:uusi apumuuttuja
+				${smr} ${k3}/*.cfg
 				${smr} ${k3}/*.png
 				
 				for f in $(find ${ks2} -name '*.cfg') ; do
@@ -333,7 +331,8 @@ function bootloader() {
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
 
-#VAIH:sudon pudon pudotus tjsp? testaappa taas
+#161225:sudoilut myöhemmin
+#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1
@@ -341,7 +340,7 @@ function make_tgt_dirs() {
 	[ x"${1}" != "x" ] || exit 99
 	[ x"${1}" != "x/" ] || exit 100
 	[ y"${2}" != "y" ] || exit 101
-	[ -z ${3} ] && exit 102 #WTUN KAARISULKEET 666!!!
+	[ -z ${3} ] && exit 102
 	
 	dqb "PARAMZx OK"
 	csleep 1
@@ -360,27 +359,23 @@ function make_tgt_dirs() {
 	else
 		dqb "rm ${1}"
 		sleep 6
-
-		${smr} -rf ${1}/* #menisikö näin? , jatkossa kuitenkin sudo pois tästä komennosta
+		${smr} -rf ${1}/*
 	fi
 
-	#${sco} 0:0 ${1} #tarpeellinen?
 	csleep 1
 	dqb "BLADDER"
 
 	if [ "${3}" != "grub" ] ; then
 		#tapauksessa grub menee mettään näin
-		[ -d ${1}/${3} ] || ${smd} -p ${1}/${3} #miksi kommenteissa?
-		#[ -d ${1}/${3} ] && ${sco} -R ${n}:${n} ${1}/${3}
+		[ -d ${1}/${3} ] || ${smd} -p ${1}/${3}
 	else
-		[ -d ${1}/boot/grub ] || ${smd} -p ${1}/boot/grub 
-		#[ -d ${1}/boot/grub ] && ${sco} -R ${n}:${n} ${1}/boot/grub 
+		[ -d ${1}/boot/grub ] || ${smd} -p ${1}/boot/grub
 	fi
 
 	csleep 1
 
 	#dqb "NIAM"
-	#141225:josqs taas pois kommenteista?
+	#141225:josqs taas josqs pois kommenteista?
 	#smd=$(which mkdir) #aiemmaksi jatkossa?
 	#smr=$(which rm)
 	#sco=$(which chown)
@@ -390,41 +385,27 @@ function make_tgt_dirs() {
 
 	dqb "LIVE-EVIL"
 	[ -d ${1}/live ] || ${smd} -p ${1}/live
-	#${sco} -R ${n}:${n} ${1}/live
-	#${scm} 0755 ${1}/live
 	csleep 1 
 
 	dqb "DGSTS"
 	[ -d ${1}/${TARGET_DIGESTS_dir} ] || ${smd} -p ${1}/${TARGET_DIGESTS_dir}
-	#${sco} -R ${n}:${n} ${1}/${TARGET_DIGESTS_dir}/..
-	#${scm} 0755 ${1}/${TARGET_DIGESTS_dir}/..
 	csleep 1
 
 	dqb "DAP"
 	[ -d ${1}/${TARGET_pad_dir} ] || ${smd} -p ${1}/${TARGET_pad_dir}
-	#${sco} -R ${n}:${n} ${1}/${TARGET_pad_dir}
-	#${scm} 0755 ${1}/${TARGET_pad_dir}
 	csleep 1 #${1}/${TARGET_pad_dir}
 
 	dqb "TUQ"
 	[ -d ${1}/../out ] || ${smd} -p ${1}/../out
-	#${sco} -R ${n}:${n} ${1}/../out
-	#${scm} 0755 ${1}/../out
 	csleep 1
 
 	dqb "UQS(${CONF_squash_dir})"
-	#miten rämän pitää mennä, vähän eri kuin yleinen tapaus
 	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
-	#${sco} -R ${n}:${n} ${CONF_squash_dir}
-	#${scm} 0755 ${CONF_squash_dir}
 	[ ${debug} -gt 0 ] && ls -las ${CONF_squash_dir}
-	#avainhakemisto (mitä siitä?)
 	csleep 2
 
 	dqb "FN1AL"
-	${sco} -R $(whoami):$(whoami) ${1} #nämä 2 fktion loppuun olisi idea
-
-	#${scm} 0755 ${1} #oikeassa paikassa? pitäiskö findin kanssa kuitnkin?
+	${sco} -R $(whoami):$(whoami) ${1}
 	local f
 	for f in $(find ${1} -type d ); do ${scm} 0755 ${f} ; done
 
@@ -436,7 +417,7 @@ function make_tgt_dirs() {
 
 #pad-hmiston omistajuuden pakotus jossain toisaalla, tässä omistajaksi menisi root
 #tämän saman joutaisitehdä useammalle tgt-hmiston alaiselle
-#141225:missä tätä käytetään nykyään?
+#151225:missä tätä käytetään nykyään? part0() @stage0f.sh
 function default_process() {
 	dqb "nt default_process(${1})"
 	[ -z "{1}" ] && exit 65

@@ -242,12 +242,11 @@ function rst_pre2() {
 	#LANGUAGE ja LC_ALL jos asettaisi jhnkn arvoon
 	#HUOM.111225:miten suhtautuu check_bin2() nykyään tähän ao. riviin?
 
-	#VAih:jotenkin toisin? kopsaisi vain jnkn pohjan jostain
-	#, vaikka "env | grep {LA,LC}"?
+	#161225:josko nyt alkaisi /e/d/locale
 	#locale > ./etc/default/locale
 
-	env | grep LA > ./etc/default/locale
-	env | grep LA >> ./etc/default/locale
+	env | grep LAN > ./etc/default/locale
+	env | grep LC >> ./etc/default/locale
 	csleep 1
 		
 	reqwreqw ./etc/default/locale

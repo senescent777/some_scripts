@@ -1,8 +1,7 @@
-#VAIH:ce common_lib.sh includeointi
+
 odio=$(which sudo) 
 #VAIH:sudoon liittyen se sudoers-meshuggah-jekku käyttöön myös näihin remasterointiskripteihimn, varm. vuoksi
 #seur. pitäisi testata mitä tapahtuu omegan ajamisen jölkeen
-#========================tilapäisesti tässä, common_lib myöh==
 
 sah6=$(${odio} which sha512sum)
 sah6=$(${odio} which sha512sum)
@@ -13,8 +12,6 @@ gv=$(${odio} which gpgv)
 gi=$(${odio} which genisoimage)
 gmk=$(${odio} which grub-mkrescue)
 xi=$(${odio} which xorriso)
-
-##========================tilapäisesti tässä, common_lib myöh==
 
 #tarttisko tälle tehdä jotain?
 #sca=$(${odio} which chattr)
@@ -50,7 +47,6 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
-#VAIH:än asti juttujen korvaaminen toisen projektin common_lib
 #============================================
 
 function parse_opts_1() {
@@ -84,7 +80,6 @@ function parse_opts_2() {
 	esac
 }
 
-#jatkossa common_lib? tai siis tämä siihen common_funcs_old.sh (VAIH)
 #josko toimisi kuteb tarkoitettu 141025
 function fix_sudo() {
 	dqb "sq22.fix_sudo( ${1}) "
@@ -97,19 +92,20 @@ function fix_sudo() {
 	[ ${debug} -eq 1 ] && pwd
 	csleep 1 
 
-	#${sco} -R 0:0 ./etc/sudo*
-	#${scm} -R a-w ./etc/sudo*
-	#${sco} -R 0:0 ./usr/lib/sudo/*
+	${sco} -R 0:0 ./etc/sudo*
+	${scm} -R a-w ./etc/sudo*
+	${sco} -R 0:0 ./usr/lib/sudo/*
 
 	#${sco} -R 0:0 ./usr/bin/sudo*
 	#RUNNING SOME OF THESE COMMANDS OUTSIDE CHROOT ENV STARTED TO SEEM LIKE A BAD IDEA
-	#AND CHATTR MAY NOT WORK WITH SOME FILESYSTEMS	
+	#AND BESIDES: CHATTR MAY NOT WORK WITH SOME FILESYSTEMS	
 
-	#${scm} 0750 ./etc/sudoers.d
-	#${scm} 0440 /etc/sudoers.d/*
+	#miten nuo jutut taas olikaan ennen siirtelyä?
+	${scm} 0750 ./etc/sudoers.d
+	${scm} 0440 /etc/sudoers.d/*
 
-	#${scm} -R a-w ./usr/lib/sudo/*
-	#${scm} -R a-w ./usr/bin/sudo*
+	${scm} -R a-w ./usr/lib/sudo/*
+	${scm} -R a-w ./usr/bin/sudo*
 	#${scm} 4555 ./usr/bin/sudo
 	#${scm} 0444 ./usr/lib/sudo/sudoers.so
 
@@ -117,7 +113,6 @@ function fix_sudo() {
 	#${sca} +ui ./usr/lib/sudo/sudoers.so	
 }
 
-#====================common_lib.sh==================================
 function gpo() {
 	dqb "GPO"
 	#getopt olisi myös keksitty
@@ -127,7 +122,7 @@ function gpo() {
 	prevopt=""
 
 	if [ $# -lt 1 ] ; then
-		echo "$0 -h" #VAIH:exit jos ei param
+		echo "$0 -h" #:exit jos ei param?
 		exit
 	fi
 
@@ -139,4 +134,3 @@ function gpo() {
 }
 
 gpo "$@"
-#====================common_lib.sh==================================

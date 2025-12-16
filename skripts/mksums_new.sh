@@ -27,12 +27,12 @@ fi
 function single_param() {
 	case ${1} in
 		--iso)
-			[ -v CONF_kay2name ] || exit 68
-			${gg} -u ${CONF_kay2name} -sb ./*.iso
+			[ -v CONF_ksk ] || exit 68
+			${gg} -u ${CONF_ksk} -sb ./*.iso
 			exit 61
 		;;
 		--pkgs)
-			[ -v CONF_kay2name ] || exit 68
+			[ -v CONF_ksk ] || exit 68
 			[ -v CONF_pkgsdir2 ] || exit 67
 			[ -v CONF_BASEDIR ] || exit 66
 			[ x"${CONF_BASEDIR}" != "x" ] || exit 65
@@ -40,8 +40,8 @@ function single_param() {
 
 			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
 
-			${gg} -u ${CONF_kay2name} -sb ./*.deb
-			[ $? -eq 0 ] && ${gg} -u ${CONF_kay2name} -sb ./*.bz2
+			${gg} -u ${CONF_ksk} -sb ./*.deb
+			[ $? -eq 0 ] && ${gg} -u ${CONF_ksk} -sb ./*.bz2
 			
 			exit 63
 		;;
@@ -145,15 +145,22 @@ function part456() {
 }
 
 #HUOM.kandee ajaa tämä vain jos binäärit ja avaimet olemassa
+#161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan? jos MKS_PARTS parametriksi?
 function part6_5() {
-	dqb "part65( ${1}, ${2}, ${3})"
-	local i
-	pwd
+	dqb "mks.part65 ${1} , ${2} , ${3} "
+
+	[ -v CONF_pubk ] || exit 99	
+	[ -v TARGET_DIGESTS_dir ] || exit 98
+	[ -v TARGET_DIGESTS_file ] || exit 97
 	csleep 1
 
+	[ ${debug} -gt 0 ] && pwd
+	csleep 1
+	local i
+
 	for i in ${MKS_parts} ; do
-		dqb "${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
-		${gg} -u ${CONF_kay1name} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
+		dqb "${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
+		${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
 		[ $? -gt 0 ] && dqb "install-keys --i | --j ?"
 	done
 
@@ -161,18 +168,22 @@ function part6_5() {
 }
 
 #151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(TODO)
+#TODO:target_dpub-jutut pois sittenq mahd
 function part7() {
-	dqb "part7"	
-	[ ${debug} -eq 1 ] && pwd
+	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " #mitvit taas
+
+	[ -v TARGET_DIGESTS_dir ] || exit 98
+	[ -v TARGET_DIGESTS_file ] || exit 97	
+	[ ${debug} -gt 0 ] && pwd
 	csleep 1
 
-	dqb "${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}"
-	${gg} -u ${CONF_kay2name} -sb ./${TARGET_Dpubkf}
-	[ $? -gt 0 ] && dqb "install-keys --i ?"
+	dqb "${gg} -u ${CONF_ksk} -sb ./${TARGET_Dpubkf}"
+	${gg} -u ${CONF_ksk} -sb ./${TARGET_Dpubkf}
+	[ $? -gt 0 ] && dqb "install_keys  ?"
 	csleep 5
 
 	${gg} --verify ./${TARGET_Dpubkf}.sig
-	[ $? -gt 0 ] && dqb "install-keys --i ?"
+	[ $? -gt 0 ] && dqb "install_keys  ?"
 	csleep 5
 
 	local i
@@ -213,10 +224,11 @@ dqb "BOOTLEREOD ONEDD"
 csleep 1
 
 #jotebkin toisin jatkossa? hakemistoa kohti 1 tdsto ja täts it? ei erikseen 1,2,3-juttui
-#part123() nykyisellään ei tee .sh-tiedostoista tsummia, mutta jos pakkaisi bz2:seen...
+#part123() nykyisellään ei tee .sh-tiedostoista tsummia, mutta jos pakkaisi bz2:seen... (liittyen:"exp2 c" voisi muuttaa)
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 
+#161225:dgsts.1 kanssa jotain? yhtäkkiä yli 100k
 cd ${source}
 for p in ${MKS_parts} ; do part456 ${p}; done
 

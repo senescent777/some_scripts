@@ -1,15 +1,12 @@
-#CONF_kayid=0x #<your_key_1> #tartteeko näitä kahta? allekirjoitusjuttuihin ehkä
-#CONF_kayid2=0x #<your_key_2>
-
 #mm. mksums_new tarvitsee
-CONF_kay1name=12341234
-CONF_kay2name=98769876
-CONF_karray="${CONF_kay1name} ${CONF_kay2name}"
-
-TARGET_Dkname1=d1k.t1t #<filename correllating to pubK ? >
-TARGET_Dkname2=d2k #<filename correllating to KsK?>
-TARGET_Dkarray="${TARGET_Dkname1} ${TARGET_Dkname2}"
-
-#tulisikohan näihin alla muutos?
-TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${TARGET_Dkname1}
-TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${TARGET_Dkname2}
+CONF_pubk=abcdabcd
+CONF_ksk=deadbeefdeadbeef
+CONF_karray="${CONF_pubk} ${CONF_kay2name}"
+#
+#TARGET_Dkname1=d1k.t1t #<filename correllating to pubK ? >
+#TARGET_Dkname2=d2k #<filename correllating to KsK?>
+#TARGET_Dkarray="${TARGET_Dkname1} ${TARGET_Dkname2}"
+#
+##tulisikohan näihin alla muutos?
+#TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${TARGET_Dkname1}
+#TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${TARGET_Dkname2}

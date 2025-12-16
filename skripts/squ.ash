@@ -101,13 +101,12 @@ case ${cmd} in
 	-x) #151225:toimii, mutta ensin tämä sitten -j (vesi/happo/käsi/rakko)
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #jos testaisi jo uudesdtaan?
+	-y) #jos testaisi jo uudesdtaan? .iso-tdstoja varmaan löytyisi
 		[ -s ${par} ] || exit 66 #xxx kyllä ...
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
 
 		${som} -o loop,ro ${par} ${CONF_source}
-
 		[ $? -eq 0 ] || exit
 		[ ${debug} -eq 1 ] && ls -las ${CONF_source}/live/
 
@@ -128,7 +127,7 @@ case ${cmd} in
 		#TODO:jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
 	-d)  #151225:OK
-	#TODO:pudon sudotus
+		#TODO:pudon sudotus josqs? vaiko se 'doers
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
 		pwd;sleep 6
@@ -138,11 +137,13 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #151225:ajettu tämäkin, toimii
+	-c)  #161225:teki tiedoston tänään
 		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
-	-r)  #151225:toimi ainakin kerran, rst_pre2() locale-muutokset viuelä testattava
+	-r)
+		#161225:tänäänkin toimii
+		#151225:toimi ainakin kerran, rst_pre2() locale-muutokset viuelä testattava
 		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
 		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
 		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
@@ -154,12 +155,11 @@ case ${cmd} in
 		rst_pre1
 		rst ${CONF_squash_dir}
 	;;
-	-j)  #151225:taitaa toimia (ansk katsoa miten fix_sudo:n siirto vaikuttaa)
-		#jlk_jutut jollain atavlla yhdistäen stage0_backend:in juttujen kanssa?
+	-j)  #161225:toiminee edelleen
 
-		#jostain syystä näin		
-		smd=$(${odio} which mkdir)
-		smd="${odio} ${smd}"
+		#josko jo common_lib...		
+		#smd=$(${odio} which mkdir)
+		#smd="${odio} ${smd}"
 
 		dqb "smd= ${smd} "
 		csleep 2
@@ -167,16 +167,22 @@ case ${cmd} in
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2}/
 		
-		#pitäisiköhän keskeyttää jos näillä main jos dir2 puuttuu?
-		[ z"${dir2}" != "z" ] || echo "--dir2 "
-		[ -d ${dir2} ] || echo "--dir2 "
+		if [ -z "${dir2}" ] ; then
+			echo "--dir2 "
+			exit 95
+		fi
+
+		if [ ! -d ${dir2} ] ; then
+			echo "--dir2 "
+			exit 96
+		fi
 
 		#j_cnf tuo mukanaan sen sq-chroot-spesifisen konffin (tai siis muokkaa moisen olemaan)
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
-	-f)  #151225:
+	-f)  #161225:kai tämäkin toimii
 		fix_sudo ${CONF_squash_dir}
 	;;
 	*)
