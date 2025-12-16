@@ -10,5 +10,5 @@ CONF_isodir=/dir/4_iso_images
 CONF_dir=/same_as_in_conf.example
 CONF_part0=/same_as_in_conf.example
 
-CONF_accept_pkgs="coreutils git grub geniso xorriso gpg iptables wodim squash"
+CONF_accept_pkgs2="coreutils git grub geniso xorriso gpg iptables wodim squash"
 

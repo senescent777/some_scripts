@@ -20,9 +20,9 @@ function single_param() {
 . ./skripts/stage0_backend.bsh
 . ./skripts/common_funcs.sh
 
-#if [ -f ./skripts/keys.conf ] ; then #HUOM.141025:kts. copy_sums()
-#	. ./skripts/keys.conf
-#fi
+if [ -f ./skripts/keys.conf ] ; then #161225 laitettu takaisin syystä
+	. ./skripts/keys.conf
+fi
 
 dqb "PARAMS OK?"
 
@@ -30,15 +30,13 @@ dqb "PARAMS OK?"
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 function part0() {
 	#debug=1
-	dqb "PART0 ${1}, ${2} , ${3} , ${4}"
+	dqb "stg0f.PART0 ${1}, ${2} , ${3} , ${4}"
 	pwd
 	csleep 2
 
 	dqb "COPY1NG FILES IN 1 SEC"
 	csleep 1
-	#spc=(which cp) ? vaiko odio="" jhnkn?
 
-	#ei aina tarttisi näiTä renkata
 	for f in ./filesystem.squashfs ./vmlinuz ./initrd.img ; do
 		if [ -s ${2}/live/${f} ] ; then
 			${spc} ${2}/live/${f} ${4}/live
@@ -71,13 +69,13 @@ function part0() {
 
 	[ -v TARGET_DIGESTS_dir ] || exit 666
 	[ -v TARGET_DGST0 ] || exit 666
-	dqb "OUYG)(&R()%¤ER"
+	dqb "OGDRU JAHA D 666"
 
 	[ -z ${TARGET_DIGESTS_dir} ] && exit 65
 	dqb "56448748765484"
 
 	[ -z ${TARGET_DGST0} ] && exit 66
-	dqb "ÄÖ_ÅPÄÖÖÅPO"
+	dqb "AAPPO.IPIIPPO"
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
@@ -90,13 +88,17 @@ function part0() {
 
 	${odio} touch ${4}/${TARGET_pad_dir}/*
 	${scm} 0444 ${CONF_tmpdir}/*.conf
-	${scm} 0755 ${CONF_tmpdir}/*.sh
+	${scm} 0755 ${CONF_tmpdir}/*.sh #vaiko 0555?
 	
-	#keys-hmistossa ei juuri nyt taida olla .gpg-tdstoja... (081025)
-	if [ -v CONF_keys_dir ] ; then #keys.conf.. eiku common.conf ainakin vielä
-		if [ ! -z ${CONF_keys_dir}} ] ; then
-			if [ -d ${CONF_keys_dir} ] ; then
-				${spc} ${CONF_keys_dir}/*.gpg ${4}/${TARGET_DIGESTS_dir}
+	#161225:ao. tavalla jos mennäään ni parempi olla julk av erillisessä hmistossa q salaiset
+	#vähän parempi olisi jos voisi vielä rajata että mitkä .gpg tuolta hak alta kopsataan
+
+	if [ -v CONF_keys_dir_pub ] ; then #keys.conf.. eiku common.conf ainakin vielä
+		if [ ! -z ${CONF_keys_dir_pub}} ] ; then
+			if [ -d ${CONF_keys_dir_pub} ] ; then
+				dqb "${spc} ${CONF_keys_dir_pub}/*.gpg ${4}/${TARGET_DIGESTS_dir}"
+				csleep 1
+				${spc} ${CONF_keys_dir_pub}/*.gpg ${4}/${TARGET_DIGESTS_dir}
 			fi
 		fi
 	fi
@@ -122,7 +124,7 @@ make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}
 else
-	if [ -s ${1} ] && [ -r ${1} ] ; then #vieläkö tässä jokin qsee 111025?
+	if [ -s ${1} ] && [ -r ${1} ] ; then #151225:nyt toimii kun common_funcs muutettu
 		dqb "${som} -o loop,ro ${1} ${CONF_source}"
 		csleep 3
 

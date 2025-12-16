@@ -32,15 +32,11 @@ function single_param() {
 #	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
 #}
 
-#--in, tekeekö sillä mitään tässä skriptissä? , kts parse_opts_2() ... voisi laittaa tekemääm
 #BTW. "-d -v" miten se hoidetaan?
 function parse_opts_real() {
 	dqb "douböe(${1} , ${2})"
 
 	case ${1} in
-#		--base) #VAIH:--in tilalle?
-#			base=${2}
-#		;;
 		--add)
 			source2=${2}
 		;;
@@ -108,7 +104,6 @@ case ${cmd} in
 	;;
 	*)
 		#stage0f==glorified cp
-		#dqb "mkdir -p ./v/smthing;mkdir -p ./v/smthing/{isolinux,grub};ln -s ~/Desktop/minimize ./v/something/pad ?"
 		echo "./stage0f.sh ${source} ${source2} ${bl} ${debug}"
 	;;
 esac
