@@ -7,7 +7,7 @@ source=""
 bl=${CONF_bloader}
 
 function usage() {
-	echo "a glorified wrapper for genisoimage"
+	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
 	exit 666
 }
