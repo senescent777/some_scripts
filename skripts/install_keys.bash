@@ -15,7 +15,7 @@ function usage() {
 	#echo "${0} --tgt <tgt> --i Imports (public) keys from <tgt>"
 	#echo "${0} --tgt <tgt> --e Exports keys to <tgt>"
 	#echo "${0} --tgt <tgt> --m Makes 2 keys , <tgt> still needed"
-	echo "${0} --tgt <tgt> --j: 4 importing (private) keys from archiive"
+	echo "${0} --tgt <tgt> --j: 4 importing (private) keys from archive"
 }
 
 function single_param() {
@@ -38,36 +38,20 @@ function parse_opts_real () {
 #TODO:joutaisi testata kaikki caset qhan palauttanut kommenteista
 #... vaikka -e ensin
 #TODO:myös skriptin nimeäminen uudelleen, ei kaikki caset asennusta
-#TODO?:josko TARGET_Dk_jutut pois jatkossa, CONF_karray:n alkioilla jatkossa samat jtut?
+#VAIHjosko TARGET_Dk_jutut pois jatkossa, CONF_karray:n alkioilla jatkossa samat jtut?
 
 case ${cmd} in
 #	--i) #tällä hetkellä julk av varten
 #vähän niinqu "import2 k" ... mikä sekin voisi mennä s.e. iteroidaan jostain hmistosta .gpg-päätteiset
 #		[ -d ${tgt} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
-#
-#		for f in ${TARGET_Dkarray}  ; do
-#			echo "dbg: ${gg} --import ${tgt}/${f}"
-#			${gg} --import ${tgt}/${f}
-#		done
-#
-#		${gg} --list-keys
 #	;;
-#	--e) 
+#	--e)  #vähän niinqu "export2 c" , useampi .gpg ulos
 #		[ -d ${tgt} ] || echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
-#
-#		for f in ${TARGET_Dkarray}  ; do
-#			echo "${smr} ${tgt}/${f}*"
-#			${smr} ${tgt}/${f}*"
-#		done
-#
-#		#TODO:uusi array näitä varten+etenkin käyttöön?
-#		${gg} --export ${CONF_kay1name} > ${tgt}/${TARGET_Dkname1}
-#		${gg} --export ${CONF_kay2name} > ${tgt}/${TARGET_Dkname2}
+#TODO:kts uudestaan gpg --export
 #	;;
-#	--m) #vähän niinqu "export2 c"
+#	--m)
 #		echo "${gg} --generate-key in 5 secs"
 #		sleep 5
-#
 #		${gg} --generate-key
 #		sleep 5
 #		${gg} --generate-key
