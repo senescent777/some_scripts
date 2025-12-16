@@ -1,34 +1,16 @@
-#
-#jatkossa toisin?
-#TARGET_Dkname1=filename correllating to 
-#TARGET_Dkname2=filename correllating to 
-#TARGET_Dkarray="${TARGET_Dkname1} ${TARGET_Dkname2}"
-#/keys
-#
 CONF_pkgsdir2=/dir_containing_genisoimage
 CONF_gi_opts=/opts_4_genisoimage
 CONF_targetdir=/some_kind_of_target_4_something
 CONF_BASEDIR=/sourcedir_4_many_things
 #
-#seur 5 tarpeellisia nykyään?
-#TARGET_archdir0=base_4_archive_dir
-#TARGET_archdir=$TARGET_archdir0/4_archiving stuff
-#TARGET_backup_part=disk/by-uuid/devicefile_reserved_for_archiving
-#TARGET_scripts_bak_file=file_2_archive scripts
-#TARGET_pad_bak_file=file:2_archive_.iso's_additional_stuff
-#
 TARGET_DTAR_OPTS="--exclude=*.bz3 --exclude=$TARGET_Dkname2" #käyttöön?
-#TARGET_pad_dir= #mitkä näistä kolmeasta tarpeellisia?
+#TARGET_pad_dir= #mitkä näistä kolmesta tarpeellisia?
 #TARGET_padfile=
 #TARGET_pad2=
 #
 TARGET_DIGESTS_dir=$TARGET_pad_dir/dir_containing_digests
 TARGET_DIGESTS_file0=base_filename_4_digests
 TARGET_DIGESTS_file=$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0
-#
-#->keys.conf,example
-#TARGET_Dpubkf=$TARGET_DIGESTS_dir/$TARGET_Dkname1
-#TARGET_Dpubkg=$TARGET_DIGESTS_dir/$TARGET_Dkname2
 #
 CONF_scripts_dir=/dir_containing_necessary_scripts
 CONF_keys_dir=/dir_4_keys
@@ -40,13 +22,10 @@ CONF_stg0file= #tarpeellinen nykyään?
 CONF_tmpdir0=" base_dir_4_temporary_files "
 CONF_squash0=$CONF_tmpdir0/$CONF_squash
 CONF_squash_dir=$CONF_squash0/squashfs-root
-the line  ext2 noauto,user,exec,suid,dev 0 0 should be found in /etc/fstab
+#
+#the line  ext2 noauto,user,exec,suid,dev 0 0 should be found in /etc/fstab
+#
 CONF_tmpdir=$CONF_tmpdir0/temp_dir_4_additional stuff 
 CONF_source=$CONF_tmpdir}/temporary_mount_point_4_base
 CONF_target=$CONF_tmpdir}/target_where_base_and_additional_stuff_are_copied_,_different_from_\$CONF_squash_and\$CONF_source_-dirs
 CONF_bloader=preferred_bootloader
-#
-#CONF_distros_dir=/Directory_Supposed_To:Contain_Distro_.isos_To_Modify,_inspired_by_Karl_Sanders
-#CONF_wget_opts="--https-only --show-progress"
-#CONF_wget_def_url=https://add,mirror,url,here
-#TARGET_DHCP_row1="options_4:dhclient"
