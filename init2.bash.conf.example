@@ -1,4 +1,14 @@
-basedir=
-pkgsrc= #source for some essential packages 
-ue=#email 4 git
-un=#name 4 git
+CONF_basedir=/BASE/DIR
+CONF_pkgsrc=/source_dir_4_some_essential_packages 
+CONF_ue=email_4_git
+CONF_un=name_4_git
+
+CONF_basept2tgt=/bASE/TGT
+CONF_basept2src=/dev/smthing
+
+CONF_isodir=/dir/4_iso_images
+CONF_dir=/same_as_in_conf.example
+CONF_part0=/same_as_in_conf.example
+
+CONF_accept_pkgs2="coreutils git grub geniso xorriso gpg iptables wodim squash"
+

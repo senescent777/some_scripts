@@ -1,2 +1,2 @@
-basedir=
-pkgsrc= #source for some essential packages
+CONF_basedir=
+CONF_pkgsrc= #source for some essential packages
