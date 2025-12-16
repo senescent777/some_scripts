@@ -1,12 +1,8 @@
-#CONF_kayid=0x #<your_key_1> #tartteeko näitä kahta?
-#CONF_kayid2=0x #<your_key_2>
-
 #mm. mksums_new tarvitsee
-CONF_kay1name=12341234
-CONF_kay2name=98769876
-
-TARGET_Dkname1=dk1 #<filename correllating to pubK ? >
-TARGET_Dkname2=dk2 #<filename correllating to KsK?>
-
-TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${TARGET_Dkname1}
-TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${TARGET_Dkname2}
+CONF_pubk=abcdabcd
+CONF_ksk=deadbeefdeadbeef
+CONF_karray="${CONF_pubk} ${CONF_kay2name}"
+#
+#tulisikohan näihin alla muutos?
+#TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${TARGET_Dkname1}
+#TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${TARGET_Dkname2}

@@ -1,40 +1,31 @@
-CONF_kayid=0x<your_key_1>
-CONF_kayid2=0x<your_key_2>
-CONF_pkgsdir2=<dir_containing_genisoimage>
-CONF_gi_opts=<opts_4_genisoimage>
-CONF_targetdir=
-CONF_BASEDIR=<sourcedir 4 many things>
-TARGET_archdir0=<base_4_archive_dir>
-TARGET_archdir=$TARGET_archdir0/< 4 archiving stuff>
-TARGET_backup_part=disk/by-uuid/<devicefile reserved for archiving>
-TARGET_scripts_bak_file=<file to archive scripts>
-TARGET_pad_bak_file=<file to archive .iso's additional stuff>
+CONF_pkgsdir2=/dir_containing_genisoimage
+CONF_gi_opts=/opts_4_genisoimage
+CONF_targetdir=/some_kind_of_target_4_something
+CONF_BASEDIR=/sourcedir_4_many_things
+#
 TARGET_DTAR_OPTS="--exclude=*.bz3 --exclude=$TARGET_Dkname2" #käyttöön?
-TARGET_pad_dir=
-TARGET_padfile=
-TARGET_pad2=
-TARGET_Dkname1=<filename correllating to >
-TARGET_Dkname2=<filename correllating to CONF_kayid2>
-TARGET_DIGESTS_dir=$TARGET_pad_dir/<dir containing digests>
-TARGET_DIGESTS_file0=<base filename 4 digests>
+#TARGET_pad_dir= #mitkä näistä kolmesta tarpeellisia?
+#TARGET_padfile=
+#TARGET_pad2=
+#
+TARGET_DIGESTS_dir=$TARGET_pad_dir/dir_containing_digests
+TARGET_DIGESTS_file0=base_filename_4_digests
 TARGET_DIGESTS_file=$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0
-TARGET_Dpubkf=$TARGET_DIGESTS_dir/$TARGET_Dkname1
-TARGET_Dpubkg=$TARGET_DIGESTS_dir/$TARGET_Dkname2
-CONF_scripts_dir=<dir containing necessary scripts>
-CONF_keys_dir=<dir 4 keys>
-CONF_stg0file=
+#
+CONF_scripts_dir=/dir_containing_necessary_scripts
+CONF_keys_dir=/dir_4_keys
+CONF_keys_dir_pub=/only_pub_keys_here
+#
+CONF_stg0file= #tarpeellinen nykyään?
+#
 #HUOM.mielellään eri osiolla tuo tmpdir kuin se kehitysymp/tmpdir0 should be in its own partition
-CONF_tmpdir0= < base_dir 4 temporary files > 
+CONF_tmpdir0=" base_dir_4_temporary_files "
 CONF_squash0=$CONF_tmpdir0/$CONF_squash
 CONF_squash_dir=$CONF_squash0/squashfs-root
-the line  ext2 noauto,user,exec,suid,dev 0 0 should be found in /etc/fstab
-CONF_tmpdir=$CONF_tmpdir0/ < temp dir 4 additional stuff > 
-CONF_source=$CONF_tmpdir/< temporary mount point 4 base > CONF_target=$CONF_tmpdir/< target where base and additional stuff are copied , different from $CONF_squash  and $CONF_source -dirs>
-CONF_bloader=<preferred bootloader>
-#CONF_distros_dir=<Directory Supposed To Contain Distro .isos To Modify, inspired by Karl Sanders >
-#CONF_wget_opts="--https-only --show-progress"
-#CONF_wget_def_url=https://<add mirror url here>
-#TARGET_DHCP_row1="<options 4 dhclient>"
-#CONF_patch_name= #turha nykyään?
-#CONF_patch_list_1="<options 4 stage0.copy_conf()>"
-#CONF_patch_list_2="<more options 4 stage0.copy_conf()>"
+#
+#the line  ext2 noauto,user,exec,suid,dev 0 0 should be found in /etc/fstab
+#
+CONF_tmpdir=$CONF_tmpdir0/temp_dir_4_additional stuff 
+CONF_source=$CONF_tmpdir}/temporary_mount_point_4_base
+CONF_target=$CONF_tmpdir}/target_where_base_and_additional_stuff_are_copied_,_different_from_\$CONF_squash_and\$CONF_source_-dirs
+CONF_bloader=preferred_bootloader
