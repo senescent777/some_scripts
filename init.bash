@@ -5,29 +5,39 @@ else
 	exit 66
 fi
 
-#kuinkahan tarpeellinen blokki?
-fq=$(find / -type f -name common.conf)
-if [ -s ${fq} ] ; then
-	echo "TODO: . ${fq}"
-fi
-#
+##kuinkahan tarpeellinen blokki?
+#fq=$(find / -type f -name common.conf)
+#if [ -s ${fq} ] ; then
+#	echo ": . ${fq} ?"
+#fi
+##
 
 smd="sudo mkdir"
-[ -v CONF_basedir ] || exit
+[ -v CONF_basedir ] || exit 11
 [ -d ${CONF_basedir} ] || ${smd} ${CONF_basedir}
-#TODO:cd basedir ni noista ao. jutuista voisi sen alkuosan poistaa
+#cd basedir ni noista ao. jutuista voisi sen alkuosan poistaa?
 
-for d in ${CONF_pkgsrc} ${CONF_keys_dir} ${CONF_distros_dir} ${CONF_basedir}/boot/grub ${CONF_basedir}/isolinux ${CONF_pkgsdir2} ${CONF_basedir}/v ${CONF_basept2tgt} ; do 
-	if [ ! -z ${d} ] ; then
-		if [ ! -d ${d} ] ; then
-			${smd} -p ${d}
+sudo tar -cvf ${1} $0*
+sudo tar -rvf ${1} ./init2* #jtnkn fiksummin tämä
+#TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
+function jord() {
+	[ -v CONF_pkgsrc} ] || exit 22
 
-			echo "sco ?:? ${d} (TODO)"
-			echo "scm \$mode ${d} (TODO)"
-			sudo tar -rvf srcdrs.tar ${d}			
+	for d in ${CONF_pkgsrc} ${CONF_keys_dir} ${CONF_distros_dir} ${CONF_basedir}/boot/grub ${CONF_basedir}/isolinux ${CONF_pkgsdir2} ${CONF_basedir}/v ${CONF_basept2tgt} ; do 
+		if [ ! -z ${d} ] ; then
+			if [ ! -d ${d} ] ; then
+				${smd} -p ${d}
+
+				echo "sco ?:? ${d} (TODO)"
+				echo "scm \$mode ${d} (TODO)"	
+			fi
+		
+			sudo tar -rvf ${1} ${d}	#tarpeen jatkossa? jos kerran menee CONF_basedir alle nuo useammat hmistot
 		fi
-	fi
-done
+	done
+}
+
+jord ${1}
 
 #VAIH:voisi testata fråm scratch tämän ja sen toisen skriptin (toinen vkone vissiin?)
 function aqua() {
@@ -42,6 +52,8 @@ function aqua() {
 
 	sudo apt-get update
 	sudo apt --fix-broken install
+
+	#TODO:gpg ja iptables mukaan?
 
 	sudo apt-get reinstall --no-install-recommends libc6 coreutils
 	sudo apt-get reinstall --no-install-recommends libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
@@ -86,15 +98,15 @@ function aqua() {
 	sudo apt-get reinstall --no-install-recommends grub-common xorriso #jälkimminen toistaiseksi mukana
 	sudo apt-get reinstall --no-install-recommends geany
 	
-	sudo cp /var/cache/apt/archives/*.deb ${1} #
+	sudo cp /var/cache/apt/archives/*.deb ${1}
 }
+[ -v CONF_pkgsrc} ] || exit 33
+#aqua ${CONF_pkgsrc} #TODO:ajetaan vain jos verkkoyhteys saatavilla
 
-#aqua ${CONF_pkgsrc}
-
-sudo tar -rvf ${1} $0*
 for f in $(find / -type f -name 'sources.list*') ; do sudo tar -rvf ${1} ${f} ; done 
-sudo tar -rvf ${1} ./init2* #jtnkn fiksummin tämä
-sudo tar -rvf ${1} ${CONF_pkgsrc}/*.deb #TODO:jatkossa tämä rivi pois jos siirretään paketit basedir alle
+sudo tar -rvf ${1} ${CONF_pkgsrc}/*.deb #jatkossa tämä rivi pois jos siirretään paketit basedir alle?
+
+#TODO:e/sudoers.d alle uuis tiedosto? stage0 -d varten siis
 
 function ignis() {
 	[ -s ${CONF_basedir}/.gitignore ] || sudo touch ${CONF_basedir}/.gitignore

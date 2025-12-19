@@ -55,6 +55,7 @@ function part0() {
 	csleep 1
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää CONF_SOURCE
+	#191225;josko vähitellen jotain sen oletus-bloader.konfiguraation hyväksi?
 	bootloader ${3} ${2} ${1} 
 	
 	default_process ${4}/live
@@ -69,13 +70,13 @@ function part0() {
 
 	[ -v TARGET_DIGESTS_dir ] || exit 666
 	[ -v TARGET_DGST0 ] || exit 666
-	dqb "OGDRU JAHA D 666"
+	dqb "QGDRU JbHA D 666"
 
 	[ -z ${TARGET_DIGESTS_dir} ] && exit 65
 	dqb "56448748765484"
 
 	[ -z ${TARGET_DGST0} ] && exit 66
-	dqb "AAPPO.IPIIPPO"
+	dqb "AAPPO.iPIIPP0"
 
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
@@ -88,20 +89,21 @@ function part0() {
 
 	${odio} touch ${4}/${TARGET_pad_dir}/*
 	${scm} 0444 ${CONF_tmpdir}/*.conf
-	${scm} 0755 ${CONF_tmpdir}/*.sh #vaiko 0555?
+	${scm} 0555 ${CONF_tmpdir}/*.sh
 	
-	#161225:ao. tavalla jos mennäään ni parempi olla julk av erillisessä hmistossa q salaiset
-	#vähän parempi olisi jos voisi vielä rajata että mitkä .gpg tuolta hak alta kopsataan
+	#161225 liittyen kts keyutl.bash
 
-	if [ -v CONF_keys_dir_pub ] ; then #keys.conf.. eiku common.conf ainakin vielä
-		if [ ! -z ${CONF_keys_dir_pub}} ] ; then
-			if [ -d ${CONF_keys_dir_pub} ] ; then
-				dqb "${spc} ${CONF_keys_dir_pub}/*.gpg ${4}/${TARGET_DIGESTS_dir}"
-				csleep 1
-				${spc} ${CONF_keys_dir_pub}/*.gpg ${4}/${TARGET_DIGESTS_dir}
-			fi
-		fi
-	fi
+#	#191225:tarkoituksella eriniminen Const, lisäillään kohdehmistoon vain jos oletusavain-hmisto olemassa
+#	#...tosin voi nyt konfliktoida copy_sums():in else-haaran kanssa
+#	if [ -v CONF_keys_dir_pub2 ] ; then
+#		if [ ! -z ${CONF_keys_dir_pub2}} ] ; then
+#			if [ -d ${CONF_keys_dir_pub2} ] ; then
+#				dqb "${spc} ${CONF_keys_dir_pub}/*.gpg ${4}/${TARGET_DIGESTS_dir}"
+#				csleep 1
+#				${spc} ${CONF_keys_dir_pub2}/*.gpg ${4}/${TARGET_DIGESTS_dir}
+#			fi
+#		fi
+#	fi
 
 	default_process ${4}/${TARGET_pad_dir}
 	[ ${debug} -eq 1 ] && ls -las ${4}

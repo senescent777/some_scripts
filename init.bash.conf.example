@@ -1,2 +1,6 @@
-CONF_basedir=
-CONF_pkgsrc= #source for some essential packages
+CONF_basedir=~/base
+CONF_pkgsrc=~/base/pkgs #source for some essential packages
+CONF_basept2tgt=${CONF_basedir}/adad
+CONF_keys_dir=${CONF_basedir}/shamash
+CONF_distros_dir=${CONF_basedir}/dfhgdfgh
+CONF_pkgsdir2=${CONF_basedir}/påaspåas

@@ -67,8 +67,8 @@ csleep 1
 
 case ${cmd} in
 	--make-dirs)
-		#init.bash käskyttämään tätä case:a tarvittaessa?
-		make_src_dirs ${CONF_bloader}
+		#181225:lotottu init.bash hoitamaan jatkossa src_dirs-asiat
+		#make_src_dirs ${CONF_bloader}
 
 		#onkohan mieltä tehdä noin päin kuin alla?
 		make_tgt_dirs ${CONF_target} ${CONF_source} ${CONF_bloader}
