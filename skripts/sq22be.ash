@@ -189,7 +189,9 @@ function jlk_sums() {
 	[ -d ${2}} ] || ${smd} -p ${2}
 	dqb "${spc} -a ${1}/* ${2}"
 	csleep 3
-	${spc} -a ${1}/* ${2}
+
+	#VAIH:pitäisikö vähän rajata? jos dgsts.x riittäisi?
+	${spc} -a ${1}/${TARGET_DIGESTS_file0}.* ${2}
 
 	ls -las ./${TARGET_DGST0};csleep 5 #pitäisikö olla $2?
 	cd ..

@@ -35,7 +35,6 @@ echo "TARGET_Dpubkg=\$TARGET_DIGESTS_dir/\$TARGET_Dkname2 #keys.conf"
 
 echo "CONF_scripts_dir=dir containing necessary scripts"
 echo "CONF_keys_dir=dir_4_keys"
-echo "CONF_keys_dir=dir_4_PUBLIC_keys"
 echo "CONF_stg0file= #necessary?"
 
 echo "CONF_tmpdir0=base_dir_4_temporary_files"

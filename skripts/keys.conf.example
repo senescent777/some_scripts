@@ -3,6 +3,10 @@ CONF_pubk=abcdabcd
 CONF_ksk=deadbeefdeadbeef
 CONF_karray="${CONF_pubk} ${CONF_kay2name}"
 #
-#tulisikohan näihin alla muutos?
+#TARGET_Dkname1=d1k.t1t #<filename correllating to pubK ? >
+#TARGET_Dkname2=d2k #<filename correllating to KsK?>
+#TARGET_Dkarray="${TARGET_Dkname1} ${TARGET_Dkname2}"
+#
+##tulisikohan näihin alla muutos?
 #TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${TARGET_Dkname1}
 #TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${TARGET_Dkname2}

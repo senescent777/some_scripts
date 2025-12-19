@@ -10,7 +10,6 @@ par=""
 d=$(dirname $0)
 . ${d}/common.conf
 
-#ennen vai jälkeen parse_opts esittelyn?
 function usage() {
 	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0} source_file NEEDS TO HAVE ABSOLUTE PATH"
 	echo "\t (source could be under /r/l/m/live) "
@@ -35,7 +34,6 @@ function usage() {
 	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
-#12125:cmd kantsisi asettaa vain jos tyhjä
 function parse_opts_real() {
 	dqb "squash.parse_opts_real(${1}, ${2})"
 
@@ -45,14 +43,15 @@ function parse_opts_real() {
 			[ -z ${2} ] && exit 65
 			[ -d ${2} ] || exit 66	
 		;;
-		-x|-y|-i|-j)
+		-x|-y|-j) #-i| ei vissiin enää moista
 			if [ -s ${2} ] || [ -d ${2} ] ; then
 				par=${2}
 			else
 				exit 67
 			fi
 
-			#[ -z ${2} ] && exit 65	
+			#[ -z ${2} ] && exit 65
+			#191225:pitäisikö jotain lisätarkistruksia?
 			cmd=${1}
 		;;
 		-c)
@@ -98,10 +97,10 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.ash
 
 case ${cmd} in
-	-x) #151225:toimii, mutta ensin tämä sitten -j (vesi/happo/käsi/rakko)
+	-x) #191225:toimii, mutta ensin tämä sitten -j (vesi/happo/käsi/rakko)
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #jos testaisi jo uudesdtaan? .iso-tdstoja varmaan löytyisi
+	-y) #191225:toimii
 		[ -s ${par} ] || exit 66 #xxx kyllä ...
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -122,11 +121,12 @@ case ${cmd} in
 
 		${uom} ${CONF_source}
 	;;
-	-b) #151225:ajettu tämäkin taas, kai toimii
+	-b) #191225:ajettu tämäkin taas, kai toimii
+		#TODO:bz3-siivoilut ao. fktioon
 		bbb ${CONF_squash_dir}
 		#TODO:jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
-	-d)  #151225:OK
+	-d)  #191225:toimii
 		#TODO:pudon sudotus josqs? vaiko se 'doers
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
@@ -137,12 +137,12 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #161225:teki tiedoston tänään
+	-c)  #191225:toimii
 		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#161225:tänäänkin toimii
+		#191225:tänäänkin toimii
 		#151225:toimi ainakin kerran, rst_pre2() locale-muutokset viuelä testattava
 		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
 		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
@@ -154,13 +154,10 @@ case ${cmd} in
 		#optionaalinen ajettava komento?
 		rst_pre1
 		rst ${CONF_squash_dir}
+		
+		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #161225:toiminee edelleen
-
-		#josko jo common_lib...		
-		#smd=$(${odio} which mkdir)
-		#smd="${odio} ${smd}"
-
+	-j)  #191225:toiminee edelleen
 		dqb "smd= ${smd} "
 		csleep 2
 
@@ -179,7 +176,8 @@ case ${cmd} in
 
 		#j_cnf tuo mukanaan sen sq-chroot-spesifisen konffin (tai siis muokkaa moisen olemaan)
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
-		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}/${TARGET_DGST0}
+		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad2}/${TARGET_DGST0}
+		
 		fix_sudo ${CONF_squash_dir}
 	;;
 	-f)  #161225:kai tämäkin toimii

@@ -2,10 +2,10 @@ function parse_opts_1() {
 	dqb "cpars.op-1(${1})"
 
 	case ${1} in
-		-h|--h) #121225:antaa tämän olla vielä tässä (josqs pois?)
-			usage
-			exit
-		;;
+#		-h|--h) #121225:antaa tämän olla vielä tässä (josqs pois?)
+#			usage
+#			exit
+#		;;
 		*)
 			single_param ${1}
 		;;
@@ -39,6 +39,7 @@ else
 		. ${fq}
 		
 		#151225:jos tästä olisi jotain hyötyä
+		#(ehkä jos parametrit keksii ao. fktioille niin sitten olisi)
 		check_binaries
 		check_binaries2
 

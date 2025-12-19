@@ -11,7 +11,7 @@ function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
 	echo "$0 --iso"
 	echo "$0 --pkgs"
-	echo "$0 -h" #voisi olla vakiovaruste tuo optio ja liityvä fktio (jos vähän jo 111225 siihen suunyaan)
+	echo "$0 -h"
 	exit 44
 }
 
@@ -97,7 +97,7 @@ function part123() {
 	dqb "part123(${1}, ${2} , ${3} )"
 
 	[ z"${1}" != "z" ] || exit 111
-	#[ -d ${2} ] || exit 112 #miksi kommenteissa? testaa syy?
+	[ -d ${2} ] || exit 112 #miksi kommenteissa? testaa syy?
 	[ -d ${3} ] || exit 113
 
 	local old
@@ -117,6 +117,7 @@ function part123() {
 
 		#HUOM.siinä aiemmassa virityksessä taisi tulla myös devuan.conf (tjsp) mukaan
 		#... ja ne 2 julk av myös
+		#byj. cersiossa myös
 		for f in $(find ./${2} -type f -name "*.conf")  ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 
 		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
@@ -228,7 +229,6 @@ csleep 1
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 
-#161225:dgsts.1 kanssa jotain? yhtäkkiä yli 100k
 cd ${source}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
