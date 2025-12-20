@@ -32,14 +32,14 @@ function jord() {
 				echo "scm \$mode ${d} (TODO)"	
 			fi
 		
-			sudo tar -rvf ${1} ${d}	#tarpeen jatkossa? jos kerran menee CONF_basedir alle nuo useammat hmistot
+			#sudo tar -rvf ${1} ${d}	#tarpeen jatkossa? jos kerran menee CONF_basedir alle kaikki hmistot
 		fi
 	done
 }
 
 jord ${1}
 
-#VAIH:voisi testata fråm scratch tämän ja sen toisen skriptin (toinen vkone vissiin?)
+#1912255:jnkn verran jo testailtu
 function aqua() {
 	if [ ! -s ${CONF_basedir}/sources.list ] ; then
 		sudo nano /etc/apt/sources.list #tai cp
@@ -100,8 +100,11 @@ function aqua() {
 	
 	sudo cp /var/cache/apt/archives/*.deb ${1}
 }
+
 [ -v CONF_pkgsrc} ] || exit 33
-#aqua ${CONF_pkgsrc} #TODO:ajetaan vain jos verkkoyhteys saatavilla
+sudo apt-get update
+[ $? -eq 0 ] && aqua ${CONF_pkgsrc}
+#VAIH:ajetaan aqua vain jos verkkoyhteys saatavilla
 
 for f in $(find / -type f -name 'sources.list*') ; do sudo tar -rvf ${1} ${f} ; done 
 sudo tar -rvf ${1} ${CONF_pkgsrc}/*.deb #jatkossa tämä rivi pois jos siirretään paketit basedir alle?
@@ -118,5 +121,5 @@ function ignis() {
 	sleep 1
 }
 
-#ignis
+ignis
 sudo tar -rvf ${1} ${CONF_basedir}

@@ -97,6 +97,7 @@ function aqua() {
 	fi
 
 	sudo apt autoremove
+	sudo apt --fix-broken install #tähän vai heti grub-as jälk?
 	sudo which iptables-restore
 	sudo iptables-restore /etc/iptables/rules.v4.0
 
@@ -119,7 +120,6 @@ function ignis() {
 	[ x"${tig}" == "x" ] && exit 68
 	[ -x${tig} ] || exit 69
 
-	#git olemassaolo pitäisi testata ennernq etenee pidemmälle
 	[ -v CONF_ue ] && ${tig} config --global user.email ${CONF_ue}
 	[ -v CONF_un ] && ${tig} config --global user.name ${CONF_un}
 	echo "tg1,1,dibe"
@@ -171,15 +171,28 @@ function luft() {
 		fi
 	fi
 
-#TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
-#	#tarpeellinen? vissiin
-#	if [ -v CONF_basept2tgt ] && [ -v CONF_basept2src ] ; then
-#		#/proc/mounts voisi grepta
-#		[ -d ${CONF_basept2tgt} ] || sudo mkdir ${CONF_basept2tgt}
-#
-#		#jnkn ehdon taa tuo mount?
-#		[ -b /dev/${CONF_basept2src} ] && sudo mount /dev/${CONF_basept2src} ${CONF_basept2tgt}
-#	fi
+	#TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
+
+	if [ -v CONF_basept2tgt ] && [ -v CONF_basept2src ] ; then
+		#/proc/mounts voisi grepta
+		[ -d ${CONF_basept2tgt} ] || sudo mkdir ${CONF_basept2tgt}
+
+		#jnkn ehdon taa tuo mount? riittääkö -b ehdoksi?
+		[ -b /dev/${CONF_basept2src} ] && sudo mount /dev/${CONF_basept2src} ${CONF_basept2tgt}
+	fi
 }
 
 luft
+
+#sudoilua;
+#CB_LIST2="/bin/rm ${CONF_basept2tgt}/*"
+#VAIH:LIST2:sesta array että saisi jotain muitakin tarpeellisia? tai ihan erillinen tdsto /e/.d alle?
+#CB_LIST="mv cp rm" #pitäisi rajata CONF_tmpdir alle nuo komennot sudolla
+
+#TODO:jospa jatkossa init1.bash tekisi ihan oman tdston /e/s.d alle
+#if [ -v CB_LIST2 ] ; then
+#	echo "$(whoami) localhost=NOPASSWD: ${CB_LIST2} " >> ${q}/meshuggah
+
+#... tai siihen init1:sen muodostamaan tar:iin sisällöksi myös /e/s.d alaisia?
+#... jokin sudoers.d.example mihin sitten lisäksi CB_LIST juttuja, lopuksi kopsaus oikeaan kohteeseen ?
+#fi
