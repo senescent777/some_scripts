@@ -7,6 +7,8 @@ MKS_parts="1 2 3"
 . ${d}/common.conf
 bl=${CONF_bloader}
 
+#TODO:part123() 2 , pitäisikö sitä miettiä vielä?
+
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
 	echo "$0 --iso"
@@ -91,14 +93,14 @@ function part0() {
 	csleep 1
 }
 
-#HUOM.281125:pad alla julk avaimet .bz2:sessa olisi idea
+#HUOM.281125:pad alla julk avaimet .bz2:sessa olisi idea, tosin muitskin löytyy
 function part123() {
 	#debug=1
 	dqb "part123(${1}, ${2} , ${3} )"
 
 	[ z"${1}" != "z" ] || exit 111
-	[ -d ${2} ] || exit 112 #miksi kommenteissa? testaa syy?
 	[ -d ${3} ] || exit 113
+	#[ -d ${2} ] || exit 114 # -d $2/$3 parempi?
 
 	local old
 	local f
@@ -162,16 +164,16 @@ function part6_5() {
 	for i in ${MKS_parts} ; do
 		dqb "${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
 		${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
-		[ $? -gt 0 ] && dqb "install-keys --i | --j ?"
+		[ $? -gt 0 ] && dqb "kutl.bash w | x ?"
 	done
 
 	dqb "dibw"
 }
 
 #151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(TODO)
-#TODO:target_dpub-jutut pois sittenq mahd
+#TODO:target_dpub-jutut pois sittenq mahd ?
 function part7() {
-	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " #mitvit taas
+	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " 
 
 	[ -v TARGET_DIGESTS_dir ] || exit 98
 	[ -v TARGET_DIGESTS_file ] || exit 97	
@@ -180,11 +182,11 @@ function part7() {
 
 	dqb "${gg} -u ${CONF_ksk} -sb ./${TARGET_Dpubkf}"
 	${gg} -u ${CONF_ksk} -sb ./${TARGET_Dpubkf}
-	[ $? -gt 0 ] && dqb "install_keys  ?"
+	[ $? -gt 0 ] && dqb "kutl.bash  ?"
 	csleep 5
 
 	${gg} --verify ./${TARGET_Dpubkf}.sig
-	[ $? -gt 0 ] && dqb "install_keys  ?"
+	[ $? -gt 0 ] && dqb "kutl.bash  ?"
 	csleep 5
 
 	local i
@@ -225,11 +227,12 @@ dqb "BOOTLEREOD ONEDD"
 csleep 1
 
 #jotebkin toisin jatkossa? hakemistoa kohti 1 tdsto ja täts it? ei erikseen 1,2,3-juttui
-#part123() nykyisellään ei tee .sh-tiedostoista tsummia, mutta jos pakkaisi bz2:seen... (liittyen:"exp2 c" voisi muuttaa)
+#201225:part123() nykyisellään ei tee .sh-tiedostoista tsummia, mutta voisi laittaa tekemään
+
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 
-cd ${source}
+cd ${source} #201225:cd-komennon kanssa ei niin justiinsa mihin laittaa part123() nähden koska kys fktio sisältää moisen komennon
 for p in ${MKS_parts} ; do part456 ${p}; done
 
 #kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim

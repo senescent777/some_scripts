@@ -97,7 +97,8 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.ash
 
 case ${cmd} in
-	-x) #191225:toimii, mutta ensin tämä sitten -j (vesi/happo/käsi/rakko)
+	-x) #201225:toimii
+	# ensin tämä sitten -j (vesi/happo/käsi/rakko) ?
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #191225:toimii
@@ -121,12 +122,12 @@ case ${cmd} in
 
 		${uom} ${CONF_source}
 	;;
-	-b) #191225:ajettu tämäkin taas, kai toimii
-		#TODO:bz3-siivoilut ao. fktioon
+	-b) #201225:jos vaikka toimisi
+		#VAIH:bz3-siivoilut ao. fktioon
 		bbb ${CONF_squash_dir}
-		#TODO:jhnkin se squash/pad-hmistn omistajuuden pakotus
+		#VAIH:jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
-	-d)  #191225:toimii
+	-d)  #201225:toimii
 		#TODO:pudon sudotus josqs? vaiko se 'doers
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
@@ -142,8 +143,7 @@ case ${cmd} in
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#191225:tänäänkin toimii
-		#151225:toimi ainakin kerran, rst_pre2() locale-muutokset viuelä testattava
+		#201225:toimii
 		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
 		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
 		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
@@ -157,12 +157,12 @@ case ${cmd} in
 		
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #191225:toiminee edelleen
+	-j)  #201225:vissiin toimii tämäkin
 		dqb "smd= ${smd} "
 		csleep 2
 
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
-		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2}/
+		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2} #/
 		
 		if [ -z "${dir2}" ] ; then
 			echo "--dir2 "
@@ -176,8 +176,9 @@ case ${cmd} in
 
 		#j_cnf tuo mukanaan sen sq-chroot-spesifisen konffin (tai siis muokkaa moisen olemaan)
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
-		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad2}/${TARGET_DGST0}
 		
+		#HUOM.201225:tarvitseekoko koko ko target_dgsts - hmistoa kopsata kohteeseen? riittäisikö vähempi?
+		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad2}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
 	-f)  #161225:kai tämäkin toimii

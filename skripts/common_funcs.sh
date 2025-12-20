@@ -1,5 +1,5 @@
 function parse_opts_1() {
-	dqb "cpars.op-1(${1})"
+	dqb "cf.pars.op-1( ${1} )"
 
 	case ${1} in
 #		-h|--h) #121225:antaa tämän olla vielä tässä (josqs pois?)
@@ -33,13 +33,10 @@ fr=$(find ${CONF_BASEDIR} -type f -name common_funcs_old.sh | head -n 1)
 if [ -z ${fq} ] ; then
 	. ${fr} #./common_funcs_old.sh
 else
-	#debug=1 301125:josko jo riittäisi debug-ulostukset
-
 	if [ -x ${fq} ] ; then
 		. ${fq}
 		
-		#151225:jos tästä olisi jotain hyötyä
-		#(ehkä jos parametrit keksii ao. fktioille niin sitten olisi)
+		#HUOM.joko annettava validi param fktioille tai asetettava CONF_testgris jotta ao. riveihin ei kosahda suoritus
 		check_binaries
 		check_binaries2
 

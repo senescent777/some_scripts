@@ -1,12 +1,11 @@
-#mm. mksums_new tarvitsee
+#==============SEURAAVAT 2 RIVIÄ VOI EDITOIDA/U PROPABLY NEED TO CHANGE NEXT 2 ROWS AFTER RUNNING kutl.bash =============================
 CONF_pubk=abcdabcd
 CONF_ksk=deadbeefdeadbeef
-CONF_karray="${CONF_pubk} ${CONF_kay2name}"
+#==============ALLAOLEVIA 6 RIVIÄ TUSKIN TARVITSEE MUUTTAA/U PROPABLY DON'T NEED TO CHANGE NEXT 6 ROWS AFTER THIS LINE===================
+CONF_karray="${CONF_pubk} ${CONF_ksk}"
 #
-#TARGET_Dkname1=d1k.t1t #<filename correllating to pubK ? >
-#TARGET_Dkname2=d2k #<filename correllating to KsK?>
-#TARGET_Dkarray="${TARGET_Dkname1} ${TARGET_Dkname2}"
-#
-##tulisikohan näihin alla muutos?
-#TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${TARGET_Dkname1}
-#TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${TARGET_Dkname2}
+#hyvä näin vai vieläkös orkitaan?
+TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${CONF_pubk}.gpg
+TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${CONF_ksk}.gpg
+#========================================================================================================================================
+#SHOULD COMMENT OUT THE OUTPUT OF gpg --list-keys THOUGH

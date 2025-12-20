@@ -1,4 +1,3 @@
-
 #HUOM.091025:OK
 function xxx() {
 	#debug=1
@@ -55,10 +54,9 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#myös 281125 testattu ja taisi toimia ok
+#myös 201225 testattu ja taisi toimia ok
 #sudoers-jekku olisi hyväksi tässäkin
 function bbb() {
-	#debug=1
 	dqb "bbb( ${1} ) OGDRU JAHAD"
 
 	[ x"${1}" == "x" ] && exit 97
@@ -82,7 +80,14 @@ function bbb() {
 	${smr} -rf ./var/cache/apt/archives/*.deb
 	${smr} -rf ./var/cache/apt/*.bin
 	${smr} -rf ./tmp/*
-
+	
+	[ -v TARGET_pad2 ] || exit 64
+	${smr} -rf ./${TARGET_pad2}/*.bz3* #uutena
+	csleep 1
+	
+	#menisikö tälleen se omistajuuden pakotus?
+	${sco} -R 0:0 ./${TARGET_pad2}
+	
 	fix_sudo $(pwd)
 	${scm} -R 0755 ./var/cache/man
 	${sco} -R man:man ./var/cache/man
@@ -94,13 +99,13 @@ function bbb() {
 	dqb "BARBEQUE PARTY DONE.done()"
 }
 
-#lienee kai ok 281125
+#201225:toiminee edelleen
 function jlk_main() {
-	dqb "jkl1 $1 , ${2} "
+	dqb "jkl_niam ( ${1} , ${2}  )"
 
 	[ x"${1}" == "x" ] && exit 66
 	[ x"${2}" == "x" ] && exit 67
-	[ -d ${1} ] || exit 68
+	[ -d ${1} ] || exit 68 #201225:kuseeko tässä? No Ei
 	[ -d ${2} ] || exit 69 #291125:jos ei ole ni pitäisikö luoda?
 
 	dqb "pars_ok"
@@ -123,8 +128,8 @@ function jlk_main() {
 #Const T_P2 mäkeen fktiosta?
 #
 #lienee ok 281125
-#
-#
+#TODO:keys.conf:in sisällön greppailu mukaan?
+#sqroot sisällä ei tarvita: CONF_dir, CONF_pkgsrv? , BASEDIR
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
 	csleep 2
@@ -168,11 +173,10 @@ function jlk_conf() {
 	csleep 5
 }
 
-#1.mitäköhän paranetreja tälle fktiolle piti antaa?
-#2.T_yyy kutsuvaanm koodiin vai ei?
+#1.mitäköhän parametreja tälle fktiolle piti antaa? lhde j khde tietenkin
 #
-#sopivilla parametreilla kopsaa dgsts-hkiston kohteeseen, ensisij tsummat , jos julk av löytyvät lähteestä niin nekin 
-#
+#sopivilla parametreilla kopsaa dgsts-hkmiston kohteeseen, ensisij tsummat , jos julk av löytyvät lähteestä niin nekin 
+#liittyyköhän copy_conf() @stage0_backend ? tai mksums.sh ? 
 function jlk_sums() {
 	#debug=1
 	dqb "jlk_sums( ${1} , ${2}, ${3}) "
@@ -187,13 +191,17 @@ function jlk_sums() {
 	csleep 6
 
 	[ -d ${2}} ] || ${smd} -p ${2}
-	dqb "${spc} -a ${1}/* ${2}"
+	dqb "${spc} -a ${1}/ \$stuff ${2}"
 	csleep 3
 
-	#VAIH:pitäisikö vähän rajata? jos dgsts.x riittäisi?
-	${spc} -a ${1}/${TARGET_DIGESTS_file0}.* ${2}
-
-	ls -las ./${TARGET_DGST0};csleep 5 #pitäisikö olla $2?
+	#VAIH:pitäisikö vähän rajata? jos dgsts.x JA .gpg riittäisi?
+	#-a nyt turha?
+	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
+	${spc} ${1}/*.gpg  ${2}
+	
+	#ls -las ./${TARGET_DGST0} #jokeri mukaan vai ei?
+	[ ${debug} -gt 0 ] && ls -las ${2}
+	csleep 5 #pitäisikö olla $2?
 	cd ..
 
 	#HUOM.281125:ei löydy .2_sta, pitäisikö?
@@ -203,7 +211,7 @@ function jlk_sums() {
 	sleep 2
 }
 
-#HUOM.091§025:OK
+#HUOM.091025:OK
 function rst_pre1() {
 	dqb "rst_pre1()"
 	csleep 1
@@ -242,10 +250,7 @@ function rst_pre2() {
 
 	#HUOM.091025:lokaaleihjin liittyen:
 	#LANGUAGE ja LC_ALL jos asettaisi jhnkn arvoon
-	#HUOM.111225:miten suhtautuu check_bin2() nykyään tähän ao. riviin?
-
-	#161225:josko nyt alkaisi /e/d/locale
-	#locale > ./etc/default/locale
+	#HUOM.201225:miten suhtautuu check_bin2() nykyään ao. riveihin?
 
 	env | grep LAN > ./etc/default/locale
 	env | grep LC >> ./etc/default/locale

@@ -14,8 +14,6 @@ function mangle_conf() {
 #	dqb "pars_ok"
 #	csleep 1
 #
-#	#TODO:PITÄISI VARMAANKIN TESTATA ONKO NÄINh YVÄ jos on ni se pudon sudotus seur.
-#	#... ellei sitten kuitenkin sudoers
 #	dqb "pwd= $(pwd)"
 #	dqb "smd= ${smd}"
 #	csleep 1
@@ -131,6 +129,10 @@ function copy_main() {
 #
 #TODO:kutsuvassa koodissa voisi $2 ja $3 vaihtaa paikkaa+vastaavat ao. fktioon
 #
+#TODO:keys.conf:ista uusimmat avainid-arvot $utfileeseen jos mahd
+#kiekolla oikeasti tarvitaan:
+#sqroot-ympäristössä tarvitaan:
+#
 function copy_conf() {
 	#debug=1
 
@@ -197,8 +199,9 @@ function copy_conf() {
 }
 
 #191225 uusittu tätä fktiota
+#jos riitttäisi avainten kopsailu, vai tarvitaanko tsummia kanssa?
+#... entä jos v-hmiston alla on tarkistusta vaativia tdstoja? mksums hoitaa ne kohteeseeen kopsailun jälkeen?
 function copy_sums() {
-	#debug=1
 	dqb "copy_syms(${1}, ${2})" 
 
 	[ -z ${1} ] && exit 2
@@ -347,6 +350,7 @@ function bootloader() {
 
 #161225:sudoilut myöhemmin
 #161225.2:voisi kai iteroida forılla arrayn läpi jatkossa
+#TODO:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1
@@ -407,7 +411,7 @@ function make_tgt_dirs() {
 
 	dqb "DAP"
 	[ -d ${1}/${TARGET_pad_dir} ] || ${smd} -p ${1}/${TARGET_pad_dir}
-	csleep 1 #${1}/${TARGET_pad_dir}
+	csleep 1
 
 	dqb "TUQ"
 	[ -d ${1}/../out ] || ${smd} -p ${1}/../out

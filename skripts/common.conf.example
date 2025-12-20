@@ -4,23 +4,23 @@ CONF_targetdir=/some_kind_of_target_4_something
 CONF_BASEDIR=/sourcedir_4_many_things
 #
 #TARGET_DTAR_OPTS="--exclude=*.bz3 --exclude=$TARGET_Dkname2" #käyttöön? TPX littyy?
-TARGET_pad_dir=
-TARGET_pad2=
+TARGET_pad_dir=/outer_pad_dir
+TARGET_pad2=/inner_pad_dir
 #
 TARGET_DIGESTS_dir=$TARGET_pad_dir/dir_containing_digests
 TARGET_DIGESTS_file0=base_filename_4_digests
-TARGET_DIGESTS_file=$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0
+TARGET_DIGESTS_file=$TARGET_DIGESTS_dir/$TARGET_DIGESTS_file0}
 #
 CONF_scripts_dir=/dir_containing_necessary_scripts
 CONF_keys_dir=/dir_4_keys
 CONF_keys_dir_pub=/only_pub_keys_here
 #
-CONF_stg0file= #tarpeellinen nykyään?
+#CONF_stg0file= #tarpeellinen nykyään?
 #
 #HUOM.mielellään eri osiolla tuo tmpdir kuin se kehitysymp/tmpdir0 should be in its own partition
 CONF_tmpdir0=" base_dir_4_temporary_files "
-CONF_squash0=$CONF_tmpdir0/$CONF_squash
-CONF_squash_dir=$CONF_squash0/squashfs-root
+CONF_squash0=$CONF_tmpdir0/$CONF_squash}
+CONF_squash_dir=$CONF_squash0}/squashfs-root
 #
 #the line  ext2 noauto,user,exec,suid,dev 0 0 should be found in /etc/fstab
 CONF_tmpdir=$CONF_tmpdir0/temp_dir_4_additional stuff 
@@ -32,3 +32,7 @@ CONF_bloader=preferred_bootloader
 #CONF_wget_opts="--https-only --show-progress"
 #CONF_wget_def_url=https://add,mirror,url,here
 #TARGET_DHCP_row1="options_4:dhclient"
+#
+CONF_testgris=/maybe/necessary
+#kutl.bash
+CONF_editor=$(which nano)

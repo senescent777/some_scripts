@@ -9,17 +9,23 @@ cmd=""
 tgt=""
 
 function usage() {
-	echo "TODO:another kind of a wrapper for gpg"
-	echo "\r\n"
+	echo "another kind of a wrapper for gpg"
+	echo "${0} <mode> [dir] \r\n"
+	echo "abt mode"
+	echo "u : imports pUblic keys from [dir] , ${CONF_keys_dir_pub} is used if dir does not exits or not given"
+	echo "v : imports priVate keys from [dir] , ${CONF_keys_dir} is used if..."
+	echo "w : exports pre-configured public keys 2 dir"
+	echo "x : eXports pre-configured private keys 2 dir"
+	echo "m: Makes 2 new keys, also creates a backup archive if [dir is given]"
 }
 
 function single_param() {
-	dqb "instk.single-param(${1})"
+	dqb "qtlu.single-param( ${1} )"
 	[ -z "${cmd}" ] && cmd=${1} 
 }
 
 function parse_opts_real() {
-	dqb "parse_opts_real(${1}, ${2})"
+	dqb "qtlu.parse_opts_real( ${1}, ${2} )"
 		
 	case "${1}" in
 		u|v|w|x)
@@ -29,10 +35,9 @@ function parse_opts_real() {
 }
 
 . ${d}/common_funcs.sh
-
-echo "cmd= ${cmd}"
-echo "tgt=${tgt}"
-sleep 1
+dqb "cmd= ${cmd}"
+dqb "tgt=${tgt}"
+csleep 1
 
 case ${cmd} in
 	u)
@@ -55,43 +60,50 @@ case ${cmd} in
 		fi	
 	;;
 	w)
-		#mitä tähän laittaa?
-		echo "VAIH: also 4 pblic keys"
-		
 		[ -v CONF_karray ] || exit 68
-		#[ ${tgt} != ${CONF_keys_dir_pub} ] && exit 69 #TODO:voisi laittaa toimimaan ASAP
+		[ -v CONF_keys_dir_pub ] || exit 69
+		#[ ${tgt} != ${} ] && exit 69 #voisi laittaa toimimaan?
+		#VAIH:kesksytys tai ulina jos tgt ei annettu tai tyhjä?
+		
+		[ -z "${tgt}" ] && tgt=${CONF_keys_dir_pub}
+		[ -d ${tgt} ] || exit 70
 		
 		for k in ${CONF_karray} ; do
-			echo "${gg} --export ${k} > ${tgt}/${k}.gpg"
+			dqb "${gg} --export ${k} > ${tgt}/${k}.gpg"
+			${gg} --export ${k} > ${tgt}/${k}.gpg
+			echo $?
 		done
 	;;
 	x)
-		echo "VAIH: also 4 priv keys"
 		[ -v CONF_karray ] || exit 68
 		#[ ${tgt} == ${CONF_keys_dir_pub} ] && exit 69 #TODO:voisi laittaa toimimaan ASAP
+		[ -z "${tgt}" ] && tgt=${CONF_keys_dir}
+		[ -d ${tgt} ] || exit 70
 		
 		for k in ${CONF_karray} ; do
-			echo "${gg} --export-secret-keys ${k} > ${tgt}/${k}.priv.gpg"
+			dqb "${gg} --export-secret-keys ${k} > ${tgt}/${k}.priv.gpg"
+			${gg} --export-secret-keys ${k} > ${tgt}/${k}.priv.gpg
+			echo $?
 		done
 	;;
 	m)
-		echo "VAIH:Make new keys"
-		#TODO:testatakin pitäisi...
-
-		echo "${gg} --generate-key"
+		${gg} --generate-key
 		sleep 5
 
-		echo "${gg} --generate-key"
+		${gg} --generate-key
 		sleep 5
 	
-		[ -s ${tgt} ] && echo "mv ${tgt} ${tgt}.OLD"
-		echo "tar -jcvf ${tgt} ~/.gnupg"
-
-		if [ ! -s ${d}/keys.conf ] ; then
-			echo "cp ${d}/keys.conf.example ${d}/keys.conf"
-			echo "${gg} --list-keys >> ${d}/keys.conf" 
-			echo "EDITOR ${d}/keys.conf"
+		if [ ! -z "${tgt}" ] ; then #vähän aiemmaksi jos tarkistus
+			[ -s ${tgt} ] && mv ${tgt} ${tgt}.OLD
+			tar -jcvf ${tgt} ~/.gnupg
 		fi
+		
+		if [ ! -s ${d}/keys.conf ] ; then
+			cp ${d}/keys.conf.example ${d}/keys.conf
+			${gg} --list-keys >> ${d}/keys.conf
+		fi
+			
+		${CONF_editor} ${d}/keys.conf
 	;;
 	*)
 		usage
