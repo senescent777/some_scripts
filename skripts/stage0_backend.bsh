@@ -4,6 +4,8 @@ function mangle_conf() {
 	#tdstoista common.conf ja keys.conf pitäisi saada TARGET_D ja CONF_k - alkuiset
 }
 
+#TODO:tdston niemäminen uusiksi?
+
 #function make_src_dirs() {
 #	#debug=1
 #	dqb "s0b.make_s_DIrs( ${1})"
@@ -107,20 +109,20 @@ function copy_main() {
 	dqb "TWO BATCH"
 	csleep 1
 
-	local t=${TARGET_DIGESTS_file}/${TARGET_DIGESTS_file0}.5
-
-	#211225 purkkaviritys, kunnes keksii paremman
-	[ -f ${2}/${t} ] && ${svm} ${2}/${t} ${2}/${t}.OLD
-	csleep 1
-	fasdfasd ${2}/${t}
-	csleep 1
+#	local t=${TARGET_DIGESTS_file}/${TARGET_DIGESTS_file0}.5
+#
+#	#211225 purkkaviritys, kunnes keksii paremman (keksitty? mf2.bash?)
+#	[ -f ${2}/${t} ] && ${svm} ${2}/${t} ${2}/${t}.OLD
+#	csleep 1
+#	fasdfasd ${2}/${t}
+#	csleep 1
 	
 	#211225;jospa yhdistäis i jo nuo 2 silmukkaa
 	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
 	for f in $(find ${1} -type f -name '*.sh') ; do
 		dqb "${spc} ${f} ${2} "
 		${spc} ${f} ${2}
-		${sah6} ${f} >> ${2}/${t}
+#		${sah6} ${f} >> ${2}/${t}
 	done
 	
 	dqb "PENNY AND A DIME"
@@ -129,12 +131,12 @@ function copy_main() {
 	for f in $(find ${1} -type f -name '*.bz2') ; do
 		dqb "${spc} ${f} ${2}"
 		${spc} ${f} ${2}
-		${sah6} ${f} >> ${2}/${t}
+#		${sah6} ${f} >> ${2}/${t}
 	done
-
-	for f in $(find ${1} -type f -name '*.bz3') ; do
-		${sah6} ${f} >> ${2}/${t}
-	done
+#
+#	for f in $(find ${1} -type f -name '*.bz3') ; do
+#		${sah6} ${f} >> ${2}/${t}
+#	done
 
 	dqb "copy_main() donw\n"
 }
@@ -215,7 +217,7 @@ function copy_conf() {
 	sleep 1
 }
 
-#191225 uusittu tätä fktiota
+#211225 uusittu tätä fktiota
 #jos riitttäisi avainten kopsailu, vai tarvitaanko tsummia kanssa?
 #
 #... entä jos v-hmiston alla on tarkistusta vaativia tdstoja?
@@ -229,7 +231,7 @@ function copy_sums() {
 	[ -z ${2} ] && exit 4
 
 	dqb "pars ok"
-	[ ${debug} -eq 1 ] && pwd
+	[ ${debug} -gt 0 ] && pwd
 	csleep 1
 	
 	if [ -d ${2} ] ; then
@@ -237,8 +239,21 @@ function copy_sums() {
 	else
 		${smd} -p ${2}
 	fi
-		
+	
+	#TODO:jos vieklä vähän karsisi tuota findin listausta , kts kutl.bash
+	#... ja siihen liittyen myös cp-komennon suhteen muutos
+	local x=0
+	local t
+	
 	if [ -d ${1} ] ; then
+		x=$(find ${1} -type f -name '*.gpg' | wc -l)
+		
+		#toisinkin voisi tehdä
+		t=${1}/${TARGET_DIGESTS_file}.5 
+		[ -s ${t} ] && ${spc} ${t} ${2}
+	fi
+	
+	if [ ${x} -gt 0 ] ; then
 		dqb "${spc} ${1}/*.gpg ${2}"
 		${spc} ${1}/*.gpg ${2}	
 	else
@@ -253,6 +268,8 @@ function copy_sums() {
 		done
 	fi
 
+	[ ${debug} -gt 0 ] && ls -las ${2}
+	csleep 3
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
@@ -369,6 +386,7 @@ function bootloader() {
 #161225:sudoilut myöhemmin
 #161225.2:voisi kai iteroida forılla arrayn läpi jatkossa
 #TODO:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
+#TODO:esim. tässä se /.chroot luonti
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1
@@ -454,6 +472,7 @@ function make_tgt_dirs() {
 #pad-hmiston omistajuuden pakotus jossain toisaalla, tässä omistajaksi menisi root
 #tämän saman joutaisitehdä useammalle tgt-hmiston alaiselle
 #151225:missä tätä käytetään nykyään? part0() @stage0f.sh
+#TODO:tämätio pois käytöstä sudo-kokeilujen yhteydessä?`
 function default_process() {
 	dqb "nt default_process(${1})"
 	[ -z "{1}" ] && exit 65

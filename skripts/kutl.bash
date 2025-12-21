@@ -29,7 +29,11 @@ function parse_opts_real() {
 		
 	case "${1}" in
 		u|v|w|x)
+			#VAIH:tarkistuksen joutunee muuttamaan koska cvase m
 			[ -d ${2} ] && tgt=${2}
+		;;
+		m)
+			[ "${2}" == "-v" ] || tgt=${2}
 		;;
 	esac
 }
@@ -41,21 +45,23 @@ csleep 1
 
 case ${cmd} in
 	u)
-		echo "#VAIH:4 pUblic keys"
+		#TODO:"find -not -name | gg" olisi hyväksi 
 		
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then
-			echo "${gg} --import ${CONF_keys_dir_pub}/*.gpg"
+			${gg} --import ${CONF_keys_dir_pub}/*.gpg
 		else
-			echo "${gg} --import ${tgt}/*.gpg"
+			${gg} --import ${tgt}/*.gpg
 		fi
 	;;
 	v)
 		#erilliset u,v-caset turhaa kikkailua oikeastaan mutta olkoon näin jnkn akaa
 		
-		#jos vetäisi vain array:n mukaiset?
+		#jos vetäisi vain array:n mukaiset? tai nitenjos findin kautta? no qhan tämänkertaiset kiukuttelut hoidettu ni
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then
+			dqb "-import ${CONF_keys_dir}/*.priv.gpg"
 			${gg} --import ${CONF_keys_dir}/*.priv.gpg
 		else
+			dqb "-import ${tgt}/stuff"
 			${gg} --import ${tgt}/*.priv.gpg
 		fi	
 	;;
@@ -72,6 +78,11 @@ case ${cmd} in
 			${gg} --export ${k} > ${tgt}/${k}.gpg
 			echo $?
 		done
+		
+		#varm vuoksi
+		${sco} $(whoami):$(whoami) ${tgt}/*.gpg
+		${scm} 0400 ${tgt}/*.gpg
+		${odio} chattr +ui ${tgt}/*.gpg
 	;;
 	x)
 		[ -v CONF_karray ] || exit 68
@@ -84,8 +95,18 @@ case ${cmd} in
 			${gg} --export-secret-keys ${k} > ${tgt}/${k}.priv.gpg
 			echo $?
 		done
+		
+		#varm vuoksi
+		${sco} $(whoami):$(whoami) ${tgt}/*.gpg
+		${scm} 0400 ${tgt}/*.gpg
+		${odio} chattr +ui ${tgt}/*.gpg
 	;;
 	m)
+		#21.12.25: jumittui tällaiseen:
+		#gpg: agent_genkey failed: No such file or directory
+		#Key generation failed: No such file or directory
+		#jos toistuu ni jotain tarttisi tehrä
+
 		${gg} --generate-key
 		sleep 5
 

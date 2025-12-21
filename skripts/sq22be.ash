@@ -100,8 +100,7 @@ function bbb() {
 	dqb "BARBEQUE PARTY DONE.done()"
 }
 
-#201225:toiminee edelleen
-#VAIH:nuo kopioidut jutut jtnkn mukaan sinne dgsts-hmiston listoihin? shasums helppo tehdä vaikka tässä mutta muut jutut
+#211225:toiminee edelleen
 function jlk_main() {
 	dqb "jkl_niam ( ${1} , ${2}  )"
 
@@ -122,9 +121,9 @@ function jlk_main() {
 	${spc} ${1}/*.bz2 ${2} 
 	${spc} ${1}/*.bz3 ${2}
 	
-	#nämä saattavat olla vähän turhia jos se dgsts.5 saadaan aikaan (tai dgsts.2:seen lisättyä)
-	${spc} ${1}/*.sha ${2}
-	${spc} ${1}/*.sig ${2}
+	#nämä saattavat olla vähän turhia jos ja kun se dgsts.5 saadaan aikaan (tai dgsts.2:seen lisättyä)
+	#${spc} ${1}/*.sha ${2}
+	#${spc} ${1}/*.sig ${2}
 
 	dqb "jkl1 d0n3"
 }
@@ -138,6 +137,9 @@ function jlk_main() {
 #lienee ok 281125
 #TODO:keys.conf:in sisällön greppailu mukaan?
 #sqroot sisällä ei tarvita: CONF_dir, CONF_pkgsrv? , BASEDIR
+#
+#TODO:kommentoitujen siivoys
+#TODO:root.conf dgsts.tdstoon mukana jos ei ole jo ?
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
 	csleep 2
@@ -202,18 +204,17 @@ function jlk_sums() {
 	dqb "${spc} -a ${1}/ \$stuff ${2}"
 	csleep 3
 
-	#VAIH:pitäisikö vähän rajata? jos dgsts.x JA .gpg riittäisi?
-	#-a nyt turha?
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
-	${spc} ${1}/*.gpg  ${2}
+	${spc} ${1}/*.gpg ${2}
 	
 	#ls -las ./${TARGET_DGST0} #jokeri mukaan vai ei?
 	[ ${debug} -gt 0 ] && ls -las ${2}
-	csleep 5 #pitäisikö olla $2?
+	csleep 5
 	cd ..
 
 	#HUOM.281125:ei löydy .2_sta, pitäisikö?
-	${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
+	#${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
+	#211225:nykyään olisi .5
 
 	dqb "JLK_SUYMD_DONE"
 	sleep 2

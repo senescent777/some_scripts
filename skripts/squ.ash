@@ -97,7 +97,7 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.ash
 
 case ${cmd} in
-	-x) #201225:toimii
+	-x) #211225:toimii
 	# ensin tämä sitten -j (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
@@ -157,7 +157,7 @@ case ${cmd} in
 		
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #201225:vissiin toimii tämäkin
+	-j)  #211225:
 		dqb "smd= ${smd} "
 		csleep 2
 
