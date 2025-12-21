@@ -80,6 +80,8 @@ function mangle_conf() {
 #	csleep 1	
 #}
 
+#HUOM.211225;tietenkin nuo $t-jutut toisella tavalla jatqssa, sisältö...
+#dgsts.5 liittyen kts copy_sums() , kommentit
 function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
 
@@ -105,10 +107,20 @@ function copy_main() {
 	dqb "TWO BATCH"
 	csleep 1
 
+	local t=${TARGET_DIGESTS_file}/${TARGET_DIGESTS_file0}.5
+
+	#211225 purkkaviritys, kunnes keksii paremman
+	[ -f ${2}/${t} ] && ${svm} ${2}/${t} ${2}/${t}.OLD
+	csleep 1
+	fasdfasd ${2}/${t}
+	csleep 1
+	
+	#211225;jospa yhdistäis i jo nuo 2 silmukkaa
 	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
 	for f in $(find ${1} -type f -name '*.sh') ; do
 		dqb "${spc} ${f} ${2} "
 		${spc} ${f} ${2}
+		${sah6} ${f} >> ${2}/${t}
 	done
 	
 	dqb "PENNY AND A DIME"
@@ -117,6 +129,11 @@ function copy_main() {
 	for f in $(find ${1} -type f -name '*.bz2') ; do
 		dqb "${spc} ${f} ${2}"
 		${spc} ${f} ${2}
+		${sah6} ${f} >> ${2}/${t}
+	done
+
+	for f in $(find ${1} -type f -name '*.bz3') ; do
+		${sah6} ${f} >> ${2}/${t}
 	done
 
 	dqb "copy_main() donw\n"
@@ -200,7 +217,11 @@ function copy_conf() {
 
 #191225 uusittu tätä fktiota
 #jos riitttäisi avainten kopsailu, vai tarvitaanko tsummia kanssa?
-#... entä jos v-hmiston alla on tarkistusta vaativia tdstoja? mksums hoitaa ne kohteeseeen kopsailun jälkeen?
+#
+#... entä jos v-hmiston alla on tarkistusta vaativia tdstoja?
+#mksums hoitaa ne kohteeseeen kopsailun jälkeen?
+#parempi niin pä'in että dgsts.5 kopsataankin lähteestä? ei tartte toisaalla säätää...
+#
 function copy_sums() {
 	dqb "copy_syms(${1}, ${2})" 
 
@@ -223,10 +244,7 @@ function copy_sums() {
 	else
 		dqb "NO ${1} / \${TARGET_DGST0} , YSINBF DEFAYLT KEYDIR "
 
-		#VAIH:tämä kohta uusiksi (jatkossa jos .bz3 sisältäisi julk avaimet hmistorakenteella? vai mitenkä?)
-		#121225:sitä array:tä voisi hyödyntää (CONF_karray?)		
-		#taI sitten vain CONF_keys_pub alta kaikki .gpg kohteeseen cp:llä ja täts it?
-		
+		#212125:jospa toimisi tämä avainjuttu nyt
 		local k
 		
 		for k in ${CONF_karray} ; do

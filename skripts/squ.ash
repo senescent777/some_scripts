@@ -98,7 +98,7 @@ tmp=$(dirname $0)
 
 case ${cmd} in
 	-x) #201225:toimii
-	# ensin tämä sitten -j (vesi/happo/käsi/rakko) ?
+	# ensin tämä sitten -j (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #191225:toimii
@@ -123,12 +123,11 @@ case ${cmd} in
 		${uom} ${CONF_source}
 	;;
 	-b) #201225:jos vaikka toimisi
-		#VAIH:bz3-siivoilut ao. fktioon
 		bbb ${CONF_squash_dir}
-		#VAIH:jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
 	-d)  #201225:toimii
-		#TODO:pudon sudotus josqs? vaiko se 'doers
+		#TODO:pudon sudotus josqs? vaiko se sudoers?
+		
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
 		pwd;sleep 6
@@ -147,7 +146,8 @@ case ${cmd} in
 		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
 		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
 		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
-
+		#TODO:sqrootissa import2.sh toimitaan jtnkn kätevämmin (tässä ettei unohdu)
+	
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 

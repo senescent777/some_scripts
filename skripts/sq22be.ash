@@ -82,7 +82,8 @@ function bbb() {
 	${smr} -rf ./tmp/*
 	
 	[ -v TARGET_pad2 ] || exit 64
-	${smr} -rf ./${TARGET_pad2}/*.bz3* #uutena
+	${smr} -rf ./${TARGET_pad2}/*.bz3*
+	${smr} -rf ./${TARGET_pad2}/*.OLD
 	csleep 1
 	
 	#menisikö tälleen se omistajuuden pakotus?
@@ -100,6 +101,7 @@ function bbb() {
 }
 
 #201225:toiminee edelleen
+#VAIH:nuo kopioidut jutut jtnkn mukaan sinne dgsts-hmiston listoihin? shasums helppo tehdä vaikka tässä mutta muut jutut
 function jlk_main() {
 	dqb "jkl_niam ( ${1} , ${2}  )"
 
@@ -113,10 +115,16 @@ function jlk_main() {
 
 	#HUOM.olisi hyvä olemassa sellainen bz3 tai bz2 missä julk av
 	#vieläpä s.e. hakemistorakenteessa mukana pad/ jnka alla ne av
-
+	#... tai jlk_sums() nykyään?
+	
+	#for-loopissakin voisi...
 	${spc} ${1}/*.sh ${2}
-	${spc} ${1}/*.bz2 ${2} #myös bz2.sha mukaan?
-	${spc} ${1}/*.bz3* ${2}
+	${spc} ${1}/*.bz2 ${2} 
+	${spc} ${1}/*.bz3 ${2}
+	
+	#nämä saattavat olla vähän turhia jos se dgsts.5 saadaan aikaan (tai dgsts.2:seen lisättyä)
+	${spc} ${1}/*.sha ${2}
+	${spc} ${1}/*.sig ${2}
 
 	dqb "jkl1 d0n3"
 }

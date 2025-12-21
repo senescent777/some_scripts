@@ -1,5 +1,5 @@
-#==============SEURAAVAT 2 RIVIÄ VOI EDITOIDA/U PROPABLY NEED TO CHANGE NEXT 2 ROWS AFTER RUNNING kutl.bash =============================
-CONF_pubk=abcdabcd
+#==============SEURAAVAT 2 RIVIÄ VOI EDITOIDA/U PROPABLY NEED TO CHANGE NEXT 2 ROWS AFTER RUNNING "kutl.bash m" =========================
+CONF_pubk=abcdabcdabcdabcd
 CONF_ksk=deadbeefdeadbeef
 #==============ALLAOLEVIA 6 RIVIÄ TUSKIN TARVITSEE MUUTTAA/U PROPABLY DON'T NEED TO CHANGE NEXT 6 ROWS AFTER THIS LINE===================
 CONF_karray="${CONF_pubk} ${CONF_ksk}"
@@ -8,4 +8,4 @@ CONF_karray="${CONF_pubk} ${CONF_ksk}"
 TARGET_Dpubkf=${TARGET_DIGESTS_dir}/${CONF_pubk}.gpg
 TARGET_Dpubkg=${TARGET_DIGESTS_dir}/${CONF_ksk}.gpg
 #========================================================================================================================================
-#SHOULD COMMENT OUT THE OUTPUT OF gpg --list-keys THOUGH
+#SHOULD COMMENT OUT THE OUTPUT OF "gpg --list-keys" THOUGH

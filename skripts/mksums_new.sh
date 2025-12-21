@@ -3,7 +3,7 @@ b=0
 debug=0 #1
 source=""
 d=$(dirname $0)
-MKS_parts="1 2 3"
+MKS_parts="1 2 3 5"
 . ${d}/common.conf
 bl=${CONF_bloader}
 
@@ -79,6 +79,7 @@ function part0() {
 	#oik/omist - asioita voisi miettiä että miten pitää mennä
 	local f
 
+	#tuhoaako vitosen kanssa?
 	for f in $(find ${1} -type f -name '${TARGET_DIGESTS_file}*') ; do
 		rm ${f}
 	done
@@ -162,7 +163,9 @@ function part6_5() {
 	local i
 
 	for i in ${MKS_parts} ; do
-		dqb "${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
+		dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
+		csleep 1
+		
 		${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
 		[ $? -gt 0 ] && dqb "kutl.bash w | x ?"
 	done
@@ -172,6 +175,7 @@ function part6_5() {
 
 #151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(TODO)
 #TODO:target_dpub-jutut pois sittenq mahd ?
+#TODO;MKS_PARTS parametriksi?
 function part7() {
 	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " 
 
@@ -231,6 +235,7 @@ csleep 1
 
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
+#part123 5 ei vielä onnaa koska sisältö, "shasum.c" ok mutta ne polut
 
 cd ${source} #201225:cd-komennon kanssa ei niin justiinsa mihin laittaa part123() nähden koska kys fktio sisältää moisen komennon
 for p in ${MKS_parts} ; do part456 ${p}; done
@@ -254,8 +259,10 @@ ${scm} 0644 ./${TARGET_DIGESTS_dir}/*
 csleep 1
 
 #271125:josko ao. blokki jo kunnossa?
-dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 10" # | grep -v 'SAM' turha?
-${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
+dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12" 
+
+#211225:"-n 11" jotta se dgsts.5 EHKÄ
+${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4
 
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}

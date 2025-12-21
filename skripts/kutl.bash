@@ -51,19 +51,18 @@ case ${cmd} in
 	;;
 	v)
 		#erilliset u,v-caset turhaa kikkailua oikeastaan mutta olkoon näin jnkn akaa
-		echo "#VAIH:4 priV keys"
 		
+		#jos vetäisi vain array:n mukaiset?
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then
-			echo "${gg} --import ${CONF_keys_dir}/*.gpg"
+			${gg} --import ${CONF_keys_dir}/*.priv.gpg
 		else
-			echo "${gg} --import ${tgt}/*.gpg"
+			${gg} --import ${tgt}/*.priv.gpg
 		fi	
 	;;
 	w)
 		[ -v CONF_karray ] || exit 68
 		[ -v CONF_keys_dir_pub ] || exit 69
 		#[ ${tgt} != ${} ] && exit 69 #voisi laittaa toimimaan?
-		#VAIH:kesksytys tai ulina jos tgt ei annettu tai tyhjä?
 		
 		[ -z "${tgt}" ] && tgt=${CONF_keys_dir_pub}
 		[ -d ${tgt} ] || exit 70
@@ -93,7 +92,7 @@ case ${cmd} in
 		${gg} --generate-key
 		sleep 5
 	
-		if [ ! -z "${tgt}" ] ; then #vähän aiemmaksi jos tarkistus
+		if [ ! -z "${tgt}" ] ; then #vähän aiemmaksi jos tarkistus?
 			[ -s ${tgt} ] && mv ${tgt} ${tgt}.OLD
 			tar -jcvf ${tgt} ~/.gnupg
 		fi
