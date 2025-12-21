@@ -9,12 +9,15 @@ fi
 echo "ko.1"
 distro=$(cat /etc/devuan_version)
 [ -v CONF_basedir ] || exit 1
+[ -d ${CONF_basedir} ] || exit 2
 echo "base= ${CONF_basedir}"
 sleep 1
 
 #simppelimpi näin
-sudo ip link set ${CONF_iface} down
+[ -v CONF_iface ] && sudo ip link set ${CONF_iface} down
 
+#TODO:jatkossa voisi olla ${CONF_basedir}/etc minkä alta juttuja kopsailtaisiin
+#TODO:tietenkin sivuvaikutukset init1:seen (sen alkutilanteen hmiston luonti+täyttö niinqu)
 function jord() {
 	echo "jord"
 	sleep 1
@@ -55,8 +58,10 @@ function ekf() {
 	fi
 }
 
-[ -v CONF_pkgsrc ] || exit 2
+[ -v CONF_pkgsrc ] || exit 22
+[ -d ${CONF_pkgsrc} ] || exit 23
 
+#HUOM.211225:jos hoitaa tietyt asiat g_doit.sh:lla ni ei tässä skriptissä tartte ninn paljoa säätää
 function aqua() {
 	echo "aqua"
 	sleep 1
@@ -66,7 +71,8 @@ function aqua() {
 	local q
 	q=$(mktemp -d)
 	sudo cp ${CONF_pkgsrc}/*.deb ${q}
-	
+	[ $? -eq 0 ] || exit 4
+
 	#parempi samaan aikaan dms ja libdev 
 	efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
 	#efk ${q}/libjte2*.deb
@@ -82,9 +88,9 @@ function aqua() {
 	sudo dpkg -i $q/*.deb
 	sudo rm ${q}/*.deb
 
-
 #	The following packages have unmet dependencies:
 # grub-efi-amd64 : Depends: grub-common (= 2.06-13) but 2.06-13+deb12u1 is installed
+#olisikohan tuolle jo 211225 mennessä tehty jotain?
 
 	echo "GENISOIMAGE?"
 	which genisoimage
@@ -92,7 +98,7 @@ function aqua() {
 
 	#common_lib sisältäisi sen listan että sikäli vähän turha
 	if [ -v CONF_part076 ] ; then
-		sudo apt-get remove --purge --yes CONF_part076
+		sudo apt-get remove --purge --yes ${CONF_part076}
 		#python3-cups ntp* #sharyp from common_lib
 	fi
 
@@ -106,7 +112,8 @@ function aqua() {
 }
 
 aqua
-[ -v CONF_ue ] || exit 3
+[ -v CONF_ue ] || exit 34
+[ -v CONF_ue ] || exit 35
 
 function ignis() {
 	echo "ignis"
@@ -117,20 +124,29 @@ function ignis() {
 
 	#uutena tää git-tark
 	tig=$(sudo which git)
-	[ x"${tig}" == "x" ] && exit 68
-	[ -x${tig} ] || exit 69
+	[ -z "${tig}" ] && exit 68
+	[ -x ${tig} ] || exit 69
 
+	#-z ? 
 	[ -v CONF_ue ] && ${tig} config --global user.email ${CONF_ue}
 	[ -v CONF_un ] && ${tig} config --global user.name ${CONF_un}
 	echo "tg1,1,dibe"
 
 	[ -s ${CONF_basedir}/.gitignore ] || touch ${CONF_basedir}/.gitignore
-	#muitakin tuonne ignoree n voisi laittaa? (VAIH)
+
+	#211225;kuinka olennaista tuo conf on laittaa ignoreemn?
 	c=$(grep $0.conf ${CONF_basedir}/.gitignore | wc -l)
 	[ ${c} -lt 1 ] && echo $0.conf >> ${CONF_basedir}/.gitignore
 
 	c=$(grep .deb ${CONF_basedir}/.gitignore | wc -l)
-	[ ${c} -lt 1 ] && echo "*.deb" >> ${CONF_basedir}/.gitignore
+	#TODO:jatkossa kopsaisi tuossa alla vaan gitignore.example oikealle nimelle
+
+	if [ ${c} -lt 1 ] ; then
+		echo "*.deb" >> ${CONF_basedir}/.gitignore
+		echo "*.OLD" >> ${CONF_basedir}/.gitignore
+		echo "*.bz3" >> ${CONF_basedir}/.gitignore
+		echo "*.bz2" >> ${CONF_basedir}/.gitignore
+	fi
 }
 
 ignis
@@ -140,11 +156,12 @@ ignis
 #for f in $(find ${CONF_basedir} -type f ) ; do sudo chmod a-x ${f} ; done
 #for f in $(find ${CONF_basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done
 
-[ -v CONF_dir ] || exit 4
+[ -v CONF_dir ] || exit 44
+[ -d ${CONF_dir} ] || exit 45
 
 #121225:pitäisikö tässä niitä lokaaliasetuksia sorkkia? vai ulkoistus g_doit ?
 function luft() {
-		echo "luft"
+	echo "luft"
 	sleep 1
 
 	local c4
@@ -184,18 +201,15 @@ function luft() {
 luft
 
 function f5th() {
-	#sudoilua;
+	#VAIH:sudoilua;
 
-	#VAIH:LIST2:sesta array että saisi jotain muitakin tarpeellisia? tai ihan erillinen tdsto /e/.d alle?
-	# #pitäisi rajata CONF_tmpdir alle nuo komennot sudolla
+	# #pitäisi rajata CONF_tmpdir alle nuo tietyt komennot sudolla
 
 	#VAIH?:jospa jatkossa init1.bash tekisi ihan oman tdston /e/s.d alle
-	#if [ -v CB_LIST2 ] ; then
-	#	echo "$(whoami) localhost=NOPASSWD: ${CB_LIST2} " >> ${q}/meshuggah
-
+	
 	#... tai siihen init1:sen muodostamaan tar:iin sisällöksi myös /e/s.d alaisia?
 	#... jokin sudoers.d.example mihin sitten lisäksi CB_LIST juttuja, lopuksi kopsaus oikeaan kohteeseen ?
-	#fi
+
 
 	local p
 	local c
@@ -209,9 +223,10 @@ function f5th() {
 		echo "$(whoami) localhost=NOPASSWD: sha256: ${p}  ${c}" >> ${somefile} 
 	done
 
-	for c in ${CONF_ab} ; do 
-		echo "$(whoami) localhost=NOPASSWD: ${c} \${CONF_basept2tgt}/*" >> ${somefile} ; done
-	fi
+	#TARKKUUTTA PRKL
+	for c in ${CONF_ab} ; do
+		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/*" >> ${somefile}
+	done 
 
 	cat ${somefile}
 	echo "TODO: sudo mv ${somefile} /etc/sudoers.d "
@@ -221,3 +236,4 @@ function f5th() {
 }
 
 f5th
+#TODO:se /.chroot luonti jonnekin, esim. stage0_backend.bash...
