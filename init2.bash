@@ -144,8 +144,7 @@ ignis
 
 #121225:pitäisikö tässä niitä lokaaliasetuksia sorkkia? vai ulkoistus g_doit ?
 function luft() {
-	#VAIH:fstabiin se tikku jo tässä? ei tarttisi g_doit ajaa sen takia
-	echo "luft"
+		echo "luft"
 	sleep 1
 
 	local c4
@@ -184,15 +183,41 @@ function luft() {
 
 luft
 
-#sudoilua;
-#CB_LIST2="/bin/rm ${CONF_basept2tgt}/*"
-#VAIH:LIST2:sesta array että saisi jotain muitakin tarpeellisia? tai ihan erillinen tdsto /e/.d alle?
-#CB_LIST="mv cp rm" #pitäisi rajata CONF_tmpdir alle nuo komennot sudolla
+function f5th() {
+	#sudoilua;
 
-#TODO:jospa jatkossa init1.bash tekisi ihan oman tdston /e/s.d alle
-#if [ -v CB_LIST2 ] ; then
-#	echo "$(whoami) localhost=NOPASSWD: ${CB_LIST2} " >> ${q}/meshuggah
+	#VAIH:LIST2:sesta array että saisi jotain muitakin tarpeellisia? tai ihan erillinen tdsto /e/.d alle?
+	# #pitäisi rajata CONF_tmpdir alle nuo komennot sudolla
 
-#... tai siihen init1:sen muodostamaan tar:iin sisällöksi myös /e/s.d alaisia?
-#... jokin sudoers.d.example mihin sitten lisäksi CB_LIST juttuja, lopuksi kopsaus oikeaan kohteeseen ?
-#fi
+	#VAIH?:jospa jatkossa init1.bash tekisi ihan oman tdston /e/s.d alle
+	#if [ -v CB_LIST2 ] ; then
+	#	echo "$(whoami) localhost=NOPASSWD: ${CB_LIST2} " >> ${q}/meshuggah
+
+	#... tai siihen init1:sen muodostamaan tar:iin sisällöksi myös /e/s.d alaisia?
+	#... jokin sudoers.d.example mihin sitten lisäksi CB_LIST juttuja, lopuksi kopsaus oikeaan kohteeseen ?
+	#fi
+
+	local p
+	local c
+
+	somefile=$(mktemp)
+	touch ${somefile}
+
+	for c in ${CONF_aa} ; do 
+		#mangle_s()
+		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
+		echo "$(whoami) localhost=NOPASSWD: sha256: ${p}  ${c}" >> ${somefile} 
+	done
+
+	for c in ${CONF_ab} ; do 
+		echo "$(whoami) localhost=NOPASSWD: ${c} \${CONF_basept2tgt}/*" >> ${somefile} ; done
+	fi
+
+	cat ${somefile}
+	echo "TODO: sudo mv ${somefile} /etc/sudoers.d "
+
+	#TODO:/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille
+	#TODO:init1.sh ja init2.sh konfiguraation koordinointi, yhjteiset osat yhteiseen tdstoon 
+}
+
+f5th

@@ -62,8 +62,6 @@ dqb "${cmd}"
 csleep 1
 
 #main()
-#TODO:sitä sudoersin sorkkimista sietäisi muuttaa koska viimeaikaiset ... kantava idea oli mikä?
-#... CB_LIST2 liittyikö?
 
 case ${cmd} in
 	--make-dirs)

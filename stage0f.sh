@@ -29,7 +29,6 @@ dqb "PARAMS OK?"
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 function part0() {
-	#debug=1
 	dqb "stg0f.PART0 ${1}, ${2} , ${3} , ${4}"
 	pwd
 	csleep 2
