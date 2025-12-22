@@ -89,8 +89,10 @@ case ${bl} in
 		#https://bbs.archlinux.org/viewtopic.php?id=219955
 		#ehkä ei tartte sudottaa jos kohde-hakemisto sopiva (esim /tmp)
 		
-		dqb "${gmk} -o ${ltarget} ${source}"
+		dqb "${gmk} -o ${ltarget} ${source} soon"
+		csleep 1
 		${gmk} ${CONF_GRUB_OPTS} -o ${ltarget} ${source}
+		[ $? -eq 0 ] || echo "chown | chmod | smthing else"
 	;;
 	*)
 		echo "bl= ${bl}"

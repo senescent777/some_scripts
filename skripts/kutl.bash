@@ -90,6 +90,8 @@ case ${cmd} in
 		[ -z "${tgt}" ] && tgt=${CONF_keys_dir}
 		[ -d ${tgt} ] || exit 70
 		
+		#karray:n sisällön jos export-komennolla asettaisi saataville? 
+		
 		for k in ${CONF_karray} ; do
 			dqb "${gg} --export-secret-keys ${k} > ${tgt}/${k}.priv.gpg"
 			${gg} --export-secret-keys ${k} > ${tgt}/${k}.priv.gpg
@@ -106,7 +108,14 @@ case ${cmd} in
 		#gpg: agent_genkey failed: No such file or directory
 		#Key generation failed: No such file or directory
 		#jos toistuu ni jotain tarttisi tehrä
-
+		
+		#TODO:tämä rimpsu varm. vuoksi koko skriptin alkuun?
+		[ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
+		chown -R $(whoami):$(whoami) ~/.gnupg #tarpeen?
+		chmod 0700 ~/.gnupg/private-keys-v1.d #tai lähes koko ~/.g
+		chmod 0644 ~/.gnupg/pubring*
+		sleep 5
+		
 		${gg} --generate-key
 		sleep 5
 
@@ -116,14 +125,26 @@ case ${cmd} in
 		if [ ! -z "${tgt}" ] ; then #vähän aiemmaksi jos tarkistus?
 			[ -s ${tgt} ] && mv ${tgt} ${tgt}.OLD
 			tar -jcvf ${tgt} ~/.gnupg
+			chmod 0444 ${tgt} 
+			${odio} chattr +ui ${tgt}
+			dqb "gnupg backup file can be restored with: tar -jxvf  ${tgt} "
 		fi
+		
+		sleep 5
 		
 		if [ ! -s ${d}/keys.conf ] ; then
 			cp ${d}/keys.conf.example ${d}/keys.conf
-			${gg} --list-keys >> ${d}/keys.conf
+			chmod 0644 ${d}/keys.conf
+			chown $(whoami):$(whoami) ${d}/keys.conf
+			sleep 5
+			#onko tu o odottaminen se jekku millä sai toimimaan?
 		fi
 			
+		${gg} --list-keys >> ${d}/keys.conf
+		sleep 1
+			
 		${CONF_editor} ${d}/keys.conf
+		#TODO:voisi kopsata toisellekin nimelle ja sillä editoida, lopuksi oikean niminen tdsto tilap tdstosta typistämällä 12 riviin	
 	;;
 	*)
 		usage

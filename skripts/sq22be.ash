@@ -190,30 +190,27 @@ function jlk_conf() {
 function jlk_sums() {
 	#debug=1
 	dqb "jlk_sums( ${1} , ${2}, ${3}) "
-	csleep 4
+	csleep 2
 
 	[ x"${1}" != "x" ] || exit 66
 	[ -d ${1} ] || exit 67
 	[ -z ${2} ] && exit 68
-
-	#,,, mksums syytä huomioida (TARGET_DIGESTS_DIR)	
-	[ ${debug} -eq 1 ] && pwd
-	csleep 6
+	dqb "pars ok"
+	csleep 2
 
 	[ -d ${2}} ] || ${smd} -p ${2}
 	dqb "${spc} -a ${1}/ \$stuff ${2}"
-	csleep 3
+	csleep 2
 
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
 	${spc} ${1}/*.gpg ${2}
+	${spc} ${1}/*.sig ${2} #uutena
 	
-	#ls -las ./${TARGET_DGST0} #jokeri mukaan vai ei?
 	[ ${debug} -gt 0 ] && ls -las ${2}
-	csleep 5
-	cd ..
+	csleep 2
+	cd ${2}/../..
 
-	#HUOM.281125:ei löydy .2_sta, pitäisikö?
-	#${sah6} -c ${TARGET_DIGESTS_file}.2 --ignore-missing
+	${sah6} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5 --ignore-missing
 	#211225:nykyään olisi .5
 
 	dqb "JLK_SUYMD_DONE"

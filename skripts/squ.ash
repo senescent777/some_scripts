@@ -43,7 +43,7 @@ function parse_opts_real() {
 			[ -z ${2} ] && exit 65
 			[ -d ${2} ] || exit 66	
 		;;
-		-x|-y|-j) #-i| ei vissiin enää moista
+		-x|-y|-j)
 			if [ -s ${2} ] || [ -d ${2} ] ; then
 				par=${2}
 			else
@@ -97,7 +97,7 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.ash
 
 case ${cmd} in
-	-x) #211225:toimii
+	-x) #221225:toimii
 	# ensin tämä sitten -j (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
@@ -122,10 +122,10 @@ case ${cmd} in
 
 		${uom} ${CONF_source}
 	;;
-	-b) #201225:jos vaikka toimisi
+	-b) #221225:jos vaikka toimisi
 		bbb ${CONF_squash_dir}
 	;;
-	-d)  #201225:toimii
+	-d)  #221225:toimii
 		#TODO:pudon sudotus josqs? vaiko se sudoers?
 		
 		[ -v CONF_squash0 ] || exit 66
@@ -137,16 +137,17 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #191225:toimii
+	-c)  #221225:toimii
 		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#201225:toimii
+		#221225:toimii
 		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
 		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
 		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
-		#TODO:sqrootissa import2.sh toimitaan jtnkn kätevämmin (tässä ettei unohdu)
+
+		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
@@ -157,7 +158,7 @@ case ${cmd} in
 		
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #211225:
+	-j)  #221225:taitaa toimia:
 		dqb "smd= ${smd} "
 		csleep 2
 

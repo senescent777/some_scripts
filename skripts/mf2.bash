@@ -48,8 +48,15 @@ function process_dir() {
 	[ -f ./${t} ] && mv ./${t} ./${t}.OLD 
 
 	${sah6} ./${TARGET_pad_dir}/*.${2} > ./${t} 
-	#${sah6} ./${TARGET_pad_dir}/*.conf >> ./${t} 	#tarvitaanko oikeasti?		
-	cd ${p}
+	#${sah6} ./${TARGET_pad_dir}/*.conf >> ./${t} 	#tarvitaanko oikeasti?	ei kuitenkaan näin	
+
+	#VAIH:${sah6} -c
+	if [ ${debug} -gt 0 ] ; then
+		${sah6} --ignore-missing -c ./${t} 
+		csleep 3
+	fi
+
+	cd ${p}	
 }
 
 dqb "source=${source}"
