@@ -23,8 +23,13 @@ sudo tar -rvf ${1} ./init2* #jtnkn fiksummin tämä
 function jord() {
 	[ -v CONF_pkgsrc} ] || exit 22
 
-	for d in ${CONF_pkgsrc} ${CONF_keys_dir} ${CONF_distros_dir} ${CONF_basedir}/boot/grub ${CONF_basedir}/isolinux ${CONF_pkgsdir2} ${CONF_basedir}/v ${CONF_basept2tgt} ; do 
-		if [ ! -z ${d} ] ; then
+	local yarr
+	yarr="${CONF_pkgsrc} ${CONF_keys_dir} ${CONF_distros_dir} ${CONF_basedir}/boot/grub ${CONF_basedir}/isolinux ${CONF_pkgsdir2} ${CONF_basedir}/v ${CONF_basept2tgt}"
+	yarr="${yarr} ${CONF_basedir}/etc/iptables ${CONF_basedir}/etc/network/interfaces  ${CONF_basedir}/etc/apt"
+
+	#221225:jos jokin array tätä varten
+	for d in ${yarr} ; do 
+		if [ ! -z "${d}" ] ; then #tarpeellinen?
 			if [ ! -d ${d} ] ; then
 				${smd} -p ${d}
 
@@ -109,12 +114,14 @@ sudo apt-get update
 for f in $(find / -type f -name 'sources.list*') ; do sudo tar -rvf ${1} ${f} ; done 
 sudo tar -rvf ${1} ${CONF_pkgsrc}/*.deb #jatkossa tämä rivi pois jos siirretään paketit basedir alle?
 
-#TODO:e/sudoers.d alle uuis tiedosto? stage0 -d varten siis
+#VAIH:e/sudoers.d alle uuis tiedosto? stage0 -d varten siis , kts init2.bash loppuosa
 
 function ignis() {
 	[ -s ${CONF_basedir}/.gitignore ] || sudo touch ${CONF_basedir}/.gitignore
 	sudo chown $(whoami):$(whoami) ${CONF_basedir}/.gitignore
 	sudo chmod 0644 ${CONF_basedir}/.gitignore
+
+	#TODO:jos .gitignore.example tähänkin
 
 	c=$(grep $0.conf ${CONF_basedir}/.gitignore | wc -l)
 	[ ${c} -lt 1 ] && echo $0.conf >> ${CONF_basedir}/.gitignore
@@ -122,4 +129,12 @@ function ignis() {
 }
 
 ignis
+
+function f5th() {
+	echo "TODO: SHOUDL POPULTAE ${CONF_basedir}/etc AROUND HERE"
+	sleep 1
+}
+
+f5th
+
 sudo tar -rvf ${1} ${CONF_basedir}

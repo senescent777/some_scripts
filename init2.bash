@@ -16,28 +16,30 @@ sleep 1
 #simppelimpi näin
 [ -v CONF_iface ] && sudo ip link set ${CONF_iface} down
 
-#TODO:jatkossa voisi olla ${CONF_basedir}/etc minkä alta juttuja kopsailtaisiin
-#TODO:tietenkin sivuvaikutukset init1:seen (sen alkutilanteen hmiston luonti+täyttö niinqu)
+#VAIH:jatkossa voisi olla ${CONF_basedir}/etc minkä alta juttuja kopsailtaisiin
+#VAIH:tietenkin sivuvaikutukset init1:seen (sen alkutilanteen hmiston luonti+täyttö niinqu)
 function jord() {
 	echo "jord"
 	sleep 1
 
+	sudo cp -a ${CONF_basedir}/etc/* /etc
+
 	#HUOM.27725: rules/interfaces/yms tarpeen vain mikäli nettiyhteyttä käyttää
-	[ -d /etc/iptables ] || sudo mkdir /etc/iptables
-
-	if [ -s ${CONF_basedir}/rules.v4.0 ] ; then
-		sudo cp ${CONF_basedir}/rules.v4.0 /etc/iptables #/rules.v4
-		sudo cp ${CONF_basedir}/rules.v4.0 /etc/iptables/rules.v4
-	fi
-
-	[ -s ${CONF_basedir}/resolv.conf.0 ] && sudo cp ${CONF_basedir}/resolv.conf.0 /etc
-
-	if [ -s ${CONF_basedir}/interfaces ] ; then
-		[ -f /etc/network/interfaces ] && sudo mv /etc/network/interfaces /etc/network/interfaces.$(date +%F)
-		sudo cp ${CONF_basedir}/interfaces /etc/network/interfaces.${distro}
-		sudo chmod 0644 /etc/network/interfaces.${distro} 
-		sudo ln -s /etc/network/interfaces.${distro} /etc/network/interfaces
-	fi
+	#[ -d /etc/iptables ] || sudo mkdir /etc/iptables
+	#
+	#if [ -s ${CONF_basedir}/rules.v4.0 ] ; then
+	#	sudo cp ${CONF_basedir}/rules.v4.0 /etc/iptables #/rules.v4
+	#	sudo cp ${CONF_basedir}/rules.v4.0 /etc/iptables/rules.v4
+	#fi
+	#
+	#[ -s ${CONF_basedir}/resolv.conf.0 ] && sudo cp ${CONF_basedir}/resolv.conf.0 /etc
+	#
+	#if [ -s ${CONF_basedir}/etc/network/interfaces ] ; then
+	#	[ -f /etc/network/interfaces ] && sudo mv /etc/network/interfaces /etc/network/interfaces.$(date +%F)
+	#	sudo cp ${CONF_basedir}/interfaces /etc/network/interfaces.${distro}
+	#	sudo chmod 0644 /etc/network/interfaces.${distro} 
+	#	sudo ln -s /etc/network/interfaces.${distro} /etc/network/interfaces
+	#fi
 }
 
 jord

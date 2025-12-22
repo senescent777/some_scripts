@@ -49,7 +49,7 @@ function parse_opts_real() {
 }
 
 . ./skripts/common_funcs.sh
-. ./skripts/stage0_backend.bsh
+. ./skripts/stage0_backend.bash
 
 if [ -d ${CONF_tmpdir0} ] ; then
 	dqb "CONF_TMPDIR0 EXISTS"

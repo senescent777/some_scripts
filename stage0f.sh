@@ -17,7 +17,7 @@ function single_param() {
 }
 
 [ $# -gt 3 ] && debug=${4}
-. ./skripts/stage0_backend.bsh
+. ./skripts/stage0_backend.bash
 . ./skripts/common_funcs.sh
 
 if [ -f ./skripts/keys.conf ] ; then #161225 laitettu takaisin syystä
