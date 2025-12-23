@@ -101,5 +101,5 @@ case ${bl} in
 esac
 
 #[ -f ${ltarget} ] && ${scm} a-wx ${ltarget} #/*.iso 
-sleep 1
-echo "stick.sh ?"
+#sleep 1
+#echo "stick.sh ?"

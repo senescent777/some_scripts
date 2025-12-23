@@ -29,7 +29,6 @@ function parse_opts_real() {
 		
 	case "${1}" in
 		u|v|w|x)
-			#VAIH:tarkistuksen joutunee muuttamaan koska cvase m
 			[ -d ${2} ] && tgt=${2}
 		;;
 		m)
@@ -43,15 +42,37 @@ dqb "cmd= ${cmd}"
 dqb "tgt=${tgt}"
 csleep 1
 
+function m0() {
+		dqb "m0( ${tgt} )"
+		csleep 1
+		
+		${sco} $(whoami):$(whoami) ${1}/*.gpg
+		${scm} 0400 ${1}/*.gpg
+		${odio} chattr +ui ${1}/*.gpg
+	}
+
+#VAIH:tämä rimpsu varm. vuoksi koko skriptin alkuun?
+[ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
+chown -R $(whoami):$(whoami) ~/.gnupg #tarpeen?
+chmod 0700 ~/.gnupg/private-keys-v1.d #tai lähes koko ~/.g
+chmod 0644 ~/.gnupg/pubring*
+csleep 5
+		
 case ${cmd} in
 	u)
-		#TODO:"find -not -name | gg" olisi hyväksi 
+		#VAIH:"find -not -name | gg" olisi hyväksi 
+		tgt2=${tgt}
 		
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then
-			${gg} --import ${CONF_keys_dir_pub}/*.gpg
-		else
-			${gg} --import ${tgt}/*.gpg
+			tgt2=${CONF_keys_dir_pub}
+			dqb "${gg} --import ${CONF_keys_dir_pub}/*.gpg"
+		#else
+		#	${gg} --import ${tgt}/*.gpg
 		fi
+		
+		for d in $(find ${tgt2} -type f -name '*.gpg' | grep -v 'priv') ; do
+			${gg} --import ${d}
+		done
 	;;
 	v)
 		#erilliset u,v-caset turhaa kikkailua oikeastaan mutta olkoon näin jnkn akaa
@@ -80,9 +101,7 @@ case ${cmd} in
 		done
 		
 		#varm vuoksi
-		${sco} $(whoami):$(whoami) ${tgt}/*.gpg
-		${scm} 0400 ${tgt}/*.gpg
-		${odio} chattr +ui ${tgt}/*.gpg
+		m0 ${tgt}
 	;;
 	x)
 		[ -v CONF_karray ] || exit 68
@@ -99,9 +118,7 @@ case ${cmd} in
 		done
 		
 		#varm vuoksi
-		${sco} $(whoami):$(whoami) ${tgt}/*.gpg
-		${scm} 0400 ${tgt}/*.gpg
-		${odio} chattr +ui ${tgt}/*.gpg
+		m0 ${tgt}
 	;;
 	m)
 		#21.12.25: jumittui tällaiseen:
@@ -109,13 +126,7 @@ case ${cmd} in
 		#Key generation failed: No such file or directory
 		#jos toistuu ni jotain tarttisi tehrä
 		
-		#TODO:tämä rimpsu varm. vuoksi koko skriptin alkuun?
-		[ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
-		chown -R $(whoami):$(whoami) ~/.gnupg #tarpeen?
-		chmod 0700 ~/.gnupg/private-keys-v1.d #tai lähes koko ~/.g
-		chmod 0644 ~/.gnupg/pubring*
 		sleep 5
-		
 		${gg} --generate-key
 		sleep 5
 
@@ -131,20 +142,24 @@ case ${cmd} in
 		fi
 		
 		sleep 5
+		m0 ${d}/keys.conf.example 
 		
 		if [ ! -s ${d}/keys.conf ] ; then
-			cp ${d}/keys.conf.example ${d}/keys.conf
-			chmod 0644 ${d}/keys.conf
-			chown $(whoami):$(whoami) ${d}/keys.conf
+			cp ${d}/keys.conf.example ${d}/keys.conf.tmp
+			chmod 0644 ${d}/keys.conf.tmp
+			chown $(whoami):$(whoami) ${d}/keys.conf.tmp
 			sleep 5
 			#onko tu o odottaminen se jekku millä sai toimimaan?
+		else
+			mv ${d}/keys.conf ${d}/keys.conf.$(date +%F)
 		fi
 			
-		${gg} --list-keys >> ${d}/keys.conf
+		${gg} --list-keys >> ${d}/keys.conf.tmp
 		sleep 1
 			
-		${CONF_editor} ${d}/keys.conf
-		#TODO:voisi kopsata toisellekin nimelle ja sillä editoida, lopuksi oikean niminen tdsto tilap tdstosta typistämällä 12 riviin	
+		${CONF_editor} ${d}/keys.conf.tmp
+		#VAIH:voisi kopsata toisellekin nimelle ja sillä editoida, lopuksi oikean niminen tdsto tilap tdstosta typistämällä 12 riviin	
+		head -n 12 ${d}/keys.conf.tmp > ${d}/keys.conf
 	;;
 	*)
 		usage

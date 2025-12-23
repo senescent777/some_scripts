@@ -88,7 +88,7 @@ function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
 
 	[ x"${1}" != "x" ] || exit 2
-	[ -d ${2} ] || exit 2 
+	[ -d ${2} ] || exit 22
 
 	[ y"${3}" != "y" ] || exit 33
 	[ -d ${3} ] || exit 34
@@ -259,7 +259,7 @@ function copy_sums() {
 		dqb "${spc} ${1}/*.gpg ${2}"
 		${spc} ${1}/*.gpg ${2}	#.sig kanssa?
 	else
-		dqb "NO ${1} / \${TARGET_DGST0} , YSINBF DEFAYLT KEYDIR "
+		dqb "NO FILES UNDER ${1} / \${TARGET_DGST0} , YSINBF DEFAYLT KEYDIR "
 
 		#212125:jospa toimisi tämä avainjuttu nyt
 		local k
@@ -329,6 +329,7 @@ function bootloader() {
 			csleep 2
 			dqb "TRYI1NG T0 R3PLACE IS0LINUX.CGF"
 
+			#TODO:cfg-png-blokit yhdistäen&&swtchin jälkeen
 			for f in $(find ${ks2} -name '*.cfg') ; do
 				dqb "spc ${f} ${k3}/"
 				${spc} ${f} ${k3}/

@@ -83,7 +83,8 @@ function single_param() {
 			ms=1
 		;;
 		-f|-r|-d|-b)
-			cmd=${1}
+			#josko tämä estäisi vahinko-deletoinnin
+			[ -z "${cmd}" ] && cmd=${1}
 		;;
 	esac
 }
@@ -94,7 +95,7 @@ dqb "par=${par}"
 #exit
 
 tmp=$(dirname $0)
-. ${tmp}/sq22be.ash
+. ${tmp}/sq22be.bash
 
 case ${cmd} in
 	-x) #221225:toimii
@@ -158,7 +159,7 @@ case ${cmd} in
 		
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #221225:taitaa toimia:
+	-j)  #231225:taitaa toimia:yosin keskeytys --fir2 puutteen vuoksi? onko tarpeellista?
 		dqb "smd= ${smd} "
 		csleep 2
 
