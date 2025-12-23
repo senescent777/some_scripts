@@ -13,6 +13,8 @@ fi
 ##
 
 smd="sudo mkdir"
+sco="sudo chown"
+scm="sudo chmod"
 [ -v CONF_basedir ] || exit 11
 [ -d ${CONF_basedir} ] || ${smd} ${CONF_basedir}
 #cd basedir ni noista ao. jutuista voisi sen alkuosan poistaa?
@@ -20,6 +22,7 @@ smd="sudo mkdir"
 sudo tar -cvf ${1} $0*
 sudo tar -rvf ${1} ./init2* #jtnkn fiksummin tämä
 #TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
+
 function jord() {
 	[ -v CONF_pkgsrc} ] || exit 22
 
@@ -32,9 +35,8 @@ function jord() {
 		if [ ! -z "${d}" ] ; then #tarpeellinen?
 			if [ ! -d ${d} ] ; then
 				${smd} -p ${d}
-
-				echo "sco ?:? ${d} (TODO)"
-				echo "scm \$mode ${d} (TODO)"	
+				${sco} 0:0 ${d}
+				${scm} 0755 ${d}
 			fi
 		
 			#sudo tar -rvf ${1} ${d}	#tarpeen jatkossa? jos kerran menee CONF_basedir alle kaikki hmistot
@@ -103,7 +105,7 @@ function aqua() {
 	sudo apt-get reinstall --no-install-recommends grub-common xorriso #jälkimminen toistaiseksi mukana
 	sudo apt-get reinstall --no-install-recommends geany
 	
-	sudo cp /var/cache/apt/archives/*.deb ${1}
+	sudo cp /var/cache/apt/archives/*.deb ${1} #tai mv
 }
 
 [ -v CONF_pkgsrc} ] || exit 33
@@ -117,15 +119,39 @@ sudo tar -rvf ${1} ${CONF_pkgsrc}/*.deb #jatkossa tämä rivi pois jos siirretä
 #VAIH:e/sudoers.d alle uuis tiedosto? stage0 -d varten siis , kts init2.bash loppuosa
 
 function ignis() {
-	[ -s ${CONF_basedir}/.gitignore ] || sudo touch ${CONF_basedir}/.gitignore
-	sudo chown $(whoami):$(whoami) ${CONF_basedir}/.gitignore
-	sudo chmod 0644 ${CONF_basedir}/.gitignore
+	if [ -s ${CONF_basedir}/.gitignore ] ; then
+		echo "not touching  ${CONF_basedir}/.gitignore this time"
+	else
+		if [ -s ${CONF_basedir}/gitignore.example ] ; then
+			cp ${CONF_basedir}/gitignore.example ${CONF_basedir}/.gitignore 
+		else
+			#fasdfasd
+			sudo touch ${CONF_basedir}/.gitignore
+			sudo chown $(whoami):$(whoami) ${CONF_basedir}/.gitignore
+			sudo chmod 0644 ${CONF_basedir}/.gitignore
+	
+			#211225;kuinka olennaista tuo conf on laittaa ignoreen?
+			c=$(grep $0.conf ${CONF_basedir}/.gitignore | wc -l)
+			[ ${c} -lt 1 ] && echo $0.conf >> ${CONF_basedir}/.gitignore
 
-	#TODO:jos .gitignore.example tähänkin
+			c=$(grep .deb ${CONF_basedir}/.gitignore | wc -l)
+		
+			if [ ${c} -lt 1 ] ; then
+				echo "*.deb" >> ${CONF_basedir}/.gitignore
+				echo "*.OLD" >> ${CONF_basedir}/.gitignore
+				echo "*.bz3" >> ${CONF_basedir}/.gitignore
+				echo "*.bz2" >> ${CONF_basedir}/.gitignore
+				echo "*.sha" >> ${CONF_basedir}/.gitignore
+				echo "*.sig" >> ${CONF_basedir}/.gitignore
+			fi
+			
+			#c=$(grep $0.conf ${CONF_basedir}/.gitignore | wc -l)
+			#[ ${c} -lt 1 ] && echo $0.conf >> ${CONF_basedir}/.gitignore
+			#sleep 1
+		fi
+	fi
+	
 
-	c=$(grep $0.conf ${CONF_basedir}/.gitignore | wc -l)
-	[ ${c} -lt 1 ] && echo $0.conf >> ${CONF_basedir}/.gitignore
-	sleep 1
 }
 
 ignis

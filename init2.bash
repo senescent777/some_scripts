@@ -16,12 +16,11 @@ sleep 1
 #simppelimpi näin
 [ -v CONF_iface ] && sudo ip link set ${CONF_iface} down
 
-#VAIH:jatkossa voisi olla ${CONF_basedir}/etc minkä alta juttuja kopsailtaisiin
-#VAIH:tietenkin sivuvaikutukset init1:seen (sen alkutilanteen hmiston luonti+täyttö niinqu)
 function jord() {
+	#231225:oikeudet olisi basedir/e alla hyvä olla järkevät, init1.sh saa nyt hoitaa
 	echo "jord"
 	sleep 1
-
+	#TODO:lähteen oikeuksien/omistajien pakotus?
 	sudo cp -a ${CONF_basedir}/etc/* /etc
 
 	#HUOM.27725: rules/interfaces/yms tarpeen vain mikäli nettiyhteyttä käyttää
@@ -134,21 +133,15 @@ function ignis() {
 	[ -v CONF_un ] && ${tig} config --global user.name ${CONF_un}
 	echo "tg1,1,dibe"
 
-	[ -s ${CONF_basedir}/.gitignore ] || touch ${CONF_basedir}/.gitignore
-
-	#211225;kuinka olennaista tuo conf on laittaa ignoreemn?
-	c=$(grep $0.conf ${CONF_basedir}/.gitignore | wc -l)
-	[ ${c} -lt 1 ] && echo $0.conf >> ${CONF_basedir}/.gitignore
-
-	c=$(grep .deb ${CONF_basedir}/.gitignore | wc -l)
-	#TODO:jatkossa kopsaisi tuossa alla vaan gitignore.example oikealle nimelle
-
-	if [ ${c} -lt 1 ] ; then
-		echo "*.deb" >> ${CONF_basedir}/.gitignore
-		echo "*.OLD" >> ${CONF_basedir}/.gitignore
-		echo "*.bz3" >> ${CONF_basedir}/.gitignore
-		echo "*.bz2" >> ${CONF_basedir}/.gitignore
+	#varmaan olisi hyvä testata tämä blokki josqs
+	if [ -s ${CONF_basedir}/.gitignore ] ; then
+		echo "not touching ${CONF_basedir}/.gitignore this time"
+	else
+		echo "init1 may have done this already"
 	fi
+
+	#sudo chown $(whoami):$(whoami) ${CONF_basedir}/.gitignore
+	#sudo chmod 0644 ${CONF_basedir}/.gitignore
 }
 
 ignis
@@ -173,6 +166,7 @@ function luft() {
 	c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
 	t=/dev/disk/by-uuid/${CONF_part0}
 
+	#TODO:jos cat:illa jatkossa? , cat $some_file >> /e/fstab tai miten se /e/a/s-list-jekku?
 	if [ ${c4} -gt 0 ] ; then
 		echo "f-stab 0k"
 	else
@@ -191,6 +185,7 @@ function luft() {
 
 	#TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
 
+	#jos ei tartte mountata niin sitten ei knffissa muuttujaa aseta
 	if [ -v CONF_basept2tgt ] && [ -v CONF_basept2src ] ; then
 		#/proc/mounts voisi grepta
 		[ -d ${CONF_basept2tgt} ] || sudo mkdir ${CONF_basept2tgt}
@@ -203,16 +198,6 @@ function luft() {
 luft
 
 function f5th() {
-	#VAIH:sudoilua;
-
-	# #pitäisi rajata CONF_tmpdir alle nuo tietyt komennot sudolla
-
-	#VAIH?:jospa jatkossa init1.bash tekisi ihan oman tdston /e/s.d alle
-	
-	#... tai siihen init1:sen muodostamaan tar:iin sisällöksi myös /e/s.d alaisia?
-	#... jokin sudoers.d.example mihin sitten lisäksi CB_LIST juttuja, lopuksi kopsaus oikeaan kohteeseen ?
-
-
 	local p
 	local c
 
@@ -222,16 +207,20 @@ function f5th() {
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
-		echo "$(whoami) localhost=NOPASSWD: sha256: ${p}  ${c}" >> ${somefile} 
+		echo "$(whoami) localhost=NOPASSWD: sha256: ${p} ${c}" >> ${somefile} 
 	done
 
 	#TARKKUUTTA PRKL
+
+	#voi miettiä vielä tätä, jos basen alla asettaa omistajudet ja oikeudet sopivasti, ei tarttisi sudottaa
 	for c in ${CONF_ab} ; do
 		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/*" >> ${somefile}
 	done 
 
 	cat ${somefile}
-	echo "TODO: sudo mv ${somefile} /etc/sudoers.d "
+	sudo chown 0:0 ${somefile}
+	sudo chmod 0440 ${somefile}
+	sudo mv ${somefile} /etc/sudoers.d 
 
 	#TODO:/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille
 	#TODO:init1.sh ja init2.sh konfiguraation koordinointi, yhjteiset osat yhteiseen tdstoon 
