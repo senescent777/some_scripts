@@ -30,7 +30,6 @@ function jord() {
 	yarr="${CONF_pkgsrc} ${CONF_keys_dir} ${CONF_distros_dir} ${CONF_basedir}/boot/grub ${CONF_basedir}/isolinux ${CONF_pkgsdir2} ${CONF_basedir}/v ${CONF_basept2tgt}"
 	yarr="${yarr} ${CONF_basedir}/etc/iptables ${CONF_basedir}/etc/network/interfaces  ${CONF_basedir}/etc/apt"
 
-	#221225:jos jokin array tätä varten
 	for d in ${yarr} ; do 
 		if [ ! -z "${d}" ] ; then #tarpeellinen?
 			if [ ! -d ${d} ] ; then
@@ -111,12 +110,10 @@ function aqua() {
 [ -v CONF_pkgsrc} ] || exit 33
 sudo apt-get update
 [ $? -eq 0 ] && aqua ${CONF_pkgsrc}
-#VAIH:ajetaan aqua vain jos verkkoyhteys saatavilla
 
+#riittäisikö /etc kuitenkin?
 for f in $(find / -type f -name 'sources.list*') ; do sudo tar -rvf ${1} ${f} ; done 
 sudo tar -rvf ${1} ${CONF_pkgsrc}/*.deb #jatkossa tämä rivi pois jos siirretään paketit basedir alle?
-
-#VAIH:e/sudoers.d alle uuis tiedosto? stage0 -d varten siis , kts init2.bash loppuosa
 
 function ignis() {
 	if [ -s ${CONF_basedir}/.gitignore ] ; then
@@ -150,17 +147,15 @@ function ignis() {
 			#sleep 1
 		fi
 	fi
-	
-
 }
 
 ignis
 
 function f5th() {
-	echo "TODO: SHOUDL POPULTAE ${CONF_basedir}/etc AROUND HERE"
+	#TODO:fstab.tmp kanssa se sed-kikkailu vai ei?
+	echo "TODO: SHOUDL POPULTAE ${CONF_basedir}/etc AROUND HERE, SPECIALLY fstab.tmp"
 	sleep 1
 }
 
 f5th
-
 sudo tar -rvf ${1} ${CONF_basedir}

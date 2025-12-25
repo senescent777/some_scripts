@@ -20,7 +20,7 @@ function jord() {
 	#231225:oikeudet olisi basedir/e alla hyvä olla järkevät, init1.sh saa nyt hoitaa
 	echo "jord"
 	sleep 1
-	#TODO:lähteen oikeuksien/omistajien pakotus?
+	#TODO:lähteen oikeuksien/omistajien pakotus? vaiko init1 hoitaa?
 	sudo cp -a ${CONF_basedir}/etc/* /etc
 
 	#HUOM.27725: rules/interfaces/yms tarpeen vain mikäli nettiyhteyttä käyttää
@@ -160,49 +160,67 @@ function luft() {
 	sleep 1
 
 	local c4
-	local t
+	#local t
 
 	c4=0
 	c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
-	t=/dev/disk/by-uuid/${CONF_part0}
+	#t=/dev/disk/by-uuid/${CONF_part0}
 
-	#TODO:jos cat:illa jatkossa? , cat $some_file >> /e/fstab tai miten se /e/a/s-list-jekku?
+	#VAIH:jos cat:illa jatkossa? , cat $some_file >> /e/fstab tai miten se /e/a/s-list-jekku?
 	if [ ${c4} -gt 0 ] ; then
 		echo "f-stab 0k"
 	else
-		if [ -b ${t} ] ; then
-			sudo chmod a+w /etc/fstab
-			sleep 1
+		#if [ -b ${t} ] ; then
+		#	echo "had to touch fstab"
+		#	sudo chmod a+w /etc/fstab
+		#	sleep 1
+#
+#			sudo echo " ${t} ${CONF_dir} auto nosuid,noexec,noauto,user 0 2" >> /etc/fstab
+#			sleep 1
+#
+#			sudo chmod a-w /etc/fstab
+#			sleep 1
+#			ls -las /etc/fstab
+#		fi
 
-			sudo echo " ${t} ${CONF_dir} auto nosuid,noexec,noauto,user 0 2" >> /etc/fstab
-			sleep 1
-
-			sudo chmod a-w /etc/fstab
-			sleep 1
-			ls -las /etc/fstab
-		fi
+		sudo chmod a+w /etc/fstab #mussun mussun
+		sleep 1
+		sudo cat /etc/fstab.tmp >> /etc/fstab
+		sleep 1	
+		sudo chmod a-wx /etc/fstab*
+		sudo chown 0:0 /etc/fstab*
 	fi
 
 	#TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
 
+	echo "TODO:VARMISTA, MITEN FSTABIN SORKINTA g_doit KAUTTA KEHITYSYMP! JOS EI TOIMI NI TÄMÄN SKRIPTIN KAUTTA"
+
+	#VAIH:fstabiin jatkossa tuokin osio alla, saisi tuon src:n pois konffista
 	#jos ei tartte mountata niin sitten ei knffissa muuttujaa aseta
-	if [ -v CONF_basept2tgt ] && [ -v CONF_basept2src ] ; then
+	if [ -v CONF_basept2tgt ] ; then # && [ -v CONF_basept2src ]
 		#/proc/mounts voisi grepta
 		[ -d ${CONF_basept2tgt} ] || sudo mkdir ${CONF_basept2tgt}
 
 		#jnkn ehdon taa tuo mount? riittääkö -b ehdoksi?
-		[ -b /dev/${CONF_basept2src} ] && sudo mount /dev/${CONF_basept2src} ${CONF_basept2tgt}
+		#[ -b /dev/${CONF_basept2src} ] &&
+		
+		sudo mount ${CONF_basept2tgt}
+		#TODO:tai sitten mount -a + vastaava muutos fstab.tmp:iin , saisi samalla sen oman osion -iso-tdstoille
 	fi
 }
 
 luft
 
+#HUOM.241225:/e/s.d alle tehdyn tdston syntaksi oli jo ok, omegaa ajeltu testiksi
+#... vähän saattaa joutua vielä viilaamaan sisältöä
 function f5th() {
 	local p
 	local c
 
 	somefile=$(mktemp)
 	touch ${somefile}
+
+	echo "#VAIH:SUDOERSIIN KANSSA SE update2.sh!!! JOS EI SIIS comon_lib..sh..."
 
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
