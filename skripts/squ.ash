@@ -98,7 +98,7 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
 case ${cmd} in
-	-x) #221225:toimii
+	-x) #251225:toimii
 	# ensin tämä sitten -j (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
@@ -123,10 +123,12 @@ case ${cmd} in
 
 		${uom} ${CONF_source}
 	;;
-	-b) #221225:jos vaikka toimisi
+	-b) 
+		#251225:toimii
 		bbb ${CONF_squash_dir}
 	;;
-	-d)  #221225:toimii
+	-d)  
+		#251225:toimii
 		#TODO:pudon sudotus josqs? vaiko se sudoers?
 		
 		[ -v CONF_squash0 ] || exit 66
@@ -138,12 +140,12 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #221225:toimii
+	-c)  #251225:toimii, tai ainakin luo tdston
 		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#221225:toimii
+		#251225:toimii
 		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
 		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
 		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
