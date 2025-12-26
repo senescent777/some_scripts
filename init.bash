@@ -12,12 +12,16 @@ fi
 #fi
 ##
 
+#251225:saattaisivat seur. komennot olla oleellisia skripts-hmiston alaisille
+#... eli nämä pikemminkin sinne sudoersiin ?(TODO)
 smd="sudo mkdir"
 sco="sudo chown"
 scm="sudo chmod"
+#näitä määrittelyjä vosi käyttää wenemmänkin tuossa alla (TODO)
+
 [ -v CONF_basedir ] || exit 11
 [ -d ${CONF_basedir} ] || ${smd} ${CONF_basedir}
-#cd basedir ni noista ao. jutuista voisi sen alkuosan poistaa?
+#cd ${CONF_basedir } #ni noista ao. jutuista voisi sen alkuosan poistaa?
 
 sudo tar -cvf ${1} $0*
 sudo tar -rvf ${1} ./init2* #jtnkn fiksummin tämä
@@ -25,12 +29,9 @@ sudo tar -rvf ${1} ./init2* #jtnkn fiksummin tämä
 
 function jord() {
 	[ -v CONF_pkgsrc} ] || exit 22
+	#local yarr
 
-	local yarr
-	yarr="${CONF_pkgsrc} ${CONF_keys_dir} ${CONF_distros_dir} ${CONF_basedir}/boot/grub ${CONF_basedir}/isolinux ${CONF_pkgsdir2} ${CONF_basedir}/v ${CONF_basept2tgt}"
-	yarr="${yarr} ${CONF_basedir}/etc/iptables ${CONF_basedir}/etc/network/interfaces  ${CONF_basedir}/etc/apt"
-
-	for d in ${yarr} ; do 
+	for d in ${CONF_yarr} ; do 
 		if [ ! -z "${d}" ] ; then #tarpeellinen?
 			if [ ! -d ${d} ] ; then
 				${smd} -p ${d}
@@ -47,8 +48,16 @@ jord ${1}
 
 #1912255:jnkn verran jo testailtu
 function aqua() {
+	echo "aqua ( ${1})"
+	[ -z "{1}" ] && exit 11
+	[ -d ${1} ] || exit 12
+	echo "ok"
+	sleep 1
+	
 	if [ ! -s ${CONF_basedir}/sources.list ] ; then
 		sudo nano /etc/apt/sources.list #tai cp
+		echo "copy /etc/apt/sources-loist ${CONF_basedir}/etc/apt ?"
+		sleep 1
 	else
 		if [ ! -s /etc/apt/sources.list.old ] ; then
 			sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
@@ -59,7 +68,7 @@ function aqua() {
 	sudo apt-get update
 	sudo apt --fix-broken install
 
-	#TODO:gpg ja iptables mukaan?
+	#gpg ja iptables mukaan?
 
 	sudo apt-get reinstall --no-install-recommends libc6 coreutils
 	sudo apt-get reinstall --no-install-recommends libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
@@ -116,43 +125,45 @@ for f in $(find / -type f -name 'sources.list*') ; do sudo tar -rvf ${1} ${f} ; 
 sudo tar -rvf ${1} ${CONF_pkgsrc}/*.deb #jatkossa tämä rivi pois jos siirretään paketit basedir alle?
 
 function ignis() {
-	if [ -s ${CONF_basedir}/.gitignore ] ; then
-		echo "not touching  ${CONF_basedir}/.gitignore this time"
+	echo "igtnis ( ${1})"
+	[ -z "{1}" ] && exit 11
+	[ -d ${1} ] || exit 12
+	echo "ok"
+	sleep 1
+	
+	if [ -s ${1}/.gitignore ] ; then
+		echo "not touching  ${1}/.gitignore this time"
 	else
-		if [ -s ${CONF_basedir}/gitignore.example ] ; then
-			cp ${CONF_basedir}/gitignore.example ${CONF_basedir}/.gitignore 
+		if [ -s ${1}/gitignore.example ] ; then
+			cp ${1}/gitignore.example ${1}/.gitignore 
 		else
 			#fasdfasd
-			sudo touch ${CONF_basedir}/.gitignore
-			sudo chown $(whoami):$(whoami) ${CONF_basedir}/.gitignore
-			sudo chmod 0644 ${CONF_basedir}/.gitignore
+			sudo touch ${1}/.gitignore
+			sudo chown $(whoami):$(whoami) ${1}/.gitignore
+			sudo chmod 0644 ${1}/.gitignore
 	
 			#211225;kuinka olennaista tuo conf on laittaa ignoreen?
-			c=$(grep $0.conf ${CONF_basedir}/.gitignore | wc -l)
-			[ ${c} -lt 1 ] && echo $0.conf >> ${CONF_basedir}/.gitignore
+			c=$(grep $0.conf ${1}/.gitignore | wc -l)
+			[ ${c} -lt 1 ] && echo $0.conf >> ${1}/.gitignore
 
-			c=$(grep .deb ${CONF_basedir}/.gitignore | wc -l)
+			c=$(grep .deb ${1}/.gitignore | wc -l)
 		
 			if [ ${c} -lt 1 ] ; then
-				echo "*.deb" >> ${CONF_basedir}/.gitignore
-				echo "*.OLD" >> ${CONF_basedir}/.gitignore
-				echo "*.bz3" >> ${CONF_basedir}/.gitignore
-				echo "*.bz2" >> ${CONF_basedir}/.gitignore
-				echo "*.sha" >> ${CONF_basedir}/.gitignore
-				echo "*.sig" >> ${CONF_basedir}/.gitignore
+				echo "*.deb" >> ${1}/.gitignore
+				echo "*.OLD" >> ${1}/.gitignore
+				echo "*.bz3" >> ${1}/.gitignore
+				echo "*.bz2" >> ${1}/.gitignore
+				echo "*.sha" >> ${1}/.gitignore
+				echo "*.sig" >> ${1}/.gitignore
 			fi
-			
-			#c=$(grep $0.conf ${CONF_basedir}/.gitignore | wc -l)
-			#[ ${c} -lt 1 ] && echo $0.conf >> ${CONF_basedir}/.gitignore
-			#sleep 1
 		fi
 	fi
 }
 
-ignis
+ignis ${CONF_basedir}
 
 function f5th() {
-	#TODO:fstab.tmp kanssa se sed-kikkailu vai ei?
+	#TODO:fstab.tmp kanssa se sed-kikkailu vähitellen?
 	echo "TODO: SHOUDL POPULTAE ${CONF_basedir}/etc AROUND HERE, SPECIALLY fstab.tmp"
 	sleep 1
 }

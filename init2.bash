@@ -16,29 +16,16 @@ sleep 1
 #simppelimpi näin
 [ -v CONF_iface ] && sudo ip link set ${CONF_iface} down
 
+#TODO:oaram, sco()-jutut
 function jord() {
 	#231225:oikeudet olisi basedir/e alla hyvä olla järkevät, init1.sh saa nyt hoitaa
 	echo "jord"
 	sleep 1
-	#TODO:lähteen oikeuksien/omistajien pakotus? vaiko init1 hoitaa?
-	sudo cp -a ${CONF_basedir}/etc/* /etc
 
-	#HUOM.27725: rules/interfaces/yms tarpeen vain mikäli nettiyhteyttä käyttää
-	#[ -d /etc/iptables ] || sudo mkdir /etc/iptables
-	#
-	#if [ -s ${CONF_basedir}/rules.v4.0 ] ; then
-	#	sudo cp ${CONF_basedir}/rules.v4.0 /etc/iptables #/rules.v4
-	#	sudo cp ${CONF_basedir}/rules.v4.0 /etc/iptables/rules.v4
-	#fi
-	#
-	#[ -s ${CONF_basedir}/resolv.conf.0 ] && sudo cp ${CONF_basedir}/resolv.conf.0 /etc
-	#
-	#if [ -s ${CONF_basedir}/etc/network/interfaces ] ; then
-	#	[ -f /etc/network/interfaces ] && sudo mv /etc/network/interfaces /etc/network/interfaces.$(date +%F)
-	#	sudo cp ${CONF_basedir}/interfaces /etc/network/interfaces.${distro}
-	#	sudo chmod 0644 /etc/network/interfaces.${distro} 
-	#	sudo ln -s /etc/network/interfaces.${distro} /etc/network/interfaces
-	#fi
+	#c_bd voisi olla parametri jatkossa
+	sudo chown -R 0:0  ${CONF_basedir}/etc	
+	sudo chmod -R 0444 ${CONF_basedir}/etc	
+	sudo cp -a ${CONF_basedir}/etc/* /etc
 }
 
 jord
@@ -139,17 +126,9 @@ function ignis() {
 	else
 		echo "init1 may have done this already"
 	fi
-
-	#sudo chown $(whoami):$(whoami) ${CONF_basedir}/.gitignore
-	#sudo chmod 0644 ${CONF_basedir}/.gitignore
 }
 
 ignis
-
-#sleep 1
-#echo "#ei joulukuusia turhanbäite"
-#for f in $(find ${CONF_basedir} -type f ) ; do sudo chmod a-x ${f} ; done
-#for f in $(find ${CONF_basedir} -type f -name '*.sh') ; do sudo chmod 0755 ${f} ; done
 
 [ -v CONF_dir ] || exit 44
 [ -d ${CONF_dir} ] || exit 45
@@ -160,29 +139,13 @@ function luft() {
 	sleep 1
 
 	local c4
-	#local t
 
 	c4=0
 	c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
-	#t=/dev/disk/by-uuid/${CONF_part0}
 
-	#VAIH:jos cat:illa jatkossa? , cat $some_file >> /e/fstab tai miten se /e/a/s-list-jekku?
 	if [ ${c4} -gt 0 ] ; then
 		echo "f-stab 0k"
 	else
-		#if [ -b ${t} ] ; then
-		#	echo "had to touch fstab"
-		#	sudo chmod a+w /etc/fstab
-		#	sleep 1
-#
-#			sudo echo " ${t} ${CONF_dir} auto nosuid,noexec,noauto,user 0 2" >> /etc/fstab
-#			sleep 1
-#
-#			sudo chmod a-w /etc/fstab
-#			sleep 1
-#			ls -las /etc/fstab
-#		fi
-
 		sudo chmod a+w /etc/fstab #mussun mussun
 		sleep 1
 		sudo cat /etc/fstab.tmp >> /etc/fstab
@@ -195,14 +158,9 @@ function luft() {
 
 	echo "TODO:VARMISTA, MITEN FSTABIN SORKINTA g_doit KAUTTA KEHITYSYMP! JOS EI TOIMI NI TÄMÄN SKRIPTIN KAUTTA"
 
-	#VAIH:fstabiin jatkossa tuokin osio alla, saisi tuon src:n pois konffista
-	#jos ei tartte mountata niin sitten ei knffissa muuttujaa aseta
-	if [ -v CONF_basept2tgt ] ; then # && [ -v CONF_basept2src ]
+	if [ -v CONF_basept2tgt ] ; then
 		#/proc/mounts voisi grepta
 		[ -d ${CONF_basept2tgt} ] || sudo mkdir ${CONF_basept2tgt}
-
-		#jnkn ehdon taa tuo mount? riittääkö -b ehdoksi?
-		#[ -b /dev/${CONF_basept2src} ] &&
 		
 		sudo mount ${CONF_basept2tgt}
 		#TODO:tai sitten mount -a + vastaava muutos fstab.tmp:iin , saisi samalla sen oman osion -iso-tdstoille
