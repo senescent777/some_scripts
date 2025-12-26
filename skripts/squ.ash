@@ -40,7 +40,7 @@ function parse_opts_real() {
 	case ${1} in
 		--dir2)
 			dir2=${2}
-			[ -z ${2} ] && exit 65
+			[ -z "${2}" ] && exit 65
 			[ -d ${2} ] || exit 66	
 		;;
 		-x|-y|-j)
@@ -129,6 +129,8 @@ case ${cmd} in
 	;;
 	-d)  
 		#251225:toimii
+		#... tai pitäidiköhän kuitenin muuttaa vähän? jotain kiukuttelua oli joisain tilnteisa
+		
 		#TODO:pudon sudotus josqs? vaiko se sudoers?
 		
 		[ -v CONF_squash0 ] || exit 66

@@ -1,3 +1,5 @@
+#!/bin/bash
+#toimii tdsto tietysti ilmankin eksploisiittisesti tylkkua qhan x-oikeus vaan
 
 #pohjana skripts/mf.bash / this is based on skripts/export/mf.bsh
 
@@ -13,12 +15,18 @@ d=$(dirname $0)
 function parse_opts_real() {
 	dqb "fm.parse_opts_real ( ${1} ; ${2} ) "
 	
-#	if [ -z "${cmd}" ] ; then
-#		cmd=${1}
-#		[ -d ${2} ] && tgt=${2}
-#	else
-#		dqb "2"
-#	fi
+	case "${1}" in
+		a)
+			cmd=${1}
+			[ -d ${2} ] && tgt=${2}
+		;;
+#		-v) antaa lla näiuden toistaiseksi kmmenteissa
+#			dqb "-v"
+#		;;
+#		*)
+#			exit 66
+#		;;
+	esac
 }
 
 function single_param() {
@@ -36,9 +44,9 @@ if [ $# -lt 2 ] ; then
 fi
 
 #uusi yritys parse_fktioiden kanssa myöhemmin
-cmd=${1}
-tgt=${2}
-
+#cmd=${1}
+#tgt=${2}
+#
 ##luusli ettö vash urputtaa puuttuvasta fktiosta...
 #function process_row2() {
 #		dqb "process_row2( ${1} , ${2}, ${3}) "
@@ -95,7 +103,7 @@ tgt=${2}
 #	#241225:tämäkin pitäisi muuttaa, olisiko nyt hyvä
 #	if [ ${debug} -gt 0 ] ; then
 #		if [ "$3]" == "a" ] ; then
-#			${sah6} --ignore-missing -c ./${q} 
+#			${sah6} 
 #			csleep 3
 #		fi
 #	fi
@@ -105,25 +113,40 @@ tgt=${2}
 
 dqb "cmd=${cmd}"
 dqb "tgt=${tgt}"
+[ -z "${tgt}" ] && exit 99
 [ -d ${tgt} ] || exit 100 #?
 
-#241225;sha512sum ./pad/*.bz3 > ./pad/dgsts/dgsts.5 helpompi kuin ylläoleva yritelmä
-#... josko echo "smthing" | bash -s saisi sen toimiaan kuitenkin...
 
-t=${tgt}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5
-[ -f ${t} ] && mv ${t} ${t}.OLD 
-csleep 1
-fasdfasd ${t}
+
+
 
 # slaughter0 mahd käyttöön ?	
 #process_dir1 ${tgt} bz3 ${cmd}
+p=$(pwd)
 
-case ${cmd} in:
+case ${cmd} in
 	a)
-	
+	#241225; helpompi kuin ylläoleva yritelmä kommentriddsw
+#... josko echo "smthing" | bash -s saisi sen toimiaan kuitenkin...
+
+		t=${tgt}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5
+		[ -f ${t} ] && mv ${t} ${t}.OLD 
+		csleep 1
+		fasdfasd ${t}
+		
+		cd ${tgt}
+		#echo "SHOULDA ${sah6} ./pad/*.bz3 > ./pad/dgsts/dgsts.5"
+		${sah6} ./${TARGET_pad_dir}/*.bz3 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5
+		csleep 2
+		
+		if [ ${debug} -gt 0 ] ; then
+			${sah6} --ignore-missing -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5
+		fi
 	;;
 	*)
-		
+		#1 toikinto voisi olla jnkn jokerin mukaisten tdstojen poisto kohdehmiston alta
+		exit 65
 	;;
 esac
 
+cd ${p}

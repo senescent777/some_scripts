@@ -72,12 +72,16 @@ function bbb() {
 
 	pwd
 	echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
-
+	#smr=$(which rm)
+	
 	${smr} -rf ./run/live
 	${smr} -rf ./boot/grub/*
 	${smr} -rf ./boot/*
-	${smr} -rf ./usr/share/doc/*	
+	${smr} -rf ./usr/share/doc/*
+	
+	#TODO:findillä etsitään . alta .deb && hukataan , voi olla muuallakin kuin vain /var
 	${smr} -rf ./var/cache/apt/archives/*.deb
+	
 	${smr} -rf ./var/cache/apt/*.bin
 	${smr} -rf ./tmp/*
 	
@@ -202,7 +206,9 @@ function jlk_sums() {
 	dqb "${spc} -a ${1}/ \$stuff ${2}"
 	csleep 2
 
+	#261225:voi kyllä mennä wanhentunut dgsts jihteeseen tälleen
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
+
 	${spc} ${1}/*.gpg ${2}
 	${spc} ${1}/*.sig ${2} #uutena
 	
