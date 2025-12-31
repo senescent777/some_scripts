@@ -16,6 +16,11 @@ sleep 1
 #simppelimpi näin
 [ -v CONF_iface ] && sudo ip link set ${CONF_iface} down
 
+sco="sudo chown"
+scm="sudo chmod"
+spc="sudo cp"
+smr="sudo rm"
+
 #TODO:oaram, sco()-jutut
 function jord() {
 	#231225:oikeudet olisi basedir/e alla hyvä olla järkevät, init1.sh saa nyt hoitaa
@@ -23,9 +28,9 @@ function jord() {
 	sleep 1
 
 	#c_bd voisi olla parametri jatkossa
-	sudo chown -R 0:0  ${CONF_basedir}/etc	
-	sudo chmod -R 0444 ${CONF_basedir}/etc	
-	sudo cp -a ${CONF_basedir}/etc/* /etc
+	${sco} -R 0:0  ${CONF_basedir}/etc	
+	${scm} -R 0444 ${CONF_basedir}/etc	
+	${spc} -a ${CONF_basedir}/etc/* /etc
 }
 
 jord
@@ -33,7 +38,7 @@ jord
 #common_lib
 function efk() {
 	sudo dpkg -i $@
-	sudo rm $@
+	${smr} $@
 }
 
 function ekf() {
@@ -58,7 +63,7 @@ function aqua() {
 
 	local q
 	q=$(mktemp -d)
-	sudo cp ${CONF_pkgsrc}/*.deb ${q}
+	${spc} ${CONF_pkgsrc}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
 
 	#parempi samaan aikaan dms ja libdev 
@@ -74,7 +79,7 @@ function aqua() {
 
 	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
 	sudo dpkg -i $q/*.deb
-	sudo rm ${q}/*.deb
+	${smr} ${q}/*.deb
 
 #	The following packages have unmet dependencies:
 # grub-efi-amd64 : Depends: grub-common (= 2.06-13) but 2.06-13+deb12u1 is installed
@@ -146,17 +151,15 @@ function luft() {
 	if [ ${c4} -gt 0 ] ; then
 		echo "f-stab 0k"
 	else
-		sudo chmod a+w /etc/fstab #mussun mussun
+		${scm} a+w /etc/fstab #mussun mussun
 		sleep 1
 		sudo cat /etc/fstab.tmp >> /etc/fstab
 		sleep 1	
-		sudo chmod a-wx /etc/fstab*
-		sudo chown 0:0 /etc/fstab*
+		${scm} a-wx /etc/fstab*
+		${sco} 0:0 /etc/fstab*
 	fi
 
 	#TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
-
-	echo "TODO:VARMISTA, MITEN FSTABIN SORKINTA g_doit KAUTTA KEHITYSYMP! JOS EI TOIMI NI TÄMÄN SKRIPTIN KAUTTA"
 
 	if [ -v CONF_basept2tgt ] ; then
 		#/proc/mounts voisi grepta
@@ -178,8 +181,6 @@ function f5th() {
 	somefile=$(mktemp)
 	touch ${somefile}
 
-	echo "#VAIH:SUDOERSIIN KANSSA SE update2.sh!!! JOS EI SIIS comon_lib..sh..."
-
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
@@ -194,8 +195,8 @@ function f5th() {
 	done 
 
 	cat ${somefile}
-	sudo chown 0:0 ${somefile}
-	sudo chmod 0440 ${somefile}
+	${sco} 0:0 ${somefile}
+	${scm} 0440 ${somefile}
 	sudo mv ${somefile} /etc/sudoers.d 
 
 	#TODO:/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille
