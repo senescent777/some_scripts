@@ -3,15 +3,17 @@ b=0
 debug=0 #1
 source=""
 d=$(dirname $0)
-MKS_parts="1 2 3"
+MKS_parts="1 2 3 5"
 . ${d}/common.conf
 bl=${CONF_bloader}
+
+#TODO:part123() 2 , pitäisikö sitä miettiä vielä?
 
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
 	echo "$0 --iso"
 	echo "$0 --pkgs"
-	echo "$0 -h" #voisi olla vakiovaruste tuo optio ja liityvä fktio (jos vähän jo 111225 siihen suuntaan)
+	echo "$0 -h"
 	exit 44
 }
 
@@ -23,7 +25,7 @@ if [ -f ${d}/keys.conf ] ; then #tarvitaan, kts sibgle_param
 	. ${d}/keys.conf
 fi
 
-#141025:ainakin silloin taisi toimia avainten asennuksen jälkeen
+#141025:toiminee avainten asennuksne jälkeen
 function single_param() {
 	case ${1} in
 		--iso)
@@ -77,6 +79,7 @@ function part0() {
 	#oik/omist - asioita voisi miettiä että miten pitää mennä
 	local f
 
+	#tuhoaako vitosen kanssa?
 	for f in $(find ${1} -type f -name '${TARGET_DIGESTS_file}*') ; do
 		rm ${f}
 	done
@@ -91,14 +94,14 @@ function part0() {
 	csleep 1
 }
 
-#HUOM.281125:pad alla julk avaimet .bz2:sessa olisi idea
+#HUOM.281125:pad alla julk avaimet .bz2:sessa olisi idea, tosin muitskin löytyy
 function part123() {
 	#debug=1
 	dqb "part123(${1}, ${2} , ${3} )"
 
 	[ z"${1}" != "z" ] || exit 111
-	#[ -d ${2} ] || exit 112 #miksi kommenteissa? testaa syy?
 	[ -d ${3} ] || exit 113
+	#[ -d ${2} ] || exit 114 # -d $2/$3 parempi?
 
 	local old
 	local f
@@ -117,6 +120,7 @@ function part123() {
 
 		#HUOM.siinä aiemmassa virityksessä taisi tulla myös devuan.conf (tjsp) mukaan
 		#... ja ne 2 julk av myös
+		#byj. cersiossa myös
 		for f in $(find ./${2} -type f -name "*.conf")  ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 
 		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
@@ -159,18 +163,21 @@ function part6_5() {
 	local i
 
 	for i in ${MKS_parts} ; do
-		dqb "${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
+		dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
+		csleep 1
+		
 		${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
-		[ $? -gt 0 ] && dqb "install-keys --i | --j ?"
+		[ $? -gt 0 ] && dqb "kutl.bash w | x ?"
 	done
 
 	dqb "dibw"
 }
 
 #151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(TODO)
-#TODO:target_dpub-jutut pois sittenq mahd
+#TODO:target_dpub-jutut pois sittenq mahd ?
+#TODO;MKS_PARTS parametriksi?
 function part7() {
-	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " #mitvit taas
+	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " 
 
 	[ -v TARGET_DIGESTS_dir ] || exit 98
 	[ -v TARGET_DIGESTS_file ] || exit 97	
@@ -179,11 +186,11 @@ function part7() {
 
 	dqb "${gg} -u ${CONF_ksk} -sb ./${TARGET_Dpubkf}"
 	${gg} -u ${CONF_ksk} -sb ./${TARGET_Dpubkf}
-	[ $? -gt 0 ] && dqb "install_keys  ?"
+	[ $? -gt 0 ] && dqb "kutl.bash  ?"
 	csleep 5
 
 	${gg} --verify ./${TARGET_Dpubkf}.sig
-	[ $? -gt 0 ] && dqb "install_keys  ?"
+	[ $? -gt 0 ] && dqb "kutl.bash  ?"
 	csleep 5
 
 	local i
@@ -224,12 +231,13 @@ dqb "BOOTLEREOD ONEDD"
 csleep 1
 
 #jotebkin toisin jatkossa? hakemistoa kohti 1 tdsto ja täts it? ei erikseen 1,2,3-juttui
-#part123() nykyisellään ei tee .sh-tiedostoista tsummia, mutta jos pakkaisi bz2:seen... (liittyen:"exp2 c" voisi muuttaa)
+#201225:part123() nykyisellään ei tee .sh-tiedostoista tsummia, mutta voisi laittaa tekemään
+
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
+#part123 5 ei vielä onnaa koska sisältö, "shasum.c" ok mutta ne polut
 
-#161225:dgsts.1 kanssa jotain? yhtäkkiä yli 100k
-cd ${source}
+cd ${source} #201225:cd-komennon kanssa ei niin justiinsa mihin laittaa part123() nähden koska kys fktio sisältää moisen komennon
 for p in ${MKS_parts} ; do part456 ${p}; done
 
 #kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim
@@ -251,8 +259,10 @@ ${scm} 0644 ./${TARGET_DIGESTS_dir}/*
 csleep 1
 
 #271125:josko ao. blokki jo kunnossa?
-dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 10" # | grep -v 'SAM' turha?
-${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 10 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
+dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12" 
+
+#211225:"-n 11" jotta se dgsts.5 EHKÄ
+${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4
 
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}

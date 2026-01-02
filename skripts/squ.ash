@@ -10,7 +10,6 @@ par=""
 d=$(dirname $0)
 . ${d}/common.conf
 
-#ennen vai jälkeen parse_opts esittelyn?
 function usage() {
 	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0} source_file NEEDS TO HAVE ABSOLUTE PATH"
 	echo "\t (source could be under /r/l/m/live) "
@@ -35,24 +34,24 @@ function usage() {
 	echo "\t potentially dangerous, so disabled by default , 1 enables"
 }
 
-#12125:cmd kantsisi asettaa vain jos tyhjä
 function parse_opts_real() {
 	dqb "squash.parse_opts_real(${1}, ${2})"
 
 	case ${1} in
 		--dir2)
 			dir2=${2}
-			[ -z ${2} ] && exit 65
+			[ -z "${2}" ] && exit 65
 			[ -d ${2} ] || exit 66	
 		;;
-		-x|-y|-i|-j)
+		-x|-y|-j)
 			if [ -s ${2} ] || [ -d ${2} ] ; then
 				par=${2}
 			else
 				exit 67
 			fi
 
-			#[ -z ${2} ] && exit 65	
+			#[ -z ${2} ] && exit 65
+			#191225:pitäisikö jotain lisätarkistruksia?
 			cmd=${1}
 		;;
 		-c)
@@ -84,7 +83,8 @@ function single_param() {
 			ms=1
 		;;
 		-f|-r|-d|-b)
-			cmd=${1}
+			#josko tämä estäisi vahinko-deletoinnin
+			[ -z "${cmd}" ] && cmd=${1}
 		;;
 	esac
 }
@@ -95,13 +95,14 @@ dqb "par=${par}"
 #exit
 
 tmp=$(dirname $0)
-. ${tmp}/sq22be.ash
+. ${tmp}/sq22be.bash
 
 case ${cmd} in
-	-x) #151225:toimii, mutta ensin tämä sitten -j (vesi/happo/käsi/rakko)
+	-x) #251225:toimii
+	# ensin tämä sitten -j (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #jos testaisi jo uudesdtaan? .iso-tdstoja varmaan löytyisi
+	-y) #191225:toimii
 		[ -s ${par} ] || exit 66 #xxx kyllä ...
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -122,12 +123,16 @@ case ${cmd} in
 
 		${uom} ${CONF_source}
 	;;
-	-b) #151225:ajettu tämäkin taas, kai toimii
+	-b) 
+		#251225:toimii
 		bbb ${CONF_squash_dir}
-		#TODO:jhnkin se squash/pad-hmistn omistajuuden pakotus
 	;;
-	-d)  #151225:OK
-		#TODO:pudon sudotus josqs? vaiko se 'doers
+	-d)  
+		#251225:toimii
+		#... tai pitäidiköhän kuitenin muuttaa vähän? jotain kiukuttelua oli joisain tilnteisa
+		
+		#TODO:pudon sudotus josqs? vaiko se sudoers?
+		
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
 		pwd;sleep 6
@@ -137,35 +142,33 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #161225:teki tiedoston tänään
+	-c)  #251225:toimii, tai ainakin luo tdston
 		#HUOM:$par tarkistus löytyy fktiosta cfd
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#161225:tänäänkin toimii
-		#151225:toimi ainakin kerran, rst_pre2() locale-muutokset viuelä testattava
+		#251225:toimii
 		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
 		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
 		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
 
+		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
+	
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
 		#optionaalinen ajettava komento?
 		rst_pre1
 		rst ${CONF_squash_dir}
+		
+		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #161225:toiminee edelleen
-
-		#josko jo common_lib...		
-		#smd=$(${odio} which mkdir)
-		#smd="${odio} ${smd}"
-
+	-j)  #231225:taitaa toimia:yosin keskeytys --fir2 puutteen vuoksi? onko tarpeellista?
 		dqb "smd= ${smd} "
 		csleep 2
 
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
-		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2}/
+		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2} #/
 		
 		if [ -z "${dir2}" ] ; then
 			echo "--dir2 "
@@ -179,7 +182,9 @@ case ${cmd} in
 
 		#j_cnf tuo mukanaan sen sq-chroot-spesifisen konffin (tai siis muokkaa moisen olemaan)
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
-		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad_dir}/${TARGET_DGST0}
+		
+		#HUOM.201225:tarvitseekoko koko ko target_dgsts - hmistoa kopsata kohteeseen? riittäisikö vähempi?
+		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad2}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
 	-f)  #161225:kai tämäkin toimii
