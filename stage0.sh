@@ -49,7 +49,7 @@ function parse_opts_real() {
 }
 
 . ./skripts/common_funcs.sh
-. ./skripts/stage0_backend.bsh
+. ./skripts/stage0_backend.bash
 
 if [ -d ${CONF_tmpdir0} ] ; then
 	dqb "CONF_TMPDIR0 EXISTS"
@@ -62,13 +62,11 @@ dqb "${cmd}"
 csleep 1
 
 #main()
-#TODO:sitä sudoersin sorkkimista sietäisi muuttaa koska viimeaikaiset ... kantava idea oli mikä?
-#... CB_LIST2 liittyikö?
 
 case ${cmd} in
 	--make-dirs)
-		#init.bash käskyttämään tätä case:a tarvittaessa?
-		make_src_dirs ${CONF_bloader}
+		#181225:lotottu init.bash hoitamaan jatkossa src_dirs-asiat
+		#make_src_dirs ${CONF_bloader}
 
 		#onkohan mieltä tehdä noin päin kuin alla?
 		make_tgt_dirs ${CONF_target} ${CONF_source} ${CONF_bloader}
