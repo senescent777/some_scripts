@@ -21,7 +21,7 @@ scm="sudo chmod"
 spc="sudo cp"
 smr="sudo rm"
 
-#TODO:oaram, sco()-jutut
+#VAIH:param
 function jord() {
 	#231225:oikeudet olisi basedir/e alla hyvä olla järkevät, init1.sh saa nyt hoitaa
 	echo "jord"
@@ -33,7 +33,7 @@ function jord() {
 	${spc} -a ${CONF_basedir}/etc/* /etc
 }
 
-jord
+jord ${CONF_basedir}
 
 #common_lib
 function efk() {
