@@ -21,16 +21,17 @@ scm="sudo chmod"
 spc="sudo cp"
 smr="sudo rm"
 
-#VAIH:param
 function jord() {
 	#231225:oikeudet olisi basedir/e alla hyvä olla järkevät, init1.sh saa nyt hoitaa
+	[ -z "${1}" ] && exit 666
+	[ -d ${1} ] || exit 666
+	
 	echo "jord"
 	sleep 1
 
-	#c_bd voisi olla parametri jatkossa
-	${sco} -R 0:0  ${CONF_basedir}/etc	
-	${scm} -R 0444 ${CONF_basedir}/etc	
-	${spc} -a ${CONF_basedir}/etc/* /etc
+	${sco} -R 0:0  ${1}/etc	
+	${scm} -R 0444 ${1}/etc	
+	${spc} -a ${1}/etc/* /etc
 }
 
 jord ${CONF_basedir}
@@ -46,7 +47,7 @@ function ekf() {
 	sleep 2
 	local t=$(sudo which ${1})
 
-	if [ ! -x $t} ] ; then
+	if [ ! -x ${t} ] ; then
 		efk ${q}/${1}*
 	fi
 }
@@ -78,7 +79,7 @@ function aqua() {
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
 
 	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
-	sudo dpkg -i $q/*.deb
+	sudo dpkg -i ${q}/*.deb
 	${smr} ${q}/*.deb
 
 #	The following packages have unmet dependencies:
