@@ -17,14 +17,15 @@ fi
 smd="sudo mkdir"
 sco="sudo chown"
 scm="sudo chmod"
-#näitä määrittelyjä vosi käyttää wenemmänkin tuossa alla (TODO)
+srat="sudo tar"
+svm="sudo mv"
 
 [ -v CONF_basedir ] || exit 11
 [ -d ${CONF_basedir} ] || ${smd} ${CONF_basedir}
 #cd ${CONF_basedir } #ni noista ao. jutuista voisi sen alkuosan poistaa?
 
-sudo tar -cvf ${1} $0*
-sudo tar -rvf ${1} ./init2* #jtnkn fiksummin tämä
+${srat} -cvf ${1} $0*
+${srat} -rvf ${1} ./init2* #jtnkn fiksummin tämä
 #TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
 
 function jord() {
@@ -39,7 +40,7 @@ function jord() {
 				${scm} 0755 ${d}
 			fi
 		
-			#sudo tar -rvf ${1} ${d}	#tarpeen jatkossa? jos kerran menee CONF_basedir alle kaikki hmistot
+			#${srat} -rvf ${1} ${d}	#tarpeen jatkossa? jos kerran menee CONF_basedir alle kaikki hmistot
 		fi
 	done
 }
@@ -56,11 +57,11 @@ function aqua() {
 	
 	if [ ! -s ${CONF_basedir}/sources.list ] ; then
 		sudo nano /etc/apt/sources.list #tai cp
-		echo "copy /etc/apt/sources-loist ${CONF_basedir}/etc/apt ?"
+		echo "copy /etc/apt/sources.list ${CONF_basedir}/etc/apt ?"
 		sleep 1
 	else
 		if [ ! -s /etc/apt/sources.list.old ] ; then
-			sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
+			${svm} /etc/apt/sources.list /etc/apt/sources.list.old
 			sudo cp ${CONF_basedir}/sources.list /etc/apt/
 		fi
 	fi
@@ -121,8 +122,8 @@ sudo apt-get update
 [ $? -eq 0 ] && aqua ${CONF_pkgsrc}
 
 #riittäisikö /etc kuitenkin?
-for f in $(find / -type f -name 'sources.list*') ; do sudo tar -rvf ${1} ${f} ; done 
-sudo tar -rvf ${1} ${CONF_pkgsrc}/*.deb #jatkossa tämä rivi pois jos siirretään paketit basedir alle?
+for f in $(find / -type f -name 'sources.list*') ; do ${srat} -rvf ${1} ${f} ; done 
+${srat} -rvf ${1} ${CONF_pkgsrc}/*.deb #jatkossa tämä rivi pois jos siirretään paketit basedir alle?
 
 function ignis() {
 	echo "igtnis ( ${1})"
@@ -139,8 +140,8 @@ function ignis() {
 		else
 			#fasdfasd
 			sudo touch ${1}/.gitignore
-			sudo chown $(whoami):$(whoami) ${1}/.gitignore
-			sudo chmod 0644 ${1}/.gitignore
+			${sco} $(whoami):$(whoami) ${1}/.gitignore
+			${scm} 0644 ${1}/.gitignore
 	
 			#211225;kuinka olennaista tuo conf on laittaa ignoreen?
 			c=$(grep $0.conf ${1}/.gitignore | wc -l)
@@ -169,4 +170,4 @@ function f5th() {
 }
 
 f5th
-sudo tar -rvf ${1} ${CONF_basedir}
+${srat} -rvf ${1} ${CONF_basedir}
