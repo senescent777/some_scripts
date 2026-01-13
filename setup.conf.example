@@ -1,0 +1,7 @@
+CONF_basedir=~/base
+CONF_pkgsrc=~/base/pkgs #source for some essential packages
+CONF_basept2tgt=${CONF_basedir}/adad
+CONF_keys_dir=${CONF_basedir}/shamash
+CONF_distros_dir=${CONF_basedir}/dfhgdfgh
+CONF_pkgsdir2=${CONF_basedir}/påaspåas
+CONF_yarr="${CONF_pkgsrc} ${CONF_keys_dir} ${CONF_distros_dir} ${CONF_basedir}/boot/grub ${CONF_basedir}/isolinux ${CONF_pkgsdir2} ${CONF_basedir}/v ${CONF_basept2tgt}"
