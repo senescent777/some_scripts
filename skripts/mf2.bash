@@ -144,7 +144,7 @@ case ${cmd} in
 		fi
 	;;
 	*)
-		#1 toikinto voisi olla jnkn jokerin mukaisten tdstojen poisto kohdehmiston alta
+		#1 toiminto voisi olla jnkn jokerin mukaisten tdstojen poisto kohdehmiston alta
 		exit 65
 	;;
 esac
