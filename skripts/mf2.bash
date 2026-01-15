@@ -43,6 +43,8 @@ if [ $# -lt 2 ] ; then
 	exit
 fi
 
+echo "TODO?:JOSKO JO VÄHITELLEN NIITÄ AIOTTUJA JUTTUJA TÄMÄN KANSSA?"
+
 #uusi yritys parse_fktioiden kanssa myöhemmin
 #cmd=${1}
 #tgt=${2}
@@ -144,7 +146,7 @@ case ${cmd} in
 		fi
 	;;
 	*)
-		#1 toikinto voisi olla jnkn jokerin mukaisten tdstojen poisto kohdehmiston alta
+		#1 toiminto voisi olla jnkn jokerin mukaisten tdstojen poisto kohdehmiston alta
 		exit 65
 	;;
 esac

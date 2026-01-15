@@ -6,6 +6,9 @@ source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
 
+#TODO:se jokin juttu tämän sktriptin kansaa, mikä olikaan (abs vs suht polut?)
+#... jossain päin inmternetiä oli myös ohjeita miten oikeaoppisesri sorkkia debiabnin .iso-tdstoja, sietäisi etsiä
+
 function usage() {
 	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"

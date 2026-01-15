@@ -56,14 +56,15 @@ if [ $# -eq 0 ] ; then
 	exit
 fi
 
+#DONE:varmista että dellii ne aiemmat fgsts.x - kalat OIKEASTI
 function part0() {
 	dqb "part0( ${1}, ${2})"
 	csleep 1
 
-	[ -z ${1} ] && exit 65
+	[ -z "${1}" ] && exit 65
 	[ -d ${1} ] || exit 67
 
-	[ -z ${2} ] && exit 69
+	[ -z "${2}" ] && exit 69
 	[ "${1}" == "/" ] && exit 71	
 	
 	grep ${2} /etc/passwd
@@ -75,18 +76,39 @@ function part0() {
 	${sco} -R ${2}:${2} ${1} 
 	${scm} 0755 ${1} 
 	${scm} u+w ${1}/* 
-
+	dqb "OCD ENOD"
+	csleep 1
+	
 	#oik/omist - asioita voisi miettiä että miten pitää mennä
 	local f
-
+	dqb "MARC"
+	csleep 1
+	
 	#tuhoaako vitosen kanssa?
-	for f in $(find ${1} -type f -name '${TARGET_DIGESTS_file}*') ; do
-		rm ${f}
-	done
+#	for f in $(find ${1} -type f -name '${TARGET_DIGESTS_file}*') ; do
+#		#rm ${f}
+#		dqb "${NKVD} OFF ${f}"
+#		csleep 1
+#		
+#		${NKVD} ${f}
+#	done
 
+	[ -v TARGET_DIGESTS_file ] || exit 73
+	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
+	
+	dqb "${NKVD} ${1}/${TARGET_DIGESTS_file}* SOON"
+	csleep 1
+	${NKVD} ${1}/${TARGET_DIGESTS_file}*	
+	
+	dqb "OPOLO"
+	csleep 1
+	
 	[ ${debug} -eq 1 ] && ls -las ${1}/${TARGET_DIGESTS_file}*
 	csleep 3
 
+	dqb "DERPECHE M0DE"
+	csleep 1
+	
 	local i
 	for i in ${MKS_parts} 4 ;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
 	

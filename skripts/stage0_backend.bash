@@ -4,84 +4,6 @@ function mangle_conf() {
 	#tdstoista common.conf ja keys.conf pitäisi saada TARGET_D ja CONF_k - alkuiset
 }
 
-#VAIH:tdston niemäminen uusiksi?
-
-#function make_src_dirs() {
-#	#debug=1
-#	dqb "s0b.make_s_DIrs( ${1})"
-#	csleep 1
-#
-#	[ -z ${1} ] && exit 99
-#	[ z"{1}" == "z/" ] && exit 100
-#	dqb "pars_ok"
-#	csleep 1
-#
-#	dqb "pwd= $(pwd)"
-#	dqb "smd= ${smd}"
-#	csleep 1
-#
-#	#141225:saman asian kuin tuossa alla pystyisi tekemään vähemmiolläkin riveillä
-#	#... ja ehkä kuuluisi pikemminkin init1.bash tontille
-#
-#	if [ -v CONF_keys_dir ] ; then
-#		if [ ! -z ${CONF_keys_dir} ] ; then
-#			if [ ! -d ${CONF_keys_dir} ] ; then
-#				dqb "${smd} ${CONF_keys_dir} + ${sco} också"
-#				
-#				${smd} ${CONF_keys_dir}
-#				csleep 1
-#
-#				#pitäisikö sco-juttujen ollakommenteissa vaiko ei?
-#				${sco} $(whoami):$(whoami) ${CONF_keys_dir}
-#				${scm} 0755 ${CONF_keys_dir} 
-#				csleep 1
-#			fi
-#		fi
-#	fi
-#
-#	if [ -v CONF_distros_dir ] ; then
-#		if [ ! -z ${CONF_distros_dir} ] ; then
-#			if [ ! -d ${CONF_distros_dir} ] ; then
-#				dqb "${smd} ${CONF_distros_dir} och sjutton också"
-#
-#				${smd} ${CONF_distros_dir}
-#				csleep 1
-#
-#				${sco} $(whoami):$(whoami) ${CONF_distros_dir}
-#				${scm} 0755 ${CONF_distros_dir}				
-#				csleep 1
-#			fi
-#		fi
-#	fi
-#
-#	case ${1} in 
-#		grub)
-#			[ -d ./boot/grub ] || ${smd} -p ./boot/grub
-#			${sco} $(whoami):$(whoami) ./boot/grub
-#			${scm} 0755 ./boot/grub
-#		;;
-#		isolinux)
-#			[ -d .${1} ] || ${smd} ${1}	
-#			${sco} $(whoami):$(whoami) ${1}
-#			${scm} 0755 ${1}
-#		;;
-#		*) #kai vähän voisi rajoittaa
-#			echo "MEE PELLE WTTUUN"
-#			exit 666
-#		;;
-#	esac
-#
-#	[ -d  ${CONF_pkgsdir2} ] || ${smd} ${CONF_pkgsdir2}
-#	${sco} $(whoami):$(whoami) ${CONF_pkgsdir2}
-#	${scm} 0755 ${CONF_pkgsdir2}
-#
-#	[ -d ./v ] || ${smd} ./v
-#	${sco} $(whoami):$(whoami) ./v
-#	${scm} 0755 ./v
-#
-#	csleep 1	
-#}
-
 #HUOM.211225;tietenkin nuo $t-jutut toisella tavalla jatqssa, sisältö...
 #dgsts.5 liittyen kts copy_sums() , kommentit
 function copy_main() {
@@ -149,10 +71,10 @@ function copy_main() {
 #TODO:kutsuvassa koodissa voisi $2 ja $3 vai htaa paikkaa+vastaavat ao. fktioon
 #
 #TODO:keys.conf:ista uusimmat avainid-arvot $utfileeseen jos mahd
-#... tai siis allek tarkistuksiin ei nykyää n tarvita konfiguraatiota joten tarvitseeko edes avaijuttujen takia kikkailla
+#... tai siis allek tarkistuksiin ei nykyää n tarvita konfiguraatiota joten tarvitseeko edes avaiNjuttujen takia kikkailla
 #
-#kiekolla oikeasti tarvitaan:
-#sqroot-ympäristössä tarvitaan:
+#kiekolla oikeasti tarvitaan:?
+#sqroot-ympäristössä tarvitaan:?
 #
 function copy_conf() {
 	#debug=1
