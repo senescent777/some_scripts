@@ -43,6 +43,8 @@ if [ $# -lt 2 ] ; then
 	exit
 fi
 
+echo "TODO?:JOSKO JO VÄHITELLEN NIITÄ AIOTTUJA JUTTUJA TÄMÄN KANSSA?"
+
 #uusi yritys parse_fktioiden kanssa myöhemmin
 #cmd=${1}
 #tgt=${2}
