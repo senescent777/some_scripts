@@ -30,21 +30,12 @@ function copy_main() {
 	#HUOM.nuo 2 blokkia alla voisi yhdistää , "-or -name"
 	dqb "TWO BATCH"
 	csleep 1
-
-#	local t=${TARGET_DIGESTS_file}/${TARGET_DIGESTS_file0}.5
-#
-#	#211225 purkkaviritys, kunnes keksii paremman (keksitty? mf2.bash?)
-#	[ -f ${2}/${t} ] && ${svm} ${2}/${t} ${2}/${t}.OLD
-#	csleep 1
-#	fasdfasd ${2}/${t}
-#	csleep 1
 	
 	#211225;jospa yhdistäis i jo nuo 2 silmukkaa
 	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
 	for f in $(find ${1} -type f -name '*.sh') ; do
 		dqb "${spc} ${f} ${2} "
 		${spc} ${f} ${2}
-#		${sah6} ${f} >> ${2}/${t}
 	done
 	
 	dqb "PENNY AND A DIME"
@@ -53,12 +44,7 @@ function copy_main() {
 	for f in $(find ${1} -type f -name '*.bz2') ; do
 		dqb "${spc} ${f} ${2}"
 		${spc} ${f} ${2}
-#		${sah6} ${f} >> ${2}/${t}
 	done
-#
-#	for f in $(find ${1} -type f -name '*.bz3') ; do
-#		${sah6} ${f} >> ${2}/${t}
-#	done
 
 	dqb "copy_main() donw\n"
 }
@@ -70,11 +56,6 @@ function copy_main() {
 #
 #TODO:kutsuvassa koodissa voisi $2 ja $3 vai htaa paikkaa+vastaavat ao. fktioon
 #
-#TODO:keys.conf:ista uusimmat avainid-arvot $utfileeseen jos mahd
-#... tai siis allek tarkistuksiin ei nykyää n tarvita konfiguraatiota joten tarvitseeko edes avaiNjuttujen takia kikkailla
-#
-#kiekolla oikeasti tarvitaan:?
-#sqroot-ympäristössä tarvitaan:?
 #
 function copy_conf() {
 	#debug=1
@@ -353,14 +334,6 @@ function make_tgt_dirs() {
 
 	csleep 1
 
-	#dqb "NIAM"
-	#141225:josqs taas josqs pois kommenteista?
-	#smd=$(which mkdir) #aiemmaksi jatkossa?
-	#smr=$(which rm)
-	#sco=$(which chown)
-	#scm=$(which chmod)
-	##${sco} -R ${n}:${n} ${1} #oikeassa paikassa?
-	#csleep 1
 
 	dqb "LIVE-EVIL"
 	[ -d ${1}/live ] || ${smd} -p ${1}/live
