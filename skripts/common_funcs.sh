@@ -2,10 +2,6 @@ function parse_opts_1() {
 	dqb "cf.pars.op-1( ${1} )"
 
 	case ${1} in
-#		-h|--h) #121225:antaa tämän olla vielä tässä (josqs pois?)
-#			usage
-#			exit
-#		;;
 		*)
 			single_param ${1}
 		;;
@@ -30,13 +26,13 @@ function parse_opts_2() {
 fq=$(find ${CONF_BASEDIR} -type f -name common_lib.sh | head -n 1)
 fr=$(find ${CONF_BASEDIR} -type f -name common_funcs_old.sh | head -n 1)
 	
-if [ -z ${fq} ] ; then
+if [ -z "${fq}" ] ; then
 	. ${fr} #./common_funcs_old.sh
 else
 	if [ -x ${fq} ] ; then
 		. ${fq}
 		
-		#HUOM.joko annettava validi param fktioille tai asetettava CONF_testgris jotta ao. riveihin ei kosahda suoritus
+		#HUOM.joko annettava validi param fktioille tai asetettava CONF_testgris jotta ao. riveihin ei kosahda suoritus (TODO)
 		check_binaries
 		check_binaries2
 

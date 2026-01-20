@@ -83,15 +83,6 @@ function part0() {
 	local f
 	dqb "MARC"
 	csleep 1
-	
-	#tuhoaako vitosen kanssa?
-#	for f in $(find ${1} -type f -name '${TARGET_DIGESTS_file}*') ; do
-#		#rm ${f}
-#		dqb "${NKVD} OFF ${f}"
-#		csleep 1
-#		
-#		${NKVD} ${f}
-#	done
 
 	[ -v TARGET_DIGESTS_file ] || exit 73
 	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
@@ -280,10 +271,7 @@ ${scm} 0644 ./${TARGET_DIGESTS_dir}/*
 [ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
-#271125:josko ao. blokki jo kunnossa?
 dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12" 
-
-#211225:"-n 11" jotta se dgsts.5 EHKÄ
 ${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
 part456 4
 

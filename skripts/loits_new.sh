@@ -6,8 +6,8 @@ source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#TODO:se jokin juttu tämän sktriptin kansaa, mikä olikaan (abs vs suht polut?)
-#... jossain päin inmternetiä oli myös ohjeita miten oikeaoppisesri sorkkia debiabnin .iso-tdstoja, sietäisi etsiä
+#TODO:se jokin juttu tämän sktriptin kansssa, mikä olikaan (abs vs suht polut?)
+#... jossain päin internetiä oli myös ohjeita miten oikeaoppisesti sorkkia debianin .iso-tdstoja, sietäisi etsiä
 
 function usage() {
 	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
@@ -102,7 +102,3 @@ case ${bl} in
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac
-
-#[ -f ${ltarget} ] && ${scm} a-wx ${ltarget} #/*.iso 
-#sleep 1
-#echo "stick.sh ?"

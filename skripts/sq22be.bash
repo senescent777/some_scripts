@@ -1,8 +1,6 @@
 #HUOM.091025:OK
 function xxx() {
-	#debug=1
 	dqb "xxx( ${1}, ${2})"
-	#tulisi stopata tässä jos ei kalaa
 
 	[ -s ${1} ] || exit 99
 	[ -z "${2}" ] && exit 98
@@ -42,7 +40,6 @@ function cfd() {
 
 	local msq
 	msq=$(${odio} which mksquashfs)
-	#common_lib , ocs() ?
 
 	if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
 		${odio} ${msq} . ${1} -comp xz -b 1048576
@@ -72,7 +69,6 @@ function bbb() {
 
 	pwd
 	echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
-	#smr=$(which rm)
 	
 	${smr} -rf ./run/live
 	${smr} -rf ./boot/grub/*
@@ -81,7 +77,6 @@ function bbb() {
 	
 	#TODO:findillä etsitään . alta .deb && hukataan , voi olla muuallakin kuin vain /var
 	${smr} -rf ./var/cache/apt/archives/*.deb
-	
 	${smr} -rf ./var/cache/apt/*.bin
 	${smr} -rf ./tmp/*
 	
@@ -90,9 +85,7 @@ function bbb() {
 	${smr} -rf ./${TARGET_pad2}/*.OLD
 	csleep 1
 	
-	#menisikö tälleen se omistajuuden pakotus?
 	${sco} -R 0:0 ./${TARGET_pad2}
-	
 	fix_sudo $(pwd)
 	${scm} -R 0755 ./var/cache/man
 	${sco} -R man:man ./var/cache/man
@@ -110,24 +103,16 @@ function jlk_main() {
 
 	[ x"${1}" == "x" ] && exit 66
 	[ x"${2}" == "x" ] && exit 67
-	[ -d ${1} ] || exit 68 #201225:kuseeko tässä? No Ei
-	[ -d ${2} ] || exit 69 #291125:jos ei ole ni pitäisikö luoda?
+	[ -d ${1} ] || exit 68
+	[ -d ${2} ] || exit 69
 
 	dqb "pars_ok"
 	csleep 1
-
-	#HUOM.olisi hyvä olemassa sellainen bz3 tai bz2 missä julk av
-	#vieläpä s.e. hakemistorakenteessa mukana pad/ jnka alla ne av
-	#... tai jlk_sums() nykyään?
 	
 	#for-loopissakin voisi...
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2} 
 	${spc} ${1}/*.bz3 ${2}
-	
-	#nämä saattavat olla vähän turhia jos ja kun se dgsts.5 saadaan aikaan (tai dgsts.2:seen lisättyä)
-	#${spc} ${1}/*.sha ${2}
-	#${spc} ${1}/*.sig ${2}
 
 	dqb "jkl1 d0n3"
 }
@@ -192,7 +177,6 @@ function jlk_conf() {
 #sopivilla parametreilla kopsaa dgsts-hkmiston kohteeseen, ensisij tsummat , jos julk av löytyvät lähteestä niin nekin 
 #liittyyköhän copy_conf() @stage0_backend ? tai mksums.sh ? 
 function jlk_sums() {
-	#debug=1
 	dqb "jlk_sums( ${1} , ${2}, ${3}) "
 	csleep 2
 
@@ -208,7 +192,6 @@ function jlk_sums() {
 
 	#261225:voi kyllä mennä wanhentunut dgsts jihteeseen tälleen
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
-
 	${spc} ${1}/*.gpg ${2}
 	${spc} ${1}/*.sig ${2} #uutena
 	
@@ -222,7 +205,6 @@ function jlk_sums() {
 	
 	#miksi urputusta tässä kohtaa? lähteessä wanha dgsgs?
 	${sah6} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5 --ignore-missing
-	#211225:nykyään olisi .5
 
 	dqb "JLK_SUYMD_DONE"
 	sleep 2
@@ -265,10 +247,6 @@ function rst_pre2() {
 	fasdfasd ./etc/default/locale
 	csleep 1
 
-	#HUOM.091025:lokaaleihjin liittyen:
-	#LANGUAGE ja LC_ALL jos asettaisi jhnkn arvoon
-	#HUOM.201225:miten suhtautuu check_bin2() nykyään ao. riveihin?
-
 	env | grep LAN > ./etc/default/locale
 	env | grep LC >> ./etc/default/locale
 	csleep 1
@@ -279,7 +257,6 @@ function rst_pre2() {
 	[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
 	${spc} /etc/hosts ./etc
 	${odio} touch ./.chroot
-	#date > ./.chroot
 
 	dqb "rst_pre2() done"
 	csleep 1
@@ -309,7 +286,7 @@ function rst_post() {
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
 function rst() { #HUOM.091025:OK
 	dqb "rst( ${1} , ${2} )"
-	[ -z ${1} ] && exit 13
+	[ -z "${1}" ] && exit 13
 	[ -d ${1} ] || exit 14
 
 	#TODO: $1 suhteen muitakin tarkistuksia?
@@ -331,27 +308,3 @@ function rst() { #HUOM.091025:OK
 	dqb "rst() done"
 	csleep 1
 }
-
-#HUOM.031025:tätä jos voisi hyÖdyntää cHrootin kanssa? patch_list:in kautta yhetiset jutut esim conf ?
-#function ijk() {
-#	if [ x"${2}" != "x" ]; then
-#		echo "${0} -x ?"
-#		
-#		previous=$(pwd)
-#		${smd} -p ${2}/${TARGET_pad2}
-#		cd ${2}/${TARGET_pad2}
-#	
-#		[ x"${1}" != "x" ] || exit 666
-#		[ -d ${1} ] || exit 666
-#
-#		local d
-#		for d in ${TARGET_patch_list_2} ; do ${spc} ${1}/${TARGET_pad_dir}/${d} . ; done
-#
-#		grep -v TARGET_to_ram devuan.conf > root.conf 
-#	
-#		${smr} devuan.conf
-#		echo "TARGET_to_ram=1" >> root.conf
-#		${scm} 0444 root.conf
-#		cd ${previous}
-#	fi
-#}

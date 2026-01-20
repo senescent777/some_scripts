@@ -51,7 +51,6 @@ function m0() {
 		${odio} chattr +ui ${1}/*.gpg
 	}
 
-#VAIH:tämä rimpsu varm. vuoksi koko skriptin alkuun?
 [ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
 chown -R $(whoami):$(whoami) ~/.gnupg #tarpeen?
 chmod 0700 ~/.gnupg/private-keys-v1.d #tai lähes koko ~/.g
@@ -60,14 +59,12 @@ csleep 5
 		
 case ${cmd} in
 	u)
-		#VAIH:"find -not -name | gg" olisi hyväksi 
+		#VAIH:"find -not -name | gg" olisi hyväksi ?
 		tgt2=${tgt}
 		
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then
 			tgt2=${CONF_keys_dir_pub}
 			dqb "${gg} --import ${CONF_keys_dir_pub}/*.gpg"
-		#else
-		#	${gg} --import ${tgt}/*.gpg
 		fi
 		
 		for d in $(find ${tgt2} -type f -name '*.gpg' | grep -v 'priv') ; do
@@ -158,7 +155,6 @@ case ${cmd} in
 		sleep 1
 			
 		${CONF_editor} ${d}/keys.conf.tmp
-		#VAIH:voisi kopsata toisellekin nimelle ja sillä editoida, lopuksi oikean niminen tdsto tilap tdstosta typistämällä 12 riviin	
 		head -n 12 ${d}/keys.conf.tmp > ${d}/keys.conf
 	;;
 	*)

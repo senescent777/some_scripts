@@ -50,22 +50,13 @@ function parse_opts_real() {
 				exit 67
 			fi
 
-			#[ -z ${2} ] && exit 65
-			#191225:pitäisikö jotain lisätarkistruksia?
 			cmd=${1}
 		;;
 		-c)
-			#[ -z "${2}" ] && exit 68 jotain syystä ei toimi 
-			#[ -s ${2} ] && exit 69
-
 			par=${2}
 			cmd=${1}
 		;; 
 	esac
-
-	#if [ "${1}" != "--dir2" ] ; then #EI NÄIN
-	#	cmd=${1} 
-	#fi
 }
 
 #12125:cmd kantsisi asettaa vain jos tyhjä
@@ -83,7 +74,6 @@ function single_param() {
 			ms=1
 		;;
 		-f|-r|-d|-b)
-			#josko tämä estäisi vahinko-deletoinnin
 			[ -z "${cmd}" ] && cmd=${1}
 		;;
 	esac
@@ -92,7 +82,6 @@ function single_param() {
 . ${d}/common_funcs.sh
 dqb "cmd=${cmd}"
 dqb "par=${par}"
-#exit
 
 tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
@@ -103,7 +92,7 @@ case ${cmd} in
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #191225:toimii
-		[ -s ${par} ] || exit 66 #xxx kyllä ...
+		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
 
@@ -113,8 +102,6 @@ case ${cmd} in
 
 		if [ $? -eq 0 ] ; then
 			csleep 3
-
-			#[ ${debug} -eq 1 ] && dirname $0
 			[ ${debug} -eq 1 ] && pwd
 			csleep 3
 
@@ -129,8 +116,6 @@ case ${cmd} in
 	;;
 	-d)  
 		#251225:toimii
-		#... tai pitäidiköhän kuitenin muuttaa vähän? jotain kiukuttelua oli joisain tilnteisa
-		
 		#TODO:pudon sudotus josqs? vaiko se sudoers?
 		
 		[ -v CONF_squash0 ] || exit 66
@@ -148,16 +133,12 @@ case ${cmd} in
 	;;
 	-r)
 		#251225:toimii
-		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
-		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
 		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
-
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
-		#optionaalinen ajettava komento?
 		rst_pre1
 		rst ${CONF_squash_dir}
 		
@@ -180,10 +161,7 @@ case ${cmd} in
 			exit 96
 		fi
 
-		#j_cnf tuo mukanaan sen sq-chroot-spesifisen konffin (tai siis muokkaa moisen olemaan)
 		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
-		
-		#HUOM.201225:tarvitseekoko koko ko target_dgsts - hmistoa kopsata kohteeseen? riittäisikö vähempi?
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad2}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
