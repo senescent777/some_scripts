@@ -55,9 +55,9 @@ function part0() {
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää CONF_SOURCE
 	#191225;josko vähitellen jotain sen oletus-bloader.konfiguraation hyväksi?
-	bootloader ${3} ${2} ${1} 
+	bootloader ${3} ${2} ${1} ${CONF_target}
 	
-	default_process ${4}/live
+	#default_process ${4}/live
 	local src2=${2}/${TARGET_pad_dir}
 	${scm} o+w ${4}/${TARGET_pad_dir}
 
@@ -80,7 +80,7 @@ function part0() {
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
 	copy_main ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} ${CONF_scripts_dir}
-	copy_conf ${2}/${TARGET_pad_dir} ${n} ${4}/${TARGET_pad_dir}
+	copy_conf ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} ${n}
 	copy_sums ${2}/${TARGET_DIGESTS_dir} ${4}/${TARGET_DIGESTS_dir}
 	
 	dqb "4FT3R COPY_X"
@@ -104,7 +104,7 @@ function part0() {
 #		fi
 #	fi
 
-	default_process ${4}/${TARGET_pad_dir}
+	#default_process ${4}/${TARGET_pad_dir}
 	[ ${debug} -eq 1 ] && ls -las ${4}
 	csleep 10
 
