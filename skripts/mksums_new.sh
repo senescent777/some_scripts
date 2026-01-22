@@ -56,7 +56,6 @@ if [ $# -eq 0 ] ; then
 	exit
 fi
 
-#DONE:varmista että dellii ne aiemmat fgsts.x - kalat OIKEASTI
 function part0() {
 	dqb "part0( ${1}, ${2})"
 	csleep 1
@@ -91,28 +90,28 @@ function part0() {
 	csleep 1
 	${NKVD} ${1}/${TARGET_DIGESTS_file}*	
 	
-	dqb "OPOLO"
+	dqb "QPOL0"
 	csleep 1
 	
 	[ ${debug} -eq 1 ] && ls -las ${1}/${TARGET_DIGESTS_file}*
 	csleep 3
 
-	dqb "DERPECHE M0DE"
+	dqb "DERPECHE M0D3"
 	csleep 1
 	
 	local i
-	for i in ${MKS_parts} 4 ;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
+	for i in ${MKS_parts} 4;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
+	#for i in $@ 
 	
 	dqb "part0 d0n3"
 	csleep 1
 }
 
-#HUOM.281125:pad alla julk avaimet .bz2:sessa olisi idea, tosin muitskin löytyy
+#HUOM.281125:pad alla julk avaimet .bz2:sessa olisi idea, tosin muitAkin löytyy
 function part123() {
-	#debug=1
 	dqb "part123(${1}, ${2} , ${3} )"
 
-	[ z"${1}" != "z" ] || exit 111
+	[ -z "${1}" ] && exit 111
 	[ -d ${3} ] || exit 113
 	#[ -d ${2} ] || exit 114 # -d $2/$3 parempi?
 
@@ -130,10 +129,6 @@ function part123() {
 		for f in $(find ./${2} -type f -name "*.cfg" -or -name "*.lst" -or -name "grubenv") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
-
-		#HUOM.siinä aiemmassa virityksessä taisi tulla myös devuan.conf (tjsp) mukaan
-		#... ja ne 2 julk av myös
-		#byj. cersiossa myös
 		for f in $(find ./${2} -type f -name "*.conf")  ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
 
 		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
@@ -148,8 +143,8 @@ function part123() {
 }
 
 function part456() {
-	dqb "part456 $1 ; $2 ; $3"
-	[ z"${1}" != "z" ] || exit 666
+	dqb "part456 $1 ; $2 ; $3" #kuinka monta paranm tulee?
+	[ -z "${1}" ] && exit 66
 	
 	[ ${debug} -eq 1 ] && pwd
 	csleep 1
@@ -164,7 +159,7 @@ function part456() {
 #HUOM.kandee ajaa tämä vain jos binäärit ja avaimet olemassa
 #161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan? jos MKS_PARTS parametriksi?
 function part6_5() {
-	dqb "mks.part65 ${1} , ${2} , ${3} "
+	dqb "mks.part65( $@ ) "
 
 	[ -v CONF_pubk ] || exit 99	
 	[ -v TARGET_DIGESTS_dir ] || exit 98
@@ -176,6 +171,7 @@ function part6_5() {
 	local i
 
 	for i in ${MKS_parts} ; do
+	#for i in $@ ; do #VAIH:tämä vielä josqs?
 		dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
 		csleep 1
 		
@@ -183,12 +179,12 @@ function part6_5() {
 		[ $? -gt 0 ] && dqb "kutl.bash w | x ?"
 	done
 
-	dqb "dibw"
+	dqb "mks.part65dibw"
 }
 
 #151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(TODO)
 #TODO:target_dpub-jutut pois sittenq mahd ?
-#TODO;MKS_PARTS parametriksi?
+
 function part7() {
 	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " 
 
@@ -209,6 +205,7 @@ function part7() {
 	local i
 
 	for i in ${MKS_parts} ; do
+	# $@ #VAIH:josqs?
 		${gg} --verify ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig 
 		csleep 1
 	done
@@ -248,19 +245,19 @@ csleep 1
 
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
-#part123 5 ei vielä onnaa koska sisältö, "shasum.c" ok mutta ne polut
+#part123 5 ei vielä onnaa koska sisältö, "shasum -c" ok mutta ne polut
 
-cd ${source} #201225:cd-komennon kanssa ei niin justiinsa mihin laittaa part123() nähden koska kys fktio sisältää moisen komennon
+cd ${source}
 for p in ${MKS_parts} ; do part456 ${p}; done
 
 #kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim
 #niinja nw julk av pitäisi myös tulla mukaan, kts stage0_backend liittyen
 
 if [ x"${gg}" != "x" ] ; then 
-	part6_5
+	part6_5 #${MKS_PARTS}
 fi
 
-part7 
+part7 #${MKS_PARTS}
 [ ${debug} -eq 1 ] && pwd
 
 #part8 ${b}

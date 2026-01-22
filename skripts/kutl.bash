@@ -59,7 +59,6 @@ csleep 5
 		
 case ${cmd} in
 	u)
-		#VAIH:"find -not -name | gg" olisi hyväksi ?
 		tgt2=${tgt}
 		
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then

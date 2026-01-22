@@ -87,7 +87,7 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
 case ${cmd} in
-	-x) #251225:toimii
+	-x) #210126:toimii edelleen
 	# ensin tämä sitten -j (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
@@ -111,29 +111,28 @@ case ${cmd} in
 		${uom} ${CONF_source}
 	;;
 	-b) 
-		#251225:toimii
+		#210126:ok?
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  
-		#251225:toimii
+		#210126:toimii edelleen
 		#TODO:pudon sudotus josqs? vaiko se sudoers?
 		
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
 		pwd;sleep 6
 
-		if [ x"${CONF_squash0}" != "x" ] ; then
+		if [ x"${CONF_squash0}" != "x/" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #251225:toimii, tai ainakin luo tdston
-		#HUOM:$par tarkistus löytyy fktiosta cfd
+	-c)  #210126:ok?
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#251225:toimii
-		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
+		#210126:ok?
+		dqb "#muista myös roiskaista ne kuvakkeet filesystem.squash sisälle	"
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
@@ -144,7 +143,7 @@ case ${cmd} in
 		
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #231225:taitaa toimia:yosin keskeytys --fir2 puutteen vuoksi? onko tarpeellista?
+	-j)  #210126:ok?
 		dqb "smd= ${smd} "
 		csleep 2
 
@@ -161,7 +160,7 @@ case ${cmd} in
 			exit 96
 		fi
 
-		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
+		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad2}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;

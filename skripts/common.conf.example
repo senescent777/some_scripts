@@ -23,7 +23,7 @@ CONF_squash0=${CONF_tmpdir0}/$CONF_squash}
 CONF_squash_dir=${CONF_squash0}/squashfs-root
 #
 #the line  ext2 noauto,user,exec,suid,dev 0 0 should be found in /etc/fstab
-CONF_tmpdir=${CONF_tmpdir0}/temp_dir_4_additional stuff 
+CONF_tmpdir=${CONF_tmpdir0}/temp_dir_4_additional_stuff 
 CONF_source=${CONF_tmpdir}/temporary_mount_point_4_base
 CONF_target=${CONF_tmpdir}/target_where_base_and_additional_stuff_are_copied_,_different_from_\$CONF_squash_and\$CONF_source_-dirs
 CONF_bloader=preferred_bootloader

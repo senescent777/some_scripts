@@ -9,10 +9,10 @@ function mangle_conf() {
 function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
 
-	[ x"${1}" != "x" ] || exit 2
+	[ -z "${1}" ] && exit 2
 	[ -d ${2} ] || exit 22
 
-	[ y"${3}" != "y" ] || exit 33
+	[ -z "${3}" ] && exit 33
 	[ -d ${3} ] || exit 34
 
 	dqb "CHECKS PASSED"
@@ -32,26 +32,17 @@ function copy_main() {
 	csleep 1
 	
 	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
-#	for f in $(find ${1} -type f -name '*.sh') ; do
-	for f in $(find ${1} -type f -name '*.sh' -or -name '*.bz2') ; do 
+
+	for f in $(find ${1} -name '*.sh' -or -name '*.bz2') ; do # -type f 
 		dqb "${spc} ${f} ${2} "
 		${spc} ${f} ${2}
 	done
 	
 	dqb "PENNY AND A DIME"
 	csleep 1
-
-#	for f in $(find ${1} -type f -name '*.bz2') ; do
-#		dqb "${spc} ${f} ${2}"
-#		${spc} ${f} ${2}
-#	done
-#
-#	dqb "copy_main() donw\n"
+	dqb "copy_main() donw\n"
 }
 
-#VAIH:kutsuvassa koodissa voisi $2 ja $3 vai htaa paikkaa+vastaavat ao. fktioon
-#
-#
 function copy_conf() {
 
 	dqb "copy_conf(${1}, ${2} , ${3})"
@@ -116,13 +107,6 @@ function copy_conf() {
 	sleep 1
 }
 
-#211225 uusittu tätä fktiota
-#jos riitttäisi avainten kopsailu, vai tarvitaanko tsummia kanssa?
-#
-#... entä jos v-hmiston alla on tarkistusta vaativia tdstoja?
-#mksums hoitaa ne kohteeseeen kopsailun jälkeen?
-#parempi niin päin että dgsts.5 kopsataankin lähteestä? ei tartte toisaalla säätää...
-#
 function copy_sums() {
 	dqb "copy_syms(${1}, ${2})" 
 
@@ -139,8 +123,8 @@ function copy_sums() {
 		${smd} -p ${2}
 	fi
 	
-	#TODO:jos vielä vähän karsisi tuota findin listausta , kts kutl.bash
-	#... ja siihen liittyen myös cp-komennon suhteen muutos
+	#TODO:jos vielä vähän karsisi tuota findin listausta? , kts kutl.bash (pointti oli?)
+	#... ja siihen liittyen myös cp-komennon suhteen muutos?
 	local x=0
 	local t
 	
@@ -178,11 +162,8 @@ function bootloader() {
 
 	[ -z "${1}" ] && exit 2
 	[ -z "${2}" ] && exit 4
-	
-	#[ x"${}" != "x" ] || exit 8
 	[ -d ${2} ] || exit 33
 
-	#ok näin?
 	[ -z "${3}" ] && exit 44
 	[ -d ${3} ] || exit 55
 
@@ -216,25 +197,7 @@ function bootloader() {
 			[ ${debug} -eq 1 ] && find ${3}/isolinux -type f -name '*.cfg'
 			csleep 5
 
-#			#jos siirtäisi ennen case;a nää, pienin muutoksin
-#			dqb "${smr} ${k3}/*.cfg"
-#			${smr} ${k3}/*.cfg
-#			${smr} ${k3}/*.png
-#
-			csleep 2
 			dqb "TRYI1NG T0 R3PLACE IS0LINUX.CGF"
-
-#			#VAIH:cfg-png-blokit yhdistäen&&swtchin jälkeen
-#			for f in $(find ${ks2} -name '*.cfg') ; do
-#				dqb "spc ${f} ${k3}/"
-#				${spc} ${f} ${k3}/
-#			done
-#
-#			#jos ei muuta keksi niln -s /r/l/m/i $tgt
-#			ls -las ${k3}/*.cfg || exit 99			
-#			csleep 2
-#			dqb "PNG"	
-#
 		;;
 		grub)
 			ks2=${2}/boot #jos siirtäisi ennen case;a nää
@@ -249,13 +212,6 @@ function bootloader() {
 				k3=${4}/boot/grub
 				[ ${debug} -gt 0 ] && ls -las ${k3}/*.cfg
 				csleep 5
-
-				#jos ei automaagisesti jatkossa... mikä?
-
-#				for f in $(find ${ks2} -name '*.png') ; do
-#					dqb "spc ${f} ${k3}"
-#					${spc} ${f} ${k3}
-#				done	
 			fi
 		;;
 		*)
@@ -292,15 +248,15 @@ function bootloader() {
 #161225:sudoilut myöhemmin
 #161225.2:voisi kai iteroida forılla arrayn läpi jatkossa
 #TODO:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
-#TODO:esim. tässä se /.chroot luonti
+#TODO:esim. tässä se /.chroot luonti?
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1
 
-	[ x"${1}" != "x" ] || exit 99
+	[ -z "${1}" ] && exit 99
 	[ x"${1}" != "x/" ] || exit 100
-	[ y"${2}" != "y" ] || exit 101
-	[ -z ${3} ] && exit 102
+	[ -z "${2}" ] && exit 101
+	[ -z "${3}" ] && exit 102
 	
 	dqb "PARAMZx OK"
 	csleep 1
@@ -354,8 +310,6 @@ function make_tgt_dirs() {
 	dqb "TUQ"
 	[ -d ${1}/../out ] || ${smd} -p ${1}/../out
 	csleep 1
-
-
 
 	dqb "FN1AL"
 	${sco} -R $(whoami):$(whoami) ${1}

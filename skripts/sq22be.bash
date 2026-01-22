@@ -1,4 +1,4 @@
-#HUOM.091025:OK
+#210126:lienee edelleen OK
 function xxx() {
 	dqb "xxx( ${1}, ${2})"
 
@@ -24,12 +24,12 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
-#HUOM.091025:OK
+#210126:ok?
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
-	[ x"${1}" == "x" ] && exit 6
+	[ -z "${1}" ] && exit 6
 	[ -s ${1} ] && exit 66
-	[ x"${2}" == "x" ] && exit 7
+	[ -z "${2}" ] && exit 7
 	[ -d ${2} ] || exit 77
 
 	dqb "PARS IJ"
@@ -51,12 +51,12 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#myös 201225 testattu ja taisi toimia ok
+#210126:ok?
 #sudoers-jekku olisi hyväksi tässäkin
 function bbb() {
 	dqb "bbb( ${1} ) OGDRU JAHAD"
 
-	[ x"${1}" == "x" ] && exit 97
+	[ -z "${1}" ] && exit 97
 	[ x"${1}" == "x/" ] && exit 98
 	[ -d ${1} ] || exit 99
 
@@ -75,14 +75,31 @@ function bbb() {
 	${smr} -rf ./boot/*
 	${smr} -rf ./usr/share/doc/*
 	
-	#TODO:findillä etsitään . alta .deb && hukataan , voi olla muuallakin kuin vain /var
-	${smr} -rf ./var/cache/apt/archives/*.deb
+	#${smr} -rf ./var/cache/apt/archives/*.deb
+	
+	#VAIH:findillä etsitään . alta .deb && hukataan , voi olla muuallakin kuin vain /var
+	for f in $(find . -type f -name '*.deb') ; do
+		dqb "${smr} ${f}"
+		csleep 1
+		${smr} ${f}
+	done
+	
+	csleep 5
+	
 	${smr} -rf ./var/cache/apt/*.bin
 	${smr} -rf ./tmp/*
 	
 	[ -v TARGET_pad2 ] || exit 64
 	${smr} -rf ./${TARGET_pad2}/*.bz3*
 	${smr} -rf ./${TARGET_pad2}/*.OLD
+	
+	#VAIH:/h/d/... alta juttuja pois kanssa
+	for f in $(find ./home -type f -name '*.tar') ; do
+		dqb "smr ${f}"
+		csleep 1
+		${smr} ${f}
+	done
+	
 	csleep 1
 	
 	${sco} -R 0:0 ./${TARGET_pad2}
@@ -97,12 +114,12 @@ function bbb() {
 	dqb "BARBEQUE PARTY DONE.done()"
 }
 
-#211225:toiminee edelleen
+#210126:ok?
 function jlk_main() {
 	dqb "jkl_niam ( ${1} , ${2}  )"
 
-	[ x"${1}" == "x" ] && exit 66
-	[ x"${2}" == "x" ] && exit 67
+	[ -z "${1}" ] && exit 66
+	[ -z "${2}" ] && exit 67
 	[ -d ${1} ] || exit 68
 	[ -d ${2} ] || exit 69
 
@@ -121,21 +138,20 @@ function jlk_main() {
 #kts. myös stage0_backend.bsh , copy_conf()
 #
 #mankeloi sen conf-tiedoston (281125:oliko vielä jotain spesifistä juttua tähän liittyen?)
-#Const T_P2 mäkeen fktiosta?
+#VAIH:Const T_P2 mäkeen fktiosta?
 #
-#lienee ok 281125
-#TODO:keys.conf:in sisällön greppailu mukaan?
+#210126:tarteeko vielä keys.conf:ista greppailla juttuja?
 #sqroot sisällä ei tarvita: CONF_dir, CONF_pkgsrv? , BASEDIR
 #
-#TODO:kommentoitujen siivoys
-#TODO:root.conf dgsts.tdstoon mukana jos ei ole jo ?
+#210126:kommentoitujen siivoUs vIelä ajankoht?
+#root.conf dgsts.tdstoon mukana jos ei ole jo ? siinä on kyllä semmoinen juttu allekirjoituksen kanssa
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
 	csleep 2
 
-	[ x"${1}" == "x" ] && exit 66
-	[ x"${2}" == "x" ] && exit 67
-	[ x"${3}" == "x" ] && exit 68
+	[ -z "${1}" ] && exit 66
+	[ -z "${2}" ] && exit 67
+	[ -z "${3}" ] && exit 68
 
 	[ -d ${1} ] || exit 69
 	[ -s ${1}/${2}.conf ] || exit 70 #jatkossa pois tämä vai ei?
@@ -145,27 +161,27 @@ function jlk_conf() {
 	[ ${debug} -eq 1 ] && pwd
 	csleep 2
 			
-	local t
-	t=${3}/${TARGET_pad2}
+#	local t
+#	t=${3}
 		
-	${smr} ${t}/root.conf
-	${smr} ${t}/${2}.conf	
+	${smr} ${3}/root.conf
+	${smr} ${3}/${2}.conf	
 	csleep 5
 
-	fasdfasd  ${t}/root.conf
+	fasdfasd ${3}/root.conf
 	csleep 5
 
 	ls -las ${1}/${2}.conf	
 	csleep 5
 
-	grep -v TARGET_to_ram ${1}/${2}.conf > ${t}/root.conf #tarpeellinen nykyään?
-	echo "TARGET_to_ram=1" >> ${t}/root.conf #whether u can write to / or not
+	grep -v TARGET_to_ram ${1}/${2}.conf > ${3}/root.conf #tarpeellinen nykyään?
+	echo "TARGET_to_ram=1" >> ${3}/root.conf #whether u can write to / or not
 	csleep 5
 
-	grep dnsm ${t}/root.conf
+	grep dnsm ${2}/root.conf | wc -l
 	csleep 5
 
-	ls -las ${t}/*.conf
+	ls -las ${3}/*.conf
 	csleep 5
 
 	dqb "jlk_conf( ) DONE4"
@@ -176,11 +192,13 @@ function jlk_conf() {
 #
 #sopivilla parametreilla kopsaa dgsts-hkmiston kohteeseen, ensisij tsummat , jos julk av löytyvät lähteestä niin nekin 
 #liittyyköhän copy_conf() @stage0_backend ? tai mksums.sh ? 
+
+#219126:ok?
 function jlk_sums() {
 	dqb "jlk_sums( ${1} , ${2}, ${3}) "
 	csleep 2
 
-	[ x"${1}" != "x" ] || exit 66
+	[ -z "${1}"  ] && exit 66
 	[ -d ${1} ] || exit 67
 	[ -z ${2} ] && exit 68
 	dqb "pars ok"
@@ -190,10 +208,10 @@ function jlk_sums() {
 	dqb "${spc} -a ${1}/ \$stuff ${2}"
 	csleep 2
 
-	#261225:voi kyllä mennä wanhentunut dgsts jihteeseen tälleen
+	#261225:voi kyllä mennä wanhentunut dgsts KOhteeseen tällä tavalla?
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
 	${spc} ${1}/*.gpg ${2}
-	${spc} ${1}/*.sig ${2} #uutena
+	${spc} ${1}/*.sig ${2}
 	
 	[ ${debug} -gt 0 ] && ls -las ${2}
 	csleep 2
@@ -210,7 +228,7 @@ function jlk_sums() {
 	sleep 2
 }
 
-#HUOM.091025:OK
+#210126:ok?
 function rst_pre1() {
 	dqb "rst_pre1()"
 	csleep 1
@@ -235,6 +253,7 @@ function rst_pre1() {
 	csleep 1		
 }
 
+#210126:ok?
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
@@ -262,7 +281,7 @@ function rst_pre2() {
 	csleep 1
 }
 
-#HUOM.091025:OK
+#210126:ok?
 function rst_post() {
 	dqb "rst_post()"
 	csleep 1
@@ -284,12 +303,14 @@ function rst_post() {
 }
 
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
-function rst() { #HUOM.091025:OK
+function rst() { #210126:ok?
 	dqb "rst( ${1} , ${2} )"
 	[ -z "${1}" ] && exit 13
 	[ -d ${1} ] || exit 14
 
-	#TODO: $1 suhteen muitakin tarkistuksia?
+	#VAIH: $1 suhteen muitakin tarkistuksia?
+	[ x"${1}" == "x/" ] && exit 98
+	
 	dqb "params ok (maybe)"
 	csleep 1
 

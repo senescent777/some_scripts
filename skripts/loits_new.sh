@@ -6,8 +6,7 @@ source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#TODO:se jokin juttu tämän sktriptin kansssa, mikä olikaan (abs vs suht polut?)
-#... jossain päin internetiä oli myös ohjeita miten oikeaoppisesti sorkkia debianin .iso-tdstoja, sietäisi etsiä
+#TODO:se jokin juttu tämän skriptin kansssa, mikä olikaan (abs vs suht polut?) (check_params())
 
 function usage() {
 	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
@@ -36,7 +35,7 @@ function check_params() {
 	dqb "check_params()"
 
 	if [ x"${source}" != "x" ] ; then
-		if [ -d ./${source} ] ; then
+		if [ -d ./${source} ] ; then #olisikohan tämä mikä qsee?
 			dqb "k0"
 		else
 			echo "no such thing as ${source}"
