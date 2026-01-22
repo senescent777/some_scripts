@@ -13,24 +13,14 @@ fi
 
 function usage() {
 	echo "${0} --in <BASE> --add <THINGS_TO_ADD> [--bl BLOADER] [--v <verbosity_level>]"
-	#echo "${0} --get-devuan <download_dir>"
 	echo "${0} -d Destroys contents of ${CONF_tmpdir}"
 	echo "${0} --make-dirs creates some dirs under ${CONF_tmpdir}"
 }
 
 function single_param() {
 	dqb "subgle(${1} , ${2})"
-	#-v ei tarttisi kelpuuttaa tässä
 	[ "${1}" == "-v" ] || cmd=${1}
 }
-
-##... koita päättää mitä tuo $1 edustaa
-#function get_devuan() {
-#	echo "cd ${1}"
-#	echo "wget ${CONF_wget_opts} ${1}"
-#	echo "sha256sum -c SHA256SUMS"
-#	[ $? -eq 0 ] || echo "https://www.youtube.com/watch?v=PjotFePip2M"
-#}
 
 #BTW. "-d -v" miten se hoidetaan?
 function parse_opts_real() {
@@ -40,11 +30,6 @@ function parse_opts_real() {
 		--add)
 			source2=${2}
 		;;
-#		--get-devuan)
-#			#jatkossa kai main() kautta jos tarpeen
-#			get_devuan ${2}
-#			exit
-#		;;
 	esac	
 }
 
@@ -66,7 +51,6 @@ csleep 1
 case ${cmd} in
 	--make-dirs)
 		#181225:lotottu init.bash hoitamaan jatkossa src_dirs-asiat
-		#make_src_dirs ${CONF_bloader}
 
 		#onkohan mieltä tehdä noin päin kuin alla?
 		make_tgt_dirs ${CONF_target} ${CONF_source} ${CONF_bloader}
@@ -83,7 +67,6 @@ case ${cmd} in
 		#TODO:man chattr pitkästä aikaa
 		#081225:v-hmiston alta jotain siivoilua myös? no ei
 		#VAIH:josko jo sudon pudotus smr:stä tai sittense sudoers
-		#smr=$(which rm)
 		
 		dqb "smr= ${smr}"
 		csleep 2

@@ -90,20 +90,6 @@ function part0() {
 	${scm} 0444 ${CONF_tmpdir}/*.conf
 	${scm} 0555 ${CONF_tmpdir}/*.sh
 	
-	#161225 liittyen kts keyutl.bash
-
-#	#191225:tarkoituksella eriniminen Const, lisäillään kohdehmistoon vain jos oletusavain-hmisto olemassa
-#	#...tosin voi nyt konfliktoida copy_sums():in else-haaran kanssa
-#	if [ -v CONF_keys_dir_pub2 ] ; then
-#		if [ ! -z ${CONF_keys_dir_pub2}} ] ; then
-#			if [ -d ${CONF_keys_dir_pub2} ] ; then
-#				dqb "${spc} ${CONF_keys_dir_pub}/*.gpg ${4}/${TARGET_DIGESTS_dir}"
-#				csleep 1
-#				${spc} ${CONF_keys_dir_pub2}/*.gpg ${4}/${TARGET_DIGESTS_dir}
-#			fi
-#		fi
-#	fi
-
 	#default_process ${4}/${TARGET_pad_dir}
 	[ ${debug} -eq 1 ] && ls -las ${4}
 	csleep 10
