@@ -91,7 +91,7 @@ case ${cmd} in
 	# ensin tämä sitten -j (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #191225:toimii
+	-y) #080226:taitee toimia edelleen 
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -127,11 +127,11 @@ case ${cmd} in
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #210126:ok?
+	-c)  #080226:ok
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#210126:ok?
+		#080226:ok
 		dqb "#muista myös roiskaista ne kuvakkeet filesystem.squash sisälle	"
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	

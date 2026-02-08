@@ -248,7 +248,7 @@ function bootloader() {
 #161225:sudoilut myöhemmin
 #161225.2:voisi kai iteroida forılla arrayn läpi jatkossa
 #TODO:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
-#TODO:esim. tässä se /.chroot luonti?
+#esim. tässä se /.chroot luonti? miksi varten?
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1

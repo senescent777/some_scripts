@@ -72,12 +72,9 @@ function bbb() {
 	
 	${smr} -rf ./run/live
 	${smr} -rf ./boot/grub/*
-	${smr} -rf ./boot/*
+	#${smr} -rf ./boot/* #080226 kommentteihin. vöib sotkea
 	${smr} -rf ./usr/share/doc/*
 	
-	#${smr} -rf ./var/cache/apt/archives/*.deb
-	
-	#VAIH:findillä etsitään . alta .deb && hukataan , voi olla muuallakin kuin vain /var
 	for f in $(find . -type f -name '*.deb') ; do
 		dqb "${smr} ${f}"
 		csleep 1
@@ -93,7 +90,6 @@ function bbb() {
 	${smr} -rf ./${TARGET_pad2}/*.bz3*
 	${smr} -rf ./${TARGET_pad2}/*.OLD
 	
-	#VAIH:/h/d/... alta juttuja pois kanssa
 	for f in $(find ./home -type f -name '*.tar') ; do
 		dqb "smr ${f}"
 		csleep 1
@@ -138,7 +134,7 @@ function jlk_main() {
 #kts. myös stage0_backend.bsh , copy_conf()
 #
 #mankeloi sen conf-tiedoston (281125:oliko vielä jotain spesifistä juttua tähän liittyen?)
-#VAIH:Const T_P2 mäkeen fktiosta?
+#tehty?:Const T_P2 mäkeen fktiosta?
 #
 #210126:tarteeko vielä keys.conf:ista greppailla juttuja?
 #sqroot sisällä ei tarvita: CONF_dir, CONF_pkgsrv? , BASEDIR
@@ -160,9 +156,6 @@ function jlk_conf() {
 	dqb "params_ok"
 	[ ${debug} -eq 1 ] && pwd
 	csleep 2
-			
-#	local t
-#	t=${3}
 		
 	${smr} ${3}/root.conf
 	${smr} ${3}/${2}.conf	
@@ -292,6 +285,9 @@ function rst_post() {
 	${smr} ./.chroot			
 	${svm} ./etc/hosts.bak ./etc/hosts
 	${smr} ./etc/mtab
+	
+	#jtnkn näin?
+	${svm} ./etc/apt/sources.list ./etc/apt/sources.list.ÅLD
 	sleep 3
 	
 	${uom} ./dev 

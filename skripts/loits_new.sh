@@ -6,7 +6,7 @@ source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#TODO:se jokin juttu tämän skriptin kansssa, mikä olikaan (abs vs suht polut?) (check_params())
+#VAIH:se jokin juttu tämän skriptin kansssa, mikä olikaan (abs vs suht polut?) (check_params())
 
 function usage() {
 	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
@@ -35,7 +35,7 @@ function check_params() {
 	dqb "check_params()"
 
 	if [ x"${source}" != "x" ] ; then
-		if [ -d ./${source} ] ; then #olisikohan tämä mikä qsee?
+		if [ -d ${source} ] ; then #olisikohan tämä mikä qs1?
 			dqb "k0"
 		else
 			echo "no such thing as ${source}"
