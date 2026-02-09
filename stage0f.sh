@@ -26,7 +26,6 @@ fi
 
 dqb "PARAMS OK?"
 
-#TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 function part0() {
 	dqb "stg0f.PART0 ${1}, ${2} , ${3} , ${4}"
@@ -57,10 +56,8 @@ function part0() {
 	#191225;josko vähitellen jotain sen oletus-bloader.konfiguraation hyväksi?
 	bootloader ${3} ${2} ${1} ${CONF_target}
 	
-	#default_process ${4}/live
 	local src2=${2}/${TARGET_pad_dir}
 	${scm} o+w ${4}/${TARGET_pad_dir}
-
 	fasdfasd ${4}/${TARGET_pad_dir}/${n}.conf
 
 	${scm} o-w ${4}/${TARGET_pad_dir}
@@ -90,7 +87,6 @@ function part0() {
 	${scm} 0444 ${CONF_tmpdir}/*.conf
 	${scm} 0555 ${CONF_tmpdir}/*.sh
 	
-	#default_process ${4}/${TARGET_pad_dir}
 	[ ${debug} -eq 1 ] && ls -las ${4}
 	csleep 10
 

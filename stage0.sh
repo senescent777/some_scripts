@@ -6,6 +6,8 @@ source2=""
 bl=${CONF_bloader} #tähän liittyen oli se juttu toisessa repossa mikö pitäisi
 cmd=""
 
+#TODO:josko nimeäisi uudestaan ihan muuten vaan
+
 if [ $# -lt 1 ] ; then
 	echo "$0 -h"
 	exit
