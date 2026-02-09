@@ -87,8 +87,8 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
 case ${cmd} in
-	-x) #210126:toimii edelleen
-	# ensin tämä sitten -j (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
+	-x) #100226:toimii edelleen (?)
+	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #080226:taitee toimia edelleen 
@@ -111,7 +111,7 @@ case ${cmd} in
 		${uom} ${CONF_source}
 	;;
 	-b) 
-		#210126:ok?
+		#100226:ok?
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  
@@ -143,7 +143,7 @@ case ${cmd} in
 		
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #210126:ok?
+	-j)  #100226:ok?
 		dqb "smd= ${smd} "
 		csleep 2
 

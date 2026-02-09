@@ -6,8 +6,6 @@ source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#VAIH:se jokin juttu tämän skriptin kansssa, mikä olikaan (abs vs suht polut?) (check_params())
-
 function usage() {
 	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
@@ -67,6 +65,9 @@ check_params
 [ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
 sleep 1
 dqb "bl=${bl}"
+csleep 4
+
+dqb "TODO: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts"
 csleep 4
 
 case ${bl} in

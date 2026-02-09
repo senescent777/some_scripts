@@ -156,6 +156,7 @@ function copy_sums() {
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
+#TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
 #TODO:sudon pudon pudotus josqs myöh?
 function bootloader() {
 	dqb "bootloader(${1}, ${2}, ${3}, ${4} )"

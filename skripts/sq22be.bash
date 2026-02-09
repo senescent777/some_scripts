@@ -51,7 +51,7 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#210126:ok?
+#100226:ok?
 #sudoers-jekku olisi hyväksi tässäkin
 function bbb() {
 	dqb "bbb( ${1} ) OGDRU JAHAD"
