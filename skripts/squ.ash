@@ -50,22 +50,13 @@ function parse_opts_real() {
 				exit 67
 			fi
 
-			#[ -z ${2} ] && exit 65
-			#191225:pitäisikö jotain lisätarkistruksia?
 			cmd=${1}
 		;;
 		-c)
-			#[ -z "${2}" ] && exit 68 jotain syystä ei toimi 
-			#[ -s ${2} ] && exit 69
-
 			par=${2}
 			cmd=${1}
 		;; 
 	esac
-
-	#if [ "${1}" != "--dir2" ] ; then #EI NÄIN
-	#	cmd=${1} 
-	#fi
 }
 
 #12125:cmd kantsisi asettaa vain jos tyhjä
@@ -83,7 +74,6 @@ function single_param() {
 			ms=1
 		;;
 		-f|-r|-d|-b)
-			#josko tämä estäisi vahinko-deletoinnin
 			[ -z "${cmd}" ] && cmd=${1}
 		;;
 	esac
@@ -92,18 +82,17 @@ function single_param() {
 . ${d}/common_funcs.sh
 dqb "cmd=${cmd}"
 dqb "par=${par}"
-#exit
 
 tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
 case ${cmd} in
-	-x) #251225:toimii
-	# ensin tämä sitten -j (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
+	-x) #100226:toimii edelleen (?)
+	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #191225:toimii
-		[ -s ${par} ] || exit 66 #xxx kyllä ...
+	-y) #080226:taitee toimia edelleen 
+		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
 
@@ -113,8 +102,6 @@ case ${cmd} in
 
 		if [ $? -eq 0 ] ; then
 			csleep 3
-
-			#[ ${debug} -eq 1 ] && dirname $0
 			[ ${debug} -eq 1 ] && pwd
 			csleep 3
 
@@ -124,46 +111,39 @@ case ${cmd} in
 		${uom} ${CONF_source}
 	;;
 	-b) 
-		#251225:toimii
+		#100226:ok?
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  
-		#251225:toimii
-		#... tai pitäidiköhän kuitenin muuttaa vähän? jotain kiukuttelua oli joisain tilnteisa
-		
+		#210126:toimii edelleen
 		#TODO:pudon sudotus josqs? vaiko se sudoers?
 		
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
 		pwd;sleep 6
 
-		if [ x"${CONF_squash0}" != "x" ] ; then
+		if [ x"${CONF_squash0}" != "x/" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
 			${smr} -rf ${CONF_squash0}/*
 		fi
 	;;
-	-c)  #251225:toimii, tai ainakin luo tdston
-		#HUOM:$par tarkistus löytyy fktiosta cfd
+	-c)  #080226:ok
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#251225:toimii
-		#tulisi sqroot-ymp ajaa se locale-gen mahd aik ni ehkä nalkutukset vähenisivät
-		#081225:pitäisiköhän urputtaa jo ennen rst_kutsuja jos ei ole "$0 -x" ajettu?
-		#TODO:muista myös roiskaista ne kuvakkeet filesystem.sqyash sisälle		
-
+		#080226:ok
+		dqb "#muista myös roiskaista ne kuvakkeet filesystem.squash sisälle	"
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
-		#optionaalinen ajettava komento?
 		rst_pre1
 		rst ${CONF_squash_dir}
 		
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #231225:taitaa toimia:yosin keskeytys --fir2 puutteen vuoksi? onko tarpeellista?
+	-j)  #100226:ok?
 		dqb "smd= ${smd} "
 		csleep 2
 
@@ -180,10 +160,7 @@ case ${cmd} in
 			exit 96
 		fi
 
-		#j_cnf tuo mukanaan sen sq-chroot-spesifisen konffin (tai siis muokkaa moisen olemaan)
-		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}
-		
-		#HUOM.201225:tarvitseekoko koko ko target_dgsts - hmistoa kopsata kohteeseen? riittäisikö vähempi?
+		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad2}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;

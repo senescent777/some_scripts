@@ -6,9 +6,6 @@ source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#TODO:se jokin juttu tämän sktriptin kansaa, mikä olikaan (abs vs suht polut?)
-#... jossain päin inmternetiä oli myös ohjeita miten oikeaoppisesri sorkkia debiabnin .iso-tdstoja, sietäisi etsiä
-
 function usage() {
 	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
@@ -36,7 +33,7 @@ function check_params() {
 	dqb "check_params()"
 
 	if [ x"${source}" != "x" ] ; then
-		if [ -d ./${source} ] ; then
+		if [ -d ${source} ] ; then #olisikohan tämä mikä qs1?
 			dqb "k0"
 		else
 			echo "no such thing as ${source}"
@@ -68,6 +65,9 @@ check_params
 [ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
 sleep 1
 dqb "bl=${bl}"
+csleep 4
+
+dqb "TODO: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts"
 csleep 4
 
 case ${bl} in
@@ -102,7 +102,3 @@ case ${bl} in
 		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
 	;;
 esac
-
-#[ -f ${ltarget} ] && ${scm} a-wx ${ltarget} #/*.iso 
-#sleep 1
-#echo "stick.sh ?"
