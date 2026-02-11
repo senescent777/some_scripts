@@ -1,4 +1,6 @@
 #!/bin/bash
+. ./setup0.conf
+
 if [ -s $0.conf ] ; then
 	. $0.conf 
 else

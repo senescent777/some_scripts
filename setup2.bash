@@ -1,4 +1,5 @@
 #!/bin/bash
+. ./setup0.conf
 
 if [ -s $0.conf ] ; then
 	. $0.conf
@@ -201,9 +202,10 @@ function f5th() {
 	sudo mv ${somefile} /etc/sudoers.d 
 
 	#TODO:/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille?
-	#TODO:init1.sh ja init2.sh konfiguraation koordinointi, yhjteiset osat yhteiseen tdstoon 
+	#VAIH:init1.sh ja init2.sh konfiguraation koordinointi, yhjteiset osat yhteiseen tdstoon 
 }
 
 f5th
 #TODO:se /.chroot luonti jonnekin?, esim. stage0_backend.bash...
 echo "kutl v | g_doit -v 1 ?"
+echo "TODO:SE &e&s.d/live HUKKAAMINEN KOKEEKSI"
