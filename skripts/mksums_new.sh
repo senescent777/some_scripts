@@ -3,7 +3,7 @@ b=0
 debug=0 #1
 source=""
 d=$(dirname $0)
-MKS_parts="1 2 3 5"
+#MKS_parts="1 2 3 5"
 . ${d}/common.conf
 bl=${CONF_bloader}
 
@@ -100,8 +100,10 @@ function part0() {
 	csleep 1
 	
 	local i
-	for i in ${MKS_parts} 4;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
+	#VAIH:travitseeko oikeastaan array:n kanssa iteroida? josko touch digests_:file.* riittäisi?
+	#for i in ${MKS_parts} 4;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
 	#for i in $@ 
+	touch ${1}/${TARGET_DIGESTS_file}.*
 	
 	dqb "part0 d0n3"
 	csleep 1
@@ -119,6 +121,7 @@ function part123() {
 	local f
 	old=$(pwd)
 
+	#TODO:apumuuttuja
 	if [ ! -s ${3}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
 		cd ${3}
 		[ ${debug} -eq 1 ] && pwd
@@ -172,11 +175,12 @@ function part6_5() {
 
 	for i in ${MKS_parts} ; do
 	#for i in $@ ; do #VAIH:tämä vielä josqs?
-		dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
-		csleep 1
+	#voisiko olla vai että ${TARGET_DIGESTS_file}..*
+		#dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
+		#csleep 1
 		
-		${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
-		[ $? -gt 0 ] && dqb "kutl.bash w | x ?"
+		##${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
+		#[ $? -gt 0 ] && dqb "kutl.bash w | x ?"
 	done
 
 	dqb "mks.part65dibw"
@@ -205,9 +209,9 @@ function part7() {
 	local i
 
 	for i in ${MKS_parts} ; do
-	# $@ #VAIH:josqs?
-		${gg} --verify ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig 
-		csleep 1
+	# $@ #VAIH:josqs? vai jokereilla?
+		#${gg} --verify ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig 
+		#csleep 1
 	done
 
 	echo $?

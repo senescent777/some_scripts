@@ -132,7 +132,6 @@ case ${cmd} in
 	;;
 	-r)
 		#080226:ok
-		dqb "#muista myös roiskaista ne kuvakkeet filesystem.squash sisälle	"
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
