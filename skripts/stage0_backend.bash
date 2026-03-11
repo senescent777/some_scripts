@@ -6,6 +6,7 @@ function mangle_conf() {
 
 #HUOM.211225;tietenkin nuo $t-jutut toisella tavalla jatqssa, sisältö...
 #dgsts.5 liittyen kts copy_sums() , kommentit
+
 function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
 
@@ -44,7 +45,6 @@ function copy_main() {
 }
 
 function copy_conf() {
-
 	dqb "copy_conf(${1}, ${2} , ${3})"
 	[ -z "${1}" ] && exit 2
 	[ -z "${2}" ] && exit 4
@@ -52,12 +52,15 @@ function copy_conf() {
 	[ -z "${3}" ] && exit 16
 	
 	csleep 1
-
 	dqb "PARAMS OK"
 	csleep 1
 
-	if [ x"${CONF_scripts_dir}" != "x" ] ; then
+	#-v vielä ?
+
+	if [ ! -z "${CONF_scripts_dir}" ] ; then
 		#pystyisi varmaan tekemään pelkällä findillä
+		#HUOM.100326:ei-tyhjä $3.conf olisi syytä löytyä lähteestä koska viimeaikaiset muutkset
+
 		for f in $(find ${CONF_scripts_dir} -type f -name '*.conf' | grep -v bash) ; do
 			dqb "${spc} ${f} ${2}/../.."
 			${spc} ${f} ${2}/../.. 	
@@ -250,6 +253,7 @@ function bootloader() {
 #161225.2:voisi kai iteroida forılla arrayn läpi jatkossa
 #TODO:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
 #esim. tässä se /.chroot luonti? miksi varten?
+
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1

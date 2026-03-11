@@ -141,6 +141,7 @@ function jlk_main() {
 #
 #210126:kommentoitujen siivoUs vIelä ajankoht?
 #root.conf dgsts.tdstoon mukana jos ei ole jo ? siinä on kyllä semmoinen juttu allekirjoituksen kanssa
+
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
 	csleep 2

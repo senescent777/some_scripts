@@ -2,7 +2,7 @@
 b=0
 debug=0 #1
 source=""
-d=$(dirname $0)
+d=$(dirname $0) #tämäb annettava olla tässä
 #MKS_parts="1 2 3 5"
 . ${d}/common.conf
 bl=${CONF_bloader}
@@ -121,21 +121,24 @@ function part123() {
 	local f
 	old=$(pwd)
 
-	#TODO:apumuuttuja
-	if [ ! -s ${3}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
+	local t
+	t=${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
+
+	#VAIH:apumuuttuja
+	if [ ! -s ${3}/${t} ] ; then
 		cd ${3}
 		[ ${debug} -eq 1 ] && pwd
 		dqb "find ./${2} -type f"
 		csleep 3
 
 		#HUOM.281125:saattaa joutua muuttamaan vielä jos isolinuxin kanssa alkaa säätää
-		for f in $(find ./${2} -type f -name "*.cfg" -or -name "*.lst" -or -name "grubenv") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
-		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
-		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
-		for f in $(find ./${2} -type f -name "*.conf")  ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
+		for f in $(find ./${2} -type f -name "*.cfg" -or -name "*.lst" -or -name "grubenv") ; do ${sah6} ${f} >> ./${t} ; done
+		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${t} ; done
+		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${t} ; done
+		for f in $(find ./${2} -type f -name "*.conf")  ; do ${sah6} ${f} >> ./${t} ; done
 
-		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
-		#${sco} 0:0 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} #ei hyvä idea?
+		${scm} 0444 ./${t}
+		#${sco} 0:0 ./${t} #ei hyvä idea?
 		cd ${old}
 	else
 		#dgsts.4 luonti ei onnistu?
@@ -152,10 +155,13 @@ function part456() {
 	[ ${debug} -eq 1 ] && pwd
 	csleep 1
 
-	if [ -s ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
-		${sah6} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} --ignore-missing
+	local t
+	t=${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
+
+	if [ -s ./${t} ] ; then
+		${sah6} -c ./${t} --ignore-missing
 	else
-		echo "no such thing as ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}"		 
+		echo "no such thing as ./${t}"		 
 	fi
 }
 
@@ -174,6 +180,7 @@ function part6_5() {
 	local i
 
 	for i in ${MKS_parts} ; do
+		dqb "VERY MUCH UNDER CONSTRUCTION"
 	#for i in $@ ; do #VAIH:tämä vielä josqs?
 	#voisiko olla vai että ${TARGET_DIGESTS_file}..*
 		#dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
@@ -188,6 +195,7 @@ function part6_5() {
 
 #151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(TODO)
 #TODO:target_dpub-jutut pois sittenq mahd ?
+#100326:"gpg --edit-key" ? ehkä ei tähän mutta johonkin
 
 function part7() {
 	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " 
@@ -209,6 +217,7 @@ function part7() {
 	local i
 
 	for i in ${MKS_parts} ; do
+		dqb "V3RY MUCH UND3R C0NSTRUCT10N"
 	# $@ #VAIH:josqs? vai jokereilla?
 		#${gg} --verify ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig 
 		#csleep 1

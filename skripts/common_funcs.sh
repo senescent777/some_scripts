@@ -29,6 +29,11 @@ fr=$(find ${CONF_BASEDIR} -type f -name common_funcs_old.sh | head -n 1)
 if [ -z "${fq}" ] ; then
 	. ${fr} #./common_funcs_old.sh
 else
+	[ -v d ] || echo "d n0t set"
+	[ -s ${d0}/$(whoami).conf ] || echo "N0 ALT C0NF"	
+	[ -s ${d}/conf ] || echo "N0 PR1MARY C0NF"
+	sleep 1
+	
 	if [ -x ${fq} ] ; then
 		. ${fq}
 		

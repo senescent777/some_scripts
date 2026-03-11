@@ -87,7 +87,7 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
 case ${cmd} in
-	-x) #100226:toimii edelleen (?)
+	-x) #100326:toimii edelleen
 	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
@@ -131,7 +131,7 @@ case ${cmd} in
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#080226:ok
+		#100326:ok?
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
@@ -139,10 +139,9 @@ case ${cmd} in
 
 		rst_pre1
 		rst ${CONF_squash_dir}
-		
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #100226:ok?
+	-j)  #100326:ok edelleen
 		dqb "smd= ${smd} "
 		csleep 2
 
