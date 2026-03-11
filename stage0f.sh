@@ -95,13 +95,12 @@ function part0() {
 	
 	${scm} 0555 ${4}/live
 	${scm} 0755 ${4}/${TARGET_DIGESTS_dir}
-
 	dqb "part0 d0ne"
 }
 
 dqb "src= ${1} , stc2= ${2} , bl= ${3}"
-[ -v CONF_source ] || exit 666
-[ -v CONF_target ] || exit 666
+[ -v CONF_source ] || exit 65
+[ -v CONF_target ] || exit 66
 make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
 
 if [ -d ${1} ] ; then
