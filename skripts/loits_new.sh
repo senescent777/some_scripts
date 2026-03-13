@@ -61,6 +61,8 @@ function check_params() {
 	dqb "check_params() done"
 }
 
+#110326:edelleen kykenee tdston muodostamaan
+
 check_params
 [ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
 sleep 1

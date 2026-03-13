@@ -24,7 +24,8 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
-#210126:ok?
+#110326;edelleen tekee tdston
+#... toiveissa että parametreja muuttamalla kiukuttelu vähenisi
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ -z "${1}" ] && exit 6
@@ -42,7 +43,7 @@ function cfd() {
 	msq=$(${odio} which mksquashfs)
 
 	if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
-		${odio} ${msq} . ${1} -comp xz -b 1048576
+		${odio} ${msq} . ${1} #-comp xz -b 1048576
 	else
 		echo "${odio} apt-get install squashfs-utils"
 	fi
@@ -51,7 +52,7 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#100226:ok?
+#110326:vissiin toimii edelleen
 #sudoers-jekku olisi hyväksi tässäkin
 function bbb() {
 	dqb "bbb( ${1} ) OGDRU JAHAD"
