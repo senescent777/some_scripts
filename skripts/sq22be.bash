@@ -1,4 +1,4 @@
-#210126:lienee edelleen OK
+#190326:lienee edelleen OK
 function xxx() {
 	dqb "xxx( ${1}, ${2})"
 
@@ -223,7 +223,7 @@ function jlk_sums() {
 	sleep 2
 }
 
-#210126:ok?
+#190326:ok?
 function rst_pre1() {
 	dqb "rst_pre1()"
 	csleep 1
@@ -248,7 +248,7 @@ function rst_pre1() {
 	csleep 1		
 }
 
-#210126:ok?
+#190326:ok?
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
@@ -261,6 +261,7 @@ function rst_pre2() {
 	fasdfasd ./etc/default/locale
 	csleep 1
 
+	#190326:asettuvato nämä kehitysymp?
 	env | grep LAN > ./etc/default/locale
 	env | grep LC >> ./etc/default/locale
 	csleep 1
@@ -306,7 +307,7 @@ function rst() { #210126:ok?
 	[ -z "${1}" ] && exit 13
 	[ -d ${1} ] || exit 14
 
-	#VAIH: $1 suhteen muitakin tarkistuksia?
+	# $1 suhteen muitakin tarkistuksia vai riittäisikö?
 	[ x"${1}" == "x/" ] && exit 98
 	
 	dqb "params ok (maybe)"

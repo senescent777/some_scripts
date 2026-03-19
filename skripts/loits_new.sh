@@ -31,7 +31,7 @@ function single_param() {
 
 function check_params() {
 	dqb "check_params()"
-
+#todo:IF-BLOKKIEN PURKAMINEN PIEenemmiksi
 	if [ x"${source}" != "x" ] ; then
 		if [ -d ${source} ] ; then #olisikohan tämä mikä qs1?
 			dqb "k0"

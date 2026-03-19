@@ -86,7 +86,7 @@ function part0() {
 	[ -v TARGET_DIGESTS_file ] || exit 73
 	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
 	
-	dqb "${NKVD} ${1}/${TARGET_DIGESTS_file}* SOON"
+	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file}* SOON"
 	csleep 1
 	${NKVD} ${1}/${TARGET_DIGESTS_file}*	
 	
@@ -99,11 +99,8 @@ function part0() {
 	dqb "DERPECHE M0D3"
 	csleep 1
 	
-	local i
-	#VAIH:travitseeko oikeastaan array:n kanssa iteroida? josko touch digests_:file.* riittäisi?
-	#for i in ${MKS_parts} 4;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
-	#for i in $@ 
-	touch ${1}/${TARGET_DIGESTS_file}.*
+
+	#touch ${1}/${TARGET_DIGESTS_file}.* einäin
 	
 	dqb "part0 d0n3"
 	csleep 1
@@ -128,7 +125,7 @@ function part123() {
 	if [ ! -s ${3}/${t} ] ; then
 		cd ${3}
 		[ ${debug} -eq 1 ] && pwd
-		dqb "find ./${2} -type f"
+		#dqb "find ./${2} -type f"
 		csleep 3
 
 		#HUOM.281125:saattaa joutua muuttamaan vielä jos isolinuxin kanssa alkaa säätää
@@ -147,23 +144,25 @@ function part123() {
 
 	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 }
-
-function part456() {
-	dqb "part456 $1 ; $2 ; $3" #kuinka monta paranm tulee?
-	[ -z "${1}" ] && exit 66
-	
-	[ ${debug} -eq 1 ] && pwd
-	csleep 1
-
-	local t
-	t=${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
-
-	if [ -s ./${t} ] ; then
-		${sah6} -c ./${t} --ignore-missing
-	else
-		echo "no such thing as ./${t}"		 
-	fi
-}
+#
+#function part456() {
+#	dqb "part456 $1 ; $2 ; $3" #kuinka monta paranm tulee?
+#	[ -z "${1}" ] && exit 66
+#	
+#	[ ${debug} -eq 1 ] && pwd
+#	csleep 1
+#
+#	local t
+#	for u in ${MKS_parts}; do	
+#		t=${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${u}
+#
+#		if [ -s ./${t} ] ; then
+#			${sah6} -c ./${t} --ignore-missing
+#		else
+#			echo "no such thing as ./${t}"		 
+#		fi
+#	done
+#}
 
 #HUOM.kandee ajaa tämä vain jos binäärit ja avaimet olemassa
 #161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan? jos MKS_PARTS parametriksi?
@@ -179,15 +178,15 @@ function part6_5() {
 	csleep 1
 	local i
 
-	for i in ${MKS_parts} ; do
-		dqb "VERY MUCH UNDER CONSTRUCTION"
-	#for i in $@ ; do #VAIH:tämä vielä josqs?
-	#voisiko olla vai että ${TARGET_DIGESTS_file}..*
-		#dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
-		#csleep 1
-		
-		##${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
-		#[ $? -gt 0 ] && dqb "kutl.bash w | x ?"
+#	for i in ${MKS_parts} ; do
+#		dqb "VERY MUCH UNDER CONSTRUCTION" #VAIH:josnyt vähitellen saisi aikaiseksi
+
+#		#dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
+#		#csleep 1
+
+	for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
+		${gg} -u ${CONF_pubk} -sb ${f}
+		[ $? -gt 0 ] && dqb "kutl.bash w | x ?"
 	done
 
 	dqb "mks.part65dibw"
@@ -216,11 +215,13 @@ function part7() {
 
 	local i
 
-	for i in ${MKS_parts} ; do
-		dqb "V3RY MUCH UND3R C0NSTRUCT10N"
-	# $@ #VAIH:josqs? vai jokereilla?
-		#${gg} --verify ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig 
-		#csleep 1
+#	for i in ${MKS_parts} ; do
+#		dqb "V3RY MUCH UND3R C0NSTRUCT10N"
+#	# $@ #VAIH:josqs? vai jokereilla?
+
+	for f in $(find ${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?.sig" ) ; do
+		${gg} --verify ${f} 
+#		#csleep 1
 	done
 
 	echo $?
@@ -232,7 +233,7 @@ function part7() {
 dqb "${source} exists"
 csleep 1
 [ ${debug} -eq 1 ] && pwd
-part0 ${source}/${TARGET_DIGESTS_dir} ${n}
+part0 ${source}/${TARGET_DIGESTS_dir} $(whoami)
 
 csleep 5
 dqb "BOOTLEODER"
@@ -261,12 +262,20 @@ part123 3 live ${source}
 #part123 5 ei vielä onnaa koska sisältö, "shasum -c" ok mutta ne polut
 
 cd ${source}
-for p in ${MKS_parts} ; do part456 ${p}; done
+#for p in  ; do  ${p}; done
+#part456
+
+for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
+	dqb "p456 ${f}"
+	${sah6} -c ${f} --ignore-missing
+done
+
+#exit 66
 
 #kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim
 #niinja nw julk av pitäisi myös tulla mukaan, kts stage0_backend liittyen
 
-if [ x"${gg}" != "x" ] ; then 
+if [ ! -z "${gg}" ] ; then 
 	part6_5 #${MKS_PARTS}
 fi
 
@@ -276,14 +285,14 @@ part7 #${MKS_PARTS}
 #part8 ${b}
 [ ${debug} -eq 1 ] && pwd
 
-${sco} ${n}:${n} ./${TARGET_DIGESTS_dir}/* 
+${sco} $(whoami):$(whoami) ./${TARGET_DIGESTS_dir}/* 
 ${scm} 0644 ./${TARGET_DIGESTS_dir}/* 
 [ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
 dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12" 
 ${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
-part456 4
+#part456 4
 
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}
