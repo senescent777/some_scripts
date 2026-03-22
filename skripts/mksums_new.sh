@@ -1,9 +1,8 @@
 #!/bin/bash
 b=0
-debug=0 #1
+debug=0
 source=""
 d=$(dirname $0) #tämäb annettava olla tässä
-#MKS_parts="1 2 3 5"
 . ${d}/common.conf
 bl=${CONF_bloader}
 
@@ -95,12 +94,6 @@ function part0() {
 	
 	[ ${debug} -eq 1 ] && ls -las ${1}/${TARGET_DIGESTS_file}*
 	csleep 3
-
-	dqb "DERPECHE M0D3"
-	csleep 1
-	
-
-	#touch ${1}/${TARGET_DIGESTS_file}.* einäin
 	
 	dqb "part0 d0n3"
 	csleep 1
@@ -121,11 +114,9 @@ function part123() {
 	local t
 	t=${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
 
-	#VAIH:apumuuttuja
 	if [ ! -s ${3}/${t} ] ; then
 		cd ${3}
 		[ ${debug} -eq 1 ] && pwd
-		#dqb "find ./${2} -type f"
 		csleep 3
 
 		#HUOM.281125:saattaa joutua muuttamaan vielä jos isolinuxin kanssa alkaa säätää
@@ -144,28 +135,9 @@ function part123() {
 
 	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 }
-#
-#function part456() {
-#	dqb "part456 $1 ; $2 ; $3" #kuinka monta paranm tulee?
-#	[ -z "${1}" ] && exit 66
-#	
-#	[ ${debug} -eq 1 ] && pwd
-#	csleep 1
-#
-#	local t
-#	for u in ${MKS_parts}; do	
-#		t=${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${u}
-#
-#		if [ -s ./${t} ] ; then
-#			${sah6} -c ./${t} --ignore-missing
-#		else
-#			echo "no such thing as ./${t}"		 
-#		fi
-#	done
-#}
 
 #HUOM.kandee ajaa tämä vain jos binäärit ja avaimet olemassa
-#161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan? jos MKS_PARTS parametriksi?
+#161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan?
 function part6_5() {
 	dqb "mks.part65( $@ ) "
 
@@ -176,13 +148,6 @@ function part6_5() {
 
 	[ ${debug} -gt 0 ] && pwd
 	csleep 1
-	local i
-
-#	for i in ${MKS_parts} ; do
-#		dqb "VERY MUCH UNDER CONSTRUCTION" #VAIH:josnyt vähitellen saisi aikaiseksi
-
-#		#dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
-#		#csleep 1
 
 	for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
 		${gg} -u ${CONF_pubk} -sb ${f}
@@ -213,15 +178,8 @@ function part7() {
 	[ $? -gt 0 ] && dqb "kutl.bash  ?"
 	csleep 5
 
-	local i
-
-#	for i in ${MKS_parts} ; do
-#		dqb "V3RY MUCH UND3R C0NSTRUCT10N"
-#	# $@ #VAIH:josqs? vai jokereilla?
-
 	for f in $(find ${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?.sig" ) ; do
 		${gg} --verify ${f} 
-#		#csleep 1
 	done
 
 	echo $?
@@ -259,30 +217,21 @@ csleep 1
 
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
-#part123 5 ei vielä onnaa koska sisältö, "shasum -c" ok mutta ne polut
-
 cd ${source}
-#for p in  ; do  ${p}; done
-#part456
 
 for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
 	dqb "p456 ${f}"
 	${sah6} -c ${f} --ignore-missing
 done
 
-#exit 66
-
 #kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim
 #niinja nw julk av pitäisi myös tulla mukaan, kts stage0_backend liittyen
 
 if [ ! -z "${gg}" ] ; then 
-	part6_5 #${MKS_PARTS}
+	part6_5
 fi
 
-part7 #${MKS_PARTS}
-[ ${debug} -eq 1 ] && pwd
-
-#part8 ${b}
+part7
 [ ${debug} -eq 1 ] && pwd
 
 ${sco} $(whoami):$(whoami) ./${TARGET_DIGESTS_dir}/* 
@@ -292,7 +241,6 @@ csleep 1
 
 dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12" 
 ${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
-#part456 4
 
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}

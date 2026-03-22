@@ -31,7 +31,6 @@ function copy_main() {
 
 	dqb "TWO BATCH"
 	csleep 1
-	
 	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
 
 	for f in $(find ${1} -name '*.sh' -or -name '*.bz2') ; do # -type f 
