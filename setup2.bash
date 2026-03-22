@@ -201,11 +201,11 @@ function f5th() {
 	${scm} 0440 ${somefile}
 	sudo mv ${somefile} /etc/sudoers.d 
 
-	#TODO:/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille?
-	#VAIH:init1.sh ja init2.sh konfiguraation koordinointi, yhjteiset osat yhteiseen tdstoon 
+	#/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille? miksi?
+	#yhteinen konfiguraatuio jo siirretty -> setup0 ?
 }
 
 f5th
-#TODO:se /.chroot luonti jonnekin?, esim. stage0_backend.bash...
+#se /.chroot luonti jonnekin?, esim. stage0_backend.bash...
 echo "kutl v | g_doit -v 1 ?"
 echo "TODO:SE &e&s.d/live HUKKAAMINEN KOKEEKSI"

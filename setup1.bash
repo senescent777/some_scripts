@@ -166,7 +166,7 @@ function ignis() {
 ignis ${CONF_basedir}
 
 function f5th() {
-	#TODO:fstab.tmp kanssa se sed-kikkailu vähitellen?
+	#TODO:fstab.tmp kanssa se sed-kikkailu vähitellen? millainen kikkailu?
 	echo "TODO: SHOUDL POPULTAE ${CONF_basedir}/etc AROUND HERE, SPECIALLY fstab.tmp"
 	sleep 1
 }

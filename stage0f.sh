@@ -58,7 +58,7 @@ function part0() {
 	
 	local src2=${2}/${TARGET_pad_dir}
 	${scm} o+w ${4}/${TARGET_pad_dir}
-	fasdfasd ${4}/${TARGET_pad_dir}/${n}.conf
+	fasdfasd ${4}/${TARGET_pad_dir}/$(whoami).conf
 
 	${scm} o-w ${4}/${TARGET_pad_dir}
 	dqb "BEFORE COPY_x"
@@ -77,7 +77,7 @@ function part0() {
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
 	copy_main ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} ${CONF_scripts_dir}
-	copy_conf ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} ${n}
+	copy_conf ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} $(whoami)
 	copy_sums ${2}/${TARGET_DIGESTS_dir} ${4}/${TARGET_DIGESTS_dir}
 	
 	dqb "4FT3R COPY_X"
@@ -91,7 +91,7 @@ function part0() {
 	csleep 10
 
 	${scm} 0555 ${4}/${TARGET_pad_dir}/*.sh
-	${sco} -R ${n}:${n} ${4}/${TARGET_DIGESTS_dir}
+	${sco} -R $(whoami):$(whoami) ${4}/${TARGET_DIGESTS_dir}
 	
 	${scm} 0555 ${4}/live
 	${scm} 0755 ${4}/${TARGET_DIGESTS_dir}
