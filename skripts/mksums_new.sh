@@ -6,7 +6,10 @@ d=$(dirname $0) #tämäb annettava olla tässä
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#TODO:part123() 2 , pitäisikö sitä miettiä vielä?
+#010426:"./boot/grub/grub.cfg: FAILED open or read" tdstosta dgsts.1 (sqroot)
+#... jos toistuu ni tekisikö jotain?
+
+#TODO?:part123() 2 , pitäisikö sitä miettiä vielä? miksi?
 
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"

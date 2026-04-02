@@ -31,28 +31,36 @@ function single_param() {
 
 function check_params() {
 	dqb "check_params()"
-#todo:IF-BLOKKIEN PURKAMINEN PIEenemmiksi
-	if [ x"${source}" != "x" ] ; then
-		if [ -d ${source} ] ; then #olisikohan tämä mikä qs1?
-			dqb "k0"
-		else
-			echo "no such thing as ${source}"
-			exit 141
-		fi
-	else
+	#VAIH:IF-BLOKKIEN PURKAMINEN PIEenemmiksi
+	
+	if [ -z "${source}" ] ; then
 		dqb "source missing"
 		exit 140
 	fi
-
-	if [ x"${ltarget}" != "x" ] ; then 
-		if [ -s out/${ltarget} ] ; then
-			echo "out/${ltarget} already exists"
-
-			exit 142
-		fi
+	
+#	if [ x != "x" ] ; then
+	if [ -d ${source} ] ; then #olisikohan tämä mikä qs1?
+		dqb "k0"
 	else
-		exit 143
+		echo "no such thing as ${source}"
+		exit 141
 	fi
+#	else
+#
+#	fi
+
+	if [ -z "${ltarget}" ] ; then
+			exit 143
+	fi
+	
+#	if [ x != "x" ] ; then 
+	if [ -s out/${ltarget} ] ; then
+		echo "out/${ltarget} already exists"
+		exit 142
+	fi
+#	else
+#	
+#	fi
 
 	if [ x"${bl}" != "x" ] ; then
 		echo "b"
@@ -61,15 +69,15 @@ function check_params() {
 	dqb "check_params() done"
 }
 
-#110326:edelleen kykenee tdston muodostamaan
+#110326:edelleen kykenee tdston muodostamaan (entöä 020426?)
 
 check_params
-[ x"${gi}" != "x" ] || echo "GENISIOMAGE MISSING"
+[ -z "${gi}" ] && echo "GENISIOMAGE MISSING"
 sleep 1
 dqb "bl=${bl}"
 csleep 4
 
-dqb "TODO: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts"
+dqb "TODO: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
 csleep 4
 
 case ${bl} in

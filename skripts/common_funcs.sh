@@ -23,6 +23,7 @@ function parse_opts_2() {
 	esac
 }
 
+# " ] -v [ " - testejä tähän?
 fq=$(find ${CONF_BASEDIR} -type f -name common_lib.sh | head -n 1)
 fr=$(find ${CONF_BASEDIR} -type f -name common_funcs_old.sh | head -n 1)
 	
@@ -37,7 +38,7 @@ else
 	if [ -x ${fq} ] ; then
 		. ${fq}
 		
-		#HUOM.joko annettava validi param fktioille tai asetettava CONF_testgris jotta ao. riveihin ei kosahda suoritus JOKO JO (VAIH)
+		#param mukaisen hmiston takaa olisi hyväklsi löytyä toivottavaa sisältöä, barm vuoksi
 		check_binaries ${CONF_testgris}
 		check_binaries2
 

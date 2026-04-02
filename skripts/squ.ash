@@ -59,7 +59,6 @@ function parse_opts_real() {
 	esac
 }
 
-#12125:cmd kantsisi asettaa vain jos tyhjä
 function single_param() {
 	dqb "sp ${1}"
 
@@ -87,11 +86,12 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
 case ${cmd} in
-	-x) #190326:toimii edelleen
+	-x) #010426:toimii edelleen
 	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #080226:taitee toimia edelleen 
+	-y) #080226:taitee toimia edelleen
+		#TODO:jospa välillä sitä toista .iso:a kokeilisi pohjana
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -111,27 +111,30 @@ case ${cmd} in
 		${uom} ${CONF_source}
 	;;
 	-b) 
-		#110326:toimii edlleen
+		#010426:ehkäö toiumii delleen
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  
-		#110326:edelleen toimii
-		#TODO:pudon sudotus josqs? vaiko se sudoers?
+		#010426:toimiiko? erit toiv tavalla?
+		#TODO?:pudon sudotus josqs? vaiko se sudoers? JOKOJO 04/26?
 		
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
+		[ -d ${CONF_squash0} ] || exit 68
 		pwd;sleep 6
 
+		#onko riittävä tarkistus vai ei?
 		if [ x"${CONF_squash0}" != "x/" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
 			${smr} -rf ${CONF_squash0}/*
+			echo $?
 		fi
 	;;
-	-c)  #110326:edelleen tekee tdston, kai
+	-c)  #010426:edelleen tekee tdston? jep
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#110326:toimii
+		#010426:toimii
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
@@ -141,7 +144,7 @@ case ${cmd} in
 		rst ${CONF_squash_dir}
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #190326:ok edelleen
+	-j)  #010426:ok edelleen
 		dqb "smd= ${smd} "
 		csleep 2
 

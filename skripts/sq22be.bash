@@ -24,7 +24,7 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
-#110326;edelleen tekee tdston
+#020426;edelleen tekee tdston
 #... toiveissa että parametreja muuttamalla kiukuttelu vähenisi
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
