@@ -106,6 +106,7 @@ make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}
 else
+	#TODO:jospa välillä sitä toista .iso:a kokeilisi pohjana
 	if [ -s ${1} ] && [ -r ${1} ] ; then #151225:nyt toimii kun common_funcs muutettu
 		dqb "${som} -o loop,ro ${1} ${CONF_source}"
 		csleep 3

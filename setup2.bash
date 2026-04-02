@@ -12,7 +12,7 @@ distro=$(cat /etc/devuan_version)
 [ -v CONF_basedir ] || exit 1
 [ -d ${CONF_basedir} ] || exit 2
 echo "base= ${CONF_basedir}"
-sleep 1
+sleep 10
 
 #simppelimpi näin
 [ -v CONF_iface ] && sudo ip link set ${CONF_iface} down
@@ -48,7 +48,8 @@ function ekf() {
 	sleep 2
 	local t=$(sudo which ${1})
 
-	if [ ! -x ${t} ] ; then
+	if [ -z "${t}" ] || [ ! -x ${t} ] ; then
+		echo "jfk"
 		efk ${q}/${1}*
 	fi
 }
@@ -78,6 +79,7 @@ function aqua() {
 
 	#onbkohan trarpeellinen kikkailu?
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
+	sleep 10
 
 	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
 	sudo dpkg -i ${q}/*.deb
@@ -146,9 +148,14 @@ function luft() {
 	sleep 1
 
 	local c4
-
 	c4=0
-	c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
+
+	if [ -v CONF_dir ] ; then	
+		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
+	else
+		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
+		exit 665
+	fi
 
 	if [ ${c4} -gt 0 ] ; then
 		echo "f-stab 0k"
@@ -161,7 +168,7 @@ function luft() {
 		${sco} 0:0 /etc/fstab*
 	fi
 
-	#TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
+	#TODO?:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
 
 	if [ -v CONF_basept2tgt ] ; then
 		#/proc/mounts voisi grepta
@@ -169,6 +176,9 @@ function luft() {
 		
 		sudo mount ${CONF_basept2tgt}
 		#TODO:tai sitten mount -a + vastaava muutos fstab.tmp:iin , saisi samalla sen oman osion -iso-tdstoille
+	else
+		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
+		exit 666
 	fi
 }
 

@@ -27,13 +27,14 @@ svm="sudo mv"
 #cd ${CONF_basedir } #ni noista ao. jutuista voisi sen alkuosan poistaa?
 
 ${srat} -cvf ${1} $0*
-${srat} -rvf ${1} ./init2* #jtnkn fiksummin tämä
-#TODO:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
+${srat} -rvf ${1} ./init2*  ./setup* #jtnkn fiksummin tämä
+#TODO?:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
+#TODO:toiminnan testaus TAAS
+#TODO:erityisesti sen varmistus ettö optables tlee mkaan
 
 function jord() {
 	[ -v CONF_pkgsrc} ] || exit 22
-	#local yarr
-
+	
 	for d in ${CONF_yarr} ; do 
 		if [ ! -z "${d}" ] ; then #tarpeellinen?
 			if [ ! -d ${d} ] ; then
