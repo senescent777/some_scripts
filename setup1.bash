@@ -25,15 +25,20 @@ svm="sudo mv"
 [ -v CONF_basedir ] || exit 11
 [ -d ${CONF_basedir} ] || ${smd} ${CONF_basedir}
 #cd ${CONF_basedir } #ni noista ao. jutuista voisi sen alkuosan poistaa?
+[ -z "${1}" ] && exit
 
 ${srat} -cvf ${1} $0*
-${srat} -rvf ${1} ./init2*  ./setup* #jtnkn fiksummin tämä
+#${srat} -rvf ${1} ./init2* 
+${srat} -rvf ${1} ./setup* 
+#jtnkn fiksummin tämä?
+
 #TODO?:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
-#TODO:toiminnan testaus TAAS
+#VAIH:toiminnan testaus TAAS
 #TODO:erityisesti sen varmistus ettö optables tlee mkaan
 
 function jord() {
-	[ -v CONF_pkgsrc} ] || exit 22
+	echo "j0.rd"
+	[ -v CONF_pkgsrc ] || exit 22
 	
 	for d in ${CONF_yarr} ; do 
 		if [ ! -z "${d}" ] ; then #tarpeellinen?
@@ -43,12 +48,13 @@ function jord() {
 				${scm} 0755 ${d}
 			fi
 		
-			#${srat} -rvf ${1} ${d}	#tarpeen jatkossa? jos kerran menee CONF_basedir alle kaikki hmistot
+		
 		fi
 	done
 }
 
-jord ${1}
+jord #${1}
+#exit
 
 #1912255:jnkn verran jo testailtu
 function aqua() {
@@ -120,13 +126,15 @@ function aqua() {
 	sudo cp /var/cache/apt/archives/*.deb ${1} #tai mv
 }
 
-[ -v CONF_pkgsrc} ] || exit 33
+[ -v CONF_pkgsrc ] || exit 33
 sudo apt-get update
 [ $? -eq 0 ] && aqua ${CONF_pkgsrc}
+#exit
 
 #riittäisikö /etc kuitenkin?
-for f in $(find / -type f -name 'sources.list*') ; do ${srat} -rvf ${1} ${f} ; done 
+for f in $(find /etc -type f -name 'sources.list*') ; do ${srat} -rvf ${1} ${f} ; done 
 ${srat} -rvf ${1} ${CONF_pkgsrc}/*.deb #jatkossa tämä rivi pois jos siirretään paketit basedir alle?
+#exit
 
 function ignis() {
 	echo "igtnis ( ${1})"
@@ -165,6 +173,7 @@ function ignis() {
 }
 
 ignis ${CONF_basedir}
+exit
 
 function f5th() {
 	#TODO:fstab.tmp kanssa se sed-kikkailu vähitellen? millainen kikkailu?
