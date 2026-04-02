@@ -78,7 +78,23 @@ function aqua() {
 	sudo apt-get update
 	sudo apt --fix-broken install
 
-	#gpg ja iptables mukaan?
+	#gpg ja  mukaan?
+
+	#common_lib.sh
+	E22_GT="isc-dhcp-client isc-dhcp-common libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 libnftables1 libedit2"
+	E22_GT="${E22_GT} iptables"
+	E22_GT="${E22_GT} init-system-helpers"
+
+	odio=$(which sudo)
+	sag=$(${odio} which apt-get)
+	shary="${odio} ${sag} --no-install-recommends reinstall --yes "
+	${shary} ${E22_GT}
+	#
+
+	#
+	E22GI="libassuan0 libbz2-1.0 libc6 libgcrypt20 libgpg-error0 libreadline8 libsqlite3-0 gpgconf zlib1g gpg"
+	${shary} ${E22GI}
+	#
 
 	sudo apt-get reinstall --no-install-recommends libc6 coreutils
 	sudo apt-get reinstall --no-install-recommends libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
@@ -173,7 +189,7 @@ function ignis() {
 }
 
 ignis ${CONF_basedir}
-exit
+#exit
 
 function f5th() {
 	#TODO:fstab.tmp kanssa se sed-kikkailu vähitellen? millainen kikkailu?
