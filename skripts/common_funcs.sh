@@ -23,17 +23,23 @@ function parse_opts_2() {
 	esac
 }
 
+# " ] -v [ " - testejä tähän?
 fq=$(find ${CONF_BASEDIR} -type f -name common_lib.sh | head -n 1)
 fr=$(find ${CONF_BASEDIR} -type f -name common_funcs_old.sh | head -n 1)
 	
 if [ -z "${fq}" ] ; then
-	. ${fr} #./common_funcs_old.sh
+	. ${fr}
 else
+	[ -v d ] || echo "d n0t set"
+	[ -s ${d0}/$(whoami).conf ] || echo "N0 ALT C0NF"	
+	[ -s ${d}/conf ] || echo "N0 PR1MARY C0NF"
+	sleep 1
+	
 	if [ -x ${fq} ] ; then
 		. ${fq}
 		
-		#HUOM.joko annettava validi param fktioille tai asetettava CONF_testgris jotta ao. riveihin ei kosahda suoritus (TODO)
-		check_binaries
+		#param mukaisen hmiston takaa olisi hyväklsi löytyä toivottavaa sisältöä, barm vuoksi
+		check_binaries ${CONF_testgris}
 		check_binaries2
 
 		#061225:toistaiseksi tässä ellei
@@ -41,7 +47,7 @@ else
 		gmk=$(${odio} which grub-mkrescue)
 		xi=$(${odio} which xorriso)
 	else
-		. ${fr} #./common_funcs_old.sh
+		. ${fr}
 	fi
 fi
 

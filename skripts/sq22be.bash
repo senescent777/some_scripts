@@ -1,4 +1,4 @@
-#210126:lienee edelleen OK
+#190326:lienee edelleen OK
 function xxx() {
 	dqb "xxx( ${1}, ${2})"
 
@@ -24,7 +24,9 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
-#210126:ok?
+#030426:edelleen tekee tdston
+#... toiveissa että (mksquashfs) parametreja muuttamalla kiukuttelu vähenisi (ehkä)
+#TODO:msq:n vivut konftdstoon?
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ -z "${1}" ] && exit 6
@@ -42,7 +44,7 @@ function cfd() {
 	msq=$(${odio} which mksquashfs)
 
 	if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
-		${odio} ${msq} . ${1} -comp xz -b 1048576
+		${odio} ${msq} . ${1} #-comp xz -b 1048576
 	else
 		echo "${odio} apt-get install squashfs-utils"
 	fi
@@ -51,8 +53,8 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#100226:ok?
-#sudoers-jekku olisi hyväksi tässäkin
+#030426:vissiin toimii edelleen
+#sudoers-jekku olisi hyväksi tässäkin?
 function bbb() {
 	dqb "bbb( ${1} ) OGDRU JAHAD"
 
@@ -106,6 +108,8 @@ function bbb() {
 	${smr} ./root/.bash_history
 	${smr} ./home/devuan/.bash_history
 
+	#OLD.tar myös pois?
+
 	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
 	dqb "BARBEQUE PARTY DONE.done()"
 }
@@ -141,6 +145,7 @@ function jlk_main() {
 #
 #210126:kommentoitujen siivoUs vIelä ajankoht?
 #root.conf dgsts.tdstoon mukana jos ei ole jo ? siinä on kyllä semmoinen juttu allekirjoituksen kanssa
+
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
 	csleep 2
@@ -221,7 +226,7 @@ function jlk_sums() {
 	sleep 2
 }
 
-#210126:ok?
+#190326:ok?
 function rst_pre1() {
 	dqb "rst_pre1()"
 	csleep 1
@@ -246,19 +251,20 @@ function rst_pre1() {
 	csleep 1		
 }
 
-#210126:ok?
+#190326:ok?
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
 	pwd
 	csleep 1
 
-	[ -d ./etc ] || exit 66 #koita keksiä jokin toinen virhekoodi, tuthan yleinen
+	[ -d ./etc ] || exit 66 #koita keksiä jokin toinen virhekoodi, tuRhan yleinen
 	csleep 1
 
 	fasdfasd ./etc/default/locale
 	csleep 1
 
+	#190326:asettuvatKo nämä kehitysymp? ekhä
 	env | grep LAN > ./etc/default/locale
 	env | grep LC >> ./etc/default/locale
 	csleep 1
@@ -304,7 +310,7 @@ function rst() { #210126:ok?
 	[ -z "${1}" ] && exit 13
 	[ -d ${1} ] || exit 14
 
-	#VAIH: $1 suhteen muitakin tarkistuksia?
+	# $1 suhteen muitakin tarkistuksia vai riittäisikö?
 	[ x"${1}" == "x/" ] && exit 98
 	
 	dqb "params ok (maybe)"

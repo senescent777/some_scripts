@@ -6,6 +6,7 @@ function mangle_conf() {
 
 #HUOM.211225;tietenkin nuo $t-jutut toisella tavalla jatqssa, sisältö...
 #dgsts.5 liittyen kts copy_sums() , kommentit
+
 function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
 
@@ -30,7 +31,6 @@ function copy_main() {
 
 	dqb "TWO BATCH"
 	csleep 1
-	
 	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
 
 	for f in $(find ${1} -name '*.sh' -or -name '*.bz2') ; do # -type f 
@@ -44,7 +44,6 @@ function copy_main() {
 }
 
 function copy_conf() {
-
 	dqb "copy_conf(${1}, ${2} , ${3})"
 	[ -z "${1}" ] && exit 2
 	[ -z "${2}" ] && exit 4
@@ -52,12 +51,15 @@ function copy_conf() {
 	[ -z "${3}" ] && exit 16
 	
 	csleep 1
-
 	dqb "PARAMS OK"
 	csleep 1
 
-	if [ x"${CONF_scripts_dir}" != "x" ] ; then
+	#-v vielä ?
+
+	if [ ! -z "${CONF_scripts_dir}" ] ; then
 		#pystyisi varmaan tekemään pelkällä findillä
+		#HUOM.100326:ei-tyhjä $3.conf olisi syytä löytyä lähteestä koska viimeaikaiset muutkset
+
 		for f in $(find ${CONF_scripts_dir} -type f -name '*.conf' | grep -v bash) ; do
 			dqb "${spc} ${f} ${2}/../.."
 			${spc} ${f} ${2}/../.. 	
@@ -247,9 +249,10 @@ function bootloader() {
 }
 
 #161225:sudoilut myöhemmin
-#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa
+#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa (joko jo?)
 #TODO:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
-#esim. tässä se /.chroot luonti? miksi varten?
+
+
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1
@@ -323,22 +326,3 @@ function make_tgt_dirs() {
 	dqb "...done\n"
 }
 
-#pad-hmiston omistajuuden pakotus jossain toisaalla, tässä omistajaksi menisi root
-#tämän saman joutaisitehdä useammalle tgt-hmiston alaiselle
-#151225:missä tätä käytetään nykyään? part0() @stage0f.sh
-
-#function default_process() {
-#	dqb "nt default_process(${1})"
-#	[ -z "{1}" ] && exit 65
-#	[ -d ${1} ] || exit 66
-#	dqb "params_checked"
-#	csleep 2
-#
-#	${sco} -R 0:0 ${1}
-#	${scm} 0755 ${1}
-#	${scm} 0444 ${1}/*
-#
-#	dqb "xt default_process ${1}\n"
-#	csleep 3
-#}
-#

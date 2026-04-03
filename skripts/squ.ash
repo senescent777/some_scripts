@@ -59,11 +59,10 @@ function parse_opts_real() {
 	esac
 }
 
-#12125:cmd kantsisi asettaa vain jos tyhjä
 function single_param() {
 	dqb "sp ${1}"
 
-	case ${1} in
+	case "${1}" in
 		-mp|--mp)
 			mp=1
 		;;
@@ -87,11 +86,12 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
 case ${cmd} in
-	-x) #100226:toimii edelleen (?)
+	-x) #030426:toimii edelleen
 	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #080226:taitee toimia edelleen 
+	-y) #080226:taitee toimia edelleen
+		#TODO:jospa välillä sitä toista .iso:a kokeilisi pohjana
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -111,28 +111,30 @@ case ${cmd} in
 		${uom} ${CONF_source}
 	;;
 	-b) 
-		#100226:ok?
+		#030426:ehkä toimii delleen
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  
-		#210126:toimii edelleen
-		#TODO:pudon sudotus josqs? vaiko se sudoers?
+		#030426:toimiiko? erit toiv tavalla? vissiin
+		#TODO?:pudon sudotus josqs? vaiko se sudoers? JOKOJO 04/26?
 		
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
+		[ -d ${CONF_squash0} ] || exit 68
 		pwd;sleep 6
 
+		#onko riittävä tarkistus vai ei?
 		if [ x"${CONF_squash0}" != "x/" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
 			${smr} -rf ${CONF_squash0}/*
+			echo $?
 		fi
 	;;
-	-c)  #080226:ok
+	-c)  #030426:toimii edelleen
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#080226:ok
-		dqb "#muista myös roiskaista ne kuvakkeet filesystem.squash sisälle	"
+		#030426:toimii
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
@@ -140,10 +142,9 @@ case ${cmd} in
 
 		rst_pre1
 		rst ${CONF_squash_dir}
-		
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #100226:ok?
+	-j)  #030426:ok edelleen
 		dqb "smd= ${smd} "
 		csleep 2
 
@@ -160,7 +161,7 @@ case ${cmd} in
 			exit 96
 		fi
 
-		jlk_conf ${dir2}/${TARGET_pad_dir} ${n} ${CONF_squash_dir}/${TARGET_pad2}
+		jlk_conf ${dir2}/${TARGET_pad_dir} $(whoami) ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad2}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;

@@ -57,6 +57,8 @@ chmod 0700 ~/.gnupg/private-keys-v1.d #tai lähes koko ~/.g
 chmod 0644 ~/.gnupg/pubring*
 csleep 5
 		
+#GPGP --EDIT-KEYS?		
+		
 case ${cmd} in
 	u)
 		tgt2=${tgt}

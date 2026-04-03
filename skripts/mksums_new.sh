@@ -1,13 +1,17 @@
 #!/bin/bash
 b=0
-debug=0 #1
+debug=0
 source=""
-d=$(dirname $0)
-MKS_parts="1 2 3 5"
+d=$(dirname $0) #tämäb annettava olla tässä
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#TODO:part123() 2 , pitäisikö sitä miettiä vielä?
+#010426:"./boot/grub/grub.cfg: FAILED open or read" tdstosta dgsts.1 (sqroot)
+#... jos toistuu ni tekisikö jotain?
+
+#TODO?:part123() 2 , pitäisikö sitä miettiä vielä? miksi?
+
+#dgsts.4 ja dgsts.5 , sisältö ok?
 
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
@@ -86,7 +90,7 @@ function part0() {
 	[ -v TARGET_DIGESTS_file ] || exit 73
 	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
 	
-	dqb "${NKVD} ${1}/${TARGET_DIGESTS_file}* SOON"
+	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file}* SOON"
 	csleep 1
 	${NKVD} ${1}/${TARGET_DIGESTS_file}*	
 	
@@ -95,13 +99,6 @@ function part0() {
 	
 	[ ${debug} -eq 1 ] && ls -las ${1}/${TARGET_DIGESTS_file}*
 	csleep 3
-
-	dqb "DERPECHE M0D3"
-	csleep 1
-	
-	local i
-	for i in ${MKS_parts} 4;  do touch ${1}/${TARGET_DIGESTS_file}.${i} ; done
-	#for i in $@ 
 	
 	dqb "part0 d0n3"
 	csleep 1
@@ -119,20 +116,22 @@ function part123() {
 	local f
 	old=$(pwd)
 
-	if [ ! -s ${3}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
+	local t
+	t=${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
+
+	if [ ! -s ${3}/${t} ] ; then
 		cd ${3}
 		[ ${debug} -eq 1 ] && pwd
-		dqb "find ./${2} -type f"
 		csleep 3
 
 		#HUOM.281125:saattaa joutua muuttamaan vielä jos isolinuxin kanssa alkaa säätää
-		for f in $(find ./${2} -type f -name "*.cfg" -or -name "*.lst" -or -name "grubenv") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
-		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
-		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
-		for f in $(find ./${2} -type f -name "*.conf")  ; do ${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ; done
+		for f in $(find ./${2} -type f -name "*.cfg" -or -name "*.lst" -or -name "grubenv") ; do ${sah6} ${f} >> ./${t} ; done
+		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${t} ; done
+		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${t} ; done
+		for f in $(find ./${2} -type f -name "*.conf")  ; do ${sah6} ${f} >> ./${t} ; done
 
-		${scm} 0444 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}
-		#${sco} 0:0 ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} #ei hyvä idea?
+		${scm} 0444 ./${t}
+		#${sco} 0:0 ./${t} #ei hyvä idea?
 		cd ${old}
 	else
 		#dgsts.4 luonti ei onnistu?
@@ -142,22 +141,8 @@ function part123() {
 	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 }
 
-function part456() {
-	dqb "part456 $1 ; $2 ; $3" #kuinka monta paranm tulee?
-	[ -z "${1}" ] && exit 66
-	
-	[ ${debug} -eq 1 ] && pwd
-	csleep 1
-
-	if [ -s ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} ] ; then
-		${sah6} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1} --ignore-missing
-	else
-		echo "no such thing as ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${1}"		 
-	fi
-}
-
 #HUOM.kandee ajaa tämä vain jos binäärit ja avaimet olemassa
-#161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan? jos MKS_PARTS parametriksi?
+#161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan?
 function part6_5() {
 	dqb "mks.part65( $@ ) "
 
@@ -168,14 +153,9 @@ function part6_5() {
 
 	[ ${debug} -gt 0 ] && pwd
 	csleep 1
-	local i
 
-	for i in ${MKS_parts} ; do
-	#for i in $@ ; do #VAIH:tämä vielä josqs?
-		dqb "NEXT: ${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}"
-		csleep 1
-		
-		${gg} -u ${CONF_pubk} -sb ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}
+	for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
+		${gg} -u ${CONF_pubk} -sb ${f}
 		[ $? -gt 0 ] && dqb "kutl.bash w | x ?"
 	done
 
@@ -184,6 +164,7 @@ function part6_5() {
 
 #151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(TODO)
 #TODO:target_dpub-jutut pois sittenq mahd ?
+#100326:"gpg --edit-key" ? ehkä ei tähän mutta johonkin
 
 function part7() {
 	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " 
@@ -202,12 +183,8 @@ function part7() {
 	[ $? -gt 0 ] && dqb "kutl.bash  ?"
 	csleep 5
 
-	local i
-
-	for i in ${MKS_parts} ; do
-	# $@ #VAIH:josqs?
-		${gg} --verify ${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.${i}.sig 
-		csleep 1
+	for f in $(find ${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?.sig" ) ; do
+		${gg} --verify ${f} 
 	done
 
 	echo $?
@@ -219,7 +196,7 @@ function part7() {
 dqb "${source} exists"
 csleep 1
 [ ${debug} -eq 1 ] && pwd
-part0 ${source}/${TARGET_DIGESTS_dir} ${n}
+part0 ${source}/${TARGET_DIGESTS_dir} $(whoami)
 
 csleep 5
 dqb "BOOTLEODER"
@@ -245,32 +222,30 @@ csleep 1
 
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
-#part123 5 ei vielä onnaa koska sisältö, "shasum -c" ok mutta ne polut
-
 cd ${source}
-for p in ${MKS_parts} ; do part456 ${p}; done
+
+for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
+	dqb "p456 ${f}"
+	${sah6} -c ${f} --ignore-missing
+done
 
 #kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim
 #niinja nw julk av pitäisi myös tulla mukaan, kts stage0_backend liittyen
 
-if [ x"${gg}" != "x" ] ; then 
-	part6_5 #${MKS_PARTS}
+if [ ! -z "${gg}" ] ; then 
+	part6_5
 fi
 
-part7 #${MKS_PARTS}
+part7
 [ ${debug} -eq 1 ] && pwd
 
-#part8 ${b}
-[ ${debug} -eq 1 ] && pwd
-
-${sco} ${n}:${n} ./${TARGET_DIGESTS_dir}/* 
+${sco} $(whoami):$(whoami) ./${TARGET_DIGESTS_dir}/* 
 ${scm} 0644 ./${TARGET_DIGESTS_dir}/* 
 [ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
 dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12" 
 ${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
-part456 4
 
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}

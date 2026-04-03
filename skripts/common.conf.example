@@ -36,3 +36,6 @@ CONF_bloader=preferred_bootloader
 CONF_testgris=/maybe/necessary/4/smthing/sometimes
 #kutl.bash
 CONF_editor=$(which nano)
+#
+d0=$(dirname $0)
+d=$(dirname $0)
