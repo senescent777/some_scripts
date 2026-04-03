@@ -73,7 +73,6 @@ function part0() {
 
 	[ -z ${TARGET_DGST0} ] && exit 66
 	dqb "AAPPO.iPIIPP0"
-
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
 	copy_main ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} ${CONF_scripts_dir}
@@ -122,4 +121,4 @@ else
 	fi 
 fi
 
-dqb "MKSUMS.SH"
+dqb "MKSUMS.SH | squ.ash "

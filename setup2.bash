@@ -7,6 +7,9 @@ else
 	exit 67
 fi
 
+echo "TODO:setup1 uusi testaus"
+sleep 5
+
 echo "ko.1"
 distro=$(cat /etc/devuan_version)
 [ -v CONF_basedir ] || exit 1
@@ -93,7 +96,7 @@ function aqua() {
 	which genisoimage
 	sleep 6
 
-	#common_lib sisältäisi sen listan että sikäli vähän turha
+	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
 	if [ -v CONF_part076 ] ; then
 		sudo apt-get remove --purge --yes ${CONF_part076}
 		#python3-cups ntp* #sharyp from common_lib
@@ -212,7 +215,7 @@ function f5th() {
 	sudo mv ${somefile} /etc/sudoers.d 
 
 	#/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille? miksi?
-	#yhteinen konfiguraatuio jo siirretty -> setup0 ?
+	#yhteinen konfiguraatio jo siirretty -> setup0 ?
 }
 
 f5th
