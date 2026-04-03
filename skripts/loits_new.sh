@@ -1,5 +1,5 @@
 #!/bin/bash
-debug=0 #miten -v ?
+debug=0
 d=$(dirname $0)
 ltarget="" 
 source=""
@@ -31,36 +31,27 @@ function single_param() {
 
 function check_params() {
 	dqb "check_params()"
-	#VAIH:IF-BLOKKIEN PURKAMINEN PIEenemmiksi
 	
 	if [ -z "${source}" ] ; then
 		dqb "source missing"
 		exit 140
 	fi
 	
-#	if [ x != "x" ] ; then
-	if [ -d ${source} ] ; then #olisikohan tämä mikä qs1?
+	if [ -d ${source} ] ; then
 		dqb "k0"
 	else
 		echo "no such thing as ${source}"
 		exit 141
 	fi
-#	else
-#
-#	fi
 
 	if [ -z "${ltarget}" ] ; then
 			exit 143
 	fi
 	
-#	if [ x != "x" ] ; then 
 	if [ -s out/${ltarget} ] ; then
 		echo "out/${ltarget} already exists"
 		exit 142
 	fi
-#	else
-#	
-#	fi
 
 	if [ x"${bl}" != "x" ] ; then
 		echo "b"
@@ -69,7 +60,7 @@ function check_params() {
 	dqb "check_params() done"
 }
 
-#110326:edelleen kykenee tdston muodostamaan (entöä 020426?)
+#110326:edelleen kykenee tdston muodostamaan (entöä 030426? jep)
 
 check_params
 [ -z "${gi}" ] && echo "GENISIOMAGE MISSING"

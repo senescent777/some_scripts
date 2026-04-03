@@ -249,9 +249,9 @@ function bootloader() {
 }
 
 #161225:sudoilut myöhemmin
-#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa
+#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa (joko jo?)
 #TODO:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
-#esim. tässä se /.chroot luonti? miksi varten?
+
 
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
@@ -326,22 +326,3 @@ function make_tgt_dirs() {
 	dqb "...done\n"
 }
 
-#pad-hmiston omistajuuden pakotus jossain toisaalla, tässä omistajaksi menisi root
-#tämän saman joutaisitehdä useammalle tgt-hmiston alaiselle
-#151225:missä tätä käytetään nykyään? part0() @stage0f.sh
-
-#function default_process() {
-#	dqb "nt default_process(${1})"
-#	[ -z "{1}" ] && exit 65
-#	[ -d ${1} ] || exit 66
-#	dqb "params_checked"
-#	csleep 2
-#
-#	${sco} -R 0:0 ${1}
-#	${scm} 0755 ${1}
-#	${scm} 0444 ${1}/*
-#
-#	dqb "xt default_process ${1}\n"
-#	csleep 3
-#}
-#

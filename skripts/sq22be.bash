@@ -24,8 +24,9 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
-#020426;edelleen tekee tdston
-#... toiveissa että parametreja muuttamalla kiukuttelu vähenisi
+#030426:edelleen tekee tdston
+#... toiveissa että (mksquashfs) parametreja muuttamalla kiukuttelu vähenisi (ehkä)
+#TODO:msq:n vivut konftdstoon?
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ -z "${1}" ] && exit 6
@@ -52,8 +53,8 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#110326:vissiin toimii edelleen
-#sudoers-jekku olisi hyväksi tässäkin
+#030426:vissiin toimii edelleen
+#sudoers-jekku olisi hyväksi tässäkin?
 function bbb() {
 	dqb "bbb( ${1} ) OGDRU JAHAD"
 
@@ -106,6 +107,8 @@ function bbb() {
 
 	${smr} ./root/.bash_history
 	${smr} ./home/devuan/.bash_history
+
+	#OLD.tar myös pois?
 
 	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
 	dqb "BARBEQUE PARTY DONE.done()"
@@ -255,13 +258,13 @@ function rst_pre2() {
 	pwd
 	csleep 1
 
-	[ -d ./etc ] || exit 66 #koita keksiä jokin toinen virhekoodi, tuthan yleinen
+	[ -d ./etc ] || exit 66 #koita keksiä jokin toinen virhekoodi, tuRhan yleinen
 	csleep 1
 
 	fasdfasd ./etc/default/locale
 	csleep 1
 
-	#190326:asettuvato nämä kehitysymp?
+	#190326:asettuvatKo nämä kehitysymp? ekhä
 	env | grep LAN > ./etc/default/locale
 	env | grep LC >> ./etc/default/locale
 	csleep 1

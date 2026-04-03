@@ -11,6 +11,8 @@ bl=${CONF_bloader}
 
 #TODO?:part123() 2 , pitäisikö sitä miettiä vielä? miksi?
 
+#dgsts.4 ja dgsts.5 , sisältö ok?
+
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
 	echo "$0 --iso"
