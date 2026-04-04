@@ -158,7 +158,12 @@ function copy_sums() {
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
-#TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
+#ne oletus-bnpptöloader-jutut esim. tähän flktioon jatkosssa
+function pre_bl() {
+	dqb "WORK N PROGRESS"
+	}
+
+#TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole (JOKO JO 04/26?)
 #TODO:sudon pudon pudotus josqs myöh?
 function bootloader() {
 	dqb "bootloader(${1}, ${2}, ${3}, ${4} )"
@@ -187,7 +192,7 @@ function bootloader() {
 	k3=""
 
 	#HUOM.jos touch-komentoja tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa (?)
-	case ${1} in
+	case "${1}" in
 		isolinux)
 			dqb "${spc} -a ${3}/isolinux/ ${4} || exit 8"
 			csleep 1
@@ -203,7 +208,7 @@ function bootloader() {
 			dqb "TRYI1NG T0 R3PLACE IS0LINUX.CGF"
 		;;
 		grub)
-			ks2=${2}/boot #jos siirtäisi ennen case;a nää
+			ks2=${2}/boot #jos siirtäisi ennen case;a nää?
 			
 			if [ -d ${ks2} ] ; then
 				dqb "${spc} -a ${3}/boot/ ${4} || exit 8"

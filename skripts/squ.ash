@@ -90,8 +90,8 @@ case ${cmd} in
 	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #080226:taitee toimia edelleen
-		#TODO:jospa välillä sitä toista .iso:a kokeilisi pohjana
+	-y) #080226:taitee toimia edelleen (tosin onko oikeasti tarpeellinen?)
+		#VAIH:jospa välillä sitä toista .iso:a kokeilisi pohjana (3426)
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"

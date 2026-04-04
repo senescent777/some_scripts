@@ -40,12 +40,12 @@ function check_params() {
 	if [ -d ${source} ] ; then
 		dqb "k0"
 	else
-		echo "no such thing as ${source}"
+		echo "no such d1r as ${source}"
 		exit 141
 	fi
 
 	if [ -z "${ltarget}" ] ; then
-			exit 143
+		exit 143
 	fi
 	
 	if [ -s out/${ltarget} ] ; then
@@ -53,15 +53,14 @@ function check_params() {
 		exit 142
 	fi
 
-	if [ x"${bl}" != "x" ] ; then
+	if [ x"${bl}" != "x" ] ; then #-z
 		echo "b"
 	fi
 
 	dqb "check_params() done"
 }
 
-#110326:edelleen kykenee tdston muodostamaan (entöä 030426? jep)
-
+#030426:edelleen kykenee tmivan tdston muodostamaan (grub)
 check_params
 [ -z "${gi}" ] && echo "GENISIOMAGE MISSING"
 sleep 1
