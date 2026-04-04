@@ -1,6 +1,8 @@
 #!/bin/bash
 . ./setup0.conf
-#TODO:skriptin toiminnan testatsuuas uusicksi 666
+
+#040426:edelleen osannee paketteja vetää kohde-tar:ia varten (qhan setup0.conf)
+#seuraavaksi common_lib.sh hyödyntäminen?
 
 if [ -s $0.conf ] ; then
 	. $0.conf 
@@ -10,6 +12,7 @@ fi
 
 #251225:saattaisivat seur. komennot olla oleellisia skripts-hmiston alaisille
 #... eli nämä pikemminkin sinne sudoersiin ? (TODO?)
+
 odio=$(which sudo)
 sag=$(${odio} which apt-get)
 shary="${odio} ${sag} --no-install-recommends reinstall --yes "
@@ -44,7 +47,7 @@ function jord() {
 
 jord #${1}
 
-#1912255:jnkn verran jo testailtu, kuten myös 020426
+#1912255:jnkn verran jo testailtu, kuten myös 020426, toimii
 function aqua() {
 	echo "aqua ( ${1})"
 	[ -z "{1}" ] && exit 11
@@ -156,8 +159,8 @@ function ignis() {
 ignis ${CONF_basedir}
 
 function f5th() {
-	#TODO:fstab.tmp kanssa se sed-kikkailu vähitellen? millainen kikkailu?
-	echo "TODO: SHOUDL POPULTAE ${CONF_basedir}/etc AROUND HERE, SPECIALLY fstab.tmp"
+	#TODO?:fstab.tmp kanssa se sed-kikkailu vähitellen? millainen kikkailu?
+	echo "TODO?: SHOUDL POPULTAE ${CONF_basedir}/etc AROUND HERE, SPECIALLY fstab.tmp"
 	sleep 1
 }
 
