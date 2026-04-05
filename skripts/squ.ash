@@ -84,6 +84,7 @@ dqb "par=${par}"
 
 tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
+dqb "TODO:konftdston muodostus sqroot:in pad-hmistoon, tarkista"
 
 case ${cmd} in
 	-x) #030426:toimii edelleen
