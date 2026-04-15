@@ -84,7 +84,9 @@ dqb "par=${par}"
 
 tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
-dqb "TODO:konftdston muodostus sqroot:in pad-hmistoon, tarkista"
+
+#140426:qseeko jokin vai ei?
+dqb "VAIH:konftdston muodostus sqroot:in pad-hmistoon, tarkista"
 
 case ${cmd} in
 	-x) #030426:toimii edelleen
@@ -92,7 +94,8 @@ case ${cmd} in
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #080226:taitee toimia edelleen (tosin onko oikeasti tarpeellinen?)
-		#VAIH:jospa välillä sitä toista .iso:a kokeilisi pohjana (3426)
+		#14+426:kokeilötu välillä yoista .iso:a pohjana
+
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -140,6 +143,8 @@ case ${cmd} in
 	
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
+
+		#TODO:jospa urputtaisi mikäli CONF_squash_dir sisältöineen puuttuu
 
 		rst_pre1
 		rst ${CONF_squash_dir}
