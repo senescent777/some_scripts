@@ -67,23 +67,33 @@ sleep 1
 dqb "bl=${bl}"
 csleep 4
 
-dqb "TODO: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
+dqb "VAIH: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
 csleep 4
 
 case ${bl} in
 	isolinux)
 		#VAIH:toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
-		${sco} -R ${n}:${n} .
-		${scm} -R 0755 .
+		#${sco} -R ${n}:${n} .
+		#${scm} -R 0755 .
 
 		ls -las ${source}/${bl}/*.cfg || exit 99
 		csleep 2
 
-		[ ${debug} -eq 1] && pwd 
+		[ ${debug} -eq 1 ] && pwd 
 		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${source}"
 		csleep 1
 
-		${gi} -o ${ltarget} ${CONF_gi_opts} ${source} #. älä ramppaa
+		# #. älä ramppaa
+		#oikeastaan komentona siinä linkissä oli xorriso, let's find out
+		
+		# -isohybrid-gpt-basdat -isohybrid-apm-hfsplus  --no-emul-boot
+
+		
+		#dqb "${gi} -r -J -J -joliet-long -cache-inodes -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/grub/efi.img -o ${ltarget} -no-emul-boot  ${source}"
+		#Size of boot image is 4 sectors -> /usr/bin/genisoimage: Error - boot image '/data/tmp/tgt/isolinux/isolinux.bin' has not an allowable size.
+		#1760426: "-boot-load-size" - option poisto ei euttanut -> KVG
+		${gi} -o ${ltarget} ${CONF_gi_opts} ${source}
+
 	;;
 	grub)
 		ls -las ${source}/boot/${bl}/*.cfg || exit 99
