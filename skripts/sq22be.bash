@@ -260,7 +260,13 @@ function rst_pre2() {
 	pwd
 	csleep 1
 
-	[ -d ./etc ] || exit 66 #koita keksiä jokin toinen virhekoodi, tuRhan yleinen
+	if [ -d ./etc ] ; then
+		dqb "CTE KO"
+	else
+		echo "U SHOULD RUN squ.ash x BEFORE squ.ash r"
+		exit 66 #koita keksiä jokin toinen virhekoodi, tuRhan yleinen
+	fi
+
 	csleep 1
 
 	fasdfasd ./etc/default/locale

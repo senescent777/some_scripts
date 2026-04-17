@@ -85,8 +85,7 @@ dqb "par=${par}"
 tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
-#140426:qseeko jokin vai ei?
-dqb "VAIH:konftdston muodostus sqroot:in pad-hmistoon, tarkista"
+#konftdston muodostus sqroot:in pad-hmistoon, onko jo kunnossa 160426?
 
 case ${cmd} in
 	-x) #030426:toimii edelleen
@@ -144,7 +143,7 @@ case ${cmd} in
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
-		#TODO:jospa urputtaisi mikäli CONF_squash_dir sisältöineen puuttuu
+		#DONE:jospa urputtaisi mikäli CONF_squash_dir sisältöineen puuttuu
 
 		rst_pre1
 		rst ${CONF_squash_dir}
