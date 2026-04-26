@@ -25,8 +25,11 @@ if [ -f ./skripts/keys.conf ] ; then #161225 laitettu takaisin syystä
 fi
 
 dqb "PARAMS OK?"
-dqb "TODO:konftdston muodostus sqroot:in pad-hmistoon, tarkista"
+
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
+
+
+#TODO:isolunux-testailut taas
 function part0() {
 	dqb "stg0f.PART0 ${1}, ${2} , ${3} , ${4}"
 	pwd
