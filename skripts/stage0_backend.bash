@@ -43,6 +43,8 @@ function copy_main() {
 	dqb "copy_main() donw\n"
 }
 
+dqb "TODO:konftdston muodostus sqroot:in pad-hmistoon, tarkista" #onko vielä 04/326 ongelmia?
+
 function copy_conf() {
 	dqb "copy_conf(${1}, ${2} , ${3})"
 	[ -z "${1}" ] && exit 2
@@ -79,6 +81,7 @@ function copy_conf() {
 
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
+	#pystyisi kai toisinkin tekemään?
 	echo -n "src=/" >> ${utfile}
 	echo -n "$" >> ${utfile}
 	echo "{TARGET_pad2}" >> ${utfile}	
@@ -194,7 +197,14 @@ function bootloader() {
 	#HUOM.jos touch-komentoja tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa (?)
 	case "${1}" in
 		isolinux)
-			dqb "${spc} -a ${3}/isolinux/ ${4} || exit 8"
+			dqb "pre-cp"
+			csleep 1
+
+			#250426:josko tällä lähtisi toimimaan?
+			${smd} -p ${4}/boot/grub
+			${spc} ${3}/boot/grub/efiboot.img ${4}/boot/grub 
+			
+				dqb "${spc} -a ${3}/isolinux/ ${4} || exit 8"	
 			csleep 1
 
 			${spc} -a ${3}/isolinux/ ${4} || exit 8

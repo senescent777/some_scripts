@@ -80,20 +80,32 @@ case ${bl} in
 		csleep 2
 
 		[ ${debug} -eq 1 ] && pwd 
-		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${source}"
-		csleep 1
+#		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${source}"
+#		csleep 1
+#
+#		# #. älä ramppaa
+#		#oikeastaan komentona siinä linkissä oli xorriso, let's find out
+#		
+#		# -isohybrid-gpt-basdat -isohybrid-apm-hfsplus  --no-emul-boot
+#
+#		
+#		#dqb "${gi} -r -J -J -joliet-long -cache-inodes -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/grub/efi.img -o ${ltarget} -no-emul-boot  ${source}"
+#		#Size of boot image is 4 sectors -> /usr/bin/genisoimage: Error - boot image '/data/tmp/tgt/isolinux/isolinux.bin' has not an allowable size.
+#		#1760426: "-boot-load-size" - option poisto ei euttanut -> KVG
+#		${gi} -o ${ltarget} ${CONF_gi_opts} ${source}
 
-		# #. älä ramppaa
-		#oikeastaan komentona siinä linkissä oli xorriso, let's find out
+		gi=$(sudo which xorriso)
+		${gi} -as mkisofs -r -J -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -no-emul-boot -eltorito-alt-boot -e boot/grub/efiboot.img -o ${ltarget} ${source}
+
+		#-isohybrid-mbr .../isohdpfx.bin qsee
+		#-b -> libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb
+		#-B + -C ->  SAMA
+		#seur --bot-jutut mukana -> taas onnasi .iso:n luonti
+		#-eltorito mukaan ja edelleen onnaa
+		#-e -> nalq	kunnes?
 		
-		# -isohybrid-gpt-basdat -isohybrid-apm-hfsplus  --no-emul-boot
-
-		
-		#dqb "${gi} -r -J -J -joliet-long -cache-inodes -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/grub/efi.img -o ${ltarget} -no-emul-boot  ${source}"
-		#Size of boot image is 4 sectors -> /usr/bin/genisoimage: Error - boot image '/data/tmp/tgt/isolinux/isolinux.bin' has not an allowable size.
-		#1760426: "-boot-load-size" - option poisto ei euttanut -> KVG
-		${gi} -o ${ltarget} ${CONF_gi_opts} ${source}
-
+		#TODO:man 1 xorrisofs
+		#TODO:KBG iso production command for debian
 	;;
 	grub)
 		ls -las ${source}/boot/${bl}/*.cfg || exit 99
