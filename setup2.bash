@@ -17,13 +17,25 @@ distro=$(cat /etc/devuan_version)
 echo "base= ${CONF_basedir}"
 sleep 10
 
-#simppelimpi näin
-[ -v CONF_iface ] && sudo ip link set ${CONF_iface} down
+odio=$(which sudo)
+sag=$(${odio} which apt-get)
+#sd0=$(${odio} which dpkg)
+#sdi="${odio} ${sd0} -i "
+#sip=$(${odio} which ip)
+#sip="${odio} ${sip} "
+#sa=$(${odio} which apt)
+#fib="${odio} ${sa} --fix-broken install "
+#sharpy="${odio} ${sag} remove --purge --yes "
+#svm=$(${odio} which mv)
+#svm="${odio} ${svm} "
 
-sco="sudo chown"
-scm="sudo chmod"
-spc="sudo cp"
-smr="sudo rm"
+sco="${odio} chown"
+scm="${odio} chmod"
+spc="${odio} cp"
+smr="${odio} rm"
+
+#simppelimpi näin
+[ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
 
 function jord() {
 	#231225:oikeudet olisi basedir/e alla hyvä olla järkevät, init1.sh saa nyt hoitaa
@@ -42,14 +54,14 @@ jord ${CONF_basedir}
 
 #common_lib
 function efk() {
-	sudo dpkg -i $@
+	${odio} dpkg -i $@
 	${smr} $@
 }
 
 function ekf() {
 	echo "EKF (${1})"
 	sleep 2
-	local t=$(sudo which ${1})
+	local t=$(${odio} which ${1})
 
 	if [ -z "${t}" ] || [ ! -x ${t} ] ; then
 		echo "jfk"
@@ -65,7 +77,7 @@ function aqua() {
 	echo "aqua"
 	sleep 1
 
-	sudo apt --fix-broken install
+	${odio} apt --fix-broken install
 
 	local q
 	q=$(mktemp -d)
@@ -85,7 +97,7 @@ function aqua() {
 	sleep 10
 
 	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
-	sudo dpkg -i ${q}/*.deb
+	${odio} dpkg -i ${q}/*.deb
 	${smr} ${q}/*.deb
 
 #	The following packages have unmet dependencies:
@@ -98,14 +110,14 @@ function aqua() {
 
 	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
 	if [ -v CONF_part076 ] ; then
-		sudo apt-get remove --purge --yes ${CONF_part076}
+		${odio} apt-get remove --purge --yes ${CONF_part076}
 		#python3-cups ntp* #sharyp from common_lib
 	fi
 
-	sudo apt autoremove
-	sudo apt --fix-broken install #tähän vai heti grub-as jälk?
-	sudo which iptables-restore
-	sudo iptables-restore /etc/iptables/rules.v4.0
+	${odio} apt autoremove
+	${odio} apt --fix-broken install #tähän vai heti grub-as jälk?
+	${odio} which iptables-restore
+	${odio} iptables-restore /etc/iptables/rules.v4.0
 
 	sleep 2
 	echo "AFTER iptables-restore "
@@ -113,30 +125,29 @@ function aqua() {
 
 aqua
 [ -v CONF_ue ] || exit 34
-[ -v CONF_ue ] || exit 35
+[ -v CONF_un ] || exit 35
 
 function ignis() {
 	echo "ignis"
 	sleep 1
 
 	local tig
-	local c
+	#local c
 
 	#uutena tää git-tark
-	tig=$(sudo which git)
+	tig=$(${odio} which git)
 	[ -z "${tig}" ] && exit 68
 	[ -x ${tig} ] || exit 69
 
-	#-z ? 
-	[ -v CONF_ue ] && ${tig} config --global user.email ${CONF_ue}
-	[ -v CONF_un ] && ${tig} config --global user.name ${CONF_un}
+	[ -z "${CONF_ue}" ] || ${tig} config --global user.email ${CONF_ue}
+	[ -z "${CONF_un}" ] || ${tig} config --global user.name ${CONF_un}
 	echo "tg1,1,dibe"
 
 	#varmaan olisi hyvä testata tämä blokki josqs
 	if [ -s ${CONF_basedir}/.gitignore ] ; then
 		echo "not touching ${CONF_basedir}/.gitignore this time"
 	else
-		echo "init1 may have done this already"
+		echo "setup1 may have done this already"
 	fi
 }
 
@@ -145,7 +156,7 @@ ignis
 [ -v CONF_dir ] || exit 44
 [ -d ${CONF_dir} ] || exit 45
 
-#121225:pitäisikö tässä niitä lokaaliasetuksia sorkkia? vai ulkoistus g_doit ?
+#lokaalien sorkinta lienee ulkoistettu 04/26 mennessä
 function luft() {
 	echo "luft"
 	sleep 1
@@ -163,9 +174,9 @@ function luft() {
 	if [ ${c4} -gt 0 ] ; then
 		echo "f-stab 0k"
 	else
-		${scm} a+w /etc/fstab #mussun mussun
+		${scm} a+w /etc/fstab #TODO:fasdfasd/reqwreqw
 		sleep 1
-		sudo cat /etc/fstab.tmp >> /etc/fstab
+		${odio} cat /etc/fstab.tmp >> /etc/fstab
 		sleep 1	
 		${scm} a-wx /etc/fstab*
 		${sco} 0:0 /etc/fstab*
@@ -174,11 +185,12 @@ function luft() {
 	#TODO?:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
 
 	if [ -v CONF_basept2tgt ] ; then
-		#/proc/mounts voisi grepta
-		[ -d ${CONF_basept2tgt} ] || sudo mkdir ${CONF_basept2tgt}
+		#/proc/mounts voisi grepAta
+		[ -d ${CONF_basept2tgt} ] || ${odio} mkdir ${CONF_basept2tgt}
 		
-		sudo mount ${CONF_basept2tgt}
-		#TODO:tai sitten mount -a + vastaava muutos fstab.tmp:iin , saisi samalla sen oman osion -iso-tdstoille
+		${odio} mount ${CONF_basept2tgt}
+		#TODO:tai sitten mount -a + vastaava muutos fstab.tmp:iin , saisi samalla sen oman osion .iso-tdstoille
+		#...vielä tarpeellinen 040426?
 	else
 		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
 		exit 666
@@ -204,7 +216,7 @@ function f5th() {
 
 	#TARKKUUTTA PRKL
 
-	#voi miettiä vielä tätä, jos basen alla asettaa omistajudet ja oikeudet sopivasti, ei tarttisi sudottaa
+	#voi miettiä vielä tätä, jos basen alla asettaa omistajudet ja oikeudet sopivasti, ei tarttisi ${odio}ttaa
 	for c in ${CONF_ab} ; do
 		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/*" >> ${somefile}
 	done 
@@ -212,7 +224,7 @@ function f5th() {
 	cat ${somefile}
 	${sco} 0:0 ${somefile}
 	${scm} 0440 ${somefile}
-	sudo mv ${somefile} /etc/sudoers.d 
+	${odio} mv ${somefile} /etc/sudoers.d 
 
 	#/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille? miksi?
 	#yhteinen konfiguraatio jo siirretty -> setup0 ?

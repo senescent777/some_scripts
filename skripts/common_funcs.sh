@@ -38,7 +38,8 @@ else
 	if [ -x ${fq} ] ; then
 		. ${fq}
 		
-		#param mukaisen hmiston takaa olisi hyväklsi löytyä toivottavaa sisältöä, barm vuoksi
+		#param mukaisen hmiston takaa olisi hyväksi löytyä toivottavaa sisältöä, barm vuoksi
+		#,,, vöhön sietäisi kyllä miettiä vielä koska mussunmussun		
 		check_binaries ${CONF_testgris}
 		check_binaries2
 

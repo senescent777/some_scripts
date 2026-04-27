@@ -4,7 +4,6 @@ function mangle_conf() {
 	#tdstoista common.conf ja keys.conf pitäisi saada TARGET_D ja CONF_k - alkuiset
 }
 
-#HUOM.211225;tietenkin nuo $t-jutut toisella tavalla jatqssa, sisältö...
 #dgsts.5 liittyen kts copy_sums() , kommentit
 
 function copy_main() {
@@ -24,7 +23,7 @@ function copy_main() {
 	csleep 1
 
 	#eri lähde find-komennoilla ni jospa ei jaksaisi hýhgdistää ekaa findia
-	for f in $(find ${3} -type f -name '*.sh') ; do	
+	for f in $(find ${3} -type f -name "*.sh") ; do	
 		dqb "${spc} ${f} ${2}/../.. "
 		${spc} ${f} ${2}/../.. 
 	done
@@ -33,7 +32,7 @@ function copy_main() {
 	csleep 1
 	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
 
-	for f in $(find ${1} -name '*.sh' -or -name '*.bz2') ; do # -type f 
+	for f in $(find ${1} -type f  -name "*.sh" -or -name "*.bz2") ; do
 		dqb "${spc} ${f} ${2} "
 		${spc} ${f} ${2}
 	done
@@ -42,6 +41,8 @@ function copy_main() {
 	csleep 1
 	dqb "copy_main() donw\n"
 }
+
+dqb "TODO?:konftdston muodostus sqroot:in pad-hmistoon, tarkista" #onko vielä 04/326 ongelmia?
 
 function copy_conf() {
 	dqb "copy_conf(${1}, ${2} , ${3})"
@@ -79,6 +80,7 @@ function copy_conf() {
 
 	for f in ${CONF_g1} ; do mangle_conf ${f} ${utfile} ; done
 
+	#pystyisi kai toisinkin tekemään?
 	echo -n "src=/" >> ${utfile}
 	echo -n "$" >> ${utfile}
 	echo "{TARGET_pad2}" >> ${utfile}	
@@ -131,7 +133,7 @@ function copy_sums() {
 	local t
 	
 	if [ -d ${1} ] ; then
-		x=$(find ${1} -type f -name '*.gpg' | wc -l)
+		x=$(find ${1} -type f -name "*.gpg" | wc -l)
 		
 		#toisinkin voisi tehdä
 		t=${1}/${TARGET_DIGESTS_file}.5 
@@ -158,8 +160,13 @@ function copy_sums() {
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
-#TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole
-#TODO:sudon pudon pudotus josqs myöh?
+#ne oletus-bnpptöloader-jutut esim. tähän flktioon jatkosssa
+function pre_bl() {
+	dqb "WORK N PROGRESS"
+	}
+
+#TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole (JOKO JO 04/26?)
+#TODO?:sudon pudon pudotus josqs myöh?
 function bootloader() {
 	dqb "bootloader(${1}, ${2}, ${3}, ${4} )"
 
@@ -187,9 +194,16 @@ function bootloader() {
 	k3=""
 
 	#HUOM.jos touch-komentoja tarttee käyttää niin mieluummin joka caseen erikseen koska x, stage0f tapa aih sekaannusta sha512-hommien kanssa (?)
-	case ${1} in
+	case "${1}" in
 		isolinux)
-			dqb "${spc} -a ${3}/isolinux/ ${4} || exit 8"
+			dqb "pre-cp"
+			csleep 1
+
+			#250426:josko tällä lähtisi toimimaan?
+			#${smd} -p ${4}/boot/grub
+			#${spc} ${3}/boot/grub/efiboot.img ${4}/boot/grub 
+			
+			dqb "${spc} -a ${3}/isolinux/ ${4} || exit 8"	
 			csleep 1
 
 			${spc} -a ${3}/isolinux/ ${4} || exit 8
@@ -203,7 +217,7 @@ function bootloader() {
 			dqb "TRYI1NG T0 R3PLACE IS0LINUX.CGF"
 		;;
 		grub)
-			ks2=${2}/boot #jos siirtäisi ennen case;a nää
+			ks2=${2}/boot #jos siirtäisi ennen case;a nää?
 			
 			if [ -d ${ks2} ] ; then
 				dqb "${spc} -a ${3}/boot/ ${4} || exit 8"
@@ -233,14 +247,14 @@ function bootloader() {
 	
 	csleep 1
 				
-	for f in $(find ${ks2} -name '*.cfg') ; do
+	for f in $(find ${ks2} -name "*.cfg") ; do
 		dqb "spc ${f} ${k3}"
 		${spc} ${f} ${k3}
 	done
 				
 	ls -las ${k3}/*.cfg || exit 99
 
-	for f in $(find ${ks2} -name '*.png') ; do
+	for f in $(find ${ks2} -name "*.png") ; do
 		dqb "spc ${f} ${k3}/"
 		${spc} ${f} ${k3}/
 	done
@@ -250,8 +264,7 @@ function bootloader() {
 
 #161225:sudoilut myöhemmin
 #161225.2:voisi kai iteroida forılla arrayn läpi jatkossa (joko jo?)
-#TODO:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
-
+#DONE?:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
 
 function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"

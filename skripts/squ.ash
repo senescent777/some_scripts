@@ -85,13 +85,16 @@ dqb "par=${par}"
 tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
+#konftdston muodostus sqroot:in pad-hmistoon, onko jo kunnossa 160426?
+
 case ${cmd} in
-	-x) #030426:toimii edelleen
+	-x) #240426:toimii edelleen
 	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #080226:taitee toimia edelleen
-		#TODO:jospa välillä sitä toista .iso:a kokeilisi pohjana
+	-y) #080226:taitee toimia edelleen (tosin onko oikeasti tarpeellinen?)
+		#14+426:kokeilötu välillä yoista .iso:a pohjana
+
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -111,7 +114,7 @@ case ${cmd} in
 		${uom} ${CONF_source}
 	;;
 	-b) 
-		#030426:ehkä toimii delleen
+		#viimeksi testattu 240426, toimi solloin
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  
@@ -130,21 +133,23 @@ case ${cmd} in
 			echo $?
 		fi
 	;;
-	-c)  #030426:toimii edelleen
+	-c)  #240426:toimii edelleen
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#030426:toimii
+		#240426:toimii
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
+		#DONE:jospa urputtaisi mikäli CONF_squash_dir sisältöineen puuttuu
+
 		rst_pre1
 		rst ${CONF_squash_dir}
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #030426:ok edelleen
+	-j)  #240426:ok edelleen
 		dqb "smd= ${smd} "
 		csleep 2
 

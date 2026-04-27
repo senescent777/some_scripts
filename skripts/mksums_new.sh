@@ -11,7 +11,7 @@ bl=${CONF_bloader}
 
 #TODO?:part123() 2 , pitäisikö sitä miettiä vielä? miksi?
 
-#dgsts.4 ja dgsts.5 , sisältö ok?
+#dgsts.4 ja dgsts.5 , sisältö ok? (TODO:kts mf2.bash liittyemn)
 
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"

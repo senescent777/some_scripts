@@ -1,4 +1,4 @@
-#190326:lienee edelleen OK
+#030426:lienee edelleen OK
 function xxx() {
 	dqb "xxx( ${1}, ${2})"
 
@@ -26,6 +26,8 @@ function xxx() {
 
 #030426:edelleen tekee tdston
 #... toiveissa että (mksquashfs) parametreja muuttamalla kiukuttelu vähenisi (ehkä)
+#... tosin viimeaik kiukuttelu johtunbee jostain muustaq tupsta
+
 #TODO:msq:n vivut konftdstoon?
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
@@ -258,7 +260,13 @@ function rst_pre2() {
 	pwd
 	csleep 1
 
-	[ -d ./etc ] || exit 66 #koita keksiä jokin toinen virhekoodi, tuRhan yleinen
+	if [ -d ./etc ] ; then
+		dqb "CTE KO"
+	else
+		echo "U SHOULD RUN squ.ash x BEFORE squ.ash r"
+		exit 66 #koita keksiä jokin toinen virhekoodi, tuRhan yleinen
+	fi
+
 	csleep 1
 
 	fasdfasd ./etc/default/locale
