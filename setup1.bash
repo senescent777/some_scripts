@@ -1,5 +1,6 @@
 #!/bin/bash
 . ./setup0.conf
+#TODO:skriptin toiminnan testatsuuas uusicksi 666
 
 #040426:edelleen osannee paketteja vetää kohde-tar:ia varten (qhan setup0.conf)
 #seuraavaksi common_lib.sh hyödyntäminen?
