@@ -7,9 +7,6 @@ else
 	exit 67
 fi
 
-echo "TODO:setup1 uusi testaus"
-sleep 5
-
 echo "ko.1"
 distro=$(cat /etc/devuan_version)
 [ -v CONF_basedir ] || exit 1
