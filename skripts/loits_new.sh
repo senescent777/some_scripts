@@ -62,50 +62,47 @@ function check_params() {
 
 #030426:edelleen kykenee tmivan tdston muodostamaan (grub)
 check_params
-[ -z "${gi}" ] && echo "GENISIOMAGE MISSING"
+#[ -z "${gi}" ] && echo "GENISIOMAGE MISSING"
 sleep 1
 dqb "bl=${bl}"
 csleep 4
 
-dqb "VAIH: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
-csleep 4
+#dqb "VAIH: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
+#csleep 4
 
 case ${bl} in
 	isolinux)
 		#VAIH:toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
-		#${sco} -R ${n}:${n} .
-		#${scm} -R 0755 .
+		${sco} -R $(whoami):$(whoami) ${source}
+		${scm} -R 0755 ${source}
 
 		ls -las ${source}/${bl}/*.cfg || exit 99
 		csleep 2
-
 		[ ${debug} -eq 1 ] && pwd 
-#		dqb "${gi} -o ${ltarget} ${CONF_gi_opts} ${source}"
-#		csleep 1
-#
-#		# #. älä ramppaa
-#		#oikeastaan komentona siinä linkissä oli xorriso, let's find out
-#		
-#		# -isohybrid-gpt-basdat -isohybrid-apm-hfsplus  --no-emul-boot
-#
-#		
+
 #		#dqb "${gi} -r -J -J -joliet-long -cache-inodes -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/grub/efi.img -o ${ltarget} -no-emul-boot  ${source}"
 #		#Size of boot image is 4 sectors -> /usr/bin/genisoimage: Error - boot image '/data/tmp/tgt/isolinux/isolinux.bin' has not an allowable size.
 #		#1760426: "-boot-load-size" - option poisto ei euttanut -> KVG
 #		${gi} -o ${ltarget} ${CONF_gi_opts} ${source}
 
 		gi=$(sudo which xorriso)
-		${gi} -as mkisofs -r -J -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -no-emul-boot -eltorito-alt-boot -e boot/grub/efiboot.img -o ${ltarget} ${source}
+		#${gi} -as mkisofs -r -J -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -no-emul-boot -eltorito-alt-boot
+		${gi} -as mkisofs -r -J  -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-info-table -no-emul-boot -o ${ltarget} ${source}
+
+		# -e boot/grub/efiboot.img
+		#no bootfile found for uefi -> vissiin efi-hmiston tai jnkin tarvitsee
 
 		#-isohybrid-mbr .../isohdpfx.bin qsee
-		#-b -> libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb
+		echo "#TODO:KVG \"libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb\""
+		echo "TODO: KVG \"no bootfile for UEFI\""
+
 		#-B + -C ->  SAMA
 		#seur --bot-jutut mukana -> taas onnasi .iso:n luonti
 		#-eltorito mukaan ja edelleen onnaa
 		#-e -> nalq	kunnes?
 		
-		#TODO:man 1 xorrisofs
-		#TODO:KBG iso production command for debian
+		#VAIH:man 1 xorrisofs
+		#VAIH:KBG iso production command for debian
 	;;
 	grub)
 		ls -las ${source}/boot/${bl}/*.cfg || exit 99
