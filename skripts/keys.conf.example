@@ -1,7 +1,7 @@
 #==============SEURAAVAT 2 RIVIÄ VOI EDITOIDA/U PROPABLY NEED TO CHANGE NEXT 2 ROWS AFTER RUNNING "kutl.bash m" =========================
 CONF_pubk=abcdabcdabcdabcd
 CONF_ksk=deadbeefdeadbeef
-#==============ALLAOLEVIA 6 RIVIÄ TUSKIN TARVITSEE MUUTTAA/U PROPABLY DON'T NEED TO CHANGE NEXT 6 ROWS AFTER THIS LINE===================
+#==============ALLAOLEVIA 6 RIVIÄ TUSKIN TARVITSEE MUUTTAA/U PROPABLY DO NoT NEED TO CHANGE NEXT 6 ROWS AFTER THIS LINE===================
 CONF_karray="${CONF_pubk} ${CONF_ksk}"
 #
 #hyvä näin vai vieläkös orkitaan?

@@ -57,7 +57,7 @@ chmod 0700 ~/.gnupg/private-keys-v1.d #tai lähes koko ~/.g
 chmod 0644 ~/.gnupg/pubring*
 csleep 5
 		
-#GPGP --EDIT-KEYS?		
+#GPG --EDIT-KEYS?		
 		
 case ${cmd} in
 	u)
@@ -68,7 +68,7 @@ case ${cmd} in
 			dqb "${gg} --import ${CONF_keys_dir_pub}/*.gpg"
 		fi
 		
-		for d in $(find ${tgt2} -type f -name '*.gpg' | grep -v 'priv') ; do
+		for d in $(find ${tgt2} -type f -name "*.gpg" | grep -v 'priv') ; do
 			${gg} --import ${d}
 		done
 	;;

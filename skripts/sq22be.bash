@@ -1,4 +1,4 @@
-#030426:lienee edelleen OK
+#270426:lienee edelleen OK
 function xxx() {
 	dqb "xxx( ${1}, ${2})"
 
@@ -24,11 +24,7 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
-#030426:edelleen tekee tdston
-#... toiveissa että (mksquashfs) parametreja muuttamalla kiukuttelu vähenisi (ehkä)
-#... tosin viimeaik kiukuttelu johtunbee jostain muustaq tupsta
-
-#TODO:msq:n vivut konftdstoon?
+#270426:toimii edelleen?
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ -z "${1}" ] && exit 6
@@ -45,8 +41,8 @@ function cfd() {
 	local msq
 	msq=$(${odio} which mksquashfs)
 
-	if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
-		${odio} ${msq} . ${1} #-comp xz -b 1048576
+	if [ ! -z "${msq}" ] && [ -x ${msq} ] ; then 
+		${odio} ${msq} . ${1} ${CONF_msq_opts} #
 	else
 		echo "${odio} apt-get install squashfs-utils"
 	fi

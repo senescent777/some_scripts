@@ -39,7 +39,7 @@ else
 		. ${fq}
 		
 		#param mukaisen hmiston takaa olisi hyväksi löytyä toivottavaa sisältöä, barm vuoksi
-		#,,, vöhön sietäisi kyllä miettiä vielä koska mussunmussun		
+		#,,, vähän sietäisi kyllä miettiä vielä koska mussunmussun		
 		check_binaries ${CONF_testgris}
 		check_binaries2
 

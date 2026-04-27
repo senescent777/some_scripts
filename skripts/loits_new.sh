@@ -85,24 +85,27 @@ case ${bl} in
 #		#1760426: "-boot-load-size" - option poisto ei euttanut -> KVG
 #		${gi} -o ${ltarget} ${CONF_gi_opts} ${source}
 
+		#270426:tuo bin jos toimaa niin isolinux-hmistobn alle jatkossa ja tsummiin mukaan
 		gi=$(sudo which xorriso)
 		#${gi} -as mkisofs -r -J -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -no-emul-boot -eltorito-alt-boot
-		${gi} -as mkisofs -r -J  -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-info-table -no-emul-boot -o ${ltarget} ${source}
+		${gi} -as mkisofs -r -J -isohybrid-mbr ${source}/isohdpfx.bin  -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -no-emul-boot -o ${ltarget} ${source}
 
 		# -e boot/grub/efiboot.img
 		#no bootfile found for uefi -> vissiin efi-hmiston tai jnkin tarvitsee
 
 		#-isohybrid-mbr .../isohdpfx.bin qsee
-		echo "#TODO:KVG \"libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb\""
+		echo "TODO:KVG \"libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb\""
 		echo "TODO: KVG \"no bootfile for UEFI\""
-
+		echo "TODO: KVG xorriso : FAILURE : Given path does not exist on disk: -boot_image system_area=..."
+		
 		#-B + -C ->  SAMA
 		#seur --bot-jutut mukana -> taas onnasi .iso:n luonti
 		#-eltorito mukaan ja edelleen onnaa
 		#-e -> nalq	kunnes?
 		
-		#VAIH:man 1 xorrisofs
-		#VAIH:KBG iso production command for debian
+		#näillä ei vbielä onnistunut:
+		#man 1 xorrisofs
+		#KBG iso production command for debian
 	;;
 	grub)
 		ls -las ${source}/boot/${bl}/*.cfg || exit 99

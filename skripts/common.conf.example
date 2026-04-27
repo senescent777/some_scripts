@@ -1,6 +1,5 @@
 CONF_pkgsdir2=/dir_containing_genisoimage(necessary?)
 CONF_gi_opts=/opts_4_genisoimage
-#CONF_targetdir=/some_kind_of_target_4_something?
 CONF_BASEDIR=/sourcedir_4_many_things
 #
 #TARGET_DTAR_OPTS="--exclude=*.bz3 --exclude=${TARGET_Dkname2}" #use it or lose it? TPX?
@@ -39,3 +38,5 @@ CONF_editor=$(which nano)
 #
 d0=$(dirname $0)
 d=$(dirname $0)
+
+CONF_msq_opts="-comp xz -b 1048576" #sq22be.cfd()
