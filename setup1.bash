@@ -1,6 +1,5 @@
 #!/bin/bash
 . ./setup0.conf
-#TODO:skriptin toiminnan testatsuuas uusicksi 666
 
 #040426:edelleen osannee paketteja vetää kohde-tar:ia varten (qhan setup0.conf)
 #seuraavaksi common_lib.sh hyödyntäminen?
@@ -85,6 +84,7 @@ function aqua() {
 	${shary} libc6 coreutils
 	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
 	${shary} git-man git
+	#/common_lib
 
 	#https://pkginfo.devuan.org/cgi-bin/policy-query.html?c=package&q=squashfs-tools&x=submit
 	${shary} liblz4-1 liblzma5 liblzo2-2 libzstd1
@@ -108,6 +108,9 @@ function aqua() {
 	${shary} mtools
 	${shary} grub-common xorriso #jälkimminen toistaiseksi mukana
 	${shary} geany
+	
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=isolinux=3:6.04~git20190206.bf6db5b4+dfsg1-3
+	${shary} isolinux
 	
 	sudo cp /var/cache/apt/archives/*.deb ${1} #kuinka tarpeellinen? kts conf EIKU
 }
