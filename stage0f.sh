@@ -9,11 +9,11 @@ function usage() {
 }
 
 function parse_opts_real() {
-	dqb "TODO:parse_opts_real() ? "
+	dqb "TODO?:parse_opts_real() ? "
 }
 
 function single_param() {
-	dqb "TODO:  single_param() ?"
+	dqb "TODO?:  single_param() ?"
 }
 
 [ $# -gt 3 ] && debug=${4}
@@ -28,8 +28,7 @@ dqb "PARAMS OK?"
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 
-
-#TODO:isolunux-testailut taas
+#VAIH:isolunux-testailut taas (chmod+chown isolinux.* , boot.* jhnkn? )
 function part0() {
 	dqb "stg0f.PART0 ${1}, ${2} , ${3} , ${4}"
 	pwd
@@ -50,10 +49,12 @@ function part0() {
 		csleep 1
 	done
 
-	#efi uutena 13725
+	#260426:kokeiltiinpa saisiko tätä kohtaa muuttamalla isolinux.hommad sujumaan
+	#... No Ei vierlä
 	dqb "${spc} -a ${1}/efi ${4}"
 	${spc} -a ${1}/efi ${4}
 	csleep 1
+	#
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää CONF_SOURCE
 	#191225;josko vähitellen jotain sen oletus-bloader.konfiguraation hyväksi?
@@ -108,7 +109,7 @@ make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}
 else
-	#TODO:jospa välillä sitä toista .iso:a kokeilisi pohjana
+	#26426:minimaalisesti modattua minimal_live:ä jo kokeiltu, pitäisi juttuja tehdäö että voisi sen kanssa jatkaa
 	if [ -s ${1} ] && [ -r ${1} ] ; then #151225:nyt toimii kun common_funcs muutettu
 		dqb "${som} -o loop,ro ${1} ${CONF_source}"
 		csleep 3
