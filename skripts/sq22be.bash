@@ -128,6 +128,7 @@ function jlk_main() {
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2} 
 	${spc} ${1}/*.bz3 ${2}
+	${spc} ${1}/*.sig ${2} #oleellisempaa tässä kui9n stage0_backendissa?
 
 	dqb "jkl1 d0n3"
 }

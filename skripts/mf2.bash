@@ -43,7 +43,7 @@ dqb "tgt=${tgt}"
 
 p=$(pwd)
 
-case ${cmd} in
+case "${cmd}" in
 	a)
 		t=${tgt}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5
 		[ -f ${t} ] && mv ${t} ${t}.OLD 
@@ -53,8 +53,9 @@ case ${cmd} in
 		cd ${tgt}
 		#VAIH:pitäisiköhän mennä findin kautta kuitenkin? kun muuallakin
 		#./${TARGET_pad_dir}/*.bz3 >
-		for f in $(${odio] find ./${TARGET_pad_dir} -type f -name "*.bz3") ; do
-			${sah6} ${f} >> ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5 #$t jatkossa?
+
+		for f in $(${odio} find ./${TARGET_pad_dir} -type f -name "*.bz3") ; do
+			${sah6} ${f} >> ${t} #$t jatkossa?
 		done
 		
 		csleep 2

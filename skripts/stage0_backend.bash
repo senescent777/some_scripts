@@ -6,6 +6,8 @@ function mangle_conf() {
 
 #dgsts.5 liittyen kts copy_sums() , kommentit
 
+#VAIH:hyvin etäisesti liittyen toisen repon copy_x - fktioihin muutoksia, .sig-jutut hyvä saada mukaan kohteeseen
+
 function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
 
@@ -39,6 +41,13 @@ function copy_main() {
 	
 	dqb "PENNY AND A DIME"
 	csleep 1
+
+	#030526:lototaan aluksi tähän, ehkä vaihtuu toiseen fktioon kys pätkä
+	for f in $(find ${1} -type f  -name "*.sig") ; do
+		dqb "${spc} ${f} ${2} "
+		${spc} ${f} ${2}
+	done
+
 	dqb "copy_main() donw\n"
 }
 
@@ -163,7 +172,7 @@ function copy_sums() {
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
-#ne oletus-bnpptöloader-jutut esim. tähän flktioon jatkosssa
+#ne oletus-bootloader-jutut esim. tähän flktioon jatkosssa
 function pre_bl() {
 	dqb "WORK N PROGRESS"
 	}
