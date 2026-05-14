@@ -9,9 +9,7 @@ bl=${CONF_bloader}
 #010426:"./boot/grub/grub.cfg: FAILED open or read" tdstosta dgsts.1 (sqroot)
 #... jos toistuu ni tekisikö jotain?
 
-#TODO?:part123() 2 , pitäisikö sitä miettiä vielä? miksi?
-
-#dgsts.4 ja dgsts.5 , sisältö ok? (TODO:kts mf2.bash liittyemn)
+#part123() 2 , pitäisikö sitä miettiä vielä? miksi?
 
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
@@ -90,10 +88,21 @@ function part0() {
 	[ -v TARGET_DIGESTS_file ] || exit 73
 	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
 	
-	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file}* SOON"
+	#VAIH:jos sittenkin selvittäisi miten dgsts.4 ja dgsts.5 asiat liittyvät ao. riveihin? vitosen kohdalla jos tekisi jotain poikkeusta sääntöön
+	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file} \* SOON"
 	csleep 1
-	${NKVD} ${1}/${TARGET_DIGESTS_file}*	
+#	#
+#
+#	for f in $($[odio} find ${1} -type f -name "{TARGET_DIGESTS_file}.*" ) ; do # | grep -v '.5' ?
+#		dqb "${NKVD} ${f}"
+#		${f}
+#		csleep 2
+#	done	
 	
+	${svm} ${1}/${TARGET_DIGESTS_file}.5 ${1}/5.6
+	${NKVD} ${1}/${TARGET_DIGESTS_file}.*
+	${svm} 	${1}/5.6 ${1}/${TARGET_DIGESTS_file}.5	
+
 	dqb "QPOL0"
 	csleep 1
 	
@@ -104,7 +113,8 @@ function part0() {
 	csleep 1
 }
 
-#HUOM.281125:pad alla julk avaimet .bz2:sessa olisi idea, tosin muitAkin löytyy
+#VAIH:sen "isohdpfx.bin"-jutun sivuvaikutukset tähänkin skriptiin
+
 function part123() {
 	dqb "part123(${1}, ${2} , ${3} )"
 
@@ -128,7 +138,7 @@ function part123() {
 		for f in $(find ./${2} -type f -name "*.cfg" -or -name "*.lst" -or -name "grubenv") ; do ${sah6} ${f} >> ./${t} ; done
 		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${t} ; done
 		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${t} ; done
-		for f in $(find ./${2} -type f -name "*.conf")  ; do ${sah6} ${f} >> ./${t} ; done
+		for f in $(find ./${2} -type f -name "*.conf" -or -name "*.bin")  ; do ${sah6} ${f} >> ./${t} ; done
 
 		${scm} 0444 ./${t}
 		#${sco} 0:0 ./${t} #ei hyvä idea?
@@ -143,6 +153,10 @@ function part123() {
 
 #HUOM.kandee ajaa tämä vain jos binäärit ja avaimet olemassa
 #161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan?
+
+#TODO:huomioimaan taas tilanne että käskytetäänkin sitä kohde-hmistoon kopsattua versiota (keys.conf pitäisi saada mukaan tavalla tai toisella)
+#muuan copy_conf() liittynee
+
 function part6_5() {
 	dqb "mks.part65( $@ ) "
 
@@ -162,7 +176,7 @@ function part6_5() {
 	dqb "mks.part65dibw"
 }
 
-#151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(TODO)
+#151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(DONE?)
 #TODO:target_dpub-jutut pois sittenq mahd ?
 #100326:"gpg --edit-key" ? ehkä ei tähän mutta johonkin
 
@@ -224,6 +238,7 @@ part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 cd ${source}
 
+#HUOM: dgsts.5 on semmoinen juttu mikä pitää huomioida 
 for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
 	dqb "p456 ${f}"
 	${sah6} -c ${f} --ignore-missing
@@ -246,6 +261,9 @@ csleep 1
 
 dqb "${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12" 
 ${sah6} ./${TARGET_DIGESTS_dir}/* | grep -v '${TARGET_DIGESTS_file}.4' | grep -v 'cf83e' | head -n 12 > ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4
+csleep 1
+${sah6} -c  ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4 --ignore-missing
+csleep 1
 
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}
