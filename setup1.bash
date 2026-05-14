@@ -1,6 +1,5 @@
 #!/bin/bash
 . ./setup0.conf
-#TODO:skriptin toiminnan testatsuuas uusicksi 666
 
 #040426:edelleen osannee paketteja vetää kohde-tar:ia varten (qhan setup0.conf)
 #seuraavaksi common_lib.sh hyödyntäminen?
@@ -48,7 +47,7 @@ function jord() {
 
 jord #${1}
 
-#1912255:jnkn verran jo testailtu, kuten myös 020426, toimii
+#1912255:jnkn verran jo testailtu, kuten myös 270426, toimii
 function aqua() {
 	echo "aqua ( ${1})"
 	[ -z "{1}" ] && exit 11
@@ -82,9 +81,11 @@ function aqua() {
 	${shary} ${E22GI}
 	#
 
+	#näillekin jokin E22_xxx ?
 	${shary} libc6 coreutils
 	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
 	${shary} git-man git
+	#/common_lib
 
 	#https://pkginfo.devuan.org/cgi-bin/policy-query.html?c=package&q=squashfs-tools&x=submit
 	${shary} liblz4-1 liblzma5 liblzo2-2 libzstd1
@@ -100,7 +101,7 @@ function aqua() {
 	${shary} libjte2
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=grub-common=2.06-13+deb12u1
-	sudo apt-get reinstall libdevmapper1.02.1 libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
+	sudo apt-get reinstall libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=xorriso=1.5.4-4
 	${shary} libisoburn1 libburn4 libisofs6 
@@ -108,6 +109,9 @@ function aqua() {
 	${shary} mtools
 	${shary} grub-common xorriso #jälkimminen toistaiseksi mukana
 	${shary} geany
+	
+	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=isolinux=3:6.04~git20190206.bf6db5b4+dfsg1-3
+	${shary} isolinux
 	
 	sudo cp /var/cache/apt/archives/*.deb ${1} #kuinka tarpeellinen? kts conf EIKU
 }
