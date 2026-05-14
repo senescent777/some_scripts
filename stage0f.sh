@@ -50,7 +50,7 @@ function part0() {
 	done
 
 	#260426:kokeiltiinpa saisiko tätä kohtaa muuttamalla isolinux.hommad sujumaan
-	#... No Ei vierlä
+	#... No Ei (vielä)
 	dqb "${spc} -a ${1}/efi ${4}"
 	${spc} -a ${1}/efi ${4}
 	csleep 1
@@ -58,6 +58,9 @@ function part0() {
 
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää CONF_SOURCE
 	#191225;josko vähitellen jotain sen oletus-bloader.konfiguraation hyväksi?
+	# dd if=debian-9.3.0-i386-DVD-1.iso bs=1 count=432 of=isohdpfx.bin myöhemmin, liian hapokasta
+	
+	csleep 5	
 	bootloader ${3} ${2} ${1} ${CONF_target}
 	
 	local src2=${2}/${TARGET_pad_dir}
@@ -76,7 +79,7 @@ function part0() {
 	dqb "56448748765484"
 
 	[ -z ${TARGET_DGST0} ] && exit 66
-	dqb "AAPPO.iPIIPP0"
+	dqb "AAPP0.1PIIPP0"
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
 	copy_main ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} ${CONF_scripts_dir}
@@ -105,6 +108,8 @@ dqb "src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 65
 [ -v CONF_target ] || exit 66
 make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
+
+#270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi?
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}
