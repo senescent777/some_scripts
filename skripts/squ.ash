@@ -88,12 +88,12 @@ tmp=$(dirname $0)
 #konftdston muodostus sqroot:in pad-hmistoon, onko jo kunnossa 160426?
 
 case ${cmd} in
-	-x) #240426:toimii edelleen
+	-x) #270426:toimii edelleen
 	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #080226:taitee toimia edelleen (tosin onko oikeasti tarpeellinen?)
-		#14+426:kokeilötu välillä yoista .iso:a pohjana
+		#140426:kokeilLtu välillä yoista .iso:a pohjana
 
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
@@ -114,12 +114,12 @@ case ${cmd} in
 		${uom} ${CONF_source}
 	;;
 	-b) 
-		#viimeksi testattu 240426, toimi solloin
+		#viimeksi testattu 270426, toimi sIlloin
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  
 		#030426:toimiiko? erit toiv tavalla? vissiin
-		#TODO?:pudon sudotus josqs? vaiko se sudoers? JOKOJO 04/26?
+		#TODO?:pudon sudotus josqs? vaiko se sudoers? JOKOJO 05/26?
 		
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
@@ -133,11 +133,11 @@ case ${cmd} in
 			echo $?
 		fi
 	;;
-	-c)  #240426:toimii edelleen
+	-c)  #270426:toimii edelleen?
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#240426:toimii
+		#270426:toimii
 		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
 	
 		[ -v CONF_squash_dir ] || exit 111
@@ -149,7 +149,7 @@ case ${cmd} in
 		rst ${CONF_squash_dir}
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #240426:ok edelleen
+	-j)  #270426:ok edelleen
 		dqb "smd= ${smd} "
 		csleep 2
 
