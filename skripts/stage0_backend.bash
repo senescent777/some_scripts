@@ -5,6 +5,7 @@ function mangle_conf() {
 }
 
 #dgsts.5 liittyen kts copy_sums() , kommentit
+#24+5236:joskohan olisi jo .sig-jutut?
 
 function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
@@ -39,10 +40,17 @@ function copy_main() {
 	
 	dqb "PENNY AND A DIME"
 	csleep 1
+
+	#030526:lototaan aluksi tähän, ehkä vaihtuu toiseen fktioon kys pätkä
+	for f in $(find ${1} -type f  -name "*.sig") ; do
+		dqb "${spc} ${f} ${2} "
+		${spc} ${f} ${2}
+	done
+
 	dqb "copy_main() donw\n"
 }
 
-dqb "TODO?:konftdston muodostus sqroot:in pad-hmistoon, tarkista" #onko vielä 04/326 ongelmia?
+#2705426:olisikohan konftdston kanssa asiat qnnossa?
 
 function copy_conf() {
 	dqb "copy_conf(${1}, ${2} , ${3})"
@@ -61,7 +69,10 @@ function copy_conf() {
 		#pystyisi varmaan tekemään pelkällä findillä
 		#HUOM.100326:ei-tyhjä $3.conf olisi syytä löytyä lähteestä koska viimeaikaiset muutkset
 
-		for f in $(find ${CONF_scripts_dir} -type f -name '*.conf' | grep -v bash) ; do
+		dqb "TODO:KEYS.CONF MUKAAN?"
+		csleep 10
+
+		for f in $(find ${CONF_scripts_dir} -type f -name "*.conf" | grep -v bash) ; do
 			dqb "${spc} ${f} ${2}/../.."
 			${spc} ${f} ${2}/../.. 	
 		done
@@ -127,7 +138,7 @@ function copy_sums() {
 		${smd} -p ${2}
 	fi
 	
-	#TODO:jos vielä vähän karsisi tuota findin listausta? , kts kutl.bash (pointti oli?)
+	#TODO?:jos vielä vähän karsisi tuota findin listausta? , kts kutl.bash (pointti oli?)
 	#... ja siihen liittyen myös cp-komennon suhteen muutos?
 	local x=0
 	local t
@@ -135,7 +146,7 @@ function copy_sums() {
 	if [ -d ${1} ] ; then
 		x=$(find ${1} -type f -name "*.gpg" | wc -l)
 		
-		#toisinkin voisi tehdä
+		#toisinkin voisi tehdä?
 		t=${1}/${TARGET_DIGESTS_file}.5 
 		[ -s ${t} ] && ${spc} ${t} ${2}
 	fi
@@ -160,13 +171,14 @@ function copy_sums() {
 	dqb "copy_syms(${1}, ${2}) dn0w\n"
 }
 
-#ne oletus-bnpptöloader-jutut esim. tähän flktioon jatkosssa
+#ne oletus-bootloader-jutut esim. tähän flktioon jatkosssa
 function pre_bl() {
 	dqb "WORK N PROGRESS"
 	}
 
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole (JOKO JO 04/26?)
 #TODO?:sudon pudon pudotus josqs myöh?
+#sen hybrid.bin-tdston kanssa jotain? antaa oll atoisdtaiseksi?
 function bootloader() {
 	dqb "bootloader(${1}, ${2}, ${3}, ${4} )"
 
@@ -247,7 +259,7 @@ function bootloader() {
 	
 	csleep 1
 				
-	for f in $(find ${ks2} -name "*.cfg") ; do
+	for f in $(find ${ks2} -name "*.cfg" -or -name "*.bin") ; do
 		dqb "spc ${f} ${k3}"
 		${spc} ${f} ${k3}
 	done
