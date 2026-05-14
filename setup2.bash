@@ -42,9 +42,11 @@ function jord() {
 	echo "jord"
 	sleep 1
 
+	#140526:pitäisiköhän jokin oletus-fstab varm vuoksi EIQU
 	${sco} -R 0:0  ${1}/etc	
 	${scm} -R 0444 ${1}/etc	
 	${spc} -a ${1}/etc/* /etc
+	exit
 }
 
 jord ${CONF_basedir}
@@ -64,6 +66,23 @@ function ekf() {
 		echo "jfk"
 		efk ${q}/${1}*
 	fi
+}
+
+function fasdfasd() {
+	[ -z "${1}" ] && exit 99
+
+	csleep 1
+	${odio} touch ${1}
+	${sco} $(whoami):$(whoami) ${1}
+	${scm} 0644 ${1}
+}
+
+function reqwreqw() {
+	[ -z "${1}" ] && exit 99
+	[ -f ${1} ] || exit 100
+	csleep 1
+	${sco} 0:0 ${1}
+	${scm} a-w ${1}
 }
 
 [ -v CONF_pkgsrc ] || exit 22
@@ -168,17 +187,24 @@ function luft() {
 		exit 665
 	fi
 
+	echo "F-STAB-1"
+	exit
+
 	if [ ${c4} -gt 0 ] ; then
 		echo "f-stab 0k"
 	else
-		${scm} a+w /etc/fstab #TODO:fasdfasd/reqwreqw
+		fasdfasd /etc/fstab 
 		sleep 1
+
+		#TODO:.tmp huomioimaan uuid:t ? sillä tavalla saattaa olla puolensa
+
 		${odio} cat /etc/fstab.tmp >> /etc/fstab
 		sleep 1	
-		${scm} a-wx /etc/fstab*
-		${sco} 0:0 /etc/fstab*
+		reqwreqw /etc/fstab  
 	fi
 
+	echo "F-STAB-2"
+	exit
 	#TODO?:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
 
 	if [ -v CONF_basept2tgt ] ; then
@@ -192,6 +218,9 @@ function luft() {
 		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
 		exit 666
 	fi
+
+	echo "F-STAB-3"
+	exit
 }
 
 luft

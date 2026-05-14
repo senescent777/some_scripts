@@ -49,6 +49,8 @@ dqb "${cmd}"
 csleep 1
 
 #main()
+echo "-d+sudo SUHTEEN OLISI PRKL SYYTÄ JO TEHDÄ JOTAIN"
+sleep 10
 
 case ${cmd} in
 	--make-dirs)
