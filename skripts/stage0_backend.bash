@@ -5,8 +5,7 @@ function mangle_conf() {
 }
 
 #dgsts.5 liittyen kts copy_sums() , kommentit
-
-#VAIH:hyvin etäisesti liittyen toisen repon copy_x - fktioihin muutoksia, .sig-jutut hyvä saada mukaan kohteeseen
+#24+5236:joskohan olisi jo .sig-jutut?
 
 function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
@@ -179,7 +178,7 @@ function pre_bl() {
 
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole (JOKO JO 04/26?)
 #TODO?:sudon pudon pudotus josqs myöh?
-#VAIH:sen hybrid.bin-tdston kanssa jotain?
+#sen hybrid.bin-tdston kanssa jotain? antaa oll atoisdtaiseksi?
 function bootloader() {
 	dqb "bootloader(${1}, ${2}, ${3}, ${4} )"
 

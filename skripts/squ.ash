@@ -119,7 +119,7 @@ case ${cmd} in
 	;;
 	-d)  
 		#030426:toimiiko? erit toiv tavalla? vissiin
-		#TODO?:pudon sudotus josqs? vaiko se sudoers? JOKOJO 04/26?
+		#TODO?:pudon sudotus josqs? vaiko se sudoers? JOKOJO 05/26?
 		
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67

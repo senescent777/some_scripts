@@ -128,7 +128,10 @@ function jlk_main() {
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2} 
 	${spc} ${1}/*.bz3 ${2}
-	${spc} ${1}/*.sig ${2} #oleellisempaa tässä kui9n stage0_backendissa?
+	
+	${spc} ${1}/*.sig ${2}
+	#oleellisempaa tässä kui9n stage0_backendissa?
+	#pitäisikö .sah kanssa?
 
 	dqb "jkl1 d0n3"
 }
@@ -208,7 +211,7 @@ function jlk_sums() {
 	#261225:voi kyllä mennä wanhentunut dgsts KOhteeseen tällä tavalla?
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
 	${spc} ${1}/*.gpg ${2}
-	${spc} ${1}/*.sig ${2}
+	${spc} ${1}/*.sig ${2} #.sha kanssa?
 	
 	[ ${debug} -gt 0 ] && ls -las ${2}
 	csleep 2

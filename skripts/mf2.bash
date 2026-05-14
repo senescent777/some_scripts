@@ -51,11 +51,10 @@ case "${cmd}" in
 		fasdfasd ${t}
 		
 		cd ${tgt}
-		#VAIH:pitäisiköhän mennä findin kautta kuitenkin? kun muuallakin
-		#./${TARGET_pad_dir}/*.bz3 >
 
+		#entä linkit?
 		for f in $(${odio} find ./${TARGET_pad_dir} -type f -name "*.bz3") ; do
-			${sah6} ${f} >> ${t} #$t jatkossa?
+			${sah6} ${f} >> ${t}
 		done
 		
 		csleep 2
