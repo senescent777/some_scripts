@@ -1,4 +1,4 @@
-#030426:lienee edelleen OK
+#270426:lienee edelleen OK
 function xxx() {
 	dqb "xxx( ${1}, ${2})"
 
@@ -24,11 +24,7 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
-#030426:edelleen tekee tdston
-#... toiveissa että (mksquashfs) parametreja muuttamalla kiukuttelu vähenisi (ehkä)
-#... tosin viimeaik kiukuttelu johtunbee jostain muustaq tupsta
-
-#TODO:msq:n vivut konftdstoon?
+#270426:toimii edelleen?
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ -z "${1}" ] && exit 6
@@ -45,8 +41,8 @@ function cfd() {
 	local msq
 	msq=$(${odio} which mksquashfs)
 
-	if [ x"${msq}" != "x" ] && [ -x ${msq} ] ; then 
-		${odio} ${msq} . ${1} #-comp xz -b 1048576
+	if [ ! -z "${msq}" ] && [ -x ${msq} ] ; then 
+		${odio} ${msq} . ${1} ${CONF_msq_opts} #
 	else
 		echo "${odio} apt-get install squashfs-utils"
 	fi
@@ -132,6 +128,10 @@ function jlk_main() {
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2} 
 	${spc} ${1}/*.bz3 ${2}
+	
+	${spc} ${1}/*.sig ${2}
+	#oleellisempaa tässä kui9n stage0_backendissa?
+	#pitäisikö .sah kanssa?
 
 	dqb "jkl1 d0n3"
 }
@@ -211,7 +211,7 @@ function jlk_sums() {
 	#261225:voi kyllä mennä wanhentunut dgsts KOhteeseen tällä tavalla?
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
 	${spc} ${1}/*.gpg ${2}
-	${spc} ${1}/*.sig ${2}
+	${spc} ${1}/*.sig ${2} #.sha kanssa?
 	
 	[ ${debug} -gt 0 ] && ls -las ${2}
 	csleep 2
