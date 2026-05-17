@@ -34,19 +34,25 @@ smr="${odio} rm"
 #simppelimpi näin
 [ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
 
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+
 function jord() {
-	#231225:oikeudet olisi basedir/e alla hyvä olla järkevät, init1.sh saa nyt hoitaa
 	[ -z "${1}" ] && exit 666
 	[ -d ${1} ] || exit 666
 	
 	echo "jord"
 	sleep 1
 
-	#140526:pitäisiköhän jokin oletus-fstab varm vuoksi EIQU
 	${sco} -R 0:0  ${1}/etc	
 	${scm} -R 0444 ${1}/etc	
 	${spc} -a ${1}/etc/* /etc
-	exit
+#	exit
 }
 
 jord ${CONF_basedir}
@@ -167,8 +173,7 @@ function ignis() {
 	fi
 }
 
-ignis
-
+ignis #${CONF_basedir}
 [ -v CONF_dir ] || exit 44
 [ -d ${CONF_dir} ] || exit 45
 
@@ -180,15 +185,21 @@ function luft() {
 	local c4
 	c4=0
 
-	if [ -v CONF_dir ] ; then	
+	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
 		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
+		c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
+		
+		if  [ ${c5} -lt 1 ] ; then
+			echo "SMTHING WRONG W/ fstab.tmp (or config)"
+			exit 666
+		fi
 	else
 		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
 		exit 665
 	fi
 
 	echo "F-STAB-1"
-	exit
+	#exit
 
 	if [ ${c4} -gt 0 ] ; then
 		echo "f-stab 0k"
@@ -196,31 +207,37 @@ function luft() {
 		fasdfasd /etc/fstab 
 		sleep 1
 
-		#TODO:.tmp huomioimaan uuid:t ? sillä tavalla saattaa olla puolensa
-
+		#VAIH:.tmp huomioimaan uuid:t ? sillä tavalla saattaa olla puolensa
+		#... tosin $CONF_basedir vastaavan rivin kanssa semmoinen muna-kana-juttu
+		[ -s /etc/fstab.tmp ] || exit 666
 		${odio} cat /etc/fstab.tmp >> /etc/fstab
+
 		sleep 1	
 		reqwreqw /etc/fstab  
 	fi
 
-	echo "F-STAB-2"
-	exit
+	#echo "F-STAB-2"
+	#exit
 	#TODO?:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
+	
+	#[ -d ${CONF_basept2tgt} ]CONF_basept2tgt}
+	for d in $(grep -v '#' /etc/fstab.tmp | awk '{print $2}') ; do
+		[ -d ${d} ] || ${odio} mkdir ${d}
+	done
 
+	#tartteeko tätä sorkkia vai ei?
 	if [ -v CONF_basept2tgt ] ; then
-		#/proc/mounts voisi grepAta
-		[ -d ${CONF_basept2tgt} ] || ${odio} mkdir ${CONF_basept2tgt}
+		#/proc/mounts voisi grepAta?
 		
-		${odio} mount ${CONF_basept2tgt}
-		#TODO:tai sitten mount -a + vastaava muutos fstab.tmp:iin , saisi samalla sen oman osion .iso-tdstoille
-		#...vielä tarpeellinen 040426?
+		#${odio} mount ${CONF_basept2tgt}
+		${odio} mount -a
 	else
 		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
 		exit 666
 	fi
 
-	echo "F-STAB-3"
-	exit
+#	echo "F-STAB-3"
+#	exit
 }
 
 luft
@@ -259,4 +276,4 @@ function f5th() {
 f5th
 #se /.chroot luonti jonnekin?, esim. stage0_backend.bash...
 echo "kutl v | g_doit -v 1 ?"
-echo "TODO:SE &e&s.d/live HUKKAAMINEN KOKEEKSI"
+echo "TODO:SE &e&s.d/live HUKKAAMINEN KOKEEKSI (JOKO JO 05/26?)"
