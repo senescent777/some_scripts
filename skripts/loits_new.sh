@@ -6,6 +6,8 @@ source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
 
+#180526:yllättäen sai aikaiseksi jnkn tiedoston omegan ajon jlkeen
+
 function usage() {
 	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
