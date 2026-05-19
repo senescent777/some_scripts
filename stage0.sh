@@ -49,8 +49,7 @@ dqb "${cmd}"
 csleep 1
 
 #main()
-echo "-d+sudo SUHTEEN OLISI PRKL SYYTÄ JO TEHDÄ JOTAIN"
-sleep 10
+#180526 alettu renkata sudo-asioita
 
 case ${cmd} in
 	--make-dirs)
@@ -70,8 +69,11 @@ case ${cmd} in
 
 		#TODO:man chattr pitkästä aikaa
 		#081225:v-hmiston alta jotain siivoilua myös? no ei
-		#VAIH:josko jo sudon pudotus smr:stä tai sittense sudoers
 		
+		#VAIH:josko jo sudon pudotus smr:stä tai sittense sudoers
+		#... jokerit eivät ekalla yrityksellä oikein		
+
+		[ -v CONF_testgris ] && smr="/usr/bin/sudo /bin/rm"
 		dqb "smr= ${smr}"
 		csleep 2
 

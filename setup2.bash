@@ -7,10 +7,20 @@ else
 	exit 67
 fi
 
+#sktiåptds/common_funcs, hyldyntäisikö?
 echo "ko.1"
 distro=$(cat /etc/devuan_version)
 [ -v CONF_basedir ] || exit 1
 [ -d ${CONF_basedir} ] || exit 2
+
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+
 echo "base= ${CONF_basedir}"
 sleep 10
 
@@ -34,12 +44,21 @@ smr="${odio} rm"
 #simppelimpi näin
 [ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
 
-function dqb() {
-	[ ${debug} -eq 1 ] && echo ${1}
+function reqwreqw() {
+	[ -z "${1}" ] && exit 99
+	[ -f ${1} ] || exit 100
+	csleep 1
+	${sco} 0:0 ${1}
+	${scm} a-w ${1}
 }
 
-function csleep() {
-	[ ${debug} -eq 1 ] && sleep ${1}
+function fasdfasd() {
+	[ -z "${1}" ] && exit 99
+
+	csleep 1
+	${odio} touch ${1}
+	${sco} $(whoami):$(whoami) ${1}
+	${scm} 0644 ${1}
 }
 
 function jord() {
@@ -74,27 +93,9 @@ function ekf() {
 	fi
 }
 
-function fasdfasd() {
-	[ -z "${1}" ] && exit 99
-
-	csleep 1
-	${odio} touch ${1}
-	${sco} $(whoami):$(whoami) ${1}
-	${scm} 0644 ${1}
-}
-
-function reqwreqw() {
-	[ -z "${1}" ] && exit 99
-	[ -f ${1} ] || exit 100
-	csleep 1
-	${sco} 0:0 ${1}
-	${scm} a-w ${1}
-}
-
 [ -v CONF_pkgsrc ] || exit 22
 [ -d ${CONF_pkgsrc} ] || exit 23
 
-#HUOM.211225:jos hoitaa tietyt asiat g_doit.sh:lla ni ei tässä skriptissä tartte ninn paljoa säätää
 function aqua() {
 	echo "aqua"
 	sleep 1
@@ -169,7 +170,7 @@ function ignis() {
 	if [ -s ${CONF_basedir}/.gitignore ] ; then
 		echo "not touching ${CONF_basedir}/.gitignore this time"
 	else
-		echo "setup1 may have done this already"
+		echo "setup1 may have done this already?"
 	fi
 }
 
@@ -198,17 +199,19 @@ function luft() {
 		exit 665
 	fi
 
-	echo "F-STAB-1"
+	dqb "F-STAB-1"
 	#exit
 
 	if [ ${c4} -gt 0 ] ; then
-		echo "f-stab 0k"
+		dqb "f-stab 0k"
 	else
 		fasdfasd /etc/fstab 
 		sleep 1
 
-		#VAIH:.tmp huomioimaan uuid:t ? sillä tavalla saattaa olla puolensa
+		#tilapäinen sekoilu osiotaulun ja fstabin kanssa toivottavasti ohi
 		#... tosin $CONF_basedir vastaavan rivin kanssa semmoinen muna-kana-juttu
+		#olisi myös hyväksi päättää mitkä rivit lisää common_lib fktio ja mitkä tämä
+
 		[ -s /etc/fstab.tmp ] || exit 666
 		${odio} cat /etc/fstab.tmp >> /etc/fstab
 
@@ -218,9 +221,8 @@ function luft() {
 
 	#echo "F-STAB-2"
 	#exit
-	#TODO?:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
-	
-	#[ -d ${CONF_basept2tgt} ]CONF_basept2tgt}
+	#dataosion jakaminen kahtai myöhemmin?
+
 	for d in $(grep -v '#' /etc/fstab.tmp | awk '{print $2}') ; do
 		[ -d ${d} ] || ${odio} mkdir ${d}
 	done
@@ -251,6 +253,9 @@ function f5th() {
 	somefile=$(mktemp)
 	touch ${somefile}
 
+	#CB_LIST1="$(${odio} which halt) $(${odio} which reboot) /usr/bin/which ${sifu} ${sifd}"
+	#...ao lista mukaan aa:han vaiko common_lib kanssa jogtain jatkosöäätöä?
+
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
@@ -259,9 +264,9 @@ function f5th() {
 
 	#TARKKUUTTA PRKL
 
-	#voi miettiä vielä tätä, jos basen alla asettaa omistajudet ja oikeudet sopivasti, ei tarttisi ${odio}ttaa
+	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästry, man-sivuja pitäisi jaksaa selailla taas
 	for c in ${CONF_ab} ; do
-		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/*" >> ${somefile}
+		echo "$(whoami) localhost=NOPASSWD: ${c} ^${CONF_basept2tgt}/[^[:space:]]*\$" >> ${somefile}
 	done 
 
 	cat ${somefile}
@@ -276,4 +281,4 @@ function f5th() {
 f5th
 #se /.chroot luonti jonnekin?, esim. stage0_backend.bash...
 echo "kutl v | g_doit -v 1 ?"
-echo "TODO:SE &e&s.d/live HUKKAAMINEN KOKEEKSI (JOKO JO 05/26?)"
+echo "VAIH:SE /e/s.d/live HUKKAAMINEN KOKEEKSI "
