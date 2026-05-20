@@ -129,11 +129,11 @@ case ${cmd} in
 		[ -d ${CONF_squash0} ] || exit 68
 		pwd;sleep 6
 		
-		[ -v CONF_testgris ] && smr="/bin/rm"
-		dqb "smr= ${smr}"
-		csleep 2
-		dqb "SHDOULD scm+sco ${CONF_tmpdir}/* 1st"
-		exit
+		#[ -v CONF_testgris ] && smr="/bin/rm"
+		#dqb "smr= ${smr}"
+		#csleep 2
+		#dqb "SHDOULD scm+sco ${CONF_tmpdir}/* 1st"
+		#exit
 	
 		#onko riittävä tarkistus vai ei?
 		if [ x"${CONF_squash0}" != "x/" ] ; then
