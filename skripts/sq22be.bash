@@ -75,7 +75,7 @@ function bbb() {
 	#${smr} -rf ./boot/* #080226 kommentteihin. vöib sotkea
 	${smr} -rf ./usr/share/doc/*
 	
-	for f in $(find . -type f -name '*.deb') ; do
+	for f in $(find . -type f -name "*.deb") ; do #HSIPUT WTTUUN
 		dqb "${smr} ${f}"
 		csleep 1
 		${smr} ${f}
@@ -90,7 +90,7 @@ function bbb() {
 	${smr} -rf ./${TARGET_pad2}/*.bz3*
 	${smr} -rf ./${TARGET_pad2}/*.OLD
 	
-	for f in $(find ./home -type f -name '*.tar') ; do
+	for f in $(find ./home -type f -name "*.tar") ; do
 		dqb "smr ${f}"
 		csleep 1
 		${smr} ${f}

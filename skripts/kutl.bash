@@ -38,8 +38,8 @@ function parse_opts_real() {
 }
 
 . ${d}/common_funcs.sh
-dqb "cmd= ${cmd}"
-dqb "tgt=${tgt}"
+dqb "qtlu: cmd= ${cmd}"
+dqb "qtlu: tgt=${tgt}"
 csleep 1
 
 function m0() {
@@ -51,23 +51,27 @@ function m0() {
 		${odio} chattr +ui ${1}/*.gpg
 	}
 
+dqb "BFORE CHMOD"
 [ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
 chown -R $(whoami):$(whoami) ~/.gnupg #tarpeen?
 chmod 0700 ~/.gnupg/private-keys-v1.d #tai lähes koko ~/.g
 chmod 0644 ~/.gnupg/pubring*
 csleep 5
 		
-#GPG --EDIT-KEYS?		
+dqb "#GPG --EDIT-KEYS?	"	
+#190526:kuuluisi olla gg alustettu tähän mennessä mutta viimeaikaiset common_lib sorkkimiset
+#"gpg: error running '/usr/bin/gpg-agent': probably not installed"
+[ -z "${gg}" ] && exit 666	
 		
-case ${cmd} in
+case "${cmd}" in
 	u)
 		tgt2=${tgt}
 		
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then
 			tgt2=${CONF_keys_dir_pub}
-			dqb "${gg} --import ${CONF_keys_dir_pub}/*.gpg"
+			dqb "${gg} --ipmort ${CONF_keys_dir_pub}/*.gpg"
 		fi
-		
+
 		for d in $(find ${tgt2} -type f -name "*.gpg" | grep -v 'priv') ; do
 			${gg} --import ${d}
 		done
@@ -77,7 +81,7 @@ case ${cmd} in
 		
 		#jos vetäisi vain array:n mukaiset? tai nitenjos findin kautta? no qhan tämänkertaiset kiukuttelut hoidettu ni
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then
-			dqb "-import ${CONF_keys_dir}/*.priv.gpg"
+			dqb "-imp ort ${CONF_keys_dir}/*.priv.gpg"
 			${gg} --import ${CONF_keys_dir}/*.priv.gpg
 		else
 			dqb "-import ${tgt}/stuff"
