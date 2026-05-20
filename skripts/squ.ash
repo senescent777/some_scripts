@@ -90,6 +90,7 @@ tmp=$(dirname $0)
 case ${cmd} in
 	-x) #270426:toimii edelleen
 	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
+	#VAIH:squashfs.työkaliut sudoersiin jos ei ole jo
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #080226:taitee toimia edelleen (tosin onko oikeasti tarpeellinen?)
@@ -119,13 +120,21 @@ case ${cmd} in
 	;;
 	-d)  
 		#030426:toimiiko? erit toiv tavalla? vissiin
-		#TODO?:pudon sudotus josqs? vaiko se sudoers? JOKOJO 05/26?
-		
+
+		#VAIH:pudon sudotus josqs? vaiko se sudoers? JOKOJO 05/26?
+		#ekalla yrityksellä(180526) ei oikein rm lähtenyt toimaamaan
+
 		[ -v CONF_squash0 ] || exit 66
 		[ -z "${CONF_squash0}" ] && exit 67
 		[ -d ${CONF_squash0} ] || exit 68
 		pwd;sleep 6
-
+		
+		[ -v CONF_testgris ] && smr="/bin/rm"
+		dqb "smr= ${smr}"
+		csleep 2
+		dqb "SHDOULD scm+sco ${CONF_tmpdir}/* 1st"
+		exit
+	
 		#onko riittävä tarkistus vai ei?
 		if [ x"${CONF_squash0}" != "x/" ] ; then
 			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
@@ -144,12 +153,13 @@ case ${cmd} in
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
 		#DONE:jospa urputtaisi mikäli CONF_squash_dir sisältöineen puuttuu
+		#TODO:tämänkin casen testaus sittenq
 
 		rst_pre1
 		rst ${CONF_squash_dir}
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #270426:ok edelleen
+	-j)  #180526:yritetty ajaa omegan jälkeen, kosahti
 		dqb "smd= ${smd} "
 		csleep 2
 

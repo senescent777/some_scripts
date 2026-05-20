@@ -69,8 +69,8 @@ function copy_conf() {
 		#pystyisi varmaan tekemään pelkällä findillä
 		#HUOM.100326:ei-tyhjä $3.conf olisi syytä löytyä lähteestä koska viimeaikaiset muutkset
 
-		dqb "TODO:KEYS.CONF MUKAAN?"
-		csleep 10
+		#180526;näyttäisi levan tilanne se että keys.conf kopioituu kohteeseen
+		#... tarvitsevat voisivat tietysti lotota kys konftdston sijainnin samaan tapaan kuin common_funcs etsii common_lib
 
 		for f in $(find ${CONF_scripts_dir} -type f -name "*.conf" | grep -v bash) ; do
 			dqb "${spc} ${f} ${2}/../.."

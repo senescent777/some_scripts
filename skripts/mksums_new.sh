@@ -88,6 +88,9 @@ function part0() {
 	[ -v TARGET_DIGESTS_file ] || exit 73
 	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
 	
+	dqb "TODO:setup2 lisäämään sudoersiin shred jos ei ole jo"
+	csleep 5
+
 	#VAIH:jos sittenkin selvittäisi miten dgsts.4 ja dgsts.5 asiat liittyvät ao. riveihin? vitosen kohdalla jos tekisi jotain poikkeusta sääntöön
 	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file} \* SOON"
 	csleep 1
@@ -99,9 +102,12 @@ function part0() {
 #		csleep 2
 #	done	
 	
+	#56-kikkailu tarpeen?
 	${svm} ${1}/${TARGET_DIGESTS_file}.5 ${1}/5.6
 	${NKVD} ${1}/${TARGET_DIGESTS_file}.*
-	${svm} 	${1}/5.6 ${1}/${TARGET_DIGESTS_file}.5	
+	${svm} ${1}/5.6 ${1}/${TARGET_DIGESTS_file}.5	
+
+	#180526:muutenkin tuota sudo-kiukuttelua seb verran palkjon jotta sittenkin odion nollaus jos x?
 
 	dqb "QPOL0"
 	csleep 1
