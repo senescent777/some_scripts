@@ -51,13 +51,13 @@ csleep 1
 #main()
 #180526 alettu renkata sudo-asioita
 
-case ${cmd} in
+case "${cmd}" in
 	--make-dirs)
-		#181225:lotottu init.bash hoitamaan jatkossa src_dirs-asiat
-
+	
+		exit #pois pelistä kunnes x
 		#onkohan mieltä tehdä noin päin kuin alla?
 		make_tgt_dirs ${CONF_target} ${CONF_source} ${CONF_bloader}
-		exit
+		
 	;;
 	-d)
 		[ -v CONF_tmpdir ] || exit 68
@@ -73,10 +73,12 @@ case ${cmd} in
 		#VAIH:josko jo sudon pudotus smr:stä tai sittense sudoers
 		#... jokerit eivät ekalla yrityksellä oikein		
 
-		[ -v CONF_testgris ] && smr="/usr/bin/sudo /bin/rm"
+		[ -v CONF_testgris ] && smr="/bin/rm"
 		dqb "smr= ${smr}"
 		csleep 2
-
+		dqb "SHDOULD scm+sco ${CONF_tmpdir}/* 1st"
+		exit
+	
 		if [ x"${CONF_tmpdir}" != "x" ] ; then 
 			echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
 			${smr} -rf ${CONF_tmpdir}/*
