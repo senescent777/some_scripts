@@ -282,6 +282,9 @@ function make_tgt_dirs() {
 	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
 	csleep 1
 
+	dqb "TODO:dalek.sh m"
+	exit
+
 	[ -z "${1}" ] && exit 99
 	[ x"${1}" != "x/" ] || exit 100
 	[ -z "${2}" ] && exit 101

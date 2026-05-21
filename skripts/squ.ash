@@ -119,6 +119,8 @@ case ${cmd} in
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  
+		exho "TODO:dalek.sh"
+		exit
 		#030426:toimiiko? erit toiv tavalla? vissiin
 
 		#VAIH:pudon sudotus josqs? vaiko se sudoers? JOKOJO 05/26?
