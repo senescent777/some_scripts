@@ -256,17 +256,21 @@ function f5th() {
 	#CB_LIST1="$(${odio} which halt) $(${odio} which reboot) /usr/bin/which ${sifu} ${sifd}"
 	#...ao lista mukaan aa:han vaiko common_lib kanssa jogtain jatkosöäätöä?
 
+	echo "VAIH:dalek.sh"
+	CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name dalek.sh)"
+
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
 		echo "$(whoami) localhost=NOPASSWD: sha256: ${p} ${c}" >> ${somefile} 
 	done
 
+	#exit
 	#TARKKUUTTA PRKL
 
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästry, man-sivuja pitäisi jaksaa selailla taas
 	for c in ${CONF_ab} ; do
-		echo "$(whoami) localhost=NOPASSWD: ${c} ^${CONF_basept2tgt}/[^[:space:]]*\$" >> ${somefile}
+		echo "# $(whoami) localhost=NOPASSWD: ${c} ^${CONF_basept2tgt}/[^[:space:]]*\$" >> ${somefile}
 	done 
 
 	cat ${somefile}
@@ -280,5 +284,5 @@ function f5th() {
 
 f5th
 #se /.chroot luonti jonnekin?, esim. stage0_backend.bash...
-echo "kutl v | g_doit -v 1 ?"
+echo "kutl v | g_doit -v 1 ?" #ensiksi mainitun kanssa jos testaisi common_lib
 echo "VAIH:SE /e/s.d/live HUKKAAMINEN KOKEEKSI "

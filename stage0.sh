@@ -60,6 +60,7 @@ case "${cmd}" in
 		
 	;;
 	-d)
+		echo "TODO:dalek.sh d1"
 		[ -v CONF_tmpdir ] || exit 68
 		[ -z ${CONF_tmpdir} ] && exit 69
 		[ "${CONF_tmpdir}" == "/" ] && exit 70
@@ -73,12 +74,20 @@ case "${cmd}" in
 		#VAIH:josko jo sudon pudotus smr:stä tai sittense sudoers
 		#... jokerit eivät ekalla yrityksellä oikein		
 
+		dqb "TODO:dalek.sh ?"
+
 		[ -v CONF_testgris ] && smr="/bin/rm"
 		dqb "smr= ${smr}"
 		csleep 2
-		dqb "SHDOULD scm+sco ${CONF_tmpdir}/* 1st"
-		exit
+		dqb "SHDOULD scm+sco ${CONF_tmpdir}/ ¸* 1st"
+		#exit
 	
+		#ehkä tämä nimenomainen komento sudoersiin jos ei ala onnata jokerien kanssa
+		#tai dellimiset erilliseen skriptiin jnpp
+		sudo chown -R $(whoami):$(whoami) ${CONF_tmpdir}
+		sudo chmod -R u+w ${CONF_tmpdir}
+		csleep 2
+
 		if [ x"${CONF_tmpdir}" != "x" ] ; then 
 			echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
 			${smr} -rf ${CONF_tmpdir}/*

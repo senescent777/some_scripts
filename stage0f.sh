@@ -104,10 +104,10 @@ function part0() {
 	dqb "part0 d0ne"
 }
 
-dqb "src= ${1} , stc2= ${2} , bl= ${3}"
+dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 65
 [ -v CONF_target ] || exit 66
-make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
+#make_tgt_dirs ${CONF_target} ${CONF_source} ${3} #VAIH
 
 #270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi?
 
