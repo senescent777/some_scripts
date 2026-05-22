@@ -119,30 +119,29 @@ case ${cmd} in
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  
-		exho "TODO:dalek.sh"
-		exit
-		#030426:toimiiko? erit toiv tavalla? vissiin
-
-		#VAIH:pudon sudotus josqs? vaiko se sudoers? JOKOJO 05/26?
-		#ekalla yrityksellä(180526) ei oikein rm lähtenyt toimaamaan
-
-		[ -v CONF_squash0 ] || exit 66
-		[ -z "${CONF_squash0}" ] && exit 67
-		[ -d ${CONF_squash0} ] || exit 68
-		pwd;sleep 6
-		
-		[ -v CONF_testgris ] && smr="/bin/rm"
-		dqb "smr= ${smr}"
-		csleep 2
-		dqb "SHDOULD scm+sco ${CONF_tmpdir}/* 1st"
-		exit
-	
-		#onko riittävä tarkistus vai ei?
-		if [ x"${CONF_squash0}" != "x/" ] ; then
-			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
-			${smr} -rf ${CONF_squash0}/*
-			echo $?
-		fi
+		${odio} ./dalek.sh d2
+#		#030426:toimiiko? erit toiv tavalla? vissiin
+#
+#		#VAIH:pudon sudotus josqs? vaiko se sudoers? JOKOJO 05/26?
+#		#ekalla yrityksellä(180526) ei oikein rm lähtenyt toimaamaan
+#
+#		[ -v CONF_squash0 ] || exit 66
+#		[ -z "${CONF_squash0}" ] && exit 67
+#		[ -d ${CONF_squash0} ] || exit 68
+#		pwd;sleep 6
+#		
+#		[ -v CONF_testgris ] && smr="/bin/rm"
+#		dqb "smr= ${smr}"
+#		csleep 2
+#		dqb "SHDOULD scm+sco ${CONF_tmpdir}/* 1st"
+#		exit
+#	
+#		#onko riittävä tarkistus vai ei?
+#		if [ x"${CONF_squash0}" != "x/" ] ; then
+#			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
+#			${smr} -rf ${CONF_squash0}/*
+#			echo $?
+#		fi
 	;;
 	-c)  #270426:toimii edelleen?
 		cfd ${par} ${CONF_squash_dir}

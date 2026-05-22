@@ -13,8 +13,8 @@ bl=${CONF_bloader}
 
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
-	echo "$0 --iso"
-	echo "$0 --pkgs"
+#	echo "$0 --iso"
+#	echo "$0 --pkgs"
 	echo "$0 -h"
 	exit 44
 }
@@ -31,23 +31,27 @@ fi
 function single_param() {
 	case ${1} in
 		--iso)
-			[ -v CONF_ksk ] || exit 68
-			${gg} -u ${CONF_ksk} -sb ./*.iso
-			exit 61
+			exit
+#			[ -v CONF_ksk ] || exit 68
+#			${gg} -u ${CONF_ksk} -sb ./*.iso
+#			exit 61
 		;;
-		--pkgs)
-			[ -v CONF_ksk ] || exit 68
-			[ -v CONF_pkgsdir2 ] || exit 67
-			[ -v CONF_BASEDIR ] || exit 66
-			[ x"${CONF_BASEDIR}" != "x" ] || exit 65
-			[ x"${CONF_pkgsdir2}" != "x" ] || exit 64
-
-			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
-
-			${gg} -u ${CONF_ksk} -sb ./*.deb
-			[ $? -eq 0 ] && ${gg} -u ${CONF_ksk} -sb ./*.bz2
-			
-			exit 63
+#		--pkgs) #takaisin kommenteista sittenq oikeasti tarttee
+#			[ -v CONF_ksk ] || exit 68
+#			[ -v CONF_pkgsdir2 ] || exit 67
+#			[ -v CONF_BASEDIR ] || exit 66
+#			[ x"${CONF_BASEDIR}" != "x" ] || exit 65
+#			[ x"${CONF_pkgsdir2}" != "x" ] || exit 64
+#
+#			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
+#
+#			${gg} -u ${CONF_ksk} -sb ./*.deb
+#			[ $? -eq 0 ] && ${gg} -u ${CONF_ksk} -sb ./*.bz2
+#			
+#			exit 63
+#		;;
+		 *)
+			echo "???"
 		;;
 	esac
 }
@@ -94,13 +98,6 @@ function part0() {
 	#VAIH:jos sittenkin selvittäisi miten dgsts.4 ja dgsts.5 asiat liittyvät ao. riveihin? vitosen kohdalla jos tekisi jotain poikkeusta sääntöön
 	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file} \* SOON"
 	csleep 1
-#	#
-#
-#	for f in $($[odio} find ${1} -type f -name "{TARGET_DIGESTS_file}.*" ) ; do # | grep -v '.5' ?
-#		dqb "${NKVD} ${f}"
-#		${f}
-#		csleep 2
-#	done	
 	
 	#56-kikkailu tarpeen?
 	${svm} ${1}/${TARGET_DIGESTS_file}.5 ${1}/5.6
