@@ -48,6 +48,8 @@ function jord() {
 jord #${1}
 
 #1912255:jnkn verran jo testailtu, kuten myös 270426, toimii
+#TODO:päällekkäisyyksiä pois josqs? esmes e23.sh sisälsi niitä uusia fkytioita
+
 function aqua() {
 	echo "aqua ( ${1})"
 	[ -z "{1}" ] && exit 11

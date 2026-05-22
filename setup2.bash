@@ -257,7 +257,12 @@ function f5th() {
 	#...ao lista mukaan aa:han vaiko common_lib kanssa jogtain jatkosöäätöä?
 
 	echo "VAIH:dalek.sh"
-	CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name dalek.sh)"
+	echo "#TODO:se konf ymppääminen dalek:iin jotta x"
+	#cat common.conf >> dalek.sh;cat dalek.s >> dalek.sh	
+	exit
+	
+	#TODO:pitäisi saada aikaiseksi testata erinäiset sklriptit omegan ajon jölkeen, sitä ennen jos toimii niin ei kerro juuri mitään
+	CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name dalek.sh | head -n 1)"
 
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
@@ -268,18 +273,17 @@ function f5th() {
 	#exit
 	#TARKKUUTTA PRKL
 
-	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästry, man-sivuja pitäisi jaksaa selailla taas
+	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
+	#oli myös se sudo.sw , jsoap menisi dalek.sh - tavalla kuitenkin	
+
 	for c in ${CONF_ab} ; do
-		echo "# $(whoami) localhost=NOPASSWD: ${c} ^${CONF_basept2tgt}/[^[:space:]]*\$" >> ${somefile}
+		echo "# $(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${somefile}
 	done 
 
 	cat ${somefile}
 	${sco} 0:0 ${somefile}
 	${scm} 0440 ${somefile}
 	${odio} mv ${somefile} /etc/sudoers.d 
-
-	#/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille? miksi?
-	#yhteinen konfiguraatio jo siirretty -> setup0 ?
 }
 
 f5th
