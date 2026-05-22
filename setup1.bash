@@ -1,4 +1,6 @@
 #!/bin/bash
+
+#TODO:jkin yhteinen kirjasto setp1:lle ja 2:lle ?
 . ./setup0.conf
 
 #040426:edelleen osannee paketteja vetää kohde-tar:ia varten (qhan setup0.conf)
@@ -46,12 +48,11 @@ function jord() {
 }
 
 jord #${1}
-
 #1912255:jnkn verran jo testailtu, kuten myös 270426, toimii
-#TODO:päällekkäisyyksiä pois josqs? esmes e23.sh sisälsi niitä uusia fkytioita
+#TODO:päällekkäisyyksiä pois josqs? esmes e23.sh sisälsi niitä uusia fktioita
 
 function aqua() {
-	echo "aqua ( ${1})"
+	echo "aqua ( ${1} )"
 	[ -z "{1}" ] && exit 11
 	[ -d ${1} ] || exit 12
 	echo "ok"
@@ -118,18 +119,20 @@ function aqua() {
 	sudo cp /var/cache/apt/archives/*.deb ${1} #kuinka tarpeellinen? kts conf EIKU
 }
 
+#TODO:"a-g-u ... tar -rvf" -välinen blokki jnkn vivun taakse?
 [ -v CONF_pkgsrc ] || exit 33
 ${odio} apt-get update
 [ $? -eq 0 ] && aqua ${CONF_pkgsrc}
 
 #riittäisikö /etc kuitenkin?
 
-for f in $(find /etc -type f -name 'sources.list*') ; do ${srat} -rvf ${1} ${f} ; done 
+for f in $(find /etc -type f -name "sources.list*") ; do ${srat} -rvf ${1} ${f} ; done 
 ${srat} -rvf ${1} ${CONF_pkgsrc}/*.deb
 #jatkossa yo. rivi pois jos siirretään paketit basedir alle?
+#/TODO
 
 function ignis() {
-	echo "igtnis ( ${1})"
+	echo "ignis ( ${1} )" #TODO:dqb() ?
 	[ -z "{1}" ] && exit 11
 	[ -d ${1} ] || exit 12
 	echo "ok"
