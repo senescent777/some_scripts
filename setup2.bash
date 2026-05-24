@@ -21,8 +21,8 @@ function csleep() {
 	[ ${debug} -eq 1 ] && sleep ${1}
 }
 
-echo "base= ${CONF_basedir}"
-sleep 10
+dqb "base= ${CONF_basedir}"
+csleep 5
 
 odio=$(which sudo)
 sag=$(${odio} which apt-get)
@@ -33,8 +33,8 @@ sag=$(${odio} which apt-get)
 #sa=$(${odio} which apt)
 #fib="${odio} ${sa} --fix-broken install "
 #sharpy="${odio} ${sag} remove --purge --yes "
-#svm=$(${odio} which mv)
-#svm="${odio} ${svm} "
+svm=$(${odio} which mv)
+svm="${odio} ${svm} "
 
 sco="${odio} chown"
 scm="${odio} chmod"
@@ -65,13 +65,12 @@ function jord() {
 	[ -z "${1}" ] && exit 666
 	[ -d ${1} ] || exit 666
 	
-	echo "jord"
-	sleep 1
+	dqb "jord"
+	csleep 1
 
 	${sco} -R 0:0  ${1}/etc	
 	${scm} -R 0444 ${1}/etc	
 	${spc} -a ${1}/etc/* /etc
-#	exit
 }
 
 jord ${CONF_basedir}
@@ -83,22 +82,23 @@ function efk() {
 }
 
 function ekf() {
-	echo "EKF (${1})"
-	sleep 2
+	dqb "EKF (${1})"
+	csleep 2
 	local t=$(${odio} which ${1})
 
 	if [ -z "${t}" ] || [ ! -x ${t} ] ; then
-		echo "jfk"
+		dqb "jfk"
 		efk ${q}/${1}*
 	fi
 }
 
 [ -v CONF_pkgsrc ] || exit 22
 [ -d ${CONF_pkgsrc} ] || exit 23
+#230526:voisiko instailun ulkoistaa -> g_doit?
 
 function aqua() {
-	echo "aqua"
-	sleep 1
+	dqb "aqua"
+	csleep 1
 
 	${odio} apt --fix-broken install
 
@@ -112,8 +112,8 @@ function aqua() {
 	#efk ${q}/libjte2*.deb
 	efk ${q}/lib*.deb
 
-	echo "BEFORE TBLZ"
-	sleep 2
+	dqb "BEFORE TBLZ"
+	csleep 2
 
 	#onbkohan trarpeellinen kikkailu?
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
@@ -123,13 +123,9 @@ function aqua() {
 	${odio} dpkg -i ${q}/*.deb
 	${smr} ${q}/*.deb
 
-#	The following packages have unmet dependencies:
-# grub-efi-amd64 : Depends: grub-common (= 2.06-13) but 2.06-13+deb12u1 is installed
-#olisikohan tuolle jo 211225 mennessä tehty jotain?
-
-	echo "GENISOIMAGE?"
+	dqb "GENISOIMAGE?"
 	which genisoimage
-	sleep 6
+	csleep 6
 
 	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
 	if [ -v CONF_part076 ] ; then
@@ -142,29 +138,25 @@ function aqua() {
 	${odio} which iptables-restore
 	${odio} iptables-restore /etc/iptables/rules.v4.0
 
-	sleep 2
-	echo "AFTER iptables-restore "
+	csleep 2
+	dqb "AFTER iptables-restore "
 }
 
-aqua
+[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
 [ -v CONF_ue ] || exit 34
 [ -v CONF_un ] || exit 35
 
 function ignis() {
-	echo "ignis"
-	sleep 1
+	dqb "ignis"
+	csleep 1
+	local tig=$(${odio} which git)
 
-	local tig
-	#local c
-
-	#uutena tää git-tark
-	tig=$(${odio} which git)
 	[ -z "${tig}" ] && exit 68
 	[ -x ${tig} ] || exit 69
 
 	[ -z "${CONF_ue}" ] || ${tig} config --global user.email ${CONF_ue}
 	[ -z "${CONF_un}" ] || ${tig} config --global user.name ${CONF_un}
-	echo "tg1,1,dibe"
+	dqb "tg1,1,dibe"
 
 	#varmaan olisi hyvä testata tämä blokki josqs
 	if [ -s ${CONF_basedir}/.gitignore ] ; then
@@ -180,11 +172,9 @@ ignis #${CONF_basedir}
 
 #lokaalien sorkinta lienee ulkoistettu 04/26 mennessä
 function luft() {
-	echo "luft"
-	sleep 1
-
-	local c4
-	c4=0
+	dqb "luft"
+	csleep 1
+	local c4=0
 
 	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
 		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
@@ -192,15 +182,12 @@ function luft() {
 		
 		if  [ ${c5} -lt 1 ] ; then
 			echo "SMTHING WRONG W/ fstab.tmp (or config)"
-			exit 666
+			exit 66
 		fi
 	else
 		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
-		exit 665
+		exit 65
 	fi
-
-	dqb "F-STAB-1"
-	#exit
 
 	if [ ${c4} -gt 0 ] ; then
 		dqb "f-stab 0k"
@@ -212,15 +199,13 @@ function luft() {
 		#... tosin $CONF_basedir vastaavan rivin kanssa semmoinen muna-kana-juttu
 		#olisi myös hyväksi päättää mitkä rivit lisää common_lib fktio ja mitkä tämä
 
-		[ -s /etc/fstab.tmp ] || exit 666
+		[ -s /etc/fstab.tmp ] || exit 64
 		${odio} cat /etc/fstab.tmp >> /etc/fstab
 
 		sleep 1	
 		reqwreqw /etc/fstab  
 	fi
 
-	#echo "F-STAB-2"
-	#exit
 	#dataosion jakaminen kahtai myöhemmin?
 
 	for d in $(grep -v '#' /etc/fstab.tmp | awk '{print $2}') ; do
@@ -235,46 +220,68 @@ function luft() {
 		${odio} mount -a
 	else
 		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
-		exit 666
+		exit 61
 	fi
-
-#	echo "F-STAB-3"
-#	exit
 }
 
 luft
 
-#HUOM.241225:/e/s.d alle tehdyn tdston syntaksi oli jo ok, omegaa ajeltu testiksi
-#... vähän saattaa joutua vielä viilaamaan sisältöä
+#TODO:komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers
 function f5th() {
+	dqb "F5"
+	csleep 5
+
 	local p
 	local c
-
-	somefile=$(mktemp)
-	touch ${somefile}
+	local somefile=$(mktemp)
+	fasdfasd ${somefile}
+	local somefile2=$(mktemp)
+	fasdfasd ${somefile2}
 
 	#CB_LIST1="$(${odio} which halt) $(${odio} which reboot) /usr/bin/which ${sifu} ${sifd}"
 	#...ao lista mukaan aa:han vaiko common_lib kanssa jogtain jatkosöäätöä?
+	[ -v CONF_scripts_dir ] || exit 11
+	[ -z "${CONF_scripts_dir}" ] && exit 22
+	[ -d ${CONF_scripts_dir} ] || exit 33
 
-	echo "VAIH:dalek.sh"
-	echo "#TODO:se konf ymppääminen dalek:iin jotta x"
-	#cat common.conf >> dalek.sh;cat dalek.s >> dalek.sh	
-	exit
+	dqb "MAKING OF:dalek.bash"
+	[ -f ${CONF_scripts_dir}/dalek.bash ] && ${svm} ${CONF_scripts_dir}/dalek.bash ${CONF_scripts_dir}/dalek.bash.OLD
+	csleep 3
+
+	#echo "#!/bin/bash" > ${CONF_scripts_dir}/dalek.sh #vissiin ei näin
+	head -n 1 ${CONF_scripts_dir}/dalek.s > ${somefile2}
+
+	#TARKKUUTTA PERKLE TÄSSÄ KOHTAA 666!!!
+	grep -v "#" ${CONF_scripts_dir}/common.conf >> ${somefile2}
+	grep -v "#" ${CONF_scripts_dir}/dalek.s >> ${somefile2}
+
+	#reqwreqw ${CONF_scripts_dir}/dalek.s #TODO:takaisin kommenteista sittenq mahd
+	reqwreqw ${somefile2}
+	${svm} ${somefile2} ${CONF_scripts_dir}/dalek.bash
+
+	${scm} a+x ${CONF_scripts_dir}/dalek.bash
+	ls -las ${CONF_scripts_dir}/dalek.*
+	#exit
 	
-	#TODO:pitäisi saada aikaiseksi testata erinäiset sklriptit omegan ajon jölkeen, sitä ennen jos toimii niin ei kerro juuri mitään
-	CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name dalek.sh | head -n 1)"
+	csleep 3
+	dqb "AFTER DALEK"
+	csleep 3
+	
+	#TODO:pitäisi saada aikaiseksi testata erinäiset skriptit omegan ajon jälkeen, sitä ennen jos toimii niin ei kerro juuri mitään
+	#CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name dalek.sh | head -n 1)"
+	
+	#olisi kai parempi vetää dalek mukaan find:illa
+	CONF_aa="${CONF_aa} ${CONF_scripts_dir}/dalek.bash"
 
+	#ei ihan näin taida mennä, pitäisi tarkemmin speksata sallitut parametrit
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
 		echo "$(whoami) localhost=NOPASSWD: sha256: ${p} ${c}" >> ${somefile} 
 	done
 
-	#exit
-	#TARKKUUTTA PRKL
-
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
-	#oli myös se sudo.sw , jsoap menisi dalek.sh - tavalla kuitenkin	
+	#oli myös se "sudo.sw"-linkki , jsoap menisi dalek.sh - tavalla kuitenkin	
 
 	for c in ${CONF_ab} ; do
 		echo "# $(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${somefile}

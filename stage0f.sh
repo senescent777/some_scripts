@@ -27,10 +27,10 @@ fi
 dqb "PARAMS OK?"
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
-
 #VAIH:isolunux-testailut taas (chmod+chown isolinux.* , boot.* jhnkn? )
+#230526:ehkä toimi tänä fktio silloin?
 function part0() {
-	dqb "stg0f.PART0 ${1}, ${2} , ${3} , ${4}"
+	dqb "stg0f.PART0))))))) ${1}, ${2} , ${3} , ${4} ((("
 	pwd
 	csleep 2
 
@@ -45,6 +45,7 @@ function part0() {
 			${spc} ${1}/live/${f} ${4}/live
 		fi
 		
+		[ $? -eq 0 ] || dqb "stage0.sh --make-dirs ? | chmod ? | chown ?"
 		dqb "NECKST"
 		csleep 1
 	done

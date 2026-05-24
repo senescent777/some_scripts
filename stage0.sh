@@ -53,55 +53,10 @@ csleep 1
 
 case "${cmd}" in
 	--make-dirs)
-		${odio} ./skripts/dalek.sh m
-		#exit #pois pelistä kunnes x
-		#onkohan mieltä tehdä noin päin kuin alla?
-		#make_tgt_dirs ${CONF_target} ${CONF_source} ${CONF_bloader}
-		
+		${odio} ./skripts/dalek.bash m
 	;;
 	-d)
-		${odio} ./skripts/dalek.sh d1
-#		echo "VAIH:dalek.sh d1"
-#		exit
-#		
-#		[ -v CONF_tmpdir ] || exit 68
-#		[ -z ${CONF_tmpdir} ] && exit 69
-#		[ "${CONF_tmpdir}" == "/" ] && exit 70
-#
-#		dqb "CONF_tmp maybe ok"
-#		csleep 1
-#
-#		#TODO:man chattr pitkästä aikaa
-#		#081225:v-hmiston alta jotain siivoilua myös? no ei
-#		
-#		#VAIH:josko jo sudon pudotus smr:stä tai sittense sudoers
-#		#... jokerit eivät ekalla yrityksellä oikein		
-#
-#
-#
-#		[ -v CONF_testgris ] && smr="/bin/rm" #TODO:tämä kohta uusiksi, ehkä
-#		dqb "smr= ${smr}"
-#		csleep 2
-#		dqb "SHDOULD scm+sco ${CONF_tmpdir}/ ¸* 1st"
-#		#exit
-#	
-#		#ehkä tämä nimenomainen komento sudoersiin jos ei ala onnata jokerien kanssa
-#		#tai dellimiset erilliseen skriptiin jnpp
-#		sudo chown -R $(whoami):$(whoami) ${CONF_tmpdir}
-#		sudo chmod -R u+w ${CONF_tmpdir}
-#		csleep 2
-#
-#		if [ x"${CONF_tmpdir}" != "x" ] ; then 
-#			echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
-#			${smr} -rf ${CONF_tmpdir}/*
-#		fi
-#
-#		if [ ${debug} -gt 0 ] ; then
-#			ls -las ${CONF_tmpdir} 
-#			sleep 5
-#		fi
-#
-#		exit
+		${odio} ./skripts/dalek.bash d1
 	;;
 	*)
 		#stage0f==glorified cp
