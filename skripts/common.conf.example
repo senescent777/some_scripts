@@ -1,3 +1,5 @@
+#HUOM.VAROVASTI SITTEN RISUAITOJEN KANSSA SILLÄ setup2.f5th() GREPPAA -v
+#
 CONF_pkgsdir2=/dir_containing_genisoimage(necessary?)
 CONF_gi_opts=/opts_4_genisoimage
 CONF_BASEDIR=/sourcedir_4_many_things

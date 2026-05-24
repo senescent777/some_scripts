@@ -48,9 +48,12 @@ function m0() {
 		
 		${sco} $(whoami):$(whoami) ${1}/*.gpg
 		${scm} 0400 ${1}/*.gpg
+
+		#TODO:ao. rivin kanssa ehkä jotain josqs
 		${odio} chattr +ui ${1}/*.gpg
 	}
 
+#TODO:sco,scm,smd
 dqb "BFORE CHMOD"
 [ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
 chown -R $(whoami):$(whoami) ~/.gnupg #tarpeen?
@@ -107,7 +110,7 @@ case "${cmd}" in
 	;;
 	x)
 		[ -v CONF_karray ] || exit 68
-		#[ ${tgt} == ${CONF_keys_dir_pub} ] && exit 69 #TODO:voisi laittaa toimimaan ASAP
+		#[ ${tgt} == ${CONF_keys_dir_pub} ] && exit 69 #TODO:voisi laittaa toimimaan ASAP?
 		[ -z "${tgt}" ] && tgt=${CONF_keys_dir}
 		[ -d ${tgt} ] || exit 70
 		

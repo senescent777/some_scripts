@@ -72,7 +72,7 @@ csleep 4
 #dqb "VAIH: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
 #csleep 4
 
-case ${bl} in
+case "${bl}" in
 	isolinux)
 		#VAIH:toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
 		${sco} -R $(whoami):$(whoami) ${source}
@@ -110,6 +110,7 @@ case ${bl} in
 		#KBG iso production command for debian
 	;;
 	grub)
+		#230526:onnistui .iso:n tekemään
 		ls -las ${source}/boot/${bl}/*.cfg || exit 99
 		csleep 2
 

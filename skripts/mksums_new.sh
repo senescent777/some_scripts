@@ -8,7 +8,6 @@ bl=${CONF_bloader}
 
 #010426:"./boot/grub/grub.cfg: FAILED open or read" tdstosta dgsts.1 (sqroot)
 #... jos toistuu ni tekisikö jotain?
-
 #part123() 2 , pitäisikö sitä miettiä vielä? miksi?
 
 function usage() {
@@ -91,8 +90,6 @@ function part0() {
 
 	[ -v TARGET_DIGESTS_file ] || exit 73
 	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
-	
-	dqb "TODO:setup2 lisäämään sudoersiin shred jos ei ole jo"
 	csleep 5
 
 	#VAIH:jos sittenkin selvittäisi miten dgsts.4 ja dgsts.5 asiat liittyvät ao. riveihin? vitosen kohdalla jos tekisi jotain poikkeusta sääntöön
@@ -105,7 +102,6 @@ function part0() {
 	${svm} ${1}/5.6 ${1}/${TARGET_DIGESTS_file}.5	
 
 	#180526:muutenkin tuota sudo-kiukuttelua seb verran palkjon jotta sittenkin odion nollaus jos x?
-
 	dqb "QPOL0"
 	csleep 1
 	
@@ -117,6 +113,7 @@ function part0() {
 }
 
 #VAIH:sen "isohdpfx.bin"-jutun sivuvaikutukset tähänkin skriptiin
+#a) olisiko jo? b) miten juttu toimii?
 
 function part123() {
 	dqb "part123(${1}, ${2} , ${3} )"
@@ -218,7 +215,7 @@ part0 ${source}/${TARGET_DIGESTS_dir} $(whoami)
 csleep 5
 dqb "BOOTLEODER"
 
-case ${bl} in
+case "${bl}" in
 	grub)
 		ls -las  ${source}/boot/grub/*.cfg || exit 99
 		part123 1 boot/grub ${source}

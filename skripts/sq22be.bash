@@ -125,6 +125,7 @@ function jlk_main() {
 	csleep 1
 	
 	#for-loopissakin voisi...
+	#230526:jotain urputusta täsäs kohtaa mutta nököjään matskut kopsautuivat
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2} 
 	${spc} ${1}/*.bz3 ${2}
@@ -132,6 +133,7 @@ function jlk_main() {
 	${spc} ${1}/*.sig ${2}
 	#oleellisempaa tässä kui9n stage0_backendissa?
 	#pitäisikö .sah kanssa?
+	${spc} ${1}/*.sha ${2}
 
 	dqb "jkl1 d0n3"
 }
@@ -209,9 +211,11 @@ function jlk_sums() {
 	csleep 2
 
 	#261225:voi kyllä mennä wanhentunut dgsts KOhteeseen tällä tavalla?
+	#230526:kopsailu toimi urputuksne kanssa
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
 	${spc} ${1}/*.gpg ${2}
-	${spc} ${1}/*.sig ${2} #.sha kanssa?
+	${spc} ${1}/*.sig ${2}
+	#${spc} ${1}/*.sha ${2} #tämän fktion kohde-hmistossa ei niin tarpeellinen?
 	
 	[ ${debug} -gt 0 ] && ls -las ${2}
 	csleep 2
@@ -288,15 +292,16 @@ function rst_pre2() {
 	csleep 1
 }
 
-#210126:ok?
+#230526:urputusta
 function rst_post() {
 	dqb "rst_post()"
 	csleep 1
 
 	pwd
 	csleep 1
-
+	#TODO:.chroot-kikkailut uusiksi?
 	${smr} ./.chroot			
+
 	${svm} ./etc/hosts.bak ./etc/hosts
 	${smr} ./etc/mtab
 	
@@ -328,11 +333,15 @@ function rst() { #210126:ok?
 	pwd
 	csleep 1
  
-	rst_pre2
+	#TODO:sopivassa kohdassa .sh-tiedostoihin ajo-oikeus päälle
 
-	${odio} chroot ./ ./bin/bash #{scr} ?
+	rst_pre2
+	#includeen vai ei?
+	scr="sudo /usr/sbin/chroot"
+	${scr} ./ ./bin/bash 
 	[ $? -eq 0 ] || echo "MOUNT -O REMOUNT,EXEC ${CONF_tmpdir0}"
 	
+	unset scr
 	rst_post
 	sleep 3
 
