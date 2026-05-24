@@ -7,7 +7,8 @@ else
 	exit 67
 fi
 
-#sktiåptds/common_funcs, hyldyntäisikö?
+#=================LIB1==============================================
+#skritps/common_funcs, hyödyntäisikö?
 echo "ko.1"
 distro=$(cat /etc/devuan_version)
 [ -v CONF_basedir ] || exit 1
@@ -60,21 +61,6 @@ function fasdfasd() {
 	${sco} $(whoami):$(whoami) ${1}
 	${scm} 0644 ${1}
 }
-
-function jord() {
-	[ -z "${1}" ] && exit 666
-	[ -d ${1} ] || exit 666
-	
-	dqb "jord"
-	csleep 1
-
-	${sco} -R 0:0  ${1}/etc	
-	${scm} -R 0444 ${1}/etc	
-	${spc} -a ${1}/etc/* /etc
-}
-
-jord ${CONF_basedir}
-
 #common_lib
 function efk() {
 	${odio} dpkg -i $@
@@ -92,54 +78,69 @@ function ekf() {
 	fi
 }
 
-[ -v CONF_pkgsrc ] || exit 22
-[ -d ${CONF_pkgsrc} ] || exit 23
-#230526:voisiko instailun ulkoistaa -> g_doit?
+#=========================LIB2=========================================
+
+function jord() {
+	[ -z "${1}" ] && exit 666
+	[ -d ${1} ] || exit 666
+	
+	dqb "jord"
+	csleep 1
+
+	${sco} -R 0:0  ${1}/etc	
+	${scm} -R 0444 ${1}/etc	
+	${spc} -a ${1}/etc/* /etc
+}
+
+jord ${CONF_basedir}
+#240526:noista paketeista oikeastaan git lienee välttämättömin tmän skriptin kannalta
 
 function aqua() {
 	dqb "aqua"
 	csleep 1
-
+[ -v CONF_pkgsrc ] || exit 22
+[ -d ${CONF_pkgsrc} ] || exit 23
+#230526:voisiko instailun ulkoistaa -> g_doit?
 	${odio} apt --fix-broken install
 
 	local q
 	q=$(mktemp -d)
 	${spc} ${CONF_pkgsrc}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
-
-	#parempi samaan aikaan dms ja libdev 
-	efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
-	#efk ${q}/libjte2*.deb
-	efk ${q}/lib*.deb
-
-	dqb "BEFORE TBLZ"
-	csleep 2
+#240526 kokeeksi kommentoitu suurin osa riveistä jemmaan
+#	#parempi samaan aikaan dms ja libdev 
+#	efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
+#	#efk ${q}/libjte2*.deb
+#	efk ${q}/lib*.deb
+#
+#	dqb "BEFORE TBLZ"
+#	csleep 2
 
 	#onbkohan trarpeellinen kikkailu?
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
 	sleep 10
-
-	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
-	${odio} dpkg -i ${q}/*.deb
-	${smr} ${q}/*.deb
-
-	dqb "GENISOIMAGE?"
-	which genisoimage
-	csleep 6
-
-	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
-	if [ -v CONF_part076 ] ; then
-		${odio} apt-get remove --purge --yes ${CONF_part076}
-		#python3-cups ntp* #sharyp from common_lib
-	fi
-
-	${odio} apt autoremove
-	${odio} apt --fix-broken install #tähän vai heti grub-as jälk?
-	${odio} which iptables-restore
-	${odio} iptables-restore /etc/iptables/rules.v4.0
-
-	csleep 2
-	dqb "AFTER iptables-restore "
+#
+#	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
+#	${odio} dpkg -i ${q}/*.deb
+#	${smr} ${q}/*.deb
+#
+#	dqb "GENISOIMAGE?"
+#	which genisoimage
+#	csleep 6
+#
+#	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
+#	if [ -v CONF_part076 ] ; then
+#		${odio} apt-get remove --purge --yes ${CONF_part076}
+#		#python3-cups ntp* #sharyp from common_lib
+#	fi
+#
+#	${odio} apt autoremove
+#	${odio} apt --fix-broken install #tähän vai heti grub-as jälk?
+#	${odio} which iptables-restore
+#	${odio} iptables-restore /etc/iptables/rules.v4.0
+#
+#	csleep 2
+#	dqb "AFTER iptables-restore "
 }
 
 [ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
@@ -206,7 +207,7 @@ function luft() {
 		reqwreqw /etc/fstab  
 	fi
 
-	#dataosion jakaminen kahtai myöhemmin?
+	#dataosion jakaminen kahtIA myöhemmin?
 
 	for d in $(grep -v '#' /etc/fstab.tmp | awk '{print $2}') ; do
 		[ -d ${d} ] || ${odio} mkdir ${d}
@@ -225,18 +226,20 @@ function luft() {
 }
 
 luft
+somefile=$(mktemp)
+somefile2=$(mktemp) #ehkä pärjäisi ilmankin
 
 #TODO:komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers
-function f5th() {
-	dqb "F5"
+function f5a() {
+	dqb "F5.a"
 	csleep 5
 
-	local p
-	local c
-	local somefile=$(mktemp)
-	fasdfasd ${somefile}
-	local somefile2=$(mktemp)
-	fasdfasd ${somefile2}
+	
+	
+
+	fasdfasd ${1}
+
+	fasdfasd ${2}
 
 	#CB_LIST1="$(${odio} which halt) $(${odio} which reboot) /usr/bin/which ${sifu} ${sifd}"
 	#...ao lista mukaan aa:han vaiko common_lib kanssa jogtain jatkosöäätöä?
@@ -249,14 +252,14 @@ function f5th() {
 	csleep 3
 
 	#echo "#!/bin/bash" > ${CONF_scripts_dir}/dalek.sh #vissiin ei näin
-	head -n 1 ${CONF_scripts_dir}/dalek.s > ${somefile2}
+	head -n 1 ${CONF_scripts_dir}/dalek.s > ${2}
 
 	#TARKKUUTTA PERKLE TÄSSÄ KOHTAA 666!!!
-	grep -v "#" ${CONF_scripts_dir}/common.conf >> ${somefile2}
-	grep -v "#" ${CONF_scripts_dir}/dalek.s >> ${somefile2}
+	grep -v "#" ${CONF_scripts_dir}/common.conf >> ${2}
+	grep -v "#" ${CONF_scripts_dir}/dalek.s >> ${2}
 
 	#reqwreqw ${CONF_scripts_dir}/dalek.s #TODO:takaisin kommenteista sittenq mahd
-	reqwreqw ${somefile2}
+	reqwreqw ${2}
 	${svm} ${somefile2} ${CONF_scripts_dir}/dalek.bash
 
 	${scm} a+x ${CONF_scripts_dir}/dalek.bash
@@ -267,33 +270,47 @@ function f5th() {
 	dqb "AFTER DALEK"
 	csleep 3
 	
-	#TODO:pitäisi saada aikaiseksi testata erinäiset skriptit omegan ajon jälkeen, sitä ennen jos toimii niin ei kerro juuri mitään
+	#VAIH:pitäisi saada aikaiseksi testata erinäiset skriptit omegan ajon jälkeen, sitä ennen jos toimii niin ei kerro juuri mitään
+	#230526:omegan jälkeen "stage0 -d -v" hyytyi ifup-kohtaan
 	#CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name dalek.sh | head -n 1)"
-	
+		
 	#olisi kai parempi vetää dalek mukaan find:illa
 	CONF_aa="${CONF_aa} ${CONF_scripts_dir}/dalek.bash"
+}
 
+function f5b() {
+	dqb "F5.b"
+	csleep 5
+	local p
+	local c
 	#ei ihan näin taida mennä, pitäisi tarkemmin speksata sallitut parametrit
+
+	#TODO:jatkossa jos edes esxittelisi/alustaisi tuon fktioille yhteisen mjan täsäs tdstossa
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
-		echo "$(whoami) localhost=NOPASSWD: sha256: ${p} ${c}" >> ${somefile} 
+		echo "$(whoami) localhost=NOPASSWD: sha256: ${p} ${c}" >> ${1} 
 	done
 
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
 	#oli myös se "sudo.sw"-linkki , jsoap menisi dalek.sh - tavalla kuitenkin	
 
 	for c in ${CONF_ab} ; do
-		echo "# $(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${somefile}
+		echo "# $(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
 	done 
 
-	cat ${somefile}
-	${sco} 0:0 ${somefile}
-	${scm} 0440 ${somefile}
-	${odio} mv ${somefile} /etc/sudoers.d 
+	cat ${1}
+	${sco} 0:0 ${1}
+	${scm} 0440 ${1}
+	${odio} mv ${1} /etc/sudoers.d 
 }
 
-f5th
+#==========================MAIN=======================================
+#TODO:fktiokutsut jatkoss a tässä osassa skriptiä
+
+f5a ${somefile} ${somefile2} 
+f5b ${somefile}
+
 #se /.chroot luonti jonnekin?, esim. stage0_backend.bash...
 echo "kutl v | g_doit -v 1 ?" #ensiksi mainitun kanssa jos testaisi common_lib
 echo "VAIH:SE /e/s.d/live HUKKAAMINEN KOKEEKSI "
