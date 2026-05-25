@@ -45,6 +45,7 @@ p=$(pwd)
 
 case "${cmd}" in
 	a)
+		#240526:vissiin toimi omegan ajon jälkeen
 		t=${tgt}/${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5
 		[ -f ${t} ] && mv ${t} ${t}.OLD 
 		csleep 1

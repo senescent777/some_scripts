@@ -1,4 +1,4 @@
-#270426:lienee edelleen OK
+#240526:lienee edelleen OK
 function xxx() {
 	dqb "xxx( ${1}, ${2})"
 
@@ -272,7 +272,6 @@ function rst_pre2() {
 	fi
 
 	csleep 1
-
 	fasdfasd ./etc/default/locale
 	csleep 1
 
@@ -286,7 +285,7 @@ function rst_pre2() {
 
 	[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
 	${spc} /etc/hosts ./etc
-	${odio} touch ./.chroot
+	${odio} touch ./.chroot #TODO:jatkossa pois moinen
 
 	dqb "rst_pre2() done"
 	csleep 1

@@ -11,7 +11,7 @@ function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
 
 	[ -z "${1}" ] && exit 2
-	[ -d ${2} ] || exit 22
+	#[ -d ${2} ] || exit 22 #mitä jos ei kohde-hmistoa ole olemassa ennen kopiointia?
 
 	[ -z "${3}" ] && exit 33
 	[ -d ${3} ] || exit 34

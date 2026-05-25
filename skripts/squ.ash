@@ -88,13 +88,15 @@ tmp=$(dirname $0)
 
 case "${cmd}" in
 	-x) #230526:vissiin toimi vaikka vähän urputti (odion nollaus ehkä syynä)
-
-	#VAIH:squashfs.työkalut sudoersiin (testaus lähinnä että pelaako)
+	#240526:omegan ajon jälkeen suostui toimimaan pienne yurputuksen kanssa
+	#... eli tartteeko laittaa sudoersiin squash-työklaluja?
+	
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #080226:taitee toimia edelleen (tosin onko oikeasti tarpeellinen?)
 		#140426:kokeilLtu välillä yoista .iso:a pohjana (ekhä toimi vähän tai sit ei)
-
+		#240526:"failed to setup loop device for " omegan jälk
+		
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -116,12 +118,15 @@ case "${cmd}" in
 	-b) 
 		#230526:toimi pienen urputuksen kanssa, ainakin osa poistettavaksi aiotuista kaloista poistui, ch-jutut asia erikseen
 		#onko tässä juttuja mitä pitäisi siirtää salekille?
+		#240526: jnkn verran toimi omehgan ajon jälkeen
 		bbb ${CONF_squash_dir}
 	;;
 	-d)  #230526:uudellakin tavalla toimi
+		#240526: toimi omegan ajon jälkeen
 		${odio} ${tmp}/dalek.bash d2
 	;;
 	-c)  #230526:toimii urputuksien kanssa?
+		#240526: jnkn verran toimi omehgan ajon jälkeen
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
@@ -130,7 +135,8 @@ case "${cmd}" in
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
 		#DONE:jospa urputtaisi mikäli CONF_squash_dir sisältöineen puuttuu
-		#VAIH:tämänkin casen testaus sittenq
+		#DONE:tämänkin casen testaus sittenq (240526) ei oikein toiminut omegan ajon jälkeen mutta se olikin odotettavissa
+		#... tosin jotain tarttisi keksiä jatkossa
 
 		rst_pre1
 		rst ${CONF_squash_dir}
@@ -138,6 +144,7 @@ case "${cmd}" in
 	;;
 	-j)  #180526:yritetty ajaa omegan jälkeen, kosahti
 		#230526:toimi pienen urputuksen kanssa, omegaa ei vielä silloin ajettu
+		#240526:saattoi toimia tällöinkin, omegan ajon jälkeen(tosin pientä nalkutusta oikeuksista)
 		dqb "smd= ${smd} "
 		csleep 2
 

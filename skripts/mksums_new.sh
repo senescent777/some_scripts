@@ -10,6 +10,8 @@ bl=${CONF_bloader}
 #... jos toistuu ni tekisikö jotain?
 #part123() 2 , pitäisikö sitä miettiä vielä? miksi?
 
+#240526:taisi toimia pienen nalkutuksen kanssa
+
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
 #	echo "$0 --iso"
