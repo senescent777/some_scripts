@@ -27,8 +27,11 @@ fi
 dqb "PARAMS OK?"
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
+#... tosin jokin piontti saattoi olla miksi näin
+#
 #VAIH:isolunux-testailut taas (chmod+chown isolinux.* , boot.* jhnkn? )
 #230526:ehkä toimi tänä fktio silloin?
+#240526:vissiin toimi omegan ajon jälkeen (penen renkkaamisen jälkeen)
 function part0() {
 	dqb "stg0f.PART0))))))) ${1}, ${2} , ${3} , ${4} ((("
 	pwd

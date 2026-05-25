@@ -61,6 +61,7 @@ function fasdfasd() {
 	${sco} $(whoami):$(whoami) ${1}
 	${scm} 0644 ${1}
 }
+
 #common_lib
 function efk() {
 	${odio} dpkg -i $@
@@ -92,33 +93,37 @@ function jord() {
 	${spc} -a ${1}/etc/* /etc
 }
 
-jord ${CONF_basedir}
 #240526:noista paketeista oikeastaan git lienee välttämättömin tmän skriptin kannalta
+#TODO:testaapa miten common_lib/g>_doit/sq-rot suoriutiuvat kehitysympstössä pakettien asentelusta
 
 function aqua() {
 	dqb "aqua"
 	csleep 1
-[ -v CONF_pkgsrc ] || exit 22
-[ -d ${CONF_pkgsrc} ] || exit 23
-#230526:voisiko instailun ulkoistaa -> g_doit?
+	[ -v CONF_pkgsrc ] || exit 22
+	[ -d ${CONF_pkgsrc} ] || exit 23
+	#230526:voisiko instailun ulkoistaa -> g_doit?
+
 	${odio} apt --fix-broken install
 
 	local q
 	q=$(mktemp -d)
 	${spc} ${CONF_pkgsrc}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
-#240526 kokeeksi kommentoitu suurin osa riveistä jemmaan
-#	#parempi samaan aikaan dms ja libdev 
-#	efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
-#	#efk ${q}/libjte2*.deb
-#	efk ${q}/lib*.deb
-#
-#	dqb "BEFORE TBLZ"
-#	csleep 2
+	
+	#240526 kokeeksi kommentoitu suurin osa riveistä jemmaan
+	#... piti samantien palauttaa lib-paketit koska git
+
+	#parempi samaan aikaan dms ja libdev 
+	efk ${q}/dmsetup*.deb ${q}/libdevmapper*.deb
+	#efk ${q}/libjte2*.deb
+	efk ${q}/lib*.deb
+
+	dqb "BEFORE TBLZ"
+	csleep 2
 
 	#onbkohan trarpeellinen kikkailu?
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
-	sleep 10
+	sleep 5
 #
 #	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
 #	${odio} dpkg -i ${q}/*.deb
@@ -143,10 +148,6 @@ function aqua() {
 #	dqb "AFTER iptables-restore "
 }
 
-[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
-[ -v CONF_ue ] || exit 34
-[ -v CONF_un ] || exit 35
-
 function ignis() {
 	dqb "ignis"
 	csleep 1
@@ -166,10 +167,6 @@ function ignis() {
 		echo "setup1 may have done this already?"
 	fi
 }
-
-ignis #${CONF_basedir}
-[ -v CONF_dir ] || exit 44
-[ -d ${CONF_dir} ] || exit 45
 
 #lokaalien sorkinta lienee ulkoistettu 04/26 mennessä
 function luft() {
@@ -225,20 +222,12 @@ function luft() {
 	fi
 }
 
-luft
-somefile=$(mktemp)
-somefile2=$(mktemp) #ehkä pärjäisi ilmankin
-
 #TODO:komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers
 function f5a() {
 	dqb "F5.a"
 	csleep 5
 
-	
-	
-
 	fasdfasd ${1}
-
 	fasdfasd ${2}
 
 	#CB_LIST1="$(${odio} which halt) $(${odio} which reboot) /usr/bin/which ${sifu} ${sifd}"
@@ -258,7 +247,7 @@ function f5a() {
 	grep -v "#" ${CONF_scripts_dir}/common.conf >> ${2}
 	grep -v "#" ${CONF_scripts_dir}/dalek.s >> ${2}
 
-	#reqwreqw ${CONF_scripts_dir}/dalek.s #TODO:takaisin kommenteista sittenq mahd
+	reqwreqw ${CONF_scripts_dir}/dalek.s #jos voisi olla renkkamatta vähän aikaa
 	reqwreqw ${2}
 	${svm} ${somefile2} ${CONF_scripts_dir}/dalek.bash
 
@@ -286,6 +275,12 @@ function f5b() {
 	#ei ihan näin taida mennä, pitäisi tarkemmin speksata sallitut parametrit
 
 	#TODO:jatkossa jos edes esxittelisi/alustaisi tuon fktioille yhteisen mjan täsäs tdstossa
+
+
+	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
+	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutus lisäämään sudoersiin mutta meilellään jos voisi rajata parametrien sijyeen
+	CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name generic_doit.sh) "
+
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
@@ -306,7 +301,20 @@ function f5b() {
 }
 
 #==========================MAIN=======================================
-#TODO:fktiokutsut jatkoss a tässä osassa skriptiä
+#VAIH:fktiokutsut jatkoss a tässä osassa skriptiä
+jord ${CONF_basedir}
+
+[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
+[ -v CONF_ue ] || exit 34
+[ -v CONF_un ] || exit 35
+
+ignis #${CONF_basedir}
+[ -v CONF_dir ] || exit 44
+[ -d ${CONF_dir} ] || exit 45
+
+luft
+somefile=$(mktemp)
+somefile2=$(mktemp) #ehkä pärjäisi ilmankin
 
 f5a ${somefile} ${somefile2} 
 f5b ${somefile}

@@ -50,6 +50,7 @@ csleep 1
 
 #main()
 #180526 alettu renkata sudo-asioita
+#240526:taisi jo toimia make-.dirs sekä d omegan ajon jälkeen mikkä ei tosin suuri ihme chmod+chown - koment5ojen takomisen jälkeen
 
 case "${cmd}" in
 	--make-dirs)
