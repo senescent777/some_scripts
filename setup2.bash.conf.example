@@ -1,6 +1,9 @@
+
+
 CONF_ue=email_4_git
 CONF_un=name_4_git
 CONF_iface=iface
+
 
 #CONF_basept2src=/dev/smthing
 
@@ -9,5 +12,5 @@ CONF_dir=/same_as_in_conf.example
 CONF_part0=/same_as_in_conf.example
 
 CONF_accept_pkgs2="coreutils git grub-common grub geniso xorriso gpg iptables wodim squash"
-CONF_aa="#sudoers_stuff_1" #g_doit mukaan?
-CONF_ab="/bin/chmod /bin/chown /bin/rm /usr/bin/shred /usr/bin/unsquashfs /usr/bin/mksquashfs"
+CONF_aa="#sudoers_stuff_1"
+CONF_ab="#sudoers_stiff_2"

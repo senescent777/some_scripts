@@ -27,13 +27,10 @@ fi
 dqb "PARAMS OK?"
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
-#... tosin jokin piontti saattoi olla miksi näin
-#
+
 #VAIH:isolunux-testailut taas (chmod+chown isolinux.* , boot.* jhnkn? )
-#230526:ehkä toimi tänä fktio silloin?
-#240526:vissiin toimi omegan ajon jälkeen (penen renkkaamisen jälkeen)
 function part0() {
-	dqb "stg0f.PART0))))))) ${1}, ${2} , ${3} , ${4} ((("
+	dqb "stg0f.PART0 ${1}, ${2} , ${3} , ${4}"
 	pwd
 	csleep 2
 
@@ -48,7 +45,6 @@ function part0() {
 			${spc} ${1}/live/${f} ${4}/live
 		fi
 		
-		[ $? -eq 0 ] || dqb "stage0.sh --make-dirs ? | chmod ? | chown ?"
 		dqb "NECKST"
 		csleep 1
 	done
@@ -108,10 +104,10 @@ function part0() {
 	dqb "part0 d0ne"
 }
 
-dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
+dqb "src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 65
 [ -v CONF_target ] || exit 66
-#make_tgt_dirs ${CONF_target} ${CONF_source} ${3} #VAIH
+make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
 
 #270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi?
 
