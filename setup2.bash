@@ -121,7 +121,7 @@ function aqua() {
 	dqb "BEFORE TBLZ"
 	csleep 2
 
-	#onbkohan trarpeellinen kikkailu?
+	#onbkohan trarpeellinen kikkailu? E22_GG 
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
 	sleep 5
 #
@@ -247,7 +247,7 @@ function f5a() {
 	grep -v "#" ${CONF_scripts_dir}/common.conf >> ${2}
 	grep -v "#" ${CONF_scripts_dir}/dalek.s >> ${2}
 
-	reqwreqw ${CONF_scripts_dir}/dalek.s #jos voisi olla renkkamatta vähän aikaa
+	reqwreqw ${CONF_scripts_dir}/dalek.s #jos voisi olla renkkaamatta vähän aikaa
 	reqwreqw ${2}
 	${svm} ${somefile2} ${CONF_scripts_dir}/dalek.bash
 
@@ -280,6 +280,7 @@ function f5b() {
 	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
 	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutus lisäämään sudoersiin mutta meilellään jos voisi rajata parametrien sijyeen
 	CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name generic_doit.sh) "
+	#250526:vielä ei g_doit lisäys listaan onnannut?
 
 	for c in ${CONF_aa} ; do 
 		#mangle_s()
@@ -301,7 +302,7 @@ function f5b() {
 }
 
 #==========================MAIN=======================================
-#VAIH:fktiokutsut jatkoss a tässä osassa skriptiä
+
 jord ${CONF_basedir}
 
 [ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
