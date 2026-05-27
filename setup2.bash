@@ -80,6 +80,8 @@ function ekf() {
 }
 
 #=========================LIB2=========================================
+g_aa=${CONF_aa}
+g_ab=${CONF_ab}
 
 function jord() {
 	[ -z "${1}" ] && exit 666
@@ -94,7 +96,8 @@ function jord() {
 }
 
 #240526:noista paketeista oikeastaan git lienee välttämättömin tmän skriptin kannalta
-#TODO:testaapa miten common_lib/g>_doit/sq-rot suoriutiuvat kehitysympstössä pakettien asentelusta
+#TODO:testaapa miten common_lib/g_doit/sq-rot suoriutiuvat kehitysympstössä pakettien asentelusta
+#josko jo lähiaikoina (260526->)
 
 function aqua() {
 	dqb "aqua"
@@ -121,10 +124,10 @@ function aqua() {
 	dqb "BEFORE TBLZ"
 	csleep 2
 
-	#onbkohan trarpeellinen kikkailu? E22_GG 
+	#onbkohan trarpeellinen kikkailu? E22_GG...
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
 	sleep 5
-#
+#HUOM.sitten oli ne grub/genisofs/yms, nei pitäisi jtnkin saada asennettua jos tässä alla ei tee
 #	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
 #	${odio} dpkg -i ${q}/*.deb
 #	${smr} ${q}/*.deb
@@ -173,19 +176,19 @@ function luft() {
 	dqb "luft"
 	csleep 1
 	local c4=0
-
-	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
-		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
-		c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
-		
-		if  [ ${c5} -lt 1 ] ; then
-			echo "SMTHING WRONG W/ fstab.tmp (or config)"
-			exit 66
-		fi
-	else
-		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
-		exit 65
-	fi
+#26526 jemmaan tilapäisesti, g_doit.pre_enforce() liittyy
+#	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
+#		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
+#		c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
+#		
+#		if  [ ${c5} -lt 1 ] ; then
+#			echo "SMTHING WRONG W/ fstab.tmp (or config)"
+#			exit 66
+#		fi
+#	else
+#		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
+#		exit 65
+#	fi
 
 	if [ ${c4} -gt 0 ] ; then
 		dqb "f-stab 0k"
@@ -222,7 +225,7 @@ function luft() {
 	fi
 }
 
-#TODO:komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers
+#VAIH:komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers
 function f5a() {
 	dqb "F5.a"
 	csleep 5
@@ -261,10 +264,10 @@ function f5a() {
 	
 	#VAIH:pitäisi saada aikaiseksi testata erinäiset skriptit omegan ajon jälkeen, sitä ennen jos toimii niin ei kerro juuri mitään
 	#230526:omegan jälkeen "stage0 -d -v" hyytyi ifup-kohtaan
-	#CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name dalek.sh | head -n 1)"
+	#g_aa="${g_aa} $(find ${CONF_basedir} -type f -name dalek.sh | head -n 1)"
 		
 	#olisi kai parempi vetää dalek mukaan find:illa
-	CONF_aa="${CONF_aa} ${CONF_scripts_dir}/dalek.bash"
+	g_aa="${g_aa} ${CONF_scripts_dir}/dalek.bash"
 }
 
 function f5b() {
@@ -274,15 +277,20 @@ function f5b() {
 	local c
 	#ei ihan näin taida mennä, pitäisi tarkemmin speksata sallitut parametrit
 
-	#TODO:jatkossa jos edes esxittelisi/alustaisi tuon fktioille yhteisen mjan täsäs tdstossa
+	#VAIH:jatkossa jos edes esxittelisi/alustaisi tuon fktioille yhteisen mjan täsäs tdstossa
 
-
+	
 	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
-	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutus lisäämään sudoersiin mutta meilellään jos voisi rajata parametrien sijyeen
-	CONF_aa="${CONF_aa} $(find ${CONF_basedir} -type f -name generic_doit.sh) "
-	#250526:vielä ei g_doit lisäys listaan onnannut?
+	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutua lisäämään sudoersiin mutta meilellään jos voisi rajata parametrien suhteen
+	if [ -v CONF_esab ] ; then #tirha kikkailu oikeastaan
+		local t=$(find ${CONF_esab} -type f -name "generic_doit.sh")
+		echo "t= ${t}"
+		sleep 6
+		[ -z "${t}" ] || g_aa="${g_aa} ${t} "
+	fi
 
-	for c in ${CONF_aa} ; do 
+	#TODO:varmista että kaikki listan skripti toimivat kuten tarkoitus
+	for c in ${g_aa} ; do 
 		#mangle_s()
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
 		echo "$(whoami) localhost=NOPASSWD: sha256: ${p} ${c}" >> ${1} 
@@ -291,7 +299,7 @@ function f5b() {
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
 	#oli myös se "sudo.sw"-linkki , jsoap menisi dalek.sh - tavalla kuitenkin	
 
-	for c in ${CONF_ab} ; do
+	for c in ${g_ab} ; do
 		echo "# $(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
 	done 
 
@@ -304,18 +312,20 @@ function f5b() {
 #==========================MAIN=======================================
 
 jord ${CONF_basedir}
+if [ "${1}" != "1" ] ; then
+	[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
+	[ -v CONF_ue ] || exit 34
+	[ -v CONF_un ] || exit 35
 
-[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
-[ -v CONF_ue ] || exit 34
-[ -v CONF_un ] || exit 35
+	ignis #${CONF_basedir}
+	[ -v CONF_dir ] || exit 44
+	[ -d ${CONF_dir} ] || exit 45
 
-ignis #${CONF_basedir}
-[ -v CONF_dir ] || exit 44
-[ -d ${CONF_dir} ] || exit 45
+	luft
+fi
 
-luft
 somefile=$(mktemp)
-somefile2=$(mktemp) #ehkä pärjäisi ilmankin
+somefile2=$(mktemp) #ehkä pärjäisi ilmankin ytuon kanssa kikkailua, suoraan kohde-hmistooon tdsto ja täts it
 
 f5a ${somefile} ${somefile2} 
 f5b ${somefile}
