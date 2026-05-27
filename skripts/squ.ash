@@ -86,16 +86,19 @@ tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 #konftdston muodostus sqroot:in pad-hmistoon, onko jo kunnossa 160426?
 
+echo "NYT JO $0 r ENNEN OMEGAA, ALA TESTATA!!!"
+sleep 6
+
 case "${cmd}" in
 	-x) #230526:vissiin toimi vaikka vähän urputti (odion nollaus ehkä syynä)
-	#240526:omegan ajon jälkeen suostui toimimaan pienne yurputuksen kanssa
+	#240526:omegan ajon jälkeen suostui toimimaan pienen urputuksen kanssa (mut miten chroot-hommad?)
 	#... eli tartteeko laittaa sudoersiin squash-työklaluja?
 	
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #080226:taitee toimia edelleen (tosin onko oikeasti tarpeellinen?)
+	-y) #080226:taisi toimia tuolloin (tosin onko oikeasti tarpeellinen?)
 		#140426:kokeilLtu välillä yoista .iso:a pohjana (ekhä toimi vähän tai sit ei)
-		#240526:"failed to setup loop device for " omegan jälk
+		#240526:"failed to setup loop device for " omegan jälk (according to the plan)
 		
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
@@ -123,6 +126,10 @@ case "${cmd}" in
 	;;
 	-d)  #230526:uudellakin tavalla toimi
 		#240526: toimi omegan ajon jälkeen
+		#26525:omegan ajon jälkeen pientä urputusta, korjaa jos toistuu
+		#"squashfs-root/etc/network/" alaiset ehkä liittyvät asiaan
+		#TODO:joulukuusi-moodi pois squash-hmistosta
+
 		${odio} ${tmp}/dalek.bash d2
 	;;
 	-c)  #230526:toimii urputuksien kanssa?
@@ -145,6 +152,8 @@ case "${cmd}" in
 	-j)  #180526:yritetty ajaa omegan jälkeen, kosahti
 		#230526:toimi pienen urputuksen kanssa, omegaa ei vielä silloin ajettu
 		#240526:saattoi toimia tällöinkin, omegan ajon jälkeen(tosin pientä nalkutusta oikeuksista)
+		#HUOM. sqash-hmstoin delliminen saattaa epäonnistua omegan jälkeen, pitäisikö huomioida jotenkin?
+
 		dqb "smd= ${smd} "
 		csleep 2
 
