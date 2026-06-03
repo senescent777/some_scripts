@@ -180,7 +180,7 @@ function pre_bl() {
 #TODO?:sudon pudon pudotus josqs myöh?
 #sen hybrid.bin-tdston kanssa jotain? antaa oll atoisdtaiseksi?
 function bootloader() {
-	dqb "bootloader(${1}, ${2}, ${3}, ${4} )"
+	dqb "bootloader(${1}, ${2}, ${3}, ${4} ((("
 
 	[ -z "${1}" ] && exit 2
 	[ -z "${2}" ] && exit 4
@@ -235,6 +235,7 @@ function bootloader() {
 				dqb "${spc} -a ${3}/boot/ ${4} || exit 8"
 				csleep 3
 
+				#TODO:koita keksiä jotain ettei tähän tökkää
 				${spc} -a ${3}/boot/ ${4} || exit 8
 				csleep 1
 
