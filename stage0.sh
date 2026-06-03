@@ -58,6 +58,7 @@ case "${cmd}" in
 	;;
 	-d)
 		#2605426:ei täytin onnistunut kohteen siivoilu omegan jälkeen, toistukuko?
+		#2626:vieläkin toivomisen varaa
 		${odio} ./skripts/dalek.bash d1
 	;;
 	*)

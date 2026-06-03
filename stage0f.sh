@@ -111,9 +111,10 @@ function part0() {
 dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 65
 [ -v CONF_target ] || exit 66
-#make_tgt_dirs ${CONF_target} ${CONF_source} ${3} #VAIH
 
-#270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi?
+#make_tgt_dirs ${CONF_target} ${CONF_source} ${3} #josqs pois kommenteista?
+#270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
+#020626:aikainen exit jos parametrit p-v-hh (esm väärä määrä param) (TODO)
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}

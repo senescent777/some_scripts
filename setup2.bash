@@ -127,7 +127,8 @@ function aqua() {
 	#onbkohan trarpeellinen kikkailu? E22_GG...
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
 	sleep 5
-#HUOM.sitten oli ne grub/genisofs/yms, nei pitäisi jtnkin saada asennettua jos tässä alla ei tee
+
+#HUOM.sitten oli ne grub/genisofs/yms, ne pitäisi jtnkin saada asennettua jos tässä alla ei tee
 #	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
 #	${odio} dpkg -i ${q}/*.deb
 #	${smr} ${q}/*.deb
@@ -176,7 +177,8 @@ function luft() {
 	dqb "luft"
 	csleep 1
 	local c4=0
-#26526 jemmaan tilapäisesti, g_doit.pre_enforce() liittyy
+
+#26526 jemmaan tilapäisesti, g_doit.pre_enforce() liittyy (tai siis)
 #	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
 #		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
 #		c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
@@ -289,7 +291,10 @@ function f5b() {
 		[ -z "${t}" ] || g_aa="${g_aa} ${t} "
 	fi
 
-	#TODO:varmista että kaikki listan skripti toimivat kuten tarkoitus
+	#TODO:varmista että kaikki listan skriptit toimivat kuten tarkoitus
+	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
+	#joko sha512 ei olekaan enää sudon tukema tai sah6 qsi
+
 	for c in ${g_aa} ; do 
 		#mangle_s()
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
@@ -312,6 +317,7 @@ function f5b() {
 #==========================MAIN=======================================
 
 jord ${CONF_basedir}
+
 if [ "${1}" != "1" ] ; then
 	[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
 	[ -v CONF_ue ] || exit 34
