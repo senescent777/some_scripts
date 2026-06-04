@@ -96,8 +96,9 @@ function jord() {
 }
 
 #240526:noista paketeista oikeastaan git lienee välttämättömin tmän skriptin kannalta
-#TODO:testaapa miten common_lib/g_doit/sq-rot suoriutiuvat kehitysympstössä pakettien asentelusta
-#josko jo lähiaikoina (260526->)
+#TODO:testaapa miten common_lib/g_doit/sq-rot suoriutuvat kehitysympstössä pakettien asentelusta
+#josko 06/26 AIKANA?
+#e22_stu() ja "exp3 s" liittyvät
 
 function aqua() {
 	dqb "aqua"
@@ -181,7 +182,7 @@ function luft() {
 #26526 jemmaan tilapäisesti, g_doit.pre_enforce() liittyy (tai siis)
 #	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
 #		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
-#		c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
+#		local c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
 #		
 #		if  [ ${c5} -lt 1 ] ; then
 #			echo "SMTHING WRONG W/ fstab.tmp (or config)"
@@ -227,7 +228,6 @@ function luft() {
 	fi
 }
 
-#VAIH:komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers
 function f5a() {
 	dqb "F5.a"
 	csleep 5
@@ -258,7 +258,6 @@ function f5a() {
 
 	${scm} a+x ${CONF_scripts_dir}/dalek.bash
 	ls -las ${CONF_scripts_dir}/dalek.*
-	#exit
 	
 	csleep 3
 	dqb "AFTER DALEK"
@@ -278,12 +277,9 @@ function f5b() {
 	local p
 	local c
 	#ei ihan näin taida mennä, pitäisi tarkemmin speksata sallitut parametrit
-
-	#VAIH:jatkossa jos edes esxittelisi/alustaisi tuon fktioille yhteisen mjan täsäs tdstossa
-
 	
 	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
-	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutua lisäämään sudoersiin mutta meilellään jos voisi rajata parametrien suhteen
+	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutua lisäämään sudoersiin mutta mIElellään jos voisi rajata parametrien suhteen
 	if [ -v CONF_esab ] ; then #tirha kikkailu oikeastaan
 		local t=$(find ${CONF_esab} -type f -name "generic_doit.sh")
 		echo "t= ${t}"
@@ -302,10 +298,11 @@ function f5b() {
 	done
 
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
-	#oli myös se "sudo.sw"-linkki , jsoap menisi dalek.sh - tavalla kuitenkin	
+	#oli myös se "sudo.sw"-linkki , jospa menisi dalek.sh - tavalla kuitenkin	
+	#TODO:jospa kokeilisi josqs toimintaa
 
 	for c in ${g_ab} ; do
-		echo "# $(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
+		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
 	done 
 
 	cat ${1}
@@ -315,9 +312,10 @@ function f5b() {
 }
 
 #==========================MAIN=======================================
-
 jord ${CONF_basedir}
 
+#se "komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers"
+#TODO:testaus jo
 if [ "${1}" != "1" ] ; then
 	[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
 	[ -v CONF_ue ] || exit 34

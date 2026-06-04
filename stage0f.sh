@@ -112,7 +112,9 @@ dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 65
 [ -v CONF_target ] || exit 66
 
-#make_tgt_dirs ${CONF_target} ${CONF_source} ${3} #josqs pois kommenteista?
+#make_tgt_dirs ${CONF_target} ${CONF_source} ${3} #josqs pois kommenteista? rtai siis
+${odio} ./skripts/dalek.bash m
+
 #270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
 #020626:aikainen exit jos parametrit p-v-hh (esm väärä määrä param) (TODO)
 
