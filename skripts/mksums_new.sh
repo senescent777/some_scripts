@@ -6,16 +6,11 @@ d=$(dirname $0) #tämäb annettava olla tässä
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#010426:"./boot/grub/grub.cfg: FAILED open or read" tdstosta dgsts.1 (sqroot)
-#... jos toistuu ni tekisikö jotain?
-#part123() 2 , pitäisikö sitä miettiä vielä? miksi?
-
 #240526:taisi toimia pienen nalkutuksen kanssa
 
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
-#	echo "$0 --iso"
-#	echo "$0 --pkgs"
+
 	echo "$0 -h"
 	exit 44
 }
@@ -28,7 +23,6 @@ if [ -f ${d}/keys.conf ] ; then #tarvitaan, kts sibgle_param
 	. ${d}/keys.conf
 fi
 
-#141025:toiminee avainten asennuksne jälkeen
 function single_param() {
 	case ${1} in
 		--iso)
@@ -153,9 +147,6 @@ function part123() {
 	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 }
 
-#HUOM.kandee ajaa tämä vain jos binäärit ja avaimet olemassa
-#161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan?
-
 #TODO:huomioimaan taas tilanne että käskytetäänkin sitä kohde-hmistoon kopsattua versiota (keys.conf pitäisi saada mukaan tavalla tai toisella)
 #muuan copy_conf() liittynee
 
@@ -178,7 +169,6 @@ function part6_5() {
 	dqb "mks.part65dibw"
 }
 
-#151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(DONE?)
 #TODO:target_dpub-jutut pois sittenq mahd ?
 #100326:"gpg --edit-key" ? ehkä ei tähän mutta johonkin
 

@@ -24,7 +24,6 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
-#270426:toimii edelleen?
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ -z "${1}" ] && exit 6
@@ -51,7 +50,6 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#030426:vissiin toimii edelleen
 #sudoers-jekku olisi hyväksi tässäkin?
 function bbb() {
 	dqb "bbb( ${1} ) OGDRU JAHAD"
@@ -112,7 +110,6 @@ function bbb() {
 	dqb "BARBEQUE PARTY DONE.done()"
 }
 
-#210126:ok?
 function jlk_main() {
 	dqb "jkl_niam ( ${1} , ${2}  )"
 
@@ -125,13 +122,13 @@ function jlk_main() {
 	csleep 1
 	
 	#for-loopissakin voisi...
-	#230526:jotain urputusta täsäs kohtaa mutta nököjään matskut kopsautuivat
+	#230526:jotain urputusta tässsä kohtaa mutta nököjään matskut kopsautuivat
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2} 
 	${spc} ${1}/*.bz3 ${2}
 	
 	${spc} ${1}/*.sig ${2}
-	#oleellisempaa tässä kui9n stage0_backendissa?
+	#oleellisempaa tässä kuin stage0_backendissa?
 	#pitäisikö .sah kanssa?
 	${spc} ${1}/*.sha ${2}
 
@@ -195,7 +192,6 @@ function jlk_conf() {
 #sopivilla parametreilla kopsaa dgsts-hkmiston kohteeseen, ensisij tsummat , jos julk av löytyvät lähteestä niin nekin 
 #liittyyköhän copy_conf() @stage0_backend ? tai mksums.sh ? 
 
-#219126:ok?
 function jlk_sums() {
 	dqb "jlk_sums( ${1} , ${2}, ${3}) "
 	csleep 2
@@ -232,7 +228,6 @@ function jlk_sums() {
 	sleep 2
 }
 
-#190326:ok?
 function rst_pre1() {
 	dqb "rst_pre1()"
 	csleep 1
@@ -257,14 +252,13 @@ function rst_pre1() {
 	csleep 1		
 }
 
-#190326:ok?
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
 	pwd
 	csleep 1
 
-	if [ -d ./etc ] ; then
+	if [ -d ./etc/default ] ; then
 		dqb "CTE KO"
 	else
 		echo "U SHOULD RUN squ.ash x BEFORE squ.ash r"
@@ -279,8 +273,11 @@ function rst_pre2() {
 	env | grep LAN > ./etc/default/locale
 	env | grep LC >> ./etc/default/locale
 	csleep 1
-		
-	reqwreqw ./etc/default/locale
+	
+	#TODO:reqw takaisin sittenq mahd	
+	#reqwreqw ./etc/default/locale
+	${sco} 0:0 ./etc/default/locale
+	${scm} a-w ./etc/default/locale
 	csleep 1
 
 	[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
@@ -317,7 +314,7 @@ function rst_post() {
 }
 
 #olikohan chroot-hommiin jotain valmista deb-pakettia? erityisesti soveltuvaa sellaista?
-function rst() { #210126:ok?
+function rst() {
 	dqb "rst( ${1} , ${2} )"
 	[ -z "${1}" ] && exit 13
 	[ -d ${1} ] || exit 14

@@ -90,9 +90,9 @@ echo "NYT JO $0 r ENNEN OMEGAA, ALA TESTATA!!!"
 sleep 6
 
 case "${cmd}" in
-	-x) #230526:vissiin toimi vaikka vähän urputti (odion nollaus ehkä syynä)
+	-x)
 	#240526:omegan ajon jälkeen suostui toimimaan pienen urputuksen kanssa (mut miten chroot-hommad?)
-	#... eli tartteeko laittaa sudoersiin squash-työklaluja?
+	#... eli tartteeko laittaa sudoersiin squash-työkaluja? ehkä
 	
 		xxx ${par} ${CONF_squash0}
 	;;
@@ -120,20 +120,20 @@ case "${cmd}" in
 	;;
 	-b) 
 		#230526:toimi pienen urputuksen kanssa, ainakin osa poistettavaksi aiotuista kaloista poistui, ch-jutut asia erikseen
-		#onko tässä juttuja mitä pitäisi siirtää salekille?
-		#240526: jnkn verran toimi omehgan ajon jälkeen
+		#onko tässä juttuja mitä pitäisi siirtää dalekille?
+		#240526: jnkn verran toimi omegan ajon jälkeen
+
 		bbb ${CONF_squash_dir}
 	;;
-	-d)  #230526:uudellakin tavalla toimi
-		#240526: toimi omegan ajon jälkeen
+	-d)
 		#26525:omegan ajon jälkeen pientä urputusta, korjaa jos toistuu
 		#"squashfs-root/etc/network/" alaiset ehkä liittyvät asiaan
-		#TODO:joulukuusi-moodi pois squash-hmistosta
+		#TODO:joulukusi-moodi pois squash-hmistosta, vissiin ajettava squash-työkalut root-tunnarilla kuiteskin
 
 		${odio} ${tmp}/dalek.bash d2
 	;;
-	-c)  #230526:toimii urputuksien kanssa?
-		#240526: jnkn verran toimi omehgan ajon jälkeen
+	-c)
+		#240526: jnkn verran toimi omegan ajon jälkeen
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
