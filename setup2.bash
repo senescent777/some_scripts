@@ -109,8 +109,7 @@ function aqua() {
 
 	${odio} apt --fix-broken install
 
-	local q
-	q=$(mktemp -d)
+	local q=$(mktemp -d)
 	${spc} ${CONF_pkgsrc}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
 	
@@ -254,7 +253,7 @@ function f5a() {
 
 	reqwreqw ${CONF_scripts_dir}/dalek.s #jos voisi olla renkkaamatta vähän aikaa
 	reqwreqw ${2}
-	${svm} ${somefile2} ${CONF_scripts_dir}/dalek.bash
+	${svm} ${2} ${CONF_scripts_dir}/dalek.bash
 
 	${scm} a+x ${CONF_scripts_dir}/dalek.bash
 	ls -las ${CONF_scripts_dir}/dalek.*
@@ -280,7 +279,7 @@ function f5b() {
 	
 	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
 	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutua lisäämään sudoersiin mutta mIElellään jos voisi rajata parametrien suhteen
-	if [ -v CONF_esab ] ; then #tirha kikkailu oikeastaan
+	if [ -v CONF_esab ] ; then #turha kikkailu oikeastaan
 		local t=$(find ${CONF_esab} -type f -name "generic_doit.sh")
 		echo "t= ${t}"
 		sleep 6
@@ -293,13 +292,14 @@ function f5b() {
 
 	for c in ${g_aa} ; do 
 		#mangle_s()
+		#HUOM. tämä loopin sisältö pitää muista amuuttaa jos mangle_s() ja CONF_algo muuttaa
 		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
 		echo "$(whoami) localhost=NOPASSWD: sha256: ${p} ${c}" >> ${1} 
 	done
 
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
-	#oli myös se "sudo.sw"-linkki , jospa menisi dalek.sh - tavalla kuitenkin	
-	#TODO:jospa kokeilisi josqs toimintaa
+	#oli myös se "sudo.sw"-linkki , jospa menisi dalek.bash - tavalla kuitenkin	
+	#VAIH:jospa kokeilisi josqs toimintaa (syntaki lienee jo)
 
 	for c in ${g_ab} ; do
 		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
@@ -315,7 +315,8 @@ function f5b() {
 jord ${CONF_basedir}
 
 #se "komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers"
-#TODO:testaus jo
+#DONE:testaus jo, toimii
+
 if [ "${1}" != "1" ] ; then
 	[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
 	[ -v CONF_ue ] || exit 34
@@ -329,7 +330,7 @@ if [ "${1}" != "1" ] ; then
 fi
 
 somefile=$(mktemp)
-somefile2=$(mktemp) #ehkä pärjäisi ilmankin ytuon kanssa kikkailua, suoraan kohde-hmistooon tdsto ja täts it
+somefile2=$(mktemp) #ehkä pärjäisi ilmankin tuon kanssa kikkailua, suoraan kohde-hmistooon tdsto ja täts it
 
 f5a ${somefile} ${somefile2} 
 f5b ${somefile}

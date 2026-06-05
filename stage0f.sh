@@ -16,6 +16,11 @@ function single_param() {
 	dqb "TODO?:  single_param() ?"
 }
 
+if [ $# -lt 3 ] ; then
+	echo "MEE PELLE VITTUUN"
+	exit 777
+fi
+ 
 [ $# -gt 3 ] && debug=${4}
 . ./skripts/stage0_backend.bash
 . ./skripts/common_funcs.sh
@@ -29,7 +34,7 @@ dqb "PARAMS OK?"
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 #... tosin jokin piontti saattoi olla miksi näin
 #
-#VAIH:isolunux-testailut taas (chmod+chown isolinux.* , boot.* jhnkn? )
+#isolunuxin kanssa päätä seinään josqs myöhemmin lisää?
 #230526:ehkä toimi tänä fktio silloin?
 #240526:vissiin toimi omegan ajon jälkeen (penen renkkaamisen jälkeen)
 function part0() {

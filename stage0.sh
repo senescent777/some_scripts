@@ -3,7 +3,7 @@ debug=0
 . ./skripts/common.conf
 source=""
 source2=""
-bl=${CONF_bloader} #tähän liittyen oli se juttu toisessa repossa mikö pitäisi
+bl=${CONF_bloader} #tähän liittyen oli se juttu toisessa repossa mikä pitäisi (mikä?)
 cmd=""
 
 #TODO:josko nimeäisi uudestaan ihan muuten vaan
@@ -51,15 +51,16 @@ csleep 1
 #main()
 #180526 alettu renkata sudo-asioita
 #240526:taisi jo toimia make-dirs sekä d omegan ajon jälkeen mikä ei tosin suuri ihme chmod+chown - koment5ojen takomisen jälkeen
+#pitäisiköhän se odio jyrätä tässä skriptissä?
 
 case "${cmd}" in
 	--make-dirs)
-		${odio} ./skripts/dalek.bash m
+		sudo ./skripts/dalek.bash m
 	;;
 	-d)
-		#2605426:ei täytin onnistunut kohteen siivoilu omegan jälkeen, toistukuko?
-		#2626:vieläkin toivomisen varaa
-		${odio} ./skripts/dalek.bash d1
+		#2605426:ei täysin onnistunut kohteen siivoilu omegan jälkeen, toistukuko?
+		#4626:vieläkin oli toivomisen varaa, lisätty pari juttua dalekiin
+		sudo ./skripts/dalek.bash d1
 	;;
 	*)
 		#stage0f==glorified cp
