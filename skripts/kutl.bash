@@ -37,6 +37,8 @@ function parse_opts_real() {
 			[ "${2}" == "-v" ] || tgt=${2}
 		;;
 	esac
+
+	dqb "fthagn"
 }
 
 . ${d}/common_funcs.sh
@@ -51,11 +53,11 @@ function m0() {
 		${sco} $(whoami):$(whoami) ${1}/*.gpg
 		${scm} 0400 ${1}/*.gpg
 
-		#TODO:ao. rivin kanssa ehkä jotain josqs
+		#TODO?:ao. rivin kanssa ehkä jotain josqs?
 		${odio} chattr +ui ${1}/*.gpg
 	}
 
-#VAIH:sco,scm,smd
+#VAIH:sco,scm,smd? valmista?
 dqb "BFORE CHMOD"
 [ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
 ${sco} -R $(whoami):$(whoami) ~/.gnupg #tarpeen?

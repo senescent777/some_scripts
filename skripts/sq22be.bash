@@ -1,4 +1,4 @@
-#240526:lienee edelleen OK
+
 function xxx() {
 	dqb "xxx( ${1}, ${2})"
 
@@ -12,8 +12,8 @@ function xxx() {
 	[ -d ${2} ] || ${smd} ${2}
 	cd ${2}
 
-	local unsq
-	unsq=$(${odio} which unsquashfs)
+	local odio=$(which sudo)
+	local unsq=$(${odio} which unsquashfs)
 
 	if [ x"${unsq}" != "x" ] ; then 
 		${odio} ${unsq} ${1}
@@ -36,9 +36,8 @@ function cfd() {
 	
 	echo "${0} -b ?"
 	cd ${2}
-
-	local msq
-	msq=$(${odio} which mksquashfs)
+	local odio=$(which sudo)
+	local msq=$(${odio} which mksquashfs)
 
 	if [ ! -z "${msq}" ] && [ -x ${msq} ] ; then 
 		${odio} ${msq} . ${1} ${CONF_msq_opts} #
@@ -50,9 +49,11 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#sudoers-jekku olisi hyväksi tässäkin?
+#sudoers-jekku olisi hyväksi tässäkin? tai sitten local odio/smr/sco (TODO)
+#VAIH:vipuaminen dalekille
 function bbb() {
-	dqb "bbb( ${1} ) OGDRU JAHAD"
+	#dqb ";bbb( ${1} ) (OGDRU JAHAD"
+	echo "SHOULD USE dalek b INSTEAD"	
 
 	[ -z "${1}" ] && exit 97
 	[ x"${1}" == "x/" ] && exit 98
@@ -122,7 +123,7 @@ function jlk_main() {
 	csleep 1
 	
 	#for-loopissakin voisi...
-	#230526:jotain urputusta tässsä kohtaa mutta nököjään matskut kopsautuivat
+	#230526:jotain urputusta tässsä kohtaa mutta nÄköjään matskut kopsautuivat
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2} 
 	${spc} ${1}/*.bz3 ${2}
@@ -252,6 +253,7 @@ function rst_pre1() {
 	csleep 1		
 }
 
+#040626:/e/d/locale kanssa oli nalkutusta, keksi jotain
 function rst_pre2() {
 	dqb "rst_pre2()"
 	csleep 1
@@ -266,7 +268,23 @@ function rst_pre2() {
 	fi
 
 	csleep 1
-	fasdfasd ./etc/default/locale
+
+	local odio=$(which sudo)
+	local sco=$(${odio} which chown)
+	#[ y"${sco}" == "y" ] && exit 98
+	#[ -x ${sco} ] || exit 97
+	
+	local scm=$(${odio} which chmod)
+	#[ y"${scm}" == "y" ] && exit 96
+	#[ -x ${scm} ] || exit 95
+	sco="${odio} ${sco} "
+	scm="${odio} ${scm} "	
+
+	#VAIH:pitäisiköhän prujata tuokin?
+	#fasdfasd ./etc/default/locale
+	${odio} touch ${1}
+	${sco} $(whoami):$(whoami) ${1}
+	${scm} 0644 ${1}
 	csleep 1
 
 	#190326:asettuvatKo nämä kehitysymp? ekhä
@@ -274,7 +292,7 @@ function rst_pre2() {
 	env | grep LC >> ./etc/default/locale
 	csleep 1
 	
-	#TODO:reqw takaisin sittenq mahd	
+	#reqw takaisin sittenq mahd?	
 	#reqwreqw ./etc/default/locale
 	${sco} 0:0 ./etc/default/locale
 	${scm} a-w ./etc/default/locale
@@ -282,7 +300,7 @@ function rst_pre2() {
 
 	[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
 	${spc} /etc/hosts ./etc
-	${odio} touch ./.chroot #TODO:jatkossa pois moinen
+	#${odio} touch ./.chroot #jatkossa pois moinen
 
 	dqb "rst_pre2() done"
 	csleep 1
@@ -295,8 +313,12 @@ function rst_post() {
 
 	pwd
 	csleep 1
-	#TODO:.chroot-kikkailut uusiksi?
-	${smr} ./.chroot			
+	#.chroot-kikkailut uusiksi?
+	#${smr} ./.chroot			
+
+	local odio=$(which sudo)
+	svm=$(${odio} which mv)
+	svm="${odio} ${svm} "
 
 	${svm} ./etc/hosts.bak ./etc/hosts
 	${smr} ./etc/mtab

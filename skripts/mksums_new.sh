@@ -31,7 +31,7 @@ function single_param() {
 #			${gg} -u ${CONF_ksk} -sb ./*.iso
 #			exit 61
 		;;
-#		--pkgs) #takaisin kommenteista sittenq oikeasti tarttee
+		--pkgs) #takaisin kommenteista sittenq oikeasti tarttee
 #			[ -v CONF_ksk ] || exit 68
 #			[ -v CONF_pkgsdir2 ] || exit 67
 #			[ -v CONF_BASEDIR ] || exit 66
@@ -43,8 +43,8 @@ function single_param() {
 #			${gg} -u ${CONF_ksk} -sb ./*.deb
 #			[ $? -eq 0 ] && ${gg} -u ${CONF_ksk} -sb ./*.bz2
 #			
-#			exit 63
-#		;;
+			exit 63
+		;;
 		 *)
 			echo "???"
 		;;
@@ -257,6 +257,7 @@ csleep 1
 ${sah6} -c  ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4 --ignore-missing
 csleep 1
 
+#040626:tässä jotain nalkutusta? luuultavasti sco syynä
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*

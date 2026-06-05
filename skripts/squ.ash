@@ -93,7 +93,9 @@ case "${cmd}" in
 	-x)
 	#240526:omegan ajon jälkeen suostui toimimaan pienen urputuksen kanssa (mut miten chroot-hommad?)
 	#... eli tartteeko laittaa sudoersiin squash-työkaluja? ehkä
-	
+	echo "#VAIH:MUISTA LAITTAA SUDOTUS SQUASH-TYÖKALUIHIN!!!"
+	sleep 10
+
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #080226:taisi toimia tuolloin (tosin onko oikeasti tarpeellinen?)
@@ -120,7 +122,7 @@ case "${cmd}" in
 	;;
 	-b) 
 		#230526:toimi pienen urputuksen kanssa, ainakin osa poistettavaksi aiotuista kaloista poistui, ch-jutut asia erikseen
-		#onko tässä juttuja mitä pitäisi siirtää dalekille?
+		#onko tässä juttuja mitä pitäisi siirtää dalekille? vssiin
 		#240526: jnkn verran toimi omegan ajon jälkeen
 
 		bbb ${CONF_squash_dir}
@@ -128,8 +130,9 @@ case "${cmd}" in
 	-d)
 		#26525:omegan ajon jälkeen pientä urputusta, korjaa jos toistuu
 		#"squashfs-root/etc/network/" alaiset ehkä liittyvät asiaan
-		#TODO:joulukusi-moodi pois squash-hmistosta, vissiin ajettava squash-työkalut root-tunnarilla kuiteskin
+		#VAIH:joulukusi-moodi pois squash-hmistosta, vissiin ajettava squash-työkalut root-tunnarilla kuiteskin
 
+		odio=$(which sudo)
 		${odio} ${tmp}/dalek.bash d2
 	;;
 	-c)
