@@ -57,7 +57,7 @@ function m0() {
 		${odio} chattr +ui ${1}/*.gpg
 	}
 
-#VAIH:sco,scm,smd? valmista?
+#sco,scm,smd? valmista?
 dqb "BFORE CHMOD"
 [ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
 ${sco} -R $(whoami):$(whoami) ~/.gnupg #tarpeen?

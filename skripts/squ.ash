@@ -84,23 +84,12 @@ dqb "par=${par}"
 
 tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
-#konftdston muodostus sqroot:in pad-hmistoon, onko jo kunnossa 160426?
-
-echo "NYT JO $0 r ENNEN OMEGAA, ALA TESTATA!!!"
-sleep 6
 
 case "${cmd}" in
 	-x)
-	#240526:omegan ajon jälkeen suostui toimimaan pienen urputuksen kanssa (mut miten chroot-hommad?)
-	#... eli tartteeko laittaa sudoersiin squash-työkaluja? ehkä
-	echo "#VAIH:MUISTA LAITTAA SUDOTUS SQUASH-TYÖKALUIHIN!!!"
-	sleep 10
-
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #080226:taisi toimia tuolloin (tosin onko oikeasti tarpeellinen?)
-		#140426:kokeilLtu välillä yoista .iso:a pohjana (ekhä toimi vähän tai sit ei)
-		#240526:"failed to setup loop device for " omegan jälk (according to the plan)
+	-y) #240526:"failed to setup loop device for " omegan jälk (according to the plan)
 		
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
@@ -120,18 +109,15 @@ case "${cmd}" in
 
 		${uom} ${CONF_source}
 	;;
-	-b) 
-		#230526:toimi pienen urputuksen kanssa, ainakin osa poistettavaksi aiotuista kaloista poistui, ch-jutut asia erikseen
-		#onko tässä juttuja mitä pitäisi siirtää dalekille? vssiin
-		#240526: jnkn verran toimi omegan ajon jälkeen
+	-b) #DONE:b) , d) , yesyaa
+		#vissiin dalek hoitaa hommansa ok 060626
 
-		bbb ${CONF_squash_dir}
+		#bbb ${CONF_squash_dir}
+		sudo ${tmp}/dalek.bash b
+		#	fix_sudo $(pwd)
 	;;
 	-d)
-		#26525:omegan ajon jälkeen pientä urputusta, korjaa jos toistuu
-		#"squashfs-root/etc/network/" alaiset ehkä liittyvät asiaan
-		#VAIH:joulukusi-moodi pois squash-hmistosta, vissiin ajettava squash-työkalut root-tunnarilla kuiteskin
-
+		#vissiin dalek hoitaa hommansa ok 060626
 		odio=$(which sudo)
 		${odio} ${tmp}/dalek.bash d2
 	;;
@@ -140,22 +126,14 @@ case "${cmd}" in
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#230526:urputusta, ei päässyt chroot asti ekalla yrityksellä
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
-
-		#DONE:jospa urputtaisi mikäli CONF_squash_dir sisältöineen puuttuu
-		#DONE:tämänkin casen testaus sittenq (240526) ei oikein toiminut omegan ajon jälkeen mutta se olikin odotettavissa
-		#... tosin jotain tarttisi keksiä jatkossa
 
 		rst_pre1
 		rst ${CONF_squash_dir}
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #180526:yritetty ajaa omegan jälkeen, kosahti
-		#230526:toimi pienen urputuksen kanssa, omegaa ei vielä silloin ajettu
-		#240526:saattoi toimia tällöinkin, omegan ajon jälkeen(tosin pientä nalkutusta oikeuksista)
-		#HUOM. sqash-hmstoin delliminen saattaa epäonnistua omegan jälkeen, pitäisikö huomioida jotenkin?
+	-j)  #HUOM. sqash-hmstoin delliminen saattaa epäonnistua omegan jälkeen, pitäisikö huomioida jotenkin?
 
 		dqb "smd= ${smd} "
 		csleep 2

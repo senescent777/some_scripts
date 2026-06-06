@@ -49,67 +49,68 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#sudoers-jekku olisi hyväksi tässäkin? tai sitten local odio/smr/sco (TODO)
-#VAIH:vipuaminen dalekille
-function bbb() {
-	#dqb ";bbb( ${1} ) (OGDRU JAHAD"
-	echo "SHOULD USE dalek b INSTEAD"	
-
-	[ -z "${1}" ] && exit 97
-	[ x"${1}" == "x/" ] && exit 98
-	[ -d ${1} ] || exit 99
-
-	dqb "pars_ok"
-	csleep 1
-
-	cd ${1}
-	[ ${debug} -eq 1 ] && pwd
-	csleep 4
-
-	pwd
-	echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
-	
-	${smr} -rf ./run/live
-	${smr} -rf ./boot/grub/*
-	#${smr} -rf ./boot/* #080226 kommentteihin. vöib sotkea
-	${smr} -rf ./usr/share/doc/*
-	
-	for f in $(find . -type f -name "*.deb") ; do #HSIPUT WTTUUN
-		dqb "${smr} ${f}"
-		csleep 1
-		${smr} ${f}
-	done
-	
-	csleep 5
-	
-	${smr} -rf ./var/cache/apt/*.bin
-	${smr} -rf ./tmp/*
-	
-	[ -v TARGET_pad2 ] || exit 64
-	${smr} -rf ./${TARGET_pad2}/*.bz3*
-	${smr} -rf ./${TARGET_pad2}/*.OLD
-	
-	for f in $(find ./home -type f -name "*.tar") ; do
-		dqb "smr ${f}"
-		csleep 1
-		${smr} ${f}
-	done
-	
-	csleep 1
-	
-	${sco} -R 0:0 ./${TARGET_pad2}
-	fix_sudo $(pwd)
-	${scm} -R 0755 ./var/cache/man
-	${sco} -R man:man ./var/cache/man
-
-	${smr} ./root/.bash_history
-	${smr} ./home/devuan/.bash_history
-
-	#OLD.tar myös pois?
-
-	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
-	dqb "BARBEQUE PARTY DONE.done()"
-}
+##sudoers-jekku olisi hyväksi tässäkin? tai sitten local odio/smr/sco (TODO)
+##VAIH:vipuaminen dalekille
+#function bbb() {
+#	#dqb ";bbb( ${1} ) (OGDRU JAHAD"
+#	echo "SHOULD USE dalek b INSTEAD"	
+#	exit
+#
+#	[ -z "${1}" ] && exit 97
+#	[ x"${1}" == "x/" ] && exit 98
+#	[ -d ${1} ] || exit 99
+#
+#	dqb "pars_ok"
+#	csleep 1
+#
+#	cd ${1}
+#	[ ${debug} -eq 1 ] && pwd
+#	csleep 4
+#
+#	pwd
+#	echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
+#	
+#	${smr} -rf ./run/live
+#	${smr} -rf ./boot/grub/*
+#	#${smr} -rf ./boot/* #080226 kommentteihin. vöib sotkea
+#	${smr} -rf ./usr/share/doc/*
+#	
+#	for f in $(find . -type f -name "*.deb") ; do #HSIPUT WTTUUN
+#		dqb "${smr} ${f}"
+#		csleep 1
+#		${smr} ${f}
+#	done
+#	
+#	csleep 5
+#	
+#	${smr} -rf ./var/cache/apt/*.bin
+#	${smr} -rf ./tmp/*
+#	
+#	[ -v TARGET_pad2 ] || exit 64
+#	${smr} -rf ./${TARGET_pad2}/*.bz3*
+#	${smr} -rf ./${TARGET_pad2}/*.OLD
+#	
+#	for f in $(find ./home -type f -name "*.tar") ; do
+#		dqb "smr ${f}"
+#		csleep 1
+#		${smr} ${f}
+#	done
+#	
+#	csleep 1
+#	
+#	${sco} -R 0:0 ./${TARGET_pad2}
+#
+#	${scm} -R 0755 ./var/cache/man
+#	${sco} -R man:man ./var/cache/man
+#
+#	${smr} ./root/.bash_history
+#	${smr} ./home/devuan/.bash_history
+#
+#	#OLD.tar myös pois?
+#
+#	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
+#	dqb "BARBEQUE PARTY DONE.done()"
+#}
 
 function jlk_main() {
 	dqb "jkl_niam ( ${1} , ${2}  )"
@@ -135,18 +136,6 @@ function jlk_main() {
 
 	dqb "jkl1 d0n3"
 }
-
-#... ideana aiemmin että root.conf olisi sq-chr-ymp varten , devuan.conf taas ei
-#kts. myös stage0_backend.bsh , copy_conf()
-#
-#mankeloi sen conf-tiedoston (281125:oliko vielä jotain spesifistä juttua tähän liittyen?)
-#tehty?:Const T_P2 mäkeen fktiosta?
-#
-#210126:tarteeko vielä keys.conf:ista greppailla juttuja?
-#sqroot sisällä ei tarvita: CONF_dir, CONF_pkgsrv? , BASEDIR
-#
-#210126:kommentoitujen siivoUs vIelä ajankoht?
-#root.conf dgsts.tdstoon mukana jos ei ole jo ? siinä on kyllä semmoinen juttu allekirjoituksen kanssa
 
 function jlk_conf() {
 	dqb "jlk_conf( ${1} , ${2} , ${3}) "
@@ -189,9 +178,6 @@ function jlk_conf() {
 }
 
 #1.mitäköhän parametreja tälle fktiolle piti antaa? lhde j khde tietenkin
-#
-#sopivilla parametreilla kopsaa dgsts-hkmiston kohteeseen, ensisij tsummat , jos julk av löytyvät lähteestä niin nekin 
-#liittyyköhän copy_conf() @stage0_backend ? tai mksums.sh ? 
 
 function jlk_sums() {
 	dqb "jlk_sums( ${1} , ${2}, ${3}) "
@@ -271,16 +257,14 @@ function rst_pre2() {
 
 	local odio=$(which sudo)
 	local sco=$(${odio} which chown)
-	#[ y"${sco}" == "y" ] && exit 98
-	#[ -x ${sco} ] || exit 97
+
 	
 	local scm=$(${odio} which chmod)
-	#[ y"${scm}" == "y" ] && exit 96
-	#[ -x ${scm} ] || exit 95
+
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "	
 
-	#VAIH:pitäisiköhän prujata tuokin?
+
 	#fasdfasd ./etc/default/locale
 	${odio} touch ${1}
 	${sco} $(whoami):$(whoami) ${1}
@@ -292,7 +276,6 @@ function rst_pre2() {
 	env | grep LC >> ./etc/default/locale
 	csleep 1
 	
-	#reqw takaisin sittenq mahd?	
 	#reqwreqw ./etc/default/locale
 	${sco} 0:0 ./etc/default/locale
 	${scm} a-w ./etc/default/locale
@@ -313,8 +296,7 @@ function rst_post() {
 
 	pwd
 	csleep 1
-	#.chroot-kikkailut uusiksi?
-	#${smr} ./.chroot			
+		
 
 	local odio=$(which sudo)
 	svm=$(${odio} which mv)
@@ -351,7 +333,7 @@ function rst() {
 	pwd
 	csleep 1
  
-	#TODO:sopivassa kohdassa .sh-tiedostoihin ajo-oikeus päälle
+	#sopivassa kohdassa .sh-tiedostoihin ajo-oikeus päälle?
 
 	rst_pre2
 	#includeen vai ei?

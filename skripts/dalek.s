@@ -31,7 +31,7 @@ debug=1
 	
 case "${1}" in
 	d1)
-		echo "d ) BEFORE CHMOF"
+		echo "d ) BEFORE CHMOD"
 		sleep 2
 
 		if [ x"${CONF_tmpdir}" != "x" ] ; then
@@ -41,7 +41,7 @@ case "${1}" in
 
 			echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
 			${smr} -rf ${CONF_tmpdir}/*
-			[ $? -eq 0 ] || echo "dale.bash d2 ?"
+			[ $? -eq 0 ] || echo "sudo daleK.bash d2 ?"
 			csleep 5
 			${scm} 0755 ${CONF_tmpdir}
 		fi
@@ -185,7 +185,8 @@ function bbb() {
 	#${smr} -rf ./boot/* #080226 kommentteihin. vöib sotkea
 	${smr} -rf ./usr/share/doc/*
 	
-	for f in $(find . -type f -name "*.deb") ; do #HSIPUT WTTUUN
+	#HSIPUT WTTUUN
+	for f in $(find . -type f -name "*.deb") ; do
 		dqb "${smr} ${f}"
 		csleep 1
 		${smr} ${f}
@@ -209,7 +210,7 @@ function bbb() {
 	csleep 1
 	
 	${sco} -R 0:0 ./${TARGET_pad2}
-	fix_sudo $(pwd)
+	#fix_sudo $(pwd) #qtsuvassa koodissa?
 	${scm} -R 0755 ./var/cache/man
 	${sco} -R man:man ./var/cache/man
 
