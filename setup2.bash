@@ -104,6 +104,7 @@ function aqua() {
 	dqb "aqua"
 	csleep 1
 	[ -v CONF_pkgsrc ] || exit 22
+	[ -z "${CONF_pkgsrc}" ] && exit 21
 	[ -d ${CONF_pkgsrc} ] || exit 23
 	#230526:voisiko instailun ulkoistaa -> g_doit?
 
@@ -240,6 +241,8 @@ function f5a() {
 	[ -z "${CONF_scripts_dir}" ] && exit 22
 	[ -d ${CONF_scripts_dir} ] || exit 33
 
+	#muistettava kanssa varmistaa että dalek tulee kaikkiin sitä tarvitseviin juttuihin mukaan?
+
 	dqb "MAKING OF:dalek.bash"
 	[ -f ${CONF_scripts_dir}/dalek.bash ] && ${svm} ${CONF_scripts_dir}/dalek.bash ${CONF_scripts_dir}/dalek.bash.OLD
 	csleep 3
@@ -289,6 +292,7 @@ function f5b() {
 	#TODO:varmista että kaikki listan skriptit toimivat kuten tarkoitus
 	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
 	#joko sha512 ei olekaan enää sudon tukema tai sah6 qsi
+	#... siis ubuntu.-tyylisen sudon poiston jöälkeen testit(aa sekä ab)
 
 	for c in ${g_aa} ; do 
 		#mangle_s()
@@ -299,7 +303,7 @@ function f5b() {
 
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
 	#oli myös se "sudo.sw"-linkki , jospa menisi dalek.bash - tavalla kuitenkin	
-	#VAIH:jospa kokeilisi josqs toimintaa (syntaki lienee jo)
+	#VAIH:jospa kokeilisi josqs toimintaa (syntaksi lienee jo) (myös joitain paranetreja tulisi sallia)
 
 	for c in ${g_ab} ; do
 		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
@@ -315,8 +319,6 @@ function f5b() {
 jord ${CONF_basedir}
 
 #se "komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers"
-#DONE:testaus jo, toimii
-
 if [ "${1}" != "1" ] ; then
 	[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
 	[ -v CONF_ue ] || exit 34

@@ -51,14 +51,14 @@ csleep 1
 #main()
 #180526 alettu renkata sudo-asioita
 #240526:taisi jo toimia make-dirs sekä d omegan ajon jälkeen mikä ei tosin suuri ihme chmod+chown - koment5ojen takomisen jälkeen
-#pitäisiköhän se odio jyrätä tässä skriptissä?
+#pitäisiköhän se odio jyrätä tässä skriptissä? jyrätään varm vuoksi
 
 case "${cmd}" in
 	--make-dirs)
 		sudo ./skripts/dalek.bash m
 	;;
 	-d)
-		#2605426:ei täysin onnistunut kohteen siivoilu omegan jälkeen, toistukuko?
+		#2605426:ei täysin onnistunut kohteen siivoilu omegan jälkeen, toistuuko?
 		#4626:vieläkin oli toivomisen varaa, lisätty pari juttua dalekiin
 		sudo ./skripts/dalek.bash d1
 	;;
