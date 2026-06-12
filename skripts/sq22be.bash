@@ -50,7 +50,7 @@ function cfd() {
 }
 
 ##sudoers-jekku olisi hyväksi tässäkin? tai sitten local odio/smr/sco (TODO)
-##VAIH:vipuaminen dalekille
+
 #function bbb() {
 #	#dqb ";bbb( ${1} ) (OGDRU JAHAD"
 #	echo "SHOULD USE dalek b INSTEAD"	
@@ -241,10 +241,13 @@ function rst_pre1() {
 
 #040626:/e/d/locale kanssa oli nalkutusta, keksi jotain
 function rst_pre2() {
-	dqb "rst_pre2()"
+	dqb "rst_pre2( ${1} ()"
 	csleep 1
 	pwd
 	csleep 1
+
+	[ -z "${1}" ] && exit 99
+	dqb "pars ok"
 
 	if [ -d ./etc/default ] ; then
 		dqb "CTE KO"
@@ -256,14 +259,11 @@ function rst_pre2() {
 	csleep 1
 
 	local odio=$(which sudo)
-	local sco=$(${odio} which chown)
-
-	
+	local sco=$(${odio} which chown)	
 	local scm=$(${odio} which chmod)
 
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "	
-
 
 	#fasdfasd ./etc/default/locale
 	${odio} touch ${1}
@@ -297,7 +297,6 @@ function rst_post() {
 	pwd
 	csleep 1
 		
-
 	local odio=$(which sudo)
 	svm=$(${odio} which mv)
 	svm="${odio} ${svm} "

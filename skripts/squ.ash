@@ -109,10 +109,9 @@ case "${cmd}" in
 
 		${uom} ${CONF_source}
 	;;
-	-b) #DONE:b) , d) , yesyaa
+	-b)
 		#vissiin dalek hoitaa hommansa ok 060626
 
-		#bbb ${CONF_squash_dir}
 		sudo ${tmp}/dalek.bash b
 		#	fix_sudo $(pwd)
 	;;
