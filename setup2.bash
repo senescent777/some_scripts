@@ -100,6 +100,8 @@ function jord() {
 #josko 06/26 AIKANA?
 #e22_stu() ja "exp3 s" liittyvät
 
+#... vaikuttaisi että gdoit.sh kehitysymp saattaa paskoa slimin
+
 function aqua() {
 	dqb "aqua"
 	csleep 1
@@ -292,7 +294,7 @@ function f5b() {
 	#TODO:varmista että kaikki listan skriptit toimivat kuten tarkoitus
 	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
 	#joko sha512 ei olekaan enää sudon tukema tai sah6 qsi
-	#... siis ubuntu.-tyylisen sudon poiston jöälkeen testit(aa sekä ab)
+	#... siis ubuntu.-tyylisen sudon poiston jälkeen testit(aa sekä ab)
 
 	for c in ${g_aa} ; do 
 		#mangle_s()
