@@ -45,6 +45,9 @@ smr="${odio} rm"
 #simppelimpi näin
 [ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
 
+sah6=/usr/bin/sha256sum
+CONF_algo=sha256
+
 function reqwreqw() {
 	[ -z "${1}" ] && exit 99
 	[ -f ${1} ] || exit 100
@@ -96,8 +99,9 @@ function jord() {
 }
 
 #240526:noista paketeista oikeastaan git lienee välttämättömin tmän skriptin kannalta
-#TODO:testaapa miten common_lib/g_doit/sq-rot suoriutuvat kehitysympstössä pakettien asentelusta
-#josko 06/26 AIKANA?
+
+#VAIH:testaapa miten common_lib/g_doit/sq-rot suoriutuvat kehitysympstössä pakettien asentelusta
+#bissiin suoriutivat
 #e22_stu() ja "exp3 s" liittyvät
 
 #... vaikuttaisi että gdoit.sh kehitysymp saattaa paskoa slimin
@@ -108,7 +112,7 @@ function aqua() {
 	[ -v CONF_pkgsrc ] || exit 22
 	[ -z "${CONF_pkgsrc}" ] && exit 21
 	[ -d ${CONF_pkgsrc} ] || exit 23
-	#230526:voisiko instailun ulkoistaa -> g_doit?
+	#230626:voisiko instailun ulkoistaa -> g_doit ? varmaankin 
 
 	${odio} apt --fix-broken install
 
@@ -269,8 +273,7 @@ function f5a() {
 	
 	#VAIH:pitäisi saada aikaiseksi testata erinäiset skriptit omegan ajon jälkeen, sitä ennen jos toimii niin ei kerro juuri mitään
 	#230526:omegan jälkeen "stage0 -d -v" hyytyi ifup-kohtaan
-	#g_aa="${g_aa} $(find ${CONF_basedir} -type f -name dalek.sh | head -n 1)"
-		
+	
 	#olisi kai parempi vetää dalek mukaan find:illa
 	g_aa="${g_aa} ${CONF_scripts_dir}/dalek.bash"
 }
@@ -294,18 +297,18 @@ function f5b() {
 	#TODO:varmista että kaikki listan skriptit toimivat kuten tarkoitus
 	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
 	#joko sha512 ei olekaan enää sudon tukema tai sah6 qsi
-	#... siis ubuntu.-tyylisen sudon poiston jälkeen testit(aa sekä ab)
+	#... siis ubuntu-tyylisen sudon poiston jälkeen testit(aa sekä ab)
+
+	#VAIH:CONF_algo, sah6 mukaan?
 
 	for c in ${g_aa} ; do 
-		#mangle_s()
-		#HUOM. tämä loopin sisältö pitää muista amuuttaa jos mangle_s() ja CONF_algo muuttaa
-		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
-		echo "$(whoami) localhost=NOPASSWD: sha256: ${p} ${c}" >> ${1} 
+		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
+		echo "$(whoami) localhost=NOPASSWD: ${CONF_algo}: ${p} ${c}" >> ${1} 
 	done
 
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
 	#oli myös se "sudo.sw"-linkki , jospa menisi dalek.bash - tavalla kuitenkin	
-	#VAIH:jospa kokeilisi josqs toimintaa (syntaksi lienee jo) (myös joitain paranetreja tulisi sallia)
+	#VAIH:jospa kokeilisi josqs toimintaa (syntaksi lienee jo) (myös joitain paraMetreja tulisi sallia)
 
 	for c in ${g_ab} ; do
 		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}

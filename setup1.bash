@@ -127,7 +127,6 @@ function aqua() {
 	sudo cp /var/cache/apt/archives/*.deb ${1} #kuinka tarpeellinen? kts conf EIKU
 }
 
-#VAIH:"a-g-u ... tar -rvf" -välinen blokki jnkn vivun taakse?
 if [ -s "${1}" ] && [ $2 -eq 1 ] ; then
 	[ -v CONF_pkgsrc ] || exit 33
 	${odio} apt-get update
