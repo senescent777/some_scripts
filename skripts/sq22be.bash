@@ -243,12 +243,14 @@ function rst_pre1() {
 function rst_pre2() {
 	dqb "rst_pre2( ${1} ()"
 	csleep 1
-	pwd
-	csleep 1
 
 	[ -z "${1}" ] && exit 99
 	dqb "pars ok"
-
+	cd ${1}
+	
+	pwd
+	csleep 1
+	
 	if [ -d ./etc/default ] ; then
 		dqb "CTE KO"
 	else
@@ -327,14 +329,16 @@ function rst() {
 	
 	dqb "params ok (maybe)"
 	csleep 1
-
+	
+	rst_pre2 ${1}
 	cd ${1}
+	
 	pwd
 	csleep 1
  
 	#sopivassa kohdassa .sh-tiedostoihin ajo-oikeus päälle?
 
-	rst_pre2
+
 	#includeen vai ei?
 	scr="sudo /usr/sbin/chroot"
 	${scr} ./ ./bin/bash 
