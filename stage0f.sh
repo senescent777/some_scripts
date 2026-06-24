@@ -16,8 +16,11 @@ function single_param() {
 	dqb "TODO?:  single_param() ?"
 }
 
+#TODO:bissiin jatkosäätöä parsetuksen kanssa
+
 if [ $# -lt 3 ] ; then
-	echo "MEE PELLE VITTUUN"
+	#echo "MEE PELLE VITTUUN"	
+	usage
 	exit 777
 fi
  
@@ -35,7 +38,7 @@ dqb "PARAMS OK?"
 #... tosin jokin piontti saattoi olla miksi näin
 #
 #isolunuxin kanssa päätä seinään josqs myöhemmin lisää?
-#230526:ehkä toimi tänä fktio silloin?
+
 #240526:vissiin toimi omegan ajon jälkeen (penen renkkaamisen jälkeen)
 function part0() {
 	dqb "stg0f.PART0))))))) ${1}, ${2} , ${3} , ${4} ((("
@@ -63,11 +66,8 @@ function part0() {
 	dqb "${spc} -a ${1}/efi ${4}"
 	${spc} -a ${1}/efi ${4}
 	csleep 1
-	#
-
+	
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää CONF_SOURCE
-	#191225;josko vähitellen jotain sen oletus-bloader.konfiguraation hyväksi?
-	# dd if=debian-9.3.0-i386-DVD-1.iso bs=1 count=432 of=isohdpfx.bin myöhemmin, liian hapokasta
 	
 	csleep 5	
 	bootloader ${3} ${2} ${1} ${CONF_target}
@@ -116,8 +116,6 @@ function part0() {
 dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 65
 [ -v CONF_target ] || exit 66
-
-#make_tgt_dirs ${CONF_target} ${CONF_source} ${3} #josqs pois kommenteista? rtai siis
 ${odio} ./skripts/dalek.bash m
 
 #270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
