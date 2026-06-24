@@ -239,7 +239,7 @@ function rst_pre1() {
 	csleep 1		
 }
 
-#040626:/e/d/locale kanssa oli nalkutusta, keksi jotain
+#040626:/e/d/locale kanssa oli nalkutusta, keksi jotain (taitaa olla edelleen 240626)
 function rst_pre2() {
 	dqb "rst_pre2( ${1} ()"
 	csleep 1
@@ -337,7 +337,6 @@ function rst() {
 	csleep 1
  
 	#sopivassa kohdassa .sh-tiedostoihin ajo-oikeus päälle?
-
 
 	#includeen vai ei?
 	scr="sudo /usr/sbin/chroot"
