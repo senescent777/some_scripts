@@ -119,6 +119,8 @@ ${odio} ./skripts/dalek.bash m
 
 #270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
 
+#270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi?
+
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}
 else

@@ -127,6 +127,9 @@ case "${cmd}" in
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
+		#DONE:jospa urputtaisi mikäli CONF_squash_dir sisältöineen puuttuu
+		#TODO:tämänkin casen testaus sittenq
+
 		rst_pre1
 		rst ${CONF_squash_dir}
 		dqb "how about removung those .bz3-files under squash?"
