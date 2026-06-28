@@ -16,10 +16,9 @@ function single_param() {
 	dqb "TODO?:  single_param() ?"
 }
 
-#TODO:bissiin jatkosäätöä parsetuksen kanssa
+#260626:vielä jatkosäätöä parsetuksen kanssa?
 
 if [ $# -lt 3 ] ; then
-	#echo "MEE PELLE VITTUUN"	
 	usage
 	exit 777
 fi
@@ -39,7 +38,7 @@ dqb "PARAMS OK?"
 #
 #isolunuxin kanssa päätä seinään josqs myöhemmin lisää?
 
-#240526:vissiin toimi omegan ajon jälkeen (penen renkkaamisen jälkeen)
+#240526:vissiin toimi omegan ajon jälkeen (pIenen renkkaamisen jälkeen)
 function part0() {
 	dqb "stg0f.PART0))))))) ${1}, ${2} , ${3} , ${4} ((("
 	pwd
@@ -119,12 +118,11 @@ dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
 ${odio} ./skripts/dalek.bash m
 
 #270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
-#020626:aikainen exit jos parametrit p-v-hh (esm väärä määrä param) (TODO)
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}
 else
-	#26426:minimaalisesti modattua minimal_live:ä jo kokeiltu, pitäisi juttuja tehdäö että voisi sen kanssa jatkaa
+	#26426:minimaalisesti modattua minimal_live:ä jo kokeiltu, pitäisi jotainb juttuja tehdä että voisi sen kanssa jatkaa (?)
 	if [ -s ${1} ] && [ -r ${1} ] ; then #151225:nyt toimii kun common_funcs muutettu
 		dqb "${som} -o loop,ro ${1} ${CONF_source}"
 		csleep 3

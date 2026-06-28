@@ -44,7 +44,6 @@ smr="${odio} rm"
 
 #simppelimpi näin
 [ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
-
 sah6=/usr/bin/sha256sum
 CONF_algo=sha256
 
@@ -100,10 +99,6 @@ function jord() {
 
 #240526:noista paketeista oikeastaan git lienee välttämättömin tmän skriptin kannalta
 
-#VAIH:testaapa miten common_lib/g_doit/sq-rot suoriutuvat kehitysympstössä pakettien asentelusta
-#bissiin suoriutivat
-#e22_stu() ja "exp3 s" liittyvät
-
 #... vaikuttaisi että gdoit.sh kehitysymp saattaa paskoa slimin
 
 function aqua() {
@@ -112,16 +107,12 @@ function aqua() {
 	[ -v CONF_pkgsrc ] || exit 22
 	[ -z "${CONF_pkgsrc}" ] && exit 21
 	[ -d ${CONF_pkgsrc} ] || exit 23
-	#230626:voisiko instailun ulkoistaa -> g_doit ? varmaankin 
 
 	${odio} apt --fix-broken install
 
 	local q=$(mktemp -d)
 	${spc} ${CONF_pkgsrc}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
-	
-	#240526 kokeeksi kommentoitu suurin osa riveistä jemmaan
-	#... piti samantien palauttaa lib-paketit koska git
 
 	#parempi samaan aikaan dms ja libdev 
 	efk ${q}/dmsetup*.deb ${q}/libdevmapper*.deb
@@ -135,8 +126,6 @@ function aqua() {
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
 	sleep 5
 
-#HUOM.sitten oli ne grub/genisofs/yms, ne pitäisi jtnkin saada asennettua jos tässä alla ei tee
-#	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
 #	${odio} dpkg -i ${q}/*.deb
 #	${smr} ${q}/*.deb
 #
@@ -179,13 +168,11 @@ function ignis() {
 	fi
 }
 
-#lokaalien sorkinta lienee ulkoistettu 04/26 mennessä
 function luft() {
 	dqb "luft"
 	csleep 1
 	local c4=0
 
-#26526 jemmaan tilapäisesti, g_doit.pre_enforce() liittyy (tai siis)
 #	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
 #		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
 #		local c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
@@ -205,10 +192,6 @@ function luft() {
 		fasdfasd /etc/fstab 
 		sleep 1
 
-		#tilapäinen sekoilu osiotaulun ja fstabin kanssa toivottavasti ohi
-		#... tosin $CONF_basedir vastaavan rivin kanssa semmoinen muna-kana-juttu
-		#olisi myös hyväksi päättää mitkä rivit lisää common_lib fktio ja mitkä tämä
-
 		[ -s /etc/fstab.tmp ] || exit 64
 		${odio} cat /etc/fstab.tmp >> /etc/fstab
 
@@ -225,8 +208,6 @@ function luft() {
 	#tartteeko tätä sorkkia vai ei?
 	if [ -v CONF_basept2tgt ] ; then
 		#/proc/mounts voisi grepAta?
-		
-		#${odio} mount ${CONF_basept2tgt}
 		${odio} mount -a
 	else
 		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
@@ -253,10 +234,7 @@ function f5a() {
 	[ -f ${CONF_scripts_dir}/dalek.bash ] && ${svm} ${CONF_scripts_dir}/dalek.bash ${CONF_scripts_dir}/dalek.bash.OLD
 	csleep 3
 
-	#echo "#!/bin/bash" > ${CONF_scripts_dir}/dalek.sh #vissiin ei näin
 	head -n 1 ${CONF_scripts_dir}/dalek.s > ${2}
-
-	#TARKKUUTTA PERKLE TÄSSÄ KOHTAA 666!!!
 	grep -v "#" ${CONF_scripts_dir}/common.conf >> ${2}
 	grep -v "#" ${CONF_scripts_dir}/dalek.s >> ${2}
 
@@ -299,8 +277,6 @@ function f5b() {
 	#joko sha512 ei olekaan enää sudon tukema tai sah6 qsi
 	#... siis ubuntu-tyylisen sudon poiston jälkeen testit(aa sekä ab)
 
-	#VAIH:CONF_algo, sah6 mukaan?
-
 	for c in ${g_aa} ; do 
 		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
 		echo "$(whoami) localhost=NOPASSWD: ${CONF_algo}: ${p} ${c}" >> ${1} 
@@ -342,6 +318,5 @@ somefile2=$(mktemp) #ehkä pärjäisi ilmankin tuon kanssa kikkailua, suoraan ko
 f5a ${somefile} ${somefile2} 
 f5b ${somefile}
 
-#se /.chroot luonti jonnekin?, esim. stage0_backend.bash...
-echo "kutl v | g_doit -v 1 ?" #ensiksi mainitun kanssa jos testaisi common_lib
+echo "kutl v | g_doit -v 1 ?"
 echo "VAIH:SE /e/s.d/live HUKKAAMINEN KOKEEKSI "
