@@ -11,7 +11,9 @@ tgt=""
 function usage() {
 	echo "another kind of a wrapper for gpg"
 	echo "${0} <mode> [dir] \r\n"
-	echo "abt mode"
+	echo "abt mode:"
+	echo
+
 	echo "u : imports pUblic keys from [dir] , ${CONF_keys_dir_pub} is used if dir does not exits or not given"
 	echo "v : imports priVate keys from [dir] , ${CONF_keys_dir} is used if..."
 	echo "w : exports pre-configured public keys 2 dir"
@@ -35,11 +37,13 @@ function parse_opts_real() {
 			[ "${2}" == "-v" ] || tgt=${2}
 		;;
 	esac
+
+	dqb "fthagn"
 }
 
 . ${d}/common_funcs.sh
-dqb "cmd= ${cmd}"
-dqb "tgt=${tgt}"
+dqb "qtlu: cmd= ${cmd}"
+dqb "qtlu: tgt=${tgt}"
 csleep 1
 
 function m0() {
@@ -48,27 +52,34 @@ function m0() {
 		
 		${sco} $(whoami):$(whoami) ${1}/*.gpg
 		${scm} 0400 ${1}/*.gpg
+
+		#TODO?:ao. rivin kanssa ehkä jotain josqs?
 		${odio} chattr +ui ${1}/*.gpg
 	}
 
+#sco,scm,smd? valmista?
+dqb "BFORE CHMOD"
 [ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
-chown -R $(whoami):$(whoami) ~/.gnupg #tarpeen?
-chmod 0700 ~/.gnupg/private-keys-v1.d #tai lähes koko ~/.g
-chmod 0644 ~/.gnupg/pubring*
+${sco} -R $(whoami):$(whoami) ~/.gnupg #tarpeen?
+${scm} 0700 ~/.gnupg/private-keys-v1.d #tai lähes koko ~/.g
+${scm} 0644 ~/.gnupg/pubring*
 csleep 5
 		
-#GPGP --EDIT-KEYS?		
+dqb "#GPG --EDIT-KEYS?	"	
+#190526:kuuluisi olla gg alustettu tähän mennessä mutta viimeaikaiset common_lib sorkkimiset
+#"gpg: error running '/usr/bin/gpg-agent': probably not installed"
+[ -z "${gg}" ] && exit 666	
 		
-case ${cmd} in
+case "${cmd}" in
 	u)
 		tgt2=${tgt}
 		
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then
 			tgt2=${CONF_keys_dir_pub}
-			dqb "${gg} --import ${CONF_keys_dir_pub}/*.gpg"
+			dqb "${gg} --ipmort ${CONF_keys_dir_pub}/*.gpg"
 		fi
-		
-		for d in $(find ${tgt2} -type f -name '*.gpg' | grep -v 'priv') ; do
+
+		for d in $(find ${tgt2} -type f -name "*.gpg" | grep -v 'priv') ; do
 			${gg} --import ${d}
 		done
 	;;
@@ -77,7 +88,7 @@ case ${cmd} in
 		
 		#jos vetäisi vain array:n mukaiset? tai nitenjos findin kautta? no qhan tämänkertaiset kiukuttelut hoidettu ni
 		if [ -z "${tgt}" ] || [ ! -d ${tgt} ] ; then
-			dqb "-import ${CONF_keys_dir}/*.priv.gpg"
+			dqb "-imp ort ${CONF_keys_dir}/*.priv.gpg"
 			${gg} --import ${CONF_keys_dir}/*.priv.gpg
 		else
 			dqb "-import ${tgt}/stuff"
@@ -103,7 +114,7 @@ case ${cmd} in
 	;;
 	x)
 		[ -v CONF_karray ] || exit 68
-		#[ ${tgt} == ${CONF_keys_dir_pub} ] && exit 69 #TODO:voisi laittaa toimimaan ASAP
+		#[ "${tgt}" == "${CONF_keys_dir_pub}" ] && exit 69 #TODO:voisi laittaa toimimaan ASAP?
 		[ -z "${tgt}" ] && tgt=${CONF_keys_dir}
 		[ -d ${tgt} ] || exit 70
 		
@@ -134,7 +145,7 @@ case ${cmd} in
 		if [ ! -z "${tgt}" ] ; then #vähän aiemmaksi jos tarkistus?
 			[ -s ${tgt} ] && mv ${tgt} ${tgt}.OLD
 			tar -jcvf ${tgt} ~/.gnupg
-			chmod 0444 ${tgt} 
+			${scm} 0444 ${tgt} 
 			${odio} chattr +ui ${tgt}
 			dqb "gnupg backup file can be restored with: tar -jxvf  ${tgt} "
 		fi
@@ -144,8 +155,8 @@ case ${cmd} in
 		
 		if [ ! -s ${d}/keys.conf ] ; then
 			cp ${d}/keys.conf.example ${d}/keys.conf.tmp
-			chmod 0644 ${d}/keys.conf.tmp
-			chown $(whoami):$(whoami) ${d}/keys.conf.tmp
+			${scm} 0644 ${d}/keys.conf.tmp
+			${sco} $(whoami):$(whoami) ${d}/keys.conf.tmp
 			sleep 5
 			#onko tu o odottaminen se jekku millä sai toimimaan?
 		else

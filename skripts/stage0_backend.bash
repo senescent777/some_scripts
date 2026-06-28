@@ -1,6 +1,6 @@
 function mangle_conf() {
 	dqb "mangle_conf ${1}, ${2}, ${3} "
-	#TODO:jotain muutakin tähän, ehkä (lähteen greppailu kohteeseen)
+	#TODO?:jotain muutakin tähän, ehkä (lähteen greppailu kohteeseen)
 	#tdstoista common.conf ja keys.conf pitäisi saada TARGET_D ja CONF_k - alkuiset
 }
 
@@ -11,7 +11,7 @@ function copy_main() {
 	dqb "copy_main(${1}, ${2}, ${3} )"
 
 	[ -z "${1}" ] && exit 2
-	[ -d ${2} ] || exit 22
+	#[ -d ${2} ] || exit 22 #mitä jos ei kohde-hmistoa ole olemassa ennen kopiointia?
 
 	[ -z "${3}" ] && exit 33
 	[ -d ${3} ] || exit 34
@@ -20,7 +20,7 @@ function copy_main() {
 	local f
 	csleep 1
 
-	dqb "ONE BATCH"	
+	dqb "PIZZAA"	
 	csleep 1
 
 	#eri lähde find-komennoilla ni jospa ei jaksaisi hýhgdistää ekaa findia
@@ -29,7 +29,7 @@ function copy_main() {
 		${spc} ${f} ${2}/../.. 
 	done
 
-	dqb "TWO BATCH"
+	dqb "PASHAA"
 	csleep 1
 	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
 
@@ -38,7 +38,7 @@ function copy_main() {
 		${spc} ${f} ${2}
 	done
 	
-	dqb "PENNY AND A DIME"
+	dqb "KERMAA"
 	csleep 1
 
 	#030526:lototaan aluksi tähän, ehkä vaihtuu toiseen fktioon kys pätkä
@@ -66,12 +66,6 @@ function copy_conf() {
 	#-v vielä ?
 
 	if [ ! -z "${CONF_scripts_dir}" ] ; then
-		#pystyisi varmaan tekemään pelkällä findillä
-		#HUOM.100326:ei-tyhjä $3.conf olisi syytä löytyä lähteestä koska viimeaikaiset muutkset
-
-		#180526;näyttäisi levan tilanne se että keys.conf kopioituu kohteeseen
-		#... tarvitsevat voisivat tietysti lotota kys konftdston sijainnin samaan tapaan kuin common_funcs etsii common_lib
-
 		for f in $(find ${CONF_scripts_dir} -type f -name "*.conf" | grep -v bash) ; do
 			dqb "${spc} ${f} ${2}/../.."
 			${spc} ${f} ${2}/../.. 	
@@ -176,11 +170,11 @@ function pre_bl() {
 	dqb "WORK N PROGRESS"
 	}
 
-#TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole (JOKO JO 04/26?)
-#TODO?:sudon pudon pudotus josqs myöh?
+#TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole (pre:b olisi tarkoitus liittyä asiaan)
+
 #sen hybrid.bin-tdston kanssa jotain? antaa oll atoisdtaiseksi?
 function bootloader() {
-	dqb "bootloader(${1}, ${2}, ${3}, ${4} )"
+	dqb "bootloader(${1}, ${2}, ${3}, ${4} ((("
 
 	[ -z "${1}" ] && exit 2
 	[ -z "${2}" ] && exit 4
@@ -235,6 +229,7 @@ function bootloader() {
 				dqb "${spc} -a ${3}/boot/ ${4} || exit 8"
 				csleep 3
 
+				#TODO:koita keksiä jotain ettei tähän tökkää
 				${spc} -a ${3}/boot/ ${4} || exit 8
 				csleep 1
 
@@ -274,80 +269,5 @@ function bootloader() {
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
 
-#161225:sudoilut myöhemmin
-#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa (joko jo?)
-#DONE?:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
-
-function make_tgt_dirs() {
-	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
-	csleep 1
-
-	[ -z "${1}" ] && exit 99
-	[ x"${1}" != "x/" ] || exit 100
-	[ -z "${2}" ] && exit 101
-	[ -z "${3}" ] && exit 102
-	
-	dqb "PARAMZx OK"
-	csleep 1
-
-	dqb "CRS"
-	[ -d ${2} ] || ${smd} -p ${2}
-	${sco} 0:0 ${2}
-	${scm} 0755 ${2}
-	csleep 1	
-	
-	dqb "UQS(${CONF_squash_dir})"
-	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
-	[ ${debug} -gt 0 ] && ls -las ${CONF_squash_dir}
-	csleep 2
-	
-	dqb "FR0ST"
-	
-	if [ ! -d ${1} ] ; then
-		#dqb "mkdir ${1}";sleep 6
-		${smd} -p ${1}
-	else
-		dqb "rm ${1}"
-		sleep 6
-		${smr} -rf ${1}/*
-	fi
-
-	csleep 1
-	dqb "BLADDER"
-
-	if [ "${3}" != "grub" ] ; then
-		#tapauksessa grub menee mettään näin
-		[ -d ${1}/${3} ] || ${smd} -p ${1}/${3}
-	else
-		[ -d ${1}/boot/grub ] || ${smd} -p ${1}/boot/grub
-	fi
-
-	csleep 1
-
-	dqb "LIVE-EVIL"
-	[ -d ${1}/live ] || ${smd} -p ${1}/live
-	csleep 1 
-
-	dqb "DGSTS"
-	[ -d ${1}/${TARGET_DIGESTS_dir} ] || ${smd} -p ${1}/${TARGET_DIGESTS_dir}
-	csleep 1
-
-	dqb "DAP"
-	[ -d ${1}/${TARGET_pad_dir} ] || ${smd} -p ${1}/${TARGET_pad_dir}
-	csleep 1
-
-	dqb "TUQ"
-	[ -d ${1}/../out ] || ${smd} -p ${1}/../out
-	csleep 1
-
-	dqb "FN1AL"
-	${sco} -R $(whoami):$(whoami) ${1}
-	local f
-	for f in $(find ${1} -type d ); do ${scm} 0755 ${f} ; done
-
-	csleep 1
-	[ ${debug} -gt 0 ] && ls -laR ${1}
-	csleep 7
-	dqb "...done\n"
-}
+#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa (MINKÄ ARRAYN?)
 

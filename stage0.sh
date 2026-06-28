@@ -3,7 +3,7 @@ debug=0
 . ./skripts/common.conf
 source=""
 source2=""
-bl=${CONF_bloader} #tähän liittyen oli se juttu toisessa repossa mikö pitäisi
+bl=${CONF_bloader} #tähän liittyen oli se juttu toisessa repossa mikä pitäisi (mikä?)
 cmd=""
 
 #TODO:josko nimeäisi uudestaan ihan muuten vaan
@@ -49,41 +49,18 @@ dqb "${cmd}"
 csleep 1
 
 #main()
+#180526 alettu renkata sudo-asioita
+#240526:taisi jo toimia make-dirs sekä d omegan ajon jälkeen mikä ei tosin suuri ihme chmod+chown - koment5ojen takomisen jälkeen
+#pitäisiköhän se odio jyrätä tässä skriptissä? jyrätään varm vuoksi
 
-case ${cmd} in
+case "${cmd}" in
 	--make-dirs)
-		#181225:lotottu init.bash hoitamaan jatkossa src_dirs-asiat
-
-		#onkohan mieltä tehdä noin päin kuin alla?
-		make_tgt_dirs ${CONF_target} ${CONF_source} ${CONF_bloader}
-		exit
+		sudo ./skripts/dalek.bash m
 	;;
 	-d)
-		[ -v CONF_tmpdir ] || exit 68
-		[ -z ${CONF_tmpdir} ] && exit 69
-		[ "${CONF_tmpdir}" == "/" ] && exit 70
-
-		dqb "CONF_tmp maybe ok"
-		csleep 1
-
-		#TODO:man chattr pitkästä aikaa
-		#081225:v-hmiston alta jotain siivoilua myös? no ei
-		#VAIH:josko jo sudon pudotus smr:stä tai sittense sudoers
-		
-		dqb "smr= ${smr}"
-		csleep 2
-
-		if [ x"${CONF_tmpdir}" != "x" ] ; then 
-			echo "${smr} -rf ${CONF_tmpdir}/* IN 6 SECS";sleep 6	
-			${smr} -rf ${CONF_tmpdir}/*
-		fi
-
-		if [ ${debug} -gt 0 ] ; then
-			ls -las ${CONF_tmpdir} 
-			sleep 5
-		fi
-
-		exit
+		#2605426:ei täysin onnistunut kohteen siivoilu omegan jälkeen, toistuuko?
+		#4626:vieläkin oli toivomisen varaa, lisätty pari juttua dalekiin
+		sudo ./skripts/dalek.bash d1
 	;;
 	*)
 		#stage0f==glorified cp

@@ -29,4 +29,4 @@ echo "#the line $CONF_squash0 ext2 noauto,user,exec,suid,dev 0 0 should be found
 echo -n "CONF_source=\$CONF_tmpdir/temporary_mount_point_4_base"
 echo "CONF_target=\$CONF_tmpdir/target_where_base _nd_additional_stuff_are_copied #, different from \$CONF_squash  and \$CONF_source -dirs"
 echo "CONF_bloader=preferred_bootloader"
-
+echo "CONF_msq_opts=\"-comp xz -b 1048576\"" #sq22be.cfd()

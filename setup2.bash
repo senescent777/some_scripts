@@ -7,15 +7,23 @@ else
 	exit 67
 fi
 
-echo "TODO:setup1 uusi testaus"
-sleep 5
-
+#=================LIB1==============================================
+#skritps/common_funcs, hyödyntäisikö?
 echo "ko.1"
 distro=$(cat /etc/devuan_version)
 [ -v CONF_basedir ] || exit 1
 [ -d ${CONF_basedir} ] || exit 2
-echo "base= ${CONF_basedir}"
-sleep 10
+
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
+
+dqb "base= ${CONF_basedir}"
+csleep 5
 
 odio=$(which sudo)
 sag=$(${odio} which apt-get)
@@ -26,8 +34,8 @@ sag=$(${odio} which apt-get)
 #sa=$(${odio} which apt)
 #fib="${odio} ${sa} --fix-broken install "
 #sharpy="${odio} ${sag} remove --purge --yes "
-#svm=$(${odio} which mv)
-#svm="${odio} ${svm} "
+svm=$(${odio} which mv)
+svm="${odio} ${svm} "
 
 sco="${odio} chown"
 scm="${odio} chmod"
@@ -36,21 +44,25 @@ smr="${odio} rm"
 
 #simppelimpi näin
 [ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
+sah6=/usr/bin/sha256sum
+CONF_algo=sha256
 
-function jord() {
-	#231225:oikeudet olisi basedir/e alla hyvä olla järkevät, init1.sh saa nyt hoitaa
-	[ -z "${1}" ] && exit 666
-	[ -d ${1} ] || exit 666
-	
-	echo "jord"
-	sleep 1
-
-	${sco} -R 0:0  ${1}/etc	
-	${scm} -R 0444 ${1}/etc	
-	${spc} -a ${1}/etc/* /etc
+function reqwreqw() {
+	[ -z "${1}" ] && exit 99
+	[ -f ${1} ] || exit 100
+	csleep 1
+	${sco} 0:0 ${1}
+	${scm} a-w ${1}
 }
 
-jord ${CONF_basedir}
+function fasdfasd() {
+	[ -z "${1}" ] && exit 99
+
+	csleep 1
+	${odio} touch ${1}
+	${sco} $(whoami):$(whoami) ${1}
+	${scm} 0644 ${1}
+}
 
 #common_lib
 function efk() {
@@ -59,178 +71,252 @@ function efk() {
 }
 
 function ekf() {
-	echo "EKF (${1})"
-	sleep 2
+	dqb "EKF (${1})"
+	csleep 2
 	local t=$(${odio} which ${1})
 
 	if [ -z "${t}" ] || [ ! -x ${t} ] ; then
-		echo "jfk"
+		dqb "jfk"
 		efk ${q}/${1}*
 	fi
 }
 
-[ -v CONF_pkgsrc ] || exit 22
-[ -d ${CONF_pkgsrc} ] || exit 23
+#=========================LIB2=========================================
+g_aa=${CONF_aa}
+g_ab=${CONF_ab}
 
-#HUOM.211225:jos hoitaa tietyt asiat g_doit.sh:lla ni ei tässä skriptissä tartte ninn paljoa säätää
+function jord() {
+	[ -z "${1}" ] && exit 666
+	[ -d ${1} ] || exit 666
+	
+	dqb "jord"
+	csleep 1
+
+	${sco} -R 0:0  ${1}/etc	
+	${scm} -R 0444 ${1}/etc	
+	${spc} -a ${1}/etc/* /etc
+}
+
+#240526:noista paketeista oikeastaan git lienee välttämättömin tmän skriptin kannalta
+
+#... vaikuttaisi että gdoit.sh kehitysymp saattaa paskoa slimin
+
 function aqua() {
-	echo "aqua"
-	sleep 1
+	dqb "aqua"
+	csleep 1
+	[ -v CONF_pkgsrc ] || exit 22
+	[ -z "${CONF_pkgsrc}" ] && exit 21
+	[ -d ${CONF_pkgsrc} ] || exit 23
 
 	${odio} apt --fix-broken install
 
-	local q
-	q=$(mktemp -d)
+	local q=$(mktemp -d)
 	${spc} ${CONF_pkgsrc}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
 
 	#parempi samaan aikaan dms ja libdev 
-	efk ${q}/dmsetup*.deb  ${q}/libdevmapper*.deb
+	efk ${q}/dmsetup*.deb ${q}/libdevmapper*.deb
 	#efk ${q}/libjte2*.deb
 	efk ${q}/lib*.deb
 
-	echo "BEFORE TBLZ"
-	sleep 2
+	dqb "BEFORE TBLZ"
+	csleep 2
 
-	#onbkohan trarpeellinen kikkailu?
+	#onbkohan trarpeellinen kikkailu? E22_GG...
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
-	sleep 10
+	sleep 5
 
-	#avaimien instauksen voi hoitaa vaikka import2:sella parillakin taballa
-	${odio} dpkg -i ${q}/*.deb
-	${smr} ${q}/*.deb
-
-#	The following packages have unmet dependencies:
-# grub-efi-amd64 : Depends: grub-common (= 2.06-13) but 2.06-13+deb12u1 is installed
-#olisikohan tuolle jo 211225 mennessä tehty jotain?
-
-	echo "GENISOIMAGE?"
-	which genisoimage
-	sleep 6
-
-	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
-	if [ -v CONF_part076 ] ; then
-		${odio} apt-get remove --purge --yes ${CONF_part076}
-		#python3-cups ntp* #sharyp from common_lib
-	fi
-
-	${odio} apt autoremove
-	${odio} apt --fix-broken install #tähän vai heti grub-as jälk?
-	${odio} which iptables-restore
-	${odio} iptables-restore /etc/iptables/rules.v4.0
-
-	sleep 2
-	echo "AFTER iptables-restore "
+#	${odio} dpkg -i ${q}/*.deb
+#	${smr} ${q}/*.deb
+#
+#	dqb "GENISOIMAGE?"
+#	which genisoimage
+#	csleep 6
+#
+#	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
+#	if [ -v CONF_part076 ] ; then
+#		${odio} apt-get remove --purge --yes ${CONF_part076}
+#		#python3-cups ntp* #sharyp from common_lib
+#	fi
+#
+#	${odio} apt autoremove
+#	${odio} apt --fix-broken install #tähän vai heti grub-as jälk?
+#	${odio} which iptables-restore
+#	${odio} iptables-restore /etc/iptables/rules.v4.0
+#
+#	csleep 2
+#	dqb "AFTER iptables-restore "
 }
 
-aqua
-[ -v CONF_ue ] || exit 34
-[ -v CONF_un ] || exit 35
-
 function ignis() {
-	echo "ignis"
-	sleep 1
+	dqb "ignis"
+	csleep 1
+	local tig=$(${odio} which git)
 
-	local tig
-	#local c
-
-	#uutena tää git-tark
-	tig=$(${odio} which git)
 	[ -z "${tig}" ] && exit 68
 	[ -x ${tig} ] || exit 69
 
 	[ -z "${CONF_ue}" ] || ${tig} config --global user.email ${CONF_ue}
 	[ -z "${CONF_un}" ] || ${tig} config --global user.name ${CONF_un}
-	echo "tg1,1,dibe"
+	dqb "tg1,1,dibe"
 
 	#varmaan olisi hyvä testata tämä blokki josqs
 	if [ -s ${CONF_basedir}/.gitignore ] ; then
 		echo "not touching ${CONF_basedir}/.gitignore this time"
 	else
-		echo "setup1 may have done this already"
+		echo "setup1 may have done this already?"
 	fi
 }
 
-ignis
-
-[ -v CONF_dir ] || exit 44
-[ -d ${CONF_dir} ] || exit 45
-
-#lokaalien sorkinta lienee ulkoistettu 04/26 mennessä
 function luft() {
-	echo "luft"
-	sleep 1
+	dqb "luft"
+	csleep 1
+	local c4=0
 
-	local c4
-	c4=0
-
-	if [ -v CONF_dir ] ; then	
-		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
-	else
-		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
-		exit 665
-	fi
+#	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
+#		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
+#		local c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
+#		
+#		if  [ ${c5} -lt 1 ] ; then
+#			echo "SMTHING WRONG W/ fstab.tmp (or config)"
+#			exit 66
+#		fi
+#	else
+#		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
+#		exit 65
+#	fi
 
 	if [ ${c4} -gt 0 ] ; then
-		echo "f-stab 0k"
+		dqb "f-stab 0k"
 	else
-		${scm} a+w /etc/fstab #TODO:fasdfasd/reqwreqw
+		fasdfasd /etc/fstab 
 		sleep 1
+
+		[ -s /etc/fstab.tmp ] || exit 64
 		${odio} cat /etc/fstab.tmp >> /etc/fstab
+
 		sleep 1	
-		${scm} a-wx /etc/fstab*
-		${sco} 0:0 /etc/fstab*
+		reqwreqw /etc/fstab  
 	fi
 
-	#TODO?:joutaisi miettiä, tilapäisille tdstoille tarkoitettua osiota ei kannattane käyttää pitkäaikaiseen säilytykseen niinqu
+	#dataosion jakaminen kahtIA myöhemmin?
 
-	if [ -v CONF_basept2tgt ] ; then
-		#/proc/mounts voisi grepAta
-		[ -d ${CONF_basept2tgt} ] || ${odio} mkdir ${CONF_basept2tgt}
-		
-		${odio} mount ${CONF_basept2tgt}
-		#TODO:tai sitten mount -a + vastaava muutos fstab.tmp:iin , saisi samalla sen oman osion .iso-tdstoille
-		#...vielä tarpeellinen 040426?
-	else
-		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
-		exit 666
-	fi
-}
-
-luft
-
-#HUOM.241225:/e/s.d alle tehdyn tdston syntaksi oli jo ok, omegaa ajeltu testiksi
-#... vähän saattaa joutua vielä viilaamaan sisältöä
-function f5th() {
-	local p
-	local c
-
-	somefile=$(mktemp)
-	touch ${somefile}
-
-	for c in ${CONF_aa} ; do 
-		#mangle_s()
-		p=$(sha256sum ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
-		echo "$(whoami) localhost=NOPASSWD: sha256: ${p} ${c}" >> ${somefile} 
+	for d in $(grep -v '#' /etc/fstab.tmp | awk '{print $2}') ; do
+		[ -d ${d} ] || ${odio} mkdir ${d}
 	done
 
-	#TARKKUUTTA PRKL
-
-	#voi miettiä vielä tätä, jos basen alla asettaa omistajudet ja oikeudet sopivasti, ei tarttisi ${odio}ttaa
-	for c in ${CONF_ab} ; do
-		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/*" >> ${somefile}
-	done 
-
-	cat ${somefile}
-	${sco} 0:0 ${somefile}
-	${scm} 0440 ${somefile}
-	${odio} mv ${somefile} /etc/sudoers.d 
-
-	#/.chroot luonti ja seuraukset $CONF_basedir alaisille skripteille? miksi?
-	#yhteinen konfiguraatio jo siirretty -> setup0 ?
+	#tartteeko tätä sorkkia vai ei?
+	if [ -v CONF_basept2tgt ] ; then
+		#/proc/mounts voisi grepAta?
+		${odio} mount -a
+	else
+		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
+		exit 61
+	fi
 }
 
-f5th
-#se /.chroot luonti jonnekin?, esim. stage0_backend.bash...
+function f5a() {
+	dqb "F5.a"
+	csleep 5
+
+	fasdfasd ${1}
+	fasdfasd ${2}
+
+	#CB_LIST1="$(${odio} which halt) $(${odio} which reboot) /usr/bin/which ${sifu} ${sifd}"
+	#...ao lista mukaan aa:han vaiko common_lib kanssa jogtain jatkosöäätöä?
+	[ -v CONF_scripts_dir ] || exit 11
+	[ -z "${CONF_scripts_dir}" ] && exit 22
+	[ -d ${CONF_scripts_dir} ] || exit 33
+
+	#muistettava kanssa varmistaa että dalek tulee kaikkiin sitä tarvitseviin juttuihin mukaan?
+
+	dqb "MAKING OF:dalek.bash"
+	[ -f ${CONF_scripts_dir}/dalek.bash ] && ${svm} ${CONF_scripts_dir}/dalek.bash ${CONF_scripts_dir}/dalek.bash.OLD
+	csleep 3
+
+	head -n 1 ${CONF_scripts_dir}/dalek.s > ${2}
+	grep -v "#" ${CONF_scripts_dir}/common.conf >> ${2}
+	grep -v "#" ${CONF_scripts_dir}/dalek.s >> ${2}
+
+	reqwreqw ${CONF_scripts_dir}/dalek.s #jos voisi olla renkkaamatta vähän aikaa
+	reqwreqw ${2}
+	${svm} ${2} ${CONF_scripts_dir}/dalek.bash
+
+	${scm} a+x ${CONF_scripts_dir}/dalek.bash
+	ls -las ${CONF_scripts_dir}/dalek.*
+	
+	csleep 3
+	dqb "AFTER DALEK"
+	csleep 3
+	
+	#VAIH:pitäisi saada aikaiseksi testata erinäiset skriptit omegan ajon jälkeen, sitä ennen jos toimii niin ei kerro juuri mitään
+	#230526:omegan jälkeen "stage0 -d -v" hyytyi ifup-kohtaan
+	
+	#olisi kai parempi vetää dalek mukaan find:illa
+	g_aa="${g_aa} ${CONF_scripts_dir}/dalek.bash"
+}
+
+function f5b() {
+	dqb "F5.b"
+	csleep 5
+	local p
+	local c
+	#ei ihan näin taida mennä, pitäisi tarkemmin speksata sallitut parametrit
+	
+	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
+	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutua lisäämään sudoersiin mutta mIElellään jos voisi rajata parametrien suhteen
+	if [ -v CONF_esab ] ; then #turha kikkailu oikeastaan
+		local t=$(find ${CONF_esab} -type f -name "generic_doit.sh")
+		echo "t= ${t}"
+		sleep 6
+		[ -z "${t}" ] || g_aa="${g_aa} ${t} "
+	fi
+
+	#TODO:varmista että kaikki listan skriptit toimivat kuten tarkoitus
+	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
+	#joko sha512 ei olekaan enää sudon tukema tai sah6 qsi
+	#... siis ubuntu-tyylisen sudon poiston jälkeen testit(aa sekä ab)
+
+	for c in ${g_aa} ; do 
+		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
+		echo "$(whoami) localhost=NOPASSWD: ${CONF_algo}: ${p} ${c}" >> ${1} 
+	done
+
+	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
+	#oli myös se "sudo.sw"-linkki , jospa menisi dalek.bash - tavalla kuitenkin	
+	#VAIH:jospa kokeilisi josqs toimintaa (syntaksi lienee jo) (myös joitain paraMetreja tulisi sallia)
+
+	for c in ${g_ab} ; do
+		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
+	done 
+
+	cat ${1}
+	${sco} 0:0 ${1}
+	${scm} 0440 ${1}
+	${odio} mv ${1} /etc/sudoers.d 
+}
+
+#==========================MAIN=======================================
+jord ${CONF_basedir}
+
+#se "komentorivi-vipu millä pelkstään sorkitaan dalek ja sudoers"
+if [ "${1}" != "1" ] ; then
+	[ -s ${CONF_scripts_dir}/dalek.bash ] || aqua
+	[ -v CONF_ue ] || exit 34
+	[ -v CONF_un ] || exit 35
+
+	ignis #${CONF_basedir}
+	[ -v CONF_dir ] || exit 44
+	[ -d ${CONF_dir} ] || exit 45
+
+	luft
+fi
+
+somefile=$(mktemp)
+somefile2=$(mktemp) #ehkä pärjäisi ilmankin tuon kanssa kikkailua, suoraan kohde-hmistooon tdsto ja täts it
+
+f5a ${somefile} ${somefile2} 
+f5b ${somefile}
+
 echo "kutl v | g_doit -v 1 ?"
-echo "TODO:SE &e&s.d/live HUKKAAMINEN KOKEEKSI"
+echo "VAIH:SE /e/s.d/live HUKKAAMINEN KOKEEKSI "

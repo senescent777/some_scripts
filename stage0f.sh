@@ -16,6 +16,13 @@ function single_param() {
 	dqb "TODO?:  single_param() ?"
 }
 
+#260626:vielä jatkosäätöä parsetuksen kanssa?
+
+if [ $# -lt 3 ] ; then
+	usage
+	exit 777
+fi
+ 
 [ $# -gt 3 ] && debug=${4}
 . ./skripts/stage0_backend.bash
 . ./skripts/common_funcs.sh
@@ -27,10 +34,13 @@ fi
 dqb "PARAMS OK?"
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
+#... tosin jokin piontti saattoi olla miksi näin
+#
+#isolunuxin kanssa päätä seinään josqs myöhemmin lisää?
 
-#VAIH:isolunux-testailut taas (chmod+chown isolinux.* , boot.* jhnkn? )
+#240526:vissiin toimi omegan ajon jälkeen (pIenen renkkaamisen jälkeen)
 function part0() {
-	dqb "stg0f.PART0 ${1}, ${2} , ${3} , ${4}"
+	dqb "stg0f.PART0))))))) ${1}, ${2} , ${3} , ${4} ((("
 	pwd
 	csleep 2
 
@@ -45,6 +55,7 @@ function part0() {
 			${spc} ${1}/live/${f} ${4}/live
 		fi
 		
+		[ $? -eq 0 ] || dqb "stage0.sh --make-dirs ? | chmod ? | chown ?"
 		dqb "NECKST"
 		csleep 1
 	done
@@ -54,11 +65,8 @@ function part0() {
 	dqb "${spc} -a ${1}/efi ${4}"
 	${spc} -a ${1}/efi ${4}
 	csleep 1
-	#
-
+	
 	#lähde voi olla muukin kuin mountattu .iso, siksi ei enää CONF_SOURCE
-	#191225;josko vähitellen jotain sen oletus-bloader.konfiguraation hyväksi?
-	# dd if=debian-9.3.0-i386-DVD-1.iso bs=1 count=432 of=isohdpfx.bin myöhemmin, liian hapokasta
 	
 	csleep 5	
 	bootloader ${3} ${2} ${1} ${CONF_target}
@@ -104,17 +112,19 @@ function part0() {
 	dqb "part0 d0ne"
 }
 
-dqb "src= ${1} , stc2= ${2} , bl= ${3}"
+dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 65
 [ -v CONF_target ] || exit 66
-make_tgt_dirs ${CONF_target} ${CONF_source} ${3}
+${odio} ./skripts/dalek.bash m
+
+#270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
 
 #270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi?
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}
 else
-	#26426:minimaalisesti modattua minimal_live:ä jo kokeiltu, pitäisi juttuja tehdäö että voisi sen kanssa jatkaa
+	#26426:minimaalisesti modattua minimal_live:ä jo kokeiltu, pitäisi jotainb juttuja tehdä että voisi sen kanssa jatkaa (?)
 	if [ -s ${1} ] && [ -r ${1} ] ; then #151225:nyt toimii kun common_funcs muutettu
 		dqb "${som} -o loop,ro ${1} ${CONF_source}"
 		csleep 3

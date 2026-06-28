@@ -6,6 +6,8 @@ source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
 
+#180526:yllättäen sai aikaiseksi jnkn tiedoston omegan ajon jlkeen
+
 function usage() {
 	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
@@ -70,7 +72,7 @@ csleep 4
 #dqb "VAIH: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
 #csleep 4
 
-case ${bl} in
+case "${bl}" in
 	isolinux)
 		#VAIH:toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
 		${sco} -R $(whoami):$(whoami) ${source}
@@ -85,26 +87,30 @@ case ${bl} in
 #		#1760426: "-boot-load-size" - option poisto ei euttanut -> KVG
 #		${gi} -o ${ltarget} ${CONF_gi_opts} ${source}
 
+		#270426:tuo bin jos toimaa niin isolinux-hmistobn alle jatkossa ja tsummiin mukaan
 		gi=$(sudo which xorriso)
 		#${gi} -as mkisofs -r -J -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -no-emul-boot -eltorito-alt-boot
-		${gi} -as mkisofs -r -J  -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-info-table -no-emul-boot -o ${ltarget} ${source}
+		${gi} -as mkisofs -r -J -isohybrid-mbr ${source}/isohdpfx.bin  -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -no-emul-boot -o ${ltarget} ${source}
 
 		# -e boot/grub/efiboot.img
 		#no bootfile found for uefi -> vissiin efi-hmiston tai jnkin tarvitsee
 
 		#-isohybrid-mbr .../isohdpfx.bin qsee
-		echo "#TODO:KVG \"libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb\""
+		echo "TODO:KVG \"libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb\""
 		echo "TODO: KVG \"no bootfile for UEFI\""
-
+		echo "TODO: KVG xorriso : FAILURE : Given path does not exist on disk: -boot_image system_area=..."
+		
 		#-B + -C ->  SAMA
 		#seur --bot-jutut mukana -> taas onnasi .iso:n luonti
 		#-eltorito mukaan ja edelleen onnaa
 		#-e -> nalq	kunnes?
 		
-		#VAIH:man 1 xorrisofs
-		#VAIH:KBG iso production command for debian
+		#näillä ei vbielä onnistunut:
+		#man 1 xorrisofs
+		#KBG iso production command for debian
 	;;
 	grub)
+		#230526:onnistui .iso:n tekemään
 		ls -las ${source}/boot/${bl}/*.cfg || exit 99
 		csleep 2
 

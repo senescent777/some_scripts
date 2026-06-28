@@ -1,4 +1,6 @@
 #!/bin/bash
+
+#TODO:jkin yhteinen kirjasto setp1:lle ja 2:lle ?
 . ./setup0.conf
 
 #040426:edelleen osannee paketteja vetää kohde-tar:ia varten (qhan setup0.conf)
@@ -9,6 +11,13 @@ if [ -s $0.conf ] ; then
 else
 	exit 66
 fi
+function dqb() {
+	[ ${debug} -eq 1 ] && echo ${1}
+}
+
+function csleep() {
+	[ ${debug} -eq 1 ] && sleep ${1}
+}
 
 #251225:saattaisivat seur. komennot olla oleellisia skripts-hmiston alaisille
 #... eli nämä pikemminkin sinne sudoersiin ? (TODO?)
@@ -31,9 +40,10 @@ ${srat} -cvf ${1} $0*
 ${srat} -rvf ${1} ./setup* 
 
 function jord() {
-	echo "j0.rd"
+	dqb "j0.rd"
 	[ -v CONF_pkgsrc ] || exit 22
-	
+	local d
+
 	for d in ${CONF_yarr} ; do 
 		if [ ! -z "${d}" ] ; then #tarpeellinen?
 			if [ ! -d ${d} ] ; then
@@ -46,18 +56,19 @@ function jord() {
 }
 
 jord #${1}
-
 #1912255:jnkn verran jo testailtu, kuten myös 270426, toimii
+#TODO:päällekkäisyyksiä pois josqs? esmes e23.sh sisälsi niitä uusia fktioita
+
 function aqua() {
-	echo "aqua ( ${1})"
+	dqb "aqua ( ${1} )"
 	[ -z "{1}" ] && exit 11
 	[ -d ${1} ] || exit 12
-	echo "ok"
+	dqb "ok"
 	sleep 1
 	
 	if [ ! -s ${CONF_basedir}/sources.list ] ; then
 		${odio} nano /etc/apt/sources.list #tai cp
-		echo "copy /etc/apt/sources.list ${CONF_basedir}/etc/apt ?"
+		dqb "copy /etc/apt/sources.list ${CONF_basedir}/etc/apt ?"
 		sleep 1
 	else
 		if [ ! -s /etc/apt/sources.list.old ] ; then
@@ -81,7 +92,7 @@ function aqua() {
 	${shary} ${E22GI}
 	#
 
-	#näillekin jokin E22_xxx ?
+	#näillekin jokin E22_xxx ? kts e23.sh olisiko jo
 	${shary} libc6 coreutils
 	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
 	${shary} git-man git
@@ -116,22 +127,24 @@ function aqua() {
 	sudo cp /var/cache/apt/archives/*.deb ${1} #kuinka tarpeellinen? kts conf EIKU
 }
 
-[ -v CONF_pkgsrc ] || exit 33
-${odio} apt-get update
-[ $? -eq 0 ] && aqua ${CONF_pkgsrc}
+if [ -s "${1}" ] && [ $2 -eq 1 ] ; then
+	[ -v CONF_pkgsrc ] || exit 33
+	${odio} apt-get update
+	[ $? -eq 0 ] && aqua ${CONF_pkgsrc}
 
-#riittäisikö /etc kuitenkin?
+	#riittäisikö /etc kuitenkin?
 
-for f in $(find /etc -type f -name 'sources.list*') ; do ${srat} -rvf ${1} ${f} ; done 
-${srat} -rvf ${1} ${CONF_pkgsrc}/*.deb
-#jatkossa yo. rivi pois jos siirretään paketit basedir alle?
+	for f in $(find /etc -type f -name "sources.list*") ; do ${srat} -rvf ${1} ${f} ; done 
+	${srat} -rvf ${1} ${CONF_pkgsrc}/*.deb
+	#jatkossa yo. rivi pois jos siirretään paketit basedir alle?
+fi
 
 function ignis() {
-	echo "igtnis ( ${1})"
+	dqb "ignis ( ${1} )"
 	[ -z "{1}" ] && exit 11
 	[ -d ${1} ] || exit 12
-	echo "ok"
-	sleep 1
+	dqb "ok"
+	csleep 1
 	
 	if [ -s ${1}/.gitignore ] ; then
 		echo "not touching  ${1}/.gitignore this time"

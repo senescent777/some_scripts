@@ -85,17 +85,12 @@ dqb "par=${par}"
 tmp=$(dirname $0)
 . ${tmp}/sq22be.bash
 
-#konftdston muodostus sqroot:in pad-hmistoon, onko jo kunnossa 160426?
-
-case ${cmd} in
-	-x) #270426:toimii edelleen
-	# (vesi/happo/käsi/rakko) , -r nalq jos ei ./etc löydy
-	#VAIH:squashfs.työkaliut sudoersiin jos ei ole jo
+case "${cmd}" in
+	-x)
 		xxx ${par} ${CONF_squash0}
 	;;
-	-y) #080226:taitee toimia edelleen (tosin onko oikeasti tarpeellinen?)
-		#140426:kokeilLtu välillä yoista .iso:a pohjana
-
+	-y) #240526:"failed to setup loop device for " omegan jälk (according to the plan)
+		
 		[ -s ${par} ] || exit 66
 		[ -d ${CONF_source} ] || ${smd} -p ${CONF_source}
 		dqb "${som} -o loop,ro ${par} ${CONF_source}"
@@ -114,41 +109,21 @@ case ${cmd} in
 
 		${uom} ${CONF_source}
 	;;
-	-b) 
-		#viimeksi testattu 270426, toimi sIlloin
-		bbb ${CONF_squash_dir}
+	-b)
+		#vissiin dalek hoitaa hommansa ok 060626
+		sudo ${tmp}/dalek.bash b
+		#	fix_sudo $(pwd)
 	;;
-	-d)  
-		#030426:toimiiko? erit toiv tavalla? vissiin
-
-		#VAIH:pudon sudotus josqs? vaiko se sudoers? JOKOJO 05/26?
-		#ekalla yrityksellä(180526) ei oikein rm lähtenyt toimaamaan
-
-		[ -v CONF_squash0 ] || exit 66
-		[ -z "${CONF_squash0}" ] && exit 67
-		[ -d ${CONF_squash0} ] || exit 68
-		pwd;sleep 6
-		
-		#[ -v CONF_testgris ] && smr="/bin/rm"
-		#dqb "smr= ${smr}"
-		#csleep 2
-		#dqb "SHDOULD scm+sco ${CONF_tmpdir}/* 1st"
-		#exit
-	
-		#onko riittävä tarkistus vai ei?
-		if [ x"${CONF_squash0}" != "x/" ] ; then
-			echo "${smr} -rf ${CONF_squash0}/* IN 6 SECS";sleep 6
-			${smr} -rf ${CONF_squash0}/*
-			echo $?
-		fi
+	-d)
+		#vissiin dalek hoitaa hommansa ok 060626
+		odio=$(which sudo)
+		${odio} ${tmp}/dalek.bash d2
 	;;
-	-c)  #270426:toimii edelleen?
+	-c)
+		#240526: jnkn verran toimi omegan ajon jälkeen
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
-		#270426:toimii
-		#HUOM.221225:sqrootissa kandee poistaa ajo-oik common_lib:stä ni avaimet saa asennettua kätevästi
-	
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
@@ -159,7 +134,7 @@ case ${cmd} in
 		rst ${CONF_squash_dir}
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #180526:yritetty ajaa omegan jälkeen, kosahti
+	-j)  #HUOM. sqash-hmstoin delliminen saattaa epäonnistua omegan jälkeen, pitäisikö huomioida jotenkin?
 		dqb "smd= ${smd} "
 		csleep 2
 

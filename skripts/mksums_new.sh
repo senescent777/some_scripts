@@ -6,15 +6,11 @@ d=$(dirname $0) #tämäb annettava olla tässä
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#010426:"./boot/grub/grub.cfg: FAILED open or read" tdstosta dgsts.1 (sqroot)
-#... jos toistuu ni tekisikö jotain?
-
-#part123() 2 , pitäisikö sitä miettiä vielä? miksi?
+#240526:taisi toimia pienen nalkutuksen kanssa
 
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
-	echo "$0 --iso"
-	echo "$0 --pkgs"
+
 	echo "$0 -h"
 	exit 44
 }
@@ -27,34 +23,39 @@ if [ -f ${d}/keys.conf ] ; then #tarvitaan, kts sibgle_param
 	. ${d}/keys.conf
 fi
 
-#141025:toiminee avainten asennuksne jälkeen
 function single_param() {
 	case ${1} in
 		--iso)
-			[ -v CONF_ksk ] || exit 68
-			${gg} -u ${CONF_ksk} -sb ./*.iso
-			exit 61
+			exit
+#			[ -v CONF_ksk ] || exit 68
+#			${gg} -u ${CONF_ksk} -sb ./*.iso
+#			exit 61
 		;;
-		--pkgs)
-			[ -v CONF_ksk ] || exit 68
-			[ -v CONF_pkgsdir2 ] || exit 67
-			[ -v CONF_BASEDIR ] || exit 66
-			[ x"${CONF_BASEDIR}" != "x" ] || exit 65
-			[ x"${CONF_pkgsdir2}" != "x" ] || exit 64
-
-			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
-
-			${gg} -u ${CONF_ksk} -sb ./*.deb
-			[ $? -eq 0 ] && ${gg} -u ${CONF_ksk} -sb ./*.bz2
-			
+		--pkgs) #takaisin kommenteista sittenq oikeasti tarttee
+#			[ -v CONF_ksk ] || exit 68
+#			[ -v CONF_pkgsdir2 ] || exit 67
+#			[ -v CONF_BASEDIR ] || exit 66
+#			[ x"${CONF_BASEDIR}" != "x" ] || exit 65
+#			[ x"${CONF_pkgsdir2}" != "x" ] || exit 64
+#
+#			cd ${CONF_BASEDIR}/${CONF_pkgsdir2}
+#
+#			${gg} -u ${CONF_ksk} -sb ./*.deb
+#			[ $? -eq 0 ] && ${gg} -u ${CONF_ksk} -sb ./*.bz2
+#			
 			exit 63
+		;;
+		 *)
+			echo "???"
 		;;
 	esac
 }
 
 . ${d}/common_funcs.sh
+#TODO:konftdstoihin liittyen tämän skriptin kohteeseen kopsattu versio toimimaan
 
 if [ $# -eq 0 ] ; then
+	usage
 	exit
 fi
 
@@ -87,20 +88,13 @@ function part0() {
 
 	[ -v TARGET_DIGESTS_file ] || exit 73
 	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
-	
-	dqb "TODO:setup2 lisäämään sudoersiin shred jos ei ole jo"
 	csleep 5
 
 	#VAIH:jos sittenkin selvittäisi miten dgsts.4 ja dgsts.5 asiat liittyvät ao. riveihin? vitosen kohdalla jos tekisi jotain poikkeusta sääntöön
+	#... olisiko jo 260626 mennessä?
+	
 	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file} \* SOON"
 	csleep 1
-#	#
-#
-#	for f in $($[odio} find ${1} -type f -name "{TARGET_DIGESTS_file}.*" ) ; do # | grep -v '.5' ?
-#		dqb "${NKVD} ${f}"
-#		${f}
-#		csleep 2
-#	done	
 	
 	#56-kikkailu tarpeen?
 	${svm} ${1}/${TARGET_DIGESTS_file}.5 ${1}/5.6
@@ -108,7 +102,6 @@ function part0() {
 	${svm} ${1}/5.6 ${1}/${TARGET_DIGESTS_file}.5	
 
 	#180526:muutenkin tuota sudo-kiukuttelua seb verran palkjon jotta sittenkin odion nollaus jos x?
-
 	dqb "QPOL0"
 	csleep 1
 	
@@ -119,7 +112,7 @@ function part0() {
 	csleep 1
 }
 
-#VAIH:sen "isohdpfx.bin"-jutun sivuvaikutukset tähänkin skriptiin
+#260626:antaapi olla toistaiseksi .bin kanssa
 
 function part123() {
 	dqb "part123(${1}, ${2} , ${3} )"
@@ -157,9 +150,6 @@ function part123() {
 	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 }
 
-#HUOM.kandee ajaa tämä vain jos binäärit ja avaimet olemassa
-#161225:miten parametrit nykyään? mitä tulee ja mitä tarvitaan?
-
 #TODO:huomioimaan taas tilanne että käskytetäänkin sitä kohde-hmistoon kopsattua versiota (keys.conf pitäisi saada mukaan tavalla tai toisella)
 #muuan copy_conf() liittynee
 
@@ -182,8 +172,7 @@ function part6_5() {
 	dqb "mks.part65dibw"
 }
 
-#151225:avainten allek ja const:it ok, pitää vain kopsata kohdehak alle jossain sopivassa kohdassa(DONE?)
-#TODO:target_dpub-jutut pois sittenq mahd ?
+#TODO?:target_dpub-jutut pois sittenq mahd ? pointti?
 #100326:"gpg --edit-key" ? ehkä ei tähän mutta johonkin
 
 function part7() {
@@ -221,7 +210,7 @@ part0 ${source}/${TARGET_DIGESTS_dir} $(whoami)
 csleep 5
 dqb "BOOTLEODER"
 
-case ${bl} in
+case "${bl}" in
 	grub)
 		ls -las  ${source}/boot/grub/*.cfg || exit 99
 		part123 1 boot/grub ${source}
@@ -244,7 +233,7 @@ part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 cd ${source}
 
-#HUOM: dgsts.5 on semmoinen juttu mikä pitää huomioida 
+#HUOM: dgsts.5 on semmoinen juttu mikä pitää huomioida ?
 for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
 	dqb "p456 ${f}"
 	${sah6} -c ${f} --ignore-missing
@@ -271,6 +260,7 @@ csleep 1
 ${sah6} -c  ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4 --ignore-missing
 csleep 1
 
+#040626:tässä jotain nalkutusta? luuultavasti sco syynä
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*
