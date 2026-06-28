@@ -8,7 +8,6 @@ function xxx() {
 	dqb "pars_ok"
 	csleep 1
 
-	#ao.blokki toistruu melkein samanlaisena toisessa kohtaa, cfd()
 	[ -d ${2} ] || ${smd} ${2}
 	cd ${2}
 
@@ -49,67 +48,10 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-##sudoers-jekku olisi hyväksi tässäkin? tai sitten local odio/smr/sco (TODO)
+#sudoers-jekku olisi hyväksi tässäkin? tai sitten local odio/smr/sco (TODO)
 
-#function bbb() {
-#	#dqb ";bbb( ${1} ) (OGDRU JAHAD"
-#	echo "SHOULD USE dalek b INSTEAD"	
-#	exit
-#
-#	[ -z "${1}" ] && exit 97
-#	[ x"${1}" == "x/" ] && exit 98
-#	[ -d ${1} ] || exit 99
-#
-#	dqb "pars_ok"
-#	csleep 1
-#
-#	cd ${1}
-#	[ ${debug} -eq 1 ] && pwd
-#	csleep 4
-#
-#	pwd
-#	echo "RM STARTS IN 6 SECS";sleep 6 #tämmöisestä rivistä fktio
-#	
-#	${smr} -rf ./run/live
-#	${smr} -rf ./boot/grub/*
-#	#${smr} -rf ./boot/* #080226 kommentteihin. vöib sotkea
-#	${smr} -rf ./usr/share/doc/*
-#	
-#	for f in $(find . -type f -name "*.deb") ; do #HSIPUT WTTUUN
-#		dqb "${smr} ${f}"
-#		csleep 1
-#		${smr} ${f}
-#	done
-#	
-#	csleep 5
-#	
-#	${smr} -rf ./var/cache/apt/*.bin
-#	${smr} -rf ./tmp/*
-#	
-#	[ -v TARGET_pad2 ] || exit 64
-#	${smr} -rf ./${TARGET_pad2}/*.bz3*
-#	${smr} -rf ./${TARGET_pad2}/*.OLD
-#	
-#	for f in $(find ./home -type f -name "*.tar") ; do
-#		dqb "smr ${f}"
-#		csleep 1
-#		${smr} ${f}
-#	done
-#	
-#	csleep 1
-#	
-#	${sco} -R 0:0 ./${TARGET_pad2}
-#
-#	${scm} -R 0755 ./var/cache/man
-#	${sco} -R man:man ./var/cache/man
-#
-#	${smr} ./root/.bash_history
-#	${smr} ./home/devuan/.bash_history
-#
-#	#OLD.tar myös pois?
-#
-#	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
-#	dqb "BARBEQUE PARTY DONE.done()"
+#function bbb() { #DONE:testaapa vähitelleen voisiko tämän komentoifdun fktion poistaa
+
 #}
 
 function jlk_main() {
@@ -130,8 +72,6 @@ function jlk_main() {
 	${spc} ${1}/*.bz3 ${2}
 	
 	${spc} ${1}/*.sig ${2}
-	#oleellisempaa tässä kuin stage0_backendissa?
-	#pitäisikö .sah kanssa?
 	${spc} ${1}/*.sha ${2}
 
 	dqb "jkl1 d0n3"
@@ -193,7 +133,6 @@ function jlk_sums() {
 	dqb "${spc} -a ${1}/ \$stuff ${2}"
 	csleep 2
 
-	#261225:voi kyllä mennä wanhentunut dgsts KOhteeseen tällä tavalla?
 	#230526:kopsailu toimi urputuksne kanssa
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
 	${spc} ${1}/*.gpg ${2}
@@ -208,7 +147,6 @@ function jlk_sums() {
 	dqb "${sah6} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5 --ignore-missing"
 	csleep 1
 	
-	#miksi urputusta tässä kohtaa? lähteessä wanha dgsgs?
 	${sah6} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5 --ignore-missing
 
 	dqb "JLK_SUYMD_DONE"
@@ -331,6 +269,7 @@ function rst() {
 	csleep 1
 	
 	rst_pre2 ${1}
+	#260626:ao. komento aiheutti ulinaa, sudotus?
 	cd ${1}
 	
 	pwd

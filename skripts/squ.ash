@@ -111,7 +111,6 @@ case "${cmd}" in
 	;;
 	-b)
 		#vissiin dalek hoitaa hommansa ok 060626
-
 		sudo ${tmp}/dalek.bash b
 		#	fix_sudo $(pwd)
 	;;
@@ -133,7 +132,6 @@ case "${cmd}" in
 		dqb "how about removung those .bz3-files under squash?"
 	;;
 	-j)  #HUOM. sqash-hmstoin delliminen saattaa epäonnistua omegan jälkeen, pitäisikö huomioida jotenkin?
-
 		dqb "smd= ${smd} "
 		csleep 2
 

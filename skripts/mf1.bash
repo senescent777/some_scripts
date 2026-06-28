@@ -4,7 +4,7 @@ debug=0 #1
 source=""
 d=$(dirname $0)
 . ${d}/common.conf
-
+exit
 protect_system
 
 ltgtdir=""
@@ -23,6 +23,7 @@ function parse_opts_real() {
 			cleanup=${2} 
 		;;	
 	esac
+}
 
 function single_param() {
 		dqb "fm.single_p ( ${1}  ) "
@@ -45,13 +46,9 @@ function process_dir() {
 	fi
 
 	local topts=""
-
-
 	
 	if [ x"${1}" != "x" ] ; then 
 		if [ -d ./${1} ] ; then
-			
-			
 			sudo chmod -R a-w ${1}/*
 			sudo chown -R root:root ${1}/*.sh
 			sudo chown ${1}/*.conf
@@ -72,7 +69,6 @@ function process_dir() {
 			fi
 
 			cd ${TARGET_pad_dir}
-
 		fi
 	fi
 
@@ -94,9 +90,7 @@ fi
 [ x"${tgtfile}" != "x" ] || exit 1
 
 enforce_deps
-
 cd ${ltgtdir}/..
-
 
 if [ x"${TARGET_DIGESTS_dir}"  != "x" ] ; then 
 	[ -d ${TARGET_DIGESTS_dir}  ] || sudo mkdir -p ${TARGET_DIGESTS_dir} 

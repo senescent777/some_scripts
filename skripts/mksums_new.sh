@@ -52,8 +52,10 @@ function single_param() {
 }
 
 . ${d}/common_funcs.sh
+#TODO:konftdstoihin liittyen tämän skriptin kohteeseen kopsattu versio toimimaan
 
 if [ $# -eq 0 ] ; then
+	usage
 	exit
 fi
 
@@ -89,6 +91,8 @@ function part0() {
 	csleep 5
 
 	#VAIH:jos sittenkin selvittäisi miten dgsts.4 ja dgsts.5 asiat liittyvät ao. riveihin? vitosen kohdalla jos tekisi jotain poikkeusta sääntöön
+	#... olisiko jo 260626 mennessä?
+	
 	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file} \* SOON"
 	csleep 1
 	
@@ -108,8 +112,7 @@ function part0() {
 	csleep 1
 }
 
-#VAIH:sen "isohdpfx.bin"-jutun sivuvaikutukset tähänkin skriptiin
-#a) olisiko jo? b) miten juttu toimii?
+#260626:antaapi olla toistaiseksi .bin kanssa
 
 function part123() {
 	dqb "part123(${1}, ${2} , ${3} )"
@@ -169,7 +172,7 @@ function part6_5() {
 	dqb "mks.part65dibw"
 }
 
-#TODO:target_dpub-jutut pois sittenq mahd ?
+#TODO?:target_dpub-jutut pois sittenq mahd ? pointti?
 #100326:"gpg --edit-key" ? ehkä ei tähän mutta johonkin
 
 function part7() {
@@ -230,7 +233,7 @@ part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 cd ${source}
 
-#HUOM: dgsts.5 on semmoinen juttu mikä pitää huomioida 
+#HUOM: dgsts.5 on semmoinen juttu mikä pitää huomioida ?
 for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
 	dqb "p456 ${f}"
 	${sah6} -c ${f} --ignore-missing

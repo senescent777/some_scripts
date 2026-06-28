@@ -19,7 +19,7 @@ function copy_main() {
 	local f
 	csleep 1
 
-	dqb "ONE BATCH"	
+	dqb "PIZZAA"	
 	csleep 1
 
 	#eri lähde find-komennoilla ni jospa ei jaksaisi hýhgdistää ekaa findia
@@ -28,7 +28,7 @@ function copy_main() {
 		${spc} ${f} ${2}/../.. 
 	done
 
-	dqb "TWO BATCH"
+	dqb "PASHAA"
 	csleep 1
 	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
 
@@ -37,7 +37,7 @@ function copy_main() {
 		${spc} ${f} ${2}
 	done
 	
-	dqb "PENNY AND A DIME"
+	dqb "KERMAA"
 	csleep 1
 
 	#030526:lototaan aluksi tähän, ehkä vaihtuu toiseen fktioon kys pätkä
@@ -266,6 +266,5 @@ function bootloader() {
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
 
-#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa (joko jo?)
-#DONE?:nuo alihakemistot, omistajaksi $n:$n jos mahd ni sudon voi skipata, enimmäkseen ?
+#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa (MINKÄ ARRAYN?)
 

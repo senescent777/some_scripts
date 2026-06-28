@@ -36,6 +36,7 @@ else
 	sleep 1
 	
 	if [ -x ${fq} ] ; then
+		#260626:pitäisiköhän tuo fq-kikkailu ulottaa myös konftdstoon? (kts mksums)
 		. ${fq}
 		
 		#param mukaisen hmiston takaa olisi hyväksi löytyä toivottavaa sisältöä, barm vuoksi
