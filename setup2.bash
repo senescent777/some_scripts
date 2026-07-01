@@ -94,12 +94,13 @@ function jord() {
 
 	${sco} -R 0:0  ${1}/etc	
 	${scm} -R 0444 ${1}/etc	
+
+	#toimiva meshuqqah /e alle?
 	${spc} -a ${1}/etc/* /etc
 }
 
 #240526:noista paketeista oikeastaan git lienee välttämättömin tmän skriptin kannalta
-
-#... vaikuttaisi että gdoit.sh kehitysymp saattaa paskoa slimin
+#... vaikuttaisi että gdoit.sh kehitysymp saattaa paskoa slimin (v8elä 07/26?)
 
 function aqua() {
 	dqb "aqua"
@@ -166,6 +167,8 @@ function ignis() {
 	else
 		echo "setup1 may have done this already?"
 	fi
+
+	#TODO:koklaten niitä got init-juttuja kanssa?
 }
 
 function luft() {
@@ -230,7 +233,7 @@ function f5a() {
 
 	#muistettava kanssa varmistaa että dalek tulee kaikkiin sitä tarvitseviin juttuihin mukaan?
 
-	dqb "MAKING OF:dalek.bash"
+	dqb "MAKING OF:dalek.bash" #TODO?: $2? eiku
 	[ -f ${CONF_scripts_dir}/dalek.bash ] && ${svm} ${CONF_scripts_dir}/dalek.bash ${CONF_scripts_dir}/dalek.bash.OLD
 	csleep 3
 
@@ -253,7 +256,12 @@ function f5a() {
 	#230526:omegan jälkeen "stage0 -d -v" hyytyi ifup-kohtaan
 	
 	#olisi kai parempi vetää dalek mukaan find:illa
-	g_aa="${g_aa} ${CONF_scripts_dir}/dalek.bash"
+	#g_aa="${g_aa} ${CONF_scripts_dir}/dalek.bash"
+
+	local t=$(${odio} find ${CONF_esab} -type f -name "dalek.bash")
+	echo "t= ${t}"
+	sleep 6
+	[ -z "${t}" ] || g_aa="${g_aa} ${t}"
 }
 
 function f5b() {
@@ -265,21 +273,33 @@ function f5b() {
 	
 	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
 	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutua lisäämään sudoersiin mutta mIElellään jos voisi rajata parametrien suhteen
+
 	if [ -v CONF_esab ] ; then #turha kikkailu oikeastaan
-		local t=$(find ${CONF_esab} -type f -name "generic_doit.sh")
+		local t=$(${odio} find ${CONF_esab} -type f -name "generic_doit.sh")
 		echo "t= ${t}"
 		sleep 6
-		[ -z "${t}" ] || g_aa="${g_aa} ${t} "
+		[ -z "${t}" ] || g_aa="${g_aa} ${t}"
 	fi
 
 	#TODO:varmista että kaikki listan skriptit toimivat kuten tarkoitus
 	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
-	#joko sha512 ei olekaan enää sudon tukema tai sah6 qsi
+
 	#... siis ubuntu-tyylisen sudon poiston jälkeen testit(aa sekä ab)
 
+	local r
+	local aa=$(whoami | tr -dc a-zA-Z0-9 )
+	local ab
+	local ac
+
+	#TODO:TAAS UUSIKSI TÄMÄ PASKA
 	for c in ${g_aa} ; do 
-		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-f0-9)
-		echo "$(whoami) localhost=NOPASSWD: ${CONF_algo}: ${p} ${c}" >> ${1} 
+		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-fA-F0-9)
+		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c}" >> ${1}
+		
+	#	r=$(echo ${c} | tr -dc a-zA-Z0-9/._)
+	#	ab=$(${sah6} ${r} | awk '{print $1}' | tr -dc a-fA-F0-9)
+	#	ac=$(${sah6} ${r} | awk '{print $2}' | tr -dc a-zA-Z0-9./_)
+	#	echo "${aa} ALL=NOPASSWD:${CONF_algo}:${ab} ${ac}" >> ${1}		
 	done
 
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
@@ -287,7 +307,7 @@ function f5b() {
 	#VAIH:jospa kokeilisi josqs toimintaa (syntaksi lienee jo) (myös joitain paraMetreja tulisi sallia)
 
 	for c in ${g_ab} ; do
-		echo "$(whoami) localhost=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
+		echo "# $(whoami) ALL=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
 	done 
 
 	cat ${1}

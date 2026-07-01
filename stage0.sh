@@ -60,6 +60,8 @@ case "${cmd}" in
 	-d)
 		#2605426:ei täysin onnistunut kohteen siivoilu omegan jälkeen, toistuuko?
 		#4626:vieläkin oli toivomisen varaa, lisätty pari juttua dalekiin
+		#30626:dalek ei oikein pelannut omegan jälkeen, koita keksiä miksi jnpp
+
 		sudo ./skripts/dalek.bash d1
 	;;
 	*)
