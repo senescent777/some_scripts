@@ -50,10 +50,6 @@ function cfd() {
 
 #sudoers-jekku olisi hyväksi tässäkin? tai sitten local odio/smr/sco (TODO)
 
-#function bbb() { #DONE:testaapa vähitelleen voisiko tämän komentoifdun fktion poistaa
-
-#}
-
 function jlk_main() {
 	dqb "jkl_niam ( ${1} , ${2}  )"
 
@@ -148,7 +144,6 @@ function jlk_sums() {
 	csleep 1
 	
 	${sah6} -c ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.5 --ignore-missing
-
 	dqb "JLK_SUYMD_DONE"
 	sleep 2
 }
@@ -274,7 +269,6 @@ function rst() {
 	
 	pwd
 	csleep 1
- 
 	#sopivassa kohdassa .sh-tiedostoihin ajo-oikeus päälle?
 
 	#includeen vai ei?
