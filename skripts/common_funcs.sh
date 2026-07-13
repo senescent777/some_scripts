@@ -44,6 +44,9 @@ else
 		check_binaries ${CONF_testgris}
 		check_binaries2
 
+		#dqb "fq.endo"
+		#csleep 6
+
 		#061225:toistaiseksi tässä ellei
 		gi=$(${odio} which genisoimage)
 		gmk=$(${odio} which grub-mkrescue)

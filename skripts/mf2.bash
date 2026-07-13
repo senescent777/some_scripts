@@ -31,8 +31,10 @@ function usage() {
 }
 
 . ${d}/common_funcs.sh
+#TODO:parsetus toisin? gpo() tulisdi kai sanoa "-h"
 
 if [ $# -lt 2 ] ; then
+	usage
 	exit
 fi
 
