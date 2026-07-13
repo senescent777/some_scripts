@@ -91,7 +91,6 @@ function aqua() {
 	${shary} ${E22GI}
 	#
 
-
 	${shary} libc6 coreutils
 	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
 	${shary} git-man git

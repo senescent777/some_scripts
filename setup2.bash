@@ -95,7 +95,9 @@ function jord() {
 	${sco} -R 0:0  ${1}/etc	
 	${scm} -R 0444 ${1}/etc	
 
-	#toimiva meshuqqah /e alle?
+	#toimiva meshuqqah /e alle se kantava idea, yhdestä toimivasta versiosta on vamruuskopio jos tarttee
+	#... koitetaan jos mangle_s:n paikallinen versio kykenisi (12726)
+
 	${spc} -a ${1}/etc/* /etc
 }
 
@@ -168,7 +170,16 @@ function ignis() {
 		echo "setup1 may have done this already?"
 	fi
 
-	#TODO:koklaten niitä got init-juttuja kanssa?
+	#VAIH:koklaten niitä got init-juttuja kanssa? testaus myös
+	local c=0
+
+	if [ -d ${CONF_basedir}/.git ] ; then
+		c=$(dinf ${CONF_basedir}/.git -type f | wc -l)
+	fi
+
+	if [ $[c} -lt 1 ] ; then
+		echo "SHOULD ${tig} init ${CONF_basedir}"
+	fi
 }
 
 function luft() {
@@ -254,9 +265,6 @@ function f5a() {
 	
 	#VAIH:pitäisi saada aikaiseksi testata erinäiset skriptit omegan ajon jälkeen, sitä ennen jos toimii niin ei kerro juuri mitään
 	#230526:omegan jälkeen "stage0 -d -v" hyytyi ifup-kohtaan
-	
-	#olisi kai parempi vetää dalek mukaan find:illa
-	#g_aa="${g_aa} ${CONF_scripts_dir}/dalek.bash"
 
 	local t=$(${odio} find ${CONF_esab} -type f -name "dalek.bash")
 	echo "t= ${t}"
@@ -283,7 +291,6 @@ function f5b() {
 
 	#TODO:varmista että kaikki listan skriptit toimivat kuten tarkoitus
 	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
-
 	#... siis ubuntu-tyylisen sudon poiston jälkeen testit(aa sekä ab)
 
 	local r
@@ -291,7 +298,7 @@ function f5b() {
 	local ab
 	local ac
 
-	#TODO:TAAS UUSIKSI TÄMÄ PASKA
+	#TODO:TAAS UUSIKSI TÄMÄ PASKA/SAISIKO SEN DALEKIN TOIMIMAAN SEN JÄLKEEN KUN UBUNTU-TYYLINEN SUDOTUS POISTETTU????
 	for c in ${g_aa} ; do 
 		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-fA-F0-9)
 		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c}" >> ${1}
