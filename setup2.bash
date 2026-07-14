@@ -112,6 +112,8 @@ function aqua() {
 	[ -d ${CONF_pkgsrc} ] || exit 23
 
 	${odio} apt --fix-broken install
+	dqb "TODO:  ${CONF_pkgsrc}/*.deb AJAN TASALLE"
+	csleep 6
 
 	local q=$(mktemp -d)
 	${spc} ${CONF_pkgsrc}/*.deb ${q}
@@ -170,23 +172,25 @@ function ignis() {
 		echo "setup1 may have done this already?"
 	fi
 
-	#VAIH:koklaten niitä got init-juttuja kanssa? testaus myös
+	echo "#VAIH:koklaten niitä got init-juttuja kanssa? testaus myös"
+	sleep 5
 	local c=0
 
 	if [ -d ${CONF_basedir}/.git ] ; then
-		c=$(dinf ${CONF_basedir}/.git -type f | wc -l)
+		c=$(find ${CONF_basedir}/.git -type f | wc -l)
 	fi
 
-	if [ $[c} -lt 1 ] ; then
+	if [ ${c} -lt 1 ] ; then
 		echo "SHOULD ${tig} init ${CONF_basedir}"
 	fi
 }
 
 function luft() {
 	dqb "luft"
-	csleep 1
+	csleep 10
 	local c4=0
 
+#MIKSI KOMMENTOITU JEMMAAN? tai siis
 #	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
 #		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
 #		local c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
@@ -208,11 +212,14 @@ function luft() {
 
 		[ -s /etc/fstab.tmp ] || exit 64
 		${odio} cat /etc/fstab.tmp >> /etc/fstab
+		echo $?
 
-		sleep 1	
+		sleep 10	
 		reqwreqw /etc/fstab  
 	fi
 
+	echo "FSTAB MUTILAEDT"
+	sleep 10
 	#dataosion jakaminen kahtIA myöhemmin?
 
 	for d in $(grep -v '#' /etc/fstab.tmp | awk '{print $2}') ; do
@@ -298,7 +305,9 @@ function f5b() {
 	local ab
 	local ac
 
-	#TODO:TAAS UUSIKSI TÄMÄ PASKA/SAISIKO SEN DALEKIN TOIMIMAAN SEN JÄLKEEN KUN UBUNTU-TYYLINEN SUDOTUS POISTETTU????
+	#VAIH:TAAS UUSIKSI TÄMÄ PASKA/SAISIKO SEN DALEKIN TOIMIMAAN SEN JÄLKEEN KUN UBUNTU-TYYLINEN SUDOTUS POISTETTU????
+	#14726:katso kophta tätäkin kohtaa, mangle_s() muutokset ensin
+
 	for c in ${g_aa} ; do 
 		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-fA-F0-9)
 		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c}" >> ${1}
