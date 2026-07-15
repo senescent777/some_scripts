@@ -70,6 +70,7 @@ function efk() {
 	${smr} $@
 }
 
+#VAIH:tasan kerran conf_pkgsdir/lib*.deb asennus. sekin vain tarvittaessa
 function ekf() {
 	dqb "EKF (${1})"
 	csleep 2
@@ -78,6 +79,9 @@ function ekf() {
 	if [ -z "${t}" ] || [ ! -x ${t} ] ; then
 		dqb "jfk"
 		efk ${q}/${1}*
+	else #tämä haara uutena
+		dqb "0S.WALD"
+		efk ${q}/lib*
 	fi
 }
 
@@ -112,7 +116,7 @@ function aqua() {
 	[ -d ${CONF_pkgsrc} ] || exit 23
 
 	${odio} apt --fix-broken install
-	dqb "TODO:  ${CONF_pkgsrc}/*.deb AJAN TASALLE"
+	dqb "TODO:  ${CONF_pkgsrc}/ \* .deb AJAN TASALLE JOS EI OLE JO"
 	csleep 6
 
 	local q=$(mktemp -d)
@@ -120,9 +124,9 @@ function aqua() {
 	[ $? -eq 0 ] || exit 4
 
 	#parempi samaan aikaan dms ja libdev 
-	efk ${q}/dmsetup*.deb ${q}/libdevmapper*.deb
+	efk ${q}/dmsetup*.deb ${q}/libdevmapper*.deb ${q}/libjte2*.deb
 	#efk ${q}/libjte2*.deb
-	efk ${q}/lib*.deb
+	#efk ${q}/lib*.deb #uutena
 
 	dqb "BEFORE TBLZ"
 	csleep 2
@@ -240,6 +244,7 @@ function f5a() {
 	dqb "F5.a"
 	csleep 5
 
+	#TODO:param tarq?
 	fasdfasd ${1}
 	fasdfasd ${2}
 
@@ -251,10 +256,11 @@ function f5a() {
 
 	#muistettava kanssa varmistaa että dalek tulee kaikkiin sitä tarvitseviin juttuihin mukaan?
 
-	dqb "MAKING OF:dalek.bash" #TODO?: $2? eiku
+	dqb "MAKING OF:dalek.bash" #TODO?: $2? eiku mitä oli tarkoitus?
 	[ -f ${CONF_scripts_dir}/dalek.bash ] && ${svm} ${CONF_scripts_dir}/dalek.bash ${CONF_scripts_dir}/dalek.bash.OLD
 	csleep 3
 
+	#15726:jos on pedantti niin dalek.s validius pitäisi tarkistaa ennenq lisäilee sudoersiin juttuja
 	head -n 1 ${CONF_scripts_dir}/dalek.s > ${2}
 	grep -v "#" ${CONF_scripts_dir}/common.conf >> ${2}
 	grep -v "#" ${CONF_scripts_dir}/dalek.s >> ${2}
@@ -284,6 +290,10 @@ function f5b() {
 	csleep 5
 	local p
 	local c
+
+	#TODO:param tarq?
+
+
 	#ei ihan näin taida mennä, pitäisi tarkemmin speksata sallitut parametrit
 	
 	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
@@ -296,19 +306,21 @@ function f5b() {
 		[ -z "${t}" ] || g_aa="${g_aa} ${t}"
 	fi
 
-	#TODO:varmista että kaikki listan skriptit toimivat kuten tarkoitus
+	#VAIH:varmista että kaikki listan skriptit toimivat kuten tarkoitus
 	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
 	#... siis ubuntu-tyylisen sudon poiston jälkeen testit(aa sekä ab)
 
-	local r
-	local aa=$(whoami | tr -dc a-zA-Z0-9 )
-	local ab
-	local ac
+
+	#local aa=$(whoami | tr -dc a-zA-Z0-9 )
+
+
+	#15726: $1 kanssa jokin tr-jekku jatkossa? kts "man 5 sudoers"
 
 	#VAIH:TAAS UUSIKSI TÄMÄ PASKA/SAISIKO SEN DALEKIN TOIMIMAAN SEN JÄLKEEN KUN UBUNTU-TYYLINEN SUDOTUS POISTETTU????
 	#14726:katso kophta tätäkin kohtaa, mangle_s() muutokset ensin
 
-	for c in ${g_aa} ; do 
+	for c in ${g_aa} ; do
+		#c kanssa tr-jekku? tai miträ jos prujaisi mangle_s():n ?
 		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-fA-F0-9)
 		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c}" >> ${1}
 		
@@ -320,10 +332,12 @@ function f5b() {
 
 	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
 	#oli myös se "sudo.sw"-linkki , jospa menisi dalek.bash - tavalla kuitenkin	
+
 	#VAIH:jospa kokeilisi josqs toimintaa (syntaksi lienee jo) (myös joitain paraMetreja tulisi sallia)
+	#15726:syntaksi kusee taas
 
 	for c in ${g_ab} ; do
-		echo "# $(whoami) ALL=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
+		echo "#v$(whoami) ALL=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
 	done 
 
 	cat ${1}
@@ -348,11 +362,11 @@ if [ "${1}" != "1" ] ; then
 	luft
 fi
 
-somefile=$(mktemp)
+somefile=$(mktemp qsipasq2-XXXX )
+#virhetilanteeseen reagointi mktemp kanssa?
 somefile2=$(mktemp) #ehkä pärjäisi ilmankin tuon kanssa kikkailua, suoraan kohde-hmistooon tdsto ja täts it
 
 f5a ${somefile} ${somefile2} 
 f5b ${somefile}
 
 echo "kutl v | g_doit -v 1 ?"
-echo "VAIH:SE /e/s.d/live HUKKAAMINEN KOKEEKSI "
