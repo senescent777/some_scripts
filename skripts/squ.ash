@@ -88,6 +88,8 @@ tmp=$(dirname $0)
 case "${cmd}" in
 	-x)
 		#15726:tämä eivielä toiminut post-omega, setup2.bash konf sorkkimista jatkettava (VAIH)
+		#19726:jo toimii? 
+
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #240526:"failed to setup loop device for " omegan jälk (according to the plan)
@@ -111,12 +113,12 @@ case "${cmd}" in
 		${uom} ${CONF_source}
 	;;
 	-b)
-		#vissiin dalek hoitaa hommansa ok 060626 (entä 15726?)
+		#vissiin dalek hoitaa hommansa ok 060626 (19726:toimii?)
 		sudo ${tmp}/dalek.bash b
 		#	fix_sudo $(pwd)
 	;;
 	-d)
-		#vissiin dalek hoitaa hommansa ok 060626 (entä 15726?)
+		#vissiin dalek hoitaa hommansa ok 060626 (19726:toimii)
 		odio=$(which sudo)
 		${odio} ${tmp}/dalek.bash d2
 	;;
@@ -137,6 +139,8 @@ case "${cmd}" in
 		csleep 2
 
 		#15726:saiko tämä jo toimimaan post-omega?
+		#19726:jo toisen kerran?
+
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2} #/
 		
