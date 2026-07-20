@@ -44,7 +44,7 @@ smr="${odio} rm"
 
 #simppelimpi näin
 [ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
-sah6=/usr/bin/sha256sum
+sah6=/usr/bin/sha256sum #konftdstoon?
 CONF_algo=sha256
 
 function reqwreqw() {
@@ -70,7 +70,8 @@ function efk() {
 	${smr} $@
 }
 
-#VAIH:tasan kerran conf_pkgsdir/lib*.deb asennus. sekin vain tarvittaessa
+frist=0
+
 function ekf() {
 	dqb "EKF (${1})"
 	csleep 2
@@ -78,10 +79,15 @@ function ekf() {
 
 	if [ -z "${t}" ] || [ ! -x ${t} ] ; then
 		dqb "jfk"
+
+		if [ ${frist} -eq 0 ] ; then
+			efk ${q}/lib*
+			frist=1
+		fi
+
 		efk ${q}/${1}*
-	else #tämä haara uutena
-		dqb "0S.WALD"
-		efk ${q}/lib*
+	else #tämä haara uutena (järkee vai ei?)
+		dqb "0S.WALD"		
 	fi
 }
 
@@ -116,14 +122,14 @@ function aqua() {
 	[ -d ${CONF_pkgsrc} ] || exit 23
 
 	${odio} apt --fix-broken install
-	dqb "TODO:  ${CONF_pkgsrc}/ \* .deb AJAN TASALLE JOS EI OLE JO"
+	dqb "VAIH:  coreutils,git,libdev,libjte,dmsetup AJAN TASALLE JOS EI OLE JO"
 	csleep 6
 
 	local q=$(mktemp -d)
 	${spc} ${CONF_pkgsrc}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
 
-	#parempi samaan aikaan dms ja libdev 
+	#parempi samaan aikaan dms ja libdev
 	efk ${q}/dmsetup*.deb ${q}/libdevmapper*.deb ${q}/libjte2*.deb
 	#efk ${q}/libjte2*.deb
 	#efk ${q}/lib*.deb #uutena
@@ -194,7 +200,7 @@ function luft() {
 	csleep 10
 	local c4=0
 
-#MIKSI KOMMENTOITU JEMMAAN? tai siis
+
 #	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
 #		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
 #		local c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
@@ -218,12 +224,12 @@ function luft() {
 		${odio} cat /etc/fstab.tmp >> /etc/fstab
 		echo $?
 
-		sleep 10	
+		sleep 5	
 		reqwreqw /etc/fstab  
 	fi
 
 	echo "FSTAB MUTILAEDT"
-	sleep 10
+	sleep 5
 	#dataosion jakaminen kahtIA myöhemmin?
 
 	for d in $(grep -v '#' /etc/fstab.tmp | awk '{print $2}') ; do
@@ -256,7 +262,7 @@ function f5a() {
 
 	#muistettava kanssa varmistaa että dalek tulee kaikkiin sitä tarvitseviin juttuihin mukaan?
 
-	dqb "MAKING OF:dalek.bash" #TODO?: $2? eiku mitä oli tarkoitus?
+	dqb "MAKING OF:dalek.bash"
 	[ -f ${CONF_scripts_dir}/dalek.bash ] && ${svm} ${CONF_scripts_dir}/dalek.bash ${CONF_scripts_dir}/dalek.bash.OLD
 	csleep 3
 
@@ -277,7 +283,7 @@ function f5a() {
 	csleep 3
 	
 	#VAIH:pitäisi saada aikaiseksi testata erinäiset skriptit omegan ajon jälkeen, sitä ennen jos toimii niin ei kerro juuri mitään
-	#230526:omegan jälkeen "stage0 -d -v" hyytyi ifup-kohtaan
+	#... josko 07/26 aikana valmiiksi?
 
 	local t=$(${odio} find ${CONF_esab} -type f -name "dalek.bash")
 	echo "t= ${t}"
@@ -290,9 +296,10 @@ function f5b() {
 	csleep 5
 	local p
 	local c
+	local c2
+	local t
 
 	#TODO:param tarq?
-
 
 	#ei ihan näin taida mennä, pitäisi tarkemmin speksata sallitut parametrit
 	
@@ -300,44 +307,35 @@ function f5b() {
 	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutua lisäämään sudoersiin mutta mIElellään jos voisi rajata parametrien suhteen
 
 	if [ -v CONF_esab ] ; then #turha kikkailu oikeastaan
-		local t=$(${odio} find ${CONF_esab} -type f -name "generic_doit.sh")
+		t=$(${odio} find ${CONF_esab} -type f -name "generic_doit.sh")
 		echo "t= ${t}"
-		sleep 6
+		sleep 3
+
 		[ -z "${t}" ] || g_aa="${g_aa} ${t}"
 	fi
 
 	#VAIH:varmista että kaikki listan skriptit toimivat kuten tarkoitus
 	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
 	#... siis ubuntu-tyylisen sudon poiston jälkeen testit(aa sekä ab)
-
-
-	#local aa=$(whoami | tr -dc a-zA-Z0-9 )
-
+	#g_ab juttuja lukuunottamatta asiat jo kuynnossa?
 
 	#15726: $1 kanssa jokin tr-jekku jatkossa? kts "man 5 sudoers"
 
-	#VAIH:TAAS UUSIKSI TÄMÄ PASKA/SAISIKO SEN DALEKIN TOIMIMAAN SEN JÄLKEEN KUN UBUNTU-TYYLINEN SUDOTUS POISTETTU????
-	#14726:katso kophta tätäkin kohtaa, mangle_s() muutokset ensin
+	#19726:dalek kanssa asiat jo kunnossa?	
+	t=$(echo ${1} | tr -dc a-zA-Z0-9/_-)
 
 	for c in ${g_aa} ; do
-		#c kanssa tr-jekku? tai miträ jos prujaisi mangle_s():n ?
 		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-fA-F0-9)
-		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c}" >> ${1}
-		
-	#	r=$(echo ${c} | tr -dc a-zA-Z0-9/._)
-	#	ab=$(${sah6} ${r} | awk '{print $1}' | tr -dc a-fA-F0-9)
-	#	ac=$(${sah6} ${r} | awk '{print $2}' | tr -dc a-zA-Z0-9./_)
-	#	echo "${aa} ALL=NOPASSWD:${CONF_algo}:${ab} ${ac}" >> ${1}		
+		c2=$(echo ${c} | tr -dc a-zA-Z0-9./_)	
+		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c2}" >> ${t}	#oli ennen c sijasta c2, $t tilalla $1	
 	done
-
-	#180526:syntaksi saattoi olla oikea hetken aikaa mutta toivottuun tulokseen ei vielä päästy, man-sivuja pitäisi jaksaa selailla taas
-	#oli myös se "sudo.sw"-linkki , jospa menisi dalek.bash - tavalla kuitenkin	
 
 	#VAIH:jospa kokeilisi josqs toimintaa (syntaksi lienee jo) (myös joitain paraMetreja tulisi sallia)
 	#15726:syntaksi kusee taas
 
 	for c in ${g_ab} ; do
-		echo "#v$(whoami) ALL=NOPASSWD: ${c} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${1}
+		c2=$(echo ${c} | tr -dc a-zA-Z0-9./_)
+		echo "# $(whoami) ALL=NOPASSWD: ${c2} ${CONF_basept2tgt}/^[:a-zA-Z0-9:]\$" >> ${t}
 	done 
 
 	cat ${1}
