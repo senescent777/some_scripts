@@ -44,9 +44,8 @@ smr="${odio} rm"
 
 #simppelimpi näin
 [ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
-sah6=/usr/bin/sha256sum #konftdstoon?
-CONF_algo=sha256
 
+#ao. fktioissa olisi kai hyvä ol,la enemmän tarkistukisa?
 function reqwreqw() {
 	[ -z "${1}" ] && exit 99
 	[ -f ${1} ] || exit 100
@@ -102,7 +101,7 @@ function jord() {
 	dqb "jord"
 	csleep 1
 
-	${sco} -R 0:0  ${1}/etc	
+	${sco} -R 0:0 ${1}/etc	
 	${scm} -R 0444 ${1}/etc	
 
 	#toimiva meshuqqah /e alle se kantava idea, yhdestä toimivasta versiosta on vamruuskopio jos tarttee
@@ -117,6 +116,7 @@ function jord() {
 function aqua() {
 	dqb "aqua"
 	csleep 1
+
 	[ -v CONF_pkgsrc ] || exit 22
 	[ -z "${CONF_pkgsrc}" ] && exit 21
 	[ -d ${CONF_pkgsrc} ] || exit 23
@@ -200,7 +200,6 @@ function luft() {
 	csleep 10
 	local c4=0
 
-
 #	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
 #		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
 #		local c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
@@ -250,8 +249,12 @@ function f5a() {
 	dqb "F5.a"
 	csleep 5
 
-	#TODO:param tarq?
-	fasdfasd ${1}
+
+	#VAIH:param tarq? /tmp löytymminen vielä
+	[ -z "${1}" ] && exit 99
+	[ -z "${2}" ] && exit 99
+
+	fasdfasd ${1} #kuinka tarpeellinen param?
 	fasdfasd ${2}
 
 	#CB_LIST1="$(${odio} which halt) $(${odio} which reboot) /usr/bin/which ${sifu} ${sifd}"
@@ -299,10 +302,9 @@ function f5b() {
 	local c2
 	local t
 
-	#TODO:param tarq?
+	#VAIH:param tarq? /tmp löytymminen vielä
+	[ -z "${1}" ] && exit 99
 
-	#ei ihan näin taida mennä, pitäisi tarkemmin speksata sallitut parametrit
-	
 	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
 	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutua lisäämään sudoersiin mutta mIElellään jos voisi rajata parametrien suhteen
 
@@ -314,15 +316,12 @@ function f5b() {
 		[ -z "${t}" ] || g_aa="${g_aa} ${t}"
 	fi
 
-	#VAIH:varmista että kaikki listan skriptit toimivat kuten tarkoitus
-	#nimittäin 26525 ei oikein pre_enforce():n kautta lisätyt pelanneet
-	#... siis ubuntu-tyylisen sudon poiston jälkeen testit(aa sekä ab)
 	#g_ab juttuja lukuunottamatta asiat jo kuynnossa?
-
 	#15726: $1 kanssa jokin tr-jekku jatkossa? kts "man 5 sudoers"
+	#jekku jo tehty?
 
-	#19726:dalek kanssa asiat jo kunnossa?	
 	t=$(echo ${1} | tr -dc a-zA-Z0-9/_-)
+	[ -z "${t}" ] && exit 99
 
 	for c in ${g_aa} ; do
 		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-fA-F0-9)
@@ -330,7 +329,7 @@ function f5b() {
 		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c2}" >> ${t}	#oli ennen c sijasta c2, $t tilalla $1	
 	done
 
-	#VAIH:jospa kokeilisi josqs toimintaa (syntaksi lienee jo) (myös joitain paraMetreja tulisi sallia)
+	#(myös joitain paraMetreja tulisi sallia)
 	#15726:syntaksi kusee taas
 
 	for c in ${g_ab} ; do
