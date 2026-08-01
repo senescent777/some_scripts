@@ -142,6 +142,7 @@ case "${cmd}" in
 		#19726:jo toisen kerran?
 
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
+		#TODO:koitahan ottaa huomioon että viimeaikaiset u-paketit eivät toimi, tulisi selvittää miksi
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2} #/
 		
 		if [ -z "${dir2}" ] ; then
