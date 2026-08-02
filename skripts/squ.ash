@@ -87,9 +87,6 @@ tmp=$(dirname $0)
 
 case "${cmd}" in
 	-x)
-		#15726:tämä eivielä toiminut post-omega, setup2.bash konf sorkkimista jatkettava (VAIH)
-		#19726:jo toimii? 
-
 		xxx ${par} ${CONF_squash0}
 	;;
 	-y) #240526:"failed to setup loop device for " omegan jälk (according to the plan)
@@ -113,17 +110,14 @@ case "${cmd}" in
 		${uom} ${CONF_source}
 	;;
 	-b)
-		#vissiin dalek hoitaa hommansa ok 060626 (19726:toimii?)
 		sudo ${tmp}/dalek.bash b
 		#	fix_sudo $(pwd)
 	;;
 	-d)
-		#vissiin dalek hoitaa hommansa ok 060626 (19726:toimii)
 		odio=$(which sudo)
 		${odio} ${tmp}/dalek.bash d2
 	;;
 	-c)
-		#240526: jnkn verran toimi omegan ajon jälkeen
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
@@ -134,12 +128,9 @@ case "${cmd}" in
 		rst ${CONF_squash_dir}
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #HUOM. sqash-hmstoin delliminen saattaa epäonnistua omegan jälkeen, pitäisikö huomioida jotenkin?
+	-j)  #sq-hmiston delliminen jo onnistuu?
 		dqb "smd= ${smd} "
 		csleep 2
-
-		#15726:saiko tämä jo toimimaan post-omega?
-		#19726:jo toisen kerran?
 
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 		#TODO:koitahan ottaa huomioon että viimeaikaiset u-paketit eivät toimi, tulisi selvittää miksi

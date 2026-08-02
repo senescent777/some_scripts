@@ -6,8 +6,6 @@ source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#180526:yllättäen sai aikaiseksi jnkn tiedoston omegan ajon jlkeen
-
 function usage() {
 	echo "a glorified wrapper for genisoimage (or grub-mkrescue)"
 	echo "${0} --in <SOURCE_DIR> --out <OUTFILE> [ --bl <BOOTLOADER> ]"
@@ -69,12 +67,12 @@ sleep 1
 dqb "bl=${bl}"
 csleep 4
 
-#dqb "VAIH: https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
+#dqb " https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
 #csleep 4
 
 case "${bl}" in
 	isolinux)
-		#VAIH:toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
+		#VAIH?:toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
 		${sco} -R $(whoami):$(whoami) ${source}
 		${scm} -R 0755 ${source}
 
@@ -96,9 +94,9 @@ case "${bl}" in
 		#no bootfile found for uefi -> vissiin efi-hmiston tai jnkin tarvitsee
 
 		#-isohybrid-mbr .../isohdpfx.bin qsee
-		echo "TODO:KVG \"libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb\""
-		echo "TODO: KVG \"no bootfile for UEFI\""
-		echo "TODO: KVG xorriso : FAILURE : Given path does not exist on disk: -boot_image system_area=..."
+		echo "TODO?:KVG \"libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb\""
+		echo "TODO?: KVG \"no bootfile for UEFI\""
+		echo "TODO?: KVG xorriso : FAILURE : Given path does not exist on disk: -boot_image system_area=..."
 		
 		#-B + -C ->  SAMA
 		#seur --bot-jutut mukana -> taas onnasi .iso:n luonti
@@ -110,7 +108,6 @@ case "${bl}" in
 		#KBG iso production command for debian
 	;;
 	grub)
-		#230526:onnistui .iso:n tekemään
 		ls -las ${source}/boot/${bl}/*.cfg || exit 99
 		csleep 2
 

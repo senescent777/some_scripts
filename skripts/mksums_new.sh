@@ -6,8 +6,6 @@ d=$(dirname $0) #tämäb annettava olla tässä
 . ${d}/common.conf
 bl=${CONF_bloader}
 
-#240526:taisi toimia pienen nalkutuksen kanssa
-
 function usage() {
 	echo "$0 --in <source> [--bl <BLOADER>]"
 
@@ -52,7 +50,8 @@ function single_param() {
 }
 
 . ${d}/common_funcs.sh
-#TODO:konftdstoihin liittyen tämän skriptin kohteeseen kopsattu versio toimimaan
+#VAIH:konftdstoihin liittyen tämän skriptin kohteeseen kopsattu versio toimimaan
+#josko sittenkin stage0f kopsaamaan konftdston kohteeseen? common_lib viimeaikaisten muutoksien johdosta ei ehkä tartte
 
 if [ $# -eq 0 ] ; then
 	usage
@@ -90,7 +89,7 @@ function part0() {
 	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
 	csleep 5
 
-	#VAIH:jos sittenkin selvittäisi miten dgsts.4 ja dgsts.5 asiat liittyvät ao. riveihin? vitosen kohdalla jos tekisi jotain poikkeusta sääntöön
+	#DONE?:jos sittenkin selvittäisi miten dgsts.4 ja dgsts.5 asiat liittyvät ao. riveihin? vitosen kohdalla jos tekisi jotain poikkeusta sääntöön
 	#... olisiko jo 260626 mennessä?
 	
 	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file} \* SOON"
@@ -101,7 +100,6 @@ function part0() {
 	${NKVD} ${1}/${TARGET_DIGESTS_file}.*
 	${svm} ${1}/5.6 ${1}/${TARGET_DIGESTS_file}.5	
 
-	#180526:muutenkin tuota sudo-kiukuttelua seb verran palkjon jotta sittenkin odion nollaus jos x?
 	dqb "QPOL0"
 	csleep 1
 	
@@ -150,14 +148,14 @@ function part123() {
 	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 }
 
-#TODO:huomioimaan taas tilanne että käskytetäänkin sitä kohde-hmistoon kopsattua versiota (keys.conf pitäisi saada mukaan tavalla tai toisella)
+#TODO?:huomioimaan taas tilanne että käskytetäänkin sitä kohde-hmistoon kopsattua versiota (keys.conf pitäisi saada mukaan tavalla tai toisella)
 #muuan copy_conf() liittynee
 
 function part6_5() {
 	dqb "mks.part65( $@ ) "
 
 	[ -v CONF_pubk ] || exit 99	
-	[ -v TARGET_DIGESTS_dir ] || exit 98
+	[ -v TARGET_DIGESTS_dir ] || exit 98 #tämä voisi olla parametri fktiolle jatkossa
 	[ -v TARGET_DIGESTS_file ] || exit 97
 	csleep 1
 
@@ -176,7 +174,7 @@ function part6_5() {
 #100326:"gpg --edit-key" ? ehkä ei tähän mutta johonkin
 
 function part7() {
-	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " 
+	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " #tuleeko tälle fktiolle param? käytetäänkö nbiitä?
 
 	[ -v TARGET_DIGESTS_dir ] || exit 98
 	[ -v TARGET_DIGESTS_file ] || exit 97	

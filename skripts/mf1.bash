@@ -1,5 +1,5 @@
 #pohjana skeripts/export/mf.bsh / this is ba5ed on skripts/export/mf.bsh
-#TODO:joq päivä takaisin käyttöqntoon
+#TODO?:joq päivä takaisin käyttöqntoon
 debug=0 #1
 source=""
 d=$(dirname $0)

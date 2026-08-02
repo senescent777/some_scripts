@@ -226,7 +226,7 @@ function bootloader() {
 				dqb "${spc} -a ${3}/boot/ ${4} || exit 8"
 				csleep 3
 
-				#TODO:koita keksiä jotain ettei tähän tökkää
+				#TODO:koita keksiä jotain ettei tähän tökkää (ajankohtainen vielä 08/26?)
 				${spc} -a ${3}/boot/ ${4} || exit 8
 				csleep 1
 
@@ -267,4 +267,3 @@ function bootloader() {
 }
 
 #161225.2:voisi kai iteroida forılla arrayn läpi jatkossa (MINKÄ ARRAYN?)
-

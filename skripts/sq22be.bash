@@ -49,6 +49,7 @@ function cfd() {
 }
 
 #sudoers-jekku olisi hyväksi tässäkin? tai sitten local odio/smr/sco (TODO)
+#... ajanjohtainen vie3lä 08/26?
 
 function jlk_main() {
 	dqb "jkl_niam ( ${1} , ${2}  )"
@@ -62,7 +63,7 @@ function jlk_main() {
 	csleep 1
 	
 	#for-loopissakin voisi...
-	#230526:jotain urputusta tässsä kohtaa mutta nÄköjään matskut kopsautuivat
+
 	${spc} ${1}/*.sh ${2}
 	${spc} ${1}/*.bz2 ${2} 
 	${spc} ${1}/*.bz3 ${2}
@@ -129,7 +130,6 @@ function jlk_sums() {
 	dqb "${spc} -a ${1}/ \$stuff ${2}"
 	csleep 2
 
-	#230526:kopsailu toimi urputuksne kanssa
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
 	${spc} ${1}/*.gpg ${2}
 	${spc} ${1}/*.sig ${2}
@@ -188,7 +188,7 @@ function rst_pre2() {
 		dqb "CTE KO"
 	else
 		echo "U SHOULD RUN squ.ash x BEFORE squ.ash r"
-		exit 66 #koita keksiä jokin toinen virhekoodi, tuRhan yleinen
+		exit 96
 	fi
 
 	csleep 1
@@ -224,7 +224,6 @@ function rst_pre2() {
 	csleep 1
 }
 
-#230526:urputusta
 function rst_post() {
 	dqb "rst_post()"
 	csleep 1
@@ -264,13 +263,14 @@ function rst() {
 	csleep 1
 	
 	rst_pre2 ${1}
-	#260626:ao. komento aiheutti ulinaa, sudotus?
+
 	cd ${1}
 	
 	pwd
 	csleep 1
 	#sopivassa kohdassa .sh-tiedostoihin ajo-oikeus päälle?
 
+	#020826:laittaisiko chrootin sudoersiin mukaan vai ei?
 	#includeen vai ei?
 	scr="sudo /usr/sbin/chroot"
 	${scr} ./ ./bin/bash 
