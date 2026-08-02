@@ -45,7 +45,6 @@ smr="${odio} rm"
 #simppelimpi näin
 [ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
 
-#ao. fktioissa olisi kai hyvä ol,la enemmän tarkistukisa? nyt on
 function reqwreqw() {
 	[ -z "${1}" ] && exit 99
 	[ -f ${1} ] || exit 100
@@ -126,15 +125,14 @@ function aqua() {
 	[ -d ${1} ] || exit 23
 
 	${odio} apt --fix-broken install
-	dqb "VAIH:  ,libdev,libjte,dmsetup AJAN TASALLE JOS EI OLE JO (exp2 s tjsp)"
 	csleep 6
 
 	local q=$(mktemp -d)
 	${spc} ${1}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
 
-	#parempi samaan aikaan dms ja libdev
-	efk ${q}/dmsetup*.deb ${q}/libdevmapper*.deb ${q}/libjte2*.deb
+	# dms ja libdev vielä lähdehmistoon?
+	efk ${q}/dmsetup*.deb.deb ${q}/libjte2*.deb ${q}/libdevmapper*
 	#efk ${q}/libjte2*.deb
 	#efk ${q}/lib*.deb #uutena
 
@@ -260,9 +258,9 @@ function f5a() {
 	[ -z "${1}" ] && exit 99
 	[ -z "${2}" ] && exit 98
 
-	#010826;tokan param kanssa ok grepata tnp
+	#020826:tokan param kanssa ok grepata tnp, ekan kanssa ei tarvitse
 	local x=$(echo ${2} | grep tmp | wc -l)
-	[ ${x} gt 0 ] || exit 95 
+	[ ${x} -gt 0 ] || exit 95 
 
 	[ -z "${3}" ] && exit 97
 	[ -d "${3}" ] || exit 96
@@ -270,18 +268,18 @@ function f5a() {
 	fasdfasd ${1} #kuinka tarpeellinen param?
 	fasdfasd ${2}
 
-	#CB_LIST1="$(${odio} which halt) $(${odio} which reboot) /usr/bin/which ${sifu} ${sifd}"
-	#...ao lista mukaan aa:han vaiko common_lib kanssa jogtain jatkosöäätöä?
 	[ -v CONF_scripts_dir ] || exit 11 #kutsuvaan koodiin
 
-
 	#muistettava kanssa varmistaa että dalek tulee kaikkiin sitä tarvitseviin juttuihin mukaan?
+	#...varmistettu?
 
 	dqb "MAKING OF:dalek.bash"
 	[ -f ${3}/dalek.bash ] && ${svm} ${1}/dalek.bash ${1}/dalek.bash.OLD
 	csleep 3
 
-	#15726:jos on pedantti niin dalek.s validius pitäisi tarkistaa ennenq lisäilee sudoersiin juttuja
+	dqb "SHOULD gpg --verify ${3}/dalek.s OR SMTHING, AROUND HERE"
+	csleep 3
+
 	head -n 1 ${3}/dalek.s > ${2}
 	grep -v "#" ${3}/common.conf >> ${2}
 	grep -v "#" ${3}/dalek.s >> ${2}
@@ -297,8 +295,7 @@ function f5a() {
 	dqb "AFTER DALEK"
 	csleep 3
 	
-	#VAIH:pitäisi saada aikaiseksi testata erinäiset skriptit omegan ajon jälkeen, sitä ennen jos toimii niin ei kerro juuri mitään
-	#... josko 08/26 aikana valmiiksi?
+	#020826:jospa toimisivat useimmat skriptit sudon kautta
 	#btw. miksi erikseen esab? , olisi suoraan tuo $3/dalek ... polut?
 
 	local t=$(${odio} find ${CONF_esab} -type f -name "dalek.bash")
