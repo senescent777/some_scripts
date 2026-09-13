@@ -55,9 +55,8 @@ function jord() {
 	done
 }
 
-jord #${1}
-#1912255:jnkn verran jo testailtu, kuten myös 270426, toimii
-#TODO:päällekkäisyyksiä pois josqs? esmes e23.sh sisälsi niitä uusia fktioita
+jord
+#TODO?:päällekkäisyyksiä pois josqs? esmes e23.sh sisälsi niitä uusia fktioita
 
 function aqua() {
 	dqb "aqua ( ${1} )"
@@ -92,37 +91,38 @@ function aqua() {
 	${shary} ${E22GI}
 	#
 
-	#näillekin jokin E22_xxx ? kts e23.sh olisiko jo
 	${shary} libc6 coreutils
 	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
 	${shary} git-man git
 	#/common_lib
 
+	#KTS e23_st() 
+
 	#https://pkginfo.devuan.org/cgi-bin/policy-query.html?c=package&q=squashfs-tools&x=submit
-	${shary} liblz4-1 liblzma5 liblzo2-2 libzstd1
-	${shary} squashfs-tools
+	#${shary} liblz4-1 liblzma5 liblzo2-2 libzstd1
+	#${shary} squashfs-tools
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=genisoimage=9:1.1.11-3.4
-	sudo apt-get reinstall libbz2-1.0 libmagic1
+	#sudo apt-get reinstall libbz2-1.0 libmagic1
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=wodim=9:1.1.11-3.4
-	sudo apt-get --no-install-recommends libcap2
-	${shary} genisoimage wodim 
-	${shary} dmsetup libdevmapper1
-	${shary} libjte2
+	#sudo apt-get --no-install-recommends libcap2
+	#${shary} genisoimage wodim 
+	#${shary} dmsetup libdevmapper1
+	#${shary} libjte2
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=grub-common=2.06-13+deb12u1
-	sudo apt-get reinstall libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
+	#sudo apt-get reinstall libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
 
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=xorriso=1.5.4-4
-	${shary} libisoburn1 libburn4 libisofs6 
-	${shary} libfuse2
-	${shary} mtools
-	${shary} grub-common xorriso #jälkimminen toistaiseksi mukana
-	${shary} geany
+	#${shary} libisoburn1 libburn4 libisofs6 
+	#${shary} libfuse2
+	#${shary} mtools
+	#${shary} grub-common xorriso #jälkimminen toistaiseksi mukana
+	#${shary} geany
 	
 	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=isolinux=3:6.04~git20190206.bf6db5b4+dfsg1-3
-	${shary} isolinux
+	#${shary} isolinux
 	
 	sudo cp /var/cache/apt/archives/*.deb ${1} #kuinka tarpeellinen? kts conf EIKU
 }
