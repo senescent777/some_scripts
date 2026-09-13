@@ -53,6 +53,7 @@ function single_param() {
 #VAIH:konftdstoihin liittyen tämän skriptin kohteeseen kopsattu versio toimimaan
 #josko sittenkin stage0f kopsaamaan konftdston kohteeseen? common_lib viimeaikaisten muutoksien johdosta ei ehkä tartte
 
+#entä "$0 -v" ? 
 if [ $# -eq 0 ] ; then
 	usage
 	exit
