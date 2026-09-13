@@ -114,7 +114,7 @@ case "${cmd}" in
 	;;
 	x)
 		[ -v CONF_karray ] || exit 68
-		#[ "${tgt}" == "${CONF_keys_dir_pub}" ] && exit 69 #TODO:voisi laittaa toimimaan ASAP?
+		#[ "${tgt}" == "${CONF_keys_dir_pub}" ] && exit 69 #TODO?:voisi laittaa toimimaan ASAP?
 		[ -z "${tgt}" ] && tgt=${CONF_keys_dir}
 		[ -d ${tgt} ] || exit 70
 		
