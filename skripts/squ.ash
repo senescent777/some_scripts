@@ -110,35 +110,30 @@ case "${cmd}" in
 		${uom} ${CONF_source}
 	;;
 	-b)
-		#vissiin dalek hoitaa hommansa ok 060626
 		sudo ${tmp}/dalek.bash b
 		#	fix_sudo $(pwd)
 	;;
 	-d)
-		#vissiin dalek hoitaa hommansa ok 060626
 		odio=$(which sudo)
 		${odio} ${tmp}/dalek.bash d2
 	;;
 	-c)
-		#240526: jnkn verran toimi omegan ajon jälkeen
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
 		[ -v CONF_squash_dir ] || exit 111
 		[ -z "${CONF_squash_dir}" ] && exit 112
 
-		#DONE:jospa urputtaisi mikäli CONF_squash_dir sisältöineen puuttuu
-		#TODO:tämänkin casen testaus sittenq
-
 		rst_pre1
 		rst ${CONF_squash_dir}
 		dqb "how about removung those .bz3-files under squash?"
 	;;
-	-j)  #HUOM. sqash-hmstoin delliminen saattaa epäonnistua omegan jälkeen, pitäisikö huomioida jotenkin?
+	-j)  #sq-hmiston delliminen jo onnistuu?
 		dqb "smd= ${smd} "
 		csleep 2
 
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
+		#TODO:koitahan ottaa huomioon että viimeaikaiset u-paketit eivät toimi, tulisi selvittää miksi
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2} #/
 		
 		if [ -z "${dir2}" ] ; then
