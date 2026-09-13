@@ -118,8 +118,9 @@ dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
 ${odio} ./skripts/dalek.bash m
 
 #270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
-
-#270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi?
+sleep 5
+echo "JUST BEFORE PT0"
+sleep 5
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}
