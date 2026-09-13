@@ -132,7 +132,7 @@ function aqua() {
 	[ $? -eq 0 ] || exit 4
 
 	# dms ja libdev vielä lähdehmistoon?
-	efk ${q}/dmsetup*.deb ${q}/libjte2*.deb ${q}/libdevmapper*.deb
+	efk ${q}/dmsetup*.deb.deb ${q}/libjte2*.deb ${q}/libdevmapper*
 	#efk ${q}/libjte2*.deb
 	#efk ${q}/lib*.deb #uutena
 
