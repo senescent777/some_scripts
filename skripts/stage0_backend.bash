@@ -22,7 +22,7 @@ function copy_main() {
 	dqb "PIZZAA"	
 	csleep 1
 
-	#eri lähde find-komennoilla ni jospa ei jaksaisi hýhgdistää ekaa findia
+	#eri lähde find-komennoilla ni jospa ei jaksaisi ýhgdistää ekaa findia
 	for f in $(find ${3} -type f -name "*.sh") ; do	
 		dqb "${spc} ${f} ${2}/../.. "
 		${spc} ${f} ${2}/../.. 
@@ -30,7 +30,7 @@ function copy_main() {
 
 	dqb "PASHAA"
 	csleep 1
-	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
+	#191225:tuleeko ongelma siitä että linkkejä ei seurata? toiv ei
 
 	for f in $(find ${1} -type f  -name "*.sh" -or -name "*.bz2") ; do
 		dqb "${spc} ${f} ${2} "
@@ -63,7 +63,7 @@ function copy_conf() {
 	#-v vielä ?
 
 	if [ ! -z "${CONF_scripts_dir}" ] ; then
-		for f in $(find ${CONF_scripts_dir} -type f -name "*.conf" | grep -v bash) ; do
+		for f in $(find ${CONF_scripts_dir}  -name "*.conf" | grep -v bash) ; do #"-type f" kokeeksi jemmaan 130926
 			dqb "${spc} ${f} ${2}/../.."
 			${spc} ${f} ${2}/../.. 	
 		done

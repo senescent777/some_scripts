@@ -50,8 +50,10 @@ function single_param() {
 }
 
 . ${d}/common_funcs.sh
-#VAIH:konftdstoihin liittyen tämän skriptin kohteeseen kopsattu versio toimimaan
+
+#DIBE?:konftdstoihin liittyen tämän skriptin kohteeseen kopsattu versio toimimaan
 #josko sittenkin stage0f kopsaamaan konftdston kohteeseen? common_lib viimeaikaisten muutoksien johdosta ei ehkä tartte
+#130926 copy_conf() muutettu liittyen
 
 #entä "$0 -v" ? 
 if [ $# -eq 0 ] ; then
