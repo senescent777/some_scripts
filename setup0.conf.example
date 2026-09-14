@@ -1,0 +1,4 @@
+CONF_basedir=$(pwd)
+CONF_pkgsrc=${CONF_basedir}/pkgs
+debug=0
+

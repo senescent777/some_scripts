@@ -79,7 +79,7 @@ function aqua() {
 	${odio} apt-get update
 	${odio} apt --fix-broken install
 
-	#common_lib.sh
+	#common_lib.sh (dhclientin kanssa voi olla juttuja)
 	E22_GT="isc-dhcp-client isc-dhcp-common libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 libnftables1 libedit2"
 	E22_GT="${E22_GT} iptables"
 	E22_GT="${E22_GT} init-system-helpers"
