@@ -2,7 +2,7 @@
 b=0
 debug=0
 source=""
-d=$(dirname $0) #tämäb annettava olla tässä
+d=$(dirname $0)
 . ${d}/common.conf
 bl=${CONF_bloader}
 
@@ -17,7 +17,7 @@ function parse_opts_real() {
 	dqb "asd.asd"
 }
 
-if [ -f ${d}/keys.conf ] ; then #tarvitaan, kts sibgle_param
+if [ -f ${d}/keys.conf ] ; then
 	. ${d}/keys.conf
 fi
 
@@ -51,10 +51,6 @@ function single_param() {
 
 . ${d}/common_funcs.sh
 
-#DIBE?:konftdstoihin liittyen tämän skriptin kohteeseen kopsattu versio toimimaan
-#josko sittenkin stage0f kopsaamaan konftdston kohteeseen? common_lib viimeaikaisten muutoksien johdosta ei ehkä tartte
-#130926 copy_conf() muutettu liittyen
-
 #entä "$0 -v" ? 
 if [ $# -eq 0 ] ; then
 	usage
@@ -76,14 +72,13 @@ function part0() {
 	dqb "PARAMS OK"
 	csleep 1
 
-	#pot. vaarallinen koska -R
 	${sco} -R ${2}:${2} ${1} 
 	${scm} 0755 ${1} 
 	${scm} u+w ${1}/* 
 	dqb "OCD ENOD"
 	csleep 1
 	
-	#oik/omist - asioita voisi miettiä että miten pitää mennä
+	#oik/omist - asioita voisi miettiä että miten pitää mennä? vielä 09/236?
 	local f
 	dqb "MARC"
 	csleep 1
@@ -91,9 +86,6 @@ function part0() {
 	[ -v TARGET_DIGESTS_file ] || exit 73
 	[ -z "${TARGET_DIGESTS_file}" ] && exit 75
 	csleep 5
-
-	#DONE?:jos sittenkin selvittäisi miten dgsts.4 ja dgsts.5 asiat liittyvät ao. riveihin? vitosen kohdalla jos tekisi jotain poikkeusta sääntöön
-	#... olisiko jo 260626 mennessä?
 	
 	dqb "\${NKVD} W1LL C0M3 F0R ${1}/${TARGET_DIGESTS_file} \* SOON"
 	csleep 1
@@ -112,8 +104,6 @@ function part0() {
 	dqb "part0 d0n3"
 	csleep 1
 }
-
-#260626:antaapi olla toistaiseksi .bin kanssa
 
 function part123() {
 	dqb "part123(${1}, ${2} , ${3} )"
@@ -134,7 +124,6 @@ function part123() {
 		[ ${debug} -eq 1 ] && pwd
 		csleep 3
 
-		#HUOM.281125:saattaa joutua muuttamaan vielä jos isolinuxin kanssa alkaa säätää
 		for f in $(find ./${2} -type f -name "*.cfg" -or -name "*.lst" -or -name "grubenv") ; do ${sah6} ${f} >> ./${t} ; done
 		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${t} ; done
 		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${t} ; done
@@ -144,15 +133,11 @@ function part123() {
 		#${sco} 0:0 ./${t} #ei hyvä idea?
 		cd ${old}
 	else
-		#dgsts.4 luonti ei onnistu?
 		dqb "ERROR TERROR"
 	fi
 
 	[ ${debug} -eq 1 ] && ls -las ${3}/${TARGET_DIGESTS_dir};sleep 3
 }
-
-#TODO?:huomioimaan taas tilanne että käskytetäänkin sitä kohde-hmistoon kopsattua versiota (keys.conf pitäisi saada mukaan tavalla tai toisella)
-#muuan copy_conf() liittynee
 
 function part6_5() {
 	dqb "mks.part65( $@ ) "
@@ -173,11 +158,10 @@ function part6_5() {
 	dqb "mks.part65dibw"
 }
 
-#TODO?:target_dpub-jutut pois sittenq mahd ? pointti?
 #100326:"gpg --edit-key" ? ehkä ei tähän mutta johonkin
 
 function part7() {
-	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " #tuleeko tälle fktiolle param? käytetäänkö nbiitä?
+	dqb "mks.part7 ( ${1} , ${2} , ${3} ) " #tuleeko tälle fktiolle param? käytetäänkö nbiitä? No Ei
 
 	[ -v TARGET_DIGESTS_dir ] || exit 98
 	[ -v TARGET_DIGESTS_file ] || exit 97	
@@ -234,14 +218,10 @@ part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
 cd ${source}
 
-#HUOM: dgsts.5 on semmoinen juttu mikä pitää huomioida ?
 for f in $(find ./${TARGET_DIGESTS_dir} -type f -name "${TARGET_DIGESTS_file}.?" ) ; do
 	dqb "p456 ${f}"
 	${sah6} -c ${f} --ignore-missing
 done
-
-#kts liittyen jlk_main() , että mitä pitäisi sisällöksi laittaa, esim
-#niinja nw julk av pitäisi myös tulla mukaan, kts stage0_backend liittyen
 
 if [ ! -z "${gg}" ] ; then 
 	part6_5
@@ -261,7 +241,6 @@ csleep 1
 ${sah6} -c  ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4 --ignore-missing
 csleep 1
 
-#040626:tässä jotain nalkutusta? luuultavasti sco syynä
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*

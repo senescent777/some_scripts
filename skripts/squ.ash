@@ -1,5 +1,5 @@
 #!/bin/bash
-debug=0 #1
+debug=0
 dir2=""
 cmd=""
 md=0
@@ -111,7 +111,6 @@ case "${cmd}" in
 	;;
 	-b)
 		sudo ${tmp}/dalek.bash b
-		#	fix_sudo $(pwd)
 	;;
 	-d)
 		odio=$(which sudo)
@@ -150,7 +149,7 @@ case "${cmd}" in
 		jlk_sums ${dir2}/${TARGET_DIGESTS_dir} ${CONF_squash_dir}/${TARGET_pad2}/${TARGET_DGST0}
 		fix_sudo ${CONF_squash_dir}
 	;;
-	-f)  #161225:kai tämäkin toimii
+	-f)
 		fix_sudo ${CONF_squash_dir}
 	;;
 	*)
