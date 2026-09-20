@@ -73,6 +73,7 @@ function efk() {
 
 frist=0
 
+#20926:tässä fktiossa ainoa globaali tuo frist
 function ekf() {
 	dqb "EKF (${1})"
 	#[ -z "${1}" ] && exit 99
@@ -83,11 +84,11 @@ function ekf() {
 		dqb "jfk"
 
 		if [ ${frist} -eq 0 ] ; then
-			efk ${q}/lib*
+			efk ${2}/lib*
 			frist=1
 		fi
 
-		efk ${q}/${1}*
+		efk ${2}/${1}*
 	else #tämä haara uutena (järkee vai ei?)
 		dqb "0S.WALD"		
 	fi
@@ -127,7 +128,7 @@ function aqua() {
 	${odio} apt --fix-broken install
 	csleep 6
 
-	local q=$(mktemp -d)
+	local q=$(mktemp -d) #tekeekö tämä mitään?
 	${spc} ${1}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
 
@@ -140,7 +141,8 @@ function aqua() {
 	csleep 2
 
 	#onbkohan trarpeellinen kikkailu? E22_GG...
-	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ; done
+	#TODO:joitain git-paketteja lisää?
+	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ${q} ; done
 	sleep 5
 
 #	${odio} dpkg -i ${q}/*.deb
@@ -268,7 +270,7 @@ function f5a() {
 	fasdfasd ${1} #kuinka tarpeellinen param?
 	fasdfasd ${2}
 
-	[ -v CONF_scripts_dir ] || exit 11 #kutsuvaan koodiin
+	[ -v CONF_scripts_dir ] || exit 11 #kutsuvaan koodiin?
 
 	#muistettava kanssa varmistaa että dalek tulee kaikkiin sitä tarvitseviin juttuihin mukaan?
 	#...varmistettu?
@@ -375,5 +377,4 @@ somefile2=$(mktemp) #ehkä pärjäisi ilmankin tuon kanssa kikkailua, suoraan ko
 
 f5a ${somefile} ${somefile2} ${CONF_scripts_dir}
 f5b ${somefile}
-
 echo "kutl v | g_doit -v 1 ?"
