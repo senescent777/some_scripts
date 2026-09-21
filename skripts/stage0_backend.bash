@@ -223,6 +223,8 @@ function bootloader() {
 			ks2=${2}/boot #jos siirtäisi ennen case;a nää?
 			
 			if [ -d ${ks2} ] ; then
+				dqb " ${ks2} FOUND"
+
 				dqb "${spc} -a ${3}/boot/ ${4} || exit 8"
 				csleep 3
 
@@ -233,7 +235,13 @@ function bootloader() {
 				k3=${4}/boot/grub
 				[ ${debug} -gt 0 ] && ls -las ${k3}/*.cfg
 				csleep 5
+			else
+				dqb " ${ks2} NOT FOUND"
 			fi
+
+			#JOSKO NYT PRKL
+			${sco} -R $(whoami):$(whoami) ${4}/boot
+			${scm} -R a+w ${4}/boot
 		;;
 		*)
 			echo "https://www.youtube.com/watch?v=PjotFePip2M"
@@ -247,21 +255,25 @@ function bootloader() {
 	if [ -d ${k3} ] ; then
 		${smr} ${k3}/*.cfg
 		${smr} ${k3}/*.png
+		ls -las ${k3}
 	fi
 	
-	csleep 1
-				
-	for f in $(find ${ks2} -name "*.cfg" -or -name "*.bin") ; do
+	csleep 10
+	dqb "JUST BFORE OVERRIDE"
+	csleep 3
+			
+	for f in $(find ${ks2} -name "*.cfg" -or  -name "*.png") ; do # -or -name "*.bin"
 		dqb "spc ${f} ${k3}"
 		${spc} ${f} ${k3}
+		csleep 1
 	done
 				
 	ls -las ${k3}/*.cfg || exit 99
 
-	for f in $(find ${ks2} -name "*.png") ; do
-		dqb "spc ${f} ${k3}/"
-		${spc} ${f} ${k3}/
-	done
+#	for f in $(find ${ks2}) ; do
+#		dqb "spc ${f} ${k3}/"
+#		${spc} ${f} ${k3}/
+#	done
 
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }

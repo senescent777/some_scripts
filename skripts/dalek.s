@@ -75,21 +75,22 @@ case "${1}" in
 
 		
 function make_tgt_dirs() {
-	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3})"
+	dqb "s0b.MAKE_t_DIRS( ${1} , ${2}, ${3} ) ${4})"
 	csleep 1
 
 	[ -z "${1}" ] && exit 99
 	[ x"${1}" != "x/" ] || exit 100
 	[ -z "${2}" ] && exit 101
 	[ -z "${3}" ] && exit 102
-	
+
+	[ -z "${4}" ] && exit 103
+	#kuuluisi kai grepata vasten /e/paswd
+
 	dqb "PARAMZx OK"
 	csleep 1
 
 	dqb "CRS"
 	[ -d ${2} ] || ${smd} -p ${2}
-
-	#tämän rivin kanssa oli jotain urputusta 230526
 	${sco} 0:0 ${2}
 
 	${scm} 0755 ${2}
@@ -102,7 +103,6 @@ function make_tgt_dirs() {
 	csleep 2
 	
 	dqb "FR0ST"
-	#ao. if-blokin pointti?
 
 	if [ ! -d ${1} ] ; then
 		${smd} -p ${1}
@@ -138,9 +138,8 @@ function make_tgt_dirs() {
 	[ -d ${1}/../out ] || ${smd} -p ${1}/../out
 	csleep 1
 
-	#josko vähitellen ?
-	dqb "FN1AL"
-	${sco} -R $(whoami):$(whoami) ${1}
+	dqb "FN1AL ly ${sco} -R ${4}:${4} ${1}"
+	${sco} -R ${4}:${4} ${1}
 	${scm} -R u+w ${1}
 	csleep 10
 
@@ -158,8 +157,14 @@ function make_tgt_dirs() {
 	csleep 17
 	dqb "...done\n"
 }
+		#risuaitojen kanssa oli semmoinen juttu ni mieluummin -z
+		if [ -z "${2}" ] ; then 
+			echo "u can F O A D!!!"
+			exit
+		fi
+
 		echo "JUST BEFORE make_tgt_drs"
-		make_tgt_dirs ${CONF_target} ${CONF_source} ${CONF_bloader}
+		make_tgt_dirs ${CONF_target} ${CONF_source} ${CONF_bloader} ${2}
 	;;
 	b)
 		
