@@ -55,20 +55,22 @@ csleep 1
 
 case "${cmd}" in
 	--make-dirs)
-		sudo ./skripts/dalek.bash m
+		#21926:uudet väännöt ja säädöt menossa ptkl
+		dqb "SOON: sudo ./skripts/dalek.bash m $(whoami)"
+		csleep 5
+
+		sudo ./skripts/dalek.bash m $(whoami)
 	;;
 	-d)
-		#2605426:ei täysin onnistunut kohteen siivoilu omegan jälkeen, toistuuko?
-		#4626:vieläkin oli toivomisen varaa, lisätty pari juttua dalekiin
-		#30626:dalek ei oikein pelannut omegan jälkeen, koita keksiä miksi jnpp
-		#15726:toimiko taas omegan jälk? ekhä
+			#15726:toimiko taas omegan jälk? ekhä
 		#18726:suattaapi olla jotta toimi jo toisen kerran
+		
 
+		
+		
 		sudo ./skripts/dalek.bash d1
 	;;
 	*)
-		#15726:ehkä toimii tuo 0f post-pomega
-		#19726:tämäkin toisne kerran?
 
 		#stage0f==glorified cp
 		echo "./stage0f.sh ${source} ${source2} ${bl} ${debug}"
