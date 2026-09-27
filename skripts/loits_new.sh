@@ -22,6 +22,9 @@ function parse_opts_real() {
 	esac
 }
 
+echo "TODO:JOULUKUSET WTTUUN 666"
+sleep 6
+
 #HUOM.12725:oliko single_param() kanssa jokin juttu? non yt aikakin fktio löytyy
 function single_param() {
 	dqb "signle_param ( ${1} , ${2} )"
