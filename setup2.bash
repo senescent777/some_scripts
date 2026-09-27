@@ -108,49 +108,34 @@ function jord() {
 	${sco} -R 0:0 ${1}/etc	
 	${scm} -R 0444 ${1}/etc	
 
-	#toimiva meshuqqah /e alle se kantava idea, yhdestä toimivasta versiosta on vamruuskopio jos tarttee
-	#... koitetaan jos mangle_s:n paikallinen versio kykenisi (12726)
-
 	${spc} -a ${1}/etc/* /etc
 }
-
-#240526:noista paketeista oikeastaan git lienee välttämättömin tmän skriptin kannalta
-#... vaikuttaisi että gdoit.sh kehitysymp saattaa paskoa slimin (v8elä 07/26?)
 
 function aqua() {
 	dqb "aqua ) ${1} ("
 	csleep 1
 
-	#[ -v CONF_pkgsrc ] || exit 22 
 	[ -z "${1}" ] && exit 21
 	[ -d ${1} ] || exit 23
 
 	${odio} apt --fix-broken install
 	csleep 6
 
-	local q=$(mktemp -d) #tekeekö tämä mitään?
+	local q=$(mktemp -d)
 	${spc} ${1}/*.deb ${q}
 	[ $? -eq 0 ] || exit 4
 
 	# dms ja libdev vielä lähdehmistoon?
 	efk ${q}/dmsetup*.deb ${q}/libjte2*.deb ${q}/libdevmapper*
-	#efk ${q}/libjte2*.deb
-	#efk ${q}/lib*.deb #uutena
 
 	dqb "BEFORE TBLZ"
 	csleep 2
 
-	#onbkohan trarpeellinen kikkailu? E22_GG...
 	#TODO:joitain git-paketteja lisää?
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ${q} ; done
 	sleep 5
 
-#	${odio} dpkg -i ${q}/*.deb
-#	${smr} ${q}/*.deb
-#
-#	dqb "GENISOIMAGE?"
-#	which genisoimage
-#	csleep 6
+
 #
 #	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
 #	if [ -v CONF_part076 ] ; then
@@ -208,19 +193,6 @@ function luft() {
 	csleep 10
 	local c4=0
 
-#	if [ -v CONF_dir ] && [ -s /etc/fstab.tmp ] ; then	
-#		c4=$(grep ${CONF_dir} /etc/fstab | wc -l)
-#		local c5=$(grep ${CONF_dir} /etc/fstab.tmp | wc -l)
-#		
-#		if  [ ${c5} -lt 1 ] ; then
-#			echo "SMTHING WRONG W/ fstab.tmp (or config)"
-#			exit 66
-#		fi
-#	else
-#		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
-#		exit 65
-#	fi
-
 	if [ ${c4} -gt 0 ] ; then
 		dqb "f-stab 0k"
 	else
@@ -237,15 +209,12 @@ function luft() {
 
 	echo "FSTAB MUTILAEDT"
 	sleep 5
-	#dataosion jakaminen kahtIA myöhemmin?
 
 	for d in $(grep -v '#' /etc/fstab.tmp | awk '{print $2}') ; do
 		[ -d ${d} ] || ${odio} mkdir ${d}
 	done
 
-	#tartteeko tätä sorkkia vai ei?
 	if [ -v CONF_basept2tgt ] ; then
-		#/proc/mounts voisi grepAta?
 		${odio} mount -a
 	else
 		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
@@ -260,20 +229,15 @@ function f5a() {
 	[ -z "${1}" ] && exit 99
 	[ -z "${2}" ] && exit 98
 
-	#020826:tokan param kanssa ok grepata tnp, ekan kanssa ei tarvitse
 	local x=$(echo ${2} | grep tmp | wc -l)
 	[ ${x} -gt 0 ] || exit 95 
 
 	[ -z "${3}" ] && exit 97
 	[ -d "${3}" ] || exit 96
 
-	fasdfasd ${1} #kuinka tarpeellinen param?
+	fasdfasd ${1}
 	fasdfasd ${2}
-
 	[ -v CONF_scripts_dir ] || exit 11 #kutsuvaan koodiin?
-
-	#muistettava kanssa varmistaa että dalek tulee kaikkiin sitä tarvitseviin juttuihin mukaan?
-	#...varmistettu?
 
 	dqb "MAKING OF:dalek.bash"
 	[ -f ${3}/dalek.bash ] && ${svm} ${1}/dalek.bash ${1}/dalek.bash.OLD
@@ -286,7 +250,7 @@ function f5a() {
 	grep -v "#" ${3}/common.conf >> ${2}
 	grep -v "#" ${3}/dalek.s >> ${2}
 
-	reqwreqw ${3}/dalek.s #jos voisi olla renkkaamatta vähän aikaa
+	reqwreqw ${3}/dalek.s
 	reqwreqw ${2}
 	${svm} ${2} ${3}/dalek.bash
 
@@ -297,9 +261,6 @@ function f5a() {
 	dqb "AFTER DALEK"
 	csleep 3
 	
-	#020826:jospa toimisivat useimmat skriptit sudon kautta
-	#btw. miksi erikseen esab? , olisi suoraan tuo $3/dalek ... polut?
-
 	local t=$(${odio} find ${CONF_esab} -type f -name "dalek.bash")
 	echo "t= ${t}"
 	sleep 6
@@ -314,11 +275,7 @@ function f5b() {
 	local c2
 	local t
 
-	#mitenkähän tämän tark pitäisi mennä?
 	[ -z "${1}" ] && exit 99
-
-	#... toisaalta squashfs-työkaluja ei tarvitsisi sudottaa (?)
-	#miten muuten "squ.ash r" ? /bin/chroot saattaa joutua lisäämään sudoersiin mutta mIElellään jos voisi rajata parametrien suhteen
 
 	if [ -v CONF_esab ] ; then #turha kikkailu oikeastaan
 		t=$(${odio} find ${CONF_esab} -type f -name "generic_doit.sh")
@@ -328,10 +285,6 @@ function f5b() {
 		[ -z "${t}" ] || g_aa="${g_aa} ${t}"
 	fi
 
-	#g_ab juttuja lukuunottamatta asiat jo kuynnossa?
-	#15726: $1 kanssa jokin tr-jekku jatkossa? kts "man 5 sudoers"
-	#jekku jo tehty? bissiin
-
 	t=$(echo ${1} | tr -dc a-zA-Z0-9/_-)
 	[ -z "${t}" ] && exit 99
 
@@ -340,9 +293,6 @@ function f5b() {
 		c2=$(echo ${c} | tr -dc a-zA-Z0-9./_)	
 		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c2}" >> ${t}	#oli ennen c sijasta c2, $t tilalla $1	
 	done
-
-	#(myös joitain paraMetreja tulisi sallia)
-	#15726:syntaksi kusee taas
 
 	for c in ${g_ab} ; do
 		c2=$(echo ${c} | tr -dc a-zA-Z0-9./_)
