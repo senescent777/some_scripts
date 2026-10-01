@@ -3,6 +3,11 @@ debug=0
 dir2=""
 cmd=""
 md=0
+
+echo "VAIH:KOITAHAN MUISTAA SE mp-VIVUN TESTAUS SEUR KERRAN KUN -r !!!"
+sleep 5
+#011026:pitäisi varmistaa että chroot alta löytyy oikea hmisto jotta mount onnaa (TODO)
+
 mp=0
 ms=0
 par=""
@@ -117,6 +122,7 @@ case "${cmd}" in
 		${odio} ${tmp}/dalek.bash d2
 	;;
 	-c)
+		#TODO:parista tuotoksesta rakentaen .iso jotta voi testata
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
@@ -131,7 +137,10 @@ case "${cmd}" in
 		dqb "smd= ${smd} "
 		csleep 2
 
+		#011026:toimiiko tämä? kyl kai qhan käyttöoik (josko dalek jatkossa hoitaisi?)
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
+		${scm} a+wx ${CONF_squash_dir}/${TARGET_pad2}
+
 		#TODO:koitahan ottaa huomioon että viimeaikaiset u-paketit eivät toimi, tulisi selvittää miksi
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2} #/
 		
