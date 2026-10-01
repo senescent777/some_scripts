@@ -7,6 +7,8 @@ else
 	exit 67
 fi
 
+#TODO:josqs taas sitä post_omega_testausta
+
 #=================LIB1==============================================
 #skritps/common_funcs, hyödyntäisikö?
 echo "ko.1"
@@ -135,7 +137,6 @@ function aqua() {
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ${q} ; done
 	sleep 5
 
-
 #
 #	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
 #	if [ -v CONF_part076 ] ; then
@@ -143,13 +144,7 @@ function aqua() {
 #		#python3-cups ntp* #sharyp from common_lib
 #	fi
 #
-#	${odio} apt autoremove
-#	${odio} apt --fix-broken install #tähän vai heti grub-as jälk?
-#	${odio} which iptables-restore
-#	${odio} iptables-restore /etc/iptables/rules.v4.0
-#
-#	csleep 2
-#	dqb "AFTER iptables-restore "
+
 }
 
 function ignis() {
