@@ -80,7 +80,8 @@ function aqua() {
 	${odio} apt --fix-broken install
 
 	#common_lib.sh (dhclientin kanssa voi olla juttuja)
-	E22_GT="isc-dhcp-client isc-dhcp-common libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 libnftables1 libedit2"
+	#"isc-dhcp-client isc-dhcp-common "
+	E22_GT=libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 libnftables1 libedit2"
 	E22_GT="${E22_GT} iptables"
 	E22_GT="${E22_GT} init-system-helpers"
 	${shary} ${E22_GT}
@@ -95,34 +96,6 @@ function aqua() {
 	${shary} libcurl3-gnutls libexpat1 liberror-perl libpcre2-8-0 zlib1g 
 	${shary} git-man git
 	#/common_lib
-
-	#KTS e23_st() 
-
-	#https://pkginfo.devuan.org/cgi-bin/policy-query.html?c=package&q=squashfs-tools&x=submit
-	#${shary} liblz4-1 liblzma5 liblzo2-2 libzstd1
-	#${shary} squashfs-tools
-
-	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=genisoimage=9:1.1.11-3.4
-	#sudo apt-get reinstall libbz2-1.0 libmagic1
-
-	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=wodim=9:1.1.11-3.4
-	#sudo apt-get --no-install-recommends libcap2
-	#${shary} genisoimage wodim 
-	#${shary} dmsetup libdevmapper1
-	#${shary} libjte2
-
-	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=grub-common=2.06-13+deb12u1
-	#sudo apt-get reinstall libefiboot1 libefivar1 libfreetype6 libfuse3-3 gettext-base
-
-	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=xorriso=1.5.4-4
-	#${shary} libisoburn1 libburn4 libisofs6 
-	#${shary} libfuse2
-	#${shary} mtools
-	#${shary} grub-common xorriso #jälkimminen toistaiseksi mukana
-	#${shary} geany
-	
-	#https://pkginfo.devuan.org/cgi-bin/package-query.html?c=package&q=isolinux=3:6.04~git20190206.bf6db5b4+dfsg1-3
-	#${shary} isolinux
 	
 	sudo cp /var/cache/apt/archives/*.deb ${1} #kuinka tarpeellinen? kts conf EIKU
 }
