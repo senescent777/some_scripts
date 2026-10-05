@@ -66,8 +66,6 @@ ${scm} 0644 ~/.gnupg/pubring*
 csleep 5
 		
 dqb "#GPG --EDIT-KEYS?	"	
-#190526:kuuluisi olla gg alustettu tähän mennessä mutta viimeaikaiset common_lib sorkkimiset
-#"gpg: error running '/usr/bin/gpg-agent': probably not installed"
 [ -z "${gg}" ] && exit 666	
 		
 case "${cmd}" in

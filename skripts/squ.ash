@@ -122,7 +122,8 @@ case "${cmd}" in
 		${odio} ${tmp}/dalek.bash d2
 	;;
 	-c)
-		#TODO:parista tuotoksesta rakentaen .iso jotta voi testata
+		#DONE:parista tuotoksesta rakentaen .iso jotta voi testata
+		#ensimmäinen yritelmä toimi paremmin kuin 2. , selvitä mikä ero taisiis kuinka pitkälle pääsi ennenq alkoi kusta(TODO)
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
@@ -141,7 +142,7 @@ case "${cmd}" in
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 		${scm} a+wx ${CONF_squash_dir}/${TARGET_pad2}
 
-		#TODO:koitahan ottaa huomioon että viimeaikaiset u-paketit eivät toimi, tulisi selvittää miksi
+		#TODO?:koitahan ottaa huomioon että viimeaikaiset u-paketit eivät toimi, tulisi selvittää miksi (vielä ongelma 10/26?)
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2} #/
 		
 		if [ -z "${dir2}" ] ; then

@@ -2,6 +2,7 @@
 odio=$(which sudo) 
 #VAIH:sudoon liittyen se sudoers-meshuggah-jekku käyttöön myös näihin remasterointiskripteihimn, varm. vuoksi
 #seur. pitäisi testata mitä tapahtuu omegan ajamisen jölkeen
+#olisikohan jo 10/26 testattu?
 
 sah6=$(${odio} which sha512sum)
 sah6=$(${odio} which sha512sum)
