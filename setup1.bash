@@ -1,6 +1,6 @@
 #!/bin/bash
-
-#TODO:jkin yhteinen kirjasto setp1:lle ja 2:lle ?
+#TODO:josko joskus testaisi tämän toiminnan?
+#TODO?:jkin yhteinen kirjasto setp1:lle ja 2:lle ?
 . ./setup0.conf
 
 #040426:edelleen osannee paketteja vetää kohde-tar:ia varten (qhan setup0.conf)
@@ -56,7 +56,6 @@ function jord() {
 }
 
 jord
-#TODO?:päällekkäisyyksiä pois josqs? esmes e23.sh sisälsi niitä uusia fktioita
 
 function aqua() {
 	dqb "aqua ( ${1} )"
@@ -79,9 +78,10 @@ function aqua() {
 	${odio} apt-get update
 	${odio} apt --fix-broken install
 
-	#common_lib.sh (dhclientin kanssa voi olla juttuja)
+	#fråm common_lib.sh (dhclientin kanssa voi olla juttuja)
 	#"isc-dhcp-client isc-dhcp-common "
-	E22_GT=libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 libnftables1 libedit2"
+
+	E22_GT="libip4tc2 libip6tc2 libxtables12 netbase libmnl0 libnetfilter-conntrack3 libnfnetlink0 libnftnl11 libnftables1 libedit2"
 	E22_GT="${E22_GT} iptables"
 	E22_GT="${E22_GT} init-system-helpers"
 	${shary} ${E22_GT}
