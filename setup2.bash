@@ -46,6 +46,16 @@ smr="${odio} rm"
 
 #simppelimpi näin
 [ -v CONF_iface ] && ${odio} ip link set ${CONF_iface} down
+sah6=/usr/bin/sha256sum
+CONF_algo=sha256
+
+function reqwreqw() {
+	[ -z "${1}" ] && exit 99
+	[ -f ${1} ] || exit 100
+	csleep 1
+	${sco} 0:0 ${1}
+	${scm} a-w ${1}
+}
 
 function reqwreqw() {
 	[ -z "${1}" ] && exit 99
@@ -209,6 +219,11 @@ function luft() {
 		[ -d ${d} ] || ${odio} mkdir ${d}
 	done
 
+	for d in $(grep -v '#' /etc/fstab.tmp | awk '{print $2}') ; do
+		[ -d ${d} ] || ${odio} mkdir ${d}
+	done
+
+	#tartteeko tätä sorkkia vai ei?
 	if [ -v CONF_basept2tgt ] ; then
 		${odio} mount -a
 	else
