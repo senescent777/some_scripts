@@ -22,7 +22,7 @@ function copy_main() {
 	dqb "PIZZAA"	
 	csleep 1
 
-	#eri lähde find-komennoilla ni jospa ei jaksaisi hýhgdistää ekaa findia
+	#eri lähde find-komennoilla ni jospa ei jaksaisi ýhgdistää ekaa findia
 	for f in $(find ${3} -type f -name "*.sh") ; do	
 		dqb "${spc} ${f} ${2}/../.. "
 		${spc} ${f} ${2}/../.. 
@@ -30,7 +30,7 @@ function copy_main() {
 
 	dqb "PASHAA"
 	csleep 1
-	#191225:tuleeko ongelma siitä että linkkejä ei seurata?
+	#191225:tuleeko ongelma siitä että linkkejä ei seurata? toiv ei
 
 	for f in $(find ${1} -type f  -name "*.sh" -or -name "*.bz2") ; do
 		dqb "${spc} ${f} ${2} "
@@ -63,7 +63,7 @@ function copy_conf() {
 	#-v vielä ?
 
 	if [ ! -z "${CONF_scripts_dir}" ] ; then
-		for f in $(find ${CONF_scripts_dir} -type f -name "*.conf" | grep -v bash) ; do
+		for f in $(find ${CONF_scripts_dir}  -name "*.conf" | grep -v bash) ; do #"-type f" kokeeksi jemmaan 130926
 			dqb "${spc} ${f} ${2}/../.."
 			${spc} ${f} ${2}/../.. 	
 		done
@@ -223,17 +223,25 @@ function bootloader() {
 			ks2=${2}/boot #jos siirtäisi ennen case;a nää?
 			
 			if [ -d ${ks2} ] ; then
+				dqb " ${ks2} FOUND"
+
 				dqb "${spc} -a ${3}/boot/ ${4} || exit 8"
 				csleep 3
 
-				#TODO:koita keksiä jotain ettei tähän tökkää (ajankohtainen vielä 08/26?)
+				#TODO?:koita keksiä jotain ettei tähän tökkää (ajankohtainen vielä 08/26?)
 				${spc} -a ${3}/boot/ ${4} || exit 8
 				csleep 1
 
 				k3=${4}/boot/grub
 				[ ${debug} -gt 0 ] && ls -las ${k3}/*.cfg
 				csleep 5
+			else
+				dqb " ${ks2} NOT FOUND"
 			fi
+
+			#JOSKO NYT PRKL
+			${sco} -R $(whoami):$(whoami) ${4}/boot
+			${scm} -R a+w ${4}/boot
 		;;
 		*)
 			echo "https://www.youtube.com/watch?v=PjotFePip2M"
@@ -247,23 +255,25 @@ function bootloader() {
 	if [ -d ${k3} ] ; then
 		${smr} ${k3}/*.cfg
 		${smr} ${k3}/*.png
+		ls -las ${k3}
 	fi
 	
-	csleep 1
-				
-	for f in $(find ${ks2} -name "*.cfg" -or -name "*.bin") ; do
+	csleep 10
+	dqb "JUST BFORE OVERRIDE"
+	csleep 3
+			
+	for f in $(find ${ks2} -name "*.cfg" -or  -name "*.png") ; do # -or -name "*.bin"
 		dqb "spc ${f} ${k3}"
 		${spc} ${f} ${k3}
+		csleep 1
 	done
 				
 	ls -las ${k3}/*.cfg || exit 99
 
-	for f in $(find ${ks2} -name "*.png") ; do
-		dqb "spc ${f} ${k3}/"
-		${spc} ${f} ${k3}/
-	done
+#	for f in $(find ${ks2}) ; do
+#		dqb "spc ${f} ${k3}/"
+#		${spc} ${f} ${k3}/
+#	done
 
 	dqb "bootloader(${1}, ${2}) EN0D\n"
 }
-
-#161225.2:voisi kai iteroida forılla arrayn läpi jatkossa (MINKÄ ARRAYN?)

@@ -70,7 +70,8 @@ function part0() {
 	
 	csleep 5	
 	bootloader ${3} ${2} ${1} ${CONF_target}
-	
+	#2290926:joulukuusi-ongelma pitäisi TAAS ratkaista	
+
 	local src2=${2}/${TARGET_pad_dir}
 	${scm} o+w ${4}/${TARGET_pad_dir}
 	fasdfasd ${4}/${TARGET_pad_dir}/$(whoami).conf
@@ -115,7 +116,7 @@ function part0() {
 dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 65
 [ -v CONF_target ] || exit 66
-${odio} ./skripts/dalek.bash m
+${odio} ./skripts/dalek.bash m $(whoami)
 
 #270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
 sleep 5
