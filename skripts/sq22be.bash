@@ -162,6 +162,7 @@ function rst_pre1() {
 		${som} -o bind /sys ./sys
 	fi
 
+	#111026:a) löytyykö mount point? b) miten ln kanssa onnaa?
 	if [ ${mp} -gt 0 ] ; then
 		dqb "MOUNTING PC9EOR"
 		${som} -o bind /proc ./proc 
