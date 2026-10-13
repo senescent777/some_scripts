@@ -50,8 +50,6 @@ function single_param() {
 }
 
 . ${d}/common_funcs.sh
-#VAIH:konftdstoihin liittyen tämän skriptin kohteeseen kopsattu versio toimimaan
-#josko sittenkin stage0f kopsaamaan konftdston kohteeseen? common_lib viimeaikaisten muutoksien johdosta ei ehkä tartte
 
 #entä "$0 -v" ? 
 if [ $# -eq 0 ] ; then
@@ -243,7 +241,6 @@ csleep 1
 ${sah6} -c  ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4 --ignore-missing
 csleep 1
 
-#040626:tässä jotain nalkutusta? luuultavasti sco syynä
 ${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
 ${scm} 0555 ./${TARGET_DIGESTS_dir}
 ${scm} 0444 ./${TARGET_DIGESTS_dir}/*

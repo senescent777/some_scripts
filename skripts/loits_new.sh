@@ -1,7 +1,7 @@
 #!/bin/bash
 debug=0
 d=$(dirname $0)
-ltarget="" 
+ltarget=""
 source=""
 . ${d}/common.conf
 bl=${CONF_bloader}
@@ -22,7 +22,7 @@ function parse_opts_real() {
 	esac
 }
 
-echo "TODO:JOULUKUSET WTTUUN 666"
+echo "TODO:JOULU6KUSET WTTUUN 66"
 sleep 6
 
 #HUOM.12725:oliko single_param() kanssa jokin juttu? non yt aikakin fktio löytyy
@@ -34,12 +34,12 @@ function single_param() {
 
 function check_params() {
 	dqb "check_params()"
-	
+
 	if [ -z "${source}" ] ; then
 		dqb "source missing"
 		exit 140
 	fi
-	
+
 	if [ -d ${source} ] ; then
 		dqb "k0"
 	else
@@ -50,7 +50,7 @@ function check_params() {
 	if [ -z "${ltarget}" ] ; then
 		exit 143
 	fi
-	
+
 	if [ -s out/${ltarget} ] ; then
 		echo "out/${ltarget} already exists"
 		exit 142
@@ -70,12 +70,11 @@ sleep 1
 dqb "bl=${bl}"
 csleep 4
 
-#dqb " https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" #JOKO JO 04/26???
-#csleep 4
+#dqb " https://wiki.debian.org/RepackBootableISO + CONF_gi_opts" 
 
 case "${bl}" in
 	isolinux)
-		#VAIH?:toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
+		#Vtoimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
 		${sco} -R $(whoami):$(whoami) ${source}
 		${scm} -R 0755 ${source}
 
@@ -83,32 +82,13 @@ case "${bl}" in
 		csleep 2
 		[ ${debug} -eq 1 ] && pwd 
 
-#		#dqb "${gi} -r -J -J -joliet-long -cache-inodes -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/grub/efi.img -o ${ltarget} -no-emul-boot  ${source}"
-#		#Size of boot image is 4 sectors -> /usr/bin/genisoimage: Error - boot image '/data/tmp/tgt/isolinux/isolinux.bin' has not an allowable size.
-#		#1760426: "-boot-load-size" - option poisto ei euttanut -> KVG
-#		${gi} -o ${ltarget} ${CONF_gi_opts} ${source}
-
-		#270426:tuo bin jos toimaa niin isolinux-hmistobn alle jatkossa ja tsummiin mukaan
 		gi=$(sudo which xorriso)
-		#${gi} -as mkisofs -r -J -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -no-emul-boot -eltorito-alt-boot
 		${gi} -as mkisofs -r -J -isohybrid-mbr ${source}/isohdpfx.bin  -b isolinux/isolinux.bin -c isolinux/boot.cat -boot-load-size 4 -boot-info-table -no-emul-boot -o ${ltarget} ${source}
 
-		# -e boot/grub/efiboot.img
-		#no bootfile found for uefi -> vissiin efi-hmiston tai jnkin tarvitsee
+#		echo "TODO?:KVG \"libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb\""
+#		echo "TODO?: KVG \"no bootfile for UEFI\""
+#		echo "TODO?: KVG xorriso : FAILURE : Given path does not exist on disk: -boot_image system_area=..."
 
-		#-isohybrid-mbr .../isohdpfx.bin qsee
-		echo "TODO?:KVG \"libisofs: FAILURE : Invalid image size 40 Kb. Must be one of 1.2, 1.44or 2.88 Mb\""
-		echo "TODO?: KVG \"no bootfile for UEFI\""
-		echo "TODO?: KVG xorriso : FAILURE : Given path does not exist on disk: -boot_image system_area=..."
-		
-		#-B + -C ->  SAMA
-		#seur --bot-jutut mukana -> taas onnasi .iso:n luonti
-		#-eltorito mukaan ja edelleen onnaa
-		#-e -> nalq	kunnes?
-		
-		#näillä ei vbielä onnistunut:
-		#man 1 xorrisofs
-		#KBG iso production command for debian
 	;;
 	grub)
 		ls -las ${source}/boot/${bl}/*.cfg || exit 99
@@ -116,7 +96,7 @@ case "${bl}" in
 
 		#https://bbs.archlinux.org/viewtopic.php?id=219955
 		#ehkä ei tartte sudottaa jos kohde-hakemisto sopiva (esim /tmp)
-		
+
 		dqb "${gmk} -o ${ltarget} ${source} soon"
 		csleep 1
 		${gmk} ${CONF_GRUB_OPTS} -o ${ltarget} ${source}
@@ -124,6 +104,6 @@ case "${bl}" in
 	;;
 	*)
 		echo "bl= ${bl}"
-		echo "https://www.youtube.com/watch?v=KnH2dxemO5o" 
+		echo "https://www.youtube.com/watch?v=KnH2dxemO5o"
 	;;
 esac
