@@ -1,4 +1,5 @@
 #!/bin/sh
+#161026:tarvitseeko nykyään tämän tdston pääte olle juuri .sh? ts tarvitseeko kopsata sinne yhteen hekmstoon?
 
 echo "CONF_pkgsdir2=dir_containing_genisoimage"
 echo "CONF_gi_opts=opts_4_genisoimage"

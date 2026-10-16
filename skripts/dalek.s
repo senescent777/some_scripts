@@ -84,7 +84,7 @@ function make_tgt_dirs() {
 	[ -z "${3}" ] && exit 102
 
 	[ -z "${4}" ] && exit 103
-	#kuuluisi kai grepata vasten /e/paswd
+	#kuuluisi kai grepata vasten /e/paswd (TODO?)
 
 	dqb "PARAMZx OK"
 	csleep 1
@@ -97,8 +97,12 @@ function make_tgt_dirs() {
 	ls -las ${2}
 	csleep 10	
 	
+	#VAIH:scm+sco tähän? vaiko squ.ash hoitamaan sopivissa kohdissa?
 	dqb "UQS(${CONF_squash_dir})"
 	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
+	${sco} -R ${4}:${4} ${CONF_squash_dir}
+	${scm} -R u+w ${CONF_squash_dir}
+
 	[ ${debug} -gt 0 ] && ls -las ${CONF_squash_dir}
 	csleep 2
 	
@@ -143,7 +147,7 @@ function make_tgt_dirs() {
 	${scm} -R u+w ${1}
 	csleep 10
 
-	dqb "JUST BEFORE scm 0755 ALL SUBDIRS"
+	dqb "JUST BEFORE scm 0755 ALL ShUBDIRS"
 	local f
 
 	for f in $(find ${1} -type d ); do

@@ -4,8 +4,8 @@ dir2=""
 cmd=""
 md=0
 
-echo "VAIH:KOITAHAN MUISTAA SE mp-VIVUN TESTAUS SEUR KERRAN KUN -r !!!"
-sleep 5
+#echo "VAIH:KOITAHAN MUISTAA SE mp-VIVUN TESTAUS SEUR KERRAN KUN -r !!!" ehkä josqs
+#sleep 5
 #011026:pitäisi varmistaa että chroot alta löytyy oikea hmisto jotta mount onnaa (TODO)
 
 mp=0
@@ -15,13 +15,19 @@ par=""
 d=$(dirname $0)
 . ${d}/common.conf
 
+echo "TODO:varmista että -j - vivun kanssa kopsailut menevät ok ESIM OIKEASTI"
+echo "TODO:muisrta myös testata, miten -c uusin tuotos toimii"
+echo "TODO:-b toimivuus varmistettava kanssa"
+echo "TODO:myös uuden kiekon muodostus modaamattomasta asti jotta u-paketti"
+sleep 6
+
 function usage() {
 	echo "-x <source_file>:eXtracts <source_file> to ${CONF_squash0} source_file NEEDS TO HAVE ABSOLUTE PATH"
 	echo "\t (source could be under /r/l/m/live) "
 
 	echo "-y <iso_file> extracts <iso_file>/live/filesystem.squashfs to ${CONF_squash0} NEEDS TO HAVE ABSOLUTE PATH"
 
-	#TODO:-b toimivuus varmistettava kanssa
+	
 	echo "-b is supposed to be run just Before -c but after -r "
 
 	echo "-d Destroys contents of ${CONF_squash0}/ "
@@ -30,10 +36,10 @@ function usage() {
 	echo "-c <target_file> [optional_params_4_mksquashfs?] : Compresses ${CONF_squash_dir} to <target_file> (with optional_params?)\n NEEDS TO HAVE ABSOLUTE PATH"
 	echo "-r :runs chRoot in ${CONF_squash_dir} "
 	
-	#TODO:varmista että -j - vivun kanssa kopsailut menevät ok
+	
 	echo "-j <src> [ --dir2 <stuff> ] : extracts dir 2 chroot_dir  NEEDS TO HAVE ABSOLUTE PATH"
 
-	#TODO:muisrta myös testata, miten -c uusin tuotos toimii
+	
 
 	echo "\t to state the obvious:"
 	echo "\t <stuff> in --dir2 has to contain sub-directory ${TARGET_DIGESTS_dir} , for example ${CONF_target} "
@@ -129,8 +135,6 @@ case "${cmd}" in
 		${odio} ${tmp}/dalek.bash d2
 	;;
 	-c)
-		#DONE:parista tuotoksesta rakentaen .iso jotta voi testata
-		#ensimmäinen yritelmä toimi paremmin kuin 2. , selvitä mikä ero taisiis kuinka pitkälle pääsi ennenq alkoi kusta(TODO)
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)
@@ -149,7 +153,6 @@ case "${cmd}" in
 		[ -d ${CONF_squash_dir}/${TARGET_pad2} ] || ${smd} -p ${CONF_squash_dir}/${TARGET_pad2}
 		${scm} a+wx ${CONF_squash_dir}/${TARGET_pad2}
 
-		#TODO?:koitahan ottaa huomioon että viimeaikaiset u-paketit eivät toimi, tulisi selvittää miksi (vielä ongelma 10/26?)
 		jlk_main ${par}/${TARGET_pad_dir} ${CONF_squash_dir}/${TARGET_pad2} #/
 		
 		if [ -z "${dir2}" ] ; then
