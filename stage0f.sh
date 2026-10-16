@@ -34,7 +34,7 @@ fi
 dqb "PARAMS OK?"
 
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
-#... tosin jokin piontti saattoi olla miksi näin
+#... tosin jokin piontti saattio olla miski niän
 #
 #isolunuxin kanssa päätä seinään josqs myöhemmin lisää?
 
