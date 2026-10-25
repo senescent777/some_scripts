@@ -44,6 +44,12 @@ function part0() {
 	pwd
 	csleep 2
 
+	#VAIH;$2  (ja muiden param) validiustarq, barm vuoksi
+	[ -d ${2} ] || exit 43
+	[ -d ${1} ] || exit 43
+	[ -z "${3}" ] && exit 54
+	[ -d ${4} ] || exit 55
+
 	dqb "COPY1NG FILES IN 1 SEC"
 	csleep 1
 
