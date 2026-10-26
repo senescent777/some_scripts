@@ -57,10 +57,15 @@ case "${1}" in
 		[ -d ${CONF_squash0} ] || exit 68
 		pwd;sleep 6
 	
+		exit 79
+		#VAIH:devuan parametriksi
+		# (TODO:myös /e/paswd -trq?)
+		[ -z "${2}" ] && exit 80
+
 		#onko riittävä tarkistus vai ei?
 		if [ x"${CONF_squash0}" != "x/" ] ; then
 			#josko nyt prkl?
-			${sco} -R devuan:devuan ${CONF_squash0}
+			${sco} -R ${2}:${2} ${CONF_squash0}
 			echo $?;sleep 5
 			${scm} -R 0777 ${CONF_squash0}
 			echo $?;sleep 5
@@ -97,7 +102,7 @@ function make_tgt_dirs() {
 	ls -las ${2}
 	csleep 10	
 	
-	#VAIH:scm+sco tähän? vaiko squ.ash hoitamaan sopivissa kohdissa?
+	#DONE?:scm+sco tähän? vaiko squ.ash hoitamaan sopivissa kohdissa?
 	dqb "UQS(${CONF_squash_dir})"
 	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
 	${sco} -R ${4}:${4} ${CONF_squash_dir}
@@ -105,7 +110,6 @@ function make_tgt_dirs() {
 
 	[ ${debug} -gt 0 ] && ls -las ${CONF_squash_dir}
 	csleep 2
-	
 	dqb "FR0ST"
 
 	if [ ! -d ${1} ] ; then

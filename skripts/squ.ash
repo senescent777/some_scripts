@@ -4,7 +4,7 @@ dir2=""
 cmd=""
 md=0
 
-#echo "VAIH:KOITAHAN MUISTAA SE mp-VIVUN TESTAUS SEUR KERRAN KUN -r !!!" ehkä josqs
+#echo "mp-VIVUN TESTAUS ehkä josqs"
 #sleep 5
 #011026:pitäisi varmistaa että chroot alta löytyy oikea hmisto jotta mount onnaa (TODO)
 
@@ -16,9 +16,9 @@ d=$(dirname $0)
 . ${d}/common.conf
 
 echo "TODO:varmista että -j - vivun kanssa kopsailut menevät ok ESIM OIKEASTI"
-echo "TODO:muisrta myös testata, miten -c uusin tuotos toimii"
+echo "VAIH:muista myös testata, miten -c uusin tuotos toimii (tai siis ei oikein)"
 echo "TODO:-b toimivuus varmistettava kanssa"
-echo "TODO:myös uuden kiekon muodostus modaamattomasta asti jotta u-paketti"
+echo "TODO:myös uuden kiekon muodostus modaamattomasta asti jotta u-paketti" #uusin ja 2. uusin u-paketti kyllä nykyään, iso:n voisi muodostaa muista syistä
 sleep 6
 
 function usage() {
@@ -132,7 +132,7 @@ case "${cmd}" in
 	;;
 	-d)
 		odio=$(which sudo)
-		${odio} ${tmp}/dalek.bash d2
+		${odio} ${tmp}/dalek.bash d2 $(whoami)
 	;;
 	-c)
 		cfd ${par} ${CONF_squash_dir}
