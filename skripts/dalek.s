@@ -56,11 +56,11 @@ case "${1}" in
 		[ -z "${CONF_squash0}" ] && exit 67
 		[ -d ${CONF_squash0} ] || exit 68
 		pwd;sleep 6
-	
-		exit 79
-		#VAIH:devuan parametriksi
-		# (TODO:myös /e/paswd -trq?)
+
+		#DONE:myöss /e/paswd -trq?
 		[ -z "${2}" ] && exit 80
+		t=$(grep ${2} /etc/passwd | wc -l)
+		[ ${t} -gt 0 ] || exit 81
 
 		#onko riittävä tarkistus vai ei?
 		if [ x"${CONF_squash0}" != "x/" ] ; then
@@ -89,7 +89,9 @@ function make_tgt_dirs() {
 	[ -z "${3}" ] && exit 102
 
 	[ -z "${4}" ] && exit 103
-	#kuuluisi kai grepata vasten /e/paswd (TODO?)
+	#kuuluisi kai grepata vasten /e/paswd (DONE)
+	local t=$(grep ${4} /etc/passwd | wc -l)
+	[ ${t} -gt 0 ] || exit 81
 
 	dqb "PARAMZx OK"
 	csleep 1

@@ -22,7 +22,7 @@ function copy_main() {
 	dqb "PIZZAA"	
 	csleep 1
 
-	#eri lähde find-komennoilla ni jospa ei jaksaisi ýhgdistää ekaa findia
+	#eri lähde find-komennoilla ni jospa ei jaksaisi ýhdistää ekaa findia
 	for f in $(find ${3} -type f -name "*.sh") ; do	
 		dqb "${spc} ${f} ${2}/../.. "
 		${spc} ${f} ${2}/../.. 

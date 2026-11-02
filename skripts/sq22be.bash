@@ -48,9 +48,6 @@ function cfd() {
 	dqb "cfd() DONE"
 }
 
-#sudoers-jekku olisi hyväksi tässäkin? tai sitten local odio/smr/sco (TODO)
-#... ajanjohtainen vie3lä 08/26?
-
 function jlk_main() {
 	dqb "jkl_niam ( ${1} , ${2}  )"
 
