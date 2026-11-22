@@ -22,11 +22,23 @@ function copy_main() {
 	dqb "PIZZAA"	
 	csleep 1
 
+	dqb "DONE?:sh-fileiden kopsautumisen varmistus, käyttöoikeuksista kiinni -> dalek?" #d luomaan hmistom sklripts + chown ?
+	#DONE?:myös sitä .iso:n luontia varten meinattu hmisto, oikeuksian pakotusta siihenkin
+	csleep 5
+
+	#tässä alla tehdään oletuksia hakemistojen sijainneista, voiv pitävät paikkansa jatkossakin
+	[ -d ${2}/../../${3} ] || exit 49
+
 	#eri lähde find-komennoilla ni jospa ei jaksaisi ýhdistää ekaa findia
+	
+	#olisi myös "tar -c |  tar -x"
 	for f in $(find ${3} -type f -name "*.sh") ; do	
-		dqb "${spc} ${f} ${2}/../.. "
-		${spc} ${f} ${2}/../.. 
+		dqb "${spc} ${f} ${2}/../../${3} "
+		${spc} ${f} ${2}/../../${3} 
 	done
+
+	[ ${debug} -eq 1 ]  && ls -las ${2}/../../${3}/*.sh
+	csleep 5
 
 	dqb "PASHAA"
 	csleep 1
@@ -61,15 +73,21 @@ function copy_conf() {
 	csleep 1
 
 	#-v vielä ?
+	#CONF_scripts pikemminkin parametriksi?
+	[ -d ${2}/../../${CONF_scripts_dir} ] || exit 49
 
 	if [ ! -z "${CONF_scripts_dir}" ] ; then
-		for f in $(find ${CONF_scripts_dir}  -name "*.conf" | grep -v bash) ; do #"-type f" kokeeksi jemmaan 130926
-			dqb "${spc} ${f} ${2}/../.."
-			${spc} ${f} ${2}/../.. 	
+		for f in $(find ${CONF_scripts_dir} -name "*.conf" | grep -v bash) ; do #"-type f" kokeeksi jemmaan 130926
+			dqb "${spc} ${f} ${2}/../../${CONF_scripts_dir}"
+			${spc} ${f} ${2}/../../${CONF_scripts_dir} 	
 		done
 
 		csleep 1
 	fi
+
+	[ ${debug} -eq 1 ] && ls -las ${2}/../../${CONF_scripts_dir} 
+	csleep 10
+	#TODO:kun sh ja conf kopåsattu ni chmod+chown?
 
 	#nykyään vähän erilainen upload kuin ao. blokkia kirJoittaessa
 	if [ -s ${2}/upload.sh ] || [ -s ${2}/extras.tar.bz2 ] ; then 
@@ -144,16 +162,22 @@ function copy_sums() {
 	
 	if [ ${x} -gt 0 ] ; then
 		dqb "${spc} ${1}/*.gpg ${2}"
-		${spc} ${1}/*.gpg ${2}	#.sig kanssa?
+		${spc} ${1}/*.gpg ${2}
+		#.sig kanssa?
+		dqb $?
+		csleep 1
 	else
 		dqb "NO FILES UNDER ${1} / \${TARGET_DGST0} , YSINBF DEFAYLT KEYDIR "
 
-		#212125:jospa toimisi tämä avainjuttu nyt
+		#TODO:tulisi tarkistaa että nuo array:n mukaiset avaimet löytyvät
+		#virhekoodiin perustuva tarkistus ei näjölään riitä
 		local k
 		
 		for k in ${CONF_karray} ; do
 			dqb " {gg} --export ${k} > ${2}/${k}.gpg "
 			${gg} --export ${k} > ${2}/${k}.gpg
+			[ $? -gt 0 ] && echo "kutl v ?"
+			csleep 2
 		done
 	fi
 
@@ -164,7 +188,7 @@ function copy_sums() {
 
 #ne oletus-bootloader-jutut esim. tähän flktioon jatkosssa
 function pre_bl() {
-	dqb "WORK N PROGRESS"
+	dqb "WORK 1N PROGRESS?"
 	}
 
 #TODO:voisi olla jotain default-bootloader-konftdstoja jos ei v/$something alla ole (pre:b olisi tarkoitus liittyä asiaan)

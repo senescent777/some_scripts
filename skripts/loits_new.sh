@@ -22,7 +22,7 @@ function parse_opts_real() {
 	esac
 }
 
-echo "TODO:JOULU6KUSET WTTUUN 66"
+echo "dalek k ?"
 sleep 6
 
 #HUOM.12725:oliko single_param() kanssa jokin juttu? non yt aikakin fktio löytyy
@@ -74,7 +74,7 @@ csleep 4
 
 case "${bl}" in
 	isolinux)
-		#Vtoimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
+		#toimivuuden testaus (jäänee kiinni muusta kuin .cfg puutteesta, KVG:juttuja)
 		${sco} -R $(whoami):$(whoami) ${source}
 		${scm} -R 0755 ${source}
 

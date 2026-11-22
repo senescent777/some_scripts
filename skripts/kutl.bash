@@ -57,7 +57,6 @@ function m0() {
 		${odio} chattr +ui ${1}/*.gpg
 	}
 
-#sco,scm,smd? valmista?
 dqb "BFORE CHMOD"
 [ -d ~/.gnupg/private-keys-v1.d ] || mkdir -p ~/.gnupg/private-keys-v1.d
 ${sco} -R $(whoami):$(whoami) ~/.gnupg #tarpeen?
@@ -82,6 +81,10 @@ case "${cmd}" in
 		done
 	;;
 	v)
+		#"gpg: key xxx : error sending to agent: pinentry error"
+		#"gpg: error building skey array: pinentry error"
+		#... mitä noiden kanssa keksisi? (TODO:joita keksiä jotaqin jos toistuu)
+
 		#erilliset u,v-caset turhaa kikkailua oikeastaan mutta olkoon näin jnkn akaa
 		
 		#jos vetäisi vain array:n mukaiset? tai nitenjos findin kautta? no qhan tämänkertaiset kiukuttelut hoidettu ni

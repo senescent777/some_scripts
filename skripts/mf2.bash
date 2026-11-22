@@ -31,12 +31,12 @@ function usage() {
 }
 
 . ${d}/common_funcs.sh
-#TODO:parsetus toisin? gpo() tulisdi kai sanoa "-h"
+#VAIH:parsetus toisin? gpo() tulisdi kai sanoa "-h"
 
-if [ $# -lt 2 ] ; then
-	usage
-	exit
-fi
+#if [ $# -lt 2 ] ; then
+#	usage
+#	exit
+#fi
 
 dqb "cmd=${cmd}"
 dqb "tgt=${tgt}"
@@ -60,6 +60,7 @@ case "${cmd}" in
 			${sah6} ${f} >> ${t}
 		done
 		
+		#TODO: .sh mukaan listaan vai ei?
 		csleep 2
 		
 		if [ ${debug} -gt 0 ] ; then

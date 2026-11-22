@@ -15,11 +15,11 @@ par=""
 d=$(dirname $0)
 . ${d}/common.conf
 
-echo "DONE?:varmista että -j - vivun kanssa kopsailut menevät ok ESIM OIKEASTI"
+#echo "DONE?:varmista että -j - vivun kanssa kopsailut menevät ok ESIM OIKEASTI"
 #011126 näytti kopsautuvan ok
 
-echo "DONE?:-b toimivuus varmistettava kanssa"
-echo "TODO:myös uuden kiekon muodostus modaamattomasta asti jotta u-paketti" #uusin ja 2. uusin u-paketti kyllä nykyään, iso:n voisi muodostaa muista syistä
+#echo "DONE?:-b toimivuus varmistettava kanssa"
+echo "VAIH:myös uuden kiekon muodostus modaamattomasta asti jotta u-paketti" #uusin ja 2. uusin u-paketti kyllä nykyään, iso:n voisi muodostaa muista syistä
 sleep 6
 
 function usage() {
@@ -121,13 +121,28 @@ case "${cmd}" in
 		${uom} ${CONF_source}
 	;;
 	-b)
-		sudo ${tmp}/dalek.bash b
+		sudo ${tmp}/dalek.bash b $(whoami)
 	;;
 	-d)
 		odio=$(which sudo)
 		${odio} ${tmp}/dalek.bash d2 $(whoami)
 	;;
 	-c)
+		#20.11.26.d = g_, l, u, omega == vähän pykii testikoneella äksä
+		#.a=vain g_jutut ja tar purq -> edelleen pykii äksä? jep, seatd-valitusta
+		#b g1, g2 mutta ilman tar purq: edelleen
+		#c: vain lisätty pad-hmisto squash sisälle -> x toimaa
+		#e: purq+ sqrot k + paqq -> boottaako vai ei?
+
+		#2111.1 pelkkä "sqrot k" -> boottasi .iso ja äksä toimi
+		#		
+		#.2 puretaan bz3 -> äksä ei startannut automaagisesti l. jotain vikaa sisällössä
+		#eli "ls -las /" sqrootissa tai tstikoneella, ykkös-iso vs kakkos-iso, mikä ero?
+		#/e, /h vai /o mikä kusee hommad?
+		#
+		#.3 doit+pt2 -> äksä ei tottele hiirtä, sen lisäksi että täyetyy eriksween sanoa startx
+		#4. bz3 purq jälkeen vain doit -> 
+
 		cfd ${par} ${CONF_squash_dir}
 	;;
 	-r)

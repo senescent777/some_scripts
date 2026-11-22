@@ -23,6 +23,7 @@ function xxx() {
 	dqb "xxx d0mw"
 }
 
+#181126.2:jossain squashfs-utilsin versiossa vissiin bugi, pyriottävä käyttämään toista versiota (tai rajoittamaan pakattabvan root-tdstojhärj kokoa)
 function cfd() {
 	dqb "cfd( ${1}  ,  ${2} )"
 	[ -z "${1}" ] && exit 6
@@ -34,7 +35,9 @@ function cfd() {
 	csleep 1
 	
 	echo "${0} -b ?"
+	#181126:tuo cd myös aiheutti nalq , tee jotain?
 	cd ${2}
+
 	local odio=$(which sudo)
 	local msq=$(${odio} which mksquashfs)
 
@@ -129,6 +132,15 @@ function jlk_sums() {
 
 	${spc} ${1}/${TARGET_DIGESTS_file0}.* ${2}
 	${spc} ${1}/*.gpg ${2}
+
+	dqb $?
+	csleep 1
+
+	dqb "SICK"
+	csleep 1
+	#181126:täöhän alle taitdateen tarvita chmod ennen cp
+	${scm} 0755 ${2}
+	csleep 1
 	${spc} ${1}/*.sig ${2}
 	#${spc} ${1}/*.sha ${2} #tämän fktion kohde-hmistossa ei niin tarpeellinen?
 	
@@ -198,25 +210,31 @@ function rst_pre2() {
 	sco="${odio} ${sco} "
 	scm="${odio} ${scm} "	
 
-	#fasdfasd ./etc/default/locale
-	${odio} touch ${1}
-	${sco} $(whoami):$(whoami) ${1}
-	${scm} 0644 ${1}
+	echo "##fasdfasd ./etc/default/locale"
+	${odio} touch  ./etc/default/locale
+	${sco} $(whoami):$(whoami) ./etc/default/locale
+	${scm} 0644  ./etc/default/locale
 	csleep 1
 
-	#190326:asettuvatKo nämä kehitysymp? ekhä
+	echo "#VAIH:w-oikeudet, /e/d/l,  tällä kertaa KUNNOLLA"
+	#vissiin omega-jutut johtivat siihen että fasd opis käytösätätä yllä
+	sleep 5
+
 	env | grep LAN > ./etc/default/locale
 	env | grep LC >> ./etc/default/locale
 	csleep 1
 	
-	#reqwreqw ./etc/default/locale
+	echo "#reqwreqw ./etc/default/locale"
 	${sco} 0:0 ./etc/default/locale
 	${scm} a-w ./etc/default/locale
 	csleep 1
 
+	echo "höst.f"
+	#scm o+w /e
 	[ -f ./etc/hosts ] && ${svm} ./etc/hosts ./etc/hosts.bak	
 	${spc} /etc/hosts ./etc
-	#${odio} touch ./.chroot #jatkossa pois moinen
+	#scm o-w /e
+	csleep 1
 
 	dqb "rst_pre2() done"
 	csleep 1
@@ -233,11 +251,14 @@ function rst_post() {
 	svm=$(${odio} which mv)
 	svm="${odio} ${svm} "
 
+	echo "höst.g"
 	${svm} ./etc/hosts.bak ./etc/hosts
 	${smr} ./etc/mtab
-	
+	sleep 3
+
 	#jtnkn näin?
 	${svm} ./etc/apt/sources.list ./etc/apt/sources.list.ÅLD
+	echo "NEXT:qom"
 	sleep 3
 	
 	${uom} ./dev 
@@ -261,7 +282,6 @@ function rst() {
 	csleep 1
 	
 	rst_pre2 ${1}
-
 	cd ${1}
 	
 	pwd

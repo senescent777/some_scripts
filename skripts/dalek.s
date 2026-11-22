@@ -31,6 +31,7 @@ debug=1
 	
 case "${1}" in
 	d1)
+		[ -v CONF_tmpdir ] || exit 99
 		echo "d ) BEFORE CHMOD"
 		sleep 2
 
@@ -57,7 +58,6 @@ case "${1}" in
 		[ -d ${CONF_squash0} ] || exit 68
 		pwd;sleep 6
 
-		#DONE:myöss /e/paswd -trq?
 		[ -z "${2}" ] && exit 80
 		t=$(grep ${2} /etc/passwd | wc -l)
 		[ ${t} -gt 0 ] || exit 81
@@ -89,7 +89,6 @@ function make_tgt_dirs() {
 	[ -z "${3}" ] && exit 102
 
 	[ -z "${4}" ] && exit 103
-	#kuuluisi kai grepata vasten /e/paswd (DONE)
 	local t=$(grep ${4} /etc/passwd | wc -l)
 	[ ${t} -gt 0 ] || exit 81
 
@@ -100,15 +99,20 @@ function make_tgt_dirs() {
 	[ -d ${2} ] || ${smd} -p ${2}
 	${sco} 0:0 ${2}
 
+	dqb $?
+	csleep 1
+
 	${scm} 0755 ${2}
 	ls -las ${2}
 	csleep 10	
 	
-	#DONE?:scm+sco tähän? vaiko squ.ash hoitamaan sopivissa kohdissa?
 	dqb "UQS(${CONF_squash_dir})"
 	[ -d ${CONF_squash_dir} ] || ${smd} -p ${CONF_squash_dir}
 	${sco} -R ${4}:${4} ${CONF_squash_dir}
 	${scm} -R u+w ${CONF_squash_dir}
+
+	dqb $?
+	csleep 1
 
 	[ ${debug} -gt 0 ] && ls -las ${CONF_squash_dir}
 	csleep 2
@@ -117,11 +121,13 @@ function make_tgt_dirs() {
 	if [ ! -d ${1} ] ; then
 		${smd} -p ${1}
 	else
+		#mikä tässä oli ideana?
 		dqb "rm ${1}"
 		sleep 6
 		${smr} -rf ${1}/*
 	fi
 
+	dqb $?
 	csleep 1
 	dqb "BLADDER"
 
@@ -131,26 +137,55 @@ function make_tgt_dirs() {
 		[ -d ${1}/boot/grub ] || ${smd} -p ${1}/boot/grub
 	fi
 
+	dqb $?
+
 	csleep 1
 	dqb "LIVE-EVIL"
 	[ -d ${1}/live ] || ${smd} -p ${1}/live
+
+	dqb $?
 	csleep 1 
 
 	dqb "DGSTS"
 	[ -d ${1}/${TARGET_DIGESTS_dir} ] || ${smd} -p ${1}/${TARGET_DIGESTS_dir}
+	
+	dqb $?
 	csleep 1
 
-	dqb "DAP"
+	dqb "DåP"
 	[ -d ${1}/${TARGET_pad_dir} ] || ${smd} -p ${1}/${TARGET_pad_dir}
+	
+	dqb $?
 	csleep 1
 
-	dqb "TUQ"
+	dqb "TUrQ"
 	[ -d ${1}/../out ] || ${smd} -p ${1}/../out
+	#DONE:out-hmiston chown, lisäksi se uusi skriptihak
+	${sco} -R ${4}:${4} ${1}/../out 
+
+	dqb $?
 	csleep 1
 
-	dqb "FN1AL ly ${sco} -R ${4}:${4} ${1}"
+	dqb "ErTh"
+	#TODO:Const josqs?
+	#TODO:chmod+chown takaisinp josqs jossain
+	t=${1}/../skripts
+	[ -d ${t} ] || ${smd} -p ${t}
+
+	dqb $?
+	csleep 1
+	${sco} -R ${4}:${4} ${t}
+
+	dqb $?
+	csleep 1
+
+	dqb "Ölu ${sco} -R ${4}:${4} ${1}"
 	${sco} -R ${4}:${4} ${1}
+
+	dqb $?
 	${scm} -R u+w ${1}
+
+	dqb $?
 	csleep 10
 
 	dqb "JUST BEFORE scm 0755 ALL ShUBDIRS"
@@ -185,6 +220,10 @@ function bbb() {
 	[ x"${1}" == "x/" ] && exit 98
 	[ -d ${1} ] || exit 99
 
+	[ -z "${2}" ] && exit 103
+	local t=$(grep ${2} /etc/passwd | wc -l)
+	[ ${t} -gt 0 ] || exit 81
+
 	dqb "pars_ok"
 	csleep 1
 
@@ -200,7 +239,6 @@ function bbb() {
 	#${smr} -rf ./boot/* #080226 kommentteihin. vöib sotkea
 	${smr} -rf ./usr/share/doc/*
 	
-	#HSIPUT WTTUUN
 	for f in $(find . -type f -name "*.deb") ; do
 		dqb "${smr} ${f}"
 		csleep 1
@@ -223,23 +261,37 @@ function bbb() {
 	done
 	
 	csleep 1
-	
-	${sco} -R 0:0 ./${TARGET_pad2}
+
+	#-R hyvä idea?	
+	${sco} 0:0 ./${TARGET_pad2}
+
 	#fix_sudo $(pwd) #qtsuvassa koodissa?
 	${scm} -R 0755 ./var/cache/man
 	${sco} -R man:man ./var/cache/man
 
 	${smr} ./root/.bash_history
-	${smr} ./home/devuan/.bash_history
+	#VAIH:parametriksi tuo devuan
+	${smr} ./home/${2}.bash_history
 
 	#OLD.tar myös pois?
 
 	for f in $(find ./var/log -type f) ; do ${smr} ${f} ; done
 	dqb "BARBEQUE PARTY DONE.done()"
 }
-		bbb ${CONF_squash_dir}
+		bbb ${CONF_squash_dir} ${2}
+	;;
+	k)
+		echo "VAIH:JOULU6KUSET WTTUUN 66 (dalek)"
+		echo "#201126:pad alta w pois, boot alta w pois rekursiivisesti"
+		sleep 6
+
+		${scm} -R a-w ${CONF_target}/${TARGET_pad2}
+		${scm} -R a-w ${CONF_target}/boot
+		${sco} -R 0:0 ${CONF_target}/*
 	;;
 	*)
 		echo "???"
 	;;
 esac
+
+echo "#kts myös loits_new"

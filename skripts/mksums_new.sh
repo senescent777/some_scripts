@@ -72,6 +72,7 @@ function part0() {
 	dqb "PARAMS OK"
 	csleep 1
 
+	#TODO:dalekille noita sco-scm-juttuja? oli ulinoita 171126 nimittäin (p7 ajon jäöleem)
 	${sco} -R ${2}:${2} ${1} 
 	${scm} 0755 ${1} 
 	${scm} u+w ${1}/* 
@@ -91,6 +92,9 @@ function part0() {
 	csleep 1
 	
 	#56-kikkailu tarpeen?
+	#TODO:muodostamaan .5 kohde-hmiston sisällön mukaan ?
+	#... tai siis sqroot varten vielä erillinen tdsto ni sitte ehkä
+
 	${svm} ${1}/${TARGET_DIGESTS_file}.5 ${1}/5.6
 	${NKVD} ${1}/${TARGET_DIGESTS_file}.*
 	${svm} ${1}/5.6 ${1}/${TARGET_DIGESTS_file}.5	
@@ -128,7 +132,7 @@ function part123() {
 		for f in $(find ./${2} -type f -name "*.mod" -or -name "vmlinuz*" -or -name "initrd*") ; do ${sah6} ${f} >> ./${t} ; done
 		for f in $(find ./${2} -type f -name "*.bz2" -or -name "filesystem*") ; do ${sah6} ${f} >> ./${t} ; done
 		for f in $(find ./${2} -type f -name "*.conf" -or -name "*.bin")  ; do ${sah6} ${f} >> ./${t} ; done
-
+		for f in $(find ./${2} -type f -name "*.sh")  ; do ${sah6} ${f} >> ./${t} ; done
 		${scm} 0444 ./${t}
 		#${sco} 0:0 ./${t} #ei hyvä idea?
 		cd ${old}
@@ -212,7 +216,6 @@ dqb "BOOTLEREOD ONEDD"
 csleep 1
 
 #jotebkin toisin jatkossa? hakemistoa kohti 1 tdsto ja täts it? ei erikseen 1,2,3-juttui
-#201225:part123() nykyisellään ei tee .sh-tiedostoista tsummia, mutta voisi laittaa tekemään
 
 part123 2 ${TARGET_pad_dir} ${source}
 part123 3 live ${source}
@@ -232,6 +235,8 @@ part7
 
 ${sco} $(whoami):$(whoami) ./${TARGET_DIGESTS_dir}/* 
 ${scm} 0644 ./${TARGET_DIGESTS_dir}/* 
+dqb $?
+csleep 1
 [ ${debug} -eq 1 ] && ls -las ./${TARGET_DIGESTS_dir}
 csleep 1
 
@@ -241,9 +246,17 @@ csleep 1
 ${sah6} -c  ./${TARGET_DIGESTS_dir}/${TARGET_DIGESTS_file}.4 --ignore-missing
 csleep 1
 
-${sco} -R 0:0 ./${TARGET_DIGESTS_dir}
-${scm} 0555 ./${TARGET_DIGESTS_dir}
-${scm} 0444 ./${TARGET_DIGESTS_dir}/*
+#co kansa dalekin käskytys?
+${sco} -R 0:0 ./${TARGET_DIGESTS_dir} 
+dqb $?
+
+csleep 1
+${scm} 0555 ./${TARGET_DIGESTS_dir} 
+dqb $?
+csleep 1
+${scm} 0444 ./${TARGET_DIGESTS_dir}/* 
+dqb $?
+csleep 1
 
 [ ${debug} -eq 1 ] && ls -laRs ${TARGET_DIGESTS_dir}
 echo "loits | squ.ash -j ?"
