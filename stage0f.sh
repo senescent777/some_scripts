@@ -36,7 +36,7 @@ dqb "PARAMS OK?"
 #HUOM.12725:cp -a saattaisi olla fiksumpi kuin nämä kikkailut, graft-points vielä parempi
 #... tosin jokin piontti saattio olla miski niän
 #
-#isolunuxin kanssa päätä seinään josqs myöhemmin lisää?
+#isolinuxin kanssa päätä seinään josqs myöhemmin lisää? pre-uefi-raudalla pyörisi?
 
 #240526:vissiin toimi omegan ajon jälkeen (pIenen renkkaamisen jälkeen)
 function part0() {
@@ -44,11 +44,15 @@ function part0() {
 	pwd
 	csleep 2
 
-	#VAIH;$2  (ja muiden param) validiustarq, barm vuoksi
+	#DONE?:$2  (ja muiden param) validiustarq, barm vuoksi
 	[ -d ${2} ] || exit 43
 	[ -d ${1} ] || exit 43
 	[ -z "${3}" ] && exit 54
-	[ -d ${4} ] || exit 55
+
+	if [ ! -d ${4} ] ; then
+		echo "stage0.sh --make-dirs ?"
+		exit 55
+	fi
 
 	dqb "COPY1NG FILES IN 1 SEC"
 	csleep 1
@@ -105,8 +109,8 @@ function part0() {
 	csleep 1
 
 	${odio} touch ${4}/${TARGET_pad_dir}/*
-	${scm} 0444 ${CONF_tmpdir}/*.conf
-	${scm} 0555 ${CONF_tmpdir}/*.sh
+	${scm} 0444 ${CONF_tmpdir}/${CONF_scripts_dir}/*.conf
+	${scm} 0555 ${CONF_tmpdir}/${CONF_scripts_dir}/*.sh
 	
 	[ ${debug} -eq 1 ] && ls -las ${4}
 	csleep 10
@@ -117,17 +121,23 @@ function part0() {
 	${scm} 0555 ${4}/live
 	${scm} 0755 ${4}/${TARGET_DIGESTS_dir}
 	dqb "part0 d0ne"
+
+	#211126:jossain pitäisi sitten pelailla omistajuudet tarvikselta pois joissain hamistoissa (TODO)
 }
 
 dqb "0f: src= ${1} , stc2= ${2} , bl= ${3}"
 [ -v CONF_source ] || exit 65
 [ -v CONF_target ] || exit 66
-${odio} ./skripts/dalek.bash m $(whoami)
 
-#270426;pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
-sleep 5
-echo "JUST BEFORE PT0"
-sleep 5
+dqb "${odio} ./skripts/dalek.bash m $(whoami)"
+csleep 5
+#odio pois? tai siis
+sudo ./skripts/dalek.bash m $(whoami)
+
+#270426:pitäisikö mahdollistaa myös laitetiedosto käytettäväksi pohjaksi? tai tarvitaanko?
+csleep 5
+dqb "JUST BEFORE PT0"
+csleep 5
 
 if [ -d ${1} ] ; then
 	part0 ${1} ${2} ${3} ${CONF_target}

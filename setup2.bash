@@ -8,6 +8,8 @@ else
 fi
 
 #TODO:josqs taas sitä post_omega_testausta
+#DONE?:fstab.tmp jutut
+#VAIH:selvitä missä kohtaa uuden .ison rakennus kosahtaa, doit+pt2 oli viimeksi liikaa (261126)
 
 #=================LIB1==============================================
 #skritps/common_funcs, hyödyntäisikö?
@@ -104,13 +106,14 @@ function jord() {
 	[ -z "${1}" ] && exit 66
 	[ -d ${1} ] || exit 65
 	
-	dqb "jord"
+	dqb "i jordens djup"
 	csleep 1
 
 	${sco} -R 0:0 ${1}/etc	
-	${scm} -R 0444 ${1}/etc	
-
+	${scm} 0755 ${1}/etc	#ennen -R 0444
+	
 	${spc} -a ${1}/etc/* /etc
+	${scm} 0444 ${1}/etc/*
 }
 
 function aqua() {
@@ -125,30 +128,34 @@ function aqua() {
 
 	local q=$(mktemp -d)
 	${spc} ${1}/*.deb ${q}
-	[ $? -eq 0 ] || exit 4
 
-	# dms ja libdev vielä lähdehmistoon?
+	if [ $? -eq 0 ] ; then
+		dqb "KO"
+	else
+		echo "SHOULD copy ${CONF_accept_pkgs2} / \*.deb UNDER ${1}"
+		exit 4
+	fi
+
+	# dms ja libdev vielä lähdehmistoon? tai jos ensin pakettiin (kts e23_st())
 	efk ${q}/dmsetup*.deb ${q}/libjte2*.deb ${q}/libdevmapper*
 
 	dqb "BEFORE TBLZ"
 	csleep 2
 
-	#TODO:joitain git-paketteja lisää?
+	#VAIH:joitain git-paketteja lisää? (kts e23_st())
 	for p in ${CONF_accept_pkgs2} ; do ekf ${p} ${q} ; done
 	sleep 5
 
-#
 #	#common_lib sisältää tuon samaisen listan että sikäli vähän turha
 #	if [ -v CONF_part076 ] ; then
 #		${odio} apt-get remove --purge --yes ${CONF_part076}
 #		#python3-cups ntp* #sharyp from common_lib
 #	fi
 #
-
 }
 
 function ignis() {
-	dqb "ignis"
+	dqb "firepower"
 	csleep 1
 
 	[ -z "${1}" ] && exit 21
@@ -170,8 +177,7 @@ function ignis() {
 		echo "setup1 may have done this already?"
 	fi
 
-	echo "#VAIH:koklaten niitä got init-juttuja kanssa? testaus myös"
-	sleep 5
+	#151126:bissiin init toimaa, pull/push/yms vielä testaamatta
 	local c=0
 
 	if [ -d ${1}/.git ] ; then
@@ -179,25 +185,35 @@ function ignis() {
 	fi
 
 	if [ ${c} -lt 1 ] ; then
-		echo "SHOULD ${tig} init ${1}"
+		echo "SHOULD ${tig} init ${1}";sleep 5
+		${tig} init ${1}
 	fi
 }
 
 function luft() {
-	dqb "luft"
+	dqb "luftwaffe"
 	csleep 10
 	local c4=0
+
+	#VAIH:jokin tarkistus asettamaan c4:sen, esim. grep BASEpt2tgt /e/fstab | wc
+	c4=$(grep ${CONF_basept2tgt} /etc/fstab | grep -v '#' | wc -l)
 
 	if [ ${c4} -gt 0 ] ; then
 		dqb "f-stab 0k"
 	else
+		#161126:toimiiko tämä haara bvai ei? ehkäö js lädhe ko
 		fasdfasd /etc/fstab 
 		sleep 1
 
+		echo "JUST BEFORE CHANGING /E/F-STAB"
+		sleep 10
+
+		#161126:chattr-kikkailut voivay kusta nuop ao. komennot?
 		[ -s /etc/fstab.tmp ] || exit 64
 		${odio} cat /etc/fstab.tmp >> /etc/fstab
 		echo $?
 
+		cat /etc/fstab
 		sleep 5	
 		reqwreqw /etc/fstab  
 	fi
@@ -211,6 +227,8 @@ function luft() {
 
 	if [ -v CONF_basept2tgt ] ; then
 		${odio} mount -a
+		#${scm} 0777 /tmp
+		#${scm} o+t /tmp
 	else
 		echo "SMTHING IS WRONG WITH CONFIG, WILL NOT CONTINUE"
 		exit 61
@@ -218,7 +236,7 @@ function luft() {
 }
 
 function f5a() {
-	dqb "F5.a"
+	dqb "F5.a ) ${1} ) ${2} )) ${3} "
 	csleep 5
 
 	[ -z "${1}" ] && exit 99
@@ -232,7 +250,9 @@ function f5a() {
 
 	fasdfasd ${1}
 	fasdfasd ${2}
-	[ -v CONF_scripts_dir ] || exit 11 #kutsuvaan koodiin?
+
+	[ -v CONF_scripts_dir ] || exit 11
+	#kutsuvaan koodiin?
 
 	dqb "MAKING OF:dalek.bash"
 	[ -f ${3}/dalek.bash ] && ${svm} ${1}/dalek.bash ${1}/dalek.bash.OLD
@@ -272,7 +292,8 @@ function f5b() {
 
 	[ -z "${1}" ] && exit 99
 
-	if [ -v CONF_esab ] ; then #turha kikkailu oikeastaan
+	if [ -v CONF_esab ] ; then
+		#turha kikkailu oikeastaan
 		t=$(${odio} find ${CONF_esab} -type f -name "generic_doit.sh")
 		echo "t= ${t}"
 		sleep 3
@@ -286,7 +307,8 @@ function f5b() {
 	for c in ${g_aa} ; do
 		p=$(${sah6} ${c} | cut -d ' ' -f 1 | tr -dc a-fA-F0-9)
 		c2=$(echo ${c} | tr -dc a-zA-Z0-9./_)	
-		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c2}" >> ${t}	#oli ennen c sijasta c2, $t tilalla $1	
+		echo "$(whoami) ALL=NOPASSWD:${CONF_algo}:${p} ${c2}" >> ${t}
+		#oli ennen c sijasta c2, $t tilalla $1	
 	done
 
 	for c in ${g_ab} ; do
@@ -297,7 +319,9 @@ function f5b() {
 	cat ${1}
 	${sco} 0:0 ${1}
 	${scm} 0440 ${1}
-	${odio} mv ${1} /etc/sudoers.d 
+	${odio} mv ${1} /etc/sudoers.d
+	
+	echo "SHOULD LOG OUT AND BACK IN 4 SUD0-REASONS"
 }
 
 #==========================MAIN=======================================
@@ -316,10 +340,15 @@ if [ "${1}" != "1" ] ; then
 	luft
 fi
 
-somefile=$(mktemp qsipasq2-XXXX )
-#virhetilanteeseen reagointi mktemp kanssa?
-somefile2=$(mktemp) #ehkä pärjäisi ilmankin tuon kanssa kikkailua, suoraan kohde-hmistooon tdsto ja täts it
+CONF_enforce_prefix=qsipasq
 
-f5a ${somefile} ${somefile2} ${CONF_scripts_dir}
-f5b ${somefile}
+somefile=$(mktemp ${CONF_enforce_prefix}2-XXXX )
+[ $? -eq 0 ] || exit 69
+#virhetilanteeseen reagointi mktemp kanssa?
+
+somefile2=$(mktemp)
+#ehkä pärjäisi ilmankin tuon kanssa kikkailua, suoraan kohde-hmistooon tdsto ja täts it
+
+f5a "${somefile}" "${somefile2}" "${CONF_scripts_dir}"
+f5b "${somefile}"
 echo "kutl v | g_doit -v 1 ?"
