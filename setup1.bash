@@ -1,5 +1,5 @@
 #!/bin/bash
-#TODO:josko joskus testaisi tämän toiminnan?
+#TODO:josko joskus testaisi tämän toiminnan? mitäjän tämän nykyään tarklpoitus tehdä?
 #TODO?:jkin yhteinen kirjasto setp1:lle ja 2:lle ?
 . ./setup0.conf
 
@@ -11,6 +11,7 @@ if [ -s $0.conf ] ; then
 else
 	exit 66
 fi
+
 function dqb() {
 	[ ${debug} -eq 1 ] && echo ${1}
 }
@@ -97,9 +98,10 @@ function aqua() {
 	${shary} git-man git
 	#/common_lib
 	
-	sudo cp /var/cache/apt/archives/*.deb ${1} #kuinka tarpeellinen? kts conf EIKU
+	${odio} cp /var/cache/apt/archives/*.deb ${1} #kuinka tarpeellinen? kts conf EIKU
 }
 
+#181126:aqua() käskyttäminen nykyään vähän turhaa touhua koska e23_st()
 if [ -s "${1}" ] && [ $2 -eq 1 ] ; then
 	[ -v CONF_pkgsrc ] || exit 33
 	${odio} apt-get update
