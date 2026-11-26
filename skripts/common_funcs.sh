@@ -41,13 +41,10 @@ else
 		
 		#param mukaisen hmiston takaa olisi hyväksi löytyä toivottavaa sisältöä, barm vuoksi
 		#,,, vähän sietäisi kyllä miettiä vielä koska mussunmussun		
+		
 		check_binaries ${CONF_testgris}
 		check_binaries2
 
-		#dqb "fq.endo"
-		#csleep 6
-
-		#061225:toistaiseksi tässä ellei
 		gi=$(${odio} which genisoimage)
 		gmk=$(${odio} which grub-mkrescue)
 		xi=$(${odio} which xorriso)
