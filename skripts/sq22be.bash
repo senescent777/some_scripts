@@ -120,7 +120,7 @@ function jlk_sums() {
 	dqb "jlk_sums( ${1} , ${2}, ${3}) "
 	csleep 2
 
-	[ -z "${1}"  ] && exit 66
+	[ -z "${1}" ] && exit 66
 	[ -d ${1} ] || exit 67
 	[ -z ${2} ] && exit 68
 	dqb "pars ok"

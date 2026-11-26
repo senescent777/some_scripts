@@ -160,16 +160,18 @@ function make_tgt_dirs() {
 
 	dqb "TUrQ"
 	[ -d ${1}/../out ] || ${smd} -p ${1}/../out
-	#DONE:out-hmiston chown, lisäksi se uusi skriptihak
+	
 	${sco} -R ${4}:${4} ${1}/../out 
 
 	dqb $?
 	csleep 1
 
 	dqb "ErTh"
-	#TODO:Const josqs?
+	#VAIH:Const josqs?
 	#TODO:chmod+chown takaisinp josqs jossain
-	t=${1}/../skripts
+	#t=${1}/../skripts
+	t=${1}/../${CONF_scripts_dir}
+	
 	[ -d ${t} ] || ${smd} -p ${t}
 
 	dqb $?
@@ -283,6 +285,7 @@ function bbb() {
 	k)
 		echo "VAIH:JOULU6KUSET WTTUUN 66 (dalek)"
 		echo "#201126:pad alta w pois, boot alta w pois rekursiivisesti"
+		#se skripts oli vielä...
 		sleep 6
 
 		${scm} -R a-w ${CONF_target}/${TARGET_pad2}

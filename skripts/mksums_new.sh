@@ -81,7 +81,7 @@ function part0() {
 	
 	#oik/omist - asioita voisi miettiä että miten pitää mennä? vielä 09/236?
 	local f
-	dqb "MARC"
+	dqb "NARC"
 	csleep 1
 
 	[ -v TARGET_DIGESTS_file ] || exit 73

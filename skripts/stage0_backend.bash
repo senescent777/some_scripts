@@ -62,18 +62,20 @@ function copy_main() {
 }
 
 function copy_conf() {
-	dqb "copy_conf(${1}, ${2} , ${3})"
+	dqb "copy_conf(${1}, ${2} , ${3} , ${3})"
 	[ -z "${1}" ] && exit 2
 	[ -z "${2}" ] && exit 4
 	[ -d ${2} ] || exit 8
 	[ -z "${3}" ] && exit 16
-	
+	[ -z "${4}" ] && exit 18
+	[ -d ${4} ] || exit 19
+
 	csleep 1
 	dqb "PARAMS OK"
 	csleep 1
 
 	#-v vielä ?
-	#CONF_scripts pikemminkin parametriksi?
+	#CONF_scripts pikemminkin parametriksi? (VAIH)
 	[ -d ${2}/../../${CONF_scripts_dir} ] || exit 49
 
 	if [ ! -z "${CONF_scripts_dir}" ] ; then
@@ -87,7 +89,7 @@ function copy_conf() {
 
 	[ ${debug} -eq 1 ] && ls -las ${2}/../../${CONF_scripts_dir} 
 	csleep 10
-	#TODO:kun sh ja conf kopåsattu ni chmod+chown?
+	#TODO:kun sh ja conf kopåsattu ni chmod+chown? VAI ONKOJO jossaon?
 
 	#nykyään vähän erilainen upload kuin ao. blokkia kirJoittaessa
 	if [ -s ${2}/upload.sh ] || [ -s ${2}/extras.tar.bz2 ] ; then 

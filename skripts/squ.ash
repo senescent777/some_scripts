@@ -5,8 +5,8 @@ cmd=""
 md=0
 
 #echo "mp-VIVUN TESTAUS ehkä josqs"
-#sleep 5
-#011026:pitäisi varmistaa että chroot alta löytyy oikea hmisto jotta mount onnaa (TODO)
+
+#011026:pitäisi varmistaa että chroot alta löytyy oikea hmisto jotta mount onnaa (TODO) (-r liittyviä bissiin)
 
 mp=0
 ms=0
@@ -15,10 +15,6 @@ par=""
 d=$(dirname $0)
 . ${d}/common.conf
 
-#echo "DONE?:varmista että -j - vivun kanssa kopsailut menevät ok ESIM OIKEASTI"
-#011126 näytti kopsautuvan ok
-
-#echo "DONE?:-b toimivuus varmistettava kanssa"
 echo "VAIH:myös uuden kiekon muodostus modaamattomasta asti jotta u-paketti" #uusin ja 2. uusin u-paketti kyllä nykyään, iso:n voisi muodostaa muista syistä
 sleep 6
 
@@ -138,10 +134,14 @@ case "${cmd}" in
 		#		
 		#.2 puretaan bz3 -> äksä ei startannut automaagisesti l. jotain vikaa sisällössä
 		#eli "ls -las /" sqrootissa tai tstikoneella, ykkös-iso vs kakkos-iso, mikä ero?
-		#/e, /h vai /o mikä kusee hommad?
+		#/e, /h vai /o mikä kusee hommad? (/h omistaja?)
 		#
 		#.3 doit+pt2 -> äksä ei tottele hiirtä, sen lisäksi että täyetyy eriksween sanoa startx
-		#4. bz3 purq jälkeen vain doit -> 
+		#4. bz3 purq jälkeen vain doit -> äksä rikkoutuu hiiren suhteen
+		#.5: .1 jölk ouretaan vain ./h -> whåtever
+
+		#TODO:elikkäs "export 4" testaus-koneella ja käännellään jälkeenpäin se enforcew-asetus
+		#--- ja sitten kokeillaan mitä tapahtuu sqrootissa
 
 		cfd ${par} ${CONF_squash_dir}
 	;;
