@@ -102,7 +102,7 @@ function part0() {
 	#HUOM.11725:linkitys-syistä oli "/" 1. param lopussa, ehkä pois jatkossa ?
 
 	copy_main ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} ${CONF_scripts_dir}
-	copy_conf ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} $(whoami)
+	copy_conf ${2}/${TARGET_pad_dir} ${4}/${TARGET_pad_dir} $(whoami) ${CONF_scripts_dir}
 	copy_sums ${2}/${TARGET_DIGESTS_dir} ${4}/${TARGET_DIGESTS_dir}
 	
 	dqb "4FT3R COPY_X"
